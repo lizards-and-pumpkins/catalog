@@ -71,7 +71,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
     {
-        if (empty($filters)) {
+        if (count($filters) === 0) {
             return $originalCriteria;
         }
 

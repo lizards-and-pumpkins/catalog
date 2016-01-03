@@ -80,6 +80,4 @@ class ProductXmlToProductBuilderLocator
         $message = sprintf('No product type builder factory for the product type code "%s" was found', $typeCode);
         throw new NoMatchingProductTypeBuilderFactoryFoundException($message);
     }
-
-
 }

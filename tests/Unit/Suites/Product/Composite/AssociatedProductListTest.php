@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product\Composite;
 
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
@@ -58,7 +57,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $productId
-     * @param ProductAttribute ...$attributes
+     * @param ProductAttribute[] $attributes
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProduct($productId, ProductAttribute ...$attributes)
@@ -73,7 +72,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ProductAttribute $attributes
+     * @param ProductAttribute[] $attributes
      * @return array[]
      */
     private function createStubProductAttributeReturnValueMap(ProductAttribute ...$attributes)
@@ -84,7 +83,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param ProductAttribute ...$attributes
+     * @param ProductAttribute[] $attributes
      * @return array[]
      */
     private function createHasProductAttributeValueMap(ProductAttribute ...$attributes)

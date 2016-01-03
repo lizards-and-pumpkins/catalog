@@ -51,7 +51,7 @@ class ProductListingCriteriaBuilder
      */
     private function getUrlKeyStringFromDomNodeArray(array $urlKeyAttributeNode)
     {
-        if (empty($urlKeyAttributeNode)) {
+        if (count($urlKeyAttributeNode) === 0) {
             throw new MissingUrlKeyXmlAttributeException('"url_key" attribute is missing in product listing XML.');
         }
 

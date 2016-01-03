@@ -149,6 +149,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
     public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl()
     {
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo');
@@ -201,6 +204,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler->process($stubHttpRequest);
     }
 
+    /**
+     * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
     public function testTrueIsReturnedIfRequestCanBeProcessed()
     {
         $this->stubRequest->method('getUrlPathRelativeToWebFront')

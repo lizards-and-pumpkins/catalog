@@ -5,10 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
@@ -67,7 +64,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $messages = $logger->getMessages();
 
-        if (!empty($messages)) {
+        if (count($messages) > 0) {
             $failMessages = array_map(function (LogMessage $logMessage) {
                 $messageContext = $logMessage->getContext();
                 if (isset($messageContext['exception'])) {

@@ -100,13 +100,17 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
 
         foreach ($this->factory->createTaxableCountries() as $country) {
-            $contextWithCountry = $this->factory->createContextBuilder()->expandContext($context, [ContextCountry::CODE => $country]);
+            $contextDataSet = [ContextCountry::CODE => $country];
+            $contextWithCountry = $this->factory->createContextBuilder()->expandContext($context, $contextDataSet);
+
             $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
-            $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext($contextWithCountry, [Product::ID => $productId]);
+            $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext(
+                $contextWithCountry,
+                [Product::ID => $productId]
+            );
             $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
             $this->assertEquals($productPrice, $priceSnippetContents);
         }
-
 
         $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
         $selectedFilters = [];
@@ -210,7 +214,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
         $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');
         
-        if (!empty($messages)) {
+        if (count($messages) > 0) {
             array_map(function (LogMessage $message) use ($expectedLoggedErrorMessage) {
                 if ($expectedLoggedErrorMessage != $message) {
                     $this->fail($message);

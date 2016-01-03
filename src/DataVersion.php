@@ -22,7 +22,7 @@ class DataVersion
             throw new InvalidVersionException('The specified version is invalid');
         }
 
-        if (empty($version)) {
+        if (is_string($version) && trim($version) === '' || !is_string($version) && 0 == $version) {
             throw new EmptyVersionException('The specified version is empty');
         }
 

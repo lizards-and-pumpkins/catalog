@@ -15,7 +15,7 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorFactory */
-        $stubTranslatorFactory = $this->getMock(Callback::class, ['__invoke']);
+        $stubTranslatorFactory = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
         $stubTranslatorFactory->method('__invoke')->willReturnCallback(function () {
             return $this->getMock(Translator::class);
         });

@@ -40,11 +40,21 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
      */
     private $stubRequest;
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @param int $ttl
+     */
     private function assertCookieHasBeenSet($name, $value, $ttl)
     {
         $this->assertContains([$name, $value, time() + $ttl], self::$setCookieValues);
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @param int $expire
+     */
     public static function trackSetCookieCalls($name, $value, $expire)
     {
         self::$setCookieValues[] = [$name, $value, $expire];
@@ -243,6 +253,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     }
 }
 
+/**
+ * @param string $name
+ * @param mixed $value
+ * @param int $expire
+ */
 function setcookie($name, $value, $expire)
 {
     ProductListingPageRequestTest::trackSetCookieCalls($name, $value, $expire);

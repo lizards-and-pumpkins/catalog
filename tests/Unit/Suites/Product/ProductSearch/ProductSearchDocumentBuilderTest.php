@@ -75,9 +75,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubValueCollectorLocator = $this->getMockBuilder(AttributeValueCollectorLocator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->stubValueCollectorLocator = $this->getMock(AttributeValueCollectorLocator::class, [], [], '', false);
         $this->stubValueCollectorLocator->method('forProduct')
             ->willReturn(new DefaultAttributeValueCollector());
     }

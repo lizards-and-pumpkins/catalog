@@ -12,4 +12,3 @@ class CastableToStringStub
         return 'stub string content';
     }
 }
-

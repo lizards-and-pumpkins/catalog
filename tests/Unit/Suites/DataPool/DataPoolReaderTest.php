@@ -212,12 +212,12 @@ class DataPoolReaderTest extends AbstractDataPoolTest
             ->with($mockCriteria, $selectedFilters, $stubContext);
 
         /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
-        $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);;
+        $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
 
         $rowsPerPage = 100;
         $pageNumber = 0;
         /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $sortOrderConfig */
-        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);;
+        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
         $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $mockCriteria,

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Log\Logger;
@@ -249,7 +248,7 @@ EOT;
      */
     private function createMockCallbackExpectingXml($expectedXml, $expectedCallCount, $callbackIdentifier)
     {
-        $mockCallback = $this->getMock(Callback::class, ['__invoke']);
+        $mockCallback = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
         $expected = new \DOMDocument();
         $expected->loadXML($expectedXml);
         $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
@@ -392,8 +391,9 @@ EOT;
             )
         );
         $instance = CatalogXmlParser::fromXml($xml, $this->mockLogger);
-        
-        $listingCallback = $this->getMock(Callback::class, ['__invoke']);
+
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $listingCallback */
+        $listingCallback = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
         $listingCallback->expects($this->once())->method('__invoke')->willThrowException(new \Exception('Test dummy'));
 
         $instance->registerListingCallback($listingCallback);

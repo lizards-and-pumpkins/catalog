@@ -21,7 +21,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $messages = $logger->getMessages();
 
-        if (!empty($messages)) {
+        if (count($messages) > 0) {
             $failMessages = array_map(function (LogMessage $logMessage) {
                 $messageContext = $logMessage->getContext();
                 if (isset($messageContext['exception'])) {
@@ -59,14 +59,14 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $metaInfoSnippetJson = $dataPoolReader->getSnippet($snippetKey);
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
-        $expectedCriteria = CompositeSearchCriterion::createAnd(
+        $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             SearchCriterionGreaterThan::create('stock_qty', '0'),
             SearchCriterionEqual::create('category', 'sale'),
             SearchCriterionEqual::create('brand', 'Adidas')
-        );
+        ));
 
         $this->assertEquals(ProductListingPageSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
-        $this->assertEquals(json_encode($expectedCriteria), json_encode($metaInfoSnippet['product_selection_criteria']));
+        $this->assertEquals($expectedCriteriaJson, json_encode($metaInfoSnippet['product_selection_criteria']));
     }
 
     public function testProductListingPageHtmlIsReturned()

@@ -67,6 +67,9 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $stubSnippetKeyGenerator;
 
+    /**
+     * @return string
+     */
     private function createProductDetailPageMetaInfoContentJson()
     {
         return json_encode(ProductDetailPageMetaInfoSnippetContent::create(

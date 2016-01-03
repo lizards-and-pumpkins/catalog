@@ -49,7 +49,7 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
 
-        if (empty($attributeValues)) {
+        if (count($attributeValues) === 0) {
             return '';
         }
 

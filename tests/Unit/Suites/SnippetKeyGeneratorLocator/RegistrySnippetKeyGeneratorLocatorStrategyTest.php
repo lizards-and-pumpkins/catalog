@@ -42,7 +42,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     public function testTrueIsReturnedIfSnippetCodeCanBeHandled()
     {
         $snippetCode = 'foo';
-        $testClosure = function () { };
+        $testClosure = function () {
+
+        };
 
         $this->strategy->register($snippetCode, $testClosure);
 
@@ -87,7 +89,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     public function testKeyGeneratorForSnippetCodesIsReturned()
     {
         $snippetCode = 'foo';
-        $testClosure = function () { return $this->stubSnippetKeyGenerator; };
+        $testClosure = function () {
+            return $this->stubSnippetKeyGenerator;
+        };
 
         $this->strategy->register($snippetCode, $testClosure);
 
@@ -97,7 +101,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     public function testExceptionIsThrownWhenRegisteringNonStringSnippetCode()
     {
         $invalidSnippetCode = 123;
-        $testClosure = function () {};
+        $testClosure = function () {
+
+        };
 
         $this->setExpectedException(InvalidSnippetCodeException::class, 'Expected snippet code to be a string');
 
@@ -107,7 +113,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     public function testSameInstanceForSameSnippetCodeIsReturned()
     {
         $snippetCode = 'foo';
-        $testClosure = function () {};
+        $testClosure = function () {
+
+        };
 
         $this->strategy->register($snippetCode, $testClosure);
 
@@ -121,12 +129,16 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     {
         $snippetCodeA = 'foo';
         $stubSnippetKeyGeneratorA = $this->getMock(SnippetKeyGenerator::class);
-        $testClosureA = function () use ($stubSnippetKeyGeneratorA) { return $stubSnippetKeyGeneratorA; };
+        $testClosureA = function () use ($stubSnippetKeyGeneratorA) {
+            return $stubSnippetKeyGeneratorA;
+        };
         $this->strategy->register($snippetCodeA, $testClosureA);
 
         $snippetCodeB = 'bar';
         $stubSnippetKeyGeneratorB = $this->getMock(SnippetKeyGenerator::class);
-        $testClosureB = function () use ($stubSnippetKeyGeneratorB) { return $stubSnippetKeyGeneratorB; };
+        $testClosureB = function () use ($stubSnippetKeyGeneratorB) {
+            return $stubSnippetKeyGeneratorB;
+        };
         $this->strategy->register($snippetCodeB, $testClosureB);
 
         $resultA = $this->strategy->getKeyGeneratorForSnippetCode($snippetCodeA);

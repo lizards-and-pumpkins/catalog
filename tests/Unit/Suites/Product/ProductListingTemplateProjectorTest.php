@@ -24,13 +24,6 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubRootSnippetSourceList = $this->getMock(ProductsPerPageForContextList::class, [], [], '', false);
-
-        $stubProductsPerPageForContextListBuilder = $this->getMockBuilder(ProductsPerPageForContextListBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stubProductsPerPageForContextListBuilder->method('fromJson')->willReturn($stubRootSnippetSourceList);
-
         $stubSnippetList = $this->getMock(SnippetList::class, [], [], '', false);
 
         /** @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject $stubSnippetRendererCollection */
@@ -41,8 +34,7 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 
         $this->projector = new ProductListingTemplateProjector(
             $stubSnippetRendererCollection,
-            $this->mockDataPoolWriter,
-            $stubProductsPerPageForContextListBuilder
+            $this->mockDataPoolWriter
         );
     }
 

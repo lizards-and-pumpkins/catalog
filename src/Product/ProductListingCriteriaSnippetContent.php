@@ -181,7 +181,7 @@ class ProductListingCriteriaSnippetContent implements PageMetaInfoSnippetContent
             throw new MalformedSearchCriteriaMetaException('Missing criteria.');
         }
 
-        array_map(function(array $criteria) {
+        array_map(function (array $criteria) {
             if (isset($criteria['condition'])) {
                 self::validateProductListingSearchCriteria($criteria);
                 return;

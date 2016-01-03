@@ -32,7 +32,7 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
 
     /**
      * @param string $condition
-     * @param SearchCriteria[] ...$criteria
+     * @param SearchCriteria[] $criteria
      * @return CompositeSearchCriterion
      */
     public static function create($condition, SearchCriteria ...$criteria)
