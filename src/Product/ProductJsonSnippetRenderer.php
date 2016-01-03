@@ -37,9 +37,8 @@ class ProductJsonSnippetRenderer
      */
     public function render(ProductView $product)
     {
-        $snippetList = new SnippetList();
-        $snippetList->add($this->createProductJsonSnippet($product));
-        return $snippetList;
+        $snippet = $this->createProductJsonSnippet($product);
+        return new SnippetList($snippet);
     }
 
     /**

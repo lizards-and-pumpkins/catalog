@@ -42,10 +42,9 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
             throw new InvalidProjectionSourceDataTypeException('First argument must be a ProductView instance.');
         }
 
-        $snippetList = new SnippetList();
         $snippet = $this->getProductInListingSnippet($projectionSourceData);
-        $snippetList->add($snippet);
-        return $snippetList;
+
+        return new SnippetList($snippet);
     }
 
     /**

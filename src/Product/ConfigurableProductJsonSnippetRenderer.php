@@ -47,15 +47,10 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     public function render(ProductView $product)
     {
-        $snippetList = new SnippetList();
-
         $variationAttributesJsonSnippet = $this->createVariationAttributesJsonSnippet($product);
-        $snippetList->add($variationAttributesJsonSnippet);
-
         $associatedProductsJsonSnippet = $this->createAssociatedProductsJsonSnippet($product);
-        $snippetList->add($associatedProductsJsonSnippet);
 
-        return $snippetList;
+        return new SnippetList($variationAttributesJsonSnippet, $associatedProductsJsonSnippet);
     }
 
     /**

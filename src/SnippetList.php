@@ -11,11 +11,6 @@ class SnippetList implements \Countable, \IteratorAggregate
         $this->snippets = $snippets;
     }
     
-    public function add(Snippet $snippet)
-    {
-        $this->snippets[] = $snippet;
-    }
-
     /**
      * @return int
      */

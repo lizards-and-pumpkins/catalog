@@ -8,67 +8,37 @@ namespace LizardsAndPumpkins;
  */
 class SnippetListTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
-    public function setUp()
-    {
-        $this->snippetList = new SnippetList();
-    }
-
     public function testIteratorAggregateInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(\IteratorAggregate::class, $this->snippetList);
+        $result = new SnippetList();
+        $this->assertInstanceOf(\IteratorAggregate::class, $result);
     }
 
     public function testIsInitiallyEmpty()
     {
-        $this->assertCount(0, $this->snippetList);
+        $result = new SnippetList();
+        $this->assertCount(0, $result);
     }
 
     public function testSnippetIsAdded()
     {
         $snippet = Snippet::create('test', 'test');
-        $this->snippetList->add($snippet);
+        $result = new SnippetList($snippet);
 
-        $this->assertEquals(1, $this->snippetList->count());
-    }
-
-    public function testSnippetIsReturned()
-    {
-        $snippet = Snippet::create('test', 'test');
-        $this->snippetList->add($snippet);
-
-        $this->assertContains($snippet, $this->snippetList->getIterator());
+        $this->assertCount(1, $result);
+        $this->assertEquals([$snippet], iterator_to_array($result));
     }
 
     public function testTwoSnippetListsAreMerged()
     {
         $snippet = Snippet::create('test', 'test');
-        $this->snippetList->add($snippet);
 
-        $snippet2 = Snippet::create('test', 'test');
-        $resultList2 = new SnippetList();
-        $resultList2->add($snippet2);
+        $snippetListA = new SnippetList($snippet);
+        $snippetListB = new SnippetList($snippet);
 
-        $this->snippetList->merge($resultList2);
+        $snippetListA->merge($snippetListB);
 
-        $this->assertEquals(2, $this->snippetList->count());
-        $this->assertContains($snippet, $this->snippetList->getIterator());
-        $this->assertContains($snippet2, $this->snippetList->getIterator());
-    }
-
-    public function testSnippetsCanBeSetAsConstructorArguments()
-    {
-        $snippet1 = Snippet::create('test1', 'test');
-        $snippet2 = Snippet::create('test2', 'test');
-        
-        $snippetList = new SnippetList($snippet1, $snippet2);
-        
-        $this->assertCount(2, $snippetList);
-        $this->assertContains($snippet1, $snippetList->getIterator());
-        $this->assertContains($snippet2, $snippetList->getIterator());
+        $this->assertCount(2, $snippetListA);
+        $this->assertEquals([$snippet, $snippet], iterator_to_array($snippetListA));
     }
 }
