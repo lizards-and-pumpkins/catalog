@@ -27,8 +27,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [''],
-            [0],
-            [0.00],
+            [' '],
         ];
     }
 
@@ -48,6 +47,8 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     public function invalidVersionProvider()
     {
         return [
+            [1],
+            [.1],
             [null],
             [[]],
             [new \stdClass()],
