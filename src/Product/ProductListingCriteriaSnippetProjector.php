@@ -51,8 +51,8 @@ class ProductListingCriteriaSnippetProjector implements Projector
 
     private function projectProductListing(ProductListingCriteria $listingCriteria)
     {
-        $snippetList = $this->snippetRendererCollection->render($listingCriteria);
-        $this->dataPoolWriter->writeSnippetList($snippetList);
+        $snippets = $this->snippetRendererCollection->render($listingCriteria);
+        $this->dataPoolWriter->writeSnippets(...$snippets);
         
         $urlKeysForContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys($listingCriteria);
         $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);

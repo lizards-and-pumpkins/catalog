@@ -36,7 +36,7 @@ class ContentBlockProjector implements Projector
             );
         }
 
-        $snippetList = $this->snippetRendererCollection->render($projectionSourceData);
-        $this->dataPoolWriter->writeSnippetList($snippetList);
+        $snippets = $this->snippetRendererCollection->render($projectionSourceData);
+        $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 }

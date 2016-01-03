@@ -6,17 +6,11 @@ use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_in_search_autosuggestion';
-
-    /**
-     * @var SnippetList
-     */
-    private $snippetList;
 
     /**
      * @var ProductInSearchAutosuggestionBlockRenderer
@@ -29,18 +23,16 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     private $snippetKeyGenerator;
 
     public function __construct(
-        SnippetList $snippetList,
         ProductInSearchAutosuggestionBlockRenderer $blockRenderer,
         SnippetKeyGenerator $snippetKeyGenerator
     ) {
-        $this->snippetList = $snippetList;
         $this->blockRenderer = $blockRenderer;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 
     /**
      * @param ProductView $projectionSourceData
-     * @return SnippetList
+     * @return Snippet
      */
     public function render($projectionSourceData)
     {
@@ -48,16 +40,16 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
             throw new InvalidProjectionSourceDataTypeException('First argument must be a ProductView instance.');
         }
 
-        $this->addProductInSearchAutosuggestionSnippetsToList($projectionSourceData);
-
-        return $this->snippetList;
+        return [
+            $this->createProductInSearchAutosuggestionSnippet($projectionSourceData)
+        ];
     }
 
-    private function addProductInSearchAutosuggestionSnippetsToList(ProductView $product)
+    private function createProductInSearchAutosuggestionSnippet(ProductView $product)
     {
         $content = $this->blockRenderer->render($product, $product->getContext());
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
-        $contentSnippet = Snippet::create($key, $content);
-        $this->snippetList->add($contentSnippet);
+
+        return Snippet::create($key, $content);
     }
 }

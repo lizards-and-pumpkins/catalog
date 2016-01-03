@@ -47,7 +47,7 @@ class ProductListingPageSnippetProjectorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['render'])
             ->getMock();
-        $this->stubProductListingPageSnippetRenderer->method('render')->willReturn($this->stubSnippet);
+        $this->stubProductListingPageSnippetRenderer->method('render')->willReturn([$this->stubSnippet]);
         
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
         
@@ -62,10 +62,10 @@ class ProductListingPageSnippetProjectorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testItAddsTheSnippetListToTheKeyValueStore()
+    public function testSnippetsAreWrittenToKeyValueStore()
     {
         $testVersion = DataVersion::fromVersionString('abc123');
-        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippet')->with($this->stubSnippet);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($this->stubSnippet);
         $this->listingProjection->project($testVersion);
     }
 }

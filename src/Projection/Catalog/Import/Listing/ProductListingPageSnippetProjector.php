@@ -38,8 +38,8 @@ class ProductListingPageSnippetProjector
     public function project(DataVersion $dataVersion)
     {
         @array_map(function (Context $context) {
-            $snippet = $this->productListingPageSnippetRenderer->render($context);
-            $this->dataPoolWriter->writeSnippet($snippet);
+            $snippets = $this->productListingPageSnippetRenderer->render($context);
+            $this->dataPoolWriter->writeSnippets(...$snippets);
         }, $this->contextSource->getAllAvailableContextsWithVersion($dataVersion));
     }
 }

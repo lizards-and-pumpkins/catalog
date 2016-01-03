@@ -5,16 +5,10 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\SnippetRenderer;
 
 class ContentBlockSnippetRenderer implements SnippetRenderer
 {
-    /**
-     * @var SnippetList
-     */
-    private $snippetList;
-
     /**
      * @var SnippetKeyGeneratorLocator
      */
@@ -26,18 +20,16 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
     private $contextBuilder;
 
     public function __construct(
-        SnippetList $snippetList,
         SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
         ContextBuilder $contextBuilder
     ) {
-        $this->snippetList = $snippetList;
         $this->snippetKeyGeneratorLocator = $snippetKeyGeneratorLocator;
         $this->contextBuilder = $contextBuilder;
     }
 
     /**
      * @param ContentBlockSource $contentBlockSource
-     * @return SnippetList
+     * @return Snippet[]
      */
     public function render(ContentBlockSource $contentBlockSource)
     {
@@ -49,9 +41,9 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
 
         $key = $keyGenerator->getKeyForContext($context, $keyGeneratorParameters);
         $content = $contentBlockSource->getContent();
-        $snippet = Snippet::create($key, $content);
-        $this->snippetList->add($snippet);
 
-        return $this->snippetList;
+        return [
+            Snippet::create($key, $content)
+        ];
     }
 }

@@ -31,8 +31,8 @@ class ProductListingTemplateProjector implements Projector
      */
     public function project($productsPerPageSourceData)
     {
-        $productsPerPageList = [];
-        $snippetList = $this->snippetRendererCollection->render($productsPerPageList);
-        $this->dataPoolWriter->writeSnippetList($snippetList);
+        $projectionData = [];
+        $snippets = $this->snippetRendererCollection->render($projectionData);
+        $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 }

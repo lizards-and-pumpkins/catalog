@@ -57,7 +57,6 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $snippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
 
         $pageSnippet = Snippet::create($snippetKey, $snippetContent);
-        $dataPoolWriter->writeSnippet($pageSnippet);
 
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
@@ -65,17 +64,16 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             [$rootSnippetCode, 'head', 'body']
         );
         $metaInfoSnippet = Snippet::create($productDetailPageMetaSnippetKey, json_encode($pageMetaInfo->getInfo()));
-        $dataPoolWriter->writeSnippet($metaInfoSnippet);
 
         $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
         $key = $headSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
         $headSnippet = Snippet::create($key, '<title>Page Title</title>');
-        $dataPoolWriter->writeSnippet($headSnippet);
 
         $bodySnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('body');
         $key = $bodySnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
         $bodySnippet = Snippet::create($key, '<h1>Headline</h1>');
-        $dataPoolWriter->writeSnippet($bodySnippet);
+
+        $dataPoolWriter->writeSnippets($pageSnippet, $metaInfoSnippet, $headSnippet, $bodySnippet);
     }
 
     public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()

@@ -242,8 +242,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductSnippetRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->createProductSnippetRendererList(),
-            $this->getMasterFactory()->createSnippetList()
+            $this->createProductSnippetRendererList()
         );
     }
 
@@ -353,8 +352,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductSearchAutosuggestionTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->createProductSearchAutosuggestionRendererList(),
-            $this->getMasterFactory()->createSnippetList()
+            $this->createProductSearchAutosuggestionRendererList()
         );
     }
 
@@ -375,7 +373,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductSearchAutosuggestionSnippetRenderer()
     {
         return new ProductSearchAutosuggestionSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer(),
             $this->getMasterFactory()->createContextSource()
@@ -388,7 +385,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductSearchAutosuggestionMetaSnippetRenderer()
     {
         return new ProductSearchAutosuggestionMetaSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer(),
             $this->getMasterFactory()->createContextSource()
@@ -453,8 +449,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductListingTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->createProductListingRendererList(),
-            $this->getMasterFactory()->createSnippetList()
+            $this->createProductListingRendererList()
         );
     }
 
@@ -525,8 +520,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingSnippetRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->createProductListingSnippetRendererList(),
-            $this->getMasterFactory()->createSnippetList()
+            $this->createProductListingSnippetRendererList()
         );
     }
 
@@ -546,19 +540,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingCriteriaSnippetRenderer()
     {
         return new ProductListingCriteriaSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
-    }
-
-    /**
-     * @return SnippetList
-     */
-    public function createSnippetList()
-    {
-        return new SnippetList();
     }
 
     /**
@@ -581,7 +566,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductDetailViewSnippetRenderer()
     {
         return new ProductDetailViewSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
@@ -646,7 +630,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductInSearchAutosuggestionSnippetRenderer()
     {
         return new ProductInSearchAutosuggestionSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductInSearchAutosuggestionBlockRenderer(),
             $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetKeyGenerator()
         );
@@ -1194,8 +1177,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createContentBlockSnippetRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->getMasterFactory()->createContentBlockSnippetRendererList(),
-            $this->getMasterFactory()->createSnippetList()
+            $this->getMasterFactory()->createContentBlockSnippetRendererList()
         );
     }
 
@@ -1213,7 +1195,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createContentBlockSnippetRenderer()
     {
         return new ContentBlockSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createContentBlockSnippetKeyGeneratorLocatorStrategy(),
             $this->getMasterFactory()->createContextBuilder()
         );
@@ -1281,7 +1262,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductSearchResultMetaSnippetRenderer()
     {
         return new ProductSearchResultMetaSnippetRenderer(
-            $this->getMasterFactory()->createSnippetList(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createContextSource()

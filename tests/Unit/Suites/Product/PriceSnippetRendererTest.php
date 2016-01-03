@@ -9,9 +9,9 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\Product\Tax\TaxService;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
+use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
-use LizardsAndPumpkins\SnippetList;
 use LizardsAndPumpkins\TaxableCountries;
 
 /**
@@ -19,7 +19,6 @@ use LizardsAndPumpkins\TaxableCountries;
  * @uses   \LizardsAndPumpkins\Product\Price
  * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetList
  * @uses   \LizardsAndPumpkins\Website\Website
  * @uses   \LizardsAndPumpkins\Country\Country
  */
@@ -101,21 +100,22 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testItReturnsASnippetList()
+    public function testItReturnsSnippets()
     {
-        $this->assertInstanceOf(SnippetList::class, $this->renderer->render($this->createStubProductView()));
+        $result = $this->renderer->render($this->createStubProductView());
+        $this->assertContainsOnly(Snippet::class, $result);
     }
 
-    public function testNothingIsAddedToSnippetListIfProductDoesNotHaveARequiredAttribute()
+    public function testEmptyArrayIsReturnedIfProductDoesNotHaveARequiredAttribute()
     {
         $stubProduct = $this->createStubProductView();
         $stubProduct->method('hasAttribute')->with($this->testPriceAttributeCode)->willReturn(false);
 
-        $snippetList = $this->renderer->render($stubProduct);
-        $this->assertCount(0, $snippetList);
+        $result = $this->renderer->render($stubProduct);
+        $this->assertCount(0, $result);
     }
 
-    public function testSnippetListContainingSnippetsWithGivenKeyAndPriceIsReturned()
+    public function testSnippetsWithGivenKeyAndPriceAreReturned()
     {
         $dummyPriceSnippetKey = 'bar';
         $dummyPriceAttributeValue = 1;
@@ -123,8 +123,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
         $stubProduct->method('hasAttribute')->with($this->testPriceAttributeCode)->willReturn(true);
-        $stubProduct->method('getFirstValueOfAttribute')
-            ->with($this->testPriceAttributeCode)
+        $stubProduct->method('getFirstValueOfAttribute')->with($this->testPriceAttributeCode)
             ->willReturn($dummyPriceAttributeValue);
         $stubProduct->method('getTaxClass')->willReturn('test class');
         $this->stubContextWebsiteAndCountry($stubProduct);
@@ -135,8 +134,8 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($dummyPriceSnippetKey);
 
-        $snippetList = $this->renderer->render($stubProductView);
-        $this->assertCount(2, $snippetList);
+        $result = $this->renderer->render($stubProductView);
+        $this->assertCount(2, $result);
     }
 
     /**
