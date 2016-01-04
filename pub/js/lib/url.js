@@ -99,8 +99,13 @@ define(function () {
         removeQueryParameterFromUrl: function (url, parameterName) {
             var queryParameters = getQueryParameters(url);
             delete queryParameters[parameterName];
+            var queryString = buildQueryString(queryParameters);
 
-            return getUrlWithoutQueryString(url) + '?' + buildQueryString(queryParameters);
+            if ('' === queryString) {
+                return getUrlWithoutQueryString(url);
+            }
+
+            return getUrlWithoutQueryString(url) + '?' + queryString;
         }
     };
 });
