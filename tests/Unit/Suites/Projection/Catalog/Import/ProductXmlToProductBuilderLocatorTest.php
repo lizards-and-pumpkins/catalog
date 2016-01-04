@@ -122,7 +122,9 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $domDocument = new \DOMDocument();
         $domDocument->loadXML($productXml);
-        return $domDocument->getElementsByTagName('special_price')->item(0)->nodeValue;
+        $domXPath = (new \DOMXPath($domDocument));
+
+        return $domXPath->query('//attributes/attribute[@name="special_price"]')->item(0)->nodeValue;
     }
     
     /**

@@ -140,7 +140,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
-            '//catalog/products/product/attributes/url_key[@locale="fr_FR"]'
+            '//catalog/products/product/attributes/attribute[@name="url_key" and @locale="fr_FR"]'
         );
 
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);

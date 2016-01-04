@@ -18,7 +18,14 @@
                                                     <xs:complexType>
                                                         <xs:sequence>
                                                             <xs:element name="product" type="abstractProduct"
-                                                                    maxOccurs="unbounded" />
+                                                                    maxOccurs="unbounded"/>
+                                                        </xs:sequence>
+                                                    </xs:complexType>
+                                                </xs:element>
+                                                <xs:element name="variations">
+                                                    <xs:complexType>
+                                                        <xs:sequence>
+                                                            <xs:element name="attribute" type="xs:string"/>
                                                         </xs:sequence>
                                                     </xs:complexType>
                                                 </xs:element>
@@ -26,14 +33,14 @@
                                             <xs:attribute name="type" use="required">
                                                 <xs:simpleType>
                                                     <xs:restriction base="xs:string">
-                                                        <xs:enumeration value="simple" />
-                                                        <xs:enumeration value="configurable" />
+                                                        <xs:enumeration value="simple"/>
+                                                        <xs:enumeration value="configurable"/>
                                                     </xs:restriction>
                                                 </xs:simpleType>
                                             </xs:attribute>
                                             <!-- The line below will most likely fail. Need XSD 1.1 parser to test. -->
                                             <xs:assert test="if(@type eq 'configurable') then associated_products
-                                     else not(associated_products)" />
+                                     else not(associated_products)"/>
                                         </xs:extension>
                                     </xs:complexContent>
                                 </xs:complexType>
@@ -50,21 +57,21 @@
                                         <xs:element name="criteria" maxOccurs="1">
                                             <xs:complexType>
                                                 <xs:sequence maxOccurs="unbounded">
-                                                    <xs:any processContents="skip" />
+                                                    <xs:any processContents="skip"/>
                                                 </xs:sequence>
                                                 <xs:attribute name="type" use="required">
                                                     <xs:simpleType>
                                                         <xs:restriction base="xs:string">
-                                                            <xs:enumeration value="or" />
-                                                            <xs:enumeration value="and" />
+                                                            <xs:enumeration value="or"/>
+                                                            <xs:enumeration value="and"/>
                                                         </xs:restriction>
                                                     </xs:simpleType>
                                                 </xs:attribute>
                                             </xs:complexType>
                                         </xs:element>
                                     </xs:sequence>
-                                    <xs:attribute name="url_key" type="xs:string" use="required" />
-                                    <xs:anyAttribute processContents="skip" />
+                                    <xs:attribute name="url_key" type="xs:string" use="required"/>
+                                    <xs:anyAttribute processContents="skip"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
@@ -76,16 +83,51 @@
 
     <xs:complexType name="abstractProduct">
         <xs:all>
+            <xs:element name="images">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="image">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="file">
+                                        <xs:complexType>
+                                            <xs:simpleContent>
+                                                <xs:extension base="xs:string">
+                                                    <xs:anyAttribute processContents="skip"/>
+                                                </xs:extension>
+                                            </xs:simpleContent>
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="label">
+                                        <xs:complexType>
+                                            <xs:simpleContent>
+                                                <xs:extension base="xs:string">
+                                                    <xs:anyAttribute processContents="skip"/>
+                                                </xs:extension>
+                                            </xs:simpleContent>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="attributes">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:any />
+                        <xs:element name="attribute" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:attribute name="name" type="xs:string" use="required"/>
+                                <xs:anyAttribute processContents="skip"/>
+                            </xs:complexType>
+                        </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:all>
-        <xs:attribute name="sku" type="xs:string" use="required" />
-        <xs:attribute name="type" type="xs:string" use="required" />
-        <xs:attribute name="tax_class" type="xs:string" use="required" />
+        <xs:attribute name="sku" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="tax_class" type="xs:string" use="required"/>
     </xs:complexType>
 </xs:schema>

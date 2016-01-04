@@ -14,46 +14,45 @@
                     <label locale="en_US">A secondary image label</label>
                 </image>
                 <!--<image>
-                    <main_listing>true</main_listing>
                     <file locale="de_DE">118235/118235-251.2de.png</file>
                     <file locale="de_US">118235/118235-251.2us.png</file>
                     <label>A secondary image label</label>
                 </image-->
             </images>
             <attributes>
-                <category website="ru" locale="de_DE">sale</category>
-                <category website="ru" locale="de_DE">men</category>
-                <category website="ru" locale="de_DE">women</category>
-                <category website="ru" locale="de_DE">sale</category>
-                <category website="ru" locale="de_DE">women-accessories</category>
-                <category website="ru" locale="en_US">sale</category>
-                <category website="ru" locale="en_US">women-accessories</category>
-                <category website="fr" locale="fr_FR">sale</category>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <url_key locale="de_DE">led-arm-signallampe</url_key>
-                <url_key locale="en_US">led-armflasher</url_key>
-                <url_key locale="fr_FR">armer-conduit</url_key>
-                <name locale="de_DE">LED Arm-Signallampe</name>
-                <name locale="en_US">LED Armflasher</name>
-                <name locale="fr_FR">Armer Conduit</name>
-                <price website="ru">11.45</price>
-                <price website="fr">12.95</price>
-                <special_price website="ru">10.95</special_price>
-                <weight>11.2</weight>
-                <description locale="de_DE"><![CDATA[LED Arm-Signallampe<br />
+                <attribute name="category" website="ru" locale="de_DE">sale</attribute>
+                <attribute name="category" website="ru" locale="de_DE">men</attribute>
+                <attribute name="category" website="ru" locale="de_DE">women</attribute>
+                <attribute name="category" website="ru" locale="de_DE">sale</attribute>
+                <attribute name="category" website="ru" locale="de_DE">women-accessories</attribute>
+                <attribute name="category" website="ru" locale="en_US">sale</attribute>
+                <attribute name="category" website="ru" locale="en_US">women-accessories</attribute>
+                <attribute name="category" website="fr" locale="fr_FR">sale</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="url_key" locale="de_DE">led-arm-signallampe</attribute>
+                <attribute name="url_key" locale="en_US">led-armflasher</attribute>
+                <attribute name="url_key" locale="fr_FR">armer-conduit</attribute>
+                <attribute name="name" locale="de_DE">LED Arm-Signallampe</attribute>
+                <attribute name="name" locale="en_US">LED Armflasher</attribute>
+                <attribute name="name" locale="fr_FR">Armer Conduit</attribute>
+                <attribute name="price" website="ru">11.45</attribute>
+                <attribute name="price" website="fr">12.95</attribute>
+                <attribute name="special_price" website="ru">10.95</attribute>
+                <attribute name="weight">11.2</attribute>
+                <attribute name="description" locale="de_DE"><![CDATA[LED Arm-Signallampe<br />
 <br />
 LED Arm-Signallampe mit elastischem Band und Flasher mit variabler Blinkfolge,
-Flasher abnehmbar.]]></description>
-                <description locale="en_US"><![CDATA[Pro Touch LED Armflasher<br />
+Flasher abnehmbar.]]></attribute>
+                <attribute name="description" locale="en_US"><![CDATA[Pro Touch LED Armflasher<br />
 <br />
-LED Armflasher with elastic Band and Flasher]]></description>
-                <brand>Pro Touch</brand>
-                <style>Leuchten</style>
-                <gender>Damen</gender>
-                <gender>Herren</gender>
-                <color>d90000</color>
-                <color>000000</color>
+LED Armflasher with elastic Band and Flasher]]></attribute>
+                <attribute name="brand">Pro Touch</attribute>
+                <attribute name="style">Leuchten</attribute>
+                <attribute name="gender">Damen</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="color">d90000</attribute>
+                <attribute name="color">000000</attribute>
             </attributes>
         </product>
 
@@ -65,16 +64,16 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>adilette</url_key>
-                <name>Adilette</name>
-                <category>sale</category>
-                <price>14.92</price>
-                <brand>Adidas</brand>
-                <gender>Herren</gender>
-                <stock_qty>1</stock_qty>
-                <backorders>false</backorders>
-                <color>d90000</color>
-                <series>Adilette</series>
+                <attribute name="url_key">adilette</attribute>
+                <attribute name="name">Adilette</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">14.92</attribute>
+                <attribute name="brand">Adidas</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">1</attribute>
+                <attribute name="backorders">false</attribute>
+                <attribute name="color">d90000</attribute>
+                <attribute name="series">Adilette</attribute>
             </attributes>
         </product>
 
@@ -86,16 +85,16 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>adilette-out-of-stock</url_key>
-                <name>Adilette Out Of Stock</name>
-                <category>sale</category>
-                <price>14.92</price>
-                <brand>Adidas</brand>
-                <gender>Herren</gender>
-                <stock_qty>0</stock_qty>
-                <backorders>false</backorders>
-                <color>d90000</color>
-                <series>Adilette</series>
+                <attribute name="url_key">adilette-out-of-stock</attribute>
+                <attribute name="name">Adilette Out Of Stock</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">14.92</attribute>
+                <attribute name="brand">Adidas</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">0</attribute>
+                <attribute name="backorders">false</attribute>
+                <attribute name="color">d90000</attribute>
+                <attribute name="series">Adilette</attribute>
             </attributes>
         </product>
 
@@ -107,18 +106,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-kayano-21</url_key>
-                <series>Example</series>
-                <name>Gel-Kayano 21</name>
-                <category>sale</category>
-                <price>106.95</price>
-                <brand>Asics</brand>
-                <style>Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>263698</color>
-                <series>Gel-Kayano</series>
+                <attribute name="url_key">gel-kayano-21</attribute>
+                <attribute name="series">Example</attribute>
+                <attribute name="name">Gel-Kayano 21</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">106.95</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Stabil</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">263698</attribute>
+                <attribute name="series">Gel-Kayano</attribute>
             </attributes>
         </product>
 
@@ -130,17 +129,17 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>xa-pro-3d-gtx</url_key>
-                <name>XA Pro 3D GTX</name>
-                <category>sale</category>
-                <price>89.95</price>
-                <brand>Salomon</brand>
-                <style>Trail</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>fdf93c</color>
-                <series>XA</series>
+                <attribute name="url_key">xa-pro-3d-gtx</attribute>
+                <attribute name="name">XA Pro 3D GTX</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">89.95</attribute>
+                <attribute name="brand">Salomon</attribute>
+                <attribute name="style">Trail</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">fdf93c</attribute>
+                <attribute name="series">XA</attribute>
             </attributes>
         </product>
 
@@ -152,18 +151,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gt-2000-3</url_key>
-                <series>Example</series>
-                <name>GT-2000 3</name>
-                <category>sale</category>
-                <price>89.90</price>
-                <brand>Asics</brand>
-                <style>Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>263698</color>
-                <series>GT</series>
+                <attribute name="url_key">gt-2000-3</attribute>
+                <attribute name="series">Example</attribute>
+                <attribute name="name">GT-2000 3</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">89.90</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Stabil</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">263698</attribute>
+                <attribute name="series">GT</attribute>
             </attributes>
         </product>
 
@@ -175,17 +174,17 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-nimbus-17</url_key>
-                <name>Gel-Nimbus 17</name>
-                <category>sale</category>
-                <price>134.95</price>
-                <brand>Asics</brand>
-                <style>Neutral</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>a7fa41</color>
-                <series>Gel-Nimbus</series>
+                <attribute name="url_key">gel-nimbus-17</attribute>
+                <attribute name="name">Gel-Nimbus 17</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">134.95</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Neutral</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Nimbus</attribute>
             </attributes>
         </product>
 
@@ -197,18 +196,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-tri-9</url_key>
-                <series>Example</series>
-                <name>Gel-Noosa Tri 9</name>
-                <category>sale</category>
-                <price>83.97</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>a7fa41</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-tri-9</attribute>
+                <attribute name="series">Example</attribute>
+                <attribute name="name">Gel-Noosa Tri 9</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">83.97</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -220,17 +219,17 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-tri-10</url_key>
-                <name>Gel-Noosa Tri 10</name>
-                <category>sale</category>
-                <price>84.90</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>a7fa41</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-tri-10</attribute>
+                <attribute name="name">Gel-Noosa Tri 10</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">84.90</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -242,17 +241,17 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-tri-10-2</url_key>
-                <name>Gel-Noosa Tri 10</name>
-                <category>sale</category>
-                <price>84.90</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>fd5224</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-tri-10-2</attribute>
+                <attribute name="name">Gel-Noosa Tri 10</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">84.90</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">fd5224</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -264,17 +263,17 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-nimbus-16</url_key>
-                <name>Gel-Nimbus 16</name>
-                <category>sale</category>
-                <price>106.95</price>
-                <brand>Asics</brand>
-                <style>Neutral</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>a7fa41</color>
-                <series>Gel-Nimbus</series>
+                <attribute name="url_key">gel-nimbus-16</attribute>
+                <attribute name="name">Gel-Nimbus 16</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">106.95</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Neutral</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Nimbus</attribute>
             </attributes>
         </product>
 
@@ -286,18 +285,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>triumph-iso</url_key>
-                <name>Triumph Iso</name>
-                <category>sale</category>
-                <price>132.81</price>
-                <brand>Saucony</brand>
-                <style>Neutral</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>false</backorders>
-                <color>263698</color>
-                <color>a7fa41</color>
-                <series>Iso</series>
+                <attribute name="url_key">triumph-iso</attribute>
+                <attribute name="name">Triumph Iso</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">132.81</attribute>
+                <attribute name="brand">Saucony</attribute>
+                <attribute name="style">Neutral</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">false</attribute>
+                <attribute name="color">263698</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Iso</attribute>
             </attributes>
         </product>
 
@@ -309,18 +308,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-10-4</url_key>
-                <name>Gel-Noosa 10</name>
-                <category>sale</category>
-                <price>84.90</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Damen</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>fd5224</color>
-                <color>a7fa41</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-10-4</attribute>
+                <attribute name="name">Gel-Noosa 10</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">84.90</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Damen</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">fd5224</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -332,18 +331,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-10-5</url_key>
-                <name>Gel-Noosa 10</name>
-                <category>sale</category>
-                <price>84.90</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Damen</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>b01c64</color>
-                <color>a7fa41</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-10-5</attribute>
+                <attribute name="name">Gel-Noosa 10</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">84.90</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Damen</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">b01c64</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -355,18 +354,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-10-3</url_key>
-                <name>Gel-Noosa 10</name>
-                <series>Gel-Noosa</series>
-                <category>sale</category>
-                <price>89.95</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Damen</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>fd5224</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-10-3</attribute>
+                <attribute name="name">Gel-Noosa 10</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">89.95</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Damen</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">fd5224</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -378,18 +377,18 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-10-gs-9</url_key>
-                <name>Gel-Noosa Tri 10 GS</name>
-                <category>sale</category>
-                <price>47.57</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Kinder</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>263698</color>
-                <color>a7fa41</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-10-gs-9</attribute>
+                <attribute name="name">Gel-Noosa Tri 10 GS</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">47.57</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Kinder</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">263698</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -401,17 +400,17 @@ LED Armflasher with elastic Band and Flasher]]></description>
                 </image>
             </images>
             <attributes>
-                <url_key>gel-noosa-10-gs-8</url_key>
-                <name>Gel-Noosa Tri 10 GS</name>
-                <category>sale</category>
-                <price>47.57</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Kinder</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <color>a7fa41</color>
-                <series>Gel-Noosa</series>
+                <attribute name="url_key">gel-noosa-10-gs-8</attribute>
+                <attribute name="name">Gel-Noosa Tri 10 GS</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">47.57</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Kinder</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Noosa</attribute>
             </attributes>
         </product>
 
@@ -423,30 +422,29 @@ LED Armflasher with elastic Band and Flasher]]></description>
                     <label locale="en_US">The main image label for this shoe</label>
                 </image>
                 <image>
-                    <main_listing>true</main_listing>
                     <file>m29540_backview.jpg</file>
                     <label>Yet another image label</label>
                 </image>
             </images>
             <attributes>
-                <url_key>adipure-360</url_key>
-                <category>sale</category>
-                <category>men-running-shoes</category>
-                <category>specials</category>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
-                <name>Adipure 360.2 Prima</name>
-                <price>89.95</price>
-                <special_price>44.97</special_price>
-                <description><![CDATA[Adidas adiPure 360.2 Prima<br><br>
+                <attribute name="url_key">adipure-360</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="category">men-running-shoes</attribute>
+                <attribute name="category">specials</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="name">Adipure 360.2 Prima</attribute>
+                <attribute name="price">89.95</attribute>
+                <attribute name="special_price">44.97</attribute>
+                <attribute name="description"><![CDATA[Adidas adiPure 360.2 Prima<br><br>
 - Flex Grooves: Flexibilität für ein natürliches Laufgefühl.<br>
 - Atmungsaktives Mesh: Ermöglicht Luftzirkulation, die für ein angenehmes Gefühl am Fuß sorgt<br>
 - Die All-Over-Graphik Ausführung  des Schuhs gibt dir einen einzigartigen Look<br><br>
-TEXTILE/SYNTHETICS]]></description>
-                <brand>Adidas</brand>
-                <style>Natural-Running (Free)</style>
-                <gender>Damen</gender>
-                <series>Adipure</series>
+TEXTILE/SYNTHETICS]]></attribute>
+                <attribute name="brand">Adidas</attribute>
+                <attribute name="style">Natural-Running (Free)</attribute>
+                <attribute name="gender">Damen</attribute>
+                <attribute name="series">Adipure</attribute>
             </attributes>
             <variations>
                 <attribute>color</attribute>
@@ -455,56 +453,56 @@ TEXTILE/SYNTHETICS]]></description>
             <associated_products>
                 <product sku="218765-333-1" type="simple" tax_class="19%">
                     <attributes>
-                        <stock_qty>6</stock_qty>
-                        <color locale="en_US">Red</color>
-                        <color locale="de_DE">Rot</color>
-                        <color locale="fr_FR">Rouge</color>
-                        <size>US 12.5 - EU 47</size>
+                        <attribute name="stock_qty">6</attribute>
+                        <attribute name="color" locale="en_US">Red</attribute>
+                        <attribute name="color" locale="de_DE">Rot</attribute>
+                        <attribute name="color" locale="fr_FR">Rouge</attribute>
+                        <attribute name="size">US 12.5 - EU 47</attribute>
                     </attributes>
                 </product>
                 <product sku="218765-333-2" type="simple" tax_class="19%">
                     <attributes>
-                        <stock_qty>0</stock_qty>
-                        <color locale="en_US">Red</color>
-                        <color locale="de_DE">Rot</color>
-                        <color locale="fr_FR">Rouge</color>
-                        <size>US 12 - EU 46</size>
+                        <attribute name="stock_qty">0</attribute>
+                        <attribute name="color" locale="en_US">Red</attribute>
+                        <attribute name="color" locale="de_DE">Rot</attribute>
+                        <attribute name="color" locale="fr_FR">Rouge</attribute>
+                        <attribute name="size">US 12 - EU 46</attribute>
                     </attributes>
                 </product>
                 <product sku="218765-333-3" type="simple" tax_class="19%">
                     <attributes>
-                        <stock_qty>45</stock_qty>
-                        <color locale="en_US">Red</color>
-                        <color locale="de_DE">Rot</color>
-                        <color locale="fr_FR">Rouge</color>
-                        <size>US 11.5 - EU 45</size>
+                        <attribute name="stock_qty">45</attribute>
+                        <attribute name="color" locale="en_US">Red</attribute>
+                        <attribute name="color" locale="de_DE">Rot</attribute>
+                        <attribute name="color" locale="fr_FR">Rouge</attribute>
+                        <attribute name="size">US 11.5 - EU 45</attribute>
                     </attributes>
                 </product>
                 <product sku="218765-333-4" type="simple" tax_class="19%">
                     <attributes>
-                        <stock_qty>5</stock_qty>
-                        <color locale="en_US">Red</color>
-                        <color locale="de_DE">Rot</color>
-                        <color locale="fr_FR">Rouge</color>
-                        <size>US 10 - EU 43</size>
+                        <attribute name="stock_qty">5</attribute>
+                        <attribute name="color" locale="en_US">Red</attribute>
+                        <attribute name="color" locale="de_DE">Rot</attribute>
+                        <attribute name="color" locale="fr_FR">Rouge</attribute>
+                        <attribute name="size">US 10 - EU 43</attribute>
                     </attributes>
                 </product>
                 <product sku="218765-333-6" type="simple" tax_class="19%">
                     <attributes>
-                        <stock_qty>5</stock_qty>
-                        <color locale="en_US">Blue</color>
-                        <color locale="de_DE">Blau</color>
-                        <color locale="fr_FR">Bleu</color>
-                        <size>US 12 - EU 46</size>
+                        <attribute name="stock_qty">5</attribute>
+                        <attribute name="color" locale="en_US">Blue</attribute>
+                        <attribute name="color" locale="de_DE">Blau</attribute>
+                        <attribute name="color" locale="fr_FR">Bleu</attribute>
+                        <attribute name="size">US 12 - EU 46</attribute>
                     </attributes>
                 </product>
                 <product sku="218765-333-7" type="simple" tax_class="19%">
                     <attributes>
-                        <stock_qty>5</stock_qty>
-                        <color locale="en_US">Blue</color>
-                        <color locale="de_DE">Blau</color>
-                        <color locale="fr_FR">Bleu</color>
-                        <size>US 11.5 - EU 45</size>
+                        <attribute name="stock_qty">5</attribute>
+                        <attribute name="color" locale="en_US">Blue</attribute>
+                        <attribute name="color" locale="de_DE">Blau</attribute>
+                        <attribute name="color" locale="fr_FR">Bleu</attribute>
+                        <attribute name="size">US 11.5 - EU 45</attribute>
                     </attributes>
                 </product>
             </associated_products>
@@ -513,17 +511,17 @@ TEXTILE/SYNTHETICS]]></description>
         <product type="simple" sku="no-image" tax_class="19%">
             <images/>
             <attributes>
-                <url_key>no-image</url_key>
-                <name>No Image</name>
-                <category>sale</category>
-                <price>5.55</price>
-                <brand>Asics</brand>
-                <style>Lightweight/Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>55</stock_qty>
-                <backorders>true</backorders>
-                <color>a7fa41</color>
-                <series>Gel-Kayano</series>
+                <attribute name="url_key">no-image</attribute>
+                <attribute name="name">No Image</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">5.55</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Lightweight/Stabil</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">55</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="color">a7fa41</attribute>
+                <attribute name="series">Gel-Kayano</attribute>
             </attributes>
         </product>
 
@@ -531,27 +529,27 @@ TEXTILE/SYNTHETICS]]></description>
     <listings>
         <listing url_key="adidas-sale" website="ru" locale="de_DE">
             <criteria type="and">
-                <stock_qty is="GreaterThan">0</stock_qty>
-                <category is="Equal">sale</category>
-                <brand is="Equal">Adidas</brand>
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
+                <attribute name="brand" is="Equal">Adidas</attribute>
             </criteria>
         </listing>
         <listing url_key="sale" website="ru" locale="de_DE">
             <criteria type="and">
-                <stock_qty is="GreaterThan">0</stock_qty>
-                <category is="Equal">sale</category>
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
             </criteria>
         </listing>
         <listing url_key="sale" website="fr" locale="fr_FR">
             <criteria type="and">
-                <stock_qty is="GreaterThan">0</stock_qty>
-                <category is="Equal">sale</category>
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
             </criteria>
         </listing>
         <listing url_key="asics" website="fr" locale="fr_FR">
             <criteria type="and">
-                <stock_qty is="GreaterThan">0</stock_qty>
-                <brand is="Equal">Asics</brand>
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="brand" is="Equal">Asics</attribute>
             </criteria>
         </listing>
     </listings>

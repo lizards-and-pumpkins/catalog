@@ -10,14 +10,14 @@
                 </image>
             </images>
             <attributes>
-                <url_key>adilette</url_key>
-                <name>Adilette</name>
-                <category>men-accessories</category>
-                <price>14.92</price>
-                <brand>Adidas</brand>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>false</backorders>
+                <attribute name="url_key">adilette</attribute>
+                <attribute name="name">Adilette</attribute>
+                <attribute name="category">men-accessories</attribute>
+                <attribute name="price">14.92</attribute>
+                <attribute name="brand">Adidas</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">false</attribute>
             </attributes>
         </product>
         <product type="simple" sku="T4H2N-4701" tax_class="test">
@@ -28,17 +28,17 @@
                 </image>
             </images>
             <attributes>
-                <url_key>gel-kayano-21</url_key>
-                <name>Gel-Kayano 21</name>
-                <category>men-accessories</category>
+                <attribute name="url_key">gel-kayano-21</attribute>
+                <attribute name="name">Gel-Kayano 21</attribute>
+                <attribute name="category">men-accessories</attribute>
                 <!-- The following lines will result in exception as context parts are different for same attribute. -->
-                <price website="ru_DE">106.95</price>
-                <price>107.95</price>
-                <brand>Asics</brand>
-                <style>Stabil</style>
-                <gender>Herren</gender>
-                <stock_qty>5</stock_qty>
-                <backorders>true</backorders>
+                <attribute name="price" website="ru_DE">106.95</attribute>
+                <attribute name="price">107.95</attribute>
+                <attribute name="brand">Asics</attribute>
+                <attribute name="style">Stabil</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
             </attributes>
         </product>
     </products>

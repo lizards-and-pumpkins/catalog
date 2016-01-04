@@ -61,7 +61,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
      */
     private function createProductAttributeListBuilder(XPathParser $parser)
     {
-        $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/*');
+        $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/attribute');
         $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);
         return ProductAttributeListBuilder::fromArray($attributesArray);
     }
@@ -116,13 +116,49 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
      */
     private function nodeArrayAsAttributeArray(array $node)
     {
-        $value = !is_array($node['value']) ?
-            $node['value'] :
-            array_map([$this, 'nodeArrayAsAttributeArray'], $node['value']);
         return [
-            ProductAttribute::CODE => $node['nodeName'],
-            ProductAttribute::CONTEXT => $node['attributes'],
-            ProductAttribute::VALUE => $value,
+            ProductAttribute::CODE => $this->getCode($node),
+            ProductAttribute::CONTEXT => $this->getContextParts($node),
+            ProductAttribute::VALUE => $this->getValue($node),
         ];
+    }
+
+    /**
+     * @param mixed[] $node
+     * @return string
+     */
+    private function getCode(array $node)
+    {
+        if ('attribute' === $node['nodeName']) {
+            return $node['attributes']['name'];
+        }
+
+        return $node['nodeName'];
+    }
+
+    /**
+     * @param string[] $node
+     * @return string[]
+     */
+    private function getContextParts(array $node)
+    {
+        if ('attribute' === $node['nodeName']) {
+            return array_diff_key($node['attributes'], ['name' => null]);
+        }
+
+        return $node['attributes'];
+    }
+
+    /**
+     * @param mixed[] $node
+     * @return mixed
+     */
+    private function getValue(array $node)
+    {
+        if (is_array($node['value'])) {
+            return array_map([$this, 'nodeArrayAsAttributeArray'], $node['value']);
+        }
+
+        return $node['value'];
     }
 }
