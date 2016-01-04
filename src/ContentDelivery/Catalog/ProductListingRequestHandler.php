@@ -161,14 +161,31 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $this->facetFilterRequest
         );
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
+        $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
+
+        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
+            $criteria,
+            $selectedFilters,
+            $this->context,
+            $this->facetFilterRequest,
+            $numberOfProductsPerPage,
+            $currentPageNumber,
+            $selectedSortOrderConfig
+        );
+
+        $lastPageNumber = (int) ceil($searchEngineResponse->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1;
+
+        if ($currentPageNumber <= $lastPageNumber) {
+            return $searchEngineResponse;
+        }
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $selectedFilters,
             $this->context,
             $this->facetFilterRequest,
-            $productsPerPage->getSelectedNumberOfProductsPerPage(),
-            $currentPageNumber,
+            $numberOfProductsPerPage,
+            $lastPageNumber,
             $selectedSortOrderConfig
         );
     }

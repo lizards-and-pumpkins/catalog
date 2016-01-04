@@ -64,6 +64,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->getInfo());
 
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn(1);
 
         $mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
@@ -80,6 +81,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private function createStubProductListingPageRequest()
     {
         $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
+        $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
+
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
         $stubProductListingPageRequest = $this->getMock(ProductListingPageRequest::class, [], [], '', false);
@@ -169,5 +172,12 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $result = $this->requestHandler->process($this->stubRequest);
         $this->assertInstanceOf(HttpResponse::class, $result);
+    }
+
+    public function testSubsequentRequestToDAtaPoolIsMadeIfRequestedPageNumberIsGreaterThanTotalNumberOfPages()
+    {
+        $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(2);
+        $this->mockDataPoolReader->expects($this->exactly(2))->method('getSearchResultsMatchingCriteria');
+        $this->requestHandler->process($this->stubRequest);
     }
 }
