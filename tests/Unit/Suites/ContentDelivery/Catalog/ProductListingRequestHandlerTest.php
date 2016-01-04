@@ -174,7 +174,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpResponse::class, $result);
     }
 
-    public function testSubsequentRequestToDAtaPoolIsMadeIfRequestedPageNumberIsGreaterThanTotalNumberOfPages()
+    public function testSubsequentRequestToDataPoolIsMadeIfRequestedPageNumberIsGreaterThanTotalNumberOfPages()
     {
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(2);
         $this->mockDataPoolReader->expects($this->exactly(2))->method('getSearchResultsMatchingCriteria');
