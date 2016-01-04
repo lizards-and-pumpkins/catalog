@@ -105,7 +105,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
     {
         $fileURI = $file->getInStorageUri();
         if (!($fileURI instanceof FilesystemFileUri)) {
-            throw $this->createStorageTypeMissmatchException($fileURI);
+            throw $this->createStorageTypeMismatchException($fileURI);
         }
     }
 
@@ -113,7 +113,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
      * @param StorageSpecificFileUri $storageSpecificFileURI
      * @return FileStorageTypeMismatchException
      */
-    private function createStorageTypeMissmatchException(StorageSpecificFileUri $storageSpecificFileURI)
+    private function createStorageTypeMismatchException(StorageSpecificFileUri $storageSpecificFileURI)
     {
         $thisURIType = get_class($this);
         $otherURIType = get_class($storageSpecificFileURI);

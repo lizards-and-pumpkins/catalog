@@ -61,7 +61,7 @@ class ProductsPerPage implements \JsonSerializable
      */
     private static function validateNumbersOfProductsPerPage(array $numbersOfProductsPerPage)
     {
-        if (empty($numbersOfProductsPerPage)) {
+        if (count($numbersOfProductsPerPage) === 0) {
             throw new InvalidNumberOfProductsPerPageException('No numbers of products per page specified.');
         }
 
@@ -96,6 +96,9 @@ class ProductsPerPage implements \JsonSerializable
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function jsonSerialize()
     {
         return array_map(function ($numberOfProductsPerPage) {

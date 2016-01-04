@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
@@ -12,7 +11,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\ProductId;
 
 class DataPoolReader

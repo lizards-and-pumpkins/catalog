@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -314,5 +313,3 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->catalogImport->importFile($fixtureFile);
     }
 }
-
-

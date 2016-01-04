@@ -2,13 +2,16 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SnippetTransformation;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
+/**
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService
+ */
 class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
 {
     private $dummyProductData = ['attributes' => []];
@@ -39,11 +42,6 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
     private $stubContext;
 
     /**
-     * @var SnippetTransformation|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubPriceSnippetTransformation;
-
-    /**
      * @var ProductJsonService
      */
     private $productJsonService;
@@ -55,9 +53,6 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubPriceSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubSpecialPriceSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubContext = $this->getMock(Context::class);
-        $this->stubContext->method('getValue')->willReturnMap([
-            [ContextLocale::CODE, 'de_DE'],
-        ]);
 
         $this->productJsonService = new ProductJsonService(
             $this->mockDataPoolReader,
@@ -68,12 +63,36 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testExceptionIsThrownIfContextDoesNotHaveLocaleData()
+    {
+        $jsonSnippetKey = 'dummy_json_snippet';
+        $priceSnippetKey = 'dummy_price_snippet_key';
+        $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
+
+        $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')->willReturn($jsonSnippetKey);
+        $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
+        $this->stubSpecialPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($specialPriceSnippetKey);
+
+        $this->mockDataPoolReader->method('getSnippets')->willReturn([
+            $jsonSnippetKey => json_encode($this->dummyProductData),
+            $priceSnippetKey => '9999',
+            $specialPriceSnippetKey => '8999',
+        ]);
+
+        $this->setExpectedException(NoValidLocaleInContextException::class);
+
+        $productId = $this->getMock(ProductId::class, [], [], '', false);
+        $this->productJsonService->get($productId);
+    }
+
     public function testItDelegatesToTheDataPoolReaderToFetchTheProductData()
     {
         $jsonSnippetKey = 'dummy_json_snippet';
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
-        
+
+        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+
         $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')->willReturn($jsonSnippetKey);
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
         $this->stubSpecialPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($specialPriceSnippetKey);
@@ -83,7 +102,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 $jsonSnippetKey => json_encode($this->dummyProductData),
                 $priceSnippetKey => '9999',
-                $specialPriceSnippetKey=> '8999',
+                $specialPriceSnippetKey => '8999',
             ]);
         
         $productId = $this->getMock(ProductId::class, [], [], '', false);
@@ -96,6 +115,8 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $jsonSnippetKey = 'dummy_json_snippet';
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
+
+        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
 
         $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')->willReturn($jsonSnippetKey);
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);

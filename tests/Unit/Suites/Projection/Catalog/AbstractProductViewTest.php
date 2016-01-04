@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage\ProductImage;

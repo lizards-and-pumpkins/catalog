@@ -23,7 +23,9 @@ class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \
     protected function setUp()
     {
         $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $testKeyGeneratorFactoryClosure = function () { return $this->stubSnippetKeyGenerator; };
+        $testKeyGeneratorFactoryClosure = function () {
+            return $this->stubSnippetKeyGenerator;
+        };
         $this->strategy = new ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy(
             $testKeyGeneratorFactoryClosure
         );

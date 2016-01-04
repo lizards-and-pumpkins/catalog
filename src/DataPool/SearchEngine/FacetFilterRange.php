@@ -46,6 +46,9 @@ class FacetFilterRange
         return new self($rangeFrom, $rangeTo);
     }
 
+    /**
+     * @param int|float|string|null $boundary
+     */
     private static function validateBoundaryType($boundary)
     {
         if (!is_int($boundary) && !is_string($boundary) && !is_float($boundary) && null !== $boundary) {

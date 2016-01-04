@@ -65,7 +65,7 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
 
     public function testArrayOfSnippetsIsReturned()
     {
-        $dataObject = [];
+        $dataObject = new \stdClass();
         $result = $this->renderer->render($dataObject);
 
         $this->assertContainsOnly(Snippet::class, $result);
@@ -79,7 +79,7 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 
-        $dataObject = [];
+        $dataObject = new \stdClass();
         $result = $this->renderer->render($dataObject);
 
         $this->assertEquals([$expectedSnippet], $result);

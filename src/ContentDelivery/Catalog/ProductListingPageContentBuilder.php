@@ -8,6 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
+use LizardsAndPumpkins\DefaultHttpResponse;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
@@ -47,6 +48,15 @@ class ProductListingPageContentBuilder
         $this->translatorRegistry = $translatorRegistry;
     }
 
+    /**
+     * @param PageMetaInfoSnippetContent $metaInfo
+     * @param Context $context
+     * @param mixed[] $keyGeneratorParams
+     * @param SearchEngineResponse $searchEngineResponse
+     * @param ProductsPerPage $productsPerPage
+     * @param SortOrderConfig $selectedSortOrderConfig
+     * @return DefaultHttpResponse
+     */
     public function buildPageContent(
         PageMetaInfoSnippetContent $metaInfo,
         Context $context,

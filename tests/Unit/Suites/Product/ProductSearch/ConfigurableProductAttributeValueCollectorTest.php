@@ -49,7 +49,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
     }
 
     /**
-     * @param Product[] $stubAssociatedProducts
+     * @param Product[] $associatedProducts
      * @return AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockAssociatedProductList(Product ...$associatedProducts)

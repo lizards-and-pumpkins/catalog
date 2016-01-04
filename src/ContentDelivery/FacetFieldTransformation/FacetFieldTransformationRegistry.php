@@ -12,6 +12,10 @@ class FacetFieldTransformationRegistry
      */
     private $transformations = [];
 
+    /**
+     * @param string $code
+     * @param FacetFieldTransformation $transformation
+     */
     public function register($code, FacetFieldTransformation $transformation)
     {
         $this->validateCode($code);
@@ -33,6 +37,10 @@ class FacetFieldTransformationRegistry
         return $this->transformations[$code];
     }
 
+    /**
+     * @param string $code
+     * @return bool
+     */
     public function hasTransformationForCode($code)
     {
         self::validateCode($code);

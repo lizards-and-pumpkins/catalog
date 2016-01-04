@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
@@ -13,8 +12,6 @@ use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
@@ -22,8 +19,6 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  */
 class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    private $testSnippetCode = 'bar';
-
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -89,6 +84,9 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $stubProductJsonService;
 
+    /**
+     * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createMockPageBuilder()
     {
         $mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);

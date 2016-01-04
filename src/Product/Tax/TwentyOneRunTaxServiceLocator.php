@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product\Tax;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Country\Country;
 use LizardsAndPumpkins\Product\Tax\Exception\UnableToLocateTaxServiceException;
 use LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate;

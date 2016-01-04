@@ -21,7 +21,7 @@ class ProductXmlToProductBuilderLocator
 
     /**
      * @param string $xml
-     * @return ProductBuilder
+     * @return ProductBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     public function createProductBuilderFromXml($xml)
     {
@@ -80,6 +80,4 @@ class ProductXmlToProductBuilderLocator
         $message = sprintf('No product type builder factory for the product type code "%s" was found', $typeCode);
         throw new NoMatchingProductTypeBuilderFactoryFoundException($message);
     }
-
-
 }

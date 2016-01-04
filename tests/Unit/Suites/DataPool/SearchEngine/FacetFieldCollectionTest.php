@@ -2,21 +2,27 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\Product\AttributeCode;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection
  */
 class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param $attributeCode
+     * @param string $attributeCode
      * @param \PHPUnit_Framework_MockObject_MockObject[] $stubFacetFieldValueCount
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubFacetField($attributeCode, array $stubFacetFieldValueCount)
     {
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode->method('__toString')->willReturn($attributeCode);
+
         $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
-        $stubFacetField->method('getAttributeCode')->willReturn($attributeCode);
+        $stubFacetField->method('getAttributeCode')->willReturn($stubAttributeCode);
         $stubFacetField->method('getValues')->willReturn($stubFacetFieldValueCount);
+
         return $stubFacetField;
     }
 

@@ -38,7 +38,7 @@ class TwentyOneRunTaxServiceLocatorTest extends \PHPUnit_Framework_TestCase
      * @param string $website
      * @param string $productTaxClass
      * @param string $country
-     * @param string $expectedTaxServiceClass
+     * @param string $expectedRate
      */
     private function assertTaxServiceLocatorReturns($website, $productTaxClass, $country, $expectedRate)
     {
@@ -92,6 +92,10 @@ class TwentyOneRunTaxServiceLocatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider taxServiceLocatorOptionsProvider
+     * @param string $website
+     * @param string $productTaxClass
+     * @param string $country
+     * @param string $rate
      */
     public function testTaxServiceLocatorReturnsTheCorrectInstances($website, $productTaxClass, $country, $rate)
     {

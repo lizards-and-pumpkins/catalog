@@ -165,11 +165,10 @@ class XPathParser
     private function validateNoErrors()
     {
         $errors = libxml_get_errors();
-        if (!empty($errors)) {
-            $message = '';
-            foreach ($errors as $error) {
-                $message .= sprintf('XML error on line %d: %s', $error->line, $error->message);
-            }
+        if (count($errors) > 0) {
+            $message = array_reduce($errors, function ($carry, $error) {
+                return $carry . sprintf('XML error on line %d: %s', $error->line, $error->message);
+            }, '');
             throw new \OutOfBoundsException($message);
         }
     }

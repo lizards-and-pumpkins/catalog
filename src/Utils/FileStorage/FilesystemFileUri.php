@@ -18,9 +18,10 @@ class FilesystemFileUri implements StorageSpecificFileUri
     {
         $this->filesystemFilePath = $filesystemFilePath;
     }
-    
+
     /**
      * @param string $filesystemPath
+     * @return FilesystemFileUri
      */
     public static function fromString($filesystemPath)
     {

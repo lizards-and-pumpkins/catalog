@@ -85,6 +85,7 @@ class Country
 
     /**
      * @param Country $otherCountry
+     * @return bool
      */
     public function isEqualTo(Country $otherCountry)
     {

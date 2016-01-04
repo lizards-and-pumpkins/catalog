@@ -8,7 +8,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilde
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 
 class ProductSearchDocumentBuilder implements SearchDocumentBuilder

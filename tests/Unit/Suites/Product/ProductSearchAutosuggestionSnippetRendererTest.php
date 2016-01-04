@@ -52,7 +52,7 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
 
     public function testArrayOfSnippetsIsReturned()
     {
-        $dataObject = [];
+        $dataObject = new \stdClass();
         $result = $this->snippetRenderer->render($dataObject);
 
         $this->assertContainsOnly(Snippet::class, $result);

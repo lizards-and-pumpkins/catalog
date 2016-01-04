@@ -64,6 +64,9 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
         $this->transformation->decode($nonMatchingEncodedInput);
     }
 
+    /**
+     * @return array[]
+     */
     public function nonMatchingEncodedInputDataProvider()
     {
         return [

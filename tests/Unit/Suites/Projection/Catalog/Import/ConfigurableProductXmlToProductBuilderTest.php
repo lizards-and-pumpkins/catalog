@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;

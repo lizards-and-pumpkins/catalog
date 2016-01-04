@@ -5,9 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 class TwentyOneRunSimpleProductView extends AbstractProductView
 {
@@ -49,7 +47,7 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
 
-        if (empty($attributeValues)) {
+        if (count($attributeValues) === 0) {
             return '';
         }
 

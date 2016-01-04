@@ -21,14 +21,13 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
     public function emptyVersionProvider()
     {
         return [
-        [''],
-        [0],
-        [0.00],
+            [''],
+            [' '],
         ];
     }
 
@@ -48,11 +47,13 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     public function invalidVersionProvider()
     {
         return [
-        [null],
-        [[]],
-        [new \stdClass()],
-        [true],
-        [false],
+            [1],
+            [.1],
+            [null],
+            [[]],
+            [new \stdClass()],
+            [true],
+            [false],
         ];
     }
 
@@ -60,6 +61,6 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     {
         $version = '1.0';
         $dataVersion = DataVersion::fromVersionString($version);
-        $this->assertSame($version, (string)$dataVersion);
+        $this->assertSame($version, (string) $dataVersion);
     }
 }

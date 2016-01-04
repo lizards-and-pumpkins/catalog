@@ -44,6 +44,9 @@ class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
         ProductsPerPage::create($invalidNumbersOfProductsPerPage, $this->selectedNumberOfProductsPerPage);
     }
 
+    /**
+     * @return array[]
+     */
     public function invalidNumbersOfProductsPerPageDataProvider()
     {
         return [

@@ -74,7 +74,7 @@ class UnitTestFactory implements Factory
      */
     public function getProductListingFilterNavigationConfig()
     {
-        return $this->mockObjectGenerator->getMock(FacetFiltersToIncludeInResult::class, [], [], '', true, true, true, true, true);
+        return new FacetFiltersToIncludeInResult();
     }
 
     /**
@@ -82,7 +82,7 @@ class UnitTestFactory implements Factory
      */
     public function getProductSearchResultsFilterNavigationConfig()
     {
-        return $this->mockObjectGenerator->getMock(FacetFiltersToIncludeInResult::class, [], [], '', true, true, true, true, true);
+        return new FacetFiltersToIncludeInResult();
     }
 
     /**

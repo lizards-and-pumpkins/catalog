@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product\Composite;
 
 use LizardsAndPumpkins\Product\AttributeCode;
@@ -40,7 +39,7 @@ class ProductVariationAttributeList implements \JsonSerializable, \IteratorAggre
 
     private function validateAttributeCodeArrayIsNotEmpty(AttributeCode ...$attributeCodes)
     {
-        if (empty($attributeCodes)) {
+        if (count($attributeCodes) === 0) {
             throw new ProductVariationAttributesEmptyException('The product variation attribute list can not be empty');
         }
     }

@@ -19,12 +19,16 @@ class TwentyOneRunTaxableCountriesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider availableCountriesDataProvider
+     * @param string $availableCountry
      */
     public function testItReturnsTheAvailableCountries($availableCountry)
     {
         $this->assertContains($availableCountry, $this->countries->getCountries());
     }
 
+    /**
+     * @return array[]
+     */
     public function availableCountriesDataProvider()
     {
         return [

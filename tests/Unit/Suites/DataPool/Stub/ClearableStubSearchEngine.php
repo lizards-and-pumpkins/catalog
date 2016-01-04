@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\DataPool\Stub;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
@@ -25,7 +24,7 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
 
     /**
      * @param SearchCriteria $criteria
-     * @param array $filterSelection
+     * @param array[] $filterSelection
      * @param Context $context
      * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @param int $rowsPerPage

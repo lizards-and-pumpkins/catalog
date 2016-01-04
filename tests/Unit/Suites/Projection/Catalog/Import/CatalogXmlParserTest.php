@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Log\Logger;
@@ -99,24 +98,6 @@ EOT;
     }
 
     /**
-     * @param string|null $imageXml
-     * @return string
-     */
-    private function getInvalidSimpleProductXml($imageXml = null)
-    {
-        $imageContent = isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml());
-        return sprintf('
-        <product type="simple" sku="test-sku">
-            %s
-            <attributes>
-                <category website="test1">category-1</category>
-                <category locale="xx_XX">category-2</category>
-            </attributes>
-        </product>
-', $this->getImagesSectionWithContext($imageContent));
-    }
-
-    /**
      * @param string $content
      * @return string
      */
@@ -208,20 +189,6 @@ EOT;
     }
 
     /**
-     * @return string
-     */
-    private function getCatalogXmlWithOneProductImage()
-    {
-        return $this->getCatalogXmlWithContent(
-            $this->getProductSectionWithContent(
-                $this->getSimpleProductXml(
-                    $this->getFirstImageXml()
-                )
-            )
-        );
-    }
-
-    /**
      * @param string $filePath ∂
      * @param string $content
      */
@@ -249,7 +216,7 @@ EOT;
      */
     private function createMockCallbackExpectingXml($expectedXml, $expectedCallCount, $callbackIdentifier)
     {
-        $mockCallback = $this->getMock(Callback::class, ['__invoke']);
+        $mockCallback = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
         $expected = new \DOMDocument();
         $expected->loadXML($expectedXml);
         $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
@@ -392,8 +359,9 @@ EOT;
             )
         );
         $instance = CatalogXmlParser::fromXml($xml, $this->mockLogger);
-        
-        $listingCallback = $this->getMock(Callback::class, ['__invoke']);
+
+        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $listingCallback */
+        $listingCallback = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
         $listingCallback->expects($this->once())->method('__invoke')->willThrowException(new \Exception('Test dummy'));
 
         $instance->registerListingCallback($listingCallback);

@@ -2,16 +2,12 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
-use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 class TwentyOneRunConfigurableProductView extends AbstractProductView implements CompositeProductView
 {
@@ -62,7 +58,7 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
 
-        if (empty($attributeValues)) {
+        if (count($attributeValues) === 0) {
             return '';
         }
 

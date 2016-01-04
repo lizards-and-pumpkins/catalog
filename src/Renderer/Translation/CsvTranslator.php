@@ -90,7 +90,7 @@ class CsvTranslator implements Translator
     }
 
     /**
-     * @param $localeDirectoryPath
+     * @param string $localeDirectoryPath
      */
     private static function validateLocaleDirectory($localeDirectoryPath)
     {

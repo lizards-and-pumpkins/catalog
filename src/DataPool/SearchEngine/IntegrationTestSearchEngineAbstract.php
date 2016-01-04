@@ -71,7 +71,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function applyFiltersToSelectionCriteria(SearchCriteria $originalCriteria, array $filters)
     {
-        if (empty($filters)) {
+        if (count($filters) === 0) {
             return $originalCriteria;
         }
 
@@ -427,7 +427,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
         if (!$transformationRegistry->hasTransformationForCode($attributeCode)) {
             throw new NoFacetFieldTransformationRegisteredException(
-                sprintf('No facet field transformation is geristered for "%s" attribute.', $attributeCode)
+                sprintf('No facet field transformation is registered for "%s" attribute.', $attributeCode)
             );
         }
 

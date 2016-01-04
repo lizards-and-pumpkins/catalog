@@ -51,7 +51,7 @@ class HttpBaseUrl implements BaseUrl
             $type = self::getTypeAsString($baseUrlString);
             throw self::createException(sprintf('The input for the base URL has to be a string, got "%s"', $type));
         }
-        if (empty(trim($baseUrlString))) {
+        if (trim($baseUrlString) === '') {
             throw self::createException('Invalid empty source data for the base URL specified');
         }
         if (substr($baseUrlString, 0, 8) !== 'https://' && substr($baseUrlString, 0, 7) !== 'http://') {

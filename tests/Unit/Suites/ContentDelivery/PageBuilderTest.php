@@ -153,9 +153,6 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippets')->willReturn($pageSnippetKeyMap);
     }
 
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator
-     */
     private function fakeSnippetKeyGeneratorLocator(\PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator)
     {
         $fixedKeyGeneratorMockFactory = function ($snippetCode) {
@@ -167,9 +164,6 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback($fixedKeyGeneratorMockFactory);
     }
 
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
-     */
     private function fakeSnippetKeyGeneratorLocatorForRootOnly(
         \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
     ) {

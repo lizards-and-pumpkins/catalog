@@ -11,6 +11,9 @@ class FromInputCopyingTestContextPartBuilder implements ContextPartBuilder
      */
     private $code;
 
+    /**
+     * @param string $code
+     */
     public function __construct($code)
     {
         $this->code = $code;

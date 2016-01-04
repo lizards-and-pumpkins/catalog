@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\IntegrationTestProductImageFileLocator;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 

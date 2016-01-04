@@ -123,10 +123,10 @@ class PriceSnippetRenderer implements SnippetRenderer
 
     /**
      * @param Product $product
-     * @param string $country
+     * @param Context $context
      * @return string
      */
-    private function getSnippetKeyForCountry(Product $product, $context)
+    private function getSnippetKeyForCountry(Product $product, Context $context)
     {
         return $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
     }

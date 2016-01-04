@@ -37,7 +37,7 @@ class ProductTypeCode
         if (!is_string($productTypeString)) {
             throw self::getInvalidProductTypeCodeException($productTypeString);
         }
-        if (empty(trim($productTypeString))) {
+        if (trim($productTypeString) === '') {
             throw self::getEmptyProductTypeCodeException();
         }
     }
