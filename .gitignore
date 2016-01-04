@@ -6,4 +6,5 @@
 !/build/phpmd.xml
 !/build/README.md
 /pub/media/
+!/pub/media/wysiwyg/
 /log/*
