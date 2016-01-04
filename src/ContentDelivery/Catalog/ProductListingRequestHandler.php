@@ -155,15 +155,33 @@ class ProductListingRequestHandler implements HttpRequestHandler
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
     ) {
+        $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
+        $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
+
+        $response = $this->getResults($request, $numberOfProductsPerPage, $currentPageNumber, $selectedSortOrderConfig);
+
+        if ($this->isPageOutOfBounds($response, $currentPageNumber, $numberOfProductsPerPage)) {
+            return $response;
+        }
+
+        $lastPageNumber = $this->getLastPageNumber($response, $numberOfProductsPerPage);
+
+        return $this->getResults($request, $numberOfProductsPerPage, $lastPageNumber, $selectedSortOrderConfig);
+    }
+
+    public function getResults(
+        HttpRequest $request,
+        $numberOfProductsPerPage,
+        $currentPageNumber,
+        SortOrderConfig $selectedSortOrderConfig
+    ) {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
             $request,
             $this->facetFilterRequest
         );
-        $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
-        $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
 
-        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria(
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $selectedFilters,
             $this->context,
@@ -172,22 +190,30 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $currentPageNumber,
             $selectedSortOrderConfig
         );
+    }
 
-        $lastPageNumber = (int) ceil($searchEngineResponse->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1;
+    /**
+     * @param SearchEngineResponse $searchEngineResponse
+     * @param int $currentPageNumber
+     * @param int $numberOfProductsPerPage
+     * @return bool
+     */
+    public function isPageOutOfBounds(
+        SearchEngineResponse $searchEngineResponse,
+        $currentPageNumber,
+        $numberOfProductsPerPage
+    ) {
+        return $currentPageNumber <= $this->getLastPageNumber($searchEngineResponse, $numberOfProductsPerPage);
+    }
 
-        if ($currentPageNumber <= $lastPageNumber) {
-            return $searchEngineResponse;
-        }
-
-        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
-            $criteria,
-            $selectedFilters,
-            $this->context,
-            $this->facetFilterRequest,
-            $numberOfProductsPerPage,
-            $lastPageNumber,
-            $selectedSortOrderConfig
-        );
+    /**
+     * @param SearchEngineResponse $searchEngineResponse
+     * @param int $numberOfProductsPerPage
+     * @return int
+     */
+    private function getLastPageNumber(SearchEngineResponse $searchEngineResponse, $numberOfProductsPerPage)
+    {
+        return (int) ceil($searchEngineResponse->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1;
     }
 
     /**
