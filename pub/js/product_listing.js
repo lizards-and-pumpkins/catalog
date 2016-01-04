@@ -77,11 +77,13 @@ require(
                 return document.createTextNode(numberOfProductsPerPage['number']);
             }
 
-            var productsPerPageElement = document.createElement('A');
-            productsPerPageElement.textContent = numberOfProductsPerPage['number'];
-            productsPerPageElement.href = url.updateQueryParameter('limit', numberOfProductsPerPage['number']);
+            var link = document.createElement('A'),
+                newUrl = url.updateQueryParameter('limit', numberOfProductsPerPage['number']);
 
-            return productsPerPageElement;
+            link.textContent = numberOfProductsPerPage['number'];
+            link.href = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
+
+            return link;
         }
 
         function renderSortingDropDown(sortOrderConfig, selector) {
@@ -114,12 +116,11 @@ require(
         }
 
         function createSortingSelectOption(config) {
-            var sortingOption = document.createElement('OPTION');
+            var sortingOption = document.createElement('OPTION'),
+                newUrl = url.updateQueryParameters({ "order": config['code'], "dir": config['selectedDirection'] });
+
             sortingOption.textContent = getAttributeTranslation(config['code']);
-            sortingOption.value = url.updateQueryParameters({
-                "order": config['code'],
-                "dir": config['selectedDirection']
-            });
+            sortingOption.value = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
             sortingOption.selected = config['selected'];
 
             return sortingOption;
