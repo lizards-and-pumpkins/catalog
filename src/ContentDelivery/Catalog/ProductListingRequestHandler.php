@@ -155,22 +155,65 @@ class ProductListingRequestHandler implements HttpRequestHandler
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
     ) {
+        $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
+        $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
+
+        $response = $this->getResults($request, $numberOfProductsPerPage, $currentPageNumber, $selectedSortOrderConfig);
+
+        if ($this->isPageWithinBounds($response, $currentPageNumber, $numberOfProductsPerPage)) {
+            return $response;
+        }
+
+        $lastPageNumber = $this->getLastPageNumber($response, $numberOfProductsPerPage);
+
+        return $this->getResults($request, $numberOfProductsPerPage, $lastPageNumber, $selectedSortOrderConfig);
+    }
+
+    private function getResults(
+        HttpRequest $request,
+        $numberOfProductsPerPage,
+        $currentPageNumber,
+        SortOrderConfig $selectedSortOrderConfig
+    ) {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
             $request,
             $this->facetFilterRequest
         );
-        $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria(
             $criteria,
             $selectedFilters,
             $this->context,
             $this->facetFilterRequest,
-            $productsPerPage->getSelectedNumberOfProductsPerPage(),
+            $numberOfProductsPerPage,
             $currentPageNumber,
             $selectedSortOrderConfig
         );
+    }
+
+    /**
+     * @param SearchEngineResponse $searchEngineResponse
+     * @param int $currentPageNumber
+     * @param int $numberOfProductsPerPage
+     * @return bool
+     */
+    private function isPageWithinBounds(
+        SearchEngineResponse $searchEngineResponse,
+        $currentPageNumber,
+        $numberOfProductsPerPage
+    ) {
+        return $currentPageNumber <= $this->getLastPageNumber($searchEngineResponse, $numberOfProductsPerPage);
+    }
+
+    /**
+     * @param SearchEngineResponse $searchEngineResponse
+     * @param int $numberOfProductsPerPage
+     * @return int
+     */
+    private function getLastPageNumber(SearchEngineResponse $searchEngineResponse, $numberOfProductsPerPage)
+    {
+        return (int) ceil($searchEngineResponse->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1;
     }
 
     /**
