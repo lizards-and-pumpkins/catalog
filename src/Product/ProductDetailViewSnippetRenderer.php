@@ -94,12 +94,4 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
         return $pageMetaInfo->getInfo();
     }
-
-    /**
-     * @return string[]
-     */
-    public function getUsedContextParts()
-    {
-        return $this->productDetailViewSnippetKeyGenerator->getContextPartsUsedForKey();
-    }
 }

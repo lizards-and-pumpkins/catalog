@@ -57,14 +57,6 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     }
 
     /**
-     * @return string[]
-     */
-    public function getContextPartsUsedForKey()
-    {
-        return $this->contextParts;
-    }
-
-    /**
      * @param mixed[] $data
      */
     private function validateDataContainsRequiredParts(array $data)

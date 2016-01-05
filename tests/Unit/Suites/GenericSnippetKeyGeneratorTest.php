@@ -104,10 +104,4 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('bar', $result);
         $this->assertNotContains('qux', $result);
     }
-
-    public function testRequiredContextPartsAreReturned()
-    {
-        $result = $this->keyGenerator->getContextPartsUsedForKey();
-        $this->assertSame($this->dummyContextParts, $result);
-    }
 }
