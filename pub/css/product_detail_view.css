@@ -76,7 +76,7 @@
 .product-controls button { float: right }
 
 .all-models { position: relative }
-.all-models h2 { display: none }
+.all-models h2.heading { display: none }
 
 /* Tablet */
 @media (max-width: 974px) {
