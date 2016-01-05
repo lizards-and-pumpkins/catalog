@@ -78,20 +78,20 @@ EOT;
         <product type="simple" sku="test-sku">
             %s
             <attributes>
-                <category website="test1" locale="xx_XX">category-1</category>
-                <category website="test2" locale="xx_XX">category-1</category>
-                <category website="test2" locale="yy_YY">category-1</category>
-                <stock_qty>111</stock_qty>
-                <backorders>true</backorders>
-                <url_key locale="xx_XX">xx-url-key</url_key>
-                <url_key locale="yy_YY">yy-url-key</url_key>
-                <name>Test Product Definition</name>
-                <price website="test1">9.99</price>
-                <price website="test2">7.99</price>
-                <special_price website="test2">5.99</special_price>
-                <description><![CDATA[A Description with some <strong>Tags</strong>]]></description>
-                <brand>Lizards</brand>
-                <thing>Pumpkin</thing>
+                <attribute name="category" website="test1" locale="xx_XX">category-1</attribute>
+                <attribute name="category" website="test2" locale="xx_XX">category-1</attribute>
+                <attribute name="category" website="test2" locale="yy_YY">category-1</attribute>
+                <attribute name="stock_qty">111</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="url_key" locale="xx_XX">xx-url-key</attribute>
+                <attribute name="url_key" locale="yy_YY">yy-url-key</attribute>
+                <attribute name="name">Test Product Definition</attribute>
+                <attribute name="price" website="test1">9.99</attribute>
+                <attribute name="price" website="test2">7.99</attribute>
+                <attribute name="special_price" website="test2">5.99</attribute>
+                <attribute name="description"><![CDATA[A Description with some <strong>Tags</strong>]]></attribute>
+                <attribute name="brand">Lizards</attribute>
+                <attribute name="thing">Pumpkin</attribute>
             </attributes>
         </product>
 ', $this->getImagesSectionWithContext($imageContent));

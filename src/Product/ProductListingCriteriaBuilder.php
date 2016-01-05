@@ -8,6 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
+use LizardsAndPumpkins\Product\Exception\MissingCriterionAttributeNameXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
@@ -100,7 +101,7 @@ class ProductListingCriteriaBuilder
     private function createCriterion(array $criterionNode)
     {
         $className = $this->getCriterionClassNameForOperation($criterionNode['attributes']['is']);
-        return call_user_func([$className, 'create'], $criterionNode['nodeName'], $criterionNode['value']);
+        return call_user_func([$className, 'create'], $criterionNode['attributes']['name'], $criterionNode['value']);
     }
 
     /**
@@ -118,6 +119,12 @@ class ProductListingCriteriaBuilder
      */
     private function validateCriterionNode(array $criterionNode)
     {
+        if (!isset($criterionNode['attributes']['name'])) {
+            throw new MissingCriterionAttributeNameXmlAttributeException(
+                'Missing "name" attribute in product listing type XML node.'
+            );
+        }
+
         if (!isset($criterionNode['attributes']['is'])) {
             throw new MissingCriterionOperationXmlAttributeException(
                 'Missing "is" attribute in product listing type XML node.'
