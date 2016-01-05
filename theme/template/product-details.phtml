@@ -43,6 +43,7 @@ $save = 0;
                 <div class="articleInformations">
                     <p class="articleNumber"><?= $this->__('SKU') ?>: <?= $this->getProductId() ?></p>
                     <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
+                    <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
                 </div>
             </div>
 
@@ -75,7 +76,7 @@ $save = 0;
                         <strong><?= $this->__('Availability') ?>: </strong>
                         <span class="in-stock"><?= $this->__('In Stock') ?></span>
                         <span class="out-of-stock"><?= $this->__('Out Of Stock') ?></span>
-                        <span class="info"><?= $this->__('Versandinfo'); ?></span>
+                        <a href="<?= $this->getBaseUrl()?>common/index/index/?identifier=versandinfo" class="info"><?= $this->__('Shipping Info'); ?></a>
                     </p>
                 </div>
             </div>
