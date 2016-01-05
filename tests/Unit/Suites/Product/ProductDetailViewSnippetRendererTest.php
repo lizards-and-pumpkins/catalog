@@ -99,13 +99,4 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsSnippetWithGivenKey($testContentSnippetKey, ...$result);
         $this->assertContainsSnippetWithGivenKey($testMetaSnippetKey, ...$result);
     }
-
-    public function testContextPartsFetchingIsDelegatedToKeyGenerator()
-    {
-        $dummyContextParts = ['foo', 'bar', 'baz'];
-        $this->stubProductDetailViewSnippetKeyGenerator->method('getContextPartsUsedForKey')
-            ->willReturn($dummyContextParts);
-
-        $this->assertSame($dummyContextParts, $this->renderer->getUsedContextParts());
-    }
 }
