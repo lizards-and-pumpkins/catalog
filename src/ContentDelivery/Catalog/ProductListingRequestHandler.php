@@ -160,7 +160,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $response = $this->getResults($request, $numberOfProductsPerPage, $currentPageNumber, $selectedSortOrderConfig);
 
-        if ($this->isPageOutOfBounds($response, $currentPageNumber, $numberOfProductsPerPage)) {
+        if ($this->isPageWithinBounds($response, $currentPageNumber, $numberOfProductsPerPage)) {
             return $response;
         }
 
@@ -169,7 +169,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $this->getResults($request, $numberOfProductsPerPage, $lastPageNumber, $selectedSortOrderConfig);
     }
 
-    public function getResults(
+    private function getResults(
         HttpRequest $request,
         $numberOfProductsPerPage,
         $currentPageNumber,
@@ -198,7 +198,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      * @param int $numberOfProductsPerPage
      * @return bool
      */
-    public function isPageOutOfBounds(
+    private function isPageWithinBounds(
         SearchEngineResponse $searchEngineResponse,
         $currentPageNumber,
         $numberOfProductsPerPage
