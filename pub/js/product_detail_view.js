@@ -5,8 +5,18 @@ require([
     'related_models',
     'lib/styleselect',
     'lib/zoom',
-    'lib/swiping_container'
-], function(domReady, common, recentlyViewedProducts, loadRelatedModels, styleSelect, zoom, initializeSwiping) {
+    'lib/swiping_container',
+    'lib/modal_box'
+], function(
+    domReady,
+    common,
+    recentlyViewedProducts,
+    loadRelatedModels,
+    styleSelect,
+    zoom,
+    initializeSwiping,
+    showModalBox
+) {
 
     var tabletWidth = 768,
         selectBoxIdPrefix = 'variation_',
@@ -27,6 +37,7 @@ require([
         initializeTabs();
         showAvailabilityStatus();
         loadRelatedModels(document.querySelector('meta[itemprop="sku"]').content);
+        bindShippingInfoModalBoxEvent();
     });
 
     function renderPrices() {
@@ -360,6 +371,13 @@ require([
         }
 
         return false;
+    }
+
+    function bindShippingInfoModalBoxEvent() {
+        document.querySelector('.product-main-info .info').addEventListener('click', function (event) {
+            event.preventDefault();
+            showModalBox(event.target.href);
+        });
     }
 
     function isParent(parent, child) {

@@ -3,6 +3,7 @@
 @import "product_grid.css";
 @import "lib/zoom.css";
 @import "lib/dropdown.css";
+@import "lib/modal_box.css";
 
 .product-essential { background: #f0f0f0; display: table; width: 100% }
 .product-collateral { margin: 30px 0 }
@@ -38,7 +39,7 @@
 .product-main-info p { line-height: 24px }
 .product-main-info .in-stock { color: #839d1b }
 .product-main-info .out-of-stock { color: #7c2c1c; display: none }
-.product-main-info .info { font-size: 10px; border-bottom: 1px dotted #000; margin: 0 0 0 5px; cursor:pointer }
+.product-main-info .info { font-size: 10px; border-bottom: 1px dotted #000000; color: inherit }
 
 /* Social buttons */
 .social-media-icons { font-size: 0; margin-top: 20px }
