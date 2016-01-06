@@ -213,7 +213,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getLastPageNumber(SearchEngineResponse $searchEngineResponse, $numberOfProductsPerPage)
     {
-        return (int) ceil($searchEngineResponse->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1;
+        return max(0, (int) ceil($searchEngineResponse->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1);
     }
 
     /**
