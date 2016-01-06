@@ -47,9 +47,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $stubRequest;
 
     /**
+     * @param int $numberOfResults
      * @return DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockDataPoolReader()
+    private function prepareMockDataPoolReader($numberOfResults)
     {
         /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
         $stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
@@ -64,15 +65,12 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->getInfo());
 
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
-        $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn(1);
+        $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn($numberOfResults);
 
-        $mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
-        $mockDataPoolReader->method('getSnippet')->willReturnMap([
+        $this->mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
         ]);
-
-        return $mockDataPoolReader;
     }
 
     /**
@@ -110,7 +108,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->mockDataPoolReader = $this->createMockDataPoolReader();
+        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -143,11 +141,17 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfThePageMetaInfoContentSnippetCanBeLoaded()
     {
+        $numberOfResults = 1;
+        $this->prepareMockDataPoolReader($numberOfResults);
+
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
     public function testPageMetaInfoIsOnlyLoadedOnce()
     {
+        $numberOfResults = 1;
+        $this->prepareMockDataPoolReader($numberOfResults);
+
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $this->requestHandler->canProcess($this->stubRequest);
         $this->requestHandler->process($this->stubRequest);
@@ -162,6 +166,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testCookieProcessingIsTriggered()
     {
+        $numberOfResults = 1;
+        $this->prepareMockDataPoolReader($numberOfResults);
+
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
         $this->requestHandler->process($this->stubRequest);
@@ -169,6 +176,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHttpResponseIsReturned()
     {
+        $numberOfResults = 1;
+        $this->prepareMockDataPoolReader($numberOfResults);
+
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $result = $this->requestHandler->process($this->stubRequest);
         $this->assertInstanceOf(HttpResponse::class, $result);
@@ -176,8 +186,21 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSubsequentRequestToDataPoolIsMadeIfRequestedPageNumberIsGreaterThanTotalNumberOfPages()
     {
+        $numberOfResults = 1;
+        $this->prepareMockDataPoolReader($numberOfResults);
+
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(2);
         $this->mockDataPoolReader->expects($this->exactly(2))->method('getSearchResultsMatchingCriteria');
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testNoSubsequentRequestToDataPoolIsMadeIfNoProductsAreFound()
+    {
+        $numberOfResults = 0;
+        $this->prepareMockDataPoolReader($numberOfResults);
+
+        $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
+        $this->mockDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria');
         $this->requestHandler->process($this->stubRequest);
     }
 }
