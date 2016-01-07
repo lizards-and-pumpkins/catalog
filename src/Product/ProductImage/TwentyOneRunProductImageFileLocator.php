@@ -25,7 +25,7 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
         self::SMALL,
         self::SEARCH_AUTOSUGGESTION,
     ];
-    
+
     /**
      * @var ImageStorage
      */
@@ -48,7 +48,7 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
         $this->validateImageVariantCode($imageVariantCode);
 
         $imageIdentifier = $this->buildIdentifier($imageFileName, $imageVariantCode);
-        return $this->imageStorage->contains($imageIdentifier) ?
+        return $this->isImageFileAvailable($imageFileName, $imageIdentifier) ?
             $this->imageStorage->getFileReference($imageIdentifier) :
             $this->getPlaceholder($imageVariantCode, $context);
     }
@@ -111,9 +111,6 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
                 $this->getInvalidTypeStringRepresentation($imageFileName)
             ));
         }
-        if ('' === trim($imageFileName)) {
-            throw new InvalidImageFileNameException('The image file name must not be empty');
-        }
     }
 
     /**
@@ -136,5 +133,15 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
     public function getVariantCodes()
     {
         return $this->imageVariantCodes;
+    }
+
+    /**
+     * @param string $imageFileName
+     * @param StorageAgnosticFileUri $imageIdentifier
+     * @return bool
+     */
+    private function isImageFileAvailable($imageFileName, StorageAgnosticFileUri $imageIdentifier)
+    {
+        return trim($imageFileName) !== '' && $this->imageStorage->contains($imageIdentifier);
     }
 }
