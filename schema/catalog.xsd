@@ -136,7 +136,6 @@
                             <xs:attribute name="is" use="required">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
-                                        <xs:enumeration value="Anything"/>
                                         <xs:enumeration value="Equal"/>
                                         <xs:enumeration value="GreaterOrEqualThan"/>
                                         <xs:enumeration value="GreaterThan"/>
