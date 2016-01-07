@@ -89,7 +89,7 @@ class GettextTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGivenStringIsTranslated()
     {
-        if (shell_exec('which msgfmt') === '') {
+        if (!$this->isMsgfmtInstalled()) {
             $this->markTestSkipped('The shell command msgfmt from gettext is not installed.');
         }
 
@@ -117,5 +117,14 @@ class GettextTranslatorTest extends \PHPUnit_Framework_TestCase
         $result = $translator->translate($testTranslationSource);
 
         $this->assertSame($testTranslationResult, $result);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isMsgfmtInstalled()
+    {
+        exec('which msgfmt', $output, $returnVar);
+        return 0 === $returnVar;
     }
 }
