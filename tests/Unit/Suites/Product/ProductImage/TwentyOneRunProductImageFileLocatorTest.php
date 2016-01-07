@@ -36,6 +36,21 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
      */
     private $stubContext;
 
+    /**
+     * @param string $imageVariantCode
+     * @return Image|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubPlaceholderImage($imageVariantCode)
+    {
+        $placeholderIdentifier = $this->stringStartsWith('product/placeholder/' . $imageVariantCode . '/');
+        $stubPlaceholderImage = $this->getMock(Image::class);
+        $this->stubImageStorage
+            ->method('getFileReference')
+            ->with($placeholderIdentifier)
+            ->willReturn($stubPlaceholderImage);
+        return $stubPlaceholderImage;
+    }
+
     protected function setUp()
     {
         $this->stubContext = $this->getMock(Context::class);
@@ -96,17 +111,15 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
         $this->productImageFileLocator->get($invalidImageFileName, $variantCode, $this->stubContext);
     }
 
-    public function testItThrowsAnExceptionIfTheFileNameIsEmpty()
+    public function testItReturnsAPlaceholderIfTheImageFileNameIsEmpty()
     {
-        $message = 'The image file name must not be empty';
-        $this->setExpectedException(
-            InvalidImageFileNameException::class,
-            sprintf($message)
-        );
-
         $emptyImageFileName = ' ';
         $variantCode = TwentyOneRunProductImageFileLocator::SMALL;
-        $this->productImageFileLocator->get($emptyImageFileName, $variantCode, $this->stubContext);
+        $this->stubImageStorage->method('contains')->willReturn(true);
+        $stubPlaceholderImage = $this->createStubPlaceholderImage($variantCode);
+        
+        $result = $this->productImageFileLocator->get($emptyImageFileName, $variantCode, $this->stubContext);
+        $this->assertSame($stubPlaceholderImage, $result);
     }
 
     /**
@@ -146,15 +159,10 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
     {
         $imageVariantCode = TwentyOneRunProductImageFileLocator::SMALL;
         $imageIdentifier = sprintf('product/%s/test.jpg', $imageVariantCode);
-        $placeholderIdentifier = $this->stringStartsWith('product/placeholder/' . $imageVariantCode . '/');
-        $stubPlaceholderImage = $this->getMock(Image::class);
+        $stubPlaceholderImage = $this->createStubPlaceholderImage($imageVariantCode);
+        
         $this->stubImageStorage->method('has')->willReturn(false);
-
-        $this->stubImageStorage
-            ->method('getFileReference')
-            ->with($placeholderIdentifier)
-            ->willReturn($stubPlaceholderImage);
-
+        
         $result = $this->productImageFileLocator->get($imageIdentifier, $imageVariantCode, $this->stubContext);
 
         $this->assertSame($stubPlaceholderImage, $result);
