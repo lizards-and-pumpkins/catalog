@@ -142,15 +142,6 @@ class TwentyOneRunProductImageFileLocator implements ProductImageFileLocator
      */
     private function isImageFileAvailable($imageFileName, StorageAgnosticFileUri $imageIdentifier)
     {
-        return !$this->isEmpty($imageFileName) && $this->imageStorage->contains($imageIdentifier);
-    }
-
-    /**
-     * @param string $imageFileName
-     * @return bool
-     */
-    private function isEmpty($imageFileName)
-    {
-        return trim($imageFileName) === '';
+        return trim($imageFileName) !== '' && $this->imageStorage->contains($imageIdentifier);
     }
 }
