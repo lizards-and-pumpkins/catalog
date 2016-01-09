@@ -30,6 +30,21 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->factory->createDomainEventConsumer()->process();
     }
 
+    private function renderProductListingTemplate()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
+        ]);
+        $httpRequestBody = HttpRequestBody::fromString('');
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
+
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
+    }
+
     /**
      * @param string $urlKey
      * @return string
@@ -160,6 +175,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         ]);
 
         $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString);
+        $this->renderProductListingTemplate();
         $this->importCatalog();
 
         $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));

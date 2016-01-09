@@ -58,7 +58,6 @@ use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
@@ -459,6 +458,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductListingRendererList()
     {
         return [
+            $this->getMasterFactory()->createProductListingPageSnippetRenderer(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer(),
         ];
     }
@@ -470,7 +470,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingPageSnippetRenderer(
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductListingBlockRenderer()
+            $this->getMasterFactory()->createProductListingBlockRenderer(),
+            $this->getMasterFactory()->createContextSource()
         );
     }
 
@@ -1369,20 +1370,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event)
     {
-        $projector = $this->createProductListingPageSnippetProjector();
-        return new CatalogWasImportedDomainEventHandler($event, $projector);
-    }
-
-    /**
-     * @return ProductListingPageSnippetProjector
-     */
-    public function createProductListingPageSnippetProjector()
-    {
-        return new ProductListingPageSnippetProjector(
-            $this->getMasterFactory()->createProductListingPageSnippetRenderer(),
-            $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createContextSource()
-        );
+        return new CatalogWasImportedDomainEventHandler($event);
     }
 
     /**

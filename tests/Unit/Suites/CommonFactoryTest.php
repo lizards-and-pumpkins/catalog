@@ -45,7 +45,6 @@ use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
 use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
@@ -133,7 +132,6 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\TemplateProjectorLocator
@@ -502,12 +500,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $stubEvent = $this->getMock(CatalogWasImportedDomainEvent::class, [], [], '', false);
         $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler($stubEvent);
         $this->assertInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
-    }
-
-    public function testItReturnsAProductListingPageSnippetProjector()
-    {
-        $result = $this->commonFactory->createProductListingPageSnippetProjector();
-        $this->assertInstanceOf(ProductListingPageSnippetProjector::class, $result);
     }
 
     public function testItReturnsAProductJsonSnippetRenderer()
