@@ -1,6 +1,13 @@
-require(
-    ['lib/domReady', 'product_grid', 'filter_navigation', 'pagination', 'lib/url', 'lib/styleselect', 'common'],
-    function (domReady, productGrid, filterNavigation, pagination, url, styleSelect) {
+require([
+    'lib/domReady',
+    'product_grid',
+    'filter_navigation',
+    'pagination',
+    'lib/url',
+    'lib/styleselect',
+    'common',
+    'ekomi'
+], function (domReady, productGrid, filterNavigation, pagination, url, styleSelect) {
 
         var previousViewportWidth;
 
