@@ -3,7 +3,9 @@
         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/snippet.xsd">
     <block name="product_details_snippet" class="LizardsAndPumpkins\Renderer\Block" template="template/2columns-left.phtml">
         <block name="head" class="LizardsAndPumpkins\Renderer\Block" template="template/head.phtml" />
-        <block name="header" class="LizardsAndPumpkins\Renderer\Block" template="template/header.phtml" />
+        <block name="header" class="LizardsAndPumpkins\Renderer\Block" template="template/header.phtml">
+            <block name="ekomi" class="LizardsAndPumpkins\Renderer\Block" template="template/ekomi.phtml" />
+        </block>
         <block name="left" class="LizardsAndPumpkins\Renderer\Block" template="template/left.phtml" />
         <block name="content" class="LizardsAndPumpkins\Renderer\Block" template="template/list.phtml" />
         <block name="footer" class="LizardsAndPumpkins\Renderer\Block" template="template/footer.phtml" />

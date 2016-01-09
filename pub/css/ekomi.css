@@ -1,8 +1,7 @@
-.header .ekomi-seal { float: right; margin: 33px 7px 0 0 }
-.reference-box .ekomi-seal { float: right; margin: 5px 20px }
+#eKomiSeal_default { float: right; margin: 33px 7px 0 0 }
 
 /* Phone */
 @media (max-width: 767px) {
-    .header .ekomi-seal { margin: 9px 7px }
-    .header .ekomi-seal img { width: 56px }
+    #eKomiSeal_default { margin: 9px 7px }
+    #eKomiSeal_default img { width: 56px }
 }
