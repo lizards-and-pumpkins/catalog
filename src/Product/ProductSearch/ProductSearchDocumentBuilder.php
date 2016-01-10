@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Product\ProductSearch;
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
@@ -34,7 +33,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
 
     /**
      * @param Product $projectionSourceData
-     * @return SearchDocumentCollection
+     * @return SearchDocument
      */
     public function aggregate($projectionSourceData)
     {
@@ -42,9 +41,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
-        $searchDocument = $this->createSearchDocument($projectionSourceData);
-
-        return new SearchDocumentCollection($searchDocument);
+        return $this->createSearchDocument($projectionSourceData);
     }
 
     /**

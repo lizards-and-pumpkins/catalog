@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Product\ProductSearch;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
@@ -15,7 +14,6 @@ use LizardsAndPumpkins\Product\ProductId;
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
@@ -91,7 +89,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->createInstance([])->aggregate('invalid-projection-source-data');
     }
 
-    public function testSearchDocumentCollectionWithDocumentContainingIndexedAttributeIsReturned()
+    public function testSearchDocumentContainingIndexedAttributeIsReturned()
     {
         $searchableAttribute = 'foo';
         $attributeValues = ['bar'];
@@ -102,9 +100,8 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $searchDocumentBuilder = $this->createInstance([$searchableAttribute]);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
-        $this->assertInstanceOf(SearchDocumentCollection::class, $result);
-        $this->assertCount(1, $result);
-        $this->assertDocumentContainsField($result->getDocuments()[0], $searchableAttribute, $attributeValues);
+        $this->assertInstanceOf(SearchDocument::class, $result);
+        $this->assertDocumentContainsField($result, $searchableAttribute, $attributeValues);
     }
 
     public function testProductPriceIsIndexedIfProductHasNoSpecialPrice()
@@ -118,9 +115,8 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $searchDocumentBuilder = $this->createInstance([$priceAttributeCode]);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
-        $this->assertInstanceOf(SearchDocumentCollection::class, $result);
-        $this->assertCount(1, $result);
-        $this->assertDocumentContainsField($result->getDocuments()[0], $priceAttributeCode, $priceValues);
+        $this->assertInstanceOf(SearchDocument::class, $result);
+        $this->assertDocumentContainsField($result, $priceAttributeCode, $priceValues);
     }
 
     public function testProductSpecialPriceIsIndexedAsPriceIfProductHasSpecialPrice()
@@ -137,9 +133,8 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $searchDocumentBuilder = $this->createInstance([$priceAttributeCode]);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
-        $this->assertInstanceOf(SearchDocumentCollection::class, $result);
-        $this->assertCount(1, $result);
-        $this->assertDocumentContainsField($result->getDocuments()[0], $priceAttributeCode, $specialPriceValues);
+        $this->assertInstanceOf(SearchDocument::class, $result);
+        $this->assertDocumentContainsField($result, $priceAttributeCode, $specialPriceValues);
     }
 
     public function testItIncludesTheProductIdInTheSearchDocumentFields()
@@ -153,7 +148,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $searchDocumentBuilder = $this->createInstance([$searchableAttribute]);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
-        $this->assertCount(1, $result);
-        $this->assertDocumentContainsField($result->getDocuments()[0], 'product_id', [(string) $stubProduct->getId()]);
+        $this->assertInstanceOf(SearchDocument::class, $result);
+        $this->assertDocumentContainsField($result, 'product_id', [(string) $stubProduct->getId()]);
     }
 }

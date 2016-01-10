@@ -108,7 +108,6 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
             <attributes>
                 <attribute name="url_key">gel-kayano-21</attribute>
                 <attribute name="mpn">T4H2N-4701</attribute>
-                <attribute name="series">Example</attribute>
                 <attribute name="name">Gel-Kayano 21</attribute>
                 <attribute name="category">sale</attribute>
                 <attribute name="price">106.95</attribute>
@@ -153,7 +152,6 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
             </images>
             <attributes>
                 <attribute name="url_key">gt-2000-3</attribute>
-                <attribute name="series">Example</attribute>
                 <attribute name="name">GT-2000 3</attribute>
                 <attribute name="category">sale</attribute>
                 <attribute name="price">89.90</attribute>
@@ -198,7 +196,6 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
             </images>
             <attributes>
                 <attribute name="url_key">gel-noosa-tri-9</attribute>
-                <attribute name="series">Example</attribute>
                 <attribute name="name">Gel-Noosa Tri 9</attribute>
                 <attribute name="category">sale</attribute>
                 <attribute name="price">83.97</attribute>
@@ -357,7 +354,6 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
             <attributes>
                 <attribute name="url_key">gel-noosa-10-3</attribute>
                 <attribute name="name">Gel-Noosa 10</attribute>
-                <attribute name="series">Gel-Noosa</attribute>
                 <attribute name="category">sale</attribute>
                 <attribute name="price">89.95</attribute>
                 <attribute name="brand">Asics</attribute>
