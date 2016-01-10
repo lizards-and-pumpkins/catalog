@@ -67,14 +67,13 @@ class TriggerTemplateUpdate extends BaseCliCommand
         ]);
     }
 
-
     protected function execute(CLImate $CLImate)
     {
-        $this->importFile();
+        $this->addDomainEvent();
         $this->processQueuesIfRequested();
     }
 
-    private function importFile()
+    private function addDomainEvent()
     {
         $templateId = $this->getArg('templateId');
         $projectionSourceData = '';
