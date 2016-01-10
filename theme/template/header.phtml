@@ -4,6 +4,7 @@
  */
 ?>
 <header class="header-container">
+    <?= $this->getChildOutput('content_block_cms_header_info_banner') ?>
     <div class="header">
         <div class="header-panel">
             <a href="<?= $this->getBaseUrl() ?>checkout/onepage/"><?= $this->__('Checkout') ?></a>
@@ -35,20 +36,7 @@
                 </div>
             </form>
         </div>
-        <script>
-
-            if (typeof eKomiIntegrationConfig == 'undefined') {
-                var eKomiIntegrationConfig = new Array({
-                    certId: 'DDD129738550E88',
-                    sealTargets: [],
-                    widgetTargets: []
-                });
-            }
-
-            eKomiIntegrationConfig[0].sealTargets.push('ekomiSeal130453');
-
-        </script>
-        <div id="ekomiSeal130453" class="ekomi-seal"></div>
+        <?= $this->getChildOutput('ekomi') ?>
         <div class="cms_header_small">
             <?= $this->getChildOutput('content_block_cms_header_small') ?>
         </div>

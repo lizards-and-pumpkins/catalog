@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 
 class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
 {
@@ -32,11 +31,9 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
         $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
     }
 
-    public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
+    public function addDocument(SearchDocument $searchDocument)
     {
-        array_map(function (SearchDocument $searchDocument) {
-            $this->index[$this->getSearchDocumentIdentifier($searchDocument)] = $searchDocument;
-        }, $searchDocumentCollection->getDocuments());
+        $this->index[$this->getSearchDocumentIdentifier($searchDocument)] = $searchDocument;
     }
 
     /**

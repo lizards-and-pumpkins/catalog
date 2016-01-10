@@ -6,7 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Utils\Clearable;
 
@@ -17,7 +17,7 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
         // Intentionally left empty
     }
 
-    public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
+    public function addDocument(SearchDocument $searchDocument)
     {
         // Intentionally left empty
     }

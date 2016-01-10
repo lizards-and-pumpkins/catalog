@@ -7,6 +7,8 @@ use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 ?>
 <?php
 
+$mpn = $this->getFirstValueOfProductAttribute('mpn');
+$sku = $mpn ? $mpn : $this->getProductId();
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 
@@ -34,15 +36,15 @@ $save = 0;
         <div class="product-shop">
             <div class="top">
                 <div class="product-title">
-                    <img src="<?= $this->getBaseUrl() ?>images/logos/<?= $brandLogo ?>" width="95" id="brandLogo" />
+                    <img src="<?= $this->getBaseUrl() ?>images/logos/<?= $brandLogo ?>" width="95" id="brandLogo"/>
                     <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
                     <p class="similarProducts">
                         <?= $this->__('More by') ?> <a href="" itemprop="brand"><?= $brand ?></a>
                     </p>
                 </div>
                 <div class="articleInformations">
-                    <p class="articleNumber"><?= $this->__('SKU') ?>: <?= $this->getProductId() ?></p>
-                    <meta itemprop="sku" content="<?= $this->getProductId() ?>" />
+                    <p class="articleNumber"><?= $this->__('SKU') ?>: <?= $sku ?></p>
+                    <meta itemprop="sku" content="<?= $sku ?>"/>
                     <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
                 </div>
             </div>
@@ -115,7 +117,7 @@ $save = 0;
                     <th><?= $this->__('SKU') ?></th>
                     <td><?= $this->getProductId() ?></td>
                 </tr>
-                <?php if ($mpn = $this->getFirstValueOfProductAttribute('mpn')) : ?>
+                <?php if ($mpn) : ?>
                 <tr>
                     <th><?= $this->__('mpn') ?></th>
                     <td><?= $mpn ?></td>
@@ -167,7 +169,7 @@ $save = 0;
 
         var html = '<li style="background-image:url(\'/media/brands/brands-small/<?= $brandLogo ?>\')" class="item">';
         html += '<div class="grid-cell-container">';
-        html += '<a href="<?= $this->getProductUrl() ?>" class="product-image"><img src="<?= $this->getMainProductImageUrl('medium') ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>" /></a>';
+        html += '<a href="<?= $this->getProductUrl() ?>" class="product-image"><img src="<?= $this->getMainProductImageUrl('medium') ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>"/></a>';
         html += '<h2 class="product-name"><a href="<?= $this->getProductUrl() ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
         html += '<a href="<?= $this->getProductUrl() ?>"><?= $this->getChildOutput('price') ?></a>';
         <?php if ($gender) : ?>

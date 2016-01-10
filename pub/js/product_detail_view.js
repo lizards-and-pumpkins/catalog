@@ -6,7 +6,8 @@ require([
     'lib/styleselect',
     'lib/zoom',
     'lib/swiping_container',
-    'lib/modal_box'
+    'lib/modal_box',
+    'ekomi'
 ], function(
     domReady,
     common,

@@ -27,7 +27,6 @@ use LizardsAndPumpkins\Utils\LocalFilesystem;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLike
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetField
@@ -57,6 +56,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     ) {
         $this->prepareTemporaryStorage();
 
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
         $stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
 
         $searchCriteriaBuilder = new SearchCriteriaBuilder(
@@ -93,6 +93,8 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
         $this->setExpectedException(SearchEngineNotAvailableException::class);
 
         $stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
+
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
         $stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
 
         $searchCriteriaBuilder = new SearchCriteriaBuilder(

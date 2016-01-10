@@ -5,15 +5,15 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
 interface SearchEngine
 {
     /**
-     * @param SearchDocumentCollection $searchDocumentCollection
+     * @param SearchDocument $searchDocument
      * @return void
      */
-    public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection);
+    public function addDocument(SearchDocument $searchDocument);
 
     /**
      * @param SearchCriteria $criteria

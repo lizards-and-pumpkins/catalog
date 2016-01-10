@@ -20,7 +20,7 @@ define(function () {
     };
 
     var turnIntoStringIfIsArray = function (operand) {
-        if (operand.isArray) {
+        if (Array.isArray(operand)) {
             return operand.join(', ');
         }
 
