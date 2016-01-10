@@ -31,11 +31,6 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
      */
     private $renderer;
 
-    /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContextSource;
-
     protected function setUp()
     {
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
@@ -48,13 +43,14 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
         $stubContext = $this->getMock(Context::class);
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
-        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->renderer = new ProductSearchResultMetaSnippetRenderer(
             $stubSnippetKeyGenerator,
             $stubBlockRenderer,
-            $this->stubContextSource
+            $stubContextSource
         );
     }
 

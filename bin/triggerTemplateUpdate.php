@@ -4,9 +4,8 @@
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
 
@@ -16,7 +15,7 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../../../autoload.php';
 }
 
-class RunImport extends BaseCliCommand
+class TriggerTemplateUpdate extends BaseCliCommand
 {
     /**
      * @var MasterFactory
@@ -49,56 +48,31 @@ class RunImport extends BaseCliCommand
     protected function getCommandLineArgumentsArray(CLImate $climate)
     {
         return array_merge(parent::getCommandLineArgumentsArray($climate), [
-            'clearStorage' => [
-                'prefix' => 'c',
-                'longPrefix' => 'clearStorage',
-                'description' => 'Clear queues and data pool before the import',
-                'noValue' => true,
-            ],
             'processQueues' => [
                 'prefix' => 'p',
                 'longPrefix' => 'processQueues',
-                'description' => 'Process queues after the import',
+                'description' => 'Process queues afterwards',
                 'noValue' => true,
             ],
-            'importFile' => [
-                'description' => 'Import XML file',
+            'templateId' => [
+                'description' => 'Template ID',
                 'required' => true
             ]
         ]);
     }
 
-
     protected function execute(CLImate $CLImate)
     {
-        $this->clearStorageIfRequested();
-        $this->importFile();
+        $this->addDomainEvent();
         $this->processQueuesIfRequested();
     }
 
-    private function clearStorageIfRequested()
+    private function addDomainEvent()
     {
-        if ($this->getArg('clearStorage')) {
-            $this->clearStorage();
-        }
-    }
+        $templateId = $this->getArg('templateId');
+        $projectionSourceData = '';
 
-    private function clearStorage()
-    {
-        $this->output('Clearing queue and data pool before import...');
-
-        /** @var DataPoolWriter $dataPoolWriter */
-        $dataPoolWriter = $this->factory->createDataPoolWriter();
-        $dataPoolWriter->clear();
-    }
-
-    private function importFile()
-    {
-        $this->output('Importing...');
-
-        /** @var CatalogImport $import */
-        $import = $this->factory->createCatalogImport();
-        $import->importFile($this->getArg('importFile'));
+        $this->factory->getEventQueue()->add(new TemplateWasUpdatedDomainEvent($templateId, $projectionSourceData));
     }
 
     private function processQueuesIfRequested()
@@ -140,4 +114,4 @@ class RunImport extends BaseCliCommand
     }
 }
 
-RunImport::bootstrap()->run();
+TriggerTemplateUpdate::bootstrap()->run();

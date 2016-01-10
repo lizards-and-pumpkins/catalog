@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import\Listing;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Product\ProductListingBlockRenderer;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -22,23 +23,44 @@ class ProductListingPageSnippetRenderer implements SnippetRenderer
      */
     private $blockRenderer;
 
-    public function __construct(SnippetKeyGenerator $snippetKeyGenerator, ProductListingBlockRenderer $blockRenderer)
-    {
+    /**
+     * @var ContextSource
+     */
+    private $contextSource;
+
+    public function __construct(
+        SnippetKeyGenerator $snippetKeyGenerator,
+        ProductListingBlockRenderer $blockRenderer,
+        ContextSource $contextSource
+    ) {
         $this->snippetKeyGenerator = $snippetKeyGenerator;
         $this->blockRenderer = $blockRenderer;
+        $this->contextSource = $contextSource;
     }
 
     /**
+     * @param mixed $dataObject
+     * @return Snippet
+     */
+    public function render($dataObject)
+    {
+        // todo: important! Use data version from $dataObject
+        return array_map(function (Context $context) use ($dataObject) {
+            return $this->renderProductListingPageSnippetForContext($dataObject, $context);
+        }, $this->contextSource->getAllAvailableContexts());
+
+    }
+
+    /**
+     * @param mixed $dataObject
      * @param Context $context
      * @return Snippet
      */
-    public function render(Context $context)
+    private function renderProductListingPageSnippetForContext($dataObject, Context $context)
     {
-        $content = $this->blockRenderer->render(null, $context);
+        $content = $this->blockRenderer->render($dataObject, $context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, []);
-        
-        return [
-            Snippet::create($key, $content)
-        ];
+
+        return Snippet::create($key, $content);
     }
 }

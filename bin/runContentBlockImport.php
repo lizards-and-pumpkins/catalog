@@ -4,8 +4,9 @@
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Content\ContentBlockId;
+use LizardsAndPumpkins\Content\ContentBlockSource;
+use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
@@ -16,7 +17,7 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../../../autoload.php';
 }
 
-class RunImport extends BaseCliCommand
+class RunContentBlockImport extends BaseCliCommand
 {
     /**
      * @var MasterFactory
@@ -49,56 +50,76 @@ class RunImport extends BaseCliCommand
     protected function getCommandLineArgumentsArray(CLImate $climate)
     {
         return array_merge(parent::getCommandLineArgumentsArray($climate), [
-            'clearStorage' => [
-                'prefix' => 'c',
-                'longPrefix' => 'clearStorage',
-                'description' => 'Clear queues and data pool before the import',
-                'noValue' => true,
-            ],
             'processQueues' => [
                 'prefix' => 'p',
                 'longPrefix' => 'processQueues',
                 'description' => 'Process queues after the import',
                 'noValue' => true,
             ],
-            'importFile' => [
-                'description' => 'Import XML file',
+            'importDirectory' => [
+                'description' => 'Path to directory with import files',
                 'required' => true
-            ]
+            ],
         ]);
     }
 
-
     protected function execute(CLImate $CLImate)
     {
-        $this->clearStorageIfRequested();
-        $this->importFile();
+        $this->addCommand();
         $this->processQueuesIfRequested();
     }
 
-    private function clearStorageIfRequested()
+    private function addCommand()
     {
-        if ($this->getArg('clearStorage')) {
-            $this->clearStorage();
+        $contentFileNames = glob($this->getArg('importDirectory') . '/*.html');
+
+        array_map(function ($contentFileName) {
+            $blockId = $this->createContentBlockIdBasedOnFileName($contentFileName);
+            $blockContent = file_get_contents($contentFileName);
+            $contextData = ['website' => 'fr', 'locale' => 'fr_FR'];
+            $keyGeneratorParams = $this->createKeyGeneratorParamsBasedOnFileName($contentFileName);
+
+            $contentBlockSource = new ContentBlockSource($blockId, $blockContent, $contextData, $keyGeneratorParams);
+
+            $this->factory->getCommandQueue()->add(new UpdateContentBlockCommand($contentBlockSource));
+        }, $contentFileNames);
+    }
+
+    /**
+     * @param string $blockId
+     * @return bool
+     */
+    private function isProductListingContentBlock($blockId)
+    {
+        return strpos($blockId, 'product_listing_content_block_') === 0;
+    }
+
+    /**
+     * @param string $fileName
+     * @return ContentBlockId
+     */
+    private function createContentBlockIdBasedOnFileName($fileName)
+    {
+        $blockIdString = preg_replace('/.*\/|\.html$/i', '', $fileName);
+
+        if ($this->isProductListingContentBlock($blockIdString)) {
+            $blockIdStringWithoutLastVariableToken = preg_replace('/_[^_]+$/', '', $blockIdString);
+            return ContentBlockId::fromString($blockIdStringWithoutLastVariableToken);
         }
+
+        return ContentBlockId::fromString($blockIdString);
     }
 
-    private function clearStorage()
+    private function createKeyGeneratorParamsBasedOnFileName($fileName)
     {
-        $this->output('Clearing queue and data pool before import...');
+        $blockIdString = preg_replace('/.*\/|\.html$/i', '', $fileName);
 
-        /** @var DataPoolWriter $dataPoolWriter */
-        $dataPoolWriter = $this->factory->createDataPoolWriter();
-        $dataPoolWriter->clear();
-    }
+        if ($this->isProductListingContentBlock($blockIdString)) {
+            $lastVariableTokenOfBlockId = preg_replace('/.*_/', '', $blockIdString);
+            return ['url_key' => $lastVariableTokenOfBlockId];
+        }
 
-    private function importFile()
-    {
-        $this->output('Importing...');
-
-        /** @var CatalogImport $import */
-        $import = $this->factory->createCatalogImport();
-        $import->importFile($this->getArg('importFile'));
+        return [];
     }
 
     private function processQueuesIfRequested()
@@ -140,4 +161,4 @@ class RunImport extends BaseCliCommand
     }
 }
 
-RunImport::bootstrap()->run();
+RunContentBlockImport::bootstrap()->run();

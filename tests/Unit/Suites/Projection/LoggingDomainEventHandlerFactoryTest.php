@@ -71,7 +71,6 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector
  * @uses   \LizardsAndPumpkins\Projection\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector

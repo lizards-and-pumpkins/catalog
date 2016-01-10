@@ -1,10 +1,8 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\DomainEventHandler;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetProjector;
 
 class CatalogWasImportedDomainEventHandler implements DomainEventHandler
 {
@@ -13,20 +11,14 @@ class CatalogWasImportedDomainEventHandler implements DomainEventHandler
      */
     private $event;
     
-    /**
-     * @var ProductListingPageSnippetProjector
-     */
-    private $listingProjector;
-
-    public function __construct(CatalogWasImportedDomainEvent $event, ProductListingPageSnippetProjector $projection)
+    public function __construct(CatalogWasImportedDomainEvent $event)
     {
         $this->event = $event;
-        $this->listingProjector = $projection;
     }
 
     public function process()
     {
-        $version = $this->event->getDataVersion();
-        $this->listingProjector->project($version);
+        // Left empty till data versioning is implemented.
+        // Version is already present in event and can be get by $this->event->getDataVersion()
     }
 }
