@@ -98,7 +98,7 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
             </attributes>
         </product>
 
-        <product type="simple" sku="T4H2N-4701" tax_class="19%">
+        <product type="simple" sku="000000000010021224" tax_class="19%">
             <images>
                 <image>
                     <file>t4h2n-4701_14.jpg</file>
@@ -107,6 +107,7 @@ LED Armflasher with elastic Band and Flasher]]></attribute>
             </images>
             <attributes>
                 <attribute name="url_key">gel-kayano-21</attribute>
+                <attribute name="mpn">T4H2N-4701</attribute>
                 <attribute name="series">Example</attribute>
                 <attribute name="name">Gel-Kayano 21</attribute>
                 <attribute name="category">sale</attribute>
