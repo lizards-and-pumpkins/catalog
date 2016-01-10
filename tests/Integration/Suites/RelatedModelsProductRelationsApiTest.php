@@ -42,8 +42,8 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
 
     public function testRelatedProductsWithMatchingBrandAndSeriesAndGenderAreReturned()
     {
-        $testProductId = 'T500N-4207';
-        $expectedProductIds = ['T4H2N-4701', 'T408Q-9030'];
+        $testProductId = 'T408Q-9030';
+        $expectedProductIds = ['T530N-0791', 'T530N-9030'];
 
         $urlString = sprintf('http://example.com/api/products/%s/relations/related-models', $testProductId);
         $httpUrl = HttpUrl::fromString($urlString);

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Projection\UrlKeyForContext;
@@ -46,9 +46,9 @@ class DataPoolWriter implements Clearable
         $this->keyValueStore->set($snippet->getKey(), $snippet->getContent());
     }
 
-    public function writeSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
+    public function writeSearchDocument(SearchDocument $searchDocument)
     {
-        $this->searchEngine->addSearchDocumentCollection($searchDocumentCollection);
+        $this->searchEngine->addDocument($searchDocument);
     }
 
     public function clear()
