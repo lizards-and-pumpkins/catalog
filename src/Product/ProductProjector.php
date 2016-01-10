@@ -71,8 +71,8 @@ class ProductProjector implements Projector
 
     private function aggregateSearchDocuments(Product $product)
     {
-        $searchDocumentCollection = $this->searchDocumentBuilder->aggregate($product);
-        $this->dataPoolWriter->writeSearchDocumentCollection($searchDocumentCollection);
+        $searchDocument = $this->searchDocumentBuilder->aggregate($product);
+        $this->dataPoolWriter->writeSearchDocument($searchDocument);
     }
 
     private function storeProductUrlKeys(Product $product)

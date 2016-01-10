@@ -9,7 +9,6 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\Product\ProductId;
@@ -72,16 +71,14 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
         return new self($storagePath, $searchCriteriaBuilder, $facetFieldTransformationRegistry);
     }
 
-    public function addSearchDocumentCollection(SearchDocumentCollection $searchDocumentCollection)
+    public function addDocument(SearchDocument $searchDocument)
     {
-        array_map(function (SearchDocument $searchDocument) {
-            $searchDocumentFilePath = $this->storagePath . '/' . $this->getSearchDocumentIdentifier($searchDocument);
+        $searchDocumentFilePath = $this->storagePath . '/' . $this->getSearchDocumentIdentifier($searchDocument);
 
-            $searchDocumentArrayRepresentation = $this->getArrayRepresentationOfSearchDocument($searchDocument);
-            $searchDocumentJson = json_encode($searchDocumentArrayRepresentation, JSON_PRETTY_PRINT);
+        $searchDocumentArrayRepresentation = $this->getArrayRepresentationOfSearchDocument($searchDocument);
+        $searchDocumentJson = json_encode($searchDocumentArrayRepresentation, JSON_PRETTY_PRINT);
 
-            file_put_contents($searchDocumentFilePath, $searchDocumentJson);
-        }, $searchDocumentCollection->getDocuments());
+        file_put_contents($searchDocumentFilePath, $searchDocumentJson);
     }
 
     /**

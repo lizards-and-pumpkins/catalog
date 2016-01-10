@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentCollection;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
@@ -28,9 +28,9 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     private $stubSnippet;
 
     /**
-     * @var SearchDocumentCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSearchDocumentCollection;
+    private $stubSearchDocument;
 
     /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
@@ -61,13 +61,13 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
         $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
-        $this->stubSearchDocumentCollection = $this->getMock(SearchDocumentCollection::class, [], [], '', false);
+        $this->stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
 
         $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
         $this->mockRendererCollection->method('render')->willReturn([$this->stubSnippet]);
 
         $this->stubSearchDocumentBuilder = $this->getMock(SearchDocumentBuilder::class);
-        $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocumentCollection);
+        $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocument);
 
         $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
         $this->stubUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class, [], [], '', false);
@@ -99,8 +99,8 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     public function testSnippetsAndSearchDocumentAreSetOnDataPoolWriter()
     {
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($this->stubSnippet);
-        $this->mockDataPoolWriter->expects($this->once())->method('writeSearchDocumentCollection')
-            ->with($this->stubSearchDocumentCollection);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSearchDocument')
+            ->with($this->stubSearchDocument);
 
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class);
