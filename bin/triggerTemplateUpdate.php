@@ -22,15 +22,9 @@ class TriggerTemplateUpdate extends BaseCliCommand
      */
     private $factory;
 
-    /**
-     * @var CLImate
-     */
-    private $climate;
-
     private function __construct(MasterFactory $factory, CLImate $CLImate)
     {
         $this->factory = $factory;
-        $this->climate = $CLImate;
         $this->setCLImate($CLImate);
     }
 
