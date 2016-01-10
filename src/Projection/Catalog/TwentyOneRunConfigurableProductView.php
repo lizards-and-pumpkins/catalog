@@ -112,6 +112,8 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
 
         unset($productData['images']);
         $productData['images'] = $this->getAllProductImageUrls();
+        
+        $productData[ConfigurableProduct::ASSOCIATED_PRODUCTS] = $this->getAssociatedProducts();
 
         return $productData;
     }

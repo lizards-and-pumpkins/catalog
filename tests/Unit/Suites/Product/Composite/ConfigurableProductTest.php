@@ -137,7 +137,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     {
         $result = ConfigurableProduct::fromArray([
             Product::TYPE_KEY => ConfigurableProduct::TYPE_CODE,
-            'simple_product' => [
+            ConfigurableProduct::SIMPLE_PRODUCT => [
                 Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
                 'product_id' => 'test',
                 'tax_class' => 'test tax class',
@@ -145,8 +145,8 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
                 'images' => [],
                 'context' => [ContextVersion::CODE => '123']
             ],
-            'variation_attributes' => ['foo'],
-            'associated_products' => [
+            ConfigurableProduct::VARIATION_ATTRIBUTES => ['foo'],
+            ConfigurableProduct::ASSOCIATED_PRODUCTS => [
                 'product_php_classes' => [],
                 'products' => []
             ]
@@ -157,9 +157,9 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfTheTypeCodeIsMissingFromSourceArray()
     {
         $allFieldsExceptTypeCode = [
-            'simple_product' => [],
-            'variation_attributes' => [],
-            'associated_products' => []
+            ConfigurableProduct::SIMPLE_PRODUCT => [],
+            ConfigurableProduct::VARIATION_ATTRIBUTES => [],
+            ConfigurableProduct::ASSOCIATED_PRODUCTS => []
         ];
         $this->setExpectedException(
             ProductTypeCodeMissingException::class,
@@ -181,9 +181,9 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         );
         ConfigurableProduct::fromArray([
             Product::TYPE_KEY => $invalidTypeCode,
-            'simple_product' => [],
-            'variation_attributes' => [],
-            'associated_products' => []
+            ConfigurableProduct::SIMPLE_PRODUCT => [],
+            ConfigurableProduct::VARIATION_ATTRIBUTES => [],
+            ConfigurableProduct::ASSOCIATED_PRODUCTS => []
         ]);
     }
 

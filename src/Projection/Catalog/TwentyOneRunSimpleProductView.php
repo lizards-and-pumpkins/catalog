@@ -111,10 +111,10 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
      */
     private function filterProductAttributeList(ProductAttributeList $attributeList)
     {
-        $filteredAttributes = $this->removeScreenedAttributes($attributeList);
-        $attributesWithProcessedStockQty = $this->processStockQtyAttribute($filteredAttributes);
+        $attributesWithProcessedStockQty = $this->processStockQtyAttribute($attributeList->getAllAttributes());
+        $filteredAttributes = $this->removeScreenedAttributes($attributesWithProcessedStockQty);
 
-        return new ProductAttributeList(...$attributesWithProcessedStockQty);
+        return new ProductAttributeList(...$filteredAttributes);
     }
 
     /**
@@ -157,13 +157,12 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     }
 
     /**
-     * @param ProductAttributeList $attributeList
+     * @param ProductAttribute[] $attributes
      * @return ProductAttribute[]
      */
-    private function removeScreenedAttributes(ProductAttributeList $attributeList)
+    private function removeScreenedAttributes(array $attributes)
     {
         $attributeCodesToBeRemoved = ['price', 'special_price', 'backorders'];
-        $attributes = $attributeList->getAllAttributes();
 
         return array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
             return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
