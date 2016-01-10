@@ -451,6 +451,7 @@ TEXTILE/SYNTHETICS]]></attribute>
                 <product sku="218765-333-1" type="simple" tax_class="19%">
                     <attributes>
                         <attribute name="stock_qty">6</attribute>
+                        <attribute name="backorders">false</attribute>
                         <attribute name="color" locale="en_US">Red</attribute>
                         <attribute name="color" locale="de_DE">Rot</attribute>
                         <attribute name="color" locale="fr_FR">Rouge</attribute>
@@ -460,6 +461,7 @@ TEXTILE/SYNTHETICS]]></attribute>
                 <product sku="218765-333-2" type="simple" tax_class="19%">
                     <attributes>
                         <attribute name="stock_qty">0</attribute>
+                        <attribute name="backorders">false</attribute>
                         <attribute name="color" locale="en_US">Red</attribute>
                         <attribute name="color" locale="de_DE">Rot</attribute>
                         <attribute name="color" locale="fr_FR">Rouge</attribute>
@@ -469,6 +471,7 @@ TEXTILE/SYNTHETICS]]></attribute>
                 <product sku="218765-333-3" type="simple" tax_class="19%">
                     <attributes>
                         <attribute name="stock_qty">45</attribute>
+                        <attribute name="backorders">false</attribute>
                         <attribute name="color" locale="en_US">Red</attribute>
                         <attribute name="color" locale="de_DE">Rot</attribute>
                         <attribute name="color" locale="fr_FR">Rouge</attribute>
@@ -478,6 +481,7 @@ TEXTILE/SYNTHETICS]]></attribute>
                 <product sku="218765-333-4" type="simple" tax_class="19%">
                     <attributes>
                         <attribute name="stock_qty">5</attribute>
+                        <attribute name="backorders">false</attribute>
                         <attribute name="color" locale="en_US">Red</attribute>
                         <attribute name="color" locale="de_DE">Rot</attribute>
                         <attribute name="color" locale="fr_FR">Rouge</attribute>
@@ -486,7 +490,8 @@ TEXTILE/SYNTHETICS]]></attribute>
                 </product>
                 <product sku="218765-333-6" type="simple" tax_class="19%">
                     <attributes>
-                        <attribute name="stock_qty">5</attribute>
+                        <attribute name="stock_qty">0</attribute>
+                        <attribute name="backorders">true</attribute>
                         <attribute name="color" locale="en_US">Blue</attribute>
                         <attribute name="color" locale="de_DE">Blau</attribute>
                         <attribute name="color" locale="fr_FR">Bleu</attribute>
@@ -496,6 +501,7 @@ TEXTILE/SYNTHETICS]]></attribute>
                 <product sku="218765-333-7" type="simple" tax_class="19%">
                     <attributes>
                         <attribute name="stock_qty">5</attribute>
+                        <attribute name="backorders">false</attribute>
                         <attribute name="color" locale="en_US">Blue</attribute>
                         <attribute name="color" locale="de_DE">Blau</attribute>
                         <attribute name="color" locale="fr_FR">Bleu</attribute>

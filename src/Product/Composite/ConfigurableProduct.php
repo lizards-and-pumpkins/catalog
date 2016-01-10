@@ -22,7 +22,9 @@ class ConfigurableProduct implements CompositeProduct
     
     const SIMPLE_PRODUCT = 'simple_product';
     const TYPE_CODE = 'configurable';
-    
+    const VARIATION_ATTRIBUTES = 'variation_attributes';
+    const ASSOCIATED_PRODUCTS = 'associated_products';
+
     /**
      * @var SimpleProduct
      */
@@ -73,8 +75,8 @@ class ConfigurableProduct implements CompositeProduct
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
             SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT]),
-            ProductVariationAttributeList::fromArray($sourceArray['variation_attributes']),
-            AssociatedProductList::fromArray($sourceArray['associated_products'])
+            ProductVariationAttributeList::fromArray($sourceArray[self::VARIATION_ATTRIBUTES]),
+            AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS])
         );
     }
 
@@ -84,10 +86,10 @@ class ConfigurableProduct implements CompositeProduct
     public function jsonSerialize()
     {
         return [
-            Product::TYPE_KEY => self::TYPE_CODE,
-            self::SIMPLE_PRODUCT => $this->simpleProductDelegate,
-            'variation_attributes' => $this->variationAttributes,
-            'associated_products' => $this->associatedProducts,
+            Product::TYPE_KEY          => self::TYPE_CODE,
+            self::SIMPLE_PRODUCT       => $this->simpleProductDelegate,
+            self::VARIATION_ATTRIBUTES => $this->variationAttributes,
+            self::ASSOCIATED_PRODUCTS  => $this->associatedProducts,
         ];
     }
 

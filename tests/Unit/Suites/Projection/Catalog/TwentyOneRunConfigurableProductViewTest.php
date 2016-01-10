@@ -43,6 +43,8 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
      * @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductImageFileLocator;
+    
+    private $dummyAssociatedProductData = ['dummy product data'];
 
     /**
      * @param string $productIdString
@@ -86,6 +88,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
                 ProductView::class;
             $stubProductView = $this->getMock($stubProductViewType);
             $stubProductView->method('getId')->willReturn($product->getId());
+            $stubProductView->method('jsonSerialize')->willReturn($this->dummyAssociatedProductData);
             return $stubProductView;
         });
 
@@ -283,6 +286,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $this->mockProduct->method('jsonSerialize')->willReturn([]);
         $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([]));
         $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->mockProduct->method('getAssociatedProducts')->willReturn(new AssociatedProductList());
 
         $result = $this->productView->jsonSerialize();
 
@@ -319,7 +323,29 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     {
         return [
             ['price'],
-            ['special_price']
+            ['special_price'],
         ];
+    }
+
+    public function testAssociatedProductJsonIsBuiltUsingProductViews()
+    {
+        $backordersAttribute = new ProductAttribute('backorders', true, []);
+        $stockQtyAttribute = new ProductAttribute('stock_qty', true, []);
+        $associatedProductAttributes = new ProductAttributeList($backordersAttribute, $stockQtyAttribute);
+
+        $stubChildProduct = $this->createStubSimpleProductWithId('test');
+        $stubChildProduct->method('getAttributes')->willReturn($associatedProductAttributes);
+        $stubChildProduct->method('getImages')->willReturn(new \ArrayIterator([]));
+        $stubChildProduct->method('getContext')->willReturn($this->getMock(Context::class));
+
+        $this->mockProduct->method('getAttributes')->willReturn(new ProductAttributeList());
+        $this->mockProduct->method('jsonSerialize')->willReturn(['associated_products' => [0 => $stubChildProduct]]);
+        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([]));
+        $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->mockProduct->method('getAssociatedProducts')->willReturn(new AssociatedProductList($stubChildProduct));
+
+        $result = json_decode(json_encode($this->productView), true);
+        $this->assertSame($this->dummyAssociatedProductData, $result[ConfigurableProduct::ASSOCIATED_PRODUCTS][0]);
     }
 }
