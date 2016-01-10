@@ -56,6 +56,10 @@ class RunContentBlockImport extends BaseCliCommand
                 'description' => 'Process queues after the import',
                 'noValue' => true,
             ],
+            'importDirectory' => [
+                'description' => 'Path to directory with import files',
+                'required' => true
+            ],
         ]);
     }
 
@@ -67,7 +71,7 @@ class RunContentBlockImport extends BaseCliCommand
 
     private function addCommand()
     {
-        $contentFileNames = glob(__DIR__ . '/../tests/shared-fixture/content-blocks/*.html');
+        $contentFileNames = glob($this->getArg('importDirectory') . '/*.html');
 
         array_map(function ($contentFileName) {
             $blockId = $this->createContentBlockIdBasedOnFileName($contentFileName);
