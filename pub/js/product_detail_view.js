@@ -37,7 +37,7 @@ require([
         initializeZoom();
         initializeTabs();
         showAvailabilityStatus();
-        loadRelatedModels(document.querySelector('meta[itemprop="sku"]').content);
+        loadRelatedModels(product.sku);
         bindShippingInfoModalBoxEvent();
     });
 
