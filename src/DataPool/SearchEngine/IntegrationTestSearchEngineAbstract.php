@@ -366,6 +366,10 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function createSimpleFacetFieldFromAttributeValues(array $attributeValues)
     {
+        usort($attributeValues, function ($a, $b) {
+            return strcmp($a['value'], $b['value']);
+        });
+
         return array_map(function ($valueCounts) {
             return FacetFieldValue::create((string) $valueCounts['value'], $valueCounts['count']);
         }, $attributeValues);

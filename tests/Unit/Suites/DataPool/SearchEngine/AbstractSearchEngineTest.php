@@ -898,4 +898,53 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('ID', $searchEngineResponse->getProductIds());
         $this->assertCount(0, $searchEngineResponse->getFacetFieldCollection());
     }
+
+    public function testFacetFilterOptionValuesAreOrderedAlphabetically()
+    {
+        $productAId = ProductId::fromString(uniqid());
+        $productBId = ProductId::fromString(uniqid());
+
+        $fieldCode = 'foo';
+
+        $facetValueA = 'baz';
+        $facetValueB = 'bar';
+
+        $searchDocumentA = $this->createSearchDocument([$fieldCode => $facetValueA], $productAId);
+        $searchDocumentB = $this->createSearchDocument([$fieldCode => $facetValueB], $productBId);
+
+        $this->searchEngine->addDocument($searchDocumentA);
+        $this->searchEngine->addDocument($searchDocumentB);
+
+        $criteria = CompositeSearchCriterion::createOr(
+            SearchCriterionEqual::create($fieldCode, $facetValueA),
+            SearchCriterionEqual::create($fieldCode, $facetValueB)
+        );
+
+        $facetFieldRequest = new FacetFiltersToIncludeInResult(
+            new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldCode))
+        );
+
+        $selectedFilters = [];
+        $rowsPerPage = 100;
+        $pageNumber = 0;
+        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+
+        $searchEngineResponse = $this->searchEngine->query(
+            $criteria,
+            $selectedFilters,
+            $this->testContext,
+            $facetFieldRequest,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
+
+        $facetFields = $searchEngineResponse->getFacetFieldCollection()->getFacetFields();
+        $expectedValues = [
+            FacetFieldValue::create($facetValueB, 1),
+            FacetFieldValue::create($facetValueA, 1),
+        ];
+
+        $this->assertEquals($expectedValues, $facetFields[0]->getValues());
+    }
 }
