@@ -27,6 +27,40 @@ define(function () {
         return operand;
     };
 
+    function isApplicableForNewBadge(productAttributes) {
+        if (!productAttributes.hasOwnProperty('news_from_date') && !productAttributes.hasOwnProperty('news_to_date')) {
+            return false;
+        }
+
+        var currentDate = new Date();
+
+        if (productAttributes.hasOwnProperty('news_from_date')) {
+            var newsFromDate = new Date(productAttributes['news_from_date']);
+
+            if (newsFromDate < currentDate) {
+                return false;
+            }
+        }
+
+        if (productAttributes.hasOwnProperty('news_to_date')) {
+            var newsToDate = new Date(productAttributes['news_to_date']);
+
+            if (newsToDate > currentDate) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function createNewBadge() {
+        var newBadge = document.createElement('SPAN');
+        newBadge.className = 'new-product';
+        newBadge.textContent = 'NEW';
+
+        return newBadge;
+    }
+
     return {
         renderGrid: function (productGridJson, productGridPlaceholderSelector) {
             var productGridPlaceholder = document.querySelector(productGridPlaceholderSelector);
@@ -57,6 +91,10 @@ define(function () {
 
                 container.style.backgroundImage = 'url("' + getBrandLogoSrc(product['attributes']['brand']) + '")';
                 container.className = 'grid-cell-container';
+
+                if (isApplicableForNewBadge(product['attributes'])) {
+                    container.appendChild(createNewBadge());
+                }
 
                 container.appendChild(wrapIntoProductLink(productImage, productUrl));
                 container.appendChild(wrapIntoProductLink(title, productUrl));
