@@ -130,9 +130,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->assertFalse($this->requestHandler->canProcess($this->stubHttpRequest));
     }
 
-    public function testRequestCanNotBeProcessedIfQueryStringIsShorterThenMinimalAllowedLength()
+    public function testRequestCanNotBeProcessedIfQueryStringIsEmpty()
     {
-        $queryString = 'f';
+        $queryString = '';
         $this->prepareStubHttpRequest($queryString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
 
