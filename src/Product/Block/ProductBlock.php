@@ -49,22 +49,6 @@ class ProductBlock extends Block
     /**
      * @return string
      */
-    public function getBrandLogoSrc()
-    {
-        $brandName = $this->getFirstValueOfProductAttribute('brand');
-        $brand = strtolower(preg_replace('/\W/', '_', trim($brandName)));
-        $fileName = 'images/brands/brands-slider/' . $brand . '.png';
-
-        if (!file_exists('pub/' . $fileName)) {
-            return '';
-        }
-
-        return $this->getBaseUrl() . $fileName;
-    }
-
-    /**
-     * @return string
-     */
     public function getMainProductImageLabel()
     {
         return $this->getProduct()->getMainImageLabel();
