@@ -28,11 +28,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockProductListingPageRequest;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockDataPoolReader;
-
-    /**
      * @var ProductListingRequestHandler
      */
     private $requestHandler;
@@ -50,7 +45,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockDataPoolReader()
+    private function createStubDataPoolReader()
     {
         /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
         $stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
@@ -120,7 +115,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
 
-        $this->mockDataPoolReader = $this->createMockDataPoolReader();
+        $stubDataPoolReader = $this->createStubDataPoolReader();
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
@@ -139,7 +134,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->requestHandler = new ProductSearchRequestHandler(
             $stubContext,
-            $this->mockDataPoolReader,
+            $stubDataPoolReader,
             $stubSnippetKeyGenerator,
             $stubFacetFilterRequest,
             $stubSearchCriteriaBuilder,
@@ -180,9 +175,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
     }
 
-    public function testRequestCanNotBeProcessedIfQueryStringIsShorterThenMinimalAllowedLength()
+    public function testRequestCanNotBeProcessedIfQueryStringIsEmpty()
     {
-        $queryString = 'f';
+        $queryString = '';
 
         $this->stubRequest->method('getUrlPathRelativeToWebFront')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
