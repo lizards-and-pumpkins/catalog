@@ -18,7 +18,6 @@ class ProductSearchRequestHandler implements HttpRequestHandler
 {
     const SEARCH_RESULTS_SLUG = 'catalogsearch/result';
     const QUERY_STRING_PARAMETER_NAME = 'q';
-    const SEARCH_QUERY_MINIMUM_LENGTH = 3;
 
     /**
      * @var DataPoolReader
@@ -148,9 +147,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             return false;
         }
 
-        $searchQueryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-
-        if (null === $searchQueryString || self::SEARCH_QUERY_MINIMUM_LENGTH > strlen($searchQueryString)) {
+        if (strlen($request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1) {
             return false;
         }
 
