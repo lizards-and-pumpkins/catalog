@@ -11,7 +11,7 @@
 .expanded, .collapsed { background-position: top right; background-repeat: no-repeat }
 .expanded { background-image: url(../images/minus.png) }
 .collapsed { background-image: url(../images/plus.png) }
-.filter-color { text-align: center; padding: 4px 0 }
+.filter-color { padding: 4px 0 }
 .filter-color li { display: inline-block; margin: 4px }
 .filter-color li a { background: none; width: 26px; height: 26px; border-radius: 2px; border: #ececec solid 1px; padding: 0; font-size: 18px; text-align: center; line-height: 25px; color: #37a3d4 }
 #filters-button { display: none }
