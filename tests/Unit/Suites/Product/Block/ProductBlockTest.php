@@ -95,33 +95,6 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($testBaseUrl . $urlKey, $result);
     }
 
-    public function testEmptyStringIsReturnedIfProductBrandLogoImageFileDoesNotExist()
-    {
-        $testProductBrandName = 'foo';
-        $this->stubProductView->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
-
-        $result = $this->productBlock->getBrandLogoSrc();
-
-        $this->assertEquals('', $result);
-    }
-
-    public function testProductBrandLogoSrcIsReturned()
-    {
-        $testProductBrandName = 'foo';
-        $testBaseUrl = '/lizards-and-pumpkins/';
-
-        $this->stubBlockRenderer->method('getBaseUrl')->willReturn($testBaseUrl);
-        $this->stubProductView->method('getFirstValueOfAttribute')->with('brand')->willReturn($testProductBrandName);
-
-        $brandLogoSrc = 'images/brands/brands-slider/' . $testProductBrandName . '.png';
-        $this->createFixtureFile('pub/' . $brandLogoSrc, '');
-
-        $expectedProductBrandLogoSrc = $testBaseUrl . $brandLogoSrc;
-        $result = $this->productBlock->getBrandLogoSrc();
-
-        $this->assertEquals($expectedProductBrandLogoSrc, $result);
-    }
-
     public function testGettingMainImageLabelIsDelegatedToProduct()
     {
         $testImageLabel = 'foo';
