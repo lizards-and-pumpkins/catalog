@@ -16,7 +16,7 @@ define(function () {
 
     var getBrandLogoSrc = function (brandName) {
         var brand = brandName.toString().toLocaleLowerCase().replace(/\W/, '_');
-        return baseUrl + 'images/brands/brands-slider/' + brand + '.png';
+        return baseUrl + 'media/brands/brands-slider/' + brand + '.png';
     };
 
     var turnIntoStringIfIsArray = function (operand) {
