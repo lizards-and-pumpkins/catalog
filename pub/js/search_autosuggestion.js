@@ -1,24 +1,25 @@
 define(['lib/ajax'], function (callAjax) {
-    Array.prototype.map.call(document.querySelectorAll('.search-form'), function (searchForm) {
-        var autosuggestionBox = searchForm.querySelector('#search-autosuggestion'),
-            searchInput = searchForm.querySelector('#search'),
-            minimalLength = 3;
+    var autosuggestionBox = document.getElementById('search-autosuggestion'),
+        searchInput = document.getElementById('search'),
+        submitButton = searchInput.parentNode.querySelector('button'),
+        minimalLength = 2;
 
-        searchInput.addEventListener('keyup', function (event) {
-            var value = event.target.value;
+    searchInput.addEventListener('keyup', function (event) {
+        var value = event.target.value;
 
-            if (value.length < minimalLength) {
-                autosuggestionBox.innerHTML = '';
-                return;
-            }
+        submitButton.disabled = value.length === 0;
 
-            callAjax(baseUrl + 'catalogsearch/suggest?q=' + value, function (responseText) {
-                autosuggestionBox.innerHTML = responseText;
-            });
-        }, true);
+        if (value.length < minimalLength) {
+            autosuggestionBox.innerHTML = '';
+            return;
+        }
 
-        searchInput.addEventListener('blur', function () {
+        callAjax(baseUrl + 'catalogsearch/suggest?q=' + value, function (responseText) {
+            autosuggestionBox.innerHTML = responseText;
+        });
+    }, true);
+
+    searchInput.addEventListener('blur', function () {
 //        autosuggestionBox.innerHTML = '';
-        }, true);
-    });
+    }, true);
 });
