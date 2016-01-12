@@ -35,17 +35,17 @@ define(function () {
         var currentDate = new Date();
 
         if (productAttributes.hasOwnProperty('news_from_date')) {
-            var newsFromDate = new Date(productAttributes['news_from_date']);
+            var newsFromDate = new Date(productAttributes['news_from_date'].replace(/\s/, 'T'));
 
-            if (newsFromDate < currentDate) {
+            if (newsFromDate > currentDate) {
                 return false;
             }
         }
 
         if (productAttributes.hasOwnProperty('news_to_date')) {
-            var newsToDate = new Date(productAttributes['news_to_date']);
+            var newsToDate = new Date(productAttributes['news_to_date'].replace(/\s/, 'T'));
 
-            if (newsToDate > currentDate) {
+            if (newsToDate < currentDate) {
                 return false;
             }
         }
