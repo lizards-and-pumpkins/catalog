@@ -22,6 +22,17 @@ define(['lib/url', 'pagination'], function (url, pagination) {
         return attributeTranslation[string];
     }
 
+    function toggleExpandedCollapsed(event) {
+        if (event.target.className.match(/\bexpanded\b/ig)) {
+            event.target.className = event.target.className.replace(/\bexpanded\b/ig, 'collapsed');
+            event.target.nextSibling.style.display = 'none';
+            return;
+        }
+
+        event.target.className = event.target.className.replace(/\bcollapsed\b/ig, 'expanded');
+        event.target.nextSibling.style.display = 'block';
+    }
+
     var FilterNavigation = {
         renderLayeredNavigation: function (filterNavigationJson, placeholderSelector) {
             if (typeof filterNavigationJson !== 'object') {
@@ -47,6 +58,7 @@ define(['lib/url', 'pagination'], function (url, pagination) {
                 var heading = document.createElement('DIV');
                 heading.className = 'block-title roundedBorder expanded';
                 heading.textContent = getAttributeTranslation(filterCode);
+                heading.addEventListener('click', toggleExpandedCollapsed, true);
 
                 var filterContainer = document.createElement('DIV');
                 filterContainer.className = 'filter-container';
