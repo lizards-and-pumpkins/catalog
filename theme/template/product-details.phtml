@@ -57,6 +57,26 @@ $save = 0;
                         stockQty = '<?= $this->getProductStockQuantity() ?>',
                         baseUrl = '<?= $this->getBaseUrl() ?>';
 
+                    <?php if ($this->getFirstValueOfProductAttribute('base_price_amount')) : ?>
+                        <?php
+
+                        $basePriceBaseUnit = $this->getFirstValueOfProductAttribute('base_price_base_unit');
+                        $basePriceBaseAmount = $this->getFirstValueOfProductAttribute('base_price_base_amount');
+                        $basePricePattern = sprintf(
+                            $this->__('per %s%s %s &euro;'),
+                            $basePriceBaseAmount,
+                            $basePriceBaseUnit,
+                            '%s'
+                        );
+
+                        ?>
+
+                        var basePriceAmount = <?= $this->getFirstValueOfProductAttribute('base_price_amount') ?>,
+                            basePriceBaseAmount = <?= $basePriceBaseAmount ?>,
+                            basePricePattern = '<?= $basePricePattern ?>';
+
+                    <?php endif ?>
+
                 </script>
                 <div class="price-information">
                     <div id="old-price"></div>

@@ -41,6 +41,28 @@ require([
         bindShippingInfoModalBoxEvent();
     });
 
+    function priceToFloat(priceString) {
+        var priceWithoutCurrency = priceString.replace(/[^0-9,.]/, '');
+        return parseFloat(priceWithoutCurrency.replace(/,/, '.'));
+    }
+
+    function renderBasePriceIfRequired() {
+        if (typeof basePriceAmount === 'undefined' || typeof basePricePattern === 'undefined') {
+            return;
+        }
+
+        var price = typeof specialPrice !== 'undefined' && priceToFloat(regularPrice) > priceToFloat(specialPrice) ?
+            priceToFloat(specialPrice) :
+            priceToFloat(regularPrice);
+
+        var basePrice = Math.round(price * parseFloat(basePriceBaseAmount) / parseFloat(basePriceAmount) * 100) / 100,
+            basePriceSpan = document.createElement('SPAN');
+
+        basePriceSpan.innerHTML = '<br/>' + basePricePattern.replace(/%s/, basePrice);
+
+        document.querySelector('.tax-information').appendChild(basePriceSpan);
+    }
+
     function renderPrices() {
         var regularPrice = document.getElementById('regular-price'),
             oldPrice = document.getElementById('old-price');
@@ -48,6 +70,8 @@ require([
         if (null === regularPrice || typeof window.regularPrice === 'undefined') {
             return;
         }
+
+        renderBasePriceIfRequired();
 
         if ('' === window.specialPrice) {
             regularPrice.textContent = window.regularPrice;

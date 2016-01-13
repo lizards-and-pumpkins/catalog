@@ -61,6 +61,68 @@ define(function () {
         return newBadge;
     }
 
+    function priceToFloat(priceString) {
+        var formattedPrice = priceString.replace(/[^0-9,.]/, '').replace(/,/, '.');
+        return parseFloat(formattedPrice);
+    }
+
+    function productHasSpecialPrice(productAttributes) {
+        if (!productAttributes.hasOwnProperty('special_price')) {
+            return false;
+        }
+
+        return priceToFloat(productAttributes['price']) > priceToFloat(productAttributes['special_price']);
+    }
+
+    function getFinalPriceAsFloat(productAttributes) {
+        if (productHasSpecialPrice(productAttributes)) {
+            return priceToFloat(productAttributes['special_price']);
+        }
+
+        return  priceToFloat(productAttributes['price']);
+    }
+
+    function createBasePriceIfRequired(productAttributes) {
+        var price = getFinalPriceAsFloat(productAttributes),
+            basePriceBaseAmount = parseFloat(productAttributes['base_price_base_amount']),
+            basePriceAmount = parseFloat(productAttributes['base_price_amount']),
+            basePriceUnit = productAttributes['base_price_unit'],
+            basePrice = Math.round(price * basePriceBaseAmount / basePriceAmount * 100) / 100,
+            basePriceNode = document.createElement('DIV');
+
+        basePriceNode.className = 'base-price';
+        basePriceNode.innerHTML = basePricePattern.replace(/%s/, basePriceBaseAmount)
+            .replace(/%s/, basePriceUnit)
+            .replace(/%s/, basePrice);
+
+        return basePriceNode;
+    }
+
+    function createPricesBlock(productAttributes) {
+        var container = document.createElement('DIV'),
+            price = document.createElement('DIV'),
+            hasSpecialPrice = productHasSpecialPrice(productAttributes);
+
+        price.textContent = productAttributes['price'];
+        price.className = hasSpecialPrice ? 'old-price' : 'regular-price';
+
+        container.className = 'price-container';
+        container.appendChild(price);
+
+        if (hasSpecialPrice) {
+            var specialPrice = document.createElement('DIV');
+            specialPrice.textContent = productAttributes['special_price'];
+            specialPrice.className = 'special-price';
+            container.appendChild(specialPrice);
+        }
+
+        if (productAttributes.hasOwnProperty('base_price_amount') && typeof basePricePattern !== 'undefined') {
+            container.appendChild(createBasePriceIfRequired(productAttributes));
+        }
+
+        return container;
+    }
+
     return {
         renderGrid: function (productGridJson, productGridPlaceholderSelector) {
             var productGridPlaceholder = document.querySelector(productGridPlaceholderSelector);
@@ -79,15 +141,10 @@ define(function () {
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),
                     productUrl = baseUrl + product['attributes']['url_key'],
-                    productImage = createProductImage(mainImage['url'], mainImage['label']),
-                    price = document.createElement('SPAN'),
-                    hasSpecialPrice = product['attributes']['special_price'];
+                    productImage = createProductImage(mainImage['url'], mainImage['label']);
 
                 title.textContent = product['attributes']['name'];
                 gender.textContent = turnIntoStringIfIsArray(product['attributes']['gender']);
-
-                price.textContent = product['attributes']['price'];
-                price.className = hasSpecialPrice ? 'old-price' : 'regular-price';
 
                 container.style.backgroundImage = 'url("' + getBrandLogoSrc(product['attributes']['brand']) + '")';
                 container.className = 'grid-cell-container';
@@ -99,14 +156,7 @@ define(function () {
                 container.appendChild(wrapIntoProductLink(productImage, productUrl));
                 container.appendChild(wrapIntoProductLink(title, productUrl));
                 container.appendChild(gender);
-                container.appendChild(price);
-
-                if (hasSpecialPrice) {
-                    var specialPrice = document.createElement('SPAN');
-                    specialPrice.textContent = product['attributes']['special_price'];
-                    specialPrice.className = 'special-price';
-                    container.appendChild(specialPrice);
-                }
+                container.appendChild(createPricesBlock(product['attributes']));
 
                 productLi.appendChild(container);
                 grid.appendChild(productLi);
