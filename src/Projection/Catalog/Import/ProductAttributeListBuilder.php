@@ -16,14 +16,18 @@ class ProductAttributeListBuilder
     private $attributes;
 
     /**
-     * @param mixed[] $attributesArray
+     * @param array[] $attributesArray
      * @return ProductAttributeListBuilder
      */
     public static function fromArray(array $attributesArray)
     {
-        $attributes = array_map(function (array $attributeArray) {
-            return ProductAttribute::fromArray($attributeArray);
-        }, $attributesArray);
+        $attributes = array_reduce($attributesArray, function (array $carry, array $attributeArray) {
+            if (trim($attributeArray[ProductAttribute::VALUE]) === '') {
+                return $carry;
+            }
+            return array_merge($carry, [ProductAttribute::fromArray($attributeArray)]);
+        }, []);
+
         return new self(...$attributes);
     }
 
