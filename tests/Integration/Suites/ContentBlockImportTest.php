@@ -27,6 +27,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
+        $this->factory->createCommandConsumer()->process();
+        $this->factory->createDomainEventConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
     }
 
