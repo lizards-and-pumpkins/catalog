@@ -349,12 +349,12 @@ class FrontendFactory implements Factory
 
     private function registerSnippetTransformations(PageBuilder $pageBuilder)
     {
-        // Todo: remove when product detail page uses product json only
         $pageBuilder->registerSnippetTransformation(
             ProductJsonSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductJsonSnippetTransformation()
         );
-        
+
+        // Todo: remove when product detail page uses product json only
         $pageBuilder->registerSnippetTransformation(
             PriceSnippetRenderer::PRICE,
             $this->getMasterFactory()->createPriceSnippetTransformation()
