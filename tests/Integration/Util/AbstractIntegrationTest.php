@@ -131,7 +131,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $this->processQueueWhileMessagesPending($factory->getEventQueue(), $factory->createDomainEventConsumer());
     }
     
-    private function processQueueWhileMessagesPending(Queue $queue, QueueMessageConsumer $consumer)
+    final protected function processQueueWhileMessagesPending(Queue $queue, QueueMessageConsumer $consumer)
     {
         while ($queue->count()) {
             $consumer->process();

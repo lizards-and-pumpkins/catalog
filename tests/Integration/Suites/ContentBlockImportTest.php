@@ -26,10 +26,14 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
         (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
 
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
+        $this->processQueueWhileMessagesPending(
+            $this->factory->getCommandQueue(),
+            $this->factory->createCommandConsumer()
+        );
+        $this->processQueueWhileMessagesPending(
+            $this->factory->getEventQueue(),
+            $this->factory->createDomainEventConsumer()
+        );
     }
 
     private function renderProductListingTemplate()
