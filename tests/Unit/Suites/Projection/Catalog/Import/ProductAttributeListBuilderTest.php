@@ -106,39 +106,4 @@ class ProductAttributeListBuilderTest extends \PHPUnit_Framework_TestCase
         );
         new ProductAttributeListBuilder($attributeA, $attributeB, $attributeC);
     }
-
-    /**
-     * @dataProvider emptyValueProvider
-     * @param string $emptyValue
-     */
-    public function testProductAttributeWithEmptyValueIsNotAddedToList($emptyValue)
-    {
-        $contextDataSet = [];
-
-        $attributeData = [
-            ProductAttribute::CODE => 'foo',
-            ProductAttribute::CONTEXT => $contextDataSet,
-            ProductAttribute::VALUE => $emptyValue
-        ];
-
-        $attributeListBuilder = ProductAttributeListBuilder::fromArray([$attributeData]);
-        $context = $this->createStubContextWithDataSet($contextDataSet);
-
-        $result = $attributeListBuilder->getAttributeListForContext($context);
-        $expectedProductAttributeList = new ProductAttributeList();
-
-        $this->assertEquals($expectedProductAttributeList, $result);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function emptyValueProvider()
-    {
-        return [
-            [''],
-            [' '],
-            [null]
-        ];
-    }
 }
