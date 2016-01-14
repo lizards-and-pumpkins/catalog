@@ -23,9 +23,9 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     private $pageMetaInfo;
 
     /**
-     * @var string
+     * @var HttpRequest
      */
-    private $requestObjectHash;
+    private $requestObject;
 
     /**
      * @var DataPoolReader
@@ -88,10 +88,8 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
 
     private function loadPageMetaInfoSnippet(HttpRequest $request)
     {
-        $requestObjectHash = spl_object_hash($request);
-
-        if ($requestObjectHash !== $this->requestObjectHash) {
-            $this->requestObjectHash = $requestObjectHash;
+        if ($request !== $this->requestObject) {
+            $this->requestObject = $request;
             $this->pageMetaInfo = false;
             $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
             $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);

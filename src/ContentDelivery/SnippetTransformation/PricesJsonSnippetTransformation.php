@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 
+/**
+ * @todo remove when product listing uses ProductJsonServiceProvider
+ */
 class PricesJsonSnippetTransformation implements SnippetTransformation
 {
     /**

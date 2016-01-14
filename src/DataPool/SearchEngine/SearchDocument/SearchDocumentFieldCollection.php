@@ -29,7 +29,7 @@ class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
             $valueArray = !is_array($value) ?
                 [$value] :
                 $value;
-            $fields[] = SearchDocumentField::fromKeyAndValues($key, $valueArray);
+            $fields[$key] = SearchDocumentField::fromKeyAndValues($key, $valueArray);
         }
 
         return new self($fields);

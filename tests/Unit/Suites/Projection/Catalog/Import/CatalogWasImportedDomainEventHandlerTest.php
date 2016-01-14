@@ -41,7 +41,7 @@ class CatalogWasImportedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
 
     public function testItTriggersTheProductListingProjection()
     {
-        $this->markTestIncomplete('This even handler is currently not doing anything.');
+        $this->markTestIncomplete('This event handler is currently not doing anything.');
         $this->eventHandler->process();
     }
 }

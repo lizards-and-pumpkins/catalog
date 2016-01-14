@@ -11,10 +11,14 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {
@@ -26,99 +30,163 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     private $factory;
 
     /**
-     * @param RegistrySnippetKeyGeneratorLocatorStrategy $snippetKeyGeneratorLocator
+     * @var RegistrySnippetKeyGeneratorLocatorStrategy
+     */
+    private $snippetKeyGeneratorLocator;
+
+    /**
+     * @var HttpRequest
+     */
+    private $request;
+
+    /**
      * @param string $productDetailPageMetaSnippetKey
      * @param Context $context
      */
-    private function addPageMetaInfoFixtureToKeyValueStorage(
-        RegistrySnippetKeyGeneratorLocatorStrategy $snippetKeyGeneratorLocator,
-        $productDetailPageMetaSnippetKey,
-        Context $context
-    ) {
+    private function addSnippetsFixtureToKeyValueStorage($productDetailPageMetaSnippetKey, Context $context)
+    {
         $dataPoolWriter = $this->factory->createDataPoolWriter();
 
         $rootSnippetCode = 'root-snippet';
+        $this->registerSnippetKeyGenerators($rootSnippetCode);
+        
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
+            $this->testProductId,
+            $rootSnippetCode,
+            ['head', 'body']
+        );
+        $metaInfoSnippet = Snippet::create($productDetailPageMetaSnippetKey, json_encode($pageMetaInfo->getInfo()));
+
+        $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
+        $rootSnippet = Snippet::create($this->getSnippetKey($rootSnippetCode, $context), $rootSnippetContent);
+
+        $pageSnippets = $this->createTestProductDetailPageSnippets($context);
+
+        $dataPoolWriter->writeSnippets($rootSnippet, $metaInfoSnippet, ...$pageSnippets);
+    }
+
+    /**
+     * @param string $rootSnippetCode
+     */
+    private function registerSnippetKeyGenerators($rootSnippetCode)
+    {
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::CODE,
             $this->factory->getRequiredContexts(),
             [Product::ID]
         );
-        $snippetKeyGeneratorLocator->register($rootSnippetCode, function () use ($rootSnippetKeyGenerator) {
+        $this->snippetKeyGeneratorLocator->register($rootSnippetCode, function () use ($rootSnippetKeyGenerator) {
             return $rootSnippetKeyGenerator;
         });
-        $snippetKeyGeneratorLocator->register('head', function () {
+        $this->snippetKeyGeneratorLocator->register('head', function () {
             return new GenericSnippetKeyGenerator('head', $this->factory->getRequiredContexts(), []);
         });
-        $snippetKeyGeneratorLocator->register('body', function () {
+        $this->snippetKeyGeneratorLocator->register('body', function () {
             return new GenericSnippetKeyGenerator('body', $this->factory->getRequiredContexts(), []);
         });
-
-        $snippetKey = $rootSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
-        $snippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
-
-        $pageSnippet = Snippet::create($snippetKey, $snippetContent);
-
-        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
-            $this->testProductId,
-            $rootSnippetCode,
-            [$rootSnippetCode, 'head', 'body']
-        );
-        $metaInfoSnippet = Snippet::create($productDetailPageMetaSnippetKey, json_encode($pageMetaInfo->getInfo()));
-
-        $headSnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('head');
-        $key = $headSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
-        $headSnippet = Snippet::create($key, '<title>Page Title</title>');
-
-        $bodySnippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode('body');
-        $key = $bodySnippetKeyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
-        $bodySnippet = Snippet::create($key, '<h1>Headline</h1>');
-
-        $dataPoolWriter->writeSnippets($pageSnippet, $metaInfoSnippet, $headSnippet, $bodySnippet);
     }
 
-    public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
+    /**
+     * @param string $code
+     * @param Context $context
+     * @return SnippetKeyGenerator
+     */
+    private function getSnippetKey($code, Context $context)
     {
-        $url = HttpUrl::fromString('http://example.com/product1');
-        $urlKey = $url->getPathRelativeToWebFront();
-        $request = HttpRequest::fromParameters(
+        $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($code);
+        return $keyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
+    }
+
+    /**
+     * @param Context $context
+     * @return Snippet[]
+     */
+    private function createTestProductDetailPageSnippets(Context $context)
+    {
+        $headSnippetContent = '<title>Page Title</title>';
+        $headSnippet = Snippet::create($this->getSnippetKey('head', $context), $headSnippetContent);
+
+        $bodySnippetContent = '<h1>Headline</h1>';
+        $bodySnippet = Snippet::create($this->getSnippetKey('body', $context), $bodySnippetContent);
+
+        $productJsonSnippetKey = $this->getSnippetKey(ProductJsonSnippetRenderer::CODE, $context);
+        $jsonSnippetContent = json_encode(['sku' => $this->testProductId]);
+        $productJsonSnippet = Snippet::create($productJsonSnippetKey, $jsonSnippetContent);
+
+        $priceSnippetKey = $this->getSnippetKey(PriceSnippetRenderer::PRICE, $context);
+        $priceSnippetContent = '1199';
+        $priceSnippet = Snippet::create($priceSnippetKey, $priceSnippetContent);
+
+        $specialPriceSnippetKey = $this->getSnippetKey(PriceSnippetRenderer::SPECIAL_PRICE, $context);
+        $specialPriceSnippetContent = '999';
+        $specialPriceSnippet = Snippet::create($specialPriceSnippetKey, $specialPriceSnippetContent);
+        
+        return [$headSnippet, $bodySnippet, $productJsonSnippet, $priceSnippet, $specialPriceSnippet];
+    }
+
+    /**
+     * @param HttpUrl $url
+     * @return HttpRequest
+     */
+    private function createDummyRequest(HttpUrl $url)
+    {
+        return HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             $url,
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
-        
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
-        $context = SelfContainedContextBuilder::rehydrateContext([ContextVersion::CODE => '-1']);
-        $snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
-        $productDetailPageMetaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
-        $productDetailPageMetaSnippetKey = $productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
-            $context,
-            [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
-        );
+    }
 
-        $this->addPageMetaInfoFixtureToKeyValueStorage(
-            $snippetKeyGeneratorLocator,
-            $productDetailPageMetaSnippetKey,
-            $context
-        );
-
+    /**
+     * @param Context $context
+     * @param Logger $logger
+     * @param SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
+     * @return ProductDetailViewRequestHandler
+     */
+    private function createProductDetailViewRequestHandler(
+        Context $context,
+        Logger $logger,
+        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
+    ) {
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $logger = $this->factory->getLogger();
-
-        $pageBuilder = new ProductDetailViewRequestHandler(
+        return new ProductDetailViewRequestHandler(
             $context,
             $dataPoolReader,
-            new PageBuilder($dataPoolReader, $snippetKeyGeneratorLocator, $logger),
+            new PageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
             $productDetailPageMetaSnippetKeyGenerator
         );
-        $page = $pageBuilder->process($request);
-        $body = $page->getBody();
+    }
 
+    protected function setUp()
+    {
+        $this->request = $this->createDummyRequest(HttpUrl::fromString('http://example.com/product1'));
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($this->request);
+        $this->snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
+    }
+
+    public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
+    {
+        $context = SelfContainedContextBuilder::rehydrateContext([ContextVersion::CODE => '-1']);
+        
+        $metaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
+        $productDetailPageMetaSnippetKey = $metaSnippetKeyGenerator->getKeyForContext(
+            $context,
+            [PageMetaInfoSnippetContent::URL_KEY => $this->request->getUrlPathRelativeToWebFront()]
+        );
+
+        $this->addSnippetsFixtureToKeyValueStorage($productDetailPageMetaSnippetKey, $context);
+
+        $logger = $this->factory->getLogger();
+
+        $pageBuilder = $this->createProductDetailViewRequestHandler($context, $logger, $metaSnippetKeyGenerator);
+        
+        $page = $pageBuilder->process($this->request);
+        
         $this->failIfMessagesWhereLogged($logger);
 
         $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';
 
-        $this->assertEquals($expected, $body);
+        $this->assertEquals($expected, $page->getBody());
     }
 }
