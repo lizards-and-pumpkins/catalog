@@ -55,27 +55,8 @@ $save = 0;
                     var regularPrice = '<?= $this->getChildOutput('price') ?>',
                         specialPrice = '<?= $this->getChildOutput('special_price') ?>',
                         stockQty = '<?= $this->getProductStockQuantity() ?>',
-                        baseUrl = '<?= $this->getBaseUrl() ?>';
-
-                    <?php if ($this->getFirstValueOfProductAttribute('base_price_amount')) : ?>
-                        <?php
-
-                        $basePriceBaseUnit = $this->getFirstValueOfProductAttribute('base_price_base_unit');
-                        $basePriceBaseAmount = $this->getFirstValueOfProductAttribute('base_price_base_amount');
-                        $basePricePattern = sprintf(
-                            $this->__('per %s%s %s &euro;'),
-                            $basePriceBaseAmount,
-                            $basePriceBaseUnit,
-                            '%s'
-                        );
-
-                        ?>
-
-                        var basePriceAmount = <?= $this->getFirstValueOfProductAttribute('base_price_amount') ?>,
-                            basePriceBaseAmount = <?= $basePriceBaseAmount ?>,
-                            basePricePattern = '<?= $basePricePattern ?>';
-
-                    <?php endif ?>
+                        baseUrl = '<?= $this->getBaseUrl() ?>',
+                        basePricePattern = '<?= sprintf($this->__('per %s%s %s &euro;'), '%s', '%s','%s') ?>';
 
                 </script>
                 <div class="price-information">

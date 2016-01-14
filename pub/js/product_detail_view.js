@@ -1,4 +1,5 @@
 require([
+    'product',
     'lib/domReady',
     'common',
     'recently_viewed_products',
@@ -9,6 +10,7 @@ require([
     'lib/modal_box',
     'ekomi'
 ], function(
+    Product,
     domReady,
     common,
     recentlyViewedProducts,
@@ -21,9 +23,13 @@ require([
 
     var tabletWidth = 768,
         selectBoxIdPrefix = 'variation_',
-        addToCartButton;
+        addToCartButton,
+        product;
 
     domReady(function() {
+
+        product = new Product(window.product);
+
         renderPrices();
         handleRecentlyViewedProducts();
         initializeAddToCartButton();
@@ -37,30 +43,18 @@ require([
         initializeZoom();
         initializeTabs();
         showAvailabilityStatus();
-        loadRelatedModels(product.sku);
+        loadRelatedModels(window.product.sku);
         bindShippingInfoModalBoxEvent();
     });
 
-    function priceToFloat(priceString) {
-        var priceWithoutCurrency = priceString.replace(/[^0-9,.]/, '');
-        return parseFloat(priceWithoutCurrency.replace(/,/, '.'));
-    }
+    function renderBasePrice() {
+        var container = document.createElement('SPAN');
 
-    function renderBasePriceIfRequired() {
-        if (typeof basePriceAmount === 'undefined' || typeof basePricePattern === 'undefined') {
-            return;
-        }
+        container.innerHTML = '<br/>' + basePricePattern.replace(/%s/, product.getBasePriceBaseAmount())
+                .replace(/%s/, product.getBasePriceUnit())
+                .replace(/%s/, product.getBasePrice());
 
-        var price = typeof specialPrice !== 'undefined' && priceToFloat(regularPrice) > priceToFloat(specialPrice) ?
-            priceToFloat(specialPrice) :
-            priceToFloat(regularPrice);
-
-        var basePrice = Math.round(price * parseFloat(basePriceBaseAmount) / parseFloat(basePriceAmount) * 100) / 100,
-            basePriceSpan = document.createElement('SPAN');
-
-        basePriceSpan.innerHTML = '<br/>' + basePricePattern.replace(/%s/, basePrice);
-
-        document.querySelector('.tax-information').appendChild(basePriceSpan);
+        document.querySelector('.tax-information').appendChild(container);
     }
 
     function renderPrices() {
@@ -71,7 +65,9 @@ require([
             return;
         }
 
-        renderBasePriceIfRequired();
+        if (product.hasBasePrice()) {
+            renderBasePrice();
+        }
 
         if ('' === window.specialPrice) {
             regularPrice.textContent = window.regularPrice;
