@@ -76,6 +76,6 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
      */
     protected function getAttributeValuesFromProduct(Product $product, AttributeCode $attributeCode)
     {
-        return array_filter($product->getAllValuesOfAttribute((string) $attributeCode));
+        return $product->getAllValuesOfAttribute((string) $attributeCode);
     }
 }
