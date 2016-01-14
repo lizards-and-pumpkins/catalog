@@ -27,8 +27,14 @@ define(function () {
         return operand;
     };
 
+    function isDate(dateString) {
+        return dateString.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$/);
+    }
+
     function isApplicableForNewBadge(productAttributes) {
-        if (!productAttributes.hasOwnProperty('news_from_date') && !productAttributes.hasOwnProperty('news_to_date')) {
+        if ((!productAttributes.hasOwnProperty('news_from_date') || !isDate(productAttributes['news_from_date'])) &&
+            (!productAttributes.hasOwnProperty('news_to_date') || !isDate(productAttributes['news_to_date']))
+        ) {
             return false;
         }
 

@@ -525,7 +525,7 @@ TEXTILE/SYNTHETICS]]></attribute>
                 <attribute name="stock_qty">55</attribute>
                 <attribute name="backorders">true</attribute>
                 <attribute name="color">a7fa41</attribute>
-                <attribute name="series">Gel-Kayano</attribute>
+                <attribute name="series"/>
             </attributes>
         </product>
 
