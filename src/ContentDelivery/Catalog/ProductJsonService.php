@@ -121,8 +121,7 @@ class ProductJsonService
             return $this->addGivenPricesToProductData(
                 $productData,
                 $snippets[$priceKey],
-                @$snippets[$specialPriceKey],
-                $this->getCurrencyCode()
+                @$snippets[$specialPriceKey]
             );
         }, $productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
     }
@@ -143,15 +142,14 @@ class ProductJsonService
      * @param string[] $productData
      * @param string $price
      * @param string $specialPrice
-     * @param string $currencyCode
      * @return array[]
      */
-    public function addGivenPricesToProductData(array $productData, $price, $specialPrice, $currencyCode)
+    public function addGivenPricesToProductData(array $productData, $price, $specialPrice)
     {
-        $currency = new Currency($currencyCode);
+        $currency = new Currency($this->getCurrencyCode());
         $productData['attributes']['raw_price'] = $price;
         $productData['attributes']['price'] = $this->formatPriceSnippet($price, $currency);
-        $productData['attributes']['price_currency'] = $currencyCode;
+        $productData['attributes']['price_currency'] = $currency->getCurrencyCode();
         $productData['attributes']['price_faction_digits'] = $currency->getDefaultFractionDigits();
         $productData['attributes']['price_base_unit'] = $currency->getSubUnit();
 
