@@ -6,6 +6,9 @@ namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 
+/**
+ * @todo remove when product detail page uses product json only
+ */
 class SimpleEuroPriceSnippetTransformation implements SnippetTransformation
 {
     /**

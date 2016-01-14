@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Price;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
@@ -10,6 +11,8 @@ use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
+use LizardsAndPumpkins\Tax\IntegrationTestTaxService;
+use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
 
 class SimpleProductBuilder implements ProductBuilder
 {
@@ -52,7 +55,8 @@ class SimpleProductBuilder implements ProductBuilder
     public function isAvailableForContext(Context $context)
     {
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
-        return count($sourceAttributeList) > 0;
+        $price = AttributeCode::fromString('price');
+        return $sourceAttributeList->hasAttribute($price);
     }
 
     /**

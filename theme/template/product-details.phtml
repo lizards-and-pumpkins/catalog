@@ -181,7 +181,9 @@ $save = 0;
         html += '</div>';
         html += '</li>';
 
-        var product = {sku: '<?= $this->getProductId() ?>', html: html};
+        var product = <?= $this->getChildOutput('product_json') ?>;
+        product.html = html;
+        product.sku = product.product_id;
         var variation_attributes = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE) ?>;
         var associated_products = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE) ?>;
 
