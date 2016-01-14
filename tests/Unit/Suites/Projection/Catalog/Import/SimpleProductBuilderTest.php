@@ -122,7 +122,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductIsAvailableForContextIfPriceIsAvailableInContext()
     {
-        $this->mockAttributeList->method('hasAttribute')->willReturn(true);
+        $this->mockAttributeList->method('count')->willReturn(2);
         $stubContext = $this->getMock(Context::class);
         
         $this->assertTrue($this->productBuilder->isAvailableForContext($stubContext));
@@ -130,7 +130,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductIsNotAvailableForContextIfNoPriceAttributeIsAvailableInContext()
     {
-        $this->mockAttributeList->method('hasAttribute')->willReturn(false);
+        $this->mockAttributeList->method('count')->willReturn(0);
         $stubContext = $this->getMock(Context::class);
         
         $this->assertFalse($this->productBuilder->isAvailableForContext($stubContext));

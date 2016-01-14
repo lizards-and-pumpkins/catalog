@@ -52,7 +52,7 @@ class SimpleProductBuilder implements ProductBuilder
     public function isAvailableForContext(Context $context)
     {
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
-        return $sourceAttributeList->hasAttribute('price');
+        return count($sourceAttributeList) > 0;
     }
 
     /**
