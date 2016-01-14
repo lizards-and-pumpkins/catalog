@@ -50,7 +50,7 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
     }
 
-    public function testItAllowsPassingTheSnippetsFromTheOutside()
+    public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation()
     {
         $productData = [];
         $price = '1999';
@@ -67,6 +67,20 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $this->assertProductJsonDataHas('price_currency', 'EUR', $result['attributes']);
         $this->assertProductJsonDataHas('price_faction_digits', 2, $result['attributes']);
         $this->assertProductJsonDataHas('price_base_unit', 100, $result['attributes']);
+    }
+
+    public function testItDoesNotAddSpecialPriceDataIfTheSpecialPriceIsNull()
+    {
+        $productData = [];
+        $price = '1999';
+        $specialPrice = null;
+        
+        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+
+        $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
+        
+        $this->assertArrayNotHasKey('special_price', $result['attributes']);
+        $this->assertArrayNotHasKey('raw_special_price', $result['attributes']);
     }
 
     public function testItAddsCurrencyInformationToTheProductAttributes()
