@@ -34,10 +34,10 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
         $values = $this->useSpecialPriceInsteadOfPrice($product, $attributeCode) ?
             $this->getAttributeValuesFromProduct($product, $this->specialPriceAttribute) :
             $this->getAttributeValuesFromProduct($product, $attributeCode);
-        return array_filter($values, [$this, 'isValidAttributeValue']);
+        return array_filter($values, [$this, 'isSearchableAttributeValue']);
     }
 
-    private function isValidAttributeValue($value)
+    private function isSearchableAttributeValue($value)
     {
         if (!is_scalar($value)) {
             return false;
