@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
@@ -19,6 +20,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionReques
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
@@ -348,15 +350,23 @@ class FrontendFactory implements Factory
     private function registerSnippetTransformations(PageBuilder $pageBuilder)
     {
         $pageBuilder->registerSnippetTransformation(
+            ProductJsonSnippetRenderer::CODE,
+            $this->getMasterFactory()->createProductJsonSnippetTransformation()
+        );
+
+        // Todo: remove when product detail page uses product json only
+        $pageBuilder->registerSnippetTransformation(
             PriceSnippetRenderer::PRICE,
             $this->getMasterFactory()->createPriceSnippetTransformation()
         );
 
+        // Todo: remove when product detail page uses product json only
         $pageBuilder->registerSnippetTransformation(
             PriceSnippetRenderer::SPECIAL_PRICE,
             $this->getMasterFactory()->createPriceSnippetTransformation()
         );
-
+        
+        // Todo: remove when product listing page uses ProductJsonService
         $pageBuilder->registerSnippetTransformation(
             'product_prices',
             $this->getMasterFactory()->createPricesJsonSnippetTransformation()
@@ -439,6 +449,14 @@ class FrontendFactory implements Factory
     }
 
     /**
+     * @return ProductJsonSnippetTransformation
+     */
+    public function createProductJsonSnippetTransformation()
+    {
+        return new ProductJsonSnippetTransformation($this->getMasterFactory()->createEnrichProductJsonWithPrices());
+    }
+
+    /**
      * @return ProductRelationsService
      */
     public function createProductRelationsService()
@@ -495,6 +513,17 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
             $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createEnrichProductJsonWithPrices(),
+            $this->getMasterFactory()->createContext()
+        );
+    }
+
+    /**
+     * @return EnrichProductJsonWithPrices
+     */
+    public function createEnrichProductJsonWithPrices()
+    {
+        return new EnrichProductJsonWithPrices(
             $this->getMasterFactory()->createContext()
         );
     }

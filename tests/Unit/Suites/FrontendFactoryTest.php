@@ -5,11 +5,13 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Api\ApiRouter;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
+use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
@@ -47,7 +49,9 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices
  * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
@@ -245,5 +249,17 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createProductJsonService();
         $this->assertInstanceOf(ProductJsonService::class, $result);
+    }
+
+    public function testItReturnsAnEnrichProductJsonWithPrices()
+    {
+        $result = $this->frontendFactory->createEnrichProductJsonWithPrices();
+        $this->assertInstanceOf(EnrichProductJsonWithPrices::class, $result);
+    }
+
+    public function testItReturnsAProductJsonSnippetTransformation()
+    {
+        $result = $this->frontendFactory->createProductJsonSnippetTransformation();
+        $this->assertInstanceOf(ProductJsonSnippetTransformation::class, $result);
     }
 }

@@ -1,0 +1,417 @@
+<?xml version="1.0"?>
+<catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
+    <products>
+        <product type="simple" sku="118235-251" tax_class="19%">
+            <images>
+                <image>
+                    <file>2013_pro_touch_118235-251.jpg</file>
+                    <label>The main image label</label>
+                </image>
+                <image>
+                    <file>2013_pro_touch_118235-251.jpg</file>
+                    <label locale="fr_FR">Der Text zum zweiten Bild</label>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="category" website="fr" locale="fr_FR">sale</attribute>
+                <attribute name="category" website="fr" locale="fr_FR">men</attribute>
+                <attribute name="category" website="fr" locale="fr_FR">women</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="url_key" locale="fr_FR">led-arm-signallampe</attribute>
+                <attribute name="url_key" locale="fr_FR">armer-conduit</attribute>
+                <attribute name="name" locale="fr_FR">LED Arm-Signallampe</attribute>
+                <attribute name="name" locale="fr_FR">Armer Conduit</attribute>
+                <attribute name="price" website="fr">12.95</attribute>
+                <attribute name="special_price" website="fr">10.95</attribute>
+                <attribute name="weight" website="fr">11.2</attribute>
+                <attribute name="description" locale="fr_FR"><![CDATA[LED Arm-Signallampe<br />
+<br />
+LED Arm-Signallampe mit elastischem Band und Flasher mit variabler Blinkfolge,
+Flasher abnehmbar.]]></attribute>
+                <attribute name="brand" website="fr">Pro Touch</attribute>
+                <attribute name="style" website="fr">Leuchten</attribute>
+                <attribute name="gender" website="fr">Damen</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="color" website="fr">d90000</attribute>
+                <attribute name="color" website="fr">000000</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="288193NEU" tax_class="19%">
+            <images>
+                <image>
+                    <file>288193_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">adilette</attribute>
+                <attribute name="name" website="fr">Adilette</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">14.92</attribute>
+                <attribute name="brand" website="fr">Adidas</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="stock_qty" website="fr">1</attribute>
+                <attribute name="backorders" website="fr">false</attribute>
+                <attribute name="color" website="fr">d90000</attribute>
+                <attribute name="series" website="fr">Adilette</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="288193NEU-OUT-OF-STOCK" tax_class="19%">
+            <images>
+                <image>
+                    <file>288193_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">adilette-out-of-stock</attribute>
+                <attribute name="name" website="fr">Adilette Out Of Stock</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">14.92</attribute>
+                <attribute name="brand" website="fr">Adidas</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="stock_qty" website="fr">0</attribute>
+                <attribute name="backorders" website="fr">false</attribute>
+                <attribute name="color" website="fr">d90000</attribute>
+                <attribute name="series" website="fr">Adilette</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="T507N-8501" tax_class="19%">
+            <images>
+                <image>
+                    <file>t507n-8501_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-nimbus-17</attribute>
+                <attribute name="name" website="fr">Gel-Nimbus 17</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">134.95</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Neutral</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Nimbus</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="T408Q-9030" tax_class="19%">
+            <images>
+                <image>
+                    <file>2014_asics_hw2014_t408q-9030_14_3.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-noosa-tri-9</attribute>
+                <attribute name="name" website="fr">Gel-Noosa Tri 9</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">83.97</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Noosa</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="T530N-0791" tax_class="19%">
+            <images>
+                <image>
+                    <file>t530n-0791_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-noosa-tri-10</attribute>
+                <attribute name="name" website="fr">Gel-Noosa Tri 10</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">84.90</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Noosa</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="T435N-0793" tax_class="19%">
+            <images>
+                <image>
+                    <file>t435n-0793_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-nimbus-16</attribute>
+                <attribute name="name" website="fr">Gel-Nimbus 16</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">106.95</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Neutral</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Nimbus</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="T580N-2307" tax_class="19%">
+            <images>
+                <image>
+                    <file>t580n-2307_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-noosa-10-4</attribute>
+                <attribute name="name" website="fr">Gel-Noosa 10</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">84.90</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Damen</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">fd5224</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Noosa</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="T580N-4907" tax_class="19%">
+            <images>
+                <image>
+                    <file>t580n-4907_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-noosa-10-5</attribute>
+                <attribute name="name" website="fr">Gel-Noosa 10</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">84.90</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Damen</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">b01c64</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Noosa</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="T580N-0739" tax_class="19%">
+            <images>
+                <image>
+                    <file>t580n-0739_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-noosa-10-3</attribute>
+                <attribute name="name" website="fr">Gel-Noosa 10</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">89.95</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Damen</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">fd5224</attribute>
+                <attribute name="series" website="fr">Gel-Noosa</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="C523N-4907" tax_class="19%">
+            <images>
+                <image>
+                    <file>c523n_4907_f_l_primary_asics_jpg.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-noosa-10-gs-9</attribute>
+                <attribute name="name" website="fr">Gel-Noosa Tri 10 GS</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">47.57</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Kinder</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">263698</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Noosa</attribute>
+            </attributes>
+        </product>
+
+        <product type="simple" sku="C523N-0791" tax_class="19%">
+            <images>
+                <image>
+                    <file>c523n_0791_f_l_primary_asics_jpg.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">gel-noosa-10-gs-8</attribute>
+                <attribute name="name" website="fr">Gel-Noosa Tri 10 GS</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">47.57</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Kinder</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Noosa</attribute>
+            </attributes>
+        </product>
+
+        <product type="configurable" sku="M29540" tax_class="19%">
+            <images>
+                <image>
+                    <file>m29540_standardview.jpg</file>
+                    <label locale="fr_FR" website="fr">Das Hauptbild</label>
+                </image>
+                <image>
+                    <file>m29540_backview.jpg</file>
+                    <label>Yet another image label</label>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key" website="fr">adipure-360</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="category" website="fr">men-running-shoes</attribute>
+                <attribute name="category" website="fr">specials</attribute>
+                <attribute name="stock_qty" website="fr">5</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="name" website="fr">Adipure 360.2 Prima</attribute>
+                <attribute name="price" website="fr">89.95</attribute>
+                <attribute name="special_price" website="fr">44.97</attribute>
+                <attribute name="description" website="fr"><![CDATA[Adidas adiPure 360.2 Prima<br><br>
+- Flex Grooves: Flexibilität für ein natürliches Laufgefühl.<br>
+- Atmungsaktives Mesh: Ermöglicht Luftzirkulation, die für ein angenehmes Gefühl am Fuß sorgt<br>
+- Die All-Over-Graphik Ausführung  des Schuhs gibt dir einen einzigartigen Look<br><br>
+TEXTILE/SYNTHETICS]]></attribute>
+                <attribute name="brand" website="fr">Adidas</attribute>
+                <attribute name="style" website="fr">Natural-Running (Free)</attribute>
+                <attribute name="gender" website="fr">Damen</attribute>
+                <attribute name="series" website="fr">Adipure</attribute>
+            </attributes>
+            <variations>
+                <attribute>color</attribute>
+                <attribute>size</attribute>
+            </variations>
+            <associated_products>
+                <product sku="218765-333-1" type="simple" tax_class="19%">
+                    <attributes>
+                        <attribute name="stock_qty" website="fr">6</attribute>
+                        <attribute name="backorders" website="fr">false</attribute>
+                        <attribute name="color" locale="fr_FR" website="fr">Rouge</attribute>
+                        <attribute name="size" website="fr">US 12.5 - EU 47</attribute>
+                    </attributes>
+                </product>
+                <product sku="218765-333-2" type="simple" tax_class="19%">
+                    <attributes>
+                        <attribute name="stock_qty" website="fr">0</attribute>
+                        <attribute name="backorders" website="fr">false</attribute>
+                        <attribute name="color" locale="fr_FR" website="fr">Rouge</attribute>
+                        <attribute name="size" website="fr">US 12 - EU 46</attribute>
+                    </attributes>
+                </product>
+                <product sku="218765-333-3" type="simple" tax_class="19%">
+                    <attributes>
+                        <attribute name="stock_qty" website="fr">45</attribute>
+                        <attribute name="backorders" website="fr">false</attribute>
+                        <attribute name="color" locale="fr_FR" website="fr">Rouge</attribute>
+                        <attribute name="size" website="fr">US 11.5 - EU 45</attribute>
+                    </attributes>
+                </product>
+                <product sku="218765-333-4" type="simple" tax_class="19%">
+                    <attributes>
+                        <attribute name="stock_qty" website="fr">5</attribute>
+                        <attribute name="backorders" website="fr">false</attribute>
+                        <attribute name="color" locale="fr_FR" website="fr">Rouge</attribute>
+                        <attribute name="size" website="fr">US 10 - EU 43</attribute>
+                    </attributes>
+                </product>
+                <product sku="218765-333-6" type="simple" tax_class="19%">
+                    <attributes>
+                        <attribute name="stock_qty" website="fr">0</attribute>
+                        <attribute name="backorders" website="fr">true</attribute>
+                        <attribute name="color" locale="fr_FR" website="fr">Bleu</attribute>
+                        <attribute name="size" website="fr">US 12 - EU 46</attribute>
+                    </attributes>
+                </product>
+                <product sku="218765-333-7" type="simple" tax_class="19%">
+                    <attributes>
+                        <attribute name="stock_qty" website="fr">5</attribute>
+                        <attribute name="backorders" website="fr">false</attribute>
+                        <attribute name="color" locale="fr_FR" website="fr">Bleu</attribute>
+                        <attribute name="size" website="fr">US 11.5 - EU 45</attribute>
+                    </attributes>
+                </product>
+            </associated_products>
+        </product>
+
+        <product type="simple" sku="no-image" tax_class="19%">
+            <images/>
+            <attributes>
+                <attribute name="url_key" website="fr">no-image</attribute>
+                <attribute name="name" website="fr">No Image</attribute>
+                <attribute name="category" website="fr">sale</attribute>
+                <attribute name="price" website="fr">5.55</attribute>
+                <attribute name="brand" website="fr">Asics</attribute>
+                <attribute name="style" website="fr">Lightweight/Stabil</attribute>
+                <attribute name="gender" website="fr">Herren</attribute>
+                <attribute name="stock_qty" website="fr">55</attribute>
+                <attribute name="backorders" website="fr">true</attribute>
+                <attribute name="color" website="fr">a7fa41</attribute>
+                <attribute name="series" website="fr">Gel-Kayano</attribute>
+            </attributes>
+        </product>
+
+    </products>
+    <listings>
+        <listing url_key="adidas-sale" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
+                <attribute name="brand" is="Equal">Adidas</attribute>
+            </criteria>
+        </listing>
+        <listing url_key="sale" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
+            </criteria>
+        </listing>
+        <listing url_key="sale" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
+            </criteria>
+        </listing>
+        <listing url_key="asics" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="brand" is="Equal">Asics</attribute>
+            </criteria>
+        </listing>
+    </listings>
+</catalog>

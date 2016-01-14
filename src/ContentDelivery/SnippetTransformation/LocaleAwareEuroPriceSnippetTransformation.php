@@ -9,6 +9,9 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\IntlFormatter;
 
+/**
+ * @todo remove when the product detail page uses product json only
+ */
 class LocaleAwareEuroPriceSnippetTransformation implements SnippetTransformation
 {
     /**

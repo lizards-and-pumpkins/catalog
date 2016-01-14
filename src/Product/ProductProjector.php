@@ -59,7 +59,7 @@ class ProductProjector implements Projector
         $productView = $this->productViewLocator->createForProduct($product);
 
         $this->projectProductView($productView);
-        $this->aggregateSearchDocuments($product);
+        $this->aggregateSearchDocument($product);
         $this->storeProductUrlKeys($product);
     }
 
@@ -69,7 +69,7 @@ class ProductProjector implements Projector
         $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 
-    private function aggregateSearchDocuments(Product $product)
+    private function aggregateSearchDocument(Product $product)
     {
         $searchDocument = $this->searchDocumentBuilder->aggregate($product);
         $this->dataPoolWriter->writeSearchDocument($searchDocument);

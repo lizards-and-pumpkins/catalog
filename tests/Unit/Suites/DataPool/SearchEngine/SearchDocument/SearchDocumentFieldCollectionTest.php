@@ -24,7 +24,7 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $fieldsArray = ['foo' => 'bar'];
         $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
-        $this->assertSame(['bar'], $collection->getFields()[0]->getValues());
+        $this->assertSame(['bar'], $collection->getFields()['foo']->getValues());
     }
 
     public function testCollectionIsAccessibleViaGetter()
@@ -35,10 +35,10 @@ class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(2, $collection);
         $this->assertContainsOnly(SearchDocumentField::class, $result);
-        $this->assertEquals('foo', $result[0]->getKey());
-        $this->assertEquals(['bar'], $result[0]->getValues());
-        $this->assertEquals('baz', $result[1]->getKey());
-        $this->assertEquals(['qux'], $result[1]->getValues());
+        $this->assertEquals('foo', $result['foo']->getKey());
+        $this->assertEquals(['bar'], $result['foo']->getValues());
+        $this->assertEquals('baz', $result['baz']->getKey());
+        $this->assertEquals(['qux'], $result['baz']->getValues());
     }
 
     public function testCollectionIsAccessibleViaIterator()

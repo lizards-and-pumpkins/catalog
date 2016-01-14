@@ -2,15 +2,12 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
-use SebastianBergmann\Money\EUR;
-use SebastianBergmann\Money\IntlFormatter;
 
 class ProductJsonService
 {
@@ -35,6 +32,11 @@ class ProductJsonService
     private $specialPriceSnippetKeyGenerator;
 
     /**
+     * @var EnrichProductJsonWithPrices
+     */
+    private $enrichProductJsonWithPrices;
+
+    /**
      * @var Context
      */
     private $context;
@@ -44,12 +46,14 @@ class ProductJsonService
         SnippetKeyGenerator $productJsonSnippetKeyGenerator,
         SnippetKeyGenerator $priceSnippetKeyGenerator,
         SnippetKeyGenerator $specialPriceSnippetKeyGenerator,
+        EnrichProductJsonWithPrices $enrichProductJsonWithPrices,
         Context $context
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->productJsonSnippetKeyGenerator = $productJsonSnippetKeyGenerator;
         $this->priceSnippetKeyGenerator = $priceSnippetKeyGenerator;
         $this->specialPriceSnippetKeyGenerator = $specialPriceSnippetKeyGenerator;
+        $this->enrichProductJsonWithPrices = $enrichProductJsonWithPrices;
         $this->context = $context;
     }
 
@@ -116,8 +120,11 @@ class ProductJsonService
         $snippets = $this->getSnippets($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
 
         return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($snippets) {
-            $productData = json_decode($snippets[$productJsonSnippetKey], true);
-            return $this->addPricesToProductData($productData, $snippets[$priceKey], @$snippets[$specialPriceKey]);
+            return $this->enrichProductJsonWithPrices->addPricesToProductData(
+                json_decode($snippets[$productJsonSnippetKey], true),
+                $snippets[$priceKey],
+                @$snippets[$specialPriceKey]
+            );
         }, $productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
     }
 
@@ -131,47 +138,5 @@ class ProductJsonService
     {
         $keys = array_merge($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
         return $this->dataPoolReader->getSnippets($keys);
-    }
-
-    /**
-     * @param string[] $productData
-     * @param string $price
-     * @param string $specialPrice
-     * @return array[]
-     */
-    private function addPricesToProductData(array $productData, $price, $specialPrice)
-    {
-        $productData['attributes']['raw_price'] = $price;
-        $productData['attributes']['price'] = $this->formatPriceSnippet($price);
-
-        if (null !== $specialPrice) {
-            $productData['attributes']['raw_special_price'] = $specialPrice;
-            $productData['attributes']['special_price'] = $this->formatPriceSnippet($specialPrice);
-        }
-        
-        return $productData;
-    }
-
-    /**
-     * @param string $price
-     * @return string
-     */
-    private function formatPriceSnippet($price)
-    {
-        $locale = $this->getLocaleString($this->context);
-        return (new IntlFormatter($locale))->format(new EUR((int) $price));
-    }
-
-    /**
-     * @param Context $context
-     * @return string
-     */
-    private function getLocaleString(Context $context)
-    {
-        $locale = $context->getValue(ContextLocale::CODE);
-        if (is_null($locale)) {
-            throw new NoValidLocaleInContextException('No valid locale in context');
-        }
-        return $locale;
     }
 }
