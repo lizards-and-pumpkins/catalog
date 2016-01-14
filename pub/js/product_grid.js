@@ -67,25 +67,20 @@ define(function () {
         return newBadge;
     }
 
-    function priceToFloat(priceString) {
-        var formattedPrice = priceString.replace(/[^0-9,.]/, '').replace(/,/, '.');
-        return parseFloat(formattedPrice);
-    }
-
     function productHasSpecialPrice(productAttributes) {
-        if (!productAttributes.hasOwnProperty('special_price')) {
+        if (!productAttributes.hasOwnProperty('raw_special_price')) {
             return false;
         }
 
-        return priceToFloat(productAttributes['price']) > priceToFloat(productAttributes['special_price']);
+        return productAttributes['raw_price'] > productAttributes['raw_special_price'];
     }
 
     function getFinalPriceAsFloat(productAttributes) {
         if (productHasSpecialPrice(productAttributes)) {
-            return priceToFloat(productAttributes['special_price']);
+            return productAttributes['raw_special_price'] / productAttributes['price_base_unit'];
         }
 
-        return  priceToFloat(productAttributes['price']);
+        return  productAttributes['raw_price'] / productAttributes['price_base_unit'];
     }
 
     function createBasePriceIfRequired(productAttributes) {
