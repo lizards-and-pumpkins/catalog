@@ -58,10 +58,11 @@ require([
     }
 
     function renderPrices() {
-        var regularPrice = document.getElementById('regular-price'),
-            oldPrice = document.getElementById('old-price');
+        var regularPriceContainer = document.getElementById('regular-price'),
+            oldPriceContainer = document.getElementById('old-price'),
+            regularPrice = product.getPrice();
 
-        if (null === regularPrice || typeof window.regularPrice === 'undefined') {
+        if (null === regularPriceContainer) {
             return;
         }
 
@@ -69,13 +70,13 @@ require([
             renderBasePrice();
         }
 
-        if ('' === window.specialPrice) {
-            regularPrice.textContent = window.regularPrice;
+        if (!product.hasSpecialPrice()) {
+            regularPriceContainer.textContent = regularPrice;
             return;
         }
 
-        oldPrice.textContent = window.regularPrice;
-        regularPrice.textContent = window.specialPrice;
+        oldPriceContainer.textContent = regularPrice;
+        regularPriceContainer.textContent = product.getSpecialPrice();
     }
 
     function initializeAddToCartButton() {
