@@ -16,7 +16,7 @@ class ProductAttributeListBuilder
     private $attributes;
 
     /**
-     * @param mixed[] $attributesArray
+     * @param array[] $attributesArray
      * @return ProductAttributeListBuilder
      */
     public static function fromArray(array $attributesArray)

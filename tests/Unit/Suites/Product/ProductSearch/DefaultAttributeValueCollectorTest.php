@@ -27,7 +27,7 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct = $this->getMock(Product::class);
         $this->attributeValueCollector = new DefaultAttributeValueCollector();
     }
-    
+
     public function testItImplementsTheSearchableProductAttributeValueCollectorInterface()
     {
         $this->assertInstanceOf(AttributeValueCollector::class, $this->attributeValueCollector);
@@ -44,10 +44,14 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($attributeValues, $result);
     }
 
-    public function testItFiltersNonScalarResultValues()
+    /**
+     * @dataProvider invalidAttributeValueProvider
+     * @param mixed $invalidAttributesValue
+     */
+    public function testItFiltersInvalidResultValues($invalidAttributesValue)
     {
         $testAttributeCode = AttributeCode::fromString('foo');
-        $attributeValues = ['c', 'd', ['x', 'y']];
+        $attributeValues = ['c', 'd', $invalidAttributesValue];
 
         $this->mockProduct->expects($this->once())
             ->method('getAllValuesOfAttribute')->with($testAttributeCode)
@@ -56,13 +60,25 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['c', 'd'], $result);
     }
 
+    /**
+     * @return array[]
+     */
+    public function invalidAttributeValueProvider()
+    {
+        return [
+            ['non-scalar' => ['x', 'y']],
+            ['empty-string' => ''],
+            ['space-only-string' => '  '],
+        ];
+    }
+
     public function testItReturnsTheProductSpecialPriceInsteadOfPriceIfPresent()
     {
         $priceAttributeCode = AttributeCode::fromString(PriceSnippetRenderer::PRICE);
         $specialPriceAttributeCode = AttributeCode::fromString(PriceSnippetRenderer::SPECIAL_PRICE);
 
         $this->mockProduct->method('hasAttribute')->with($specialPriceAttributeCode)->willReturn(true);
-        
+
         $this->mockProduct->expects($this->once())
             ->method('getAllValuesOfAttribute')->with($specialPriceAttributeCode)
             ->willReturn([1.99]);
