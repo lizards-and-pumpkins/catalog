@@ -46,6 +46,17 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $productJsonService;
 
+    /**
+     * @param string $attributeCode
+     * @param string $expectedValue
+     * @param string[] $attributeData
+     */
+    private function assertProductJsonDataHas($attributeCode, $expectedValue, array $attributeData)
+    {
+        $this->assertArrayHasKey($attributeCode, $attributeData);
+        $this->assertSame($expectedValue, $attributeData[$attributeCode]);
+    }
+
     protected function setUp()
     {
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
@@ -138,16 +149,12 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $result);
         $this->assertArrayHasKey('attributes', $result[0]);
         
-        $this->assertArrayHasKey('price', $result[0]['attributes']);
-        $this->assertSame('99,99 €', $result[0]['attributes']['price']);
-        
-        $this->assertArrayHasKey('raw_price', $result[0]['attributes']);
-        $this->assertSame('9999', $result[0]['attributes']['raw_price']);
-        
-        $this->assertArrayHasKey('special_price', $result[0]['attributes']);
-        $this->assertSame('89,99 €', $result[0]['attributes']['special_price']);
-        
-        $this->assertArrayHasKey('raw_special_price', $result[0]['attributes']);
-        $this->assertSame('8999', $result[0]['attributes']['raw_special_price']);
+        $this->assertProductJsonDataHas('price', '99,99 €', $result[0]['attributes']);
+        $this->assertProductJsonDataHas('raw_price', '9999', $result[0]['attributes']);
+        $this->assertProductJsonDataHas('special_price', '89,99 €', $result[0]['attributes']);
+        $this->assertProductJsonDataHas('raw_special_price', '8999', $result[0]['attributes']);
+        $this->assertProductJsonDataHas('price_currency', 'EUR', $result[0]['attributes']);
+        $this->assertProductJsonDataHas('price_faction_digits', 2, $result[0]['attributes']);
+        $this->assertProductJsonDataHas('price_base_unit', 100, $result[0]['attributes']);
     }
 }

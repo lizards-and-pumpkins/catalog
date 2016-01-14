@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
+use SebastianBergmann\Money\Currency;
 use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\IntlFormatter;
 
@@ -141,8 +142,12 @@ class ProductJsonService
      */
     private function addPricesToProductData(array $productData, $price, $specialPrice)
     {
+        $currency = $this->getCurrency();
         $productData['attributes']['raw_price'] = $price;
         $productData['attributes']['price'] = $this->formatPriceSnippet($price);
+        $productData['attributes']['price_currency'] = $currency->getCurrencyCode();
+        $productData['attributes']['price_faction_digits'] = $currency->getDefaultFractionDigits();
+        $productData['attributes']['price_base_unit'] = $currency->getSubUnit();
 
         if (null !== $specialPrice) {
             $productData['attributes']['raw_special_price'] = $specialPrice;
@@ -173,5 +178,13 @@ class ProductJsonService
             throw new NoValidLocaleInContextException('No valid locale in context');
         }
         return $locale;
+    }
+
+    /**
+     * @return Currency
+     */
+    private function getCurrency()
+    {
+        return new Currency('EUR');
     }
 }
