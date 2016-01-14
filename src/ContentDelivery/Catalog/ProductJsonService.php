@@ -10,8 +10,8 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use SebastianBergmann\Money\Currency;
-use SebastianBergmann\Money\EUR;
 use SebastianBergmann\Money\IntlFormatter;
+use SebastianBergmann\Money\Money;
 
 class ProductJsonService
 {
@@ -118,7 +118,12 @@ class ProductJsonService
 
         return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($snippets) {
             $productData = json_decode($snippets[$productJsonSnippetKey], true);
-            return $this->addPricesToProductData($productData, $snippets[$priceKey], @$snippets[$specialPriceKey]);
+            return $this->addGivenPricesToProductData(
+                $productData,
+                $snippets[$priceKey],
+                @$snippets[$specialPriceKey],
+                $this->getCurrencyCode()
+            );
         }, $productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
     }
 
@@ -138,20 +143,21 @@ class ProductJsonService
      * @param string[] $productData
      * @param string $price
      * @param string $specialPrice
+     * @param string $currencyCode
      * @return array[]
      */
-    private function addPricesToProductData(array $productData, $price, $specialPrice)
+    public function addGivenPricesToProductData(array $productData, $price, $specialPrice, $currencyCode)
     {
-        $currency = $this->getCurrency();
+        $currency = new Currency($currencyCode);
         $productData['attributes']['raw_price'] = $price;
-        $productData['attributes']['price'] = $this->formatPriceSnippet($price);
-        $productData['attributes']['price_currency'] = $currency->getCurrencyCode();
+        $productData['attributes']['price'] = $this->formatPriceSnippet($price, $currency);
+        $productData['attributes']['price_currency'] = $currencyCode;
         $productData['attributes']['price_faction_digits'] = $currency->getDefaultFractionDigits();
         $productData['attributes']['price_base_unit'] = $currency->getSubUnit();
 
         if (null !== $specialPrice) {
             $productData['attributes']['raw_special_price'] = $specialPrice;
-            $productData['attributes']['special_price'] = $this->formatPriceSnippet($specialPrice);
+            $productData['attributes']['special_price'] = $this->formatPriceSnippet($specialPrice, $currency);
         }
         
         return $productData;
@@ -159,12 +165,13 @@ class ProductJsonService
 
     /**
      * @param string $price
+     * @param string $currency
      * @return string
      */
-    private function formatPriceSnippet($price)
+    private function formatPriceSnippet($price, Currency $currency)
     {
         $locale = $this->getLocaleString($this->context);
-        return (new IntlFormatter($locale))->format(new EUR((int) $price));
+        return (new IntlFormatter($locale))->format(new Money((int) $price, $currency));
     }
 
     /**
@@ -181,10 +188,10 @@ class ProductJsonService
     }
 
     /**
-     * @return Currency
+     * @return string
      */
-    private function getCurrency()
+    private function getCurrencyCode()
     {
-        return new Currency('EUR');
+        return 'EUR';
     }
 }

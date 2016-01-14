@@ -153,8 +153,37 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertProductJsonDataHas('raw_price', '9999', $result[0]['attributes']);
         $this->assertProductJsonDataHas('special_price', '89,99 €', $result[0]['attributes']);
         $this->assertProductJsonDataHas('raw_special_price', '8999', $result[0]['attributes']);
-        $this->assertProductJsonDataHas('price_currency', 'EUR', $result[0]['attributes']);
-        $this->assertProductJsonDataHas('price_faction_digits', 2, $result[0]['attributes']);
-        $this->assertProductJsonDataHas('price_base_unit', 100, $result[0]['attributes']);
+    }
+
+    public function testItAllowsPassingTheSnippetsFromTheOutside()
+    {
+        $productData = [];
+        $price = '1999';
+        $specialPrice = '1799';
+        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+        
+        $result = $this->productJsonService->addGivenPricesToProductData($productData, $price, $specialPrice, 'EUR');
+        
+        $this->assertProductJsonDataHas('price', '19,99 €', $result['attributes']);
+        $this->assertProductJsonDataHas('raw_price', '1999', $result['attributes']);
+        $this->assertProductJsonDataHas('special_price', '17,99 €', $result['attributes']);
+        $this->assertProductJsonDataHas('raw_special_price', '1799', $result['attributes']);
+        $this->assertProductJsonDataHas('price_currency', 'EUR', $result['attributes']);
+        $this->assertProductJsonDataHas('price_faction_digits', 2, $result['attributes']);
+        $this->assertProductJsonDataHas('price_base_unit', 100, $result['attributes']);
+    }
+
+    public function testItAddsCurrencyInformationToTheProductAttributes()
+    {
+        $productData = [];
+        $price = '1999';
+        $specialPrice = '1799';
+        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+
+        $result = $this->productJsonService->addGivenPricesToProductData($productData, $price, $specialPrice, 'EUR');
+
+        $this->assertProductJsonDataHas('price_currency', 'EUR', $result['attributes']);
+        $this->assertProductJsonDataHas('price_faction_digits', 2, $result['attributes']);
+        $this->assertProductJsonDataHas('price_base_unit', 100, $result['attributes']);
     }
 }
