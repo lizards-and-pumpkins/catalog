@@ -69,7 +69,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, []);
         $this->assertContains(
             $rootSnippetCode,
-            $pageMetaInfo->getInfo()[ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]
+            $pageMetaInfo->getPageSnippetCodes()
         );
     }
 
@@ -122,5 +122,13 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
     public function testPageSnippetCodeListIsReturned()
     {
         $this->assertInternalType('array', $this->pageMetaInfo->getPageSnippetCodes());
+    }
+
+    public function testThePageSnippetListIncludesTheProductJsonAndPriceSnippetCodes()
+    {
+        $pageSnippetCodes = $this->pageMetaInfo->getPageSnippetCodes();
+        $this->assertContains(ProductJsonSnippetRenderer::CODE, $pageSnippetCodes);
+        $this->assertContains(PriceSnippetRenderer::PRICE, $pageSnippetCodes);
+        $this->assertContains(PriceSnippetRenderer::SPECIAL_PRICE, $pageSnippetCodes);
     }
 }
