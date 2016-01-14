@@ -46,8 +46,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         self::validateProductId($productId);
         self::validateRootSnippetCode($rootSnippetCode);
         $pageSnippetCodes = array_unique(array_merge(
-            [$rootSnippetCode],
-            [ProductJsonSnippetRenderer::CODE, PriceSnippetRenderer::PRICE, PriceSnippetRenderer::SPECIAL_PRICE],
+            [$rootSnippetCode, ProductJsonSnippetRenderer::CODE, PriceSnippetRenderer::PRICE, PriceSnippetRenderer::SPECIAL_PRICE],
             $pageSnippetCodes
         ));
         return new self($productId, $rootSnippetCode, $pageSnippetCodes);
