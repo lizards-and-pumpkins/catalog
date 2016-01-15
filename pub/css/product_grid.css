@@ -4,7 +4,7 @@
 .products-grid li .grid-cell-container { padding: 25px 15px 20px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat }
 .products-grid li.last .grid-cell-container { border-right: none }
 .products-grid .product-image { display: block; margin: 0 0 10px 0 }
-.products-grid h2 { font-size: 14px; margin-bottom: 5px; position: relative; width: 220px }
+.products-grid h2 { font-size: 14px; margin: 0; padding-top: 5px; padding-bottom: 5px }
 
 .products-grid .price-container { position: absolute; bottom: 0; right: 14px; text-align: right; height: 51px }
 .products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold }

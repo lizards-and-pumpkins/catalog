@@ -5,14 +5,16 @@ require([
     'pagination',
     'lib/url',
     'lib/styleselect',
+    'lib/overflow_scrolling',
     'common',
     'ekomi'
-], function (domReady, productGrid, filterNavigation, pagination, url, styleSelect) {
+], function (domReady, productGrid, filterNavigation, pagination, url, styleSelect, productTitleScrolling) {
 
         var previousViewportWidth;
 
         domReady(function () {
             productGrid.renderGrid(productListingJson, '#products-grid-container');
+            productTitleScrolling('.grid-cell-container h2');
             filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation');
             pagination.renderPagination(totalNumberOfResults, productsPerPage, '#pagination');
             setTotalNumberOfProductsInSelection(totalNumberOfResults, '.toolbar .amount');
