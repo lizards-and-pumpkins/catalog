@@ -216,7 +216,7 @@ abstract class AbstractProductView implements ProductView
 
                 case 'attributes':
                     $attributes = $this->getAttributes()->jsonSerialize();
-                    $result = [$key => $this->transformAttributeData($attributes)];
+                    $result = [$key => $this->transformAttributeDataToKeyValueMap($attributes)];
                     break;
 
                 case 'images':
@@ -235,7 +235,7 @@ abstract class AbstractProductView implements ProductView
      * @param array[] $attributes
      * @return array[]
      */
-    private function transformAttributeData(array $attributes)
+    private function transformAttributeDataToKeyValueMap(array $attributes)
     {
         return array_reduce($attributes, function (array $carry, array $attribute) {
             $code = $attribute[ProductAttribute::CODE];
