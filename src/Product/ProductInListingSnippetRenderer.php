@@ -17,9 +17,8 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
      */
     private $snippetKeyGenerator;
     
-    public function __construct(
-        SnippetKeyGenerator $snippetKeyGenerator
-    ) {
+    public function __construct(SnippetKeyGenerator $snippetKeyGenerator)
+    {
         $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 

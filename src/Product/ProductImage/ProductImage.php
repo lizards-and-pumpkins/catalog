@@ -49,7 +49,7 @@ class ProductImage implements \JsonSerializable
     }
 
     /**
-     * @return ProductAttributeList
+     * @return array[]
      */
     public function jsonSerialize()
     {

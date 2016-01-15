@@ -41,16 +41,14 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
     private function createConfigurableProductViewInstance()
     {
         /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
-        /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $mockImageFileLocator */
-        /** @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject $fakeProductViewLocator */
         $mockProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
         $mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
         $mockImage = $this->getMock(Image::class);
         $mockPlaceholderImage = $this->getMock(Image::class);
 
+        /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $mockImageFileLocator */
         $mockImageFileLocator = $this->getMock(ProductImageFileLocator::class);
-
         $mockImageFileLocator->method('get')->willReturn($mockImage);
         $mockImageFileLocator->method('getPlaceholder')->willReturn($mockPlaceholderImage);
         $mockImageFileLocator->method('getVariantCodes')->willReturn([]);
@@ -63,6 +61,7 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
         $mockAssociatedProducts = $this->getMock(AssociatedProductList::class, [], [], '', false);
         $mockProduct->method('getAssociatedProducts')->willReturn($mockAssociatedProducts);
 
+        /** @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject $fakeProductViewLocator */
         $fakeProductViewLocator = $this->getMock(ProductViewLocator::class);
         $fakeProductViewLocator->method('createForProduct')->willReturnCallback(function (Product $product) {
             $stubProductView = $product instanceof ConfigurableProduct ?

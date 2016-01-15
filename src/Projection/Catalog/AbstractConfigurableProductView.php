@@ -26,20 +26,15 @@ abstract class AbstractConfigurableProductView extends AbstractProductView imple
         $original = parent::jsonSerialize();
 
         return array_reduce(array_keys($original), function (array $carry, $key) use ($original) {
-            switch ($key) {
-                case ConfigurableProduct::SIMPLE_PRODUCT:
-                    $result = $this->transformProductJson($original[$key]);
-                    break;
-                
-                case ConfigurableProduct::ASSOCIATED_PRODUCTS:
-                    $result = [$key => $this->getAssociatedProducts()];
-                    break;
-                
-                default:
-                    $result = [$key => $original[$key]];
-                    break;
+            if (ConfigurableProduct::SIMPLE_PRODUCT === $key) {
+                return array_merge($carry, $this->transformProductJson($original[$key]));
             }
-            return array_merge($carry, $result);
+
+            if (ConfigurableProduct::ASSOCIATED_PRODUCTS === $key) {
+                return array_merge($carry, [$key => $this->getAssociatedProducts()]);
+            }
+
+            return array_merge($carry, [$key => $original[$key]]);
         }, []);
     }
 

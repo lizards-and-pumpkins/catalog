@@ -16,9 +16,8 @@ class ProductJsonSnippetRenderer implements SnippetRenderer
      */
     private $productJsonKeyGenerator;
 
-    public function __construct(
-        SnippetKeyGenerator $productJsonKeyGenerator
-    ) {
+    public function __construct(SnippetKeyGenerator $productJsonKeyGenerator)
+    {
         $this->productJsonKeyGenerator = $productJsonKeyGenerator;
     }
 
@@ -43,16 +42,6 @@ class ProductJsonSnippetRenderer implements SnippetRenderer
             $product->getContext(),
             ['product_id' => $product->getId()]
         );
-        $snippet = Snippet::create($key, $this->getJson($product));
-        return $snippet;
-    }
-
-    /**
-     * @param ProductView $product
-     * @return string
-     */
-    private function getJson(ProductView $product)
-    {
-        return json_encode($product);
+        return Snippet::create($key, json_encode($product));
     }
 }

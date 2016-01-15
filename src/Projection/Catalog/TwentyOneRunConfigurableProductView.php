@@ -47,7 +47,7 @@ class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductVie
      * @param ProductAttribute $attribute
      * @return bool
      */
-    protected function isAttributePublic(ProductAttribute $attribute)
+    final protected function isAttributePublic(ProductAttribute $attribute)
     {
         return in_array($attribute->getCode(), ['backorders']) ?
             false :

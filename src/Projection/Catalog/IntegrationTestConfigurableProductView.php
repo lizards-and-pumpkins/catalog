@@ -43,7 +43,7 @@ class IntegrationTestConfigurableProductView extends AbstractConfigurableProduct
     /**
      * @return ProductViewLocator
      */
-    protected function getProductViewLocator()
+    final protected function getProductViewLocator()
     {
         return $this->productViewLocator;
     }
@@ -51,7 +51,7 @@ class IntegrationTestConfigurableProductView extends AbstractConfigurableProduct
     /**
      * @return ProductImageFileLocator
      */
-    protected function getProductImageFileLocator()
+    final protected function getProductImageFileLocator()
     {
         return $this->productImageFileLocator;
     }

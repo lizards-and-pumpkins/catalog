@@ -49,9 +49,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function createInstanceUnderTest($snippetKeyGenerator)
     {
-        return new ProductInListingSnippetRenderer(
-            $snippetKeyGenerator
-        );
+        return new ProductInListingSnippetRenderer($snippetKeyGenerator);
     }
 
     protected function setUp()
@@ -59,9 +57,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
-        $this->snippetRenderer = $this->createInstanceUnderTest(
-            $this->mockSnippetKeyGenerator
-        );
+        $this->snippetRenderer = $this->createInstanceUnderTest($this->mockSnippetKeyGenerator);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -97,9 +93,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->with($this->anything(), [Product::ID => $stubProduct->getId()])
             ->willReturn('stub-content-key');
 
-        $snippetRenderer = $this->createInstanceUnderTest(
-            $mockSnippetKeyGenerator
-        );
+        $snippetRenderer = $this->createInstanceUnderTest($mockSnippetKeyGenerator);
 
         $snippetRenderer->render($stubProduct);
     }

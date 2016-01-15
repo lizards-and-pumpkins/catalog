@@ -107,7 +107,7 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     private function createAssociatedProductsJsonSnippetContent(ProductView $product)
     {
         if ($this->isCompositeProduct($product)) {
-            return json_decode(json_encode($this->getAssociatedProductListJson($product)), true);
+            return json_encode($this->getAssociatedProductListJson($product));
         }
 
         return json_encode([]);
@@ -119,6 +119,6 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function getAssociatedProductListJson(CompositeProductView $product)
     {
-        return json_encode($product->getAssociatedProducts());
+        return $product->getAssociatedProducts();
     }
 }

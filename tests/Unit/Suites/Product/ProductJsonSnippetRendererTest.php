@@ -29,10 +29,8 @@ class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProductJsonKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $stubProductJsonKeyGenerator->method('getKeyForContext')->willReturn('test-key');
 
-        $this->snippetRenderer = new ProductJsonSnippetRenderer(
-            $stubProductJsonKeyGenerator
-        );
-        
+        $this->snippetRenderer = new ProductJsonSnippetRenderer($stubProductJsonKeyGenerator);
+
         $this->stubProductView = $this->getMock(ProductView::class);
         $this->stubProductView->method('getContext')->willReturn($this->getMock(Context::class));
     }
