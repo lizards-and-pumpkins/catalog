@@ -45,6 +45,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
     private function getProductInListingSnippet(ProductView $product)
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
-        return Snippet::create($key, json_encode($product));
+        $content = json_encode($product);
+        return Snippet::create($key, $content);
     }
 }

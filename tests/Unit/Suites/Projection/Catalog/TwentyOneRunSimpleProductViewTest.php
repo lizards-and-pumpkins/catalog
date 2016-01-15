@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
 use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
@@ -30,13 +29,18 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
      */
     private $productView;
 
+    /**
+     * @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockProductImageFileLocator;
+
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
-        $stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
-        $stubProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
-        $stubProductImageFileLocator->method('getVariantCodes')->willReturn(['large']);
-        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct, $stubProductImageFileLocator);
+        $this->mockProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $this->mockProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
+        $this->mockProductImageFileLocator->method('getVariantCodes')->willReturn(['large']);
+        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct, $this->mockProductImageFileLocator);
     }
 
     public function testOriginalProductIsReturned()
@@ -47,33 +51,6 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     public function testProductViewInterfaceIsImplemented()
     {
         $this->assertInstanceOf(ProductView::class, $this->productView);
-    }
-
-    public function testGettingFirstValueOfProductAttributeIsDelegatedToOriginalProduct()
-    {
-        $testAttributeCode = 'foo';
-        $testAttributeValue = 'bar';
-
-        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
-        $attributeList = new ProductAttributeList($attribute);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $this->assertSame($testAttributeValue, $this->productView->getFirstValueOfAttribute($testAttributeCode));
-    }
-
-    /**
-     * @dataProvider priceAttributeCodeProvider
-     * @param string $priceAttributeCode
-     */
-    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString($priceAttributeCode)
-    {
-        $testAttributeValue = 1000;
-
-        $attribute = new ProductAttribute($priceAttributeCode, $testAttributeValue, []);
-        $attributeList = new ProductAttributeList($attribute);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $this->assertSame('', $this->productView->getFirstValueOfAttribute($priceAttributeCode));
     }
 
     public function testGettingFirstValueOfBackordersAttributeReturnsEmptyString()
@@ -88,33 +65,6 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', $this->productView->getFirstValueOfAttribute($testAttributeCode));
     }
 
-    public function testGettingAllValuesOfProductAttributeIsDelegatedToOriginalProduct()
-    {
-        $testAttributeCode = 'foo';
-        $testAttributeValue = 'bar';
-
-        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
-        $attributeList = new ProductAttributeList($attribute);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $this->assertSame([$testAttributeValue], $this->productView->getAllValuesOfAttribute($testAttributeCode));
-    }
-
-    /**
-     * @dataProvider priceAttributeCodeProvider
-     * @param string $priceAttributeCode
-     */
-    public function testGettingAllValuesOfPriceAttributeReturnsEmptyArray($priceAttributeCode)
-    {
-        $testAttributeValue = 1000;
-
-        $attribute = new ProductAttribute($priceAttributeCode, $testAttributeValue, []);
-        $attributeList = new ProductAttributeList($attribute);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $this->assertSame([], $this->productView->getAllValuesOfAttribute($testAttributeValue));
-    }
-
     public function testGettingAllValuesOfBackordersAttributeReturnsEmptyArray()
     {
         $testAttributeCode = 'backorders';
@@ -127,33 +77,6 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $this->productView->getAllValuesOfAttribute($testAttributeCode));
     }
 
-    public function testCheckingIfProductHasAnAttributeIsDelegatedToOriginalProduct()
-    {
-        $testAttributeCode = 'foo';
-        $testAttributeValue = 'bar';
-
-        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
-        $attributeList = new ProductAttributeList($attribute);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $this->assertTrue($this->productView->hasAttribute($testAttributeCode));
-    }
-
-    /**
-     * @dataProvider priceAttributeCodeProvider
-     * @param string $priceAttributeCode
-     */
-    public function testProductViewAttributeListDoesNotHavePrice($priceAttributeCode)
-    {
-        $testAttributeValue = 1000;
-
-        $attribute = new ProductAttribute($priceAttributeCode, $testAttributeValue, []);
-        $attributeList = new ProductAttributeList($attribute);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $this->assertFalse($this->productView->hasAttribute($priceAttributeCode));
-    }
-
     public function testProductViewAttributeListDoesNotHaveBackorders()
     {
         $testAttributeCode = 'backorders';
@@ -164,6 +87,22 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
         $this->assertFalse($this->productView->hasAttribute($testAttributeCode));
+    }
+
+    public function testProductJsonDoesNotHaveBackorders()
+    {
+
+        $testAttributeCode = 'backorders';
+        $testAttributeValue = true;
+
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
+        $this->mockProduct->method('jsonSerialize')->willReturn(['attributes' => $attributeList]);
+        
+        $productData = json_decode(json_encode($this->productView), true);
+
+        $this->assertArrayNotHasKey('backorders', $productData['attributes']);
     }
 
     public function testFilteredProductAttributeListIsReturned()
@@ -186,43 +125,6 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(1, $result);
         $this->assertContains($nonPriceAttribute, $result->getAllAttributes());
-    }
-
-    public function testProductAttributeListIsMemoized()
-    {
-        $attributeList = new ProductAttributeList();
-        $this->mockProduct->expects($this->once())->method('getAttributes')->willReturn($attributeList);
-
-        $this->productView->getAttributes();
-        $this->productView->getAttributes();
-    }
-
-    public function testJsonSerializedProductViewHasNoPrices()
-    {
-        $nonPriceAttribute = new ProductAttribute('foo', 'bar', []);
-        $priceAttribute = new ProductAttribute('price', 1000, []);
-        $specialPriceAttribute = new ProductAttribute('special_price', 900, []);
-        $backordersAttribute = new ProductAttribute('backorders', true, []);
-        $imageList = new ProductImageList();
-
-        $attributeList = new ProductAttributeList(
-            $nonPriceAttribute,
-            $priceAttribute,
-            $specialPriceAttribute,
-            $backordersAttribute
-        );
-
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-        $this->mockProduct->method('getImages')->willReturn($imageList);
-        $this->mockProduct->method('jsonSerialize')->willReturn([]);
-        $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
-
-        $result = $this->productView->jsonSerialize();
-
-        /** @var ProductAttributeList $attributesList */
-        $attributesList = $result['attributes'];
-
-        $this->assertContains($nonPriceAttribute, $attributesList->getAllAttributes());
     }
 
     public function testMaximumPurchasableQuantityIsReturnedIfProductIsAvailableForBackorders()
@@ -255,14 +157,31 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(TwentyOneRunSimpleProductView::MAX_PURCHASABLE_QTY, $result);
     }
 
-    /**
-     * @return array[]
-     */
-    public function priceAttributeCodeProvider()
+    public function testItReturnsTheOriginalStockQtyIfBackordersIsFalseAndQtyIsSmallerThanMaximumPurchasableQuantity()
     {
-        return [
-            ['price'],
-            ['special_price']
-        ];
+        $stockAttributeCode = 'stock_qty';
+        $testAttributeValue = 4;
+
+        $attribute = new ProductAttribute($stockAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
+        $this->mockProduct->method('getFirstValueOfAttribute')->with('backorders')->willReturn('false');
+        $result = $this->productView->getFirstValueOfAttribute($stockAttributeCode);
+
+        $this->assertSame($testAttributeValue, $result);
+    }
+
+    public function testItUsesTheInjectedProductImageFileLocatorToGetPlaceholderImages()
+    {
+        $stubAttributeList = $this->getMock(ProductAttributeList::class);
+        $stubAttributeList->method('getAllAttributes')->willReturn([]);
+        $this->mockProduct->method('getAttributes')->willReturn($stubAttributeList);
+        $this->mockProduct->method('jsonSerialize')->willReturn(['images' => []]);
+        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([]));
+        $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
+
+        $this->mockProductImageFileLocator->expects($this->once())->method('getPlaceholder');
+        json_encode($this->productView);
     }
 }

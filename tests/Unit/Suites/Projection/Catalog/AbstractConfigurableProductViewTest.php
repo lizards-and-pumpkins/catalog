@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Utils\ImageStorage\Image;
@@ -16,6 +17,9 @@ use LizardsAndPumpkins\Utils\ImageStorage\Image;
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\AbstractConfigurableProductView
  * @uses   \LizardsAndPumpkins\Projection\Catalog\AbstractProductView
+ * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Product\ProductAttribute
  */
 class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +32,8 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
      * @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProduct;
+
+    private $dummyAssociatedProductViewData = ['dummy product view data'];
 
     /**
      * @return StubProductView
@@ -50,18 +56,20 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
         $mockImageFileLocator->method('getVariantCodes')->willReturn([]);
 
         $mockImage->method('getUrl')->willReturn($this->getMock(HttpUrl::class, [], [], '', false));
-        
+
         $mockVariationAttributes = $this->getMock(ProductVariationAttributeList::class, [], [], '', false);
         $mockProduct->method('getVariationAttributes')->willReturn($mockVariationAttributes);
-        
+
         $mockAssociatedProducts = $this->getMock(AssociatedProductList::class, [], [], '', false);
         $mockProduct->method('getAssociatedProducts')->willReturn($mockAssociatedProducts);
-        
+
         $fakeProductViewLocator = $this->getMock(ProductViewLocator::class);
-        $fakeProductViewLocator->method('createForProduct')->willReturnCallback(function(Product $product) {
-            return $product instanceof ConfigurableProduct ?
+        $fakeProductViewLocator->method('createForProduct')->willReturnCallback(function (Product $product) {
+            $stubProductView = $product instanceof ConfigurableProduct ?
                 $this->getMock(ProductView::class) :
                 $this->getMock(CompositeProductView::class);
+            $stubProductView->method('jsonSerialize')->willReturn($this->dummyAssociatedProductViewData);
+            return $stubProductView;
         });
 
         return new StubConfigurableProductView(
@@ -80,12 +88,12 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
     public function testItKeepsVariationAttributes()
     {
         $productJsonData = [
-            'product_id' => 'test',
+            'product_id'           => 'test',
             'variation_attributes' => ['foo', 'bar'],
         ];
         $expectedData = [
-            'product_id' => 'test',
-            'variation_attributes' => ['foo', 'bar']
+            'product_id'           => 'test',
+            'variation_attributes' => ['foo', 'bar'],
         ];
         $this->mockProduct->method('jsonSerialize')->willReturn($productJsonData);
         $this->assertSame($expectedData, json_decode(json_encode($this->configurableProductView), true));
@@ -94,28 +102,25 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
     public function testItFlattensTheSimpleProductIntoTheMainProduct()
     {
         $productJsonData = [
-            'simple_product' => [
-                'product_id' => 'test',
+            'simple_product'       => [
+                'product_id'           => 'test',
+                'attributes'           => [],
                 SimpleProduct::CONTEXT => [],
-                'attributes' => [
-                    [
-                        ProductAttribute::CODE => 'foo',
-                        ProductAttribute::CONTEXT => [],
-                        ProductAttribute::VALUE => 'bar'
-                    ],
-                ],
-                'images' => [],
+                'images'               => [],
             ],
             'variation_attributes' => ['foo'],
         ];
         $expectedData = [
-            'product_id' => 'test',
-            'attributes' => [
+            'product_id'           => 'test',
+            'attributes'           => [
                 'foo' => 'bar',
             ],
-            'images' => [],
+            'images'               => [],
             'variation_attributes' => ['foo'],
         ];
+        $stubProductAttributes = $this->getMock(ProductAttributeList::class);
+        $stubProductAttributes->method('getAllAttributes')->willReturn([new ProductAttribute('foo', 'bar', [])]);
+        $this->mockProduct->method('getAttributes')->willReturn($stubProductAttributes);
         $this->mockProduct->method('jsonSerialize')->willReturn($productJsonData);
         $this->assertSame($expectedData, json_decode(json_encode($this->configurableProductView), true));
     }
@@ -142,5 +147,23 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->expects($this->once())->method('getVariationAttributes');
         $result = $this->configurableProductView->getVariationAttributes();
         $this->assertInstanceOf(ProductVariationAttributeList::class, $result);
+    }
+
+    public function testAssociatedProductViewsAreUsedToBuildJsonData()
+    {
+        $stubChildProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $stubAssociatedProductsList */
+        $stubAssociatedProductsList = $this->mockProduct->getAssociatedProducts();
+        $stubAssociatedProductsList->method('getProducts')->willReturn([$stubChildProduct]);
+        $stubAssociatedProductsList->method('getIterator')
+            ->willReturn(new \ArrayIterator([$stubChildProduct]));
+
+        $this->mockProduct->method('jsonSerialize')->willReturn(['associated_products' => [0 => $stubChildProduct]]);
+        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([]));
+        $this->mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
+
+        $result = json_decode(json_encode($this->configurableProductView), true);
+        $this->assertSame($this->dummyAssociatedProductViewData, $result[ConfigurableProduct::ASSOCIATED_PRODUCTS][0]);
     }
 }

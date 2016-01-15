@@ -152,7 +152,9 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      */
     public function jsonSerialize()
     {
-        return $this->attributes;
+        return array_map(function (ProductAttribute $productAttribute) {
+            return $productAttribute->jsonSerialize();
+        }, $this->attributes);
     }
 
     /**

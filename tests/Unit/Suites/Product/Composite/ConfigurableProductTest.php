@@ -127,7 +127,6 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $this->mockSimpleProduct->expects($this->once())->method('jsonSerialize')->willReturn([]);
         $this->mockAssociatedProductList->expects($this->once())->method('jsonSerialize')->willReturn([]);
         $this->mockVariationAttributeList->expects($this->once())->method('jsonSerialize')->willReturn([]);
-        json_encode($this->configurableProduct);
         $result = $this->configurableProduct->jsonSerialize();
         $this->assertArrayHasKey(Product::TYPE_KEY, $result);
         $this->assertSame(ConfigurableProduct::TYPE_CODE, $result[Product::TYPE_KEY]);

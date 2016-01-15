@@ -27,8 +27,12 @@ abstract class AbstractConfigurableProductView extends AbstractProductView imple
 
         return array_reduce(array_keys($original), function (array $carry, $key) use ($original) {
             switch ($key) {
-                case 'simple_product':
+                case ConfigurableProduct::SIMPLE_PRODUCT:
                     $result = $this->transformProductJson($original[$key]);
+                    break;
+                
+                case ConfigurableProduct::ASSOCIATED_PRODUCTS:
+                    $result = [$key => $this->getAssociatedProducts()];
                     break;
                 
                 default:

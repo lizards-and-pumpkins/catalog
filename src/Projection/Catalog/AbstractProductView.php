@@ -3,7 +3,9 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductAttribute;
+use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 use LizardsAndPumpkins\Product\SimpleProduct;
@@ -11,6 +13,11 @@ use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 abstract class AbstractProductView implements ProductView
 {
+    /**
+     * @var ProductAttributeList
+     */
+    private $memoizedProductAttributes;
+
     /**
      * @return ProductImageFileLocator
      */
@@ -29,7 +36,13 @@ abstract class AbstractProductView implements ProductView
      */
     public function getFirstValueOfAttribute($attributeCode)
     {
-        return $this->getOriginalProduct()->getFirstValueOfAttribute($attributeCode);
+        $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
+
+        if (count($attributeValues) === 0) {
+            return '';
+        }
+
+        return $attributeValues[0];
     }
 
     /**
@@ -37,7 +50,15 @@ abstract class AbstractProductView implements ProductView
      */
     public function getAllValuesOfAttribute($attributeCode)
     {
-        return $this->getOriginalProduct()->getAllValuesOfAttribute($attributeCode);
+        $attributeList = $this->getAttributes();
+
+        if (!$attributeList->hasAttribute($attributeCode)) {
+            return [];
+        }
+
+        return array_map(function (ProductAttribute $productAttribute) {
+            return $productAttribute->getValue();
+        }, $attributeList->getAttributesWithCode($attributeCode));
     }
 
     /**
@@ -45,7 +66,7 @@ abstract class AbstractProductView implements ProductView
      */
     public function hasAttribute($attributeCode)
     {
-        return $this->getOriginalProduct()->hasAttribute($attributeCode);
+        return $this->getAttributes()->hasAttribute($attributeCode);
     }
 
     /**
@@ -53,7 +74,32 @@ abstract class AbstractProductView implements ProductView
      */
     public function getAttributes()
     {
-        return $this->getOriginalProduct()->getAttributes();
+        if (null === $this->memoizedProductAttributes) {
+            $attributesArray = $this->getOriginalProduct()->getAttributes()->getAllAttributes();
+            $filteredAttributes = array_filter($attributesArray, [$this, 'isAttributePublic']);
+            $processedAttributes = array_map([$this, 'getProcessedAttribute'], $filteredAttributes);
+            $this->memoizedProductAttributes = new ProductAttributeList(...$processedAttributes);
+        }
+        return $this->memoizedProductAttributes;
+    }
+
+    /**
+     * @param ProductAttribute $attribute
+     * @return bool
+     */
+    protected function isAttributePublic(ProductAttribute $attribute)
+    {
+        return !in_array($attribute->getCode(), [PriceSnippetRenderer::PRICE, PriceSnippetRenderer::SPECIAL_PRICE]);
+    }
+
+    /**
+     * @param ProductAttribute $attribute
+     * @return ProductAttribute
+     */
+    protected function getProcessedAttribute(ProductAttribute $attribute)
+    {
+        // Hook method to allow the processing of attribute values
+        return $attribute;
     }
 
     /**
@@ -152,7 +198,7 @@ abstract class AbstractProductView implements ProductView
      */
     public function jsonSerialize()
     {
-        $original = json_decode(json_encode($this->getOriginalProduct()), true);
+        $original = $this->getOriginalProduct()->jsonSerialize();
         return $this->transformProductJson($original);
     }
 
@@ -169,9 +215,10 @@ abstract class AbstractProductView implements ProductView
                     break;
 
                 case 'attributes':
-                    $result = [$key => $this->transformAttributes($productData[$key])];
+                    $attributes = $this->getAttributes()->jsonSerialize();
+                    $result = [$key => $this->transformAttributeData($attributes)];
                     break;
-                
+
                 case 'images':
                     $result = ['images' => $this->getAllProductImageUrls()];
                     break;
@@ -188,7 +235,7 @@ abstract class AbstractProductView implements ProductView
      * @param array[] $attributes
      * @return array[]
      */
-    private function transformAttributes(array $attributes)
+    private function transformAttributeData(array $attributes)
     {
         return array_reduce($attributes, function (array $carry, array $attribute) {
             $code = $attribute[ProductAttribute::CODE];
