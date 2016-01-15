@@ -2,6 +2,7 @@
 @import "common.css";
 @import "product_grid.css";
 @import "lib/dropdown.css";
+@import "lib/overflow_scrolling.css";
 
 /* Filter navigation */
 #filter-navigation { display: block }
