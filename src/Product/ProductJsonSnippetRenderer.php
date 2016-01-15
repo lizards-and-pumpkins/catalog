@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
@@ -17,17 +16,9 @@ class ProductJsonSnippetRenderer implements SnippetRenderer
      */
     private $productJsonKeyGenerator;
 
-    /**
-     * @var InternalToPublicProductJsonData
-     */
-    private $internalToPublicProductJsonData;
-
-    public function __construct(
-        SnippetKeyGenerator $productJsonKeyGenerator,
-        InternalToPublicProductJsonData $internalToPublicProductJsonData
-    ) {
+    public function __construct(SnippetKeyGenerator $productJsonKeyGenerator)
+    {
         $this->productJsonKeyGenerator = $productJsonKeyGenerator;
-        $this->internalToPublicProductJsonData = $internalToPublicProductJsonData;
     }
 
     /**
@@ -51,18 +42,6 @@ class ProductJsonSnippetRenderer implements SnippetRenderer
             $product->getContext(),
             ['product_id' => $product->getId()]
         );
-        $snippet = Snippet::create($key, $this->getJson($product));
-        return $snippet;
-    }
-
-    /**
-     * @param ProductView $product
-     * @return string
-     */
-    private function getJson(ProductView $product)
-    {
-        $internalJsonData = json_decode(json_encode($product), true);
-        $publicJsonData = $this->internalToPublicProductJsonData->transformProduct($internalJsonData);
-        return json_encode($publicJsonData);
+        return Snippet::create($key, json_encode($product));
     }
 }

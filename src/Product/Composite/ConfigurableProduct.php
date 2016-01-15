@@ -87,9 +87,9 @@ class ConfigurableProduct implements CompositeProduct
     {
         return [
             Product::TYPE_KEY          => self::TYPE_CODE,
-            self::SIMPLE_PRODUCT       => $this->simpleProductDelegate,
-            self::VARIATION_ATTRIBUTES => $this->variationAttributes,
-            self::ASSOCIATED_PRODUCTS  => $this->associatedProducts,
+            self::SIMPLE_PRODUCT       => $this->simpleProductDelegate->jsonSerialize(),
+            self::VARIATION_ATTRIBUTES => $this->variationAttributes->jsonSerialize(),
+            self::ASSOCIATED_PRODUCTS  => $this->associatedProducts->jsonSerialize(),
         ];
     }
 

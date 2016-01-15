@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
@@ -23,6 +24,8 @@ class IntegrationTestProductViewLocator implements ProductViewLocator
      */
     public function createForProduct(Product $product)
     {
-        return new IntegrationTestProductView($product, $this->productImageFileLocator);
+        return $product instanceof ConfigurableProduct ?
+            new IntegrationTestConfigurableProductView($product, $this, $this->productImageFileLocator) :
+            new IntegrationTestProductView($product, $this->productImageFileLocator);
     }
 }

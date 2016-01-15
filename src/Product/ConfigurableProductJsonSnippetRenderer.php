@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Projection\Catalog\CompositeProductView;
-use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
@@ -24,19 +23,12 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private $associatedProductsJsonSnippetKeyGenerator;
 
-    /**
-     * @var InternalToPublicProductJsonData
-     */
-    private $internalToPublicProductJsonData;
-
     public function __construct(
         SnippetKeyGenerator $variationAttributesJsonSnippetKeyGenerator,
-        SnippetKeyGenerator $associatedProductsJsonSnippetKeyGenerator,
-        InternalToPublicProductJsonData $internalToPublicProductJsonData
+        SnippetKeyGenerator $associatedProductsJsonSnippetKeyGenerator
     ) {
         $this->variationAttributesJsonSnippetKeyGenerator = $variationAttributesJsonSnippetKeyGenerator;
         $this->associatedProductsJsonSnippetKeyGenerator = $associatedProductsJsonSnippetKeyGenerator;
-        $this->internalToPublicProductJsonData = $internalToPublicProductJsonData;
     }
 
     /**
@@ -92,10 +84,7 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function getVariationAttributesJsonData(CompositeProductView $product)
     {
-        $variationAttributesJson = json_encode($product->getVariationAttributes());
-        return $this->internalToPublicProductJsonData->transformVariationAttributes(
-            json_decode($variationAttributesJson, true)
-        );
+        return json_decode(json_encode($product->getVariationAttributes()), true);
     }
 
     /**
@@ -130,9 +119,6 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      */
     private function getAssociatedProductListJson(CompositeProductView $product)
     {
-        $associatedProductListJson = json_encode($product->getAssociatedProducts());
-        return $this->internalToPublicProductJsonData->transformAssociatedProducts(
-            json_decode($associatedProductListJson, true)
-        );
+        return $product->getAssociatedProducts();
     }
 }

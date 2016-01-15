@@ -49,10 +49,10 @@ class ProductImage implements \JsonSerializable
     }
 
     /**
-     * @return ProductAttributeList
+     * @return array[]
      */
     public function jsonSerialize()
     {
-        return $this->attributeList;
+        return $this->attributeList->jsonSerialize();
     }
 }

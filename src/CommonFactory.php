@@ -73,7 +73,6 @@ use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
-use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\TemplateProjectorLocator;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
@@ -267,8 +266,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductJsonSnippetRenderer()
     {
         return new ProductJsonSnippetRenderer(
-            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createInternalToPublicProductJsonData()
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator()
         );
     }
 
@@ -293,8 +291,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ConfigurableProductJsonSnippetRenderer(
             $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createInternalToPublicProductJsonData()
+            $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
         );
     }
 
@@ -324,14 +321,6 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
-    }
-
-    /**
-     * @return InternalToPublicProductJsonData
-     */
-    public function createInternalToPublicProductJsonData()
-    {
-        return new InternalToPublicProductJsonData();
     }
 
     /**
@@ -620,8 +609,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductInListingSnippetRenderer()
     {
         return new ProductInListingSnippetRenderer(
-            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator(),
-            $this->getMasterFactory()->createInternalToPublicProductJsonData()
+            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
         );
     }
 

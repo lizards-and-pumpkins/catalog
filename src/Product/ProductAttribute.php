@@ -159,7 +159,7 @@ class ProductAttribute implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            self::CODE => $this->code,
+            self::CODE => $this->code->jsonSerialize(),
             self::CONTEXT => $this->contextData,
             self::VALUE => $this->value
         ];

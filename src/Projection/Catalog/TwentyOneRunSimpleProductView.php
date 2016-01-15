@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
 class TwentyOneRunSimpleProductView extends AbstractProductView
@@ -15,11 +14,6 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
      * @var Product
      */
     private $product;
-
-    /**
-     * @var ProductAttributeList
-     */
-    private $memoizedProductAttributesList;
 
     /**
      * @var ProductImageFileLocator
@@ -35,86 +29,40 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     /**
      * {@inheritdoc}
      */
-    public function getOriginalProduct()
+    final public function getOriginalProduct()
     {
         return $this->product;
     }
 
     /**
-     * {@inheritdoc}
+     * @return ProductImageFileLocator
      */
-    public function getFirstValueOfAttribute($attributeCode)
+    final protected function getProductImageFileLocator()
     {
-        $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
+        return $this->productImageFileLocator;
+    }
 
-        if (count($attributeValues) === 0) {
-            return '';
+    /**
+     * @param ProductAttribute $attribute
+     * @return bool
+     */
+    final protected function isAttributePublic(ProductAttribute $attribute)
+    {
+        return (in_array($attribute->getCode(), ['backorders'])) ?
+            false :
+            parent::isAttributePublic($attribute);
+    }
+
+    /**
+     * @param ProductAttribute $attribute
+     * @return ProductAttribute
+     */
+    final protected function getProcessedAttribute(ProductAttribute $attribute)
+    {
+        if ($attribute->getCode() == 'stock_qty') {
+            return $this->getBoundedStockQtyAttribute($attribute);
         }
-
-        return $attributeValues[0];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAllValuesOfAttribute($attributeCode)
-    {
-        $attributeList = $this->getAttributes();
-
-        if (!$attributeList->hasAttribute($attributeCode)) {
-            return [];
-        }
-
-        return array_map(function (ProductAttribute $productAttribute) {
-            return $productAttribute->getValue();
-        }, $attributeList->getAttributesWithCode($attributeCode));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function hasAttribute($attributeCode)
-    {
-        return $this->getAttributes()->hasAttribute($attributeCode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributes()
-    {
-        if (null === $this->memoizedProductAttributesList) {
-            $originalAttributes = $this->product->getAttributes();
-            $this->memoizedProductAttributesList = $this->filterProductAttributeList($originalAttributes);
-        }
-
-        return $this->memoizedProductAttributesList;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        $productData = $this->product->jsonSerialize();
-        $productData['attributes'] = $this->getAttributes();
-
-        unset($productData['images']);
-        $productData['images'] = $this->getAllProductImageUrls();
-
-        return $productData;
-    }
-
-    /**
-     * @param ProductAttributeList $attributeList
-     * @return ProductAttributeList
-     */
-    private function filterProductAttributeList(ProductAttributeList $attributeList)
-    {
-        $attributesWithProcessedStockQty = $this->processStockQtyAttribute($attributeList->getAllAttributes());
-        $filteredAttributes = $this->removeScreenedAttributes($attributesWithProcessedStockQty);
-
-        return new ProductAttributeList(...$filteredAttributes);
+        return parent::getProcessedAttribute($attribute);
     }
 
     /**
@@ -154,40 +102,5 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     private function createStockQtyAttributeAtMaximumPurchasableLevel(ProductAttribute $attribute)
     {
         return new ProductAttribute('stock_qty', self::MAX_PURCHASABLE_QTY, $attribute->getContextDataSet());
-    }
-
-    /**
-     * @param ProductAttribute[] $attributes
-     * @return ProductAttribute[]
-     */
-    private function removeScreenedAttributes(array $attributes)
-    {
-        $attributeCodesToBeRemoved = ['price', 'special_price', 'backorders'];
-
-        return array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCodesToBeRemoved) {
-            return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
-        });
-    }
-
-    /**
-     * @param ProductAttribute[] $filteredAttributes
-     * @return ProductAttribute[]
-     */
-    private function processStockQtyAttribute(array $filteredAttributes)
-    {
-        return array_map(function (ProductAttribute $attribute) {
-            if ($attribute->getCode() == 'stock_qty') {
-                return $this->getBoundedStockQtyAttribute($attribute);
-            }
-            return $attribute;
-        }, $filteredAttributes);
-    }
-
-    /**
-     * @return ProductImageFileLocator
-     */
-    final protected function getProductImageFileLocator()
-    {
-        return $this->productImageFileLocator;
     }
 }
