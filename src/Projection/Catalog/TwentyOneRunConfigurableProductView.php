@@ -4,12 +4,11 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
-class TwentyOneRunConfigurableProductView extends AbstractProductView implements CompositeProductView
+class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductView implements CompositeProductView
 {
     const MAX_PURCHASABLE_QTY = 5;
 
@@ -119,24 +118,6 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
     }
 
     /**
-     * @return ProductVariationAttributeList
-     */
-    public function getVariationAttributes()
-    {
-        return $this->product->getVariationAttributes();
-    }
-
-    /**
-     * @return ProductView[]
-     */
-    public function getAssociatedProducts()
-    {
-        return array_map(function (Product $associatedProduct) {
-            return $this->productViewLocator->createForProduct($associatedProduct);
-        }, $this->product->getAssociatedProducts()->getProducts());
-    }
-
-    /**
      * @param ProductAttributeList $attributeList
      * @return ProductAttributeList
      */
@@ -160,12 +141,20 @@ class TwentyOneRunConfigurableProductView extends AbstractProductView implements
             return !in_array((string) $attribute->getCode(), $attributeCodesToBeRemoved);
         });
     }
-
+    
     /**
      * @return ProductImageFileLocator
      */
     final protected function getProductImageFileLocator()
     {
         return $this->productImageFileLocator;
+    }
+
+    /**
+     * @return ProductViewLocator
+     */
+    final protected function getProductViewLocator()
+    {
+        return $this->productViewLocator;
     }
 }

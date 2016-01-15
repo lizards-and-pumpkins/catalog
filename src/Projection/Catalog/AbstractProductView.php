@@ -3,8 +3,10 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 abstract class AbstractProductView implements ProductView
@@ -150,7 +152,74 @@ abstract class AbstractProductView implements ProductView
      */
     public function jsonSerialize()
     {
-        return $this->getOriginalProduct()->jsonSerialize();
+        $original = json_decode(json_encode($this->getOriginalProduct()), true);
+        return $this->transformProductJson($original);
+    }
+
+    /**
+     * @param mixed[] $productData
+     * @return mixed[]
+     */
+    protected function transformProductJson(array $productData)
+    {
+        return array_reduce(array_keys($productData), function (array $carry, $key) use ($productData) {
+            switch ($key) {
+                case SimpleProduct::CONTEXT:
+                    $result = [];
+                    break;
+
+                case 'attributes':
+                    $result = [$key => $this->transformAttributes($productData[$key])];
+                    break;
+                
+                case 'images':
+                    $result = ['images' => $this->getAllProductImageUrls()];
+                    break;
+
+                default:
+                    $result = [$key => $productData[$key]];
+                    break;
+            }
+            return array_merge($carry, $result);
+        }, []);
+    }
+
+    /**
+     * @param array[] $attributes
+     * @return array[]
+     */
+    private function transformAttributes(array $attributes)
+    {
+        return array_reduce($attributes, function (array $carry, array $attribute) {
+            $code = $attribute[ProductAttribute::CODE];
+            return array_merge($carry, [$code => $this->getAttributeValue($attribute, $carry)]);
+        }, []);
+    }
+
+    /**
+     * @param mixed[] $attribute
+     * @param string[] $carry
+     * @return string|string[]
+     */
+    private function getAttributeValue(array $attribute, array $carry)
+    {
+        $code = $attribute[ProductAttribute::CODE];
+        return array_key_exists($code, $carry) ?
+            $this->getAttributeValuesAsArray($attribute, $carry[$code]) :
+            $attribute[ProductAttribute::VALUE];
+    }
+
+    /**
+     * @param mixed[] $attribute
+     * @param string|string[] $existing
+     * @return string[]
+     */
+    private function getAttributeValuesAsArray(array $attribute, $existing)
+    {
+        $existingValues = is_array($existing) ?
+            $existing :
+            [$existing];
+        return array_merge($existingValues, [$attribute[ProductAttribute::VALUE]]);
     }
 
     /**

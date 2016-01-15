@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Projection\Catalog\InternalToPublicProductJsonData;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
@@ -18,17 +17,10 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
      */
     private $snippetKeyGenerator;
     
-    /**
-     * @var InternalToPublicProductJsonData
-     */
-    private $internalToPublicProductJsonData;
-
     public function __construct(
-        SnippetKeyGenerator $snippetKeyGenerator,
-        InternalToPublicProductJsonData $internalToPublicProductJsonData
+        SnippetKeyGenerator $snippetKeyGenerator
     ) {
         $this->snippetKeyGenerator = $snippetKeyGenerator;
-        $this->internalToPublicProductJsonData = $internalToPublicProductJsonData;
     }
 
     /**
@@ -53,8 +45,6 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
     private function getProductInListingSnippet(ProductView $product)
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
-        $internalJson = json_encode($product);
-        $publicJson = $this->internalToPublicProductJsonData->transformProduct(json_decode($internalJson, true));
-        return Snippet::create($key, json_encode($publicJson));
+        return Snippet::create($key, json_encode($product));
     }
 }

@@ -2,12 +2,14 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
+use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductView
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\IntegrationTestConfigurableProductView
  */
 class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,5 +37,15 @@ class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->createForProduct($stubProduct);
 
         $this->assertInstanceOf(ProductView::class, $result);
+    }
+
+    public function testItReturnsAConfigurableProductViewForConfigurableProducts()
+    {
+        /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+
+        $result = $this->locator->createForProduct($stubProduct);
+
+        $this->assertInstanceOf(CompositeProductView::class, $result);
     }
 }

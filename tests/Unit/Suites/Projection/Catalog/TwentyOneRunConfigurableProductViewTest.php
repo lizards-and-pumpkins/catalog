@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Utils\ImageStorage\Image;
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunConfigurableProductView
  * @uses   \LizardsAndPumpkins\Projection\Catalog\AbstractProductView
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\AbstractConfigurableProductView
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Product\ProductAttribute
@@ -62,21 +63,6 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     }
 
     /**
-     * @param string $productIdString
-     * @return ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubConfigurableProductWithId($productIdString)
-    {
-        $stubConfigurableProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $stubConfigurableProductId->method('__toString')->willReturn($productIdString);
-
-        $stubConfigurableProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
-        $stubConfigurableProduct->method('getId')->willReturn($stubConfigurableProductId);
-
-        return $stubConfigurableProduct;
-    }
-
-    /**
      * @return ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProductViewLocator()
@@ -113,6 +99,11 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
     public function testProductViewInterfaceIsImplemented()
     {
         $this->assertInstanceOf(ProductView::class, $this->productView);
+    }
+
+    public function testItExtendsTheAbstractConfigurableProductView()
+    {
+        $this->assertInstanceOf(AbstractConfigurableProductView::class, $this->productView);
     }
 
     public function testOriginalProductIsReturned()
@@ -294,26 +285,6 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $attributesList = $result['attributes'];
 
         $this->assertContains($nonPriceAttribute, $attributesList->getAllAttributes());
-    }
-
-    public function testGettingVariationAttributesIsDelegatedToOriginalProduct()
-    {
-        $this->mockProduct->expects($this->once())->method('getVariationAttributes');
-        $this->productView->getVariationAttributes();
-    }
-
-    public function testAssociatedProductsAreReturnedAsProductViewInstances()
-    {
-        $stubSimpleProduct = $this->createStubSimpleProductWithId('foo');
-        $stubConfigurableProduct = $this->createStubConfigurableProductWithId('bar');
-
-        $stubAssociatedProductsList = $this->getMock(AssociatedProductList::class, [], [], '', false);
-        $stubAssociatedProductsList->method('getProducts')->willReturn([$stubSimpleProduct, $stubConfigurableProduct]);
-
-        $this->mockProduct->method('getAssociatedProducts')->willReturn($stubAssociatedProductsList);
-
-        $result = $this->productView->getAssociatedProducts();
-        $this->assertContainsOnlyInstancesOf(ProductView::class, $result);
     }
 
     /**

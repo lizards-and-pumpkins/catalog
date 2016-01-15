@@ -5,8 +5,10 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductImage\ProductImage;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
@@ -19,6 +21,8 @@ use LizardsAndPumpkins\Utils\ImageStorage\Image;
 class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 {
     private $expectedPlaceholderImageLabel = '';
+
+    private $testImageUrl = 'http://example.com/image.jpg';
 
     /**
      * @var StubProductView
@@ -45,13 +49,17 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $mockProduct = $this->getMock(Product::class);
         $mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
 
+        $stubImageUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubImageUrl->method('__toString')->willReturn($this->testImageUrl);
         $mockImage = $this->getMock(Image::class);
+        $mockImage->method('getUrl')->willReturn($stubImageUrl);
         $mockPlaceholderImage = $this->getMock(Image::class);
         
         $mockImageFileLocator = $this->getMock(ProductImageFileLocator::class);
         
         $mockImageFileLocator->method('get')->willReturn($mockImage);
         $mockImageFileLocator->method('getPlaceholder')->willReturn($mockPlaceholderImage);
+        $mockImageFileLocator->method('getVariantCodes')->willReturn(['small', 'large']);
         
         $mockImage->method('getUrl')->willReturn($this->getMock(HttpUrl::class, [], [], '', false));
         
@@ -177,8 +185,130 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingProductArrayRepresentationIsDelegatedToOriginalProduct()
     {
-        $this->mockProduct->expects($this->once())->method('jsonSerialize');
+        $this->mockProduct->expects($this->once())->method('jsonSerialize')->willReturn([]);
         $this->productView->jsonSerialize();
+    }
+
+    public function testItFlattensAttributesInJson()
+    {
+        $productJsonData = [
+            'product_id' => 'test',
+            'attributes' => [
+                [
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'bar'
+                ],
+            ],
+        ];
+        $expectedData = [
+            'product_id' => 'test',
+            'attributes' => [
+                'foo' => 'bar'
+            ],
+        ];
+        $this->mockProduct->method('jsonSerialize')->willReturn($productJsonData);
+        $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
+    }
+
+    public function testItCombinesTheValuesOfAttributesWithTheSameCodeIntoArraysInJson()
+    {
+        $productJsonData = [
+            'product_id' => 'test',
+            'attributes' => [
+                [
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'bar'
+                ],
+                [
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'buz'
+                ],
+                [
+                    ProductAttribute::CODE => 'foo',
+                    ProductAttribute::CONTEXT => [],
+                    ProductAttribute::VALUE => 'qux'
+                ],
+            ],
+        ];
+        $expectedData = [
+            'product_id' => 'test',
+            'attributes' => [
+                'foo' => ['bar', 'buz', 'qux']
+            ],
+        ];
+        $this->mockProduct->method('jsonSerialize')->willReturn($productJsonData);
+        $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
+    }
+
+    public function testItRemovesTheContextFromProductJson()
+    {
+        $productJsonData = [
+            'product_id' => 'test',
+            SimpleProduct::CONTEXT => [],
+        ];
+        $expectedData = [
+            'product_id' => 'test',
+        ];
+        $this->mockProduct->method('jsonSerialize')->willReturn($productJsonData);
+        $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
+    }
+
+    public function testItFlattensTheProductImagesInJson()
+    {
+        $testImageLabel = 'Test Label';
+        $mockProductImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $mockProductImage->method('getLabel')->willReturn($testImageLabel);
+        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([$mockProductImage]));
+        
+        $productJsonData = [
+            'product_id' => 'test',
+            'images' => ['original product image data'],
+        ];
+        $expectedData = [
+            'product_id' => 'test',
+            'images' => [
+                'small' => [
+                    ['url' => $this->testImageUrl, 'label' => $testImageLabel]
+                ],
+                'large' => [
+                    ['url' => $this->testImageUrl, 'label' => $testImageLabel]
+                ],
+            ],
+        ];
+        $this->mockProduct->method('jsonSerialize')->willReturn($productJsonData);
+        $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
+    }
+
+    public function testItReturnsPlaceholdersIfTheProductHasNoImages()
+    {
+        $placeholderUrl = 'http://example.com/placeholder.jpg';
+        $stubPlaceholderUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubPlaceholderUrl->method('__toString')->willReturn($placeholderUrl);
+        /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
+        $placeholderImage = $this->mockImageFileLocator->getPlaceholder('dummy', $this->mockProduct->getContext());
+        $placeholderImage->method('getUrl')->willReturn($stubPlaceholderUrl);
+        
+        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([]));
+        $productJsonData = [
+            'product_id' => 'test',
+            'images' => ['original product image data'],
+        ];
+        $expectedData = [
+            'product_id' => 'test',
+            'images' => [
+                'small' => [
+                    ['url' => $placeholderUrl, 'label' => '']
+                ],
+                'large' => [
+                    ['url' => $placeholderUrl, 'label' => '']
+                ],
+            ],
+        ];
+        $this->mockProduct->method('jsonSerialize')->willReturn($productJsonData);
+        $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
     }
 
     public function testGettingAnImageByNumberHigherThenTheImageCountWillReturnThePlaceholderImage()
