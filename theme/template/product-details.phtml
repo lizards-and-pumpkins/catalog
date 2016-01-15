@@ -52,10 +52,9 @@ $save = 0;
             <div class="product-main-info">
                 <script>
 
-                    var regularPrice = '<?= $this->getChildOutput('price') ?>',
-                        specialPrice = '<?= $this->getChildOutput('special_price') ?>',
-                        stockQty = '<?= $this->getProductStockQuantity() ?>',
-                        baseUrl = '<?= $this->getBaseUrl() ?>';
+                    var stockQty = '<?= $this->getProductStockQuantity() ?>',
+                        baseUrl = '<?= $this->getBaseUrl() ?>',
+                        basePricePattern = '<?= sprintf($this->__('per %s%s %s &euro;'), '%s', '%s','%s') ?>';
 
                 </script>
                 <div class="price-information">

@@ -1,4 +1,5 @@
 require([
+    'product',
     'lib/domReady',
     'common',
     'recently_viewed_products',
@@ -9,6 +10,7 @@ require([
     'lib/modal_box',
     'ekomi'
 ], function(
+    Product,
     domReady,
     common,
     recentlyViewedProducts,
@@ -21,9 +23,13 @@ require([
 
     var tabletWidth = 768,
         selectBoxIdPrefix = 'variation_',
-        addToCartButton;
+        addToCartButton,
+        product;
 
     domReady(function() {
+
+        product = new Product(window.product);
+
         renderPrices();
         handleRecentlyViewedProducts();
         initializeAddToCartButton();
@@ -37,25 +43,40 @@ require([
         initializeZoom();
         initializeTabs();
         showAvailabilityStatus();
-        loadRelatedModels(product.sku);
+        loadRelatedModels(window.product.sku);
         bindShippingInfoModalBoxEvent();
     });
 
+    function renderBasePrice() {
+        var container = document.createElement('SPAN');
+
+        container.innerHTML = '<br/>' + basePricePattern.replace(/%s/, product.getBasePriceBaseAmount())
+                .replace(/%s/, product.getBasePriceUnit())
+                .replace(/%s/, product.getBasePrice());
+
+        document.querySelector('.tax-information').appendChild(container);
+    }
+
     function renderPrices() {
-        var regularPrice = document.getElementById('regular-price'),
-            oldPrice = document.getElementById('old-price');
+        var regularPriceContainer = document.getElementById('regular-price'),
+            oldPriceContainer = document.getElementById('old-price'),
+            regularPrice = product.getPrice();
 
-        if (null === regularPrice || typeof window.regularPrice === 'undefined') {
+        if (null === regularPriceContainer) {
             return;
         }
 
-        if ('' === window.specialPrice) {
-            regularPrice.textContent = window.regularPrice;
+        if (product.hasBasePrice()) {
+            renderBasePrice();
+        }
+
+        if (!product.hasSpecialPrice()) {
+            regularPriceContainer.textContent = regularPrice;
             return;
         }
 
-        oldPrice.textContent = window.regularPrice;
-        regularPrice.textContent = window.specialPrice;
+        oldPriceContainer.textContent = regularPrice;
+        regularPriceContainer.textContent = product.getSpecialPrice();
     }
 
     function initializeAddToCartButton() {

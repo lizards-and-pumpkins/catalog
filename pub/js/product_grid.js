@@ -1,4 +1,4 @@
-define(function () {
+define(['product'], function (Product) {
 
     var wrapIntoProductLink = function (element, url) {
         var link = document.createElement('A');
@@ -27,44 +27,47 @@ define(function () {
         return operand;
     };
 
-    function isDate(dateString) {
-        return dateString.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$/);
-    }
-
-    function isApplicableForNewBadge(productAttributes) {
-        if ((!productAttributes.hasOwnProperty('news_from_date') || !isDate(productAttributes['news_from_date'])) &&
-            (!productAttributes.hasOwnProperty('news_to_date') || !isDate(productAttributes['news_to_date']))
-        ) {
-            return false;
-        }
-
-        var currentDate = new Date();
-
-        if (productAttributes.hasOwnProperty('news_from_date')) {
-            var newsFromDate = new Date(productAttributes['news_from_date'].replace(/\s/, 'T'));
-
-            if (newsFromDate > currentDate) {
-                return false;
-            }
-        }
-
-        if (productAttributes.hasOwnProperty('news_to_date')) {
-            var newsToDate = new Date(productAttributes['news_to_date'].replace(/\s/, 'T'));
-
-            if (newsToDate < currentDate) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     function createNewBadge() {
         var newBadge = document.createElement('SPAN');
         newBadge.className = 'new-product';
         newBadge.textContent = 'NEW';
 
         return newBadge;
+    }
+
+    function createBasePrice(product) {
+        var basePriceNode = document.createElement('DIV');
+
+        basePriceNode.className = 'base-price';
+        basePriceNode.innerHTML = basePricePattern.replace(/%s/, product.getBasePriceBaseAmount())
+            .replace(/%s/, product.getBasePriceUnit())
+            .replace(/%s/, product.getBasePrice());
+
+        return basePriceNode;
+    }
+
+    function createPricesBlock(product) {
+        var container = document.createElement('DIV'),
+            price = document.createElement('DIV');
+
+        price.textContent = product.getPrice();
+        price.className = product.hasSpecialPrice() ? 'old-price' : 'regular-price';
+
+        container.className = 'price-container';
+        container.appendChild(price);
+
+        if (product.hasSpecialPrice()) {
+            var specialPrice = document.createElement('DIV');
+            specialPrice.textContent = product.getSpecialPrice();
+            specialPrice.className = 'special-price';
+            container.appendChild(specialPrice);
+        }
+
+        if (product.hasBasePrice() && typeof basePricePattern !== 'undefined') {
+            container.appendChild(createBasePrice(product));
+        }
+
+        return container;
     }
 
     return {
@@ -78,41 +81,31 @@ define(function () {
             var grid = document.createElement('UL');
             grid.className = 'products-grid';
 
-            productGridJson.map(function (product) {
-                var mainImage = product['images']['medium'][0],
+            productGridJson.map(function (productSourceData) {
+
+                var product = new Product(productSourceData),
+                    mainImage = product.getMainImage(),
                     productLi = document.createElement('LI'),
                     container = document.createElement('DIV'),
                     title = document.createElement('H2'),
                     gender = document.createElement('P'),
-                    productUrl = baseUrl + product['attributes']['url_key'],
-                    productImage = createProductImage(mainImage['url'], mainImage['label']),
-                    price = document.createElement('SPAN'),
-                    hasSpecialPrice = product['attributes']['special_price'];
+                    productUrl = baseUrl + product.getUrlKey(),
+                    productImage = createProductImage(mainImage['url'], mainImage['label']);
 
-                title.textContent = product['attributes']['name'];
-                gender.textContent = turnIntoStringIfIsArray(product['attributes']['gender']);
+                title.textContent = product.getName();
+                gender.textContent = turnIntoStringIfIsArray(product.getGender());
 
-                price.textContent = product['attributes']['price'];
-                price.className = hasSpecialPrice ? 'old-price' : 'regular-price';
-
-                container.style.backgroundImage = 'url("' + getBrandLogoSrc(product['attributes']['brand']) + '")';
+                container.style.backgroundImage = 'url("' + getBrandLogoSrc(product.getBrand()) + '")';
                 container.className = 'grid-cell-container';
 
-                if (isApplicableForNewBadge(product['attributes'])) {
+                if (product.isNew()) {
                     container.appendChild(createNewBadge());
                 }
 
                 container.appendChild(wrapIntoProductLink(productImage, productUrl));
                 container.appendChild(wrapIntoProductLink(title, productUrl));
                 container.appendChild(gender);
-                container.appendChild(price);
-
-                if (hasSpecialPrice) {
-                    var specialPrice = document.createElement('SPAN');
-                    specialPrice.textContent = product['attributes']['special_price'];
-                    specialPrice.className = 'special-price';
-                    container.appendChild(specialPrice);
-                }
+                container.appendChild(createPricesBlock(product));
 
                 productLi.appendChild(container);
                 grid.appendChild(productLi);

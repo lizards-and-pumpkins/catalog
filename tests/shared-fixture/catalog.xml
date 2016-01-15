@@ -529,6 +529,65 @@ TEXTILE/SYNTHETICS]]></attribute>
             </attributes>
         </product>
 
+        <product type="simple" sku="000000000010074508" tax_class="7%">
+            <images>
+                <image>
+                    <file>040545.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="stock_qty" website="fr" locale="fr_FR">1</attribute>
+                <attribute name="backorders" website="fr" locale="fr_FR">true</attribute>
+                <attribute name="category" website="fr" locale="fr_FR">sale</attribute>
+                <attribute name="brand" website="fr" locale="fr_FR">Taxofit</attribute>
+                <attribute name="product_group" website="fr" locale="fr_FR">Diététique / Nutritio</attribute>
+                <attribute name="series" website="fr" locale="fr_FR">Protein Riegel</attribute>
+                <attribute name="style" website="fr" locale="fr_FR">Barre de fitness</attribute>
+                <attribute name="name" website="fr" locale="fr_FR">32 % Protein Riegel Milde Zitrone 35G_FR</attribute>
+                <attribute name="gender" website="fr" locale="fr_FR">Homme</attribute>
+                <attribute name="gender" website="fr" locale="fr_FR">Femme</attribute>
+                <attribute name="mpn" website="fr" locale="fr_FR">40545</attribute>
+                <attribute name="base_price_amount" website="fr" locale="fr_FR">35</attribute>
+                <attribute name="base_price_unit" website="fr" locale="fr_FR">G</attribute>
+                <attribute name="base_price_base_amount" website="fr" locale="fr_FR">100</attribute>
+                <attribute name="base_price_base_unit" website="fr" locale="fr_FR">G</attribute>
+                <attribute name="country_of_manufacture" website="fr" locale="fr_FR">Deutschland</attribute>
+                <attribute name="color" website="fr" locale="fr_FR">454444</attribute>
+                <attribute name="color" website="fr" locale="fr_FR">ce000a</attribute>
+                <attribute name="color" website="fr" locale="fr_FR">09146a</attribute>
+                <attribute name="url_key" website="fr" locale="fr_FR">32-protein-riegel-milde-zitrone-35g.html</attribute>
+                <attribute name="special_price" website="fr" locale="fr_FR">1.392523364486</attribute>
+                <attribute name="price" website="fr" locale="fr_FR">1.392523364486</attribute>
+                <attribute name="description" website="fr" locale="fr_FR"><![CDATA[taxofit 32 % PROTEIN  Riegel Milde Zitrone 35g<br><br>
+Der von Sportwissenschaftlern entwickelte taxofit Sport 32 % Protein Riegel<br>
+o  versorgt deine erschöpften Muskeln nach dem Sport mit hoch dosiertem hochwertigem Eiweiß<br>
+o zum Muskelaufbau und -erhalt<br>
+o zur schnellen Regeneration<br>
+o leicht verdaulich, da nur 3 g Fett pro Riegel <br>
+o Gut verträglich, ohne künstlichen Farb- und Konservierungsstoffe.<br>
+o Milde Zitrone-Geschmack<br>
+o Auf Dopingsubstanzen getestet<br><br>
+<strong>Milch</strong>eiweiß, Glukosesirup, Fruktosesirup, weiße Schokolade 17,1 % (Zucker, Kakaobutter, <strong>Vollmilch</strong>pulver, Emulgator (<strong>Soja-Lecithin</strong>), Aromen), hydrolisiertes <strong>Weizengluten</strong>, Palmfett, Dextrose, Feuchthaltemittel (Glycerin), Aromen, Salz, Emulgator (<strong>Soja-Lecithin</strong>), Säureregulator (Zitronensäure), Sonnenblumenöl, Vitamine (Vitamin C (Askorbinsäure), Niacin, Vitamin E (Tocopherolacetat), Calciumpantothenate, Vitamin B2 (Riboflavin), Vitamin B6 (Pyridoxinhydrochlorid), Vitamin B1 (Thiaminhydrochlorid), Biotin, Vitamin B12 (Cyanocobalamine)), Farbstoff (Beta-Carotin).<br><br>
+Je nach Belastung 1 - 3 Riegel pro Tag, unmittelbar nach dem Sport verzehren.<br><br>
+
+<table width="100%" border="1" cellpadding="0" cellspacing="2">
+ <tr><td>Nährwertangaben</td><td>1 Portion (35g) </td><td>Menge / 100 g</td></tr>
+ <tr><td>Brennwert</td><td>577 kJ</td><td>1648 kJ</td></tr>
+ <tr><td>Brennwert kcal </td><td>137 kcal</td><td>391 kcal</td></tr>
+ <tr><td>Fett</td><td>3,4 g</td><td>9,8 g</td></tr>
+ <tr><td>- davon gesättigte Fettsäuren</td><td>2,0 g</td><td>5,6 g</td></tr>
+ <tr><td>Kohlenhydrate</td><td>15 g</td><td>44 g</td></tr>
+ <tr><td>- davon Zucker</td><td>11 g</td><td>31 g</td></tr>
+ <tr><td>Eiweiß</td><td>11 g</td><td>32 g</td></tr>
+ <tr><td>Salz</td><td>0,28 g</td><td>0,80 g</td></tr>
+</table>]]></attribute>
+                <attribute name="short_description" website="fr" locale="fr_FR">32 % Protein Riegel Milde Zitrone 35G_FR</attribute>
+                <attribute name="news_from_date" website="fr" locale="fr_FR">2015-06-23 00:00:00</attribute>
+                <attribute name="news_to_date" website="fr" locale="fr_FR">2015-09-21 00:00:00</attribute>
+            </attributes>
+        </product>
+
     </products>
     <listings>
         <listing url_key="adidas-sale" website="ru" locale="de_DE">
