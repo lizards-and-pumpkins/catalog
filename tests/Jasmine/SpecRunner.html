@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="lib/jasmine.css"/>
+    <script src="../../pub/js/lib/require.js"></script>
+    <script>
+
+        require.config({
+            paths: {
+                'jasmine': ['lib/jasmine'],
+                'jasmine-html': ['lib/jasmine-html'],
+                'jasmine-boot': ['lib/boot']
+            },
+            shim: {
+                'jasmine-html': {
+                    deps : ['jasmine']
+                },
+                'jasmine-boot': {
+                    deps : ['jasmine', 'jasmine-html']
+                }
+            },
+            urlArgs: (new Date()).getTime() // Bypass cache
+        });
+
+        require(['jasmine-boot'], function () {
+            require(['productSpec'], function() {
+                window.onload(); // Trigger Jasmine
+            })
+        });
+
+    </script>
+</head>
+<body></body>
+</html>
