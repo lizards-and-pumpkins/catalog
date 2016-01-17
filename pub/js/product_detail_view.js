@@ -216,7 +216,8 @@ require([
 
             if (false === optionIsAlreadyPresent) {
                 carry.push({
-                    'value': getVariationAttributeOptionValue(associatedProduct['attributes'], attributeCode),
+                    'value': associatedProduct['attributes'][attributeCode],
+                    'label': getVariationAttributeOptionLabel(associatedProduct['attributes'], attributeCode),
                     'disabled': 0 == associatedProduct['attributes']['stock_qty']
                 });
             }
@@ -225,7 +226,7 @@ require([
         }, []);
     }
 
-    function getVariationAttributeOptionValue(associatedProductAttributes, attributeCode) {
+    function getVariationAttributeOptionLabel(associatedProductAttributes, attributeCode) {
         if (!associatedProductAttributes.hasOwnProperty(attributeCode)) {
             return '';
         }
@@ -255,7 +256,7 @@ require([
 
     function createSelectOption(option) {
         var variationOption = document.createElement('OPTION');
-        variationOption.textContent = option['value'];
+        variationOption.textContent = option['label'];
         variationOption.value = option['value'];
 
         if (option['disabled']) {
