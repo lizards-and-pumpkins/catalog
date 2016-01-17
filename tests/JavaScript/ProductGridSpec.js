@@ -1,4 +1,7 @@
 define(['../../pub/js/product_grid'], function (ProductGrid) {
+    var gridContainerId = 'grid-container-id',
+        gridContainerSelector = '#' + gridContainerId;
+
     var testProductName = 'foo',
         testProductUrlKey = 'foo.html',
         testProductBrand = 'bar',
@@ -7,16 +10,14 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
         testProductImageLabel = 'foo',
         testProductPrice = '$18.00';
 
-    function createTemporaryElementWithId(id) {
+    function createTemporaryElement() {
         var gridContainer = document.createElement('DIV');
-        gridContainer.id = id;
-
+        gridContainer.id = gridContainerId;
         document.getElementsByTagName('BODY')[0].appendChild(gridContainer);
-        return gridContainer;
     }
 
-    function removeTemporaryElement(element) {
-        document.getElementsByTagName('BODY')[0].removeChild(element);
+    function removeTemporaryElement() {
+        document.getElementsByTagName('BODY')[0].removeChild(document.getElementById(gridContainerId));
     }
 
     function getTestProductData() {
@@ -67,17 +68,13 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
     }
 
     describe('Product grid', function () {
-        var gridContainer,
-            gridContainerId = 'grid-container-id',
-            gridContainerSelector = '#' + gridContainerId;
-
         beforeEach(function () {
-            gridContainer = createTemporaryElementWithId(gridContainerId);
+            createTemporaryElement();
             window.baseUrl = 'http://example.com/';
         });
 
         afterEach(function () {
-            removeTemporaryElement(gridContainer);
+            removeTemporaryElement();
             delete window.baseUrl;
         });
 
@@ -89,6 +86,7 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
 
         it('is an empty unordered list if there are no products', function () {
             ProductGrid.renderGrid([], gridContainerSelector);
+            var gridContainer = document.querySelector(gridContainerSelector);
             expect(gridContainer.innerHTML).toMatch(/^<ul[^>]*><\/ul>$/);
         });
 
@@ -222,6 +220,8 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
                 var expectedHtml = '<div class="base-price">100 G 36</div>';
                 expect(gridItem.innerHTML).toContain(expectedHtml);
             });
+
+            delete window.basePricePattern;
         });
     });
 });
