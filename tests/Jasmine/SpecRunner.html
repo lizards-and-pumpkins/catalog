@@ -6,24 +6,31 @@
     <script>
 
         require.config({
+            baseUrl: '../../pub/js',
             paths: {
-                'jasmine': ['lib/jasmine'],
-                'jasmine-html': ['lib/jasmine-html'],
-                'jasmine-boot': ['lib/boot']
+                'jasmine': ['../../tests/Jasmine/lib/jasmine'],
+                'jasmine-html': ['../../tests/Jasmine/lib/jasmine-html'],
+                'jasmine-boot': ['../../tests/Jasmine/lib/boot']
             },
             shim: {
                 'jasmine-html': {
-                    deps : ['jasmine']
+                    deps: ['jasmine']
                 },
                 'jasmine-boot': {
-                    deps : ['jasmine', 'jasmine-html']
+                    deps: ['jasmine', 'jasmine-html']
                 }
             },
             urlArgs: (new Date()).getTime() // Bypass cache
         });
 
         require(['jasmine-boot'], function () {
-            require(['productSpec'], function() {
+
+            var specs = [
+                '../../tests/Jasmine/productGridSpec',
+                '../../tests/Jasmine/productSpec'
+            ];
+
+            require(specs, function () {
                 window.onload(); // Trigger Jasmine
             })
         });
