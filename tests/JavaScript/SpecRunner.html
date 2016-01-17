@@ -8,9 +8,9 @@
         require.config({
             baseUrl: '../../pub/js',
             paths: {
-                'jasmine': ['../../tests/Jasmine/lib/jasmine'],
-                'jasmine-html': ['../../tests/Jasmine/lib/jasmine-html'],
-                'jasmine-boot': ['../../tests/Jasmine/lib/boot']
+                'jasmine': ['../../tests/JavaScript/lib/jasmine'],
+                'jasmine-html': ['../../tests/JavaScript/lib/jasmine-html'],
+                'jasmine-boot': ['../../tests/JavaScript/lib/boot']
             },
             shim: {
                 'jasmine-html': {
@@ -26,8 +26,8 @@
         require(['jasmine-boot'], function () {
 
             var specs = [
-                '../../tests/Jasmine/productGridSpec',
-                '../../tests/Jasmine/productSpec'
+                '../../tests/JavaScript/productGridSpec',
+                '../../tests/JavaScript/productSpec'
             ];
 
             require(specs, function () {
