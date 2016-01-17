@@ -216,13 +216,25 @@ require([
 
             if (false === optionIsAlreadyPresent) {
                 carry.push({
-                    'value': associatedProduct['attributes'][attributeCode],
+                    'value': getVariationAttributeOptionValue(associatedProduct['attributes'], attributeCode),
                     'disabled': 0 == associatedProduct['attributes']['stock_qty']
                 });
             }
 
             return carry;
         }, []);
+    }
+
+    function getVariationAttributeOptionValue(associatedProductAttributes, attributeCode) {
+        if (!associatedProductAttributes.hasOwnProperty(attributeCode)) {
+            return '';
+        }
+
+        if ('size' !== attributeCode || !associatedProductAttributes.hasOwnProperty('size_eu')) {
+            return associatedProductAttributes[attributeCode];
+        }
+
+        return 'US ' + associatedProductAttributes['size'] + ' - EU ' + associatedProductAttributes['size_eu'];
     }
 
     function createSelect(name, options) {
