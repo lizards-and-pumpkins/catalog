@@ -4,12 +4,20 @@ define(function () {
         return dateString.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$/);
     }
 
+    function getRawPrice(product) {
+        return parseInt(product.product['attributes']['raw_price']);
+    }
+
+    function getRawSpecialPrice(product) {
+        return parseInt(product.product['attributes']['raw_special_price']);
+    }
+
     function getFinalRawPrice(product) {
         if (product.hasSpecialPrice()) {
-            return parseInt(product.product['attributes']['raw_special_price']);
+            return getRawSpecialPrice(product);
         }
 
-        return  parseInt(product.product['attributes']['raw_price']);
+        return getRawPrice(product);
     }
 
     return function (productSourceData) {
@@ -40,10 +48,7 @@ define(function () {
                 return false;
             }
 
-            var rawPrice = parseInt(this.product['attributes']['raw_price']),
-                rawSpecialPrice = parseInt(this.product['attributes']['raw_special_price']);
-
-            return rawPrice > rawSpecialPrice;
+            return getRawPrice(this) > getRawSpecialPrice(this);
         };
 
         this.getPrice = function () {
