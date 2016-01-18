@@ -70,6 +70,13 @@ define(['product'], function (Product) {
         return container;
     }
 
+    var createYouSaveBlock = function (product) {
+        var container = document.createElement('P');
+        container.textContent = 'Save ' + product.getDiscountPercentage() + '% now';
+        container.className = 'you-save';
+        return container;
+    };
+
     function createGridItem(productSourceData) {
         var product = new Product(productSourceData),
             mainImage = product.getMainImage(),
@@ -93,6 +100,11 @@ define(['product'], function (Product) {
         container.appendChild(wrapIntoProductLink(productImage, productUrl));
         container.appendChild(wrapIntoProductLink(title, productUrl));
         container.appendChild(gender);
+
+        if (product.getDiscountPercentage() >= 5) {
+            container.appendChild(createYouSaveBlock(product));
+        }
+
         container.appendChild(createPricesBlock(product));
 
         productLi.appendChild(container);

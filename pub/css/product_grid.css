@@ -1,10 +1,12 @@
 .products-grid { font-size: 0; overflow: hidden }
+.products-grid::after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 .products-grid a { color: #000000 }
-.products-grid li { display: inline-block; width: 33%; position: relative; margin-bottom: -1px; font-size: 13px }
-.products-grid li .grid-cell-container { padding: 25px 15px 20px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat }
+.products-grid li { float: left; width: 33%; position: relative; margin-bottom: -1px; font-size: 13px }
+.products-grid li .grid-cell-container { padding: 25px 15px 20px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat; min-height: 191px }
 .products-grid li.last .grid-cell-container { border-right: none }
 .products-grid .product-image { display: block; margin: 0 0 10px 0 }
 .products-grid h2 { font-size: 14px; margin: 0; padding-top: 5px; padding-bottom: 5px }
+.products-grid p { margin: 7px 0 0 }
 
 .products-grid .price-container { position: absolute; bottom: 0; right: 14px; text-align: right; height: 51px }
 .products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold }
@@ -12,6 +14,7 @@
 .products-grid .base-price { font-size: 12px }
 
 .products-grid li .new-product { background: #3CABD9; color: #ffffff; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 16px; padding: 3px 7px; text-transform: uppercase; position: absolute; left: 0; top: 0 }
+.products-grid .you-save { color: #3cabd9 }
 
 .swipe-container .products-grid li { display: table-cell; width: auto }
 .swipe-container .products-grid li .grid-cell-container { border-bottom: none; width: 213px }

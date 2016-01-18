@@ -225,6 +225,37 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
 
                 delete window.basePricePattern;
             });
+
+            it('has no saving information if there is no special price defined', function () {
+                ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li'),
+                    unexpectedHtml = '<p class="you-save">';
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    expect(gridItem.innerHTML).not.toContain(unexpectedHtml);
+                });
+            });
+
+            it('has no saving information if saving is less than 5%', function () {
+                ProductGrid.renderGrid([getTestProductDataWithSpecialPrice('%17.99', '1799')], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li'),
+                    unexpectedHtml = '<p class="you-save">';
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    expect(gridItem.innerHTML).not.toContain(unexpectedHtml);
+                });
+            });
+
+
+            it('has a saving information if saving is greater or equals to 5%', function () {
+                ProductGrid.renderGrid([getTestProductDataWithSpecialPrice('%17.00', '1700')], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li'),
+                    expectedHtml = '<p class="you-save">Save 6% now';
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    expect(gridItem.innerHTML).toContain(expectedHtml);
+                });
+            });
         });
     });
 });
