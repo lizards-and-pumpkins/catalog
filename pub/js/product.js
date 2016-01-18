@@ -23,6 +23,10 @@ define(function () {
     return function (productSourceData) {
         this.product = productSourceData;
 
+        this.getSku = function () {
+            return this.product['sku'];
+        };
+
         this.getName = function () {
             return this.product['attributes']['name'];
         };

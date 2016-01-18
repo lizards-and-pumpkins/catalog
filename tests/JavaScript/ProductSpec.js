@@ -7,6 +7,11 @@ define(['../../pub/js/product'], function (Product) {
     describe('Product', function () {
         var product;
 
+        it('SKU is returned', function () {
+            product = new Product({"sku": 'foo', "attributes": {}});
+            expect(product.getSku()).toBe('foo');
+        });
+
         it('name is returned', function () {
             product = new Product({"attributes": {"name": 'foo'}});
             expect(product.getName()).toBe('foo');
