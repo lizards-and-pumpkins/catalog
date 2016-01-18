@@ -1,4 +1,14 @@
 define(function() {
+
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     return {
 
         get: function(key) {
@@ -7,7 +17,13 @@ define(function() {
                 return null;
             }
 
-            return JSON.parse(localStorage.getItem(key));
+            var item = localStorage.getItem(key);
+
+            if (!isJson(item)) {
+                return null;
+            }
+
+            return JSON.parse(item);
         },
 
         set: function(key, value) {
