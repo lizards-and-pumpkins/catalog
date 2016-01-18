@@ -1,4 +1,4 @@
-define(['lib/local_storage'], function(storage) {
+define(['lib/local_storage'], function (storage) {
 
     var storageKey = 'recently-viewed-products',
         numProducts = 4;
@@ -11,7 +11,7 @@ define(['lib/local_storage'], function(storage) {
 
     return {
 
-        addProductIntoLocalStorage: function(product) {
+        addProductIntoLocalStorage: function (product) {
 
             if (typeof product == 'undefined') {
                 return;
@@ -29,12 +29,12 @@ define(['lib/local_storage'], function(storage) {
             storage.set(storageKey, recentlyViewedProducts);
         },
 
-        getRecentlyViewedProductsHtml: function(currentProduct) {
+        getRecentlyViewedProductsHtml: function (currentProduct) {
 
             var products = storage.get(storageKey) || [];
 
             var liHtml = products.reduce(function (carry, product, index) {
-                if (currentProduct.hasOwnProperty('sku') && product['sku'] !== currentProduct['sku']) {
+                if (currentProduct.getSku() !== product['sku']) {
                     var elementHtml = product['html'];
                     if (index === products.length - 1) {
                         elementHtml = elementHtml.replace(/class="item"/igm, 'class="item last"');
