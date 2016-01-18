@@ -153,5 +153,10 @@ define(['../../pub/js/product'], function (Product) {
             });
             expect(product.isNew()).toBe(true);
         });
+
+        it('discount percentage is returned', function () {
+            product = new Product({"attributes": {"raw_price": '1800', "raw_special_price": '1700'}});
+            expect(product.getDiscountPercentage()).toBe(100 - Math.round(1700 * 100 / 1800));
+        });
     });
 });

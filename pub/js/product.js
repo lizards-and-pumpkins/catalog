@@ -111,5 +111,9 @@ define(function () {
 
             return true;
         };
+
+        this.getDiscountPercentage = function () {
+            return 100 - Math.round(getRawSpecialPrice(this) * 100 / getRawPrice(this));
+        };
     }
 });
