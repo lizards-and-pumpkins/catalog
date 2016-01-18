@@ -4,6 +4,22 @@ define(function () {
         return dateString.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}$/);
     }
 
+    function getRawPrice(product) {
+        return parseInt(product.product['attributes']['raw_price']);
+    }
+
+    function getRawSpecialPrice(product) {
+        return parseInt(product.product['attributes']['raw_special_price']);
+    }
+
+    function getFinalRawPrice(product) {
+        if (product.hasSpecialPrice()) {
+            return getRawSpecialPrice(product);
+        }
+
+        return getRawPrice(product);
+    }
+
     return function (productSourceData) {
         this.product = productSourceData;
 
@@ -32,7 +48,7 @@ define(function () {
                 return false;
             }
 
-            return this.product['attributes']['raw_price'] > this.product['attributes']['raw_special_price'];
+            return getRawPrice(this) > getRawSpecialPrice(this);
         };
 
         this.getPrice = function () {
@@ -43,20 +59,14 @@ define(function () {
             return this.product['attributes']['special_price'];
         };
 
-        this.getFinalPriceAsFloat = function() {
-            if (this.hasSpecialPrice()) {
-                return this.product['attributes']['raw_special_price'] / this.product['attributes']['price_base_unit'];
-            }
-
-            return  this.product['attributes']['raw_price'] / this.product['attributes']['price_base_unit'];
-        };
-
         this.hasBasePrice = function () {
-            return this.product['attributes'].hasOwnProperty('base_price_amount');
+            return this.product['attributes'].hasOwnProperty('base_price_amount') && this.getBasePriceAmount() > 0;
         };
 
         this.getBasePrice = function () {
-            var basePrice = this.getFinalPriceAsFloat() * this.getBasePriceBaseAmount() / this.getBasePriceAmount();
+            var price = getFinalRawPrice(this) / this.product['attributes']['price_base_unit'],
+                basePrice = price * this.getBasePriceBaseAmount() / this.getBasePriceAmount();
+
             return Math.round(basePrice * 100) / 100;
         };
 

@@ -70,6 +70,36 @@ define(['product'], function (Product) {
         return container;
     }
 
+    function createGridItem(productSourceData) {
+        var product = new Product(productSourceData),
+            mainImage = product.getMainImage(),
+            productLi = document.createElement('LI'),
+            container = document.createElement('DIV'),
+            title = document.createElement('H2'),
+            gender = document.createElement('P'),
+            productUrl = baseUrl + product.getUrlKey(),
+            productImage = createProductImage(mainImage['url'], mainImage['label']);
+
+        title.textContent = product.getName();
+        gender.textContent = turnIntoStringIfIsArray(product.getGender());
+
+        container.style.backgroundImage = 'url("' + getBrandLogoSrc(product.getBrand()) + '")';
+        container.className = 'grid-cell-container';
+
+        if (product.isNew()) {
+            container.appendChild(createNewBadge());
+        }
+
+        container.appendChild(wrapIntoProductLink(productImage, productUrl));
+        container.appendChild(wrapIntoProductLink(title, productUrl));
+        container.appendChild(gender);
+        container.appendChild(createPricesBlock(product));
+
+        productLi.appendChild(container);
+
+        return productLi;
+    }
+
     return {
         renderGrid: function (productGridJson, productGridPlaceholderSelector) {
             var productGridPlaceholder = document.querySelector(productGridPlaceholderSelector);
@@ -82,33 +112,7 @@ define(['product'], function (Product) {
             grid.className = 'products-grid';
 
             productGridJson.map(function (productSourceData) {
-
-                var product = new Product(productSourceData),
-                    mainImage = product.getMainImage(),
-                    productLi = document.createElement('LI'),
-                    container = document.createElement('DIV'),
-                    title = document.createElement('H2'),
-                    gender = document.createElement('P'),
-                    productUrl = baseUrl + product.getUrlKey(),
-                    productImage = createProductImage(mainImage['url'], mainImage['label']);
-
-                title.textContent = product.getName();
-                gender.textContent = turnIntoStringIfIsArray(product.getGender());
-
-                container.style.backgroundImage = 'url("' + getBrandLogoSrc(product.getBrand()) + '")';
-                container.className = 'grid-cell-container';
-
-                if (product.isNew()) {
-                    container.appendChild(createNewBadge());
-                }
-
-                container.appendChild(wrapIntoProductLink(productImage, productUrl));
-                container.appendChild(wrapIntoProductLink(title, productUrl));
-                container.appendChild(gender);
-                container.appendChild(createPricesBlock(product));
-
-                productLi.appendChild(container);
-                grid.appendChild(productLi);
+                grid.appendChild(createGridItem(productSourceData));
             });
 
             productGridPlaceholder.appendChild(grid);
