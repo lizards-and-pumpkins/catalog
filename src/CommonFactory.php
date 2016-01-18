@@ -1053,7 +1053,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new ProductSearchDocumentBuilder(
             $indexAttributeCodes,
-            $this->getMasterFactory()->createAttributeValueCollectorLocator()
+            $this->getMasterFactory()->createAttributeValueCollectorLocator(),
+            $this->getMasterFactory()->createTaxableCountries(),
+            $this->getMasterFactory()->createTaxServiceLocator()
         );
     }
 

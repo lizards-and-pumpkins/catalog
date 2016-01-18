@@ -10,6 +10,9 @@ use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\Tax\TaxService;
+use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\TaxableCountries;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
@@ -21,10 +24,29 @@ use LizardsAndPumpkins\Product\ProductId;
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    private $dummyTaxableCountries = ['DE', 'UK'];
+
+    private $dummyPriceInclTax = '12199';
+
     /**
      * @var AttributeValueCollectorLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubValueCollectorLocator;
+
+    /**
+     * @var TaxableCountries|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTaxableCountries;
+
+    /**
+     * @var TaxServiceLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTaxServiceLocator;
+
+    /**
+     * @var TaxService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTaxService;
 
     /**
      * @param array[] $attributesMap
@@ -47,6 +69,16 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
             return false;
         });
+//        $stubProduct->method('getFirstValueOfAttribute')
+//            ->willReturnCallback(function ($attributeCode) use ($attributesMap) {
+//                foreach ($attributesMap as $attributeMap) {
+//                    if ($attributeMap[0] === $attributeCode) {
+//                        return (string) reset($attributeMap[1]);
+//                    }
+//                }
+//
+//                return '';
+//            });
 
         return $stubProduct;
     }
@@ -68,11 +100,22 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createInstance(array $searchableAttributes)
     {
-        return new ProductSearchDocumentBuilder($searchableAttributes, $this->stubValueCollectorLocator);
+        return new ProductSearchDocumentBuilder(
+            $searchableAttributes,
+            $this->stubValueCollectorLocator,
+            $this->stubTaxableCountries,
+            $this->stubTaxServiceLocator
+        );
     }
 
     protected function setUp()
     {
+        $this->stubTaxableCountries = $this->getMock(TaxableCountries::class);
+        $this->stubTaxableCountries->method('getCountries')->willReturn($this->dummyTaxableCountries);
+        $this->stubTaxService = $this->getMock(TaxService::class);
+        $this->stubTaxService->method('applyTo')->willReturn($this->dummyPriceInclTax);
+        $this->stubTaxServiceLocator = $this->getMock(TaxServiceLocator::class);
+        $this->stubTaxServiceLocator->method('get')->willReturn($this->stubTaxService);
         $this->stubValueCollectorLocator = $this->getMock(AttributeValueCollectorLocator::class, [], [], '', false);
         $this->stubValueCollectorLocator->method('forProduct')
             ->willReturn(new DefaultAttributeValueCollector());
@@ -150,5 +193,22 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(SearchDocument::class, $result);
         $this->assertDocumentContainsField($result, 'product_id', [(string) $stubProduct->getId()]);
+    }
+
+    public function testItAddsThePriceIncludingTaxForEachTaxableCountry()
+    {
+        $priceField = 'price';
+        $priceExcludingTax = ['100'];
+
+        $attributesMap = [[$priceField, $priceExcludingTax]];
+        $stubProduct = $this->createStubProduct($attributesMap);
+
+        $searchDocumentBuilder = $this->createInstance([$priceField]);
+        $result = $searchDocumentBuilder->aggregate($stubProduct);
+
+        foreach ($this->dummyTaxableCountries as $countryCode) {
+            $priceWithTaxField = 'price_incl_tax_' . strtolower($countryCode);
+            $this->assertDocumentContainsField($result, $priceWithTaxField, [$this->dummyPriceInclTax]);
+        }
     }
 }
