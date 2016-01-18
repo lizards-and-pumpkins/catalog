@@ -11,11 +11,7 @@ $mpn = $this->getFirstValueOfProductAttribute('mpn');
 $sku = $mpn ? $mpn : $this->getProductId();
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
-
 $productImageCount = $this->getProductImageCount();
-
-/* TODO: Implement calculation of save */
-$save = 0;
 
 ?>
 <div itemscope itemtype="http://schema.org/Product">
@@ -166,23 +162,7 @@ $save = 0;
 
     <script type="text/javascript">
 
-        var html = '<li style="background-image:url(\'/media/brands/brands-small/<?= $brandLogo ?>\')" class="item">';
-        html += '<div class="grid-cell-container">';
-        html += '<a href="<?= $this->getProductUrl() ?>" class="product-image"><img src="<?= $this->getMainProductImageUrl('medium') ?>" width="188" height="115" alt="<?= $this->getMainProductImageLabel() ?>"/></a>';
-        html += '<h2 class="product-name"><a href="<?= $this->getProductUrl() ?>"><?= $this->getFirstValueOfProductAttribute('name') ?></a></h2>';
-        html += '<a href="<?= $this->getProductUrl() ?>"><?= $this->getChildOutput('price') ?></a>';
-        <?php if ($gender) : ?>
-        html += '<p class="product-category"><a href="<?= $this->getProductUrl() ?>"><?= is_array($gender) ? implode(',', $gender) : $gender ?></a></p>';
-        <?php endif; ?>
-        <?php if ($save > 0) : ?>
-        html += '<p class="you-save"><a href="<?= $this->getProductUrl() ?>"><?= sprintf($this->__('You save %s'), '<strong>' . $save . '%</strong>') ?></a></p>';
-        <?php endif; ?>
-        html += '</div>';
-        html += '</li>';
-
         var product = <?= $this->getChildOutput('product_json') ?>;
-        product.html = html;
-        product.sku = product.product_id;
         var variation_attributes = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE) ?>;
         var associated_products = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE) ?>;
 

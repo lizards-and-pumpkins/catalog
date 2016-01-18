@@ -8,7 +8,7 @@ define(['../../pub/js/product'], function (Product) {
         var product;
 
         it('SKU is returned', function () {
-            product = new Product({"sku": 'foo', "attributes": {}});
+            product = new Product({"product_id": 'foo', "attributes": {}});
             expect(product.getSku()).toBe('foo');
         });
 

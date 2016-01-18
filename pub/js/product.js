@@ -24,7 +24,7 @@ define(function () {
         this.product = productSourceData;
 
         this.getSku = function () {
-            return this.product['sku'];
+            return this.product['product_id'];
         };
 
         this.getName = function () {
