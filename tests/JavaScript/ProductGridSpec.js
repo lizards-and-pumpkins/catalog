@@ -122,106 +122,109 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
             });
         });
 
-        it('product has a "new" badge if it is new', function () {
-            var testProductData = getTestProductData(),
-                testNewProductData = getTestProductDataWithProductNewInformation();
+        describe('product', function () {
+            it('has a "new" badge if it is new', function () {
+                var testProductData = getTestProductData(),
+                    testNewProductData = getTestProductDataWithProductNewInformation();
 
-            ProductGrid.renderGrid([testNewProductData, testProductData], gridContainerSelector);
-            var gridItemContainers = document.querySelectorAll(gridContainerSelector + ' > ul > li > div'),
-                gridItemContainersArray = Array.prototype.slice.call(gridItemContainers),
-                newBadgeHtml = '<span class="new-product">NEW</span>';
+                ProductGrid.renderGrid([testNewProductData, testProductData], gridContainerSelector);
+                var gridItemContainers = document.querySelectorAll(gridContainerSelector + ' > ul > li > div'),
+                    gridItemContainersArray = Array.prototype.slice.call(gridItemContainers),
+                    newBadgeHtml = '<span class="new-product">NEW</span>';
 
-            expect(gridItemContainersArray[0].innerHTML).toContain(newBadgeHtml);
-            expect(gridItemContainersArray[1].innerHTML).not.toContain(newBadgeHtml);
-        });
-
-        it('product has an image wrapped product link', function () {
-            ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
-            var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
-
-            Array.prototype.map.call(gridItems, function (gridItem) {
-                var imageTag = '<img src="' + testProductImageUrl + '" alt="' + testProductImageLabel + '">',
-                    expectedHtml = '<a href="' + baseUrl + testProductUrlKey + '">' + imageTag + '</a>';
-                expect(gridItem.innerHTML).toContain(expectedHtml);
-            });
-        });
-
-        it('product has a title wrapped into H2 tag and product link', function () {
-            ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
-            var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
-
-            Array.prototype.map.call(gridItems, function (gridItem) {
-                var expectedHtml = '<a href="' + baseUrl + testProductUrlKey + '"><h2>' + testProductName + '</h2></a>';
-                expect(gridItem.innerHTML).toContain(expectedHtml);
-            });
-        });
-
-        it('product has a gender wrapped into P tag', function () {
-            ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
-            var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
-
-            Array.prototype.map.call(gridItems, function (gridItem) {
-                var expectedGenderHtml = '<p>' + testProductGenders[0] + '</p>';
-                expect(gridItem.innerHTML).toContain(expectedGenderHtml);
-            });
-        });
-
-        it('product has multiple genders comma concatenated', function () {
-            testProductGenders = ['male', 'female'];
-
-            ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
-            var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
-
-            Array.prototype.map.call(gridItems, function (gridItem) {
-                var expectedGenderHtml = '<p>' + testProductGenders[0] + ', ' + testProductGenders[1] + '</p>';
-                expect(gridItem.innerHTML).toContain(expectedGenderHtml);
-            });
-        });
-
-        it('product has a price', function () {
-            ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
-            var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
-
-            Array.prototype.map.call(gridItems, function (gridItem) {
-                var priceHtml = '<div class="regular-price">' + testProductPrice + '</div>',
-                    expectedHtml = '<div class="price-container">' + priceHtml + '</div>';
-                expect(gridItem.innerHTML).toContain(expectedHtml);
-            });
-        });
-
-        it('product has a price and a special price', function () {
-            var specialPrice = '$17.00',
-                rawSpecialPrice = '1700',
-                productData = getTestProductDataWithSpecialPrice(specialPrice, rawSpecialPrice);
-
-            ProductGrid.renderGrid([productData], gridContainerSelector);
-            var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
-
-            Array.prototype.map.call(gridItems, function (gridItem) {
-                var priceHtml = '<div class="old-price">' + testProductPrice + '</div>',
-                    specialPriceHtml = '<div class="special-price">' + specialPrice + '</div>',
-                    expectedHtml = '<div class="price-container">' + priceHtml + specialPriceHtml + '</div>';
-                expect(gridItem.innerHTML).toContain(expectedHtml);
-            });
-        });
-
-        it('product has a base price', function () {
-            var basePriceUnit = 'G',
-                basePriceAmount = '50',
-                basePriceBaseAmount = '100',
-                productData = getTestProductDataWithBasePrice(basePriceAmount, basePriceUnit, basePriceBaseAmount);
-
-            window.basePricePattern = '%s %s %s';
-
-            ProductGrid.renderGrid([productData], gridContainerSelector);
-            var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
-
-            Array.prototype.map.call(gridItems, function (gridItem) {
-                var expectedHtml = '<div class="base-price">100 G 36</div>';
-                expect(gridItem.innerHTML).toContain(expectedHtml);
+                expect(gridItemContainersArray[0].innerHTML).toContain(newBadgeHtml);
+                expect(gridItemContainersArray[1].innerHTML).not.toContain(newBadgeHtml);
             });
 
-            delete window.basePricePattern;
+            it('has an image wrapped product link', function () {
+                ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    var imageTag = '<img src="' + testProductImageUrl + '" alt="' + testProductImageLabel + '">',
+                        expectedHtml = '<a href="' + baseUrl + testProductUrlKey + '">' + imageTag + '</a>';
+                    expect(gridItem.innerHTML).toContain(expectedHtml);
+                });
+            });
+
+            it('has a title wrapped into H2 tag and product link', function () {
+                ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    var titleHTML = '<h2>' + testProductName + '</h2>',
+                        expectedHtml = '<a href="' + baseUrl + testProductUrlKey + '">' + titleHTML + '</a>';
+                    expect(gridItem.innerHTML).toContain(expectedHtml);
+                });
+            });
+
+            it('has a gender wrapped into P tag', function () {
+                ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    var expectedGenderHtml = '<p>' + testProductGenders[0] + '</p>';
+                    expect(gridItem.innerHTML).toContain(expectedGenderHtml);
+                });
+            });
+
+            it('has multiple genders comma concatenated', function () {
+                testProductGenders = ['male', 'female'];
+
+                ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    var expectedGenderHtml = '<p>' + testProductGenders[0] + ', ' + testProductGenders[1] + '</p>';
+                    expect(gridItem.innerHTML).toContain(expectedGenderHtml);
+                });
+            });
+
+            it('has a price', function () {
+                ProductGrid.renderGrid([getTestProductData()], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    var priceHtml = '<div class="regular-price">' + testProductPrice + '</div>',
+                        expectedHtml = '<div class="price-container">' + priceHtml + '</div>';
+                    expect(gridItem.innerHTML).toContain(expectedHtml);
+                });
+            });
+
+            it('has a price and a special price', function () {
+                var specialPrice = '$17.00',
+                    rawSpecialPrice = '1700',
+                    productData = getTestProductDataWithSpecialPrice(specialPrice, rawSpecialPrice);
+
+                ProductGrid.renderGrid([productData], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    var priceHtml = '<div class="old-price">' + testProductPrice + '</div>',
+                        specialPriceHtml = '<div class="special-price">' + specialPrice + '</div>',
+                        expectedHtml = '<div class="price-container">' + priceHtml + specialPriceHtml + '</div>';
+                    expect(gridItem.innerHTML).toContain(expectedHtml);
+                });
+            });
+
+            it('has a base price', function () {
+                var basePriceUnit = 'G',
+                    basePriceAmount = '50',
+                    basePriceBaseAmount = '100',
+                    productData = getTestProductDataWithBasePrice(basePriceAmount, basePriceUnit, basePriceBaseAmount);
+
+                window.basePricePattern = '%s %s %s';
+
+                ProductGrid.renderGrid([productData], gridContainerSelector);
+                var gridItems = document.querySelectorAll(gridContainerSelector + ' > ul > li');
+
+                Array.prototype.map.call(gridItems, function (gridItem) {
+                    var expectedHtml = '<div class="base-price">100 G 36</div>';
+                    expect(gridItem.innerHTML).toContain(expectedHtml);
+                });
+
+                delete window.basePricePattern;
+            });
         });
     });
 });
