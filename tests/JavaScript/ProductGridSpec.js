@@ -79,9 +79,9 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
         });
 
         it('is not rendered if non existing container selector is specified', function () {
-            var documentBefore = document;
+            var documentBodyHtmlBefore = document.body.innerHTML;
             ProductGrid.renderGrid([], 'non-existing-selector');
-            expect(document).toBe(documentBefore);
+            expect(document.body.innerHTML).toBe(documentBodyHtmlBefore);
         });
 
         it('is an empty unordered list if there are no products', function () {
