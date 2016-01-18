@@ -103,7 +103,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return array[]
      */
-    public function getProductListingFilterNavigationConfig()
+    public function getProductListingFilterNavigationFields()
     {
         return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
@@ -116,7 +116,7 @@ class IntegrationTestFactory implements Factory
     /**
      * @return array[]
      */
-    public function getProductSearchResultsFilterNavigationConfig()
+    public function getProductSearchResultsFilterNavigationFields()
     {
         return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),

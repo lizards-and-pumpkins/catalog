@@ -8,7 +8,6 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
@@ -75,7 +74,7 @@ class TwentyOneRunFactory implements Factory
     /**
      * @return FacetFiltersToIncludeInResult
      */
-    public function getProductListingFilterNavigationConfig()
+    public function getProductListingFilterNavigationFields()
     {
         return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
@@ -95,7 +94,7 @@ class TwentyOneRunFactory implements Factory
     /**
      * @return FacetFiltersToIncludeInResult
      */
-    public function getProductSearchResultsFilterNavigationConfig()
+    public function getProductSearchResultsFilterNavigationFields()
     {
         return new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),

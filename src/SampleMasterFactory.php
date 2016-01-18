@@ -35,7 +35,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method Context\Context createContext
  * @method DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder createSearchCriteriaBuilder
  * @method string[] getSearchableAttributeCodes
- * @method array[] getProductListingFilterNavigationConfig
+ * @method array[] getProductListingFilterNavigationFields
  * @method ContentDelivery\Catalog\ProductsPerPage getProductsPerPageConfig
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductListingSortOrderConfig
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductSearchSortOrderConfig

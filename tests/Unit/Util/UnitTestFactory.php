@@ -72,7 +72,7 @@ class UnitTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationConfig()
+    public function getProductListingFilterNavigationFields()
     {
         return new FacetFiltersToIncludeInResult();
     }
@@ -80,7 +80,7 @@ class UnitTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationConfig()
+    public function getProductSearchResultsFilterNavigationFields()
     {
         return new FacetFiltersToIncludeInResult();
     }

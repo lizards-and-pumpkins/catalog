@@ -1046,8 +1046,8 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $indexAttributeCodes = array_unique(array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
-            $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings(),
+            $this->getMasterFactory()->getProductListingFilterNavigationFields()->getAttributeCodeStrings(),
+            $this->getMasterFactory()->getProductSearchResultsFilterNavigationFields()->getAttributeCodeStrings(),
             $this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
         ));
 

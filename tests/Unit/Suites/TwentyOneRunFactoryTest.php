@@ -134,13 +134,13 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
-        $result = $this->factory->getProductListingFilterNavigationConfig();
+        $result = $this->factory->getProductListingFilterNavigationFields();
         $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
+        $result = $this->factory->getProductSearchResultsFilterNavigationFields();
         $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
