@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
@@ -35,7 +36,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method Context\Context createContext
  * @method DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder createSearchCriteriaBuilder
  * @method string[] getSearchableAttributeCodes
- * @method array[] getProductListingFilterNavigationFields
+ * @method FacetFiltersToIncludeInResult createProductListingFacetFiltersToIncludeInResult
  * @method ContentDelivery\Catalog\ProductsPerPage getProductsPerPageConfig
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductListingSortOrderConfig
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductSearchSortOrderConfig

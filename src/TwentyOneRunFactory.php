@@ -8,7 +8,10 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
@@ -72,42 +75,65 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @return FacetFiltersToIncludeInResult
+     * @param Context $context
+     * @return FacetFilterRequestField[]
      */
-    public function getProductListingFilterNavigationFields()
+    public function getProductListingFacetFilterRequestFields(Context $context)
     {
-        return new FacetFiltersToIncludeInResult(
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestRangedField(
-                AttributeCode::fromString('price'),
-                ...FilterNavigationPriceRangesBuilder::getPriceRanges()
-            ),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('series')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        return array_merge(
+            $this->getCommonFacetFilterRequestFields(),
+            [$this->createPriceRangeFacetFilterField($context)]
         );
     }
 
     /**
-     * @return FacetFiltersToIncludeInResult
+     * @param Context $context
+     * @return FacetFilterRequestField[]
      */
-    public function getProductSearchResultsFilterNavigationFields()
+    public function getProductSearchFacetFilterRequestFields(Context $context)
     {
-        return new FacetFiltersToIncludeInResult(
+        return array_merge(
+            $this->getCommonFacetFilterRequestFields(),
+            [$this->createPriceRangeFacetFilterField($context)]
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFacetFilterRequestFieldCodesForSearchDocuments()
+    {
+        return array_map(function (FacetFilterRequestField $field) {
+            return (string) $field->getAttributeCode();
+        }, $this->getCommonFacetFilterRequestFields());
+    }
+
+    /**
+     * @return FacetFilterRequestField[]
+     */
+    private function getCommonFacetFilterRequestFields()
+    {
+        return [
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestRangedField(
-                AttributeCode::fromString('price'),
-                ...FilterNavigationPriceRangesBuilder::getPriceRanges()
-            ),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('series')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        ];
+    }
+
+    /**
+     * @param Context $context
+     * @return FacetFilterRequestField
+     */
+    private function createPriceRangeFacetFilterField(Context $context)
+    {
+        $fieldCode = 'price_incl_tax_' . strtolower($context->getValue(ContextLocale::CODE));
+        return new FacetFilterRequestRangedField(
+            AttributeCode::fromString($fieldCode),
+            ...FilterNavigationPriceRangesBuilder::getPriceRanges()
         );
     }
 

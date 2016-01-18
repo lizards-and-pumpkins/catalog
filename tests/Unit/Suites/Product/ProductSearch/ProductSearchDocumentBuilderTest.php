@@ -69,16 +69,6 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
             return false;
         });
-//        $stubProduct->method('getFirstValueOfAttribute')
-//            ->willReturnCallback(function ($attributeCode) use ($attributesMap) {
-//                foreach ($attributesMap as $attributeMap) {
-//                    if ($attributeMap[0] === $attributeCode) {
-//                        return (string) reset($attributeMap[1]);
-//                    }
-//                }
-//
-//                return '';
-//            });
 
         return $stubProduct;
     }

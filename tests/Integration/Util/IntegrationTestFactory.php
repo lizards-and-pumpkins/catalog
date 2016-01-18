@@ -7,8 +7,10 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
@@ -101,30 +103,45 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return array[]
+     * @param Context $context
+     * @return FacetFilterRequestField[]
      */
-    public function getProductListingFilterNavigationFields()
+    public function getProductListingFacetFilterRequestFields(Context $context)
     {
-        return new FacetFiltersToIncludeInResult(
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
-        );
+        return $this->getCommonFacetFilterRequestFields();
     }
 
     /**
-     * @return array[]
+     * @param Context $context
+     * @return FacetFilterRequestField[]
      */
-    public function getProductSearchResultsFilterNavigationFields()
+    public function getProductSearchFacetFilterRequestFields(Context $context)
     {
-        return new FacetFiltersToIncludeInResult(
+        return $this->getCommonFacetFilterRequestFields();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFacetFilterRequestFieldCodesForSearchDocuments()
+    {
+        return array_map(function (FacetFilterRequestField $field) {
+            return (string) $field->getAttributeCode();
+        }, $this->getCommonFacetFilterRequestFields());
+    }
+
+    /**
+     * @return FacetFilterRequestField[]
+     */
+    private function getCommonFacetFilterRequestFields()
+    {
+        return [
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
-        );
+        ];
     }
 
     /**

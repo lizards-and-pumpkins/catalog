@@ -14,6 +14,7 @@ use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTr
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -148,6 +149,19 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createProductListingRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
+    }
+
+    
+    public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
+    {
+        $result = $this->frontendFactory->createProductListingFacetFiltersToIncludeInResult();
+        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
+    }
+
+    public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
+    {
+        $result = $this->frontendFactory->createProductSearchFacetFiltersToIncludeInResult();
+        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testSameKeyGeneratorLocatorIsReturnedViaGetter()

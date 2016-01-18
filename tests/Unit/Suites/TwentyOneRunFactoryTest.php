@@ -5,7 +5,9 @@ namespace LizardsAndPumpkins\Tests\Integration;
 use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
@@ -132,16 +134,65 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnly('string', $result);
     }
 
-    public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
+    /**
+     * @param string $fieldName
+     * @dataProvider facetFieldsToIncludeInResultProvider
+     */
+    public function testItReturnsAListOfFacetFilterRequestFieldsForTheProductListings($fieldName)
     {
-        $result = $this->factory->getProductListingFilterNavigationFields();
-        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $fieldCodes = array_map(function (FacetFilterRequestField $field) {
+            return $field->getAttributeCode();
+        }, $this->factory->getProductListingFacetFilterRequestFields($stubContext));
+        $this->assertContains($fieldName, $fieldCodes);
     }
 
-    public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
+    /**
+     * @param string $fieldName
+     * @dataProvider facetFieldsToIncludeInResultProvider
+     */
+    public function testItReturnsAListOfFacetFilterRequestFieldsForTheSearchResults($fieldName)
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationFields();
-        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $fieldCodes = array_map(function (FacetFilterRequestField $field) {
+            return $field->getAttributeCode();
+        }, $this->factory->getProductSearchFacetFilterRequestFields($stubContext));
+        $this->assertContains($fieldName, $fieldCodes);
+    }
+
+    /**
+     * @param string $fieldName
+     * @dataProvider facetFieldsToIndexProvider
+     */
+    public function testItReturnsAListOfFacetFilterCodesForSearchDocuments($fieldName)
+    {
+        $this->assertContains($fieldName, $this->factory->getFacetFilterRequestFieldCodesForSearchDocuments());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function facetFieldsToIncludeInResultProvider()
+    {
+        return array_merge($this->facetFieldsToIndexProvider(), [['price_incl_tax_de']]);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function facetFieldsToIndexProvider()
+    {
+        return [
+            ['gender'],
+            ['product_group'],
+            ['style'],
+            ['brand'],
+            ['series'],
+            ['size'],
+            ['color'],
+        ];
     }
 
     public function testArrayOfAdditionalAttributeCodesForSearchEngineIsReturned()
@@ -190,7 +241,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createProductDetailsPageImageProcessor());
     }
-    
+
     public function testProductDetailsPageImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
@@ -203,7 +254,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createProductListingImageProcessor());
     }
-    
+
     public function testProductListingImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
@@ -216,7 +267,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createGalleyThumbnailImageProcessor());
     }
-    
+
     public function testGalleyThumbnailImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(

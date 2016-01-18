@@ -23,6 +23,7 @@ use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTr
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRouter;
@@ -192,10 +193,28 @@ class FrontendFactory implements Factory
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator(),
-            $this->getMasterFactory()->getProductListingFilterNavigationFields(),
+            $this->getMasterFactory()->createProductListingFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest()
         );
+    }
+
+    /**
+     * @return FacetFiltersToIncludeInResult
+     */
+    public function createProductListingFacetFiltersToIncludeInResult()
+    {
+        $facetFields = $this->getMasterFactory()->getProductListingFacetFilterRequestFields($this->createContext());
+        return new FacetFiltersToIncludeInResult(...$facetFields);
+    }
+
+    /**
+     * @return FacetFiltersToIncludeInResult
+     */
+    public function createProductSearchFacetFiltersToIncludeInResult()
+    {
+        $facetFields = $this->getMasterFactory()->getProductSearchFacetFilterRequestFields($this->createContext());
+        return new FacetFiltersToIncludeInResult(...$facetFields);
     }
 
     /**
@@ -400,7 +419,7 @@ class FrontendFactory implements Factory
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
-            $this->getMasterFactory()->getProductSearchResultsFilterNavigationFields(),
+            $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
