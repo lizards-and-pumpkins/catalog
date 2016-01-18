@@ -6,7 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilde
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\EuroPriceRangeTransformation;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\TwentyOneRunFacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
@@ -614,15 +614,15 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @return TwentyOneRunFacetFieldToRequestParameterMap
+     * @return SearchFieldToRequestParamMap
      */
-    public function createFacetFieldToRequestParameterMap(Context $context)
+    public function createSearchFieldToRequestParamMap(Context $context)
     {
         $queryParameter = 'price';
         $facetField = $this->getPriceFacetFieldNameForContext($context);
         $facetFieldToQueryParameterMap = [$facetField => $queryParameter];
         $queryParameterToFacetFieldMap = [$queryParameter => $facetField];
-        return new TwentyOneRunFacetFieldToRequestParameterMap(
+        return new SearchFieldToRequestParamMap(
             $facetFieldToQueryParameterMap,
             $queryParameterToFacetFieldMap
         );

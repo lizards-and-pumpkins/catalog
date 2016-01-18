@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
@@ -38,14 +38,14 @@ class ProductListingPageContentBuilder
     private $productJsonService;
 
     /**
-     * @var FacetFieldToRequestParameterMap
+     * @var SearchFieldToRequestParamMap
      */
-    private $facetFieldToRequestParameterMap;
+    private $searchFieldToRequestParamMap;
 
     public function __construct(
         ProductJsonService $productJsonService,
         PageBuilder $pageBuilder,
-        FacetFieldToRequestParameterMap $facetFieldToRequestParameterMap,
+        SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
         TranslatorRegistry $translatorRegistry,
         SortOrderConfig ...$sortOrderConfigs
     ) {
@@ -53,7 +53,7 @@ class ProductListingPageContentBuilder
         $this->pageBuilder = $pageBuilder;
         $this->sortOrderConfigs = $sortOrderConfigs;
         $this->translatorRegistry = $translatorRegistry;
-        $this->facetFieldToRequestParameterMap = $facetFieldToRequestParameterMap;
+        $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
 
     /**
@@ -96,7 +96,7 @@ class ProductListingPageContentBuilder
         $externalFacetFields = count($facetFields) === 0 ?
             [] :
             array_reduce(array_keys($facetFields), function ($carry, $fieldName) use ($facetFields) {
-                $parameterName = $this->facetFieldToRequestParameterMap->getQueryParameterName($fieldName);
+                $parameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($fieldName);
                 return array_merge($carry, [$parameterName => $facetFields[$fieldName]]);
             }, []);
         

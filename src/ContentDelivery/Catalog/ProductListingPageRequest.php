@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Product\AttributeCode;
@@ -22,9 +22,9 @@ class ProductListingPageRequest
     const PAGINATION_QUERY_PARAMETER_NAME = 'p';
 
     /**
-     * @var FacetFieldToRequestParameterMap
+     * @var SearchFieldToRequestParamMap
      */
-    private $facetFieldToRequestParameterMap;
+    private $searchFieldToRequestParamMap;
 
     /**
      * @var SortOrderConfig[]
@@ -38,12 +38,12 @@ class ProductListingPageRequest
 
     public function __construct(
         ProductsPerPage $productsPerPage,
-        FacetFieldToRequestParameterMap $facetFieldToRequestParameterMap,
+        SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
         SortOrderConfig ...$sortOrderConfigs
     ) {
         $this->productsPerPage = $productsPerPage;
         $this->sortOrderConfigs = $sortOrderConfigs;
-        $this->facetFieldToRequestParameterMap = $facetFieldToRequestParameterMap;
+        $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
 
     /**
@@ -64,7 +64,7 @@ class ProductListingPageRequest
     {
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         return array_reduce($facetFilterAttributeCodeStrings, function (array $carry, $filterName) use ($request) {
-            $queryParameterName = $this->facetFieldToRequestParameterMap->getQueryParameterName($filterName);
+            $queryParameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($filterName);
             $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($queryParameterName)));
             return $carry;
         }, []);

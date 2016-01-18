@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
@@ -29,7 +29,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\TwentyOneRunFacetFieldToRequestParameterMap
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
@@ -355,11 +355,11 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ImageStorage::class, $this->factory->createImageStorage());
     }
 
-    public function testItReturnsAFacetFieldToRequestParameterMap()
+    public function testItReturnsASearchFieldToRequestParamMap()
     {
         $stubContext = $this->getMock(Context::class);
-        $result = $this->factory->createFacetFieldToRequestParameterMap($stubContext);
-        $this->assertInstanceOf(FacetFieldToRequestParameterMap::class, $result);
+        $result = $this->factory->createSearchFieldToRequestParamMap($stubContext);
+        $this->assertInstanceOf(SearchFieldToRequestParamMap::class, $result);
     }
 
     public function testItReturnsThePriceFacetFieldName()

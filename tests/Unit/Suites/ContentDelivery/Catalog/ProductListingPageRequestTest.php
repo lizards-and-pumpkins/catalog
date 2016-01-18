@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -43,9 +43,9 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     private $stubRequest;
 
     /**
-     * @var FacetFieldToRequestParameterMap|MockObject
+     * @var SearchFieldToRequestParamMap|MockObject
      */
-    private $stubFacetFieldToRequestParameterMap;
+    private $stubSearchFieldToRequestParamMap;
 
     /**
      * @param string $name
@@ -71,10 +71,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->stubFacetFieldToRequestParameterMap = $this->getMock(FacetFieldToRequestParameterMap::class);
+        $class = SearchFieldToRequestParamMap::class;
+        $this->stubSearchFieldToRequestParamMap = $this->getMock($class, [], [], '', false);
         $this->pageRequest = new ProductListingPageRequest(
             $this->stubProductsPerPage,
-            $this->stubFacetFieldToRequestParameterMap,
+            $this->stubSearchFieldToRequestParamMap,
             $this->stubSortOrderConfig
         );
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -100,7 +101,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectedFiltersArrayIsReturned()
     {
-        $this->stubFacetFieldToRequestParameterMap->method('getQueryParameterName')->willReturnArgument(0);
+        $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')->willReturnArgument(0);
         
         $filterAName = 'foo';
         $filterBName = 'bar';
@@ -272,7 +273,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $stubFacetFiltersToIncludeInResult = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
         $stubFacetFiltersToIncludeInResult->method('getAttributeCodeStrings')->willReturn(['price_with_tax']);
 
-        $this->stubFacetFieldToRequestParameterMap->method('getQueryParameterName')->willReturnMap([
+        $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')->willReturnMap([
             ['price_with_tax', 'price'],
         ]);
 

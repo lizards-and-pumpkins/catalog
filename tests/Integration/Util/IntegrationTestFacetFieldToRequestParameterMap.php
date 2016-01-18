@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 
-class IntegrationTestFacetFieldToRequestParameterMap implements FacetFieldToRequestParameterMap
+class IntegrationTestSearchFieldToRequestParamMap implements SearchFieldToRequestParamMap
 {
     /**
      * @param string $requestParameterName

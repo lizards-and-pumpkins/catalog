@@ -225,7 +225,7 @@ class FrontendFactory implements Factory
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->createFacetFieldToRequestParameterMap($this->createContext()),
+            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
             $this->getMasterFactory()->getTranslatorRegistry(),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
@@ -238,7 +238,7 @@ class FrontendFactory implements Factory
     {
         return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
-            $this->getMasterFactory()->createFacetFieldToRequestParameterMap($this->createContext()),
+            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
     }

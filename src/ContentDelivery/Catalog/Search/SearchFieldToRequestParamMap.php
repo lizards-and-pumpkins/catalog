@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search;
 
-class TwentyOneRunFacetFieldToRequestParameterMap implements FacetFieldToRequestParameterMap
+class SearchFieldToRequestParamMap
 {
     /**
      * @var string[]

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
@@ -378,10 +378,10 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return FacetFieldToRequestParameterMap
+     * @return SearchFieldToRequestParamMap
      */
-    public function createFacetFieldToRequestParameterMap()
+    public function createSearchFieldToRequestParamMap()
     {
-        return $this->mockObjectGenerator->getMock(FacetFieldToRequestParameterMap::class);
+        return $this->mockObjectGenerator->getMock(SearchFieldToRequestParamMap::class, [], [], '', false);
     }
 }

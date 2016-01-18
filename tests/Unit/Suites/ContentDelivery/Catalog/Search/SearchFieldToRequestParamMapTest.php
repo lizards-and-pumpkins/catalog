@@ -2,10 +2,10 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search;
 
-class TwentyOneRunFacetFieldToRequestParameterMapTest extends \PHPUnit_Framework_TestCase
+class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var TwentyOneRunFacetFieldToRequestParameterMap
+     * @var SearchFieldToRequestParamMap
      */
     private $map;
 
@@ -19,15 +19,15 @@ class TwentyOneRunFacetFieldToRequestParameterMapTest extends \PHPUnit_Framework
             'query_parameter_a' => 'facet_field_b',
             'query_parameter_c' => 'facet_field_d',
         ];
-        $this->map = new TwentyOneRunFacetFieldToRequestParameterMap(
+        $this->map = new SearchFieldToRequestParamMap(
             $facetFieldToQueryParameterMap,
             $queryParameterToFacetFieldMap
         );
     }
     
-    public function testItIsAFacetFieldToRequestParameterMap()
+    public function testItIsASearchFieldToRequestParamMap()
     {
-        $this->assertInstanceOf(FacetFieldToRequestParameterMap::class, $this->map);
+        $this->assertInstanceOf(SearchFieldToRequestParamMap::class, $this->map);
     }
 
     public function testItReturnsTheMatchingQueryParameter()

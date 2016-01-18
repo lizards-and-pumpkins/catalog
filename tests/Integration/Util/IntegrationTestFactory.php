@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
@@ -513,10 +513,10 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return FacetFieldToRequestParameterMap
+     * @return SearchFieldToRequestParamMap
      */
-    public function createFacetFieldToRequestParameterMap()
+    public function createSearchFieldToRequestParamMap()
     {
-        return new IntegrationTestFacetFieldToRequestParameterMap();
+        return new IntegrationTestSearchFieldToRequestParamMap();
     }
 }
