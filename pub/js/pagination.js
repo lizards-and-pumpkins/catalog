@@ -38,7 +38,7 @@ define(['lib/url'], function (url) {
             var paginationPlaceholder = document.querySelector(paginationPlaceholderSelector),
                 totalPageCount = Math.ceil(totalNumberOfResults / getSelectedNumberOfProductsPerPage(productsPerPage));
 
-            if (null === paginationPlaceholder) {
+            if (null === paginationPlaceholder || totalPageCount < 2) {
                 return;
             }
 
