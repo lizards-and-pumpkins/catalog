@@ -217,12 +217,25 @@ require([
             if (false === optionIsAlreadyPresent) {
                 carry.push({
                     'value': associatedProduct['attributes'][attributeCode],
+                    'label': getVariationAttributeOptionLabel(associatedProduct['attributes'], attributeCode),
                     'disabled': 0 == associatedProduct['attributes']['stock_qty']
                 });
             }
 
             return carry;
         }, []);
+    }
+
+    function getVariationAttributeOptionLabel(associatedProductAttributes, attributeCode) {
+        if (!associatedProductAttributes.hasOwnProperty(attributeCode)) {
+            return '';
+        }
+
+        if ('size' !== attributeCode || !associatedProductAttributes.hasOwnProperty('size_eu')) {
+            return associatedProductAttributes[attributeCode];
+        }
+
+        return 'US ' + associatedProductAttributes['size'] + ' - EU ' + associatedProductAttributes['size_eu'];
     }
 
     function createSelect(name, options) {
@@ -243,7 +256,7 @@ require([
 
     function createSelectOption(option) {
         var variationOption = document.createElement('OPTION');
-        variationOption.textContent = option['value'];
+        variationOption.textContent = option['label'];
         variationOption.value = option['value'];
 
         if (option['disabled']) {
