@@ -517,6 +517,8 @@ class IntegrationTestFactory implements Factory
      */
     public function createSearchFieldToRequestParamMap()
     {
-        return new IntegrationTestSearchFieldToRequestParamMap();
+        $facetFieldToQueryParameterMap = [];
+        $queryParameterToFacetFieldMap = [];
+        return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
     }
 }
