@@ -1,30 +1,24 @@
 <?php
 
-namespace LizardsAndPumpkins\Tests\Integration;
+namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
-use LizardsAndPumpkins\LocalFilesystemStorageReader;
-use LizardsAndPumpkins\LocalFilesystemStorageWriter;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
-use LizardsAndPumpkins\SampleMasterFactory;
-use LizardsAndPumpkins\TwentyOneRunFactory;
-use LizardsAndPumpkins\TaxableCountries;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
@@ -34,7 +28,8 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
- * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\TwentyOneRunFacetFieldToRequestParameterMap
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
@@ -65,6 +60,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage
  * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\TwentyOneRunTaxableCountries
  */
 class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -357,5 +353,19 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnImageStorage()
     {
         $this->assertInstanceOf(ImageStorage::class, $this->factory->createImageStorage());
+    }
+
+    public function testItReturnsAFacetFieldToRequestParameterMap()
+    {
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->factory->createFacetFieldToRequestParameterMap($stubContext);
+        $this->assertInstanceOf(FacetFieldToRequestParameterMap::class, $result);
+    }
+
+    public function testItReturnsThePriceFacetFieldName()
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $this->assertSame('price_incl_tax_de', $this->factory->getPriceFacetFieldNameForContext($stubContext));
     }
 }

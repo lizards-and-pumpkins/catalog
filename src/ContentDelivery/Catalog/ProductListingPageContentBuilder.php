@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
@@ -36,9 +37,15 @@ class ProductListingPageContentBuilder
      */
     private $productJsonService;
 
+    /**
+     * @var FacetFieldToRequestParameterMap
+     */
+    private $facetFieldToRequestParameterMap;
+
     public function __construct(
         ProductJsonService $productJsonService,
         PageBuilder $pageBuilder,
+        FacetFieldToRequestParameterMap $facetFieldToRequestParameterMap,
         TranslatorRegistry $translatorRegistry,
         SortOrderConfig ...$sortOrderConfigs
     ) {
@@ -46,6 +53,7 @@ class ProductListingPageContentBuilder
         $this->pageBuilder = $pageBuilder;
         $this->sortOrderConfigs = $sortOrderConfigs;
         $this->translatorRegistry = $translatorRegistry;
+        $this->facetFieldToRequestParameterMap = $facetFieldToRequestParameterMap;
     }
 
     /**
@@ -83,9 +91,16 @@ class ProductListingPageContentBuilder
     private function addFilterNavigationSnippetToPageBuilder(FacetFieldCollection $facetFieldCollection)
     {
         $snippetCode = 'filter_navigation';
-        $snippetContents = json_encode($facetFieldCollection);
+        $facetFields = $facetFieldCollection->jsonSerialize();
 
-        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
+        $externalFacetFields = count($facetFields) === 0 ?
+            [] :
+            array_reduce(array_keys($facetFields), function ($carry, $fieldName) use ($facetFields) {
+                $parameterName = $this->facetFieldToRequestParameterMap->getQueryParameterName($fieldName);
+                return array_merge($carry, [$parameterName => $facetFields[$fieldName]]);
+            }, []);
+        
+        $this->addDynamicSnippetToPageBuilder($snippetCode, json_encode($externalFacetFields));
     }
 
     private function addProductsInListingToPageBuilder(Context $context, ProductId ...$productIds)

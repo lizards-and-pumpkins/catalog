@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 

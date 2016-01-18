@@ -3,8 +3,10 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
@@ -16,12 +18,12 @@ use LizardsAndPumpkins\Http\HttpRequest;
 class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductsPerPage|MockObject
      */
     private $stubProductsPerPage;
 
     /**
-     * @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortOrderConfig|MockObject
      */
     private $stubSortOrderConfig;
 
@@ -36,9 +38,14 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     private static $setCookieValues = [];
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $stubRequest;
+
+    /**
+     * @var FacetFieldToRequestParameterMap|MockObject
+     */
+    private $stubFacetFieldToRequestParameterMap;
 
     /**
      * @param string $name
@@ -64,7 +71,12 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->pageRequest = new ProductListingPageRequest($this->stubProductsPerPage, $this->stubSortOrderConfig);
+        $this->stubFacetFieldToRequestParameterMap = $this->getMock(FacetFieldToRequestParameterMap::class);
+        $this->pageRequest = new ProductListingPageRequest(
+            $this->stubProductsPerPage,
+            $this->stubFacetFieldToRequestParameterMap,
+            $this->stubSortOrderConfig
+        );
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
 
@@ -88,16 +100,18 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testSelectedFiltersArrayIsReturned()
     {
+        $this->stubFacetFieldToRequestParameterMap->method('getQueryParameterName')->willReturnArgument(0);
+        
         $filterAName = 'foo';
         $filterBName = 'bar';
 
-        /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
+        /** @var FacetFiltersToIncludeInResult|MockObject $stubFacetFilterRequest */
         $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
         $stubFacetFilterRequest->method('getAttributeCodeStrings')->willReturn([$filterAName, $filterBName]);
 
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [$filterAName, 'baz,qux'],
-            [$filterBName, null]
+            [$filterBName, null],
         ]);
 
         $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $stubFacetFilterRequest);
@@ -206,7 +220,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $selectedNumberOfProductsPerPage = 2;
 
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, $selectedNumberOfProductsPerPage]
+            [ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, $selectedNumberOfProductsPerPage],
         ]);
 
         $this->pageRequest->processCookies($this->stubRequest);
@@ -223,7 +237,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $sortOrderAttributeName = 'foo';
 
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, $sortOrderAttributeName]
+            [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, $sortOrderAttributeName],
         ]);
 
         $this->pageRequest->processCookies($this->stubRequest);
@@ -240,7 +254,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $sortOrderDirection = SortOrderDirection::ASC;
 
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection]
+            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
         ]);
 
         $this->pageRequest->processCookies($this->stubRequest);
@@ -250,6 +264,26 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             $sortOrderDirection,
             ProductListingPageRequest::SORT_DIRECTION_COOKIE_TTL
         );
+    }
+
+    public function testItMapsRequestParametersToFacetFieldNames()
+    {
+        /** @var FacetFiltersToIncludeInResult|MockObject $stubFacetFiltersToIncludeInResult */
+        $stubFacetFiltersToIncludeInResult = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
+        $stubFacetFiltersToIncludeInResult->method('getAttributeCodeStrings')->willReturn(['price_with_tax']);
+
+        $this->stubFacetFieldToRequestParameterMap->method('getQueryParameterName')->willReturnMap([
+            ['price_with_tax', 'price'],
+        ]);
+
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([
+            ['price', '10.00 to 19.99'],
+        ]);
+
+        $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $stubFacetFiltersToIncludeInResult);
+
+        $this->assertArrayHasKey('price_with_tax', $result);
+        $this->assertContains('10.00 to 19.99', $result['price_with_tax']);
     }
 }
 

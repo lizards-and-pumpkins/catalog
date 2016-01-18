@@ -4,9 +4,10 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
@@ -509,5 +510,13 @@ class IntegrationTestFactory implements Factory
             $this->getMasterFactory()->createMediaBaseUrlBuilder(),
             $this->getMasterFactory()->getMediaBaseDirectoryConfig()
         );
+    }
+
+    /**
+     * @return FacetFieldToRequestParameterMap
+     */
+    public function createFacetFieldToRequestParameterMap()
+    {
+        return new IntegrationTestFacetFieldToRequestParameterMap();
     }
 }

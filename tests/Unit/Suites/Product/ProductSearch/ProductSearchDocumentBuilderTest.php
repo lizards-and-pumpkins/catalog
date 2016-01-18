@@ -20,6 +20,7 @@ use LizardsAndPumpkins\TaxableCountries;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Product\Price
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase

@@ -4,8 +4,9 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldToRequestParameterMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
@@ -374,5 +375,13 @@ class UnitTestFactory implements Factory
     private function getCommonFacetFilterRequestFields()
     {
         return [];
+    }
+
+    /**
+     * @return FacetFieldToRequestParameterMap
+     */
+    public function createFacetFieldToRequestParameterMap()
+    {
+        return $this->mockObjectGenerator->getMock(FacetFieldToRequestParameterMap::class);
     }
 }

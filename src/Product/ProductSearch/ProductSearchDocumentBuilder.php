@@ -139,9 +139,9 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
      */
     private function getPriceIncludingTaxForCountry(Product $product, $countryCode)
     {
-        $amountString = (string) $this->getAttributeValuesForSearchDocument($product, 'price')[0];
+        $amount = (int) $this->getAttributeValuesForSearchDocument($product, 'price')[0];
         $options = $this->createTaxServiceLocatorOptions($product, $countryCode);
-        return $this->taxServiceLocator->get($options)->applyTo(Price::fromString($amountString));
+        return $this->taxServiceLocator->get($options)->applyTo(new Price($amount));
     }
 
     /**
