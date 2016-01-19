@@ -90,17 +90,25 @@ class ProductListingPageContentBuilder
 
     private function addFilterNavigationSnippetToPageBuilder(FacetFieldCollection $facetFieldCollection)
     {
-        $snippetCode = 'filter_navigation';
         $facetFields = $facetFieldCollection->jsonSerialize();
-
-        $externalFacetFields = count($facetFields) === 0 ?
-            [] :
-            array_reduce(array_keys($facetFields), function ($carry, $fieldName) use ($facetFields) {
-                $parameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($fieldName);
-                return array_merge($carry, [$parameterName => $facetFields[$fieldName]]);
-            }, []);
+        $externalFacetFields = count($facetFields) > 0 ?
+            $this->replaceInternalWithExternalFieldNames($facetFields) :
+            [];
         
+        $snippetCode = 'filter_navigation';
         $this->addDynamicSnippetToPageBuilder($snippetCode, json_encode($externalFacetFields));
+    }
+
+    /**
+     * @param array[] $facetFields
+     * @return array[]
+     */
+    private function replaceInternalWithExternalFieldNames(array $facetFields)
+    {
+        return array_reduce(array_keys($facetFields), function ($carry, $fieldName) use ($facetFields) {
+            $parameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($fieldName);
+            return array_merge($carry, [$parameterName => $facetFields[$fieldName]]);
+        }, []);
     }
 
     private function addProductsInListingToPageBuilder(Context $context, ProductId ...$productIds)
