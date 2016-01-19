@@ -23,6 +23,10 @@ define(function () {
     return function (productSourceData) {
         this.product = productSourceData;
 
+        this.getSku = function () {
+            return this.product['product_id'];
+        };
+
         this.getName = function () {
             return this.product['attributes']['name'];
         };
@@ -110,6 +114,10 @@ define(function () {
             }
 
             return true;
+        };
+
+        this.getDiscountPercentage = function () {
+            return 100 - Math.round(getRawSpecialPrice(this) * 100 / getRawPrice(this));
         };
     }
 });

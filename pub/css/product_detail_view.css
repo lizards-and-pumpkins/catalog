@@ -4,6 +4,7 @@
 @import "lib/zoom.css";
 @import "lib/dropdown.css";
 @import "lib/modal_box.css";
+@import "lib/overflow_scrolling.css";
 
 .product-essential { background: #f0f0f0; display: table; width: 100% }
 .product-collateral { margin: 30px 0 }

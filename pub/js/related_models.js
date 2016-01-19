@@ -1,7 +1,21 @@
 define(['lib/ajax', 'product_grid', 'lib/swiping_container'], function (callAjax, productGrid, initializeSwiping) {
-    
+
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     return function (productId) {
         callAjax(baseUrl + 'api/products/' + productId + '/relations/related-models', function (responseText) {
+            if (!isJson(responseText)) {
+                console.log('Not a valid JSON:' + responseText);
+                return;
+            }
+
             var productGridJson = JSON.parse(responseText).data;
 
             if (productGridJson.length > 0) {

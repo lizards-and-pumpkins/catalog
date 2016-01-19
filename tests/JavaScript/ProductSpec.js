@@ -7,6 +7,11 @@ define(['../../pub/js/product'], function (Product) {
     describe('Product', function () {
         var product;
 
+        it('SKU is returned', function () {
+            product = new Product({"product_id": 'foo', "attributes": {}});
+            expect(product.getSku()).toBe('foo');
+        });
+
         it('name is returned', function () {
             product = new Product({"attributes": {"name": 'foo'}});
             expect(product.getName()).toBe('foo');
@@ -152,6 +157,11 @@ define(['../../pub/js/product'], function (Product) {
                 }
             });
             expect(product.isNew()).toBe(true);
+        });
+
+        it('discount percentage is returned', function () {
+            product = new Product({"attributes": {"raw_price": '1800', "raw_special_price": '1700'}});
+            expect(product.getDiscountPercentage()).toBe(100 - Math.round(1700 * 100 / 1800));
         });
     });
 });

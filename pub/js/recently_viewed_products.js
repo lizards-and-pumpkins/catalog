@@ -1,26 +1,20 @@
-define(['lib/local_storage'], function(storage) {
+define(['lib/local_storage'], function (storage) {
 
     var storageKey = 'recently-viewed-products',
         numProducts = 4;
 
     function removeProductFromListBySku(list, sku) {
         return list.filter(function (item) {
-            return item['sku'] !== sku;
+            return item['product_id'] !== sku;
         });
     }
 
     return {
-
-        addProductIntoLocalStorage: function(product) {
-
-            if (typeof product == 'undefined') {
-                return;
-            }
-
+        addProductIntoLocalStorage: function (productData) {
             var recentlyViewedProducts = storage.get(storageKey) || [];
 
-            recentlyViewedProducts = removeProductFromListBySku(recentlyViewedProducts, product['sku']);
-            recentlyViewedProducts.unshift(product);
+            recentlyViewedProducts = removeProductFromListBySku(recentlyViewedProducts, productData['product_id']);
+            recentlyViewedProducts.unshift(productData);
 
             if (recentlyViewedProducts.length > numProducts + 1) {
                 recentlyViewedProducts.pop();
@@ -29,22 +23,12 @@ define(['lib/local_storage'], function(storage) {
             storage.set(storageKey, recentlyViewedProducts);
         },
 
-        getRecentlyViewedProductsHtml: function(currentProduct) {
-
+        getRecentlyViewedProductsExceptCurrent: function (currentProduct) {
             var products = storage.get(storageKey) || [];
 
-            var liHtml = products.reduce(function (carry, product, index) {
-                if (currentProduct.hasOwnProperty('sku') && product['sku'] !== currentProduct['sku']) {
-                    var elementHtml = product['html'];
-                    if (index === products.length - 1) {
-                        elementHtml = elementHtml.replace(/class="item"/igm, 'class="item last"');
-                    }
-                    carry += elementHtml;
-                }
-                return carry;
-            }, '');
-
-            return '<ul class="products-grid">' + liHtml + '</ul>';
+            return products.filter(function (product) {
+                return currentProduct.getSku() !== product['product_id'];
+            });
         }
     }
 });

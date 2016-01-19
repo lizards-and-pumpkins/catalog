@@ -8,17 +8,21 @@ require([
     'lib/zoom',
     'lib/swiping_container',
     'lib/modal_box',
+    'lib/overflow_scrolling',
+    'product_grid',
     'ekomi'
 ], function(
     Product,
     domReady,
     common,
-    recentlyViewedProducts,
+    recentlyViewed,
     loadRelatedModels,
     styleSelect,
     zoom,
     initializeSwiping,
-    showModalBox
+    showModalBox,
+    productTitleScrolling,
+    productGrid
 ) {
 
     var tabletWidth = 768,
@@ -43,7 +47,7 @@ require([
         initializeZoom();
         initializeTabs();
         showAvailabilityStatus();
-        loadRelatedModels(window.product.sku);
+        loadRelatedModels(product.getSku());
         bindShippingInfoModalBoxEvent();
     });
 
@@ -267,13 +271,13 @@ require([
     }
 
     function handleRecentlyViewedProducts() {
-        recentlyViewedProducts.addProductIntoLocalStorage(product);
-        var recentlyViewedProductsListHtml = recentlyViewedProducts.getRecentlyViewedProductsHtml(product);
+        recentlyViewed.addProductIntoLocalStorage(window.product);
+        var products = recentlyViewed.getRecentlyViewedProductsExceptCurrent(product);
 
-        if (recentlyViewedProductsListHtml.indexOf('</li>') !== -1) {
-            var container = document.querySelector('#recently-viewed-products .swipe-container');
-            container.innerHTML = recentlyViewedProductsListHtml;
-            container.parentNode.style.display = 'block';
+        if (products.length > 0) {
+            productGrid.renderGrid(products, '#recently-viewed-products .swipe-container');
+            document.getElementById('recently-viewed-products').style.display = 'block';
+            productTitleScrolling('.grid-cell-container h2');
         }
     }
 
