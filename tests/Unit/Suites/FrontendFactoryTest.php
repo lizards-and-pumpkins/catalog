@@ -150,7 +150,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->frontendFactory->createProductListingRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
-
     
     public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
