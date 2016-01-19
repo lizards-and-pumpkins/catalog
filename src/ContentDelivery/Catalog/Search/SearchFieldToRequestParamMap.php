@@ -24,69 +24,91 @@ class SearchFieldToRequestParamMap
         array $searchFieldToQueryParameterMap,
         array $queryParameterToFacetFieldMap
     ) {
-        array_map(function ($searchFieldName, $queryParameterName) {
-            $name = 'Search Field to Query Parameter';
-            $this->validateArrayKeys($searchFieldName, $name);
-            $this->validateArrayValues($queryParameterName, $name);
-        }, array_keys($searchFieldToQueryParameterMap), $searchFieldToQueryParameterMap);
-        array_map(function ($queryParameterName, $searchFieldName) {
-            $name = 'Query Parameter to Search Field';
-            $this->validateArrayKeys($queryParameterName, $name);
-            $this->validateArrayValues($searchFieldName, $name);
-        }, array_keys($queryParameterToFacetFieldMap), $queryParameterToFacetFieldMap);
+        $this->validateSearchFieldToQueryParameterMap($searchFieldToQueryParameterMap);
+        $this->validateQueryParameterToSearchFieldMap($queryParameterToFacetFieldMap);
+        
         $this->searchFieldsToQueryParameters = $searchFieldToQueryParameterMap;
         $this->queryParametersToFacetFields = $queryParameterToFacetFieldMap;
     }
 
     /**
-     * @param mixed $searchFieldName
-     * @param string $name
+     * @param string[] $searchFieldToQueryParameterMap
      */
-    private function validateArrayKeys($searchFieldName, $name)
+    private function validateSearchFieldToQueryParameterMap(array $searchFieldToQueryParameterMap)
     {
-        if (!is_string($searchFieldName)) {
-            throw $this->createInvalidArrayKeyTypeException($searchFieldName, $name);
+        $this->validateArrayMap($searchFieldToQueryParameterMap, 'Search Field to Query Parameter');
+    }
+
+    /**
+     * @param string[] $queryParameterToFacetFieldMap
+     */
+    private function validateQueryParameterToSearchFieldMap(array $queryParameterToFacetFieldMap)
+    {
+        $this->validateArrayMap($queryParameterToFacetFieldMap, 'Query Parameter to Search Field');
+    }
+    
+    /**
+     * @param string[] $map
+     * @param string $nameInExceptions
+     */
+    private function validateArrayMap(array $map, $nameInExceptions)
+    {
+        array_map(function ($key, $value) use ($nameInExceptions) {
+            $this->validateArrayKey($key, $nameInExceptions);
+            $this->validateArrayValue($value, $nameInExceptions);
+        }, array_keys($map), $map);
+    }
+
+    /**
+     * @param mixed $arrayKey
+     * @param string $nameInException
+     */
+    private function validateArrayKey($arrayKey, $nameInException)
+    {
+        if (!is_string($arrayKey)) {
+            throw $this->createInvalidArrayKeyTypeException($arrayKey, $nameInException);
         }
-        if ('' === $searchFieldName) {
-            $message = sprintf('The %s Map must have not have empty string keys', $name);
+        if ('' === $arrayKey) {
+            $message = sprintf('The %s Map must have not have empty string keys', $nameInException);
             throw new InvalidSearchFieldToQueryParameterMapException($message);
         }
     }
 
     /**
-     * @param mixed $queryParameterName
-     * @param string $name
+     * @param mixed $arrayValue
+     * @param string $nameInException
      */
-    private function validateArrayValues($queryParameterName, $name)
+    private function validateArrayValue($arrayValue, $nameInException)
     {
-        if (!is_string($queryParameterName)) {
-            throw $this->createInvalidValueTypeException($queryParameterName, $name);
+        if (!is_string($arrayValue)) {
+            throw $this->createInvalidValueTypeException($arrayValue, $nameInException);
         }
-        if ('' === $queryParameterName) {
-            $message = sprintf('The %s Map must have not have empty string values', $name);
+        if ('' === $arrayValue) {
+            $message = sprintf('The %s Map must have not have empty string values', $nameInException);
             throw new InvalidSearchFieldToQueryParameterMapException($message);
         }
     }
 
     /**
-     * @param mixed $searchFieldName
-     * @param string $name
+     * @param mixed $arrayKey
+     * @param string $nameInException
      * @return InvalidSearchFieldToQueryParameterMapException
      */
-    private function createInvalidArrayKeyTypeException($searchFieldName, $name)
+    private function createInvalidArrayKeyTypeException($arrayKey, $nameInException)
     {
-        $message = sprintf('The %s Map must have string keys, got "%s"', $name, $searchFieldName);
+        $message = sprintf('The %s Map must have string keys, got "%s"', $nameInException, $arrayKey);
         return new InvalidSearchFieldToQueryParameterMapException($message);
     }
 
     /**
-     * @param mixed $queryParameterName
-     * @param string $name
+     * @param mixed $arrayValue
+     * @param string $nameInException
      * @return InvalidSearchFieldToQueryParameterMapException
      */
-    private function createInvalidValueTypeException($queryParameterName, $name)
+    private function createInvalidValueTypeException($arrayValue, $nameInException)
     {
-        $message = sprintf('The %s Map must have string values, got "%s"', $name, $this->getType($queryParameterName));
+        $type = $this->getType($arrayValue);
+        $message = sprintf('The %s Map must have string values, got "%s"', $nameInException, $type);
         return new InvalidSearchFieldToQueryParameterMapException($message);
     }
 
