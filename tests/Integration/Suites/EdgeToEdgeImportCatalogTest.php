@@ -217,7 +217,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         if (count($messages) > 0) {
             array_map(function (LogMessage $message) use ($expectedLoggedErrorMessage) {
                 if ($expectedLoggedErrorMessage != $message) {
-                    $this->fail($message);
+                    $this->fail($message->getContextSynopsis());
                 }
             }, $messages);
         }

@@ -4,13 +4,15 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\EuroPriceRangeTransformation;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\EuroPriceRangeTransformation;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
@@ -73,43 +75,83 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @return FacetFiltersToIncludeInResult
+     * @param Context $context
+     * @return FacetFilterRequestField[]
      */
-    public function getProductListingFilterNavigationConfig()
+    public function getProductListingFacetFilterRequestFields(Context $context)
     {
-        return new FacetFiltersToIncludeInResult(
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestRangedField(
-                AttributeCode::fromString('price'),
-                ...FilterNavigationPriceRangesBuilder::getPriceRanges()
-            ),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('series')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        return array_merge(
+            $this->getCommonFacetFilterRequestFields(),
+            [$this->createPriceRangeFacetFilterField($context)]
         );
     }
 
     /**
-     * @return FacetFiltersToIncludeInResult
+     * @param Context $context
+     * @return FacetFilterRequestField[]
      */
-    public function getProductSearchResultsFilterNavigationConfig()
+    public function getProductSearchFacetFilterRequestFields(Context $context)
     {
-        return new FacetFiltersToIncludeInResult(
+        return array_merge(
+            $this->getCommonFacetFilterRequestFields(),
+            [$this->createPriceRangeFacetFilterField($context)]
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFacetFilterRequestFieldCodesForSearchDocuments()
+    {
+        return array_map(function (FacetFilterRequestField $field) {
+            return (string) $field->getAttributeCode();
+        }, $this->getCommonFacetFilterRequestFields());
+    }
+
+    /**
+     * @return FacetFilterRequestField[]
+     */
+    private function getCommonFacetFilterRequestFields()
+    {
+        return [
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('product_group')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('style')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestRangedField(
-                AttributeCode::fromString('price'),
-                ...FilterNavigationPriceRangesBuilder::getPriceRanges()
-            ),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('series')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('size')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('color')),
+        ];
+    }
+
+    /**
+     * @param Context $context
+     * @return FacetFilterRequestField
+     */
+    private function createPriceRangeFacetFilterField(Context $context)
+    {
+        return new FacetFilterRequestRangedField(
+            AttributeCode::fromString($this->getPriceFacetFieldNameForContext($context)),
+            ...FilterNavigationPriceRangesBuilder::getPriceRanges()
         );
+    }
+
+    /**
+     * @param Context $context
+     * @return string
+     */
+    public function getPriceFacetFieldNameForContext(Context $context)
+    {
+        return $this->getPriceFacetFieldNameForCountry($context->getValue(ContextCountry::CODE));
+    }
+
+    /**
+     * @param string $countryCode
+     * @return string
+     */
+    private function getPriceFacetFieldNameForCountry($countryCode)
+    {
+        return 'price_incl_tax_' . strtolower($countryCode);
     }
 
     /**
@@ -211,8 +253,13 @@ class TwentyOneRunFactory implements Factory
      */
     public function createFacetFieldTransformationRegistry()
     {
-        $registry = new FacetFieldTransformationRegistry;
-        $registry->register('price', new EuroPriceRangeTransformation);
+        $registry = new FacetFieldTransformationRegistry();
+        $priceTransformation = new EuroPriceRangeTransformation();
+        $registry->register('price', $priceTransformation);
+        $countries = $this->getMasterFactory()->createTaxableCountries()->getCountries();
+        array_map(function ($country) use ($registry, $priceTransformation) {
+            $registry->register($this->getPriceFacetFieldNameForCountry($country), $priceTransformation);
+        }, $countries);
 
         return $registry;
     }
@@ -242,10 +289,10 @@ class TwentyOneRunFactory implements Factory
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
         $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
-                          TwentyOneRunProductImageFileLocator::ORIGINAL;
+            TwentyOneRunProductImageFileLocator::ORIGINAL;
 
         $this->createDirectoryIfNotExists($resultImageDir);
-        
+
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
@@ -283,10 +330,10 @@ class TwentyOneRunFactory implements Factory
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
         $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
-                          TwentyOneRunProductImageFileLocator::LARGE;
+            TwentyOneRunProductImageFileLocator::LARGE;
 
         $this->createDirectoryIfNotExists($resultImageDir);
-        
+
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
@@ -313,10 +360,10 @@ class TwentyOneRunFactory implements Factory
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
         $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
-                          TwentyOneRunProductImageFileLocator::MEDIUM;
+            TwentyOneRunProductImageFileLocator::MEDIUM;
 
         $this->createDirectoryIfNotExists($resultImageDir);
-        
+
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
@@ -343,10 +390,10 @@ class TwentyOneRunFactory implements Factory
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
         $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
-                          TwentyOneRunProductImageFileLocator::SMALL;
+            TwentyOneRunProductImageFileLocator::SMALL;
 
         $this->createDirectoryIfNotExists($resultImageDir);
-        
+
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
@@ -373,7 +420,7 @@ class TwentyOneRunFactory implements Factory
         $fileStorageWriter = $this->getMasterFactory()->createFileStorageWriter();
 
         $resultImageDir = $this->getMasterFactory()->getMediaBaseDirectoryConfig() . '/product/' .
-                          TwentyOneRunProductImageFileLocator::SEARCH_AUTOSUGGESTION;
+            TwentyOneRunProductImageFileLocator::SEARCH_AUTOSUGGESTION;
 
         $this->createDirectoryIfNotExists($resultImageDir);
 
@@ -405,7 +452,7 @@ class TwentyOneRunFactory implements Factory
             sys_get_temp_dir() . '/lizards-and-pumpkins' :
             $basePath;
     }
-    
+
     /**
      * @param string $path
      */
@@ -564,5 +611,17 @@ class TwentyOneRunFactory implements Factory
             $this->getMasterFactory()->createMediaBaseUrlBuilder(),
             $this->getMasterFactory()->getMediaBaseDirectoryConfig()
         );
+    }
+
+    /**
+     * @return SearchFieldToRequestParamMap
+     */
+    public function createSearchFieldToRequestParamMap(Context $context)
+    {
+        $queryParameter = 'price';
+        $facetField = $this->getPriceFacetFieldNameForContext($context);
+        $facetFieldToQueryParameterMap = [$facetField => $queryParameter];
+        $queryParameterToFacetFieldMap = [$queryParameter => $facetField];
+        return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
     }
 }

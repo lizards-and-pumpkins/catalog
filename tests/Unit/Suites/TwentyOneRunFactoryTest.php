@@ -1,28 +1,24 @@
 <?php
 
-namespace LizardsAndPumpkins\Tests\Integration;
+namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
-use LizardsAndPumpkins\LocalFilesystemStorageReader;
-use LizardsAndPumpkins\LocalFilesystemStorageWriter;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
-use LizardsAndPumpkins\SampleMasterFactory;
-use LizardsAndPumpkins\TwentyOneRunFactory;
-use LizardsAndPumpkins\TaxableCountries;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
@@ -32,7 +28,8 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
- * @uses   \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
@@ -63,6 +60,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage
  * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\TwentyOneRunTaxableCountries
  */
 class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,16 +130,65 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnly('string', $result);
     }
 
-    public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
+    /**
+     * @param string $fieldName
+     * @dataProvider facetFieldsToIncludeInResultProvider
+     */
+    public function testItReturnsAListOfFacetFilterRequestFieldsForTheProductListings($fieldName)
     {
-        $result = $this->factory->getProductListingFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $fieldCodes = array_map(function (FacetFilterRequestField $field) {
+            return $field->getAttributeCode();
+        }, $this->factory->getProductListingFacetFilterRequestFields($stubContext));
+        $this->assertContains($fieldName, $fieldCodes);
     }
 
-    public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
+    /**
+     * @param string $fieldName
+     * @dataProvider facetFieldsToIncludeInResultProvider
+     */
+    public function testItReturnsAListOfFacetFilterRequestFieldsForTheSearchResults($fieldName)
     {
-        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $fieldCodes = array_map(function (FacetFilterRequestField $field) {
+            return $field->getAttributeCode();
+        }, $this->factory->getProductSearchFacetFilterRequestFields($stubContext));
+        $this->assertContains($fieldName, $fieldCodes);
+    }
+
+    /**
+     * @param string $fieldName
+     * @dataProvider facetFieldsToIndexProvider
+     */
+    public function testItReturnsAListOfFacetFilterCodesForSearchDocuments($fieldName)
+    {
+        $this->assertContains($fieldName, $this->factory->getFacetFilterRequestFieldCodesForSearchDocuments());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function facetFieldsToIncludeInResultProvider()
+    {
+        return array_merge($this->facetFieldsToIndexProvider(), [['price_incl_tax_de']]);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function facetFieldsToIndexProvider()
+    {
+        return [
+            ['gender'],
+            ['product_group'],
+            ['style'],
+            ['brand'],
+            ['series'],
+            ['size'],
+            ['color'],
+        ];
     }
 
     public function testArrayOfAdditionalAttributeCodesForSearchEngineIsReturned()
@@ -190,7 +237,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createProductDetailsPageImageProcessor());
     }
-    
+
     public function testProductDetailsPageImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
@@ -203,7 +250,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createProductListingImageProcessor());
     }
-    
+
     public function testProductListingImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
@@ -216,7 +263,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createGalleyThumbnailImageProcessor());
     }
-    
+
     public function testGalleyThumbnailImageProcessingStrategySequenceIsReturned()
     {
         $this->assertInstanceOf(
@@ -306,5 +353,19 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnImageStorage()
     {
         $this->assertInstanceOf(ImageStorage::class, $this->factory->createImageStorage());
+    }
+
+    public function testItReturnsASearchFieldToRequestParamMap()
+    {
+        $stubContext = $this->getMock(Context::class);
+        $result = $this->factory->createSearchFieldToRequestParamMap($stubContext);
+        $this->assertInstanceOf(SearchFieldToRequestParamMap::class, $result);
+    }
+
+    public function testItReturnsThePriceFacetFieldName()
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $this->assertSame('price_incl_tax_de', $this->factory->getPriceFacetFieldNameForContext($stubContext));
     }
 }

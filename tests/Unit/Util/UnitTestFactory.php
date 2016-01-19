@@ -4,9 +4,12 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -72,15 +75,7 @@ class UnitTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getProductListingFilterNavigationConfig()
-    {
-        return new FacetFiltersToIncludeInResult();
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getProductSearchResultsFilterNavigationConfig()
+    public function createProductListingFacetFiltersToIncludeInResult()
     {
         return new FacetFiltersToIncludeInResult();
     }
@@ -346,5 +341,47 @@ class UnitTestFactory implements Factory
     public function getAdditionalAttributesForSearchIndex()
     {
         return [];
+    }
+
+    /**
+     * @param Context $context
+     * @return FacetFilterRequestField[]
+     */
+    public function getProductListingFacetFilterRequestFields(Context $context)
+    {
+        return $this->getCommonFacetFilterRequestFields();
+    }
+
+    /**
+     * @param Context $context
+     * @return FacetFilterRequestField[]
+     */
+    public function getProductSearchFacetFilterRequestFields(Context $context)
+    {
+        return $this->getCommonFacetFilterRequestFields();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFacetFilterRequestFieldCodesForSearchDocuments()
+    {
+        return [];
+    }
+
+    /**
+     * @return FacetFilterRequestField[]
+     */
+    private function getCommonFacetFilterRequestFields()
+    {
+        return [];
+    }
+
+    /**
+     * @return SearchFieldToRequestParamMap
+     */
+    public function createSearchFieldToRequestParamMap()
+    {
+        return $this->mockObjectGenerator->getMock(SearchFieldToRequestParamMap::class, [], [], '', false);
     }
 }

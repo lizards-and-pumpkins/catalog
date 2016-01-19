@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Product\AttributeCode;
@@ -21,6 +22,11 @@ class ProductListingPageRequest
     const PAGINATION_QUERY_PARAMETER_NAME = 'p';
 
     /**
+     * @var SearchFieldToRequestParamMap
+     */
+    private $searchFieldToRequestParamMap;
+
+    /**
      * @var SortOrderConfig[]
      */
     private $sortOrderConfigs;
@@ -30,10 +36,14 @@ class ProductListingPageRequest
      */
     private $productsPerPage;
 
-    public function __construct(ProductsPerPage $productsPerPage, SortOrderConfig ...$sortOrderConfigs)
-    {
+    public function __construct(
+        ProductsPerPage $productsPerPage,
+        SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
+        SortOrderConfig ...$sortOrderConfigs
+    ) {
         $this->productsPerPage = $productsPerPage;
         $this->sortOrderConfigs = $sortOrderConfigs;
+        $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
 
     /**
@@ -54,7 +64,8 @@ class ProductListingPageRequest
     {
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         return array_reduce($facetFilterAttributeCodeStrings, function (array $carry, $filterName) use ($request) {
-            $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($filterName)));
+            $queryParameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($filterName);
+            $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($queryParameterName)));
             return $carry;
         }, []);
     }

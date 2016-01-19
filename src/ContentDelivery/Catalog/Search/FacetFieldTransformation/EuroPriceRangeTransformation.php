@@ -1,8 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation;
 
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\Exception\InvalidTransformationInputException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\Exception\InvalidTransformationInputException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 
 class EuroPriceRangeTransformation implements FacetFieldTransformation
