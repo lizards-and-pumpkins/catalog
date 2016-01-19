@@ -118,7 +118,10 @@ class IntegrationTestFactory implements Factory
      */
     public function getProductSearchFacetFilterRequestFields(Context $context)
     {
-        return $this->getCommonFacetFilterRequestFields();
+        return array_merge(
+            $this->getCommonFacetFilterRequestFields(),
+            [new FacetFilterRequestSimpleField(AttributeCode::fromString('category'))]
+        );
     }
 
     /**
@@ -139,7 +142,6 @@ class IntegrationTestFactory implements Factory
         return [
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
         ];
