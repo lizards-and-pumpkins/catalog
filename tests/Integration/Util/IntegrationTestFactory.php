@@ -4,11 +4,14 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
@@ -101,30 +104,47 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return array[]
+     * @param Context $context
+     * @return FacetFilterRequestField[]
      */
-    public function getProductListingFilterNavigationConfig()
+    public function getProductListingFacetFilterRequestFields(Context $context)
     {
-        return new FacetFiltersToIncludeInResult(
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
+        return $this->getCommonFacetFilterRequestFields();
+    }
+
+    /**
+     * @param Context $context
+     * @return FacetFilterRequestField[]
+     */
+    public function getProductSearchFacetFilterRequestFields(Context $context)
+    {
+        return array_merge(
+            $this->getCommonFacetFilterRequestFields(),
+            [new FacetFilterRequestSimpleField(AttributeCode::fromString('category'))]
         );
     }
 
     /**
-     * @return array[]
+     * @return string[]
      */
-    public function getProductSearchResultsFilterNavigationConfig()
+    public function getFacetFilterRequestFieldCodesForSearchDocuments()
     {
-        return new FacetFiltersToIncludeInResult(
+        return array_map(function (FacetFilterRequestField $field) {
+            return (string) $field->getAttributeCode();
+        }, $this->getCommonFacetFilterRequestFields());
+    }
+
+    /**
+     * @return FacetFilterRequestField[]
+     */
+    private function getCommonFacetFilterRequestFields()
+    {
+        return [
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('brand')),
-            new FacetFilterRequestSimpleField(AttributeCode::fromString('category')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('price')),
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))
-        );
+        ];
     }
 
     /**
@@ -492,5 +512,15 @@ class IntegrationTestFactory implements Factory
             $this->getMasterFactory()->createMediaBaseUrlBuilder(),
             $this->getMasterFactory()->getMediaBaseDirectoryConfig()
         );
+    }
+
+    /**
+     * @return SearchFieldToRequestParamMap
+     */
+    public function createSearchFieldToRequestParamMap()
+    {
+        $facetFieldToQueryParameterMap = [];
+        $queryParameterToFacetFieldMap = [];
+        return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
     }
 }

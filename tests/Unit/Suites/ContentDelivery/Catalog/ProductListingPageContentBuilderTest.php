@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
@@ -83,6 +84,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      * @var ProductJsonService|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductJsonService;
+
+    /**
+     * @var SearchFieldToRequestParamMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSearchFieldToRequestParamMap;
 
     /**
      * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -167,6 +173,10 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubProductJsonService = $this->getMock(ProductJsonService::class, [], [], '', false);
         $this->mockPageBuilder = $this->createMockPageBuilder();
+
+        $class = SearchFieldToRequestParamMap::class;
+        $this->stubSearchFieldToRequestParamMap = $this->getMock($class, [], [], '', false);
+        
         $this->stubTranslator = $this->getMock(Translator::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
@@ -178,6 +188,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
             $this->stubProductJsonService,
             $this->mockPageBuilder,
+            $this->stubSearchFieldToRequestParamMap,
             $stubTranslatorRegistry,
             $this->stubSortOrderConfig
         );
@@ -240,6 +251,34 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $snippetCode = 'filter_navigation';
 
         $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode);
+    }
+
+    public function testItMapsFilterNavigationFieldsToRequestParameterNames()
+    {
+        $dummyFacetData = [
+            'price_with_tax' => ['a', 'b', 'c']
+        ];
+        $expectedValue = [
+            'price' => ['a', 'b', 'c']
+        ];
+        
+        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
+        $this->stubFacetFieldCollection->method('jsonSerialize')->willReturn($dummyFacetData);
+        $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')
+            ->with('price_with_tax')->willReturn('price');
+
+        $this->pageContentBuilder->buildPageContent(
+            $this->stubPageMetaInfoSnippetContent,
+            $this->stubContext,
+            $this->stubKeyGeneratorParams,
+            $this->stubSearchEngineResponse,
+            $this->stubProductsPerPage,
+            $this->stubSelectedSortOrderConfig
+        );
+
+        $snippetCode = 'filter_navigation';
+        
+        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($expectedValue));
     }
 
     public function testTotalNumberOfResultsSnippetIsAddedToPageBuilder()

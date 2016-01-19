@@ -1,12 +1,12 @@
 <?php
 
-namespace LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation;
+namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation;
 
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
-use LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\Exception\UnableToFindTransformationException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\Exception\UnableToFindTransformationException;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\FacetFieldTransformation\FacetFieldTransformationRegistry
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry
  */
 class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
 {

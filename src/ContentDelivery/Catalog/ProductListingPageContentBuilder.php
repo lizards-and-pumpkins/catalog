@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
@@ -36,9 +37,15 @@ class ProductListingPageContentBuilder
      */
     private $productJsonService;
 
+    /**
+     * @var SearchFieldToRequestParamMap
+     */
+    private $searchFieldToRequestParamMap;
+
     public function __construct(
         ProductJsonService $productJsonService,
         PageBuilder $pageBuilder,
+        SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
         TranslatorRegistry $translatorRegistry,
         SortOrderConfig ...$sortOrderConfigs
     ) {
@@ -46,6 +53,7 @@ class ProductListingPageContentBuilder
         $this->pageBuilder = $pageBuilder;
         $this->sortOrderConfigs = $sortOrderConfigs;
         $this->translatorRegistry = $translatorRegistry;
+        $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
 
     /**
@@ -82,10 +90,25 @@ class ProductListingPageContentBuilder
 
     private function addFilterNavigationSnippetToPageBuilder(FacetFieldCollection $facetFieldCollection)
     {
+        $facetFields = $facetFieldCollection->jsonSerialize();
+        $externalFacetFields = count($facetFields) > 0 ?
+            $this->replaceInternalWithExternalFieldNames($facetFields) :
+            [];
+        
         $snippetCode = 'filter_navigation';
-        $snippetContents = json_encode($facetFieldCollection);
+        $this->addDynamicSnippetToPageBuilder($snippetCode, json_encode($externalFacetFields));
+    }
 
-        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContents);
+    /**
+     * @param array[] $facetFields
+     * @return array[]
+     */
+    private function replaceInternalWithExternalFieldNames(array $facetFields)
+    {
+        return array_reduce(array_keys($facetFields), function ($carry, $fieldName) use ($facetFields) {
+            $parameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($fieldName);
+            return array_merge($carry, [$parameterName => $facetFields[$fieldName]]);
+        }, []);
     }
 
     private function addProductsInListingToPageBuilder(Context $context, ProductId ...$productIds)

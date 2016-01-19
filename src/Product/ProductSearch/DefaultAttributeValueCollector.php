@@ -37,6 +37,10 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
         return array_filter($values, [$this, 'isSearchableAttributeValue']);
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     private function isSearchableAttributeValue($value)
     {
         if (!is_scalar($value)) {

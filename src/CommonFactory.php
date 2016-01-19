@@ -21,6 +21,7 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
@@ -256,7 +257,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
-            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer()
+            $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
         ];
     }
 
@@ -520,7 +521,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingSnippetRendererList()
     {
         return [
-            $this->getMasterFactory()->createProductListingCriteriaSnippetRenderer()
+            $this->getMasterFactory()->createProductListingCriteriaSnippetRenderer(),
         ];
     }
 
@@ -802,7 +803,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createSimpleProductXmlToProductBuilder(),
-            $this->getMasterFactory()->createConfigurableProductXmlToProductBuilder()
+            $this->getMasterFactory()->createConfigurableProductXmlToProductBuilder(),
         ];
     }
 
@@ -1046,14 +1047,15 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $indexAttributeCodes = array_unique(array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
-            $this->getMasterFactory()->getProductListingFilterNavigationConfig()->getAttributeCodeStrings(),
-            $this->getMasterFactory()->getProductSearchResultsFilterNavigationConfig()->getAttributeCodeStrings(),
+            $this->getMasterFactory()->getFacetFilterRequestFieldCodesForSearchDocuments(),
             $this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
         ));
 
         return new ProductSearchDocumentBuilder(
             $indexAttributeCodes,
-            $this->getMasterFactory()->createAttributeValueCollectorLocator()
+            $this->getMasterFactory()->createAttributeValueCollectorLocator(),
+            $this->getMasterFactory()->createTaxableCountries(),
+            $this->getMasterFactory()->createTaxServiceLocator()
         );
     }
 

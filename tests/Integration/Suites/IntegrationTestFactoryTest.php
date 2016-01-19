@@ -92,18 +92,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnly('string', $result);
     }
 
-    public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
-    {
-        $result = $this->factory->getProductListingFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
-    }
-
-    public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
-    {
-        $result = $this->factory->getProductSearchResultsFilterNavigationConfig();
-        $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
-    }
-
     public function testImageProcessorCollectionIsReturned()
     {
         $this->assertInstanceOf(ImageProcessorCollection::class, $this->factory->createImageProcessorCollection());

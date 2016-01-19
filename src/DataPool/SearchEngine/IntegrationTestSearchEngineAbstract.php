@@ -86,7 +86,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function createSearchEngineCriteriaForFilters(array $filters)
     {
-        return array_map(function ($filterCode) use ($filters) {
+        return @array_map(function ($filterCode) use ($filters) {
             $optionValuesCriteriaArray = $this->createOptionValuesCriteriaArray($filterCode, $filters[$filterCode]);
             return CompositeSearchCriterion::createOr(...$optionValuesCriteriaArray);
         }, array_keys($filters));
@@ -180,7 +180,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function createOptionValuesCriteriaArray($filterCode, array $filterOptionValues)
     {
-        return array_map(function ($filterOptionValue) use ($filterCode) {
+        return @array_map(function ($filterOptionValue) use ($filterCode) {
             return $this->getSearchCriteriaBuilder()->fromFieldNameAndValue($filterCode, $filterOptionValue);
         }, $filterOptionValues);
     }
@@ -210,7 +210,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             ...$searchDocuments
         );
 
-        return array_reduce(
+        return @array_reduce(
             $facetFilterRequest->getFields(),
             function (array $carry, FacetFilterRequestField $field) use ($attributeCounts, $selectedFacetFieldCodes) {
                 $attributeCode = $field->getAttributeCode();
@@ -397,8 +397,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     ) {
         $attributeCode = (string) $facetFilterRequestRangedField->getAttributeCode();
 
-        return array_reduce(
-            $facetFilterRequestRangedField->getRanges(),
+        $ranges = $facetFilterRequestRangedField->getRanges();
+        return @array_reduce(
+            $ranges,
             function ($carry, FacetFilterRange $range) use ($attributeValues, $attributeCode) {
                 $rangeCount = $this->sumAttributeValuesCountsInRange($range, $attributeValues);
 
