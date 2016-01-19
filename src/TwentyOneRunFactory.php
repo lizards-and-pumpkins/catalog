@@ -622,9 +622,6 @@ class TwentyOneRunFactory implements Factory
         $facetField = $this->getPriceFacetFieldNameForContext($context);
         $facetFieldToQueryParameterMap = [$facetField => $queryParameter];
         $queryParameterToFacetFieldMap = [$queryParameter => $facetField];
-        return new SearchFieldToRequestParamMap(
-            $facetFieldToQueryParameterMap,
-            $queryParameterToFacetFieldMap
-        );
+        return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
     }
 }
