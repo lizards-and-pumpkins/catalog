@@ -123,4 +123,30 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($testTranslationResult, $result);
     }
+
+    public function testAllTranslatinsAreReturnedAsAnArray()
+    {
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
+        $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
+
+        $translationSourceA = 'foo';
+        $translationResultA = 'bar';
+        $translationA = sprintf('"%s","%s"', $translationSourceA, $translationResultA);
+
+        $translationSourceB = 'baz';
+        $translationResultB = 'qux';
+        $translationB = sprintf('"%s","%s"', $translationSourceB, $translationResultB);
+
+        $testTranslationFileContents = $translationA . "\n" . $translationB;
+        $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
+
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+
+        $result = $translator->jsonSerialize();
+        $expectedArray = [$translationSourceA => $translationResultA, $translationSourceB => $translationResultB];
+
+        $this->assertSame($expectedArray, $result);
+    }
 }

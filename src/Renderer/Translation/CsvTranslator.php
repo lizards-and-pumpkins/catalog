@@ -114,4 +114,12 @@ class CsvTranslator implements Translator
             );
         }
     }
+
+    /**
+     * @return string[]
+     */
+    function jsonSerialize()
+    {
+        return $this->translations;
+    }
 }
