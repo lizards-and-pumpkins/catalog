@@ -5,14 +5,12 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\DefaultHttpResponse;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 class ProductListingPageContentBuilder
@@ -82,7 +80,7 @@ class ProductListingPageContentBuilder
             $this->addProductsInListingToPageBuilder(...$productIds);
             $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
             $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
-            $this->addFilterAttributeTranslationsToPageBuilder($facetFieldCollection, $context);
+            $this->addTranslationsToPageBuilder($context);
         }
 
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
@@ -168,49 +166,9 @@ class ProductListingPageContentBuilder
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 
-    private function addFilterAttributeTranslationsToPageBuilder(
-        FacetFieldCollection $facetFieldCollection,
-        Context $context
-    ) {
+    private function addTranslationsToPageBuilder(Context $context)
+    {
         $translator = $this->translatorRegistry->getTranslatorForLocale($context->getValue(ContextLocale::CODE));
-
-        $facetFieldAttributesTranslations = $this->getFilterAttributesTranslations($facetFieldCollection, $translator);
-        $sortingAttributeTranslations = $this->getSortingAttributesTranslations($translator);
-
-        $translationsJson = json_encode(array_merge($facetFieldAttributesTranslations, $sortingAttributeTranslations));
-
-        $this->addDynamicSnippetToPageBuilder('attribute_translation', $translationsJson);
-    }
-
-    /**
-     * @param FacetFieldCollection $facetFields
-     * @param Translator $translator
-     * @return string[]
-     */
-    private function getFilterAttributesTranslations(FacetFieldCollection $facetFields, Translator $translator)
-    {
-        $facetFields = $facetFields->getFacetFields();
-
-        return array_reduce($facetFields, function (array $carry, FacetField $facetField) use ($translator) {
-            $attributeCodeString = (string) $facetField->getAttributeCode();
-            return array_merge($carry, [$attributeCodeString => $translator->translate($attributeCodeString)]);
-        }, []);
-    }
-
-    /**
-     * @param Translator $translator
-     * @return string[]
-     */
-    private function getSortingAttributesTranslations(Translator $translator)
-    {
-        return array_reduce(
-            $this->sortOrderConfigs,
-            function (array $carry, SortOrderConfig $sortOrderConfig) use ($translator) {
-                $attributeCodeString = (string) $sortOrderConfig->getAttributeCode();
-
-                return array_merge($carry, [$attributeCodeString => $translator->translate($attributeCodeString)]);
-            },
-            []
-        );
+        $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
     }
 }

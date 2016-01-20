@@ -147,11 +147,11 @@ require([
         }
 
         function getAttributeTranslation(string) {
-            if (typeof attributeTranslation !== 'object' || !attributeTranslation.hasOwnProperty(string)) {
+            if (typeof translations !== 'object' || !translations.hasOwnProperty(string)) {
                 return string;
             }
 
-            return attributeTranslation[string];
+            return translations[string];
         }
     }
 );
