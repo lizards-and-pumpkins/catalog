@@ -75,15 +75,39 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
+     * @param FacetFilterRequestField[] $fields
+     * @param string $name
+     * @param int $pos
+     * @return int
+     */
+    private function findFacetFieldPosition(array $fields, $name, $pos = 0)
+    {
+        if ($pos === count($fields) || $fields[$pos]->getAttributeCode() == $name) {
+            return $pos;
+        }
+        return $this->findFacetFieldPosition($fields, $name, $pos + 1);
+    }
+
+    /**
+     * @param FacetFilterRequestField $fieldToInject
+     * @param string $siblingName
+     * @param FacetFilterRequestField[] $fields
+     * @return FacetFilterRequestField[]
+     */
+    private function injectFacetFieldAfter(FacetFilterRequestField $fieldToInject, $siblingName, array $fields)
+    {
+        $pos = $this->findFacetFieldPosition($fields, $siblingName);
+        return array_merge(array_slice($fields, 0, $pos + 1), [$fieldToInject], array_slice($fields, $pos + 1));
+    }
+
+    /**
      * @param Context $context
      * @return FacetFilterRequestField[]
      */
     public function getProductListingFacetFilterRequestFields(Context $context)
     {
-        return array_merge(
-            $this->getCommonFacetFilterRequestFields(),
-            [$this->createPriceRangeFacetFilterField($context)]
-        );
+        $priceField = $this->createPriceRangeFacetFilterField($context);
+        return $this->injectFacetFieldAfter($priceField, 'brand', $this->getCommonFacetFilterRequestFields());
     }
 
     /**
@@ -92,10 +116,8 @@ class TwentyOneRunFactory implements Factory
      */
     public function getProductSearchFacetFilterRequestFields(Context $context)
     {
-        return array_merge(
-            $this->getCommonFacetFilterRequestFields(),
-            [$this->createPriceRangeFacetFilterField($context)]
-        );
+        $priceField = $this->createPriceRangeFacetFilterField($context);
+        return $this->injectFacetFieldAfter($priceField, 'brand', $this->getCommonFacetFilterRequestFields());
     }
 
     /**

@@ -69,6 +69,17 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
+    /**
+     * @param FacetFilterRequestField[] $facetFilterFields
+     * @return string[]
+     */
+    private function getFacetCodes(FacetFilterRequestField ...$facetFilterFields)
+    {
+        return array_map(function (FacetFilterRequestField $field) {
+            return (string) $field->getAttributeCode();
+        }, $facetFilterFields);
+    }
+
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
@@ -138,10 +149,17 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturn('DE');
-        $fieldCodes = array_map(function (FacetFilterRequestField $field) {
-            return $field->getAttributeCode();
-        }, $this->factory->getProductListingFacetFilterRequestFields($stubContext));
+        $fieldCodes = $this->getFacetCodes(...$this->factory->getProductListingFacetFilterRequestFields($stubContext));
         $this->assertContains($fieldName, $fieldCodes);
+    }
+
+    public function testItInjectsThePriceAfterTheBrandFacetForProductListings()
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $fieldCodes = $this->getFacetCodes(...$this->factory->getProductListingFacetFilterRequestFields($stubContext));
+        $brandPosition = array_search('brand', $fieldCodes, true);
+        $this->assertEquals('price_incl_tax_de', $fieldCodes[$brandPosition + 1]);
     }
 
     /**
@@ -152,10 +170,17 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturn('DE');
-        $fieldCodes = array_map(function (FacetFilterRequestField $field) {
-            return $field->getAttributeCode();
-        }, $this->factory->getProductSearchFacetFilterRequestFields($stubContext));
+        $fieldCodes = $this->getFacetCodes(...$this->factory->getProductSearchFacetFilterRequestFields($stubContext));
         $this->assertContains($fieldName, $fieldCodes);
+    }
+
+    public function testItInjectsThePriceAfterTheBrandFacetForSearchListings()
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->willReturn('DE');
+        $fieldCodes = $this->getFacetCodes(...$this->factory->getProductSearchFacetFilterRequestFields($stubContext));
+        $brandPosition = array_search('brand', $fieldCodes, true);
+        $this->assertEquals('price_incl_tax_de', $fieldCodes[$brandPosition + 1]);
     }
 
     /**
