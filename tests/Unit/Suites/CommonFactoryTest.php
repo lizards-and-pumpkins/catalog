@@ -481,9 +481,27 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result1, $result2);
     }
     
-    public function testTranslatorIsReturned()
+    public function testProductSearchAutosuggestionTranslatorFactoryIsReturningATranslator()
     {
-        $translatorFactory = $this->commonFactory->getTranslatorFactory();
+        $translatorFactory = $this->commonFactory->getProductSearchAutosuggestionTranslatorFactory();
+        $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
+    }
+
+    public function testProductInSearchAutosuggestionTranslatorFactoryIsReturningATranslator()
+    {
+        $translatorFactory = $this->commonFactory->getProductInSearchAutosuggestionTranslatorFactory();
+        $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
+    }
+
+    public function testProductDetailsViewTranslatorFactoryIsReturningATranslator()
+    {
+        $translatorFactory = $this->commonFactory->getProductDetailsViewTranslatorFactory();
+        $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
+    }
+
+    public function testProductListingTranslatorFactoryIsReturningATranslator()
+    {
+        $translatorFactory = $this->commonFactory->getProductListingTranslatorFactory();
         $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
     }
 
