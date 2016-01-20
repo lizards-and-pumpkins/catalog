@@ -404,8 +404,6 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $translations = ['foo' => 'bar'];
 
-        $this->stubProductJsonService->method('get')->willReturn([]);
-
         $this->stubTranslator->method('jsonSerialize')->willReturn($translations);
 
         $this->pageContentBuilder->buildPageContent(
