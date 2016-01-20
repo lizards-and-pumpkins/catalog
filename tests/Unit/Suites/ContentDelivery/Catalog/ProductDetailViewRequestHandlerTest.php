@@ -14,6 +14,8 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 /**
@@ -68,6 +70,16 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private $stubSnippetKeyGenerator;
 
     /**
+     * @var Translator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubTranslator;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     */
+    private $addSnippetsToPageSpy;
+
+    /**
      * @return string
      */
     private function createProductDetailPageMetaInfoContentJson()
@@ -79,6 +91,26 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->getInfo());
     }
 
+    /**
+     * @param string $snippetCode
+     * @param string $snippetValue
+     */
+    private function assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $snippetValue)
+    {
+        $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
+            array_map(function ($invocation) use ($snippetCode, $snippetValue) {
+                return intval([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
+                              [$snippetCode => $snippetValue] === $invocation->parameters[1]);
+            }, $this->addSnippetsToPageSpy->getInvocations())
+        );
+
+        $this->assertEquals(1, $numberOfTimesSnippetWasAddedToPageBuilder, sprintf(
+            'Failed to assert "%s" snippet with "%s" value was added to page builder.',
+            $snippetCode,
+            $snippetValue
+        ));
+    }
+
     protected function setUp()
     {
         $this->dummyMetaInfoSnippetJson = $this->createProductDetailPageMetaInfoContentJson();
@@ -87,12 +119,22 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubContext = $this->getMock(Context::class);
         $this->stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
+        $this->addSnippetsToPageSpy = $this->any();
+        $this->stubPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
+
         $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+
+        $this->stubTranslator = $this->getMock(Translator::class);
+
+        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
+        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
 
         $this->requestHandler = new ProductDetailViewRequestHandler(
             $this->stubContext,
             $this->mockDataPoolReader,
             $this->stubPageBuilder,
+            $stubTranslatorRegistry,
             $this->stubSnippetKeyGenerator
         );
 
@@ -187,5 +229,24 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->requestHandler->canProcess($stubRequestA));
         $this->assertFalse($this->requestHandler->canProcess($stubRequestB));
+    }
+
+    public function testTranslationsAreAddedToPageBuilder()
+    {
+        $translations = ['foo' => 'bar'];
+
+        $this->stubTranslator->method('jsonSerialize')->willReturn($translations);
+
+        $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
+        $this->mockDataPoolReader->method('getSnippet')
+            ->willReturnMap([[$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]]);
+        $this->stubPageBuilder->method('buildPage')
+            ->with($this->anything(), $this->anything(), [Product::ID => $this->testProductId])
+            ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
+
+        $this->requestHandler->process($this->stubRequest);
+
+        $snippetCode = 'translations';
+        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($translations));
     }
 }

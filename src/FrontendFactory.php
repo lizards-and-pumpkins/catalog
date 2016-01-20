@@ -176,10 +176,13 @@ class FrontendFactory implements Factory
      */
     private function createProductDetailViewRequestHandler()
     {
+        $translatorFactory = $this->getMasterFactory()->getProductDetailsViewTranslatorFactory();
+
         return new ProductDetailViewRequestHandler(
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
+            $this->getMasterFactory()->getTranslatorRegistry($translatorFactory),
             $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
         );
     }

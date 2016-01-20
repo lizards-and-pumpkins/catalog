@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -13,6 +14,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler
@@ -47,15 +49,22 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     private $snippetKeyGenerator;
 
+    /**
+     * @var TranslatorRegistry
+     */
+    private $translatorRegistry;
+
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
+        TranslatorRegistry $translatorRegistry,
         SnippetKeyGenerator $snippetKeyGenerator
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
+        $this->translatorRegistry = $translatorRegistry;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 
@@ -82,6 +91,8 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $keyGeneratorParams = [
             Product::ID => $this->pageMetaInfo->getProductId()
         ];
+
+        $this->addTranslationsToPageBuilder($this->context);
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
     }
@@ -126,5 +137,23 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         );
 
         return $metaInfoSnippetKey;
+    }
+
+    private function addTranslationsToPageBuilder(Context $context)
+    {
+        $translator = $this->translatorRegistry->getTranslatorForLocale($context->getValue(ContextLocale::CODE));
+        $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param string $snippetContents
+     */
+    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContents)
+    {
+        $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
+        $snippetKeyToContentMap = [$snippetCode => $snippetContents];
+
+        $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 }

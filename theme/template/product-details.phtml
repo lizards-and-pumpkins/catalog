@@ -162,9 +162,10 @@ $productImageCount = $this->getProductImageCount();
 
     <script type="text/javascript">
 
-        var product = <?= $this->getChildOutput('product_json') ?>;
-        var variation_attributes = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE) ?>;
-        var associated_products = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE) ?>;
+        var product = <?= $this->getChildOutput('product_json') ?>,
+            variation_attributes = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE) ?>,
+            associated_products = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE) ?>,
+            translations = {{snippet translations}};
 
     </script>
 </div>
