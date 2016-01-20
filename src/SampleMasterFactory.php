@@ -2,11 +2,8 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
  * @method DataPool\DataPoolWriter createDataPoolWriter
@@ -19,7 +16,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method DomainEventConsumer createDomainEventConsumer
  * @method CommandConsumer createCommandConsumer
  * @method RegistrySnippetKeyGeneratorLocatorStrategy createRegistrySnippetKeyGeneratorLocatorStrategy
- * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
+ * @method SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
  * @method Log\InMemoryLogger getLogger
  * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
@@ -36,7 +33,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method Context\Context createContext
  * @method DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder createSearchCriteriaBuilder
  * @method string[] getSearchableAttributeCodes
- * @method FacetFiltersToIncludeInResult createProductListingFacetFiltersToIncludeInResult
+ * @method DataPool\SearchEngine\FacetFiltersToIncludeInResult createProductListingFacetFiltersToIncludeInResult
  * @method ContentDelivery\Catalog\ProductsPerPage getProductsPerPageConfig
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductListingSortOrderConfig
  * @method ContentDelivery\Catalog\SortOrderConfig[] getProductSearchSortOrderConfig
@@ -44,7 +41,9 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
  * @method ContentDelivery\Catalog\ProductListingRequestHandler createProductListingRequestHandler
  * @method ContentDelivery\Catalog\ProductSearchRequestHandler createProductSearchRequestHandler
  * @method TwentyOneRunTaxableCountries createTaxableCountries
- * @method SearchEngine getSearchEngine
+ * @method DataPool\SearchEngine\SearchEngine getSearchEngine
+ * @method callable getProductDetailsViewTranslatorFactory
+ * @method Renderer\Translation\TranslatorRegistry getTranslatorRegistry(callable $translatorFactory)
  */
 class SampleMasterFactory implements MasterFactory
 {
