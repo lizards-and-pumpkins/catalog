@@ -222,11 +222,13 @@ class FrontendFactory implements Factory
      */
     public function createProductListingPageContentBuilder()
     {
+        $translatorFactory = $this->getMasterFactory()->getProductListingTranslatorFactory();
+
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
-            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->getTranslatorRegistry($translatorFactory),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
     }

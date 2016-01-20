@@ -25,12 +25,21 @@ class CsvTranslator implements Translator
     /**
      * @param string $localeCode
      * @param ThemeLocator $themeLocator
+     * @param string[] $fileNames
      * @return CsvTranslator
      */
-    public static function forLocale($localeCode, ThemeLocator $themeLocator)
+    public static function forLocale($localeCode, ThemeLocator $themeLocator, array $fileNames)
     {
-        $translationFiles = self::getTranslationFilesFromLocaleDirectory($localeCode, $themeLocator);
-        $translations = array_reduce($translationFiles, function (array $carry, $filePath) {
+        $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode . '/';
+
+        if (!is_dir($localeDirectoryPath)) {
+            return new self([]);
+        }
+
+        self::validateLocaleDirectory($localeDirectoryPath);
+
+        $translations = array_reduce($fileNames, function (array $carry, $fileName) use ($localeDirectoryPath) {
+            $filePath = $localeDirectoryPath . $fileName;
             self::validateTranslationFileIsReadable($filePath);
             $fileRows = file($filePath);
 
@@ -57,24 +66,6 @@ class CsvTranslator implements Translator
         }
 
         return $this->translations[$string];
-    }
-
-    /**
-     * @param string $localeCode
-     * @param ThemeLocator $themeLocator
-     * @return string[]
-     */
-    private static function getTranslationFilesFromLocaleDirectory($localeCode, ThemeLocator $themeLocator)
-    {
-        $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode;
-
-        if (!is_dir($localeDirectoryPath)) {
-            return [];
-        }
-
-        self::validateLocaleDirectory($localeDirectoryPath);
-
-        return glob($localeDirectoryPath . '/*.csv');
     }
 
     /**
