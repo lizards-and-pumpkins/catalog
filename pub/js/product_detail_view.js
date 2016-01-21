@@ -10,6 +10,7 @@ require([
     'lib/modal_box',
     'lib/overflow_scrolling',
     'product_grid',
+    'lib/translator',
     'ekomi'
 ], function(
     Product,
@@ -22,7 +23,8 @@ require([
     initializeSwiping,
     showModalBox,
     productTitleScrolling,
-    productGrid
+    productGrid,
+    translate
 ) {
 
     var tabletWidth = 768,
@@ -429,25 +431,5 @@ require([
             node = node.parentNode;
         }
         return false;
-    }
-
-    function translate(string) {
-        var translation = getTranslation(string);
-
-        if (arguments.length === 1) {
-            return translation;
-        }
-
-        return Array.prototype.slice.call(arguments).slice(1).reduce(function (carry, argument) {
-            return carry.replace(/%s/, argument);
-        }, translation);
-    }
-
-    function getTranslation(string) {
-        if (typeof translations === 'undefined' || !translations.hasOwnProperty(string)) {
-            return string;
-        }
-
-        return translations[string];
     }
 });

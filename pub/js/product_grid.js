@@ -1,4 +1,4 @@
-define(['product'], function (Product) {
+define(['product', 'lib/translator'], function (Product, translate) {
 
     var wrapIntoProductLink = function (element, url) {
         var link = document.createElement('A');
@@ -72,7 +72,7 @@ define(['product'], function (Product) {
 
     var createYouSaveBlock = function (product) {
         var container = document.createElement('P');
-        container.textContent = 'Save ' + product.getDiscountPercentage() + '% now';
+        container.textContent = translate('Save %s% now', product.getDiscountPercentage());
         container.className = 'you-save';
         return container;
     };
