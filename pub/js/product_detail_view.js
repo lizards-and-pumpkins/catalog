@@ -247,8 +247,9 @@ require([
         variationSelect.id = selectBoxIdPrefix + name;
         variationSelect.addEventListener('change', function () { showNextSelectBox(name); }, true);
 
-        var defaultOption = document.createElement('OPTION');
-        defaultOption.textContent = 'Select ' + name;
+        var translatedAttributeName = translate(name),
+            defaultOption = document.createElement('OPTION');
+        defaultOption.textContent = translate('Select %s', translatedAttributeName);
         variationSelect.appendChild(defaultOption);
 
         options.map(function (option) {
@@ -428,5 +429,25 @@ require([
             node = node.parentNode;
         }
         return false;
+    }
+
+    function translate(string) {
+        var translation = getTranslation(string);
+
+        if (arguments.length === 1) {
+            return translation;
+        }
+
+        return Array.prototype.slice.call(arguments).slice(1).reduce(function (carry, argument) {
+            return carry.replace(/%s/, argument);
+        }, translation);
+    }
+
+    function getTranslation(string) {
+        if (typeof translations === 'undefined' || !translations.hasOwnProperty(string)) {
+            return string;
+        }
+
+        return translations[string];
     }
 });

@@ -11,6 +11,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\DefaultHttpResponse;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
 class ProductListingPageContentBuilder
@@ -168,7 +169,10 @@ class ProductListingPageContentBuilder
 
     private function addTranslationsToPageBuilder(Context $context)
     {
-        $translator = $this->translatorRegistry->getTranslatorForLocale($context->getValue(ContextLocale::CODE));
+        $translator = $this->translatorRegistry->getTranslator(
+            ProductListingPageSnippetRenderer::CODE,
+            $context->getValue(ContextLocale::CODE)
+        );
         $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
     }
 }

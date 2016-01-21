@@ -176,13 +176,11 @@ class FrontendFactory implements Factory
      */
     private function createProductDetailViewRequestHandler()
     {
-        $translatorFactory = $this->getMasterFactory()->getProductDetailsViewTranslatorFactory();
-
         return new ProductDetailViewRequestHandler(
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->getTranslatorRegistry($translatorFactory),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
         );
     }
@@ -225,13 +223,11 @@ class FrontendFactory implements Factory
      */
     public function createProductListingPageContentBuilder()
     {
-        $translatorFactory = $this->getMasterFactory()->getProductListingTranslatorFactory();
-
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
-            $this->getMasterFactory()->getTranslatorRegistry($translatorFactory),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
     }

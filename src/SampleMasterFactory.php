@@ -43,7 +43,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLoc
  * @method TwentyOneRunTaxableCountries createTaxableCountries
  * @method DataPool\SearchEngine\SearchEngine getSearchEngine
  * @method callable getProductDetailsViewTranslatorFactory
- * @method Renderer\Translation\TranslatorRegistry getTranslatorRegistry(callable $translatorFactory)
+ * @method Renderer\Translation\TranslatorRegistry getTranslatorRegistry
  */
 class SampleMasterFactory implements MasterFactory
 {

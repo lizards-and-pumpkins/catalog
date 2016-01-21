@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
+use LizardsAndPumpkins\Renderer\Translation\Exception\UndefinedTranslatorException;
+
 /**
  * @covers \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
  */
@@ -12,34 +14,65 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
      */
     private $registry;
 
-    protected function setUp()
+    /**
+     * @return callable|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createStubTranslatorFactory()
     {
-        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorFactory */
         $stubTranslatorFactory = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
         $stubTranslatorFactory->method('__invoke')->willReturnCallback(function () {
             return $this->getMock(Translator::class);
         });
 
-        $this->registry = new TranslatorRegistry($stubTranslatorFactory);
+        return $stubTranslatorFactory;
+    }
+
+    protected function setUp()
+    {
+        $this->registry = new TranslatorRegistry();
+    }
+
+    public function testExceptionIsThrowIfNoTranslatorFactoryIsDefinedForGivenPage()
+    {
+        $pageCode = 'foo';
+        $locale = 'foo_BAR';
+
+        $this->setExpectedException(UndefinedTranslatorException::class);
+        $this->registry->getTranslator($pageCode, $locale);
     }
 
     public function testTranslatorIsReturnedEvenIfLocaleIsNotAvailable()
     {
-        $this->assertInstanceOf(Translator::class, $this->registry->getTranslatorForLocale('foo_BAR'));
+        $pageCode = 'foo';
+        $locale = 'foo_BAR';
+
+        $this->registry->register($pageCode, $this->createStubTranslatorFactory());
+        $this->assertInstanceOf(Translator::class, $this->registry->getTranslator($pageCode, $locale));
     }
 
     public function testSameInstanceOfTranslatorIsReturnedOnConsecutiveCallsForSameLocale()
     {
-        $instanceA = $this->registry->getTranslatorForLocale('foo_BAR');
-        $instanceB = $this->registry->getTranslatorForLocale('foo_BAR');
+        $pageCode = 'foo';
+        $locale = 'foo_BAR';
+
+        $this->registry->register($pageCode, $this->createStubTranslatorFactory());
+
+        $instanceA = $this->registry->getTranslator($pageCode, $locale);
+        $instanceB = $this->registry->getTranslator($pageCode, $locale);
 
         $this->assertSame($instanceA, $instanceB);
     }
 
     public function testDifferentInstancesOfTranslatorAreReturnedForDifferentLocales()
     {
-        $instanceA = $this->registry->getTranslatorForLocale('foo_BAR');
-        $instanceB = $this->registry->getTranslatorForLocale('baz_QUX');
+        $pageCode = 'foo';
+        $localeA = 'foo_BAR';
+        $localeB = 'baz_QUX';
+
+        $this->registry->register($pageCode, $this->createStubTranslatorFactory());
+
+        $instanceA = $this->registry->getTranslator($pageCode, $localeA);
+        $instanceB = $this->registry->getTranslator($pageCode, $localeB);
 
         $this->assertNotSame($instanceA, $instanceB);
     }

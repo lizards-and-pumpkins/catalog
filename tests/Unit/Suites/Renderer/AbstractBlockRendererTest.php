@@ -156,8 +156,8 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         $this->mockBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
-        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
-        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class);
+        $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
         $this->blockRenderer = $this->createRendererInstance(
             $this->stubThemeLocator,

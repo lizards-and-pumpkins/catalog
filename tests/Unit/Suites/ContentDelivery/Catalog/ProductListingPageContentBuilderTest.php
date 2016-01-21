@@ -164,8 +164,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubTranslator = $this->getMock(Translator::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
-        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class, [], [], '', false);
-        $stubTranslatorRegistry->method('getTranslatorForLocale')->willReturn($this->stubTranslator);
+        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class);
+        $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
         $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 

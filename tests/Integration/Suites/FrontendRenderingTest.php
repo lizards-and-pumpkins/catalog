@@ -151,13 +151,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
     ) {
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $translatorFactory = $this->factory->getProductDetailsViewTranslatorFactory();
 
         return new ProductDetailViewRequestHandler(
             $context,
             $dataPoolReader,
             new PageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
-            $this->factory->getTranslatorRegistry($translatorFactory),
+            $this->factory->getTranslatorRegistry(),
             $productDetailPageMetaSnippetKeyGenerator
         );
     }

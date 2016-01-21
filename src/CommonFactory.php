@@ -412,12 +412,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductSearchAutosuggestionBlockRenderer()
     {
-        $translationFactory = $this->getMasterFactory()->getProductSearchAutosuggestionTranslatorFactory();
-
         return new ProductSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry($translationFactory),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
@@ -485,12 +483,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductListingBlockRenderer()
     {
-        $translatorFactory = $this->getMasterFactory()->getProductListingTranslatorFactory();
-
         return new ProductListingBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry($translatorFactory),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
@@ -571,12 +567,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductDetailViewBlockRenderer()
     {
-        $translatorFactory = $this->getMasterFactory()->getProductListingTranslatorFactory();
-
         return new ProductDetailViewBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry($translatorFactory),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
@@ -681,12 +675,10 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      */
     public function createProductInSearchAutosuggestionBlockRenderer()
     {
-        $translationFactory = $this->getMasterFactory()->getProductInSearchAutosuggestionTranslatorFactory();
-
         return new ProductInSearchAutosuggestionBlockRenderer(
             $this->getMasterFactory()->createThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry($translationFactory),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
@@ -1330,13 +1322,32 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @param callable $translatorFactory
      * @return TranslatorRegistry
      */
-    public function getTranslatorRegistry(callable  $translatorFactory)
+    public function getTranslatorRegistry()
     {
         if (null === $this->translatorRegistry) {
-            $this->translatorRegistry = new TranslatorRegistry($translatorFactory);
+            $this->translatorRegistry = new TranslatorRegistry();
+
+            $this->translatorRegistry->register(
+                ProductSearchAutosuggestionSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductSearchAutosuggestionTranslatorFactory()
+            );
+
+            $this->translatorRegistry->register(
+                ProductListingPageSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductListingTranslatorFactory()
+            );
+
+            $this->translatorRegistry->register(
+                ProductInSearchAutosuggestionSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductInSearchAutosuggestionTranslatorFactory()
+            );
+
+            $this->translatorRegistry->register(
+                ProductDetailViewSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductDetailsViewTranslatorFactory()
+            );
         }
 
         return $this->translatorRegistry;
