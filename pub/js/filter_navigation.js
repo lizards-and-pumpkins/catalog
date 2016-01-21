@@ -1,4 +1,4 @@
-define(['lib/url', 'pagination', 'lib/translator'], function (url, pagination, translate) {
+define(['lib/url', 'pagination', 'lib/translate'], function (url, pagination, translate) {
 
     function getSelectedFilterValues(filterCode) {
         var rawSelectedValues = url.getQueryParameterValue(filterCode);

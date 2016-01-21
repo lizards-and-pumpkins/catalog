@@ -6,7 +6,7 @@ require([
     'lib/url',
     'lib/styleselect',
     'lib/overflow_scrolling',
-    'lib/translator',
+    'lib/translate',
     'common',
     'ekomi'
 ], function (domReady, productGrid, filterNavigation, pagination, url, styleSelect, productTitleScrolling, translate) {

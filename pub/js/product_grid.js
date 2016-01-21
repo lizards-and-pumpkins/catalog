@@ -1,4 +1,4 @@
-define(['product', 'lib/translator'], function (Product, translate) {
+define(['product', 'lib/translate'], function (Product, translate) {
 
     var wrapIntoProductLink = function (element, url) {
         var link = document.createElement('A');

@@ -1,4 +1,4 @@
-define(['../../pub/js/lib/translator'], function (translate) {
+define(['../../pub/js/lib/translate'], function (translate) {
     describe('Translator', function () {
         it('returns same string if no translations are provided', function () {
             expect(translate('foo')).toBe('foo');

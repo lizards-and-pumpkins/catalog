@@ -10,7 +10,7 @@ require([
     'lib/modal_box',
     'lib/overflow_scrolling',
     'product_grid',
-    'lib/translator',
+    'lib/translate',
     'ekomi'
 ], function(
     Product,
