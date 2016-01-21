@@ -241,7 +241,6 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippet')
             ->willReturnMap([[$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]]);
         $this->stubPageBuilder->method('buildPage')
-            ->with($this->anything(), $this->anything(), [Product::ID => $this->testProductId])
             ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
 
         $this->requestHandler->process($this->stubRequest);
