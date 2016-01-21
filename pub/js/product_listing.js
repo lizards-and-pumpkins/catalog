@@ -14,13 +14,15 @@ require([
         var previousViewportWidth;
 
         domReady(function () {
-            productGrid.renderGrid(productListingJson, '#products-grid-container');
+            var content = document.querySelector('.col-main');
+            content.appendChild(createToolbar());
+            productGrid.renderGrid(productListingJson, '.col-main');
+            content.appendChild(pagination.renderPagination(totalNumberOfResults, productsPerPage));
+
+            styleSelect('.sort-by select');
+
             productTitleScrolling('.grid-cell-container h2');
             filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation');
-            pagination.renderPagination(totalNumberOfResults, productsPerPage, '#pagination');
-            setTotalNumberOfProductsInSelection(totalNumberOfResults, '.toolbar .amount');
-            renderProductsPerPageLinks(productsPerPage, '.toolbar .limiter');
-            renderSortingDropDown(sortOrderConfig, '.toolbar .sort-by');
             bindLayeredNavigationButtonsActions();
 
             adjustToPageWidth();
@@ -58,30 +60,6 @@ require([
             });
         }
 
-        function setTotalNumberOfProductsInSelection(totalNumberOfResults, selector) {
-            Array.prototype.map.call(document.querySelectorAll(selector), function (targetElement) {
-                var textNode = document.createTextNode(totalNumberOfResults);
-                targetElement.insertBefore(textNode, targetElement.firstChild);
-            });
-        }
-
-        function renderProductsPerPageLinks(productsPerPage, selector) {
-            var productsPerPageLinksPlaceholder = document.querySelector(selector);
-
-            if (null === productsPerPageLinksPlaceholder) {
-                return;
-            }
-
-            productsPerPage.map(function (numberOfProductsPerPage, index) {
-                productsPerPageLinksPlaceholder.appendChild(createProductsPerPageElement(numberOfProductsPerPage));
-
-                if (index < productsPerPage.length - 1) {
-                    var separator = document.createTextNode(' | ');
-                    productsPerPageLinksPlaceholder.appendChild(separator);
-                }
-            });
-        }
-
         function createProductsPerPageElement(numberOfProductsPerPage) {
             if (true === numberOfProductsPerPage['selected']) {
                 return document.createTextNode(numberOfProductsPerPage['number']);
@@ -96,29 +74,18 @@ require([
             return link;
         }
 
-        function renderSortingDropDown(sortOrderConfig, selector) {
-            if (typeof sortOrderConfig !== 'object' || 0 === sortOrderConfig.length) {
-                return;
-            }
-
-            var sortingPlaceholder = document.querySelector(selector);
-
-            if (null === sortingPlaceholder) {
-                return;
-            }
-
-            sortingPlaceholder.appendChild(createSortingSelect(sortOrderConfig));
-            styleSelect(selector + ' select');
-        }
-
-        function createSortingSelect(sortOrderConfig) {
+        function createSortingSelect() {
             var sortingSelect = document.createElement('SELECT');
+
+            if (typeof window.sortOrderConfig !== 'object' || 0 === window.sortOrderConfig.length) {
+                return sortingSelect;
+            }
 
             sortingSelect.addEventListener('change', function () {
                 document.location.href = this.value
             }, true);
 
-            sortOrderConfig.map(function (config) {
+            window.sortOrderConfig.map(function (config) {
                 sortingSelect.appendChild(createSortingSelectOption(config));
             });
 
@@ -127,7 +94,7 @@ require([
 
         function createSortingSelectOption(config) {
             var sortingOption = document.createElement('OPTION'),
-                newUrl = url.updateQueryParameters({ "order": config['code'], "dir": config['selectedDirection'] });
+                newUrl = url.updateQueryParameters({"order": config['code'], "dir": config['selectedDirection']});
 
             sortingOption.textContent = translate(config['code']);
             sortingOption.value = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
@@ -145,6 +112,54 @@ require([
                 this.className += 'block' === filters.style.display ? ' collapsed' : ' expanded';
                 filters.style.display = 'block' === filters.style.display ? 'none' : 'block';
             }, true);
+        }
+
+        function createToolbar() {
+            var toolbar = document.createElement('DIV');
+            toolbar.className = 'toolbar roundedBorder';
+            toolbar.appendChild(createTotalProductsNumberBlock());
+            toolbar.appendChild(createSortingBlock());
+            toolbar.appendChild(createProductsPerPageBlock());
+
+            return toolbar;
+        }
+
+        function createTotalProductsNumberBlock() {
+            var amount = document.createElement('P');
+            amount.className = 'amount';
+            amount.textContent = translate('%s Items(s)', totalNumberOfResults);
+
+            return amount;
+        }
+
+        function createSortingBlock() {
+            var sortBy = document.createElement('DIV'),
+                sortByLabel = document.createElement('LABEL');
+            sortBy.className = 'sort-by';
+            sortByLabel.textContent = translate('Sort By');
+            sortBy.appendChild(sortByLabel);
+            sortBy.appendChild(createSortingSelect());
+
+            return sortBy;
+        }
+
+        function createProductsPerPageBlock() {
+            var productPerPage = document.createElement('DIV'),
+                productPerPageLabel = document.createElement('LABEL');
+            productPerPage.className = 'limiter';
+            productPerPageLabel.textContent = translate('Items') + ': ';
+            productPerPage.appendChild(productPerPageLabel);
+
+            window.productsPerPage.map(function (numberOfProductsPerPage, index) {
+                productPerPage.appendChild(createProductsPerPageElement(numberOfProductsPerPage));
+
+                if (index < productsPerPage.length - 1) {
+                    var separator = document.createTextNode(' | ');
+                    productPerPage.appendChild(separator);
+                }
+            });
+
+            return productPerPage;
         }
     }
 );

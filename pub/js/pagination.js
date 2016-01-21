@@ -34,12 +34,14 @@ define(['lib/url'], function (url) {
             return paginationQueryParameterName;
         },
 
-        renderPagination: function (totalNumberOfResults, productsPerPage, paginationPlaceholderSelector) {
-            var paginationPlaceholder = document.querySelector(paginationPlaceholderSelector),
+        renderPagination: function (totalNumberOfResults, productsPerPage) {
+            var paginationContainer = document.createElement('DIV'),
                 totalPageCount = Math.ceil(totalNumberOfResults / getSelectedNumberOfProductsPerPage(productsPerPage));
 
-            if (null === paginationPlaceholder || totalPageCount < 2) {
-                return;
+            paginationContainer.id = 'pagination';
+
+            if (totalPageCount < 2) {
+                return paginationContainer;
             }
 
             var pagination = document.createElement('OL'),
@@ -89,7 +91,9 @@ define(['lib/url'], function (url) {
                 pagination.appendChild(createPaginationItemWithLink(nextPageUrl, '&#9654;', 'next'));
             }
 
-            paginationPlaceholder.appendChild(pagination);
+            paginationContainer.appendChild(pagination);
+
+            return paginationContainer;
         }
     }
 });

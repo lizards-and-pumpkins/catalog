@@ -4,13 +4,6 @@
  */
 ?>
 <?= $this->getChildOutput('product_listing_content_block_top') ?>
-<div class="toolbar roundedBorder">
-    <p class="amount"> <?= $this->__('Item(s)') ?></p>
-    <div class="sort-by"><label><?= $this->__('Sort By') ?></label></div>
-    <div class="limiter"><label><?= $this->__('Items') ?>: </label></div>
-</div>
-<div id="products-grid-container"></div>
-<div id="pagination"></div>
 <script>
     var productListingJson = {{snippet product_grid}},
         totalNumberOfResults = {{snippet total_number_of_results}},
