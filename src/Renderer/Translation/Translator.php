@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
-interface Translator
+interface Translator extends \JsonSerializable
 {
     /**
      * @param string $string

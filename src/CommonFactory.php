@@ -1327,8 +1327,26 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function getTranslatorRegistry()
     {
         if (null === $this->translatorRegistry) {
-            $this->translatorRegistry = new TranslatorRegistry(
-                $this->getMasterFactory()->getTranslatorFactory()
+            $this->translatorRegistry = new TranslatorRegistry();
+
+            $this->translatorRegistry->register(
+                ProductSearchAutosuggestionSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductSearchAutosuggestionTranslatorFactory()
+            );
+
+            $this->translatorRegistry->register(
+                ProductListingPageSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductListingTranslatorFactory()
+            );
+
+            $this->translatorRegistry->register(
+                ProductInSearchAutosuggestionSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductInSearchAutosuggestionTranslatorFactory()
+            );
+
+            $this->translatorRegistry->register(
+                ProductDetailViewSnippetRenderer::CODE,
+                $this->getMasterFactory()->getProductDetailsViewTranslatorFactory()
             );
         }
 
@@ -1338,10 +1356,44 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return callable
      */
-    public function getTranslatorFactory()
+    public function getProductListingTranslatorFactory()
     {
         return function ($locale) {
-            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator());
+            $files = ['common.csv', 'attributes.csv', 'product-listing.csv'];
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
+        };
+    }
+
+    /**
+     * @return callable
+     */
+    public function getProductDetailsViewTranslatorFactory()
+    {
+        return function ($locale) {
+            $files = ['common.csv', 'attributes.csv', 'product-details.csv'];
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
+        };
+    }
+
+    /**
+     * @return callable
+     */
+    public function getProductInSearchAutosuggestionTranslatorFactory()
+    {
+        return function ($locale) {
+            $files = [];
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
+        };
+    }
+
+    /**
+     * @return callable
+     */
+    public function getProductSearchAutosuggestionTranslatorFactory()
+    {
+        return function ($locale) {
+            $files = [];
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
         };
     }
 

@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -150,10 +151,12 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
     ) {
         $dataPoolReader = $this->factory->createDataPoolReader();
+
         return new ProductDetailViewRequestHandler(
             $context,
             $dataPoolReader,
             new PageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
+            $this->factory->getTranslatorRegistry(),
             $productDetailPageMetaSnippetKeyGenerator
         );
     }
@@ -167,7 +170,10 @@ class FrontendRenderingTest extends AbstractIntegrationTest
 
     public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
     {
-        $context = SelfContainedContextBuilder::rehydrateContext([ContextVersion::CODE => '-1']);
+        $context = SelfContainedContextBuilder::rehydrateContext([
+            ContextVersion::CODE => '-1',
+            ContextLocale::CODE => 'foo_BAR'
+        ]);
         
         $metaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
         $productDetailPageMetaSnippetKey = $metaSnippetKeyGenerator->getKeyForContext(

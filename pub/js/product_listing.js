@@ -6,9 +6,10 @@ require([
     'lib/url',
     'lib/styleselect',
     'lib/overflow_scrolling',
+    'lib/translate',
     'common',
     'ekomi'
-], function (domReady, productGrid, filterNavigation, pagination, url, styleSelect, productTitleScrolling) {
+], function (domReady, productGrid, filterNavigation, pagination, url, styleSelect, productTitleScrolling, translate) {
 
         var previousViewportWidth;
 
@@ -128,7 +129,7 @@ require([
             var sortingOption = document.createElement('OPTION'),
                 newUrl = url.updateQueryParameters({ "order": config['code'], "dir": config['selectedDirection'] });
 
-            sortingOption.textContent = getAttributeTranslation(config['code']);
+            sortingOption.textContent = translate(config['code']);
             sortingOption.value = url.removeQueryParameterFromUrl(newUrl, pagination.getPaginationQueryParameterName());
             sortingOption.selected = config['selected'];
 
@@ -144,14 +145,6 @@ require([
                 this.className += 'block' === filters.style.display ? ' collapsed' : ' expanded';
                 filters.style.display = 'block' === filters.style.display ? 'none' : 'block';
             }, true);
-        }
-
-        function getAttributeTranslation(string) {
-            if (typeof attributeTranslation !== 'object' || !attributeTranslation.hasOwnProperty(string)) {
-                return string;
-            }
-
-            return attributeTranslation[string];
         }
     }
 );

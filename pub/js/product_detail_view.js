@@ -10,6 +10,7 @@ require([
     'lib/modal_box',
     'lib/overflow_scrolling',
     'product_grid',
+    'lib/translate',
     'ekomi'
 ], function(
     Product,
@@ -22,7 +23,8 @@ require([
     initializeSwiping,
     showModalBox,
     productTitleScrolling,
-    productGrid
+    productGrid,
+    translate
 ) {
 
     var tabletWidth = 768,
@@ -247,8 +249,9 @@ require([
         variationSelect.id = selectBoxIdPrefix + name;
         variationSelect.addEventListener('change', function () { showNextSelectBox(name); }, true);
 
-        var defaultOption = document.createElement('OPTION');
-        defaultOption.textContent = 'Select ' + name;
+        var translatedAttributeName = translate(name),
+            defaultOption = document.createElement('OPTION');
+        defaultOption.textContent = translate('Select %s', translatedAttributeName);
         variationSelect.appendChild(defaultOption);
 
         options.map(function (option) {

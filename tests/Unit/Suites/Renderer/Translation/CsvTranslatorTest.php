@@ -38,7 +38,9 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
         $this->createFixtureDirectory($testLocaleDirectoryPath);
 
-        $result = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $fileNames = [];
+
+        $result = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
         $this->assertInstanceOf(Translator::class, $result);
     }
 
@@ -54,7 +56,9 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
         $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
-        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $fileNames = [];
+
+        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
     }
 
     public function testExceptionIsThrownIfTranslationFileIsNotReadable()
@@ -69,7 +73,9 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents, 0000);
         $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
-        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $fileNames = ['test_translation_file.csv'];
+
+        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
     }
 
     public function testExceptionIsThrownIfTranslationFileHasWrongFormatting()
@@ -84,7 +90,21 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
         $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
-        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $fileNames = ['test_translation_file.csv'];
+
+        CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
+    }
+
+    public function testOriginalStringIsReturnedIfTranslationDirectoryDoesNotExist()
+    {
+        $fileNames = [];
+
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
+
+        $testTranslationSource = 'foo';
+        $result = $translator->translate($testTranslationSource);
+
+        $this->assertSame($testTranslationSource, $result);
     }
 
     public function testOriginalStringIsReturnedIfTranslationIsMissing()
@@ -94,11 +114,13 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
         $this->createFixtureDirectory($testLocaleDirectoryPath);
 
-        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
-        $this->createFixtureDirectory($testLocaleDirectoryPath);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
+
+        $fileNames = [];
+
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
 
         $testTranslationSource = 'foo';
-        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
         $result = $translator->translate($testTranslationSource);
 
         $this->assertSame($testTranslationSource, $result);
@@ -118,9 +140,61 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
         $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
 
-        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator);
+        $fileNames = ['test_translation_file.csv'];
+
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
         $result = $translator->translate($testTranslationSource);
 
         $this->assertSame($testTranslationResult, $result);
+    }
+
+    public function testGivenStringIsNotTranslatedIfTranslationFileIsNotSpecifiedEvenIfExists()
+    {
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
+        $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
+
+        $testTranslationSource = 'foo';
+        $testTranslationResult = 'bar';
+
+        $testTranslationFileContents = sprintf('"%s","%s"', $testTranslationSource, $testTranslationResult);
+
+        $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
+
+        $fileNames = [];
+
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
+        $result = $translator->translate($testTranslationSource);
+
+        $this->assertSame($testTranslationSource, $result);
+    }
+
+    public function testAllTranslationsAreReturnedAsAnArray()
+    {
+        $testThemeDirectoryPath = sys_get_temp_dir();
+        $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
+        $testTranslationFilePath = $testLocaleDirectoryPath . '/test_translation_file.csv';
+
+        $translationSourceA = 'foo';
+        $translationResultA = 'bar';
+        $translationA = sprintf('"%s","%s"', $translationSourceA, $translationResultA);
+
+        $translationSourceB = 'baz';
+        $translationResultB = 'qux';
+        $translationB = sprintf('"%s","%s"', $translationSourceB, $translationResultB);
+
+        $testTranslationFileContents = $translationA . "\n" . $translationB;
+        $this->createFixtureFile($testTranslationFilePath, $testTranslationFileContents);
+        $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
+
+        $fileNames = ['test_translation_file.csv'];
+
+        $translator = CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
+
+        $result = $translator->jsonSerialize();
+        $expectedArray = [$translationSourceA => $translationResultA, $translationSourceB => $translationResultB];
+
+        $this->assertSame($expectedArray, $result);
     }
 }

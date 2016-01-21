@@ -217,7 +217,7 @@ abstract class BlockRenderer
     public function translate($string)
     {
         $locale = $this->context->getValue(ContextLocale::CODE);
-        return $this->translatorRegistry->getTranslatorForLocale($locale)->translate($string);
+        return $this->translatorRegistry->getTranslator($this->getLayoutHandle(), $locale)->translate($string);
     }
 
     /**

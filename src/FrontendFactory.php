@@ -180,6 +180,7 @@ class FrontendFactory implements Factory
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
+            $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
         );
     }

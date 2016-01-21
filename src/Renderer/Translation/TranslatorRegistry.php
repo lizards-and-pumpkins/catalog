@@ -2,33 +2,44 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
+use LizardsAndPumpkins\Renderer\Translation\Exception\UndefinedTranslatorException;
+
 class TranslatorRegistry
 {
     /**
-     * @var callable
+     * @var callable[]
      */
-    private $translatorFactory;
+    private $translatorFactories;
 
     /**
      * @var Translator[]
      */
     private $translators = [];
 
-    public function __construct(callable $translatorFactory)
+    /**
+     * @param string $pageCode
+     * @param callable $translatorFactory
+     */
+    public function register($pageCode, callable $translatorFactory)
     {
-        $this->translatorFactory = $translatorFactory;
+        $this->translatorFactories[$pageCode] = $translatorFactory;
     }
 
     /**
+     * @param string $pageCode
      * @param string $locale
      * @return Translator
      */
-    public function getTranslatorForLocale($locale)
+    public function getTranslator($pageCode, $locale)
     {
-        if (!isset($this->translators[$locale])) {
-            $this->translators[$locale] = call_user_func($this->translatorFactory, $locale);
+        if (! isset($this->translatorFactories[$pageCode])) {
+            throw new UndefinedTranslatorException(sprintf('No translator found for page "%s".', $pageCode));
         }
 
-        return $this->translators[$locale];
+        if (! isset($this->translators[$pageCode][$locale])) {
+            $this->translators[$pageCode][$locale] = call_user_func($this->translatorFactories[$pageCode], $locale);
+        }
+
+        return $this->translators[$pageCode][$locale];
     }
 }
