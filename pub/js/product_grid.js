@@ -123,11 +123,11 @@ define(['product', 'lib/translate'], function (Product, translate) {
             var grid = document.createElement('UL');
             grid.className = 'products-grid';
 
+            productGridPlaceholder.appendChild(grid);
+
             productGridJson.map(function (productSourceData) {
                 grid.appendChild(createGridItem(productSourceData));
             });
-
-            productGridPlaceholder.appendChild(grid);
         }
     }
 });
