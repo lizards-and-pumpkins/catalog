@@ -76,4 +76,19 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotSame($instanceA, $instanceB);
     }
+
+    public function testDifferentInstancesOfTranslatorAreReturnedForDifferentPageCodes()
+    {
+        $pageCodeA = 'foo';
+        $pageCodeB = 'bar';
+        $locale = 'foo_BAR';
+
+        $this->registry->register($pageCodeA, $this->createStubTranslatorFactory());
+        $this->registry->register($pageCodeB, $this->createStubTranslatorFactory());
+
+        $instanceA = $this->registry->getTranslator($pageCodeA, $locale);
+        $instanceB = $this->registry->getTranslator($pageCodeB, $locale);
+
+        $this->assertNotSame($instanceA, $instanceB);
+    }
 }
