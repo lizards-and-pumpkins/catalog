@@ -1,4 +1,4 @@
-define(['lib/url', 'pagination'], function (url, pagination) {
+define(['lib/url', 'pagination', 'lib/translator'], function (url, pagination, translate) {
 
     function getSelectedFilterValues(filterCode) {
         var rawSelectedValues = url.getQueryParameterValue(filterCode);
@@ -12,14 +12,6 @@ define(['lib/url', 'pagination'], function (url, pagination) {
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    function getAttributeTranslation(string) {
-        if (typeof translations !== 'object' || !translations.hasOwnProperty(string)) {
-            return string;
-        }
-
-        return translations[string];
     }
 
     function toggleExpandedCollapsed(event) {
@@ -57,7 +49,7 @@ define(['lib/url', 'pagination'], function (url, pagination) {
 
                 var heading = document.createElement('DIV');
                 heading.className = 'block-title roundedBorder expanded';
-                heading.textContent = getAttributeTranslation(filterCode);
+                heading.textContent = translate(filterCode);
                 heading.addEventListener('click', toggleExpandedCollapsed, true);
 
                 var filterContainer = document.createElement('DIV');
