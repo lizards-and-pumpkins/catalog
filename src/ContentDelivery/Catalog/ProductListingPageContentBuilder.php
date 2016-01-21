@@ -73,16 +73,13 @@ class ProductListingPageContentBuilder
         SortOrderConfig $selectedSortOrderConfig
     ) {
         $productIds = $searchEngineResponse->getProductIds();
+        $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
 
-        if (count($productIds) > 0) {
-            $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
-
-            $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
-            $this->addProductsInListingToPageBuilder(...$productIds);
-            $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
-            $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
-            $this->addTranslationsToPageBuilder($context);
-        }
+        $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
+        $this->addProductsInListingToPageBuilder(...$productIds);
+        $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
+        $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
+        $this->addTranslationsToPageBuilder($context);
 
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
     }
@@ -93,7 +90,7 @@ class ProductListingPageContentBuilder
         $externalFacetFields = count($facetFields) > 0 ?
             $this->replaceInternalWithExternalFieldNames($facetFields) :
             [];
-        
+
         $snippetCode = 'filter_navigation';
         $this->addDynamicSnippetToPageBuilder($snippetCode, json_encode($externalFacetFields));
     }
