@@ -50,6 +50,10 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
  * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator
  * @uses   \LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy

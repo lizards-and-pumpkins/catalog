@@ -3,9 +3,10 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
 use LizardsAndPumpkins\Command;
+use LizardsAndPumpkins\Factory;
 use LizardsAndPumpkins\Product\ProductListingCriteria;
 
-interface ProductListingImportCommandFactory
+interface ProductListingImportCommandFactory extends Factory
 {
     /**
      * @param ProductListingCriteria $productListingCriteria

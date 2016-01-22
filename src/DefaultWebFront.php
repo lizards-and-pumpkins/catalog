@@ -3,6 +3,9 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRouterChain;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
 
 class DefaultWebFront extends WebFront
 {
@@ -18,6 +21,9 @@ class DefaultWebFront extends WebFront
     {
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new TwentyOneRunFactory());
+        $masterFactory->register(new UpdatingProductImportCommandFactory());
+        $masterFactory->register(new UpdatingProductImageImportCommandFactory());
+        $masterFactory->register(new UpdatingProductListingImportCommandFactory());
         $masterFactory->register(new FrontendFactory($this->getRequest()));
     }
 

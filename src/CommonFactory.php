@@ -1305,7 +1305,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createCatalogImport()
     {
         return new CatalogImport(
-            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->createQueueImportCommands(),
             $this->getMasterFactory()->createProductXmlToProductBuilderLocator(),
             $this->getMasterFactory()->createProductListingCriteriaBuilder(),
             $this->getMasterFactory()->getEventQueue(),
@@ -1502,7 +1502,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createQueueImportCommands()
     {
         return new QueueImportCommands(
-            $this->getMasterFactory()->createCommandQueue(),
+            $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->createProductImportCommandLocator(),
             $this->getMasterFactory()->createProductImageImportCommandLocator(),
             $this->getMasterFactory()->createProductListingImportCommandLocator()
