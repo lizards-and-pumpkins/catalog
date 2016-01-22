@@ -38,6 +38,8 @@
 /* Scrolling */
 .filter-container { max-height: 220px; overflow: scroll }
 
+.note-msg { padding: 60px 0 0 10px; font-weight: bold }
+
 /* Tablet */
 @media (max-width: 974px) {
     .products-grid li { width: 50% }

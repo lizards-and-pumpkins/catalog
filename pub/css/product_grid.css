@@ -1,4 +1,4 @@
-.products-grid { font-size: 0; overflow: hidden }
+.products-grid { overflow: hidden }
 .products-grid::after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 .products-grid a { color: #000000 }
 .products-grid li { float: left; width: 33%; position: relative; margin-bottom: -1px; font-size: 13px }
@@ -16,5 +16,5 @@
 .products-grid li .new-product { background: #3CABD9; color: #ffffff; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 16px; padding: 3px 7px; text-transform: uppercase; position: absolute; left: 0; top: 0 }
 .products-grid .you-save { color: #3cabd9 }
 
-.swipe-container .products-grid li { display: table-cell; width: auto }
+.swipe-container .products-grid li { display: table-cell; width: auto; float: none }
 .swipe-container .products-grid li .grid-cell-container { border-bottom: none; width: 213px }
