@@ -66,8 +66,13 @@ require([
         }
 
         function addClassToLastElementOfEachRow(className) {
-            var grid = document.querySelector('.products-grid'),
-                cells = Array.prototype.slice.call(grid.querySelectorAll('li')),
+            var grid = document.querySelector('.products-grid');
+
+            if (null === grid) {
+                return;
+            }
+
+            var cells = Array.prototype.slice.call(grid.querySelectorAll('li')),
                 colsPerRow = Math.floor(grid.clientWidth / cells[0].clientWidth);
 
             cells.map(function (cell, index) {
