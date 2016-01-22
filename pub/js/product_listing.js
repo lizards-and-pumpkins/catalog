@@ -14,14 +14,8 @@ require([
         var previousViewportWidth;
 
         domReady(function () {
-            var content = document.querySelector('.col-main');
-            content.appendChild(createToolbar());
-            productGrid.renderGrid(productListingJson, '.col-main');
-            content.appendChild(pagination.renderPagination(totalNumberOfResults, productsPerPage));
+            renderContent();
 
-            styleSelect('.sort-by select');
-
-            productTitleScrolling('.grid-cell-container h2');
             filterNavigation.renderLayeredNavigation(filterNavigationJson, '#filter-navigation');
             bindLayeredNavigationButtonsActions();
 
@@ -29,6 +23,30 @@ require([
             window.addEventListener('resize', adjustToPageWidth);
             window.addEventListener('orientationchange', adjustToPageWidth);
         });
+
+        function renderContent() {
+            var content = document.querySelector('.col-main');
+
+            if (typeof totalNumberOfResults === 'undefined' || 0 === totalNumberOfResults) {
+                content.appendChild(createEmptyListingBlock());
+                return;
+            }
+
+            content.appendChild(createToolbar());
+            productGrid.renderGrid(productListingJson, '.col-main');
+            content.appendChild(pagination.renderPagination(totalNumberOfResults, productsPerPage));
+
+            styleSelect('.sort-by select');
+            productTitleScrolling('.grid-cell-container h2');
+        }
+
+        function createEmptyListingBlock() {
+            var emptyListingMessage = document.createElement('P');
+            emptyListingMessage.className = 'note-msg';
+            emptyListingMessage.textContent = translate('There are no products matching the selection.');
+
+            return emptyListingMessage;
+        }
 
         function adjustToPageWidth() {
             if (!isViewportWidthChanged()) {
