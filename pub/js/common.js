@@ -67,26 +67,22 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
         }
     }
 
-    function mobileNavigationClickListener(event) {
-        if (this.querySelector('ul') === null) {
-            return;
-        }
-
+    function toggleMainNavigationSubMenu(event) {
         event.preventDefault();
 
-        var elementWasAlreadySelected = this.className.match(/\bhover\b/ig);
+        var elementWasAlreadySelected = this.parentNode.className.match(/\bhover\b/ig);
 
         removeClassFromAllNodeListElements(document.querySelectorAll('.nav > li'), 'hover');
 
         if (null === elementWasAlreadySelected) {
-            this.className += ' hover';
+            this.parentNode.className += ' hover';
         }
     }
 
     function adjustToPageWidth() {
         if (document.body.clientWidth < siteFullWidth) {
-            Array.prototype.map.call(document.querySelectorAll('.nav > li'), function (menuItem) {
-                menuItem.addEventListener('click', mobileNavigationClickListener, true);
+            Array.prototype.map.call(document.querySelectorAll('.nav > li.parent > a'), function (menuItem) {
+                menuItem.addEventListener('click', toggleMainNavigationSubMenu);
             });
         }
 
