@@ -58,12 +58,16 @@ use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands;
 use LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder;
@@ -1490,5 +1494,42 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createConfigurableProductAttributeValueCollector()
     {
         return new ConfigurableProductAttributeValueCollector();
+    }
+
+    /**
+     * @return QueueImportCommands
+     */
+    public function createQueueImportCommands()
+    {
+        return new QueueImportCommands(
+            $this->getMasterFactory()->createCommandQueue(),
+            $this->getMasterFactory()->createProductImportCommandLocator(),
+            $this->getMasterFactory()->createProductImageImportCommandLocator(),
+            $this->getMasterFactory()->createProductListingImportCommandLocator()
+        );
+    }
+
+    /**
+     * @return ProductImportCommandLocator
+     */
+    public function createProductImportCommandLocator()
+    {
+        return new ProductImportCommandLocator($this->getMasterFactory());
+    }
+
+    /**
+     * @return ProductImageImportCommandLocator
+     */
+    public function createProductImageImportCommandLocator()
+    {
+        return new ProductImageImportCommandLocator($this->getMasterFactory());
+    }
+
+    /**
+     * @return ProductListingImportCommandLocator
+     */
+    public function createProductListingImportCommandLocator()
+    {
+        return new ProductListingImportCommandLocator($this->getMasterFactory());
     }
 }
