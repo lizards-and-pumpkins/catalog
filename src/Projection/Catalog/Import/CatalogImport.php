@@ -19,11 +19,6 @@ use LizardsAndPumpkins\Utils\XPathParser;
 class CatalogImport
 {
     /**
-     * @var Queue
-     */
-    private $commandQueue;
-
-    /**
      * @var ProductXmlToProductBuilderLocator
      */
     private $productXmlToProductBuilder;
@@ -58,15 +53,20 @@ class CatalogImport
      */
     private $imageDirectoryPath;
 
+    /**
+     * @var QueueImportCommands
+     */
+    private $queueImportCommands;
+
     public function __construct(
-        Queue $commandQueue,
+        QueueImportCommands $quueImportCommands,
         ProductXmlToProductBuilderLocator $productXmlToProductBuilder,
         ProductListingCriteriaBuilder $productListingCriteriaBuilder,
         Queue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
     ) {
-        $this->commandQueue = $commandQueue;
+        $this->queueImportCommands = $quueImportCommands;
         $this->productXmlToProductBuilder = $productXmlToProductBuilder;
         $this->productListingCriteriaBuilder = $productListingCriteriaBuilder;
         $this->eventQueue = $eventQueue;
@@ -143,7 +143,7 @@ class CatalogImport
         array_map(function (Context $context) use ($productBuilder, $productXml) {
             if ($productBuilder->isAvailableForContext($context)) {
                 $product = $productBuilder->getProductForContext($context);
-                $this->addUpdateProductCommandToQueue($product);
+                $this->queueImportCommands->forProduct($product);
                 $this->processImagesInProductXml($productXml);
             }
         }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
@@ -169,15 +169,10 @@ class CatalogImport
         try {
             $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
             $imageFilePath = $this->imageDirectoryPath . '/' . $fileNode['value'];
-            $this->commandQueue->add(new AddImageCommand($imageFilePath, $this->dataVersion));
+            $this->queueImportCommands->forImage($imageFilePath, $this->dataVersion);
         } catch (\Exception $exception) {
             $this->logger->log(new ProductImageImportCallbackFailureMessage($exception, $productImageXml));
         }
-    }
-
-    private function addUpdateProductCommandToQueue(Product $product)
-    {
-        $this->commandQueue->add(new UpdateProductCommand($product));
     }
 
     /**
@@ -188,7 +183,7 @@ class CatalogImport
         try {
             $productListingCriteria = $this->productListingCriteriaBuilder
                 ->createProductListingCriteriaFromXml($listingXml, $this->dataVersion);
-            $this->commandQueue->add(new AddProductListingCommand($productListingCriteria));
+            $this->queueImportCommands->forListing($productListingCriteria);
         } catch (\Exception $exception) {
             $this->logger->log(new CatalogListingImportCallbackFailureMessage($exception, $listingXml));
         }

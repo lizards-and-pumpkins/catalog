@@ -40,11 +40,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $sharedFixtureFilePath = __DIR__ . '/../../../../../shared-fixture/catalog.xml';
 
     /**
-     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockCommandQueue;
-
-    /**
      * @var ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductXmlToProductBuilder;
@@ -65,14 +60,14 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $catalogImport;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
-     */
-    private $addToCommandQueueSpy;
-
-    /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockEventQueue;
+
+    /**
+     * @var QueueImportCommands|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockQueueImportCommands;
 
     /**
      * @var string
@@ -83,34 +78,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
      * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
      */
     private $contextSource;
-
-    /**
-     * @param string $commandClass
-     */
-    private function assertCommandWasAddedToQueue($commandClass)
-    {
-        $numberOfInvocations = array_sum(array_map(function ($invocation) use ($commandClass) {
-            /** @var \PHPUnit_Framework_MockObject_Invocation_Object $invocation */
-            return intval($commandClass === get_class($invocation->parameters[0]));
-        }, $this->addToCommandQueueSpy->getInvocations()));
-
-        $message = sprintf('Failed to assert that %s was added to command queue.', $commandClass);
-        $this->assertGreaterThan(0, $numberOfInvocations, $message);
-    }
-
-    /**
-     * @param string $commandClass
-     */
-    private function assertCommandWasNotAddedToQueue($commandClass)
-    {
-        $numberOfInvocations = array_sum(array_map(function ($invocation) use ($commandClass) {
-            /** @var \PHPUnit_Framework_MockObject_Invocation_Object $invocation */
-            return intval($commandClass === get_class($invocation->parameters[0]));
-        }, $this->addToCommandQueueSpy->getInvocations()));
-
-        $message = sprintf('Failed to assert that %s was not added to command queue.', $commandClass);
-        $this->assertSame(0, $numberOfInvocations, $message);
-    }
 
     /**
      * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
@@ -156,9 +123,8 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->testDirectoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($this->testDirectoryPath);
         
-        $this->mockCommandQueue = $this->getMock(Queue::class);
-        $this->addToCommandQueueSpy = $this->any();
-        $this->mockCommandQueue->expects($this->addToCommandQueueSpy)->method('add');
+        $this->mockQueueImportCommands = $this->getMock(QueueImportCommands::class, [], [], '', false);
+        
         $this->stubProductXmlToProductBuilder = $this->createMockProductXmlToProductBuilder();
         $this->stubProductListingCriteriaBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->mockEventQueue = $this->getMock(Queue::class);
@@ -169,7 +135,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockLogger = $this->getMock(Logger::class);
 
         $this->catalogImport = new CatalogImport(
-            $this->mockCommandQueue,
+            $this->mockQueueImportCommands,
             $this->stubProductXmlToProductBuilder,
             $this->stubProductListingCriteriaBuilder,
             $this->mockEventQueue,
@@ -200,45 +166,40 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->catalogImport->importFile($importFilePath);
     }
 
-    public function testUpdateProductCommandsAreEmitted()
+    public function testItAddsCommandsForTheProductToQueue()
     {
+        $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(true);
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
         
-        $this->assertCommandWasAddedToQueue(UpdateProductCommand::class);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
     }
 
-    public function testUpdateProductCommandsAreNotEmittedIfTheProductDoesNotMatchAGivenContext()
+    public function testItAddsNoProductCommandsToTheQueueIfTheProductDoesNotMatchAGivenContext()
     {
+        $this->mockQueueImportCommands->expects($this->never())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(false);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
-        
-        $this->assertCommandWasNotAddedToQueue(UpdateProductCommand::class);
     }
 
-    public function testAddProductListingCommandsAreEmitted()
+    public function testAddsCommandsForTheProductListingToTheQueue()
     {
+        $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forListing');
         $this->setProductIsAvailableForContextFixture(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
-        
-        $this->assertCommandWasAddedToQueue(AddProductListingCommand::class);
     }
 
-    public function testAddImageCommandsAreEmitted()
+    public function testItAddsCommandsForTheProductImageToTheQueue()
     {
+        $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forImage');
         $this->setProductIsAvailableForContextFixture(true);
-        
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
-        
-        $this->assertCommandWasAddedToQueue(AddImageCommand::class);
     }
 
-    public function testAddImageCommandsAreNotEmittedIfTheProductDoesNotMatchAGivenContext()
+    public function testItAddsNoCommandsForImagesIfTheProductDoesNotMatchAGivenContext()
     {
+        $this->mockQueueImportCommands->expects($this->never())->method('forImage');
         $this->setProductIsAvailableForContextFixture(false);
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
-
-        $this->assertCommandWasNotAddedToQueue(AddImageCommand::class);
     }
 
     public function testItAddsACatalogWasImportedDomainEventToTheEventQueue()
@@ -254,18 +215,8 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockLogger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(CatalogListingImportCallbackFailureMessage::class));
 
-        $mockCommandQueue = $this->getMock(Queue::class);
-        $mockCommandQueue->method('add')->willThrowException(new \Exception('dummy'));
+        $this->mockQueueImportCommands->method('forListing')->willThrowException(new \Exception('dummy'));
         
-        $this->catalogImport = new CatalogImport(
-            $mockCommandQueue,
-            $this->stubProductXmlToProductBuilder,
-            $this->stubProductListingCriteriaBuilder,
-            $this->mockEventQueue,
-            $this->contextSource,
-            $this->mockLogger
-        );
-
         $fullXml = file_get_contents($this->sharedFixtureFilePath);
         $onlyListingXml = (new XPathParser($fullXml))->getXmlNodesRawXmlArrayByXPath('/catalog/listings')[0];
         $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
@@ -289,7 +240,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $stubProductXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
 
         $this->catalogImport = new CatalogImport(
-            $this->mockCommandQueue,
+            $this->mockQueueImportCommands,
             $stubProductXmlToProductBuilder,
             $this->stubProductListingCriteriaBuilder,
             $this->mockEventQueue,
@@ -306,10 +257,8 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockLogger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(ProductImageImportCallbackFailureMessage::class));
 
-        $originalXml = file_get_contents($this->sharedFixtureFilePath);
-        $invalidImagesXml = preg_replace('#.(jpg|png)<#i', '.<', $originalXml);
-        $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
-        $this->createFixtureFile($fixtureFile, $invalidImagesXml);
-        $this->catalogImport->importFile($fixtureFile);
+        $this->mockQueueImportCommands->method('forImage')->willThrowException(new \Exception('dummy'));
+
+        $this->catalogImport->importFile($this->sharedFixtureFilePath);
     }
 }

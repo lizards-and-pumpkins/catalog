@@ -37,6 +37,9 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductProjector;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
@@ -45,6 +48,7 @@ use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
+use LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
@@ -133,6 +137,10 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator
  * @uses   \LizardsAndPumpkins\Projection\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler
@@ -647,5 +655,29 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createConfigurableProductAttributeValueCollector();
         $this->assertInstanceOf(ConfigurableProductAttributeValueCollector::class, $result);
+    }
+
+    public function testItReturnsAQueueImportCommandsInstance()
+    {
+        $result = $this->commonFactory->createQueueImportCommands();
+        $this->assertInstanceOf(QueueImportCommands::class, $result);
+    }
+
+    public function testItReturnsAProductImportCommandLocator()
+    {
+        $result = $this->commonFactory->createProductImportCommandLocator();
+        $this->assertInstanceOf(ProductImportCommandLocator::class, $result);
+    }
+
+    public function testItReturnsAProductImageImportCommandLocator()
+    {
+        $result = $this->commonFactory->createProductImageImportCommandLocator();
+        $this->assertInstanceOf(ProductImageImportCommandLocator::class, $result);
+    }
+
+    public function testItReturnsAProductListingImportCommandLocator()
+    {
+        $result = $this->commonFactory->createProductListingImportCommandLocator();
+        $this->assertInstanceOf(ProductListingImportCommandLocator::class, $result);
     }
 }

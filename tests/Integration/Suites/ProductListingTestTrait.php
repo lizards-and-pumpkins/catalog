@@ -10,6 +10,9 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
 use LizardsAndPumpkins\Queue\Queue;
 
@@ -110,6 +113,9 @@ trait ProductListingTestTrait
         $masterFactory->register(new CommonFactory);
         $masterFactory->register($this->createIntegrationTestFactory($masterFactory));
         $masterFactory->register(new FrontendFactory($request));
+        $masterFactory->register(new UpdatingProductImportCommandFactory());
+        $masterFactory->register(new UpdatingProductImageImportCommandFactory());
+        $masterFactory->register(new UpdatingProductListingImportCommandFactory());
 
         return $masterFactory;
     }

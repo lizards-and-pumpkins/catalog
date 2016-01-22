@@ -6,6 +6,10 @@ namespace LizardsAndPumpkins;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\NullProductImageImportCommandFactory;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
@@ -38,6 +42,8 @@ class RunImport extends BaseCliCommand
         $factory->register(new CommonFactory());
         $factory->register(new TwentyOneRunFactory());
         $factory->register(new LoggingDomainEventHandlerFactory());
+        $factory->register(new UpdatingProductImportCommandFactory());
+        $factory->register(new UpdatingProductListingImportCommandFactory());
 
         return new self($factory, new CLImate());
     }
@@ -61,6 +67,12 @@ class RunImport extends BaseCliCommand
                 'description' => 'Process queues after the import',
                 'noValue' => true,
             ],
+            'importImages' => [
+                'prefix' => 'i',
+                'longPrefix' => 'importImages',
+                'description' => 'Process images during import',
+                'noValue' => true,
+            ],
             'importFile' => [
                 'description' => 'Import XML file',
                 'required' => true
@@ -72,6 +84,7 @@ class RunImport extends BaseCliCommand
     protected function execute(CLImate $CLImate)
     {
         $this->clearStorageIfRequested();
+        $this->enableImageImportIfRequested();
         $this->importFile();
         $this->processQueuesIfRequested();
     }
@@ -80,6 +93,15 @@ class RunImport extends BaseCliCommand
     {
         if ($this->getArg('clearStorage')) {
             $this->clearStorage();
+        }
+    }
+
+    private function enableImageImportIfRequested()
+    {
+        if ($this->getArg('importImages')) {
+            $this->factory->register(new UpdatingProductImageImportCommandFactory());
+        } else {
+            $this->factory->register(new NullProductImageImportCommandFactory());
         }
     }
 
