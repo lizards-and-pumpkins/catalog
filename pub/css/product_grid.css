@@ -1,8 +1,8 @@
 .products-grid { overflow: hidden }
 .products-grid::after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 .products-grid a { color: #000000 }
-.products-grid li { float: left; width: 33%; position: relative; margin-bottom: -1px; font-size: 13px }
-.products-grid li .grid-cell-container { padding: 25px 15px 20px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat; min-height: 191px }
+.products-grid li { float: left; width: 33%; position: relative; font-size: 13px }
+.products-grid li .grid-cell-container { padding: 25px 15px 20px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat; height: 193px }
 .products-grid li.last .grid-cell-container { border-right: none }
 .products-grid .product-image { display: block; margin: 0 0 10px 0 }
 .products-grid h2 { font-size: 14px; margin: 0; padding-top: 5px; padding-bottom: 5px }
