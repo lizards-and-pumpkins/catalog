@@ -43,7 +43,6 @@ class RunImport extends BaseCliCommand
         $factory->register(new TwentyOneRunFactory());
         $factory->register(new LoggingDomainEventHandlerFactory());
         $factory->register(new UpdatingProductImportCommandFactory());
-        $factory->register(new NullProductImageImportCommandFactory());
         $factory->register(new UpdatingProductListingImportCommandFactory());
 
         return new self($factory, new CLImate());
@@ -101,6 +100,8 @@ class RunImport extends BaseCliCommand
     {
         if ($this->getArg('importImages')) {
             $this->factory->register(new UpdatingProductImageImportCommandFactory());
+        } else {
+            $this->factory->register(new NullProductImageImportCommandFactory());
         }
     }
 

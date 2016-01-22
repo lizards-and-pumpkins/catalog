@@ -39,8 +39,8 @@ class QueueImportCommands
         ProductImageImportCommandLocator $productImageImportCommandLocator,
         ProductListingImportCommandLocator $productListingImportCommandLocator
     ) {
-        $this->productImportCommandLocator = $productImportCommandLocator;
         $this->commandQueue = $commandQueue;
+        $this->productImportCommandLocator = $productImportCommandLocator;
         $this->imageImportCommandLocator = $productImageImportCommandLocator;
         $this->listingImportCommandLocator = $productListingImportCommandLocator;
     }
