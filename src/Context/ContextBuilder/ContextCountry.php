@@ -11,7 +11,7 @@ class ContextCountry implements ContextPartBuilder
 {
     const CODE = 'country';
     
-    const COOKIE_NAME = 'breraTransport';
+    const COOKIE_NAME = 'lizardsAndPumpkinsTransport';
     
     private $cookieDataKey = 'country';
     
