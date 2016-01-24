@@ -65,7 +65,6 @@ textarea:focus, input:focus { outline: 0 }
 .cms_header_small p { margin: 0 }
 
 /* Main navigation */
-header { position: relative; z-index: 100 }
 nav { clear: both; color: #ffffff }
 .nav a { color: #ffffff }
 .nav > li { float: left }
@@ -74,7 +73,7 @@ nav { clear: both; color: #ffffff }
 .nav > li.last { border-right: none }
 .nav > li > a { display: block; padding: 7px 21px 8px 23px; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 20px }
 .nav > li.hover > a, .nav > li:hover > a { background: #105a86; padding-top: 6px; border-top: 1px solid #0a4365; border-radius: 2px 2px 0 0 }
-.nav > li > ul { left: -100000px; border-radius: 2px }
+.nav > li > ul { left: -100000px; border-radius: 2px; z-index: 220 }
 .nav > li.first > ul { border-radius: 0 2px 2px 2px }
 .nav > li > ul { position: absolute; background: #105a86; padding: 20px 0; width: 100% }
 .nav > li:hover > ul { left: 0 }
