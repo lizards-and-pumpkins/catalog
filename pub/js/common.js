@@ -43,7 +43,7 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
     function processLoginLogoutMetaLinks() {
         var elementIdToHide = 'meta-menu-logout-link';
 
-        if (cookie.getJsonValue('breraTransport', 'isCustomerLoggedIn')) {
+        if (cookie.getJsonValue('lizardsAndPumpkinsTransport', 'isCustomerLoggedIn')) {
             elementIdToHide = 'meta-menu-login-link';
         }
 
@@ -52,14 +52,14 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
     }
 
     function processCartMetaInfo() {
-        var cartNumItems = cookie.getJsonValue('breraTransport', 'cartNumItems');
+        var cartNumItems = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartNumItems');
 
         if (cartNumItems) {
             var cartNumItemsElement = document.getElementById('meta-menu-cart-num-items');
             cartNumItemsElement.innerHTML = cartNumItems;
         }
 
-        var cartTotal = cookie.getJsonValue('breraTransport', 'cartTotal');
+        var cartTotal = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartTotal');
 
         if (cartTotal) {
             var cartTotalElement = document.getElementById('meta-menu-cart-total');
