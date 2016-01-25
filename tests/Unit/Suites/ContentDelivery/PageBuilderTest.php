@@ -292,6 +292,22 @@ EOH;
         $this->assertEquals('Stub Content - Child Content 1 - Added Content', $page->getBody());
     }
 
+    public function testPageSpecificAdditionalSnippetIsMergedIntoList()
+    {
+        $rootSnippetContent = 'Stub Content - {{snippet child1}}';
+        $childSnippetContent = 'Child Content 1 - {{snippet added-later}}';
+
+        $childSnippetCodeToContentMap = ['child1' => $childSnippetContent];
+
+        $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetCodeToContentMap);
+
+        $this->pageBuilder->addSnippetToPage('added-later', 'Added Content');
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+
+        $this->assertEquals('Stub Content - Child Content 1 - Added Content', $page->getBody());
+    }
+
     public function testChildSnippetsWithNoRegisteredKeyGeneratorAreIgnored()
     {
         /** @var SnippetKeyGeneratorLocator|MockObject $stubKeyGeneratorLocator */
@@ -421,5 +437,32 @@ EOH;
         $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
 
         $this->assertEquals('Stub Content - Child 1Child 2Child 3', $page->getBody());
+    }
+
+    public function testItCombinesSnippetsAddedToThePageBuilder()
+    {
+        $rootSnippetContent = 'Stub Content - {{snippet container1}} : {{snippet container2}}';
+        $childSnippetCodeToContentMap = [
+            'child1' => 'Child 1',
+            'child2' => 'Child 2',
+            'child3' => 'Child 3',
+        ];
+        $containerSnippets = ['container1' => ['child1']];
+
+        $this->setDataPoolFixture(
+            $this->testRootSnippetCode,
+            $rootSnippetContent,
+            $childSnippetCodeToContentMap,
+            $containerSnippets
+        );
+        
+        $this->pageBuilder->addSnippetToContainer('container1', 'child2');
+        $this->pageBuilder->addSnippetToContainer('container2', 'child3');
+        $this->pageBuilder->addSnippetToContainer('container2', 'child4');
+        $this->pageBuilder->addSnippetToPage('child4', 'Child 4');
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+
+        $this->assertEquals('Stub Content - Child 1Child 2 : Child 3Child 4', $page->getBody());
     }
 }
