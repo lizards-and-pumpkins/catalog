@@ -73,7 +73,8 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
     {
         $expectedSnippetContent = [
             ProductSearchAutosuggestionMetaSnippetContent::KEY_ROOT_SNIPPET_CODE  => $this->dummyRootSnippetCode,
-            ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode]
+            ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
+            ProductSearchAutosuggestionMetaSnippetContent::KEY_CONTAINER_SNIPPETS => []
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 

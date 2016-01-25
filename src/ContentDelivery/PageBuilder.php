@@ -63,6 +63,11 @@ class PageBuilder
      */
     private $pageSnippets;
 
+    /**
+     * @var array[]
+     */
+    private $containerSnippets = [];
+
     public function __construct(
         DataPoolReader $dataPoolReader,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
@@ -86,7 +91,11 @@ class PageBuilder
 
         $codeToKeyMap = $this->initFromMetaInfo($metaInfo);
         $keyToContentMap = $this->loadSnippets();
-        $this->pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $this->pageSnippets = PageBuilderSnippets::fromCodesAndContent(
+            $codeToKeyMap,
+            $keyToContentMap,
+            array_merge_recursive($metaInfo->getContainerSnippets(), $this->containerSnippets)
+        );
         
         $this->logMissingSnippets();
         $this->applySnippetTransformations();
@@ -131,6 +140,24 @@ class PageBuilder
             $this->snippetTransformations[$snippetCode] = [];
         }
         $this->snippetTransformations[$snippetCode][] = $transformation;
+    }
+
+    /**
+     * @param string $containerCode
+     * @param string $snippetCode
+     */
+    public function addSnippetToContainer($containerCode, $snippetCode)
+    {
+        $this->containerSnippets[$containerCode][] = $snippetCode;
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param string $snippetContent
+     */
+    public function addSnippetToPage($snippetCode, $snippetContent)
+    {
+        $this->addSnippetsToPage([$snippetCode => $snippetCode], [$snippetCode => $snippetContent]);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
@@ -74,9 +75,10 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
         $result = $this->renderer->render($stubProductListingCriteria);
 
         $expectedSnippetContents = json_encode([
-            'product_selection_criteria' => null,
-            'root_snippet_code' => 'product_listing',
-            'page_snippet_codes' => ['product_listing']
+            ProductListingCriteriaSnippetContent::KEY_CRITERIA => null,
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'product_listing',
+            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['product_listing'],
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         $expectedSnippet = Snippet::create($testSnippetKey, $expectedSnippetContents);

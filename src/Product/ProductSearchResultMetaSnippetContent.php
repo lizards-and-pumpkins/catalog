@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\SnippetContainer;
 
 class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetContent
 {
@@ -17,21 +18,29 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     private $pageSnippetCodes;
 
     /**
+     * @var array|\LizardsAndPumpkins\SnippetContainer[]
+     */
+    private $containerSnippets;
+
+    /**
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
+     * @param SnippetContainer[] $containerSnippets
      */
-    private function __construct($rootSnippetCode, array $pageSnippetCodes)
+    private function __construct($rootSnippetCode, array $pageSnippetCodes, array $containerSnippets)
     {
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
+        $this->containerSnippets = $containerSnippets;
     }
 
     /**
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
+     * @param array[] $containerData
      * @return ProductSearchResultMetaSnippetContent
      */
-    public static function create($rootSnippetCode, array $pageSnippetCodes)
+    public static function create($rootSnippetCode, array $pageSnippetCodes, array $containerData)
     {
         if (!is_string($rootSnippetCode)) {
             throw new \InvalidArgumentException(sprintf(
@@ -43,8 +52,18 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
         if (!in_array($rootSnippetCode, $pageSnippetCodes)) {
             $pageSnippetCodes = array_merge([$rootSnippetCode], $pageSnippetCodes);
         }
+        return new self($rootSnippetCode, $pageSnippetCodes, self::createSnippetContainers($containerData));
+    }
 
-        return new self($rootSnippetCode, $pageSnippetCodes);
+    /**
+     * @param array[] $containerArray
+     * @return SnippetContainer[]
+     */
+    private static function createSnippetContainers(array $containerArray)
+    {
+        return array_map(function ($code) use ($containerArray) {
+            return new SnippetContainer($code, $containerArray[$code]);
+        }, array_keys($containerArray));
     }
 
     /**
@@ -59,13 +78,17 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
             throw new \OutOfBoundsException(sprintf('JSON decode error: %s', json_last_error_msg()));
         }
 
-        foreach ([self::KEY_ROOT_SNIPPET_CODE, self::KEY_PAGE_SNIPPET_CODES] as $key) {
+        foreach ([self::KEY_ROOT_SNIPPET_CODE, self::KEY_PAGE_SNIPPET_CODES, self::KEY_CONTAINER_SNIPPETS] as $key) {
             if (!array_key_exists($key, $pageMetaInfo)) {
                 throw new \RuntimeException(sprintf('Missing "%s" in input JSON', $key));
             }
         }
 
-        return self::create($pageMetaInfo[self::KEY_ROOT_SNIPPET_CODE], $pageMetaInfo[self::KEY_PAGE_SNIPPET_CODES]);
+        return self::create(
+            $pageMetaInfo[self::KEY_ROOT_SNIPPET_CODE],
+            $pageMetaInfo[self::KEY_PAGE_SNIPPET_CODES],
+            $pageMetaInfo[self::KEY_CONTAINER_SNIPPETS]
+        );
     }
 
     /**
@@ -75,7 +98,8 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     {
         return [
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
-            self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes
+            self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
+            self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets(),
         ];
     }
 
@@ -93,5 +117,15 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     public function getPageSnippetCodes()
     {
         return $this->pageSnippetCodes;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getContainerSnippets()
+    {
+        return array_reduce($this->containerSnippets, function ($carry, SnippetContainer $container) {
+            return array_merge($carry, $container->toArray());
+        }, []);
     }
 }

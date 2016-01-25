@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\NullProductImageImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
@@ -60,7 +61,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new UpdatingProductImportCommandFactory());
-        $factory->register(new UpdatingProductImageImportCommandFactory());
+        $factory->register(new NullProductImageImportCommandFactory());
         $factory->register(new UpdatingProductListingImportCommandFactory());
         $this->registerIntegrationTestFactory($factory);
         return $factory;

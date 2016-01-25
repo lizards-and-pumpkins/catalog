@@ -88,7 +88,8 @@ class ProductListingCriteriaSnippetRenderer implements SnippetRenderer
         $metaSnippetContent = ProductListingCriteriaSnippetContent::create(
             $productListingCriteria->getCriteria(),
             ProductListingPageSnippetRenderer::CODE,
-            $pageSnippetCodes
+            $pageSnippetCodes,
+            []
         );
 
         return json_encode($metaSnippetContent->getInfo());

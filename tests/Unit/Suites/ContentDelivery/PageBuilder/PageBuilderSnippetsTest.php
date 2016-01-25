@@ -27,14 +27,16 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
     {
         $codeToKeyMap = [$this->testCode => $this->testKey];
         $keyToContentMap = [$this->testKey => $this->testContent];
-        $this->pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $containers = [];
+        $this->pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
     }
 
     public function testItReturnsAPageSnippetInstance()
     {
         $codeToKeyMap = [];
         $keyToContentMap = [];
-        $pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $containers = [];
+        $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
         $this->assertInstanceOf(PageBuilderSnippets::class, $pageSnippets);
     }
 
@@ -47,7 +49,8 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
     {
         $codeToKeyMap = ['found' => 'found_key', 'missing' => 'missing_key'];
         $keyToContentMap = ['found_key' => 'found_content'];
-        $pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $containers = [];
+        $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
         $this->assertSame(['missing'], $pageSnippets->getNotLoadedSnippetCodes());
     }
 
@@ -55,7 +58,8 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
     {
         $codeToKeyMap = ['found' => 'found_key', 'missing' => 'missing_key'];
         $keyToContentMap = ['found_key' => 'found_content'];
-        $pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $containers = [];
+        $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
         $this->assertSame(['found'], $pageSnippets->getSnippetCodes());
     }
 

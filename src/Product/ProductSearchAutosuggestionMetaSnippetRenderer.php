@@ -77,7 +77,8 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
     {
         $metaSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::create(
             $rootSnippetCode,
-            $pageSnippetCodes
+            $pageSnippetCodes,
+            []
         );
 
         return json_encode($metaSnippetContent->getInfo());
