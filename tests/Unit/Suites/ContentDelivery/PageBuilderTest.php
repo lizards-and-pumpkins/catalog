@@ -396,4 +396,30 @@ EOH;
 
         $this->assertEquals('Stub Content - Child 1Child 2', $page->getBody());
     }
+
+    public function testItCombinesNestedContainers()
+    {
+        $rootSnippetContent = 'Stub Content - {{snippet container1}}';
+        $childSnippetCodeToContentMap = [
+            'child1' => 'Child 1',
+            'child2' => 'Child 2',
+            'child3' => 'Child 3',
+        ];
+        $containerSnippets = [
+            'container1' => ['child1', 'container2'],
+            'container2' => ['child2', 'container3'],
+            'container3' => ['child3'],
+        ];
+
+        $this->setDataPoolFixture(
+            $this->testRootSnippetCode,
+            $rootSnippetContent,
+            $childSnippetCodeToContentMap,
+            $containerSnippets
+        );
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+
+        $this->assertEquals('Stub Content - Child 1Child 2Child 3', $page->getBody());
+    }
 }
