@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
+ * @uses   \LizardsAndPumpkins\SnippetContainer
  */
 class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,13 +22,16 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
      * @var string
      */
     private $sourceId = '123';
+    
+    private $containers = ['additional_info' => []];
 
     protected function setUp()
     {
         $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             $this->sourceId,
             $this->rootSnippetCode,
-            [$this->rootSnippetCode]
+            [$this->rootSnippetCode],
+            $this->containers
         );
     }
 
@@ -41,7 +45,8 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         $keys = [
             ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID,
             ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE,
-            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES
+            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES,
+            ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS
         ];
         foreach ($keys as $key) {
             $this->assertTrue(
@@ -54,19 +59,19 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
     public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductDetailPageMetaInfoSnippetContent::create([], 'test', []);
+        ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], []);
     }
 
     public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, []);
+        ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, [], []);
     }
 
     public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, []);
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, [], []);
         $this->assertContains(
             $rootSnippetCode,
             $pageMetaInfo->getPageSnippetCodes()
@@ -106,6 +111,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
             [ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID],
             [ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE],
             [ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES],
+            [ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS],
         ];
     }
 
@@ -130,5 +136,10 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         $this->assertContains(ProductJsonSnippetRenderer::CODE, $pageSnippetCodes);
         $this->assertContains(PriceSnippetRenderer::PRICE, $pageSnippetCodes);
         $this->assertContains(PriceSnippetRenderer::SPECIAL_PRICE, $pageSnippetCodes);
+    }
+
+    public function testItReturnsThePageSnippetContainers()
+    {
+        $this->assertSame($this->containers, $this->pageMetaInfo->getContainerSnippets());
     }
 }

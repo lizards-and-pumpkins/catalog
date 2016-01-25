@@ -3,10 +3,18 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\SnippetContainer;
 
 class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 {
     const KEY_PRODUCT_ID = 'product_id';
+
+    private static $requiredKeys = [
+        self::KEY_PRODUCT_ID,
+        self::KEY_ROOT_SNIPPET_CODE,
+        self::KEY_PAGE_SNIPPET_CODES,
+        self::KEY_CONTAINER_SNIPPETS
+    ];
 
     /**
      * @var string
@@ -24,24 +32,32 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     private $pageSnippetCodes;
 
     /**
+     * @var array[]
+     */
+    private $containers;
+
+    /**
      * @param string $productId
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
+     * @param SnippetContainer[] $containers
      */
-    private function __construct($productId, $rootSnippetCode, array $pageSnippetCodes)
+    private function __construct($productId, $rootSnippetCode, array $pageSnippetCodes, array $containers)
     {
         $this->productId = $productId;
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
+        $this->containers = $containers;
     }
 
     /**
      * @param string $productId
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
+     * @param array[] $containerData
      * @return ProductDetailPageMetaInfoSnippetContent
      */
-    public static function create($productId, $rootSnippetCode, array $pageSnippetCodes)
+    public static function create($productId, $rootSnippetCode, array $pageSnippetCodes, array $containerData)
     {
         self::validateProductId($productId);
         self::validateRootSnippetCode($rootSnippetCode);
@@ -54,7 +70,18 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
             ],
             $pageSnippetCodes
         ));
-        return new self($productId, $rootSnippetCode, $pageSnippetCodes);
+        return new self($productId, $rootSnippetCode, $pageSnippetCodes, self::createSnippetContainers($containerData));
+    }
+
+    /**
+     * @param array[] $containerArray
+     * @return SnippetContainer[]
+     */
+    private static function createSnippetContainers(array $containerArray)
+    {
+        return array_map(function ($code) use ($containerArray) {
+            return new SnippetContainer($code, $containerArray[$code]);
+        }, array_keys($containerArray));
     }
 
     /**
@@ -68,7 +95,8 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         return static::create(
             $pageInfo[self::KEY_PRODUCT_ID],
             $pageInfo[self::KEY_ROOT_SNIPPET_CODE],
-            $pageInfo[self::KEY_PAGE_SNIPPET_CODES]
+            $pageInfo[self::KEY_PAGE_SNIPPET_CODES],
+            $pageInfo[self::KEY_CONTAINER_SNIPPETS]
         );
     }
 
@@ -88,7 +116,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      */
     protected static function validateRequiredKeysArePresent(array $pageInfo)
     {
-        foreach ([self::KEY_PRODUCT_ID, self::KEY_ROOT_SNIPPET_CODE, self::KEY_PAGE_SNIPPET_CODES] as $key) {
+        foreach (self::$requiredKeys as $key) {
             if (!array_key_exists($key, $pageInfo)) {
                 throw new \RuntimeException(sprintf('Missing key in input JSON: "%s"', $key));
             }
@@ -120,6 +148,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
             self::KEY_PRODUCT_ID         => $this->productId,
             self::KEY_ROOT_SNIPPET_CODE  => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
+            self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets()
         ];
     }
 
@@ -171,5 +200,15 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     public function getPageSnippetCodes()
     {
         return $this->pageSnippetCodes;
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getContainerSnippets()
+    {
+        return array_reduce($this->containers, function ($carry, SnippetContainer $container) {
+            return array_merge($carry, $container->toArray());
+        }, []);
     }
 }
