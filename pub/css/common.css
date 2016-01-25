@@ -162,6 +162,10 @@ nav { clear: both; color: #ffffff }
     .social .text h3 { margin-top: 10px }
     .flex-control-nav { display: none }
     .cms_header_small { display: none }
+
+    /* Navigation */
+    .nav > li:hover > ul { left: -100000px }
+    .nav > li.hover > ul { left: 0 }
     .nav .brands-logos .brand-logos-title { float: none; padding: 0 }
 
     /* Footer blocks */
@@ -192,8 +196,6 @@ nav { clear: both; color: #ffffff }
     .nav.first { border-top: none }
     .nav.last { border-bottom: none }
     .nav > li { display: table-cell; float: none; text-align: center }
-    .nav > li:hover > ul { left: -9999px }
-    .nav > li.hover > ul { left: 0 }
     #phone-meta-menu { display: table; width: 100%; clear: both }
     #phone-meta-menu li { display: table-cell; padding-bottom: 10px }
     #phone-meta-menu li a { display: block; border-right: #21719f solid 1px; padding: 11px 0; text-align: center; background-color: #228bb6 }
