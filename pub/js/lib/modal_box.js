@@ -44,15 +44,18 @@ define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
 
     function processContent(content) {
         if (!content.match(/^https?:\/\//i)) {
-            return content;
+            popup.className = popup.className.replace(/\bloading\b/, '');
+            popup.innerHTML = content;
+            return;
         }
 
         callAjax(content, function (responseText) {
+            popup.className = popup.className.replace(/\bloading\b/, '');
             popup.innerHTML = responseText;
             centerPopup();
         });
 
-        popup.innerHTML = 'loading .. ';
+        popup.className += ' loading';
     }
 
     function showCloseButton() {
