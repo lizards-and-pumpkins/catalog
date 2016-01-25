@@ -1,4 +1,7 @@
 define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
+    var popup,
+        overlay,
+        closeButton;
 
     domReady(function () {
         window.addEventListener('resize', centerPopup);
@@ -6,14 +9,12 @@ define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
     });
 
     function centerPopup() {
-        var popup = document.getElementById('modal-popup');
-
-        if (null === popup) {
+        if (typeof popup === 'undefined' || typeof closeButton === 'undefined') {
             return;
         }
 
-        var viewportWidth = Math.floor(document.body.clientWidth / 100 * 90),
-            viewportHeight = Math.floor(document.body.clientHeight / 100 * 90);
+        var viewportWidth = Math.floor(document.body.clientWidth / 100 * 85),
+            viewportHeight = Math.floor(window.innerHeight / 100 * 85);
 
         popup.style.top = '';
         popup.style.left = '';
@@ -27,57 +28,56 @@ define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
         popup.style.top = '50%';
         popup.style.left = '50%';
 
-        var contentContainer = document.getElementById('modal-box-content');
-        contentContainer.style.height = viewportHeight > popup.offsetHeight ? '' : popup.offsetHeight + 'px';
+        closeButton.style.top = popup.offsetTop - closeButton.offsetHeight/2 + 'px';
+        closeButton.style.left = popup.offsetLeft + popup.offsetWidth - closeButton.offsetWidth/2 + 'px';
     }
 
     function hidePopupAndOverlayIfShown() {
-        var elementsToRemove = document.querySelectorAll('#modal-popup, body > .modal-box-overlay');
+        if (typeof popup === 'undefined' || typeof overlay === 'undefined' || typeof closeButton === 'undefined') {
+            return;
+        }
 
-        Array.prototype.map.call(elementsToRemove, function (element) {
-            element.remove();
-        });
+        popup.remove();
+        overlay.remove();
+        closeButton.remove();
     }
 
     function processContent(content) {
         if (!content.match(/^https?:\/\//i)) {
-            return content;
+            popup.className = popup.className.replace(/\bloading\b/, '');
+            popup.innerHTML = content;
+            return;
         }
 
         callAjax(content, function (responseText) {
-            document.getElementById('modal-box-content').innerHTML = responseText;
+            popup.className = popup.className.replace(/\bloading\b/, '');
+            popup.innerHTML = responseText;
             centerPopup();
         });
 
-        return 'loading .. ';
+        popup.className += ' loading';
     }
 
-    function createCloseButton() {
-        var closeButton = document.createElement('SPAN');
-        closeButton.className = 'popup-close';
+    function showCloseButton() {
+        closeButton = document.createElement('DIV');
+        closeButton.id = 'popup-close';
         closeButton.addEventListener('click', hidePopupAndOverlayIfShown);
 
-        return closeButton;
+        document.body.appendChild(closeButton);
     }
 
     function showOverlay() {
-        var overlay = document.createElement('DIV');
-        overlay.className = 'modal-box-overlay';
-        overlay.style.width = document.body.clientWidth + 'px';
-        overlay.style.height = document.body.clientHeight + 'px';
+        overlay = document.createElement('DIV');
+        overlay.id = 'modal-box-overlay';
 
         document.body.appendChild(overlay);
     }
 
     function showPopup(content) {
-        var contentWrapper = document.createElement('DIV');
-        contentWrapper.id = 'modal-box-content';
-        contentWrapper.innerHTML = processContent(content);
-
-        var popup = document.createElement('DIV');
+        popup = document.createElement('DIV');
         popup.id = 'modal-popup';
-        popup.appendChild(contentWrapper);
-        popup.appendChild(createCloseButton());
+
+        processContent(content);
 
         document.body.appendChild(popup);
     }
@@ -90,6 +90,7 @@ define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
         hidePopupAndOverlayIfShown();
         showOverlay();
         showPopup(content);
+        showCloseButton();
         centerPopup();
     }
 });
