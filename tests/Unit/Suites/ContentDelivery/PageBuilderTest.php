@@ -12,6 +12,7 @@ use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder
@@ -26,34 +27,34 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @var string
      */
     private $urlPathKeyFixture = 'dummy-url-key';
-    
+
     /**
      * @var string
      */
     private $testRootSnippetCode = 'root-snippet';
-    
+
     /**
      * @var PageBuilder
      */
     private $pageBuilder;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolReader|MockObject
      */
     private $mockDataPoolReader;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
     private $stubLogger;
 
     /**
-     * @var PageMetaInfoSnippetContent|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageMetaInfoSnippetContent|MockObject
      */
     private $stubPageMetaInfo;
 
@@ -63,52 +64,9 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     private $contextIdFixture = 'v12';
 
     /**
-     * @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGeneratorLocator|MockObject
      */
     private $stubSnippetKeyGeneratorLocator;
-
-    /**
-     * @param string $snippetCode
-     * @param string $snippetKey
-     */
-    private function assertSnippetCodeIsMappedToSnippetKey($snippetCode, $snippetKey)
-    {
-        $field = 'snippetCodeToKeyMap';
-        $this->assertArrayKeyIsMappedToValueOnRequestHandler($snippetCode, $snippetKey, $field);
-    }
-
-    /**
-     * @param string $snippetKey
-     * @param string $content
-     */
-    private function assertSnippetKeyIsMappedToContent($snippetKey, $content)
-    {
-        $field = 'snippetKeyToContentMap';
-        $this->assertArrayKeyIsMappedToValueOnRequestHandler($snippetKey, $content, $field);
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $value
-     * @param string $field
-     */
-    private function assertArrayKeyIsMappedToValueOnRequestHandler($key, $value, $field)
-    {
-        $map = $this->getPrivateFieldValue($field);
-        $this->assertArrayHasKey($key, $map);
-        $this->assertSame($value, $map[$key]);
-    }
-
-    /**
-     * @param string $field
-     * @return mixed
-     */
-    private function getPrivateFieldValue($field)
-    {
-        $property = new \ReflectionProperty($this->pageBuilder, $field);
-        $property->setAccessible(true);
-        return $property->getValue($this->pageBuilder);
-    }
 
     /**
      * @param string $rootSnippetCode
@@ -127,11 +85,11 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $rootSnippetCode
      * @param string[] $allSnippetCodes
      */
-    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes)
+    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes, array $containers = [])
     {
         $pageMetaInfo = [
-            ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => $rootSnippetCode,
-            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes
+            ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => $rootSnippetCode,
+            ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes,
         ];
 
         $this->mockDataPoolReader->method('getSnippet')->with($this->urlPathKeyFixture)
@@ -139,7 +97,6 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->stubPageMetaInfo->method('getPageSnippetCodes')->willReturn($allSnippetCodes);
         $this->stubPageMetaInfo->method('getRootSnippetCode')->willReturn($rootSnippetCode);
-
     }
 
     /**
@@ -153,7 +110,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippets')->willReturn($pageSnippetKeyMap);
     }
 
-    private function fakeSnippetKeyGeneratorLocator(\PHPUnit_Framework_MockObject_MockObject $fakeKeyGeneratorLocator)
+    private function fakeSnippetKeyGeneratorLocator(MockObject $fakeKeyGeneratorLocator)
     {
         $fixedKeyGeneratorMockFactory = function ($snippetCode) {
             $keyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
@@ -164,9 +121,8 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback($fixedKeyGeneratorMockFactory);
     }
 
-    private function fakeSnippetKeyGeneratorLocatorForRootOnly(
-        \PHPUnit_Framework_MockObject_MockObject $fakeSnippetKeyGeneratorLocator
-    ) {
+    private function fakeSnippetKeyGeneratorLocatorForRootOnly(MockObject $fakeSnippetKeyGeneratorLocator)
+    {
         $fakeSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnCallback(
             function ($snippetCode) {
                 if ($snippetCode === $this->testRootSnippetCode) {
@@ -229,8 +185,8 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
-            'head' => '<title>My Website!</title>',
-            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'head'           => '<title>My Website!</title>',
+            'body'           => '<h1>My Website!</h1>{{snippet nesting-level1}}',
             'nesting-level1' => 'child1{{snippet nesting-level2}}',
             'nesting-level2' => 'child2{{snippet nesting-level3}}',
             'nesting-level3' => 'child3',
@@ -246,12 +202,12 @@ EOH;
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
-    public function testPlaceholderIsReplacedWithNestedPlaceholdersAndDoNotCareAboutMissingSnippets()
+    public function testPlaceholderIsReplacedWithNestedPlaceholdersIgnoringMissingSnippets()
     {
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
-            'head' => '<title>My Website!</title>',
-            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'head'           => '<title>My Website!</title>',
+            'body'           => '<h1>My Website!</h1>{{snippet nesting-level1}}',
             'nesting-level1' => 'child1{{snippet nesting-level2}}',
             'nesting-level2' => 'child2{{snippet nesting-level3}}',
             'nesting-level3' => 'child3{{snippet nesting-level4}}',
@@ -271,7 +227,7 @@ EOH;
     {
         $rootSnippetContent = '<html><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
-            'body' => '<h1>My Website!</h1>{{snippet nesting-level1}}',
+            'body'           => '<h1>My Website!</h1>{{snippet nesting-level1}}',
             'nesting-level1' => 'child1{{snippet nesting-level2}}',
             'nesting-level3' => 'child3{{snippet nesting-level4}}',
             'nesting-level2' => 'child2{{snippet nesting-level3}}',
@@ -309,45 +265,28 @@ EOH;
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }
 
-    /**
-     * @dataProvider callOrderDataProvider
-     * @param bool $testLoadBeforeAdd
-     */
-    public function testPageSpecificAdditionalSnippetsAreMergedIntoList($testLoadBeforeAdd)
+    public function testPageSpecificAdditionalSnippetsAreMergedIntoList()
     {
-        $rootSnippetContent = 'Stub Content';
-        $childSnippetCodeToContentMap = ['child1' => 'Child Content 1'];
-        $snippetCodeToKeyMap = ['test-code' => 'test-key'];
-        $snippetKeyToContentMap = ['test-key' => 'test-content'];
+        $rootSnippetContent = 'Stub Content - {{snippet child1}}';
+        $childSnippetContent = 'Child Content 1 - {{snippet added-later}}';
+
+        $childSnippetCodeToContentMap = ['child1' => $childSnippetContent];
+
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetCodeToContentMap);
 
-        if ($testLoadBeforeAdd) {
-            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-            $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
-        } else {
-            $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
-            $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        }
+        $mergedSnippetCodeToKeyMap = ['added-later' => 'test-key'];
+        $mergedSnippetKeyToContentMap = ['test-key' => 'Added Content'];
 
-        $this->assertSnippetKeyIsMappedToContent('child1', 'Child Content 1');
-        $this->assertSnippetCodeIsMappedToSnippetKey('test-code', 'test-key');
-        $this->assertSnippetKeyIsMappedToContent('test-key', 'test-content');
+        $this->pageBuilder->addSnippetsToPage($mergedSnippetCodeToKeyMap, $mergedSnippetKeyToContentMap);
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+
+        $this->assertEquals('Stub Content - Child Content 1 - Added Content', $page->getBody());
     }
 
-    /**
-     * @return array[]
-     */
-    public function callOrderDataProvider()
+    public function testChildSnippetsWithNoRegisteredKeyGeneratorAreIgnored()
     {
-        return [
-            'load-then-add' => [true],
-            'add-then-load' => [false],
-        ];
-    }
-
-    public function testChildSnippetsAreGracefullyHandledWithNoKeyGenerator()
-    {
-        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
+        /** @var SnippetKeyGeneratorLocator|MockObject $stubKeyGeneratorLocator */
         $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubKeyGeneratorLocator);
 
@@ -359,19 +298,19 @@ EOH;
 
         $childSnippetCodes = ['child1'];
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
+        
+        $rootSnippetContent = "This is returned even the child snippet doesn't have a key generator ";
         $this->mockDataPoolReader->method('getSnippets')
-            ->willReturn([$this->testRootSnippetCode => 'Dummy Root Content']);
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-        $this->assertTrue(
-            true,
-            'Dummy assertion. What I want is that the page is built with unregistered key generators ' .
-            'without throwing an exception'
-        );
+            ->willReturn([$this->testRootSnippetCode => $rootSnippetContent . '{{snippet child1}}',]);
+        
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+
+        $this->assertEquals($rootSnippetContent, $page->getBody());
     }
 
     public function testTestSnippetTransformationIsNotCalledIfThereIsNoMatchingSnippet()
     {
-        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformation */
+        /** @var callable|MockObject $mockTransformation */
         $mockTransformation = $this->getMock(SnippetTransformation::class);
         $mockTransformation->expects($this->never())->method('__invoke');
         $this->pageBuilder->registerSnippetTransformation('non-existing-snippet-code', $mockTransformation);
@@ -382,13 +321,13 @@ EOH;
             'body' => '<h1>My Website!</h1>',
         ];
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetMap);
-        
+
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }
 
     public function testTestSnippetTransformationIsCalledIfThereIsAMatchingSnippet()
     {
-        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformation */
+        /** @var callable|MockObject $mockTransformation */
         $mockTransformation = $this->getMock(SnippetTransformation::class);
         $mockTransformation->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
             ->willReturn('Transformed Content');
@@ -406,13 +345,13 @@ EOH;
 
     public function testMultipleTestSnippetTransformationsForOneSnippetCanBeRegistered()
     {
-        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformationOne */
+        /** @var callable|MockObject $mockTransformationOne */
         $mockTransformationOne = $this->getMock(SnippetTransformation::class);
         $mockTransformationOne->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
             ->willReturn('result one');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationOne);
 
-        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $mockTransformationTwo */
+        /** @var callable|MockObject $mockTransformationTwo */
         $mockTransformationTwo = $this->getMock(SnippetTransformation::class);
         $mockTransformationTwo->expects($this->once())->method('__invoke')->with('result one')
             ->willReturn('result two');

@@ -46,7 +46,12 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         self::validateProductId($productId);
         self::validateRootSnippetCode($rootSnippetCode);
         $pageSnippetCodes = array_unique(array_merge(
-            [$rootSnippetCode, ProductJsonSnippetRenderer::CODE, PriceSnippetRenderer::PRICE, PriceSnippetRenderer::SPECIAL_PRICE],
+            [
+                $rootSnippetCode,
+                ProductJsonSnippetRenderer::CODE,
+                PriceSnippetRenderer::PRICE,
+                PriceSnippetRenderer::SPECIAL_PRICE,
+            ],
             $pageSnippetCodes
         ));
         return new self($productId, $rootSnippetCode, $pageSnippetCodes);
@@ -112,9 +117,9 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     public function getInfo()
     {
         return [
-            self::KEY_PRODUCT_ID => $this->productId,
-            self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
-            self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes
+            self::KEY_PRODUCT_ID         => $this->productId,
+            self::KEY_ROOT_SNIPPET_CODE  => $this->rootSnippetCode,
+            self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
         ];
     }
 
@@ -136,7 +141,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      */
     private static function validateRootSnippetCode($rootSnippetCode)
     {
-        if (! is_string($rootSnippetCode)) {
+        if (!is_string($rootSnippetCode)) {
             throw new \InvalidArgumentException(sprintf(
                 'The page meta info root snippet code has to be a string value, got "%s"',
                 gettype($rootSnippetCode)
