@@ -75,7 +75,7 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
      */
     private function getMetaSnippetContentJson($rootSnippetCode, array $pageSnippetCodes)
     {
-        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($rootSnippetCode, $pageSnippetCodes);
+        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($rootSnippetCode, $pageSnippetCodes, []);
         return json_encode($metaSnippetContent->getInfo());
     }
 }

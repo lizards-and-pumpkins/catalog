@@ -89,7 +89,8 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             (string) $productView->getId(),
             $rootBlockName,
-            $this->blockRenderer->getNestedSnippetCodes()
+            $this->blockRenderer->getNestedSnippetCodes(),
+            []
         );
 
         return $pageMetaInfo->getInfo();

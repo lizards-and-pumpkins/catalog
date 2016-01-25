@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
@@ -163,8 +164,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(HttpResponse::class, [], [], '', false));
 
         $metaSnippetContent = [
-            'root_snippet_code'  => 'foo',
-            'page_snippet_codes' => ['foo']
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',
+            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['foo'],
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
@@ -189,8 +191,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
-            'root_snippet_code'  => 'foo',
-            'page_snippet_codes' => ['foo']
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',
+            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['foo'],
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
         ];
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->expects($this->never())->method('getSnippets');
@@ -211,8 +214,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
-            'root_snippet_code'  => 'foo',
-            'page_snippet_codes' => ['foo']
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',
+            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['foo'],
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
         ];
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);

@@ -6,6 +6,7 @@ use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent
+ * @uses   \LizardsAndPumpkins\SnippetContainer
  */
 class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,11 +20,14 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
      */
     private $dummyRootSnippetCode = 'foo';
 
+    private $containerSnippetData = ['some-container' => []];
+
     protected function setUp()
     {
         $this->metaSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::create(
             $this->dummyRootSnippetCode,
-            [$this->dummyRootSnippetCode]
+            [$this->dummyRootSnippetCode],
+            $this->containerSnippetData
         );
     }
 
@@ -35,14 +39,15 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductSearchAutosuggestionMetaSnippetContent::create(1, []);
+        ProductSearchAutosuggestionMetaSnippetContent::create(1, [], []);
     }
 
     public function testMetaSnippetContentInfoContainsRequiredKeys()
     {
         $expectedKeys = [
             ProductSearchAutosuggestionMetaSnippetContent::KEY_ROOT_SNIPPET_CODE,
-            ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES
+            ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES,
+            ProductSearchAutosuggestionMetaSnippetContent::KEY_CONTAINER_SNIPPETS,
         ];
 
         $result = $this->metaSnippetContent->getInfo();
@@ -64,7 +69,11 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfAbsent()
     {
-        $metaSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::create($this->dummyRootSnippetCode, []);
+        $metaSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::create(
+            $this->dummyRootSnippetCode,
+            [],
+            $this->containerSnippetData
+        );
         $metaMetaInfo = $metaSnippetContent->getInfo();
         $pageSnippetCodes = $metaMetaInfo[ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES];
 
@@ -101,6 +110,7 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
         return [
             [ProductSearchAutosuggestionMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],
             [ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES],
+            [ProductSearchAutosuggestionMetaSnippetContent::KEY_CONTAINER_SNIPPETS],
         ];
     }
 
@@ -108,5 +118,10 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
     {
         $this->setExpectedException(\OutOfBoundsException::class);
         ProductSearchAutosuggestionMetaSnippetContent::fromJson('malformed-json');
+    }
+
+    public function testItReturnsThePageSnippetContainers()
+    {
+        $this->assertSame($this->containerSnippetData, $this->metaSnippetContent->getContainerSnippets());
     }
 }

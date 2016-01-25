@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Product\Exception\MalformedSearchCriteriaMetaException;
  * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\SnippetContainer
  */
 class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,6 +23,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
      * @var string
      */
     private $rootSnippetCode = 'root-snippet-code';
+    
+    private $containerSnippets = ['additional-info' => []];
 
     /**
      * @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject
@@ -40,11 +43,12 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
         ]);
 
         $pageSnippetCodes = [$this->rootSnippetCode];
-
+        
         $this->pageMetaInfo = ProductListingCriteriaSnippetContent::create(
             $this->stubSelectionCriteria,
             $this->rootSnippetCode,
-            $pageSnippetCodes
+            $pageSnippetCodes,
+            $this->containerSnippets
         );
     }
 
@@ -58,7 +62,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
         $keys = [
             ProductListingCriteriaSnippetContent::KEY_CRITERIA,
             ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE,
-            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES
+            ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES,
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS,
         ];
 
         $result = $this->pageMetaInfo->getInfo();
@@ -71,7 +76,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductListingCriteriaSnippetContent::create($this->stubSelectionCriteria, 1.0, []);
+        ProductListingCriteriaSnippetContent::create($this->stubSelectionCriteria, 1.0, [], []);
     }
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
@@ -80,6 +85,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
         $pageMetaInfo = ProductListingCriteriaSnippetContent::create(
             $this->stubSelectionCriteria,
             $rootSnippetCode,
+            [],
             []
         );
         $this->assertContains(
@@ -121,6 +127,7 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
             [ProductListingCriteriaSnippetContent::KEY_CRITERIA],
             [ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE],
             [ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES],
+            [ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS],
         ];
     }
 
@@ -146,7 +153,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
         $json = json_encode([
             ProductListingCriteriaSnippetContent::KEY_CRITERIA => [],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => '',
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         ProductListingCriteriaSnippetContent::fromJson($json);
@@ -161,7 +169,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
                 'condition' => CompositeSearchCriterion::AND_CONDITION
             ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => '',
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         ProductListingCriteriaSnippetContent::fromJson($json);
@@ -177,7 +186,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
                 'criteria'  => [[]]
             ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => '',
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         ProductListingCriteriaSnippetContent::fromJson($json);
@@ -195,7 +205,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
                 ]
             ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => '',
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         ProductListingCriteriaSnippetContent::fromJson($json);
@@ -213,7 +224,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
                 ]
             ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => '',
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         ProductListingCriteriaSnippetContent::fromJson($json);
@@ -236,7 +248,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
                 ]
             ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => '',
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         ProductListingCriteriaSnippetContent::fromJson($json);
@@ -256,7 +269,8 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
                 ]
             ],
             ProductListingCriteriaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => ''
+            ProductListingCriteriaSnippetContent::KEY_ROOT_SNIPPET_CODE => '',
+            ProductListingCriteriaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 
         $metaSnippetContent = ProductListingCriteriaSnippetContent::fromJson($json);
@@ -267,5 +281,10 @@ class ProductListingCriteriaSnippetContentTest extends \PHPUnit_Framework_TestCa
         $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion);
 
         $this->assertEquals($expectedCriteria, $result);
+    }
+
+    public function testItReturnsThePageSnippetContainers()
+    {
+        $this->assertSame($this->containerSnippets, $this->pageMetaInfo->getContainerSnippets());
     }
 }

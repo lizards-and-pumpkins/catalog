@@ -54,7 +54,8 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
             $rootSnippetCode,
-            ['head', 'body']
+            ['head', 'body'],
+            []
         );
         $metaInfoSnippet = Snippet::create($productDetailPageMetaSnippetKey, json_encode($pageMetaInfo->getInfo()));
 

@@ -61,7 +61,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $testMetaInfoSnippetJson = json_encode(ProductListingCriteriaSnippetContent::create(
             $stubSelectionCriteria,
             'root-snippet-code',
-            $pageSnippetCodes
+            $pageSnippetCodes,
+            []
         )->getInfo());
 
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);

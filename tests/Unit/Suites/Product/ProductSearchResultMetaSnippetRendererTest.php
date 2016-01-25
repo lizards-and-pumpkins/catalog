@@ -71,7 +71,8 @@ class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_Test
     {
         $expectedSnippetContent = [
             ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
-            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode]
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
+            ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 

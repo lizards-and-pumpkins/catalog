@@ -87,7 +87,8 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         return json_encode(ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
             'root-snippet-code',
-            ['child-snippet1']
+            ['child-snippet1'],
+            []
         )->getInfo());
     }
 

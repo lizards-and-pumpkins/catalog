@@ -6,6 +6,7 @@ use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent
+ * @uses   \LizardsAndPumpkins\SnippetContainer
  */
 class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,11 +20,14 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
      */
     private $dummyRootSnippetCode = 'foo';
 
+    private $containerSnippets = ['additonal-info' => []];
+
     protected function setUp()
     {
         $this->metaSnippetContent = ProductSearchResultMetaSnippetContent::create(
             $this->dummyRootSnippetCode,
-            [$this->dummyRootSnippetCode]
+            [$this->dummyRootSnippetCode],
+            $this->containerSnippets
         );
     }
 
@@ -35,14 +39,15 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
         $this->setExpectedException(\InvalidArgumentException::class);
-        ProductSearchResultMetaSnippetContent::create(1, []);
+        ProductSearchResultMetaSnippetContent::create(1, [], []);
     }
 
     public function testMetaSnippetContentInfoContainsRequiredKeys()
     {
         $expectedKeys = [
             ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE,
-            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES,
+            ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS,
         ];
 
         $result = $this->metaSnippetContent->getInfo();
@@ -64,7 +69,7 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfAbsent()
     {
-        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($this->dummyRootSnippetCode, []);
+        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($this->dummyRootSnippetCode, [], []);
         $metaMetaInfo = $metaSnippetContent->getInfo();
         $pageSnippetCodes = $metaMetaInfo[ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES];
 
@@ -100,6 +105,7 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
         return [
             [ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],
             [ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES],
+            [ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS],
         ];
     }
 
@@ -107,5 +113,10 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
     {
         $this->setExpectedException(\OutOfBoundsException::class);
         ProductSearchResultMetaSnippetContent::fromJson('malformed-json');
+    }
+
+    public function testItReturnsThePageSnippetContainers()
+    {
+        $this->assertSame($this->containerSnippets, $this->metaSnippetContent->getContainerSnippets());
     }
 }
