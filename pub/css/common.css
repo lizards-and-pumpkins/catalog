@@ -104,16 +104,6 @@ nav { clear: both; color: #ffffff }
 .footer-block-wide { float: right; text-align: right; width: 365px }
 .footer-block-wide img { margin-bottom: 21px }
 
-/* Footer Social */
-.social { width: 25%; margin: 50px 0 }
-.social .inner-container { border-right: 1px solid #9E9E9E; height: 120px; margin: 0 10px 0 15px }
-.social.last .inner-container { border: none; }
-.social .icon { width: 70px; margin-right: 15px; padding: 0 }
-.social .text { width: 118px }
-.social .text h3 { font-family: 'GeogrotesqueMedium', serif; font-size: 18px; font-weight: normal; margin-bottom: 8px }
-.social .text a { color: #000 }
-.social .text p { line-height: 18px; }
-
 /* Header drop-down emulations */
 .drop-container { position: relative; display: inline-block }
 .drop-container a { display: block }
@@ -158,8 +148,6 @@ nav { clear: both; color: #ffffff }
     .main, .header, .footer, .footer-block-info, .info-banner-inner-container { width: auto }
     .main-container .main { padding-left: 10px; padding-right: 10px; width: auto }
     .logo { padding-left: 10px }
-    .social { height: auto }
-    .social .text h3 { margin-top: 10px }
     .flex-control-nav { display: none }
     .cms_header_small { display: none }
 
@@ -184,11 +172,6 @@ nav { clear: both; color: #ffffff }
     .col2-left-layout .col-main { padding-left: 0 }
 
     .col-main { clear: both }
-    .social { width: auto; clear: both; margin: 0 0 30px 0 }
-    .social.first { margin-top: 30px }
-    .social .inner-container { padding: 0; border: none; height: auto }
-    .social .text { width: 200px }
-    .social .text h3 { margin-top: 0 }
     #search_mini_form { display: none }
     .logo { margin: 0; padding: 0; text-align: left }
     .logo img { margin: 10px; }
