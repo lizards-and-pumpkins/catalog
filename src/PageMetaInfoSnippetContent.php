@@ -25,7 +25,7 @@ interface PageMetaInfoSnippetContent
     public function getPageSnippetCodes();
 
     /**
-     * @return string[]
+     * @return array[]
      */
     public function getContainerSnippets();
 }
