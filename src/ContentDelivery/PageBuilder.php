@@ -86,7 +86,11 @@ class PageBuilder
 
         $codeToKeyMap = $this->initFromMetaInfo($metaInfo);
         $keyToContentMap = $this->loadSnippets();
-        $this->pageSnippets = PageBuilderSnippets::fromKeyCodeAndContent($codeToKeyMap, $keyToContentMap);
+        $this->pageSnippets = PageBuilderSnippets::fromCodesAndContent(
+            $codeToKeyMap,
+            $keyToContentMap,
+            $metaInfo->getContainerSnippets()
+        );
         
         $this->logMissingSnippets();
         $this->applySnippetTransformations();

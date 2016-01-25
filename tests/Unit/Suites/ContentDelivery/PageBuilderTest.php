@@ -72,24 +72,31 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $rootSnippetCode
      * @param string $rootSnippetContent
      * @param string[] $childSnippetMap
+     * @param string[] $containerSnippets
      */
-    private function setDataPoolFixture($rootSnippetCode, $rootSnippetContent, array $childSnippetMap)
-    {
+    private function setDataPoolFixture(
+        $rootSnippetCode,
+        $rootSnippetContent,
+        array $childSnippetMap,
+        array $containerSnippets = []
+    ) {
         $allSnippetCodes = array_merge([$rootSnippetCode], array_keys($childSnippetMap));
         $allSnippetContent = array_merge([$rootSnippetContent], array_values($childSnippetMap));
-        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodes);
+        $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodes, $containerSnippets);
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
     }
 
     /**
      * @param string $rootSnippetCode
      * @param string[] $allSnippetCodes
+     * @param string[] $containerSnippets
      */
-    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes, array $containers = [])
+    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes, array $containerSnippets = [])
     {
         $pageMetaInfo = [
             ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => $rootSnippetCode,
             ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes,
+            ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => $containerSnippets,
         ];
 
         $this->mockDataPoolReader->method('getSnippet')->with($this->urlPathKeyFixture)
@@ -97,6 +104,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->stubPageMetaInfo->method('getPageSnippetCodes')->willReturn($allSnippetCodes);
         $this->stubPageMetaInfo->method('getRootSnippetCode')->willReturn($rootSnippetCode);
+        $this->stubPageMetaInfo->method('getContainerSnippets')->willReturn($containerSnippets);
     }
 
     /**
@@ -366,5 +374,26 @@ EOH;
 
         $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
         $this->assertEquals('<body>result two</body>', $page->getBody());
+    }
+
+    public function testItCombinesSnippetsInContainers()
+    {
+        $rootSnippetContent = 'Stub Content - {{snippet container1}}';
+        $childSnippetCodeToContentMap = [
+            'child1' => 'Child 1',
+            'child2' => 'Child 2',
+        ];
+        $containerSnippets = ['container1' => ['child1', 'child2']];
+
+        $this->setDataPoolFixture(
+            $this->testRootSnippetCode,
+            $rootSnippetContent,
+            $childSnippetCodeToContentMap,
+            $containerSnippets
+        );
+
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+
+        $this->assertEquals('Stub Content - Child 1Child 2', $page->getBody());
     }
 }
