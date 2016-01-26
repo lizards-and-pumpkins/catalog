@@ -35,31 +35,29 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     /**
      * {@inheritdoc}
      */
-    final public function query(
-        SearchCriteria $originalCriteria,
-        array $filterSelection,
-        Context $context,
-        FacetFiltersToIncludeInResult $facetFilterRequest,
-        $rowsPerPage,
-        $pageNumber,
-        SortOrderConfig $sortOrderConfig
-    ) {
-        $selectedFilters = array_filter($filterSelection);
+    final public function query(SearchCriteria $originalCriteria, QueryOptions $queryOptions)
+    {
+        $selectedFilters = array_filter($queryOptions->getFilterSelection());
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
         $allDocuments = $this->getSearchDocuments();
+        $context = $queryOptions->getContext();
         $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
 
         $facetFieldCollection = $this->createFacetFieldCollection(
             $originalCriteria,
             $context,
-            $facetFilterRequest,
+            $queryOptions->getFacetFiltersToIncludeInResult(),
             $selectedFilters,
             $matchingDocuments,
             $allDocuments
         );
 
+        $sortOrderConfig = $queryOptions->getSortOrderConfig();
         $sortedDocuments = $this->getSortedDocuments($sortOrderConfig, ...array_values($matchingDocuments));
+
+        $rowsPerPage = $queryOptions->getRowsPerPage();
+        $pageNumber = $queryOptions->getPageNumber();
 
         return $this->createSearchEngineResponse($facetFieldCollection, $sortedDocuments, $rowsPerPage, $pageNumber);
     }

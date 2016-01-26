@@ -6,6 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Context\Context;
@@ -163,32 +164,12 @@ class DataPoolReader
 
     /**
      * @param SearchCriteria $criteria
-     * @param array[] $selectedFilters
-     * @param Context $context
-     * @param FacetFiltersToIncludeInResult $facetFilterRequest
-     * @param int $rowsPerPage
-     * @param int $pageNumber
-     * @param SortOrderConfig $sortOrderConfig
+     * @param QueryOptions $queryOptions
      * @return SearchEngineResponse
      */
-    public function getSearchResultsMatchingCriteria(
-        SearchCriteria $criteria,
-        array $selectedFilters,
-        Context $context,
-        FacetFiltersToIncludeInResult $facetFilterRequest,
-        $rowsPerPage,
-        $pageNumber,
-        SortOrderConfig $sortOrderConfig
-    ) {
-        return $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $context,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+    public function getSearchResultsMatchingCriteria(SearchCriteria $criteria, QueryOptions $queryOptions)
+    {
+        return $this->searchEngine->query($criteria, $queryOptions);
     }
 
     /**
@@ -217,9 +198,8 @@ class DataPoolReader
     ) {
         $emptyFilterSelection = [];
         $includeNoFacetFiltersInResult = new FacetFiltersToIncludeInResult();
-        
-        $searchResult = $this->searchEngine->query(
-            $criteria,
+
+        $queryOptions = new QueryOptions(
             $emptyFilterSelection,
             $context,
             $includeNoFacetFiltersInResult,
@@ -227,6 +207,9 @@ class DataPoolReader
             $pageNumber,
             $sortOrderConfig
         );
+
+        $searchResult = $this->searchEngine->query($criteria, $queryOptions);
+
         return array_values($searchResult->getProductIds());
     }
 }

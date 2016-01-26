@@ -156,6 +156,109 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($keys, $sortedKeys, 'Failed asserting elements order');
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubFacetFiltersToIncludeInResult()
+    {
+        $stubFacetFiltersToIncludeInResult = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
+        $stubFacetFiltersToIncludeInResult->method('getAttributeCodeStrings')->willReturn([]);
+        $stubFacetFiltersToIncludeInResult->method('getFields')->willReturn([]);
+
+        return $stubFacetFiltersToIncludeInResult;
+    }
+
+    /**
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubQueryOptions()
+    {
+        return $this->createStubQueryOptionsWithGivenContext($this->testContext);
+    }
+
+    /**
+     * @param Context $context
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubQueryOptionsWithGivenContext(Context $context)
+    {
+        $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
+        $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+
+        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions->method('getFilterSelection')->willReturn([]);
+        $stubQueryOptions->method('getContext')->willReturn($context);
+        $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($stubFacetFiltersToIncludeInResult);
+        $stubQueryOptions->method('getRowsPerPage')->willReturn(100);
+        $stubQueryOptions->method('getPageNumber')->willReturn(0);
+        $stubQueryOptions->method('getSortOrderConfig')->willReturn($stubSortOrderConfig);
+
+        return $stubQueryOptions;
+    }
+
+    /**
+     * @param FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult
+     * @param array[] $selectedFilters
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubQueryOptionsWithGivenFacetFilters(
+        FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
+        array $selectedFilters
+    ) {
+        $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+
+        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions->method('getFilterSelection')->willReturn($selectedFilters);
+        $stubQueryOptions->method('getContext')->willReturn($this->testContext);
+        $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($facetFiltersToIncludeInResult);
+        $stubQueryOptions->method('getRowsPerPage')->willReturn(100);
+        $stubQueryOptions->method('getPageNumber')->willReturn(0);
+        $stubQueryOptions->method('getSortOrderConfig')->willReturn($stubSortOrderConfig);
+
+        return $stubQueryOptions;
+    }
+
+    /**
+     * @param SortOrderConfig $sortOrderConfig
+     * @param array[] $selectedFilters
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubQueryOptionsWithGivenSortOrder(SortOrderConfig $sortOrderConfig, array $selectedFilters)
+    {
+        $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
+
+        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions->method('getFilterSelection')->willReturn($selectedFilters);
+        $stubQueryOptions->method('getContext')->willReturn($this->testContext);
+        $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($stubFacetFiltersToIncludeInResult);
+        $stubQueryOptions->method('getRowsPerPage')->willReturn(100);
+        $stubQueryOptions->method('getPageNumber')->willReturn(0);
+        $stubQueryOptions->method('getSortOrderConfig')->willReturn($sortOrderConfig);
+
+        return $stubQueryOptions;
+    }
+
+    /**
+     * @param int $rowsPerPage
+     * @param int $pageNumber
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubQueryOptionsWithGivenPagination($rowsPerPage, $pageNumber)
+    {
+        $facetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
+        $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+
+        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions->method('getFilterSelection')->willReturn([]);
+        $stubQueryOptions->method('getContext')->willReturn($this->testContext);
+        $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($facetFiltersToIncludeInResult);
+        $stubQueryOptions->method('getRowsPerPage')->willReturn($rowsPerPage);
+        $stubQueryOptions->method('getPageNumber')->willReturn($pageNumber);
+        $stubQueryOptions->method('getSortOrderConfig')->willReturn($stubSortOrderConfig);
+
+        return $stubQueryOptions;
+    }
+
     protected function setUp()
     {
         $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
@@ -171,21 +274,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testSearchEngineResponseIsReturned()
     {
         $criteria = SearchCriterionEqual::create('foo', 'bar');
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $result = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
 
-        $result = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
         $this->assertInstanceOf(SearchEngineResponse::class, $result);
     }
 
@@ -208,21 +298,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $queryOptions = $this->createStubQueryOptionsWithGivenContext($queryContext);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $queryContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertNotContains($productAId, $result, '', false, false);
@@ -248,21 +326,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $queryOptions = $this->createStubQueryOptionsWithGivenContext($queryContext);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $queryContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productAId, $result, '', false, false);
@@ -283,21 +349,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
 
         $criteria = SearchCriterionLike::create($fieldName, 'bar');
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productAId, $result, '', false, false);
@@ -306,21 +359,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
         $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
-
-        $searchEngineResponse = $this->searchEngine->query(
-            $searchCriteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($searchCriteria, $this->createStubQueryOptions());
 
         $this->assertCount(0, $searchEngineResponse->getProductIds());
     }
@@ -340,21 +379,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
-
-        $searchEngineResponse = $this->searchEngine->query(
-            $searchCriteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($searchCriteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productAId, $result, '', false, false);
@@ -393,21 +418,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
-
-        $searchEngineResponse = $this->searchEngine->query(
-            $searchCriteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($searchCriteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productAId, $result, '', false, false);
@@ -450,21 +461,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productId, $result, '', false, false);
@@ -481,21 +479,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->clear();
 
         $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
 
         $this->assertCount(0, $searchEngineResponse->getProductIds());
     }
@@ -518,21 +503,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentC);
 
         $criteria = SearchCriterionEqual::create($fieldName, $uniqueValue);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertCount(2, $result);
@@ -562,26 +534,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             SearchCriterionEqual::create($fieldCCode, $keyword)
         );
 
-        $facetFieldRequest = new FacetFiltersToIncludeInResult(
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldACode)),
             new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldBCode))
         );
-
         $selectedFilters = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFieldRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
-
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getFacetFieldCollection();
 
         $this->assertFacetFieldCollectionContainsFieldWithCodeAndValue($result, $fieldACode, $keyword);
@@ -600,30 +560,20 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(false);
 
-        $facetFieldRequest = new FacetFiltersToIncludeInResult(
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString($fieldName),
                 FacetFilterRange::create(1, 10)
             )
         );
+        $selectedFilters = [];
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
-        $selectedFilters = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
         $this->setExpectedException(NoFacetFieldTransformationRegisteredException::class);
 
-        $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFieldRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $this->searchEngine->query($criteria, $queryOptions);
     }
 
     public function testFacetFieldCollectionContainsConfiguredRanges()
@@ -652,7 +602,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->stubFacetFieldTransformationRegistry->method('getTransformationByCode')
             ->willReturn($stubFacetFieldTransformation);
 
-        $facetFieldRequest = new FacetFiltersToIncludeInResult(
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestRangedField(
                 AttributeCode::fromString($fieldName),
                 FacetFilterRange::create(null, 10),
@@ -661,23 +611,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
                 FacetFilterRange::create(30, null)
             )
         );
+        $selectedFilters = [];
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
-        $selectedFilters = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFieldRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
-
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $facetFieldsCollection = $searchEngineResponse->getFacetFieldCollection();
 
         $this->assertFacetFieldCollectionContainsFieldWithCodeAndValue($facetFieldsCollection, $fieldName, '-10');
@@ -700,23 +639,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
 
         $criteria = SearchCriterionEqual::create($field, $keyword);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
+
         $rowsPerPage = 1;
         $pageNumber = 1;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $queryOptions = $this->createStubQueryOptionsWithGivenPagination($rowsPerPage, $pageNumber);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
 
-        $this->assertCount(1, $searchEngineResponse->getProductIds());
+        $this->assertCount($rowsPerPage, $searchEngineResponse->getProductIds());
         $this->assertSame(2, $searchEngineResponse->getTotalNumberOfResults());
     }
 
@@ -739,26 +669,14 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionEqual::create($fieldACode, $keywordA);
 
-        $facetFieldRequest = new FacetFiltersToIncludeInResult(
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldACode)),
             new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldBCode))
         );
-
         $selectedFilters = [$fieldBCode => [$keywordB]];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFieldRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
-
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertCount(1, $result);
@@ -784,26 +702,15 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($documentA);
         $this->searchEngine->addDocument($documentB);
 
-        $facetFieldRequest = new FacetFiltersToIncludeInResult(
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldACode))
         );
+        $selectedFilters = [$fieldACode => [$fieldValueB]];
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
         $criteria = SearchCriterionEqual::create($fieldBCode, $keyword);
-        $selectedFilters = [$fieldACode => [$fieldValueB]];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFieldRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
-
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getFacetFieldCollection()->getFacetFields();
 
         $this->assertCount(1, $result);
@@ -829,22 +736,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($documentC);
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
-        $selectedFilters = [];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
+
         $sortOrderConfig = $this->createStubSortOrderConfig($fieldName, SortOrderDirection::DESC);
+        $selectedFilters = [];
+        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
-
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $expectedOrder = [$productAId, $productCId, $productBId];
 
         $this->assertOrder($expectedOrder, $searchEngineResponse->getProductIds());
@@ -853,21 +750,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnEmptyArrayForRequestsWithSelectedFacetsIfTheSearchEngineIndexIsEmpty()
     {
         $criteria = SearchCriterionAnything::create();
-        $selectedFilters = ['foo' => ['bar']];
-        $facetFilterRequest = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
+        $selectedFilters = ['foo' => ['bar']];
+        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
+
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
+
         $this->assertSame([], $searchEngineResponse->getProductIds());
     }
 
@@ -879,21 +768,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocument);
         
         $criteria = SearchCriterionAnything::create();
-        $selectedFilters = ['qux' => ['bar']];
-        $facetFiltersToIncludeInResult = new FacetFiltersToIncludeInResult();
-        $rowsPerPage = 100;
-        $pageNumber = 0;
+
         $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
-        
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFiltersToIncludeInResult,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $selectedFilters = ['qux' => ['bar']];
+        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
+
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
 
         $this->assertContains('ID', $searchEngineResponse->getProductIds());
         $this->assertCount(0, $searchEngineResponse->getFacetFieldCollection());
@@ -920,24 +800,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
             SearchCriterionEqual::create($fieldCode, $facetValueB)
         );
 
-        $facetFieldRequest = new FacetFiltersToIncludeInResult(
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldCode))
         );
-
         $selectedFilters = [];
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        $sortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
-        $searchEngineResponse = $this->searchEngine->query(
-            $criteria,
-            $selectedFilters,
-            $this->testContext,
-            $facetFieldRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
 
         $facetFields = $searchEngineResponse->getFacetFieldCollection()->getFacetFields();
         $expectedValues = [

@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -180,9 +181,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $request,
             $this->facetFilterRequest
         );
-
-        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
-            $criteria,
+        $queryOptions = new QueryOptions(
             $selectedFilters,
             $this->context,
             $this->facetFilterRequest,
@@ -190,6 +189,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $currentPageNumber,
             $selectedSortOrderConfig
         );
+
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
     }
 
     /**

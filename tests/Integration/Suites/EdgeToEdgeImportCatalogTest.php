@@ -6,6 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -121,8 +122,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             AttributeCode::fromString('name'),
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
-        $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria(
-            $criteria,
+        $queryOptions = new QueryOptions(
             $selectedFilters,
             $context,
             $facetFilterRequest,
@@ -130,6 +130,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $pageNumber,
             $sortOrderConfig
         );
+        $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
 
         $this->assertContains($productId, $searchResults->getProductIds(), '', false, false);
     }

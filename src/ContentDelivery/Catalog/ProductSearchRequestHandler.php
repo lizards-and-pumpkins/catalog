@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -177,8 +178,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
 
-        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
-            $criteria,
+        $queryOptions = new QueryOptions(
             $selectedFilters,
             $this->context,
             $this->facetFilterRequest,
@@ -186,6 +186,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $currentPageNumber,
             $selectedSortOrderConfig
         );
+
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
     }
 
     /**

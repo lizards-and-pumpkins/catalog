@@ -17,6 +17,7 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
