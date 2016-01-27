@@ -19,7 +19,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreat
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessThan;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLike;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -348,9 +347,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $criteria = SearchCriterionLike::create($fieldName, 'bar');
-
-        $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
+        $searchEngineResponse = $this->searchEngine->queryFullText('bar', $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productAId, $result, '', false, false);
@@ -815,11 +812,5 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expectedValues, $facetFields[0]->getValues());
-    }
-
-    public function testFullTextQueryIsReturningSearchEngineResponse()
-    {
-        $result = $this->searchEngine->queryFullText('foo', $this->createStubQueryOptions());
-        $this->assertInstanceOf(SearchEngineResponse::class, $result);
     }
 }

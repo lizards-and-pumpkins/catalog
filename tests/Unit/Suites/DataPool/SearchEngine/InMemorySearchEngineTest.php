@@ -48,13 +48,14 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
     ) {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
         $stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $stubGlobalProductListingCriteria->method('matches')->willReturn(true);
 
         $searchCriteriaBuilder = new SearchCriteriaBuilder(
             $facetFieldTransformationRegistry,
             $stubGlobalProductListingCriteria
         );
 
-        $testSearchableFields = [];
+        $testSearchableFields = ['baz'];
 
         return new InMemorySearchEngine(
             $testSearchableFields,
