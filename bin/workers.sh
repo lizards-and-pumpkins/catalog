@@ -8,8 +8,7 @@ declare -a names=(commandConsumer.php eventConsumer.php)
 
 function main() {
     init_vars
-
-    runmode=1
+    declare runmode=1
     while [ $runmode -gt 0 ]; do
         get_valid_choice
         case $choice in
@@ -30,10 +29,11 @@ function main() {
 }
 
 function init_vars() {
-    declare -a pids=();
     current_selection=0
     dir="$(dirname $0)"
     supervisor="$dir/consumerSupervisor.sh"
+    
+    update_pid_list
 }
 
 function get_valid_choice() {
@@ -67,14 +67,29 @@ function print_menu()
 {
     for ((i=0; i < ${#names[@]}; i++)); do
         [[ $current_selection = $i ]] && is_selected="*" || is_selected=" "
-        printf "%d) %-20s %1s [ %2d ]\n" $((i + 1)) ${names[$i]} "$is_selected" $(get_pid_count_at $i)
+        printf "%d) %-20s %1s [ %2d ]\n" $((i + 1)) ${names[$i]} "$is_selected" $(get_pid_count_for $i)
+        [ "$verbose" == "true" ] && echo "${pids[$i]}"
     done
 }
 
-function get_pid_count_at()
+
+function update_pid_list()
+{
+    for ((i=0; i < ${#names[@]}; i++)); do
+        pids[$i]=" "$(get_pids_for ${names[$i]})
+    done
+}
+
+function get_pids_for()
+{
+    name=$1
+    echo $(ps x|grep $name|grep -v 'grep '|cut -d' ' -f1)
+}
+
+function get_pid_count_for()
 {
     index=$1
-    echo ${pids[$i]} | wc -w
+    echo ${pids[$index]} | wc -w
 }
 
 function increase_current_selection()
@@ -93,6 +108,15 @@ function decrease_current_selection()
 }
 
 ########################################################
+
+while test $# -ne 0; do
+    case "$1" in
+        "-d"|"--debug"|"-v"|"--verbose")
+            verbose=true
+            ;;
+    esac
+    shift
+done
 
 main
 
