@@ -178,7 +178,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
 
-        $queryOptions = new QueryOptions(
+        $queryOptions = QueryOptions::create(
             $selectedFilters,
             $this->context,
             $this->facetFilterRequest,

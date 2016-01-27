@@ -44,7 +44,7 @@ class SearchEngineTest extends AbstractIntegrationTest
 
         $selectedFilters = ['color' => ['Red']];
 
-        $queryOptions = new QueryOptions(
+        $queryOptions = QueryOptions::create(
             $selectedFilters,
             $context,
             $facetFieldRequest,

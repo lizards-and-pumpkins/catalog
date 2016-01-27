@@ -77,12 +77,15 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private function createStubProductListingPageRequest()
     {
         $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
+        $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
+
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
         $stubProductListingPageRequest = $this->getMock(ProductListingPageRequest::class, [], [], '', false);
         $stubProductListingPageRequest->method('getProductsPerPage')->willReturn($stubProductsPerPage);
         $stubProductListingPageRequest->method('getSelectedSortOrderConfig')->willReturn($stubSortOrderConfig);
         $stubProductListingPageRequest->method('getSelectedFilterValues')->willReturn([]);
+        $stubProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
 
         return $stubProductListingPageRequest;
     }

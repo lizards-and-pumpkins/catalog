@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidRowsPerPageException;
 
 class QueryOptions
 {
@@ -38,8 +39,6 @@ class QueryOptions
     private $sortOrderConfig;
 
     /**
-     * QueryOptions constructor.
-     *
      * @param array[] $filterSelection
      * @param Context $context
      * @param FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult
@@ -47,7 +46,7 @@ class QueryOptions
      * @param int $pageNumber
      * @param SortOrderConfig $sortOrderConfig
      */
-    public function __construct(
+    private function __construct(
         array $filterSelection,
         Context $context,
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
@@ -61,6 +60,36 @@ class QueryOptions
         $this->rowsPerPage = $rowsPerPage;
         $this->pageNumber = $pageNumber;
         $this->sortOrderConfig = $sortOrderConfig;
+    }
+
+    /**
+     * @param array[] $filterSelection
+     * @param Context $context
+     * @param FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult
+     * @param int $rowsPerPage
+     * @param int $pageNumber
+     * @param SortOrderConfig $sortOrderConfig
+     * @return QueryOptions
+     */
+    public static function create(
+        array $filterSelection,
+        Context $context,
+        FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
+        $rowsPerPage,
+        $pageNumber,
+        SortOrderConfig $sortOrderConfig
+    ) {
+        self::validateRowsPerPage($rowsPerPage);
+        self::validatePageNumber($pageNumber);
+
+        return new self(
+            $filterSelection,
+            $context,
+            $facetFiltersToIncludeInResult,
+            $rowsPerPage,
+            $pageNumber,
+            $sortOrderConfig
+        );
     }
 
     public function getFilterSelection()
@@ -91,5 +120,35 @@ class QueryOptions
     public function getSortOrderConfig()
     {
         return $this->sortOrderConfig;
+    }
+
+    private static function validateRowsPerPage($rowsPerPage)
+    {
+        if (!is_int($rowsPerPage)) {
+            throw new InvalidRowsPerPageException(
+                sprintf('Number of rows per page must be an integer, got "%s".', gettype($rowsPerPage))
+            );
+        }
+
+        if ($rowsPerPage <= 0) {
+            throw new InvalidRowsPerPageException(
+                sprintf('Number of rows per page must be positive, got "%s".', $rowsPerPage)
+            );
+        }
+    }
+
+    private static function validatePageNumber($pageNumber)
+    {
+        if (!is_int($pageNumber)) {
+            throw new InvalidRowsPerPageException(
+                sprintf('Current page number must be an integer, got "%s".', gettype($pageNumber))
+            );
+        }
+
+        if ($pageNumber < 0) {
+            throw new InvalidRowsPerPageException(
+                sprintf('Current page number can not be negative, got "%s".', $pageNumber)
+            );
+        }
     }
 }

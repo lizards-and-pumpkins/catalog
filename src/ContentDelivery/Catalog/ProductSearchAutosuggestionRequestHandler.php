@@ -158,7 +158,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $rowsPerPage = 5; // TODO: Replace with configured number of suggestions to show
         $pageNumber = 0;
 
-        $queryOptions = new QueryOptions(
+        $queryOptions = QueryOptions::create(
             $selectedFilters,
             $this->context,
             $facetFilterRequest,

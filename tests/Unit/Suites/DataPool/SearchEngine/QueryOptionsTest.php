@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidRowsPerPageException;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
@@ -44,7 +45,7 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
         );
         $this->stubSearchOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
-        $this->queryOptions = new QueryOptions(
+        $this->queryOptions = QueryOptions::create(
             $this->testFilterSelection,
             $this->stubContext,
             $this->stubFacetFiltersToIncludeInResult,
@@ -52,6 +53,101 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
             $this->testPageNumber,
             $this->stubSearchOrderConfig
         );
+    }
+
+    /**
+     * @dataProvider nonIntegerProvider
+     * @param mixed $invalidRowsPerPage
+     */
+    public function testExceptionIsThrownIfRowsPerPageIsNotAnInteger($invalidRowsPerPage)
+    {
+        $this->setExpectedException(
+            InvalidRowsPerPageException::class,
+            sprintf('Number of rows per page must be an integer, got "%s".', gettype($invalidRowsPerPage))
+        );
+
+        $this->queryOptions = QueryOptions::create(
+            $this->testFilterSelection,
+            $this->stubContext,
+            $this->stubFacetFiltersToIncludeInResult,
+            $invalidRowsPerPage,
+            $this->testPageNumber,
+            $this->stubSearchOrderConfig
+        );
+    }
+
+    public function testExceptionIsThrownIfRowsPerPageIsNotPositive()
+    {
+        $invalidRowsPerPage = 0;
+
+        $this->setExpectedException(
+            InvalidRowsPerPageException::class,
+            sprintf('Number of rows per page must be positive, got "%s".', $invalidRowsPerPage)
+        );
+
+        $this->queryOptions = QueryOptions::create(
+            $this->testFilterSelection,
+            $this->stubContext,
+            $this->stubFacetFiltersToIncludeInResult,
+            $invalidRowsPerPage,
+            $this->testPageNumber,
+            $this->stubSearchOrderConfig
+        );
+    }
+
+    /**
+     * @dataProvider nonIntegerProvider
+     * @param mixed $invalidPageNumber
+     */
+    public function testExceptionIsThrownIfCurrentPageNumberIsNotAnInteger($invalidPageNumber)
+    {
+        $this->setExpectedException(
+            InvalidRowsPerPageException::class,
+            sprintf('Current page number must be an integer, got "%s".', gettype($invalidPageNumber))
+        );
+
+        $this->queryOptions = QueryOptions::create(
+            $this->testFilterSelection,
+            $this->stubContext,
+            $this->stubFacetFiltersToIncludeInResult,
+            $this->testRowsPerPage,
+            $invalidPageNumber,
+            $this->stubSearchOrderConfig
+        );
+    }
+
+    public function testExceptionIsThrownIfPageNumberIsNegative()
+    {
+        $invalidPageNumber = -1;
+
+        $this->setExpectedException(
+            InvalidRowsPerPageException::class,
+            sprintf('Current page number can not be negative, got "%s".', $invalidPageNumber)
+        );
+
+        $this->queryOptions = QueryOptions::create(
+            $this->testFilterSelection,
+            $this->stubContext,
+            $this->stubFacetFiltersToIncludeInResult,
+            $this->testRowsPerPage,
+            $invalidPageNumber,
+            $this->stubSearchOrderConfig
+        );
+    }
+
+    /**
+     * @return array[]
+     */
+    public function nonIntegerProvider()
+    {
+        return [
+            [1.1],
+            ['1'],
+            [new \stdClass()],
+            [[]],
+            [false],
+            [null]
+        ];
     }
 
     public function testFilterSelectionIsReturned()

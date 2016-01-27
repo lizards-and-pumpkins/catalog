@@ -199,7 +199,7 @@ class DataPoolReader
         $emptyFilterSelection = [];
         $includeNoFacetFiltersInResult = new FacetFiltersToIncludeInResult();
 
-        $queryOptions = new QueryOptions(
+        $queryOptions = QueryOptions::create(
             $emptyFilterSelection,
             $context,
             $includeNoFacetFiltersInResult,

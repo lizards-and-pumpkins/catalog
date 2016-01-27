@@ -181,7 +181,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $request,
             $this->facetFilterRequest
         );
-        $queryOptions = new QueryOptions(
+        $queryOptions = QueryOptions::create(
             $selectedFilters,
             $this->context,
             $this->facetFilterRequest,

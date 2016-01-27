@@ -122,7 +122,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             AttributeCode::fromString('name'),
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
-        $queryOptions = new QueryOptions(
+        $queryOptions = QueryOptions::create(
             $selectedFilters,
             $context,
             $facetFilterRequest,
