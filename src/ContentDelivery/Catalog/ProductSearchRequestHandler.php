@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
@@ -40,16 +40,6 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $facetFilterRequest;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var string[]
-     */
-    private $searchableAttributeCodes;
-
-    /**
      * @var ProductListingPageContentBuilder
      */
     private $productListingPageContentBuilder;
@@ -59,23 +49,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      */
     private $productListingPageRequest;
 
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param SnippetKeyGenerator $metaInfoSnippetKeyGenerator
-     * @param FacetFiltersToIncludeInResult $facetFilterRequest
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param string[] $searchableAttributeCodes
-     * @param ProductListingPageContentBuilder $productListingPageContentBuilder
-     * @param ProductListingPageRequest $productListingPageRequest
-     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         FacetFiltersToIncludeInResult $facetFilterRequest,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        array $searchableAttributeCodes,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest
     ) {
@@ -83,8 +61,6 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
         $this->facetFilterRequest = $facetFilterRequest;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->searchableAttributeCodes = $searchableAttributeCodes;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
     }
@@ -165,27 +141,18 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
     ) {
-        $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
-            $request,
-            $this->facetFilterRequest
-        );
-
-        $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $criteria = $this->searchCriteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString(
-            $this->searchableAttributeCodes,
-            $queryString
-        );
-        $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
-
-        return $this->dataPoolReader->getSearchResultsMatchingCriteria(
-            $criteria,
-            $selectedFilters,
+        $queryOptions = QueryOptions::create(
+            $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFilterRequest),
             $this->context,
             $this->facetFilterRequest,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
-            $currentPageNumber,
+            $this->productListingPageRequest->getCurrentPageNumber($request),
             $selectedSortOrderConfig
         );
+
+        $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+
+        return $this->dataPoolReader->getSearchResultsMatchingString($queryString, $queryOptions);
     }
 
     /**

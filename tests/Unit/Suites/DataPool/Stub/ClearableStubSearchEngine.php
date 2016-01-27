@@ -5,9 +5,11 @@ namespace LizardsAndPumpkins\DataPool\Stub;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Utils\Clearable;
 
 class ClearableStubSearchEngine implements SearchEngine, Clearable
@@ -24,23 +26,21 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
 
     /**
      * @param SearchCriteria $criteria
-     * @param array[] $filterSelection
-     * @param Context $context
-     * @param FacetFiltersToIncludeInResult $facetFilterRequest
-     * @param int $rowsPerPage
-     * @param int $pageNumber
-     * @param SortOrderConfig $sortOrderConfig
+     * @param QueryOptions $queryOptions
      * @return void
      */
-    public function query(
-        SearchCriteria $criteria,
-        array $filterSelection,
-        Context $context,
-        FacetFiltersToIncludeInResult $facetFilterRequest,
-        $rowsPerPage,
-        $pageNumber,
-        SortOrderConfig $sortOrderConfig
-    ) {
+    public function query(SearchCriteria $criteria, QueryOptions $queryOptions)
+    {
+        // Intentionally left empty
+    }
+
+    /**
+     * @param string $searchString
+     * @param QueryOptions $queryOptions
+     * @return void
+     */
+    public function queryFullText($searchString, QueryOptions $queryOptions)
+    {
         // Intentionally left empty
     }
 }

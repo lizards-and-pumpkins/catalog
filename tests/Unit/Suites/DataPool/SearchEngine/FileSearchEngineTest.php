@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Exception\SearchEngineNotAvailableE
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\Utils\LocalFilesystem;
+use \PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
@@ -58,14 +59,18 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
 
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
         $stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $stubGlobalProductListingCriteria->method('matches')->willReturn(true);
 
         $searchCriteriaBuilder = new SearchCriteriaBuilder(
             $facetFieldTransformationRegistry,
             $stubGlobalProductListingCriteria
         );
 
+        $testSearchableFields = ['baz'];
+
         return FileSearchEngine::create(
             $this->temporaryStorage,
+            $testSearchableFields,
             $searchCriteriaBuilder,
             $facetFieldTransformationRegistry
         );
@@ -92,6 +97,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
     {
         $this->setExpectedException(SearchEngineNotAvailableException::class);
 
+        /** @var FacetFieldTransformationRegistry|MockObject $stubFacetFieldTransformationRegistry */
         $stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
 
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
@@ -102,8 +108,11 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
             $stubGlobalProductListingCriteria
         );
 
+        $testSearchableFields = [];
+
         FileSearchEngine::create(
             'non-existing-path',
+            $testSearchableFields,
             $searchCriteriaBuilder,
             $stubFacetFieldTransformationRegistry
         );

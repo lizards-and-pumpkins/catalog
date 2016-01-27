@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Product\AttributeCode;
@@ -42,8 +43,8 @@ class SearchEngineTest extends AbstractIntegrationTest
         $searchEngine = $this->factory->getSearchEngine();
 
         $selectedFilters = ['color' => ['Red']];
-        $searchEngineResponse = $searchEngine->query(
-            SearchCriterionAnything::create(),
+
+        $queryOptions = QueryOptions::create(
             $selectedFilters,
             $context,
             $facetFieldRequest,
@@ -51,6 +52,8 @@ class SearchEngineTest extends AbstractIntegrationTest
             $pageNumber,
             $sortOrderConfig
         );
+
+        $searchEngineResponse = $searchEngine->query(SearchCriterionAnything::create(), $queryOptions);
 
         $this->assertContains('M29540', $searchEngineResponse->getProductIds());
     }

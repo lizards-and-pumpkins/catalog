@@ -46,12 +46,21 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
     final protected function createSearchEngineInstance(
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
     ) {
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
         $stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $stubGlobalProductListingCriteria->method('matches')->willReturn(true);
+
         $searchCriteriaBuilder = new SearchCriteriaBuilder(
             $facetFieldTransformationRegistry,
             $stubGlobalProductListingCriteria
         );
 
-        return new InMemorySearchEngine($searchCriteriaBuilder, $facetFieldTransformationRegistry);
+        $testSearchableFields = ['baz'];
+
+        return new InMemorySearchEngine(
+            $testSearchableFields,
+            $searchCriteriaBuilder,
+            $facetFieldTransformationRegistry
+        );
     }
 }

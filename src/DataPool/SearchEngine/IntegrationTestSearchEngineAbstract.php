@@ -33,35 +33,50 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getFacetFieldTransformationRegistry();
 
     /**
+     * @return string[]
+     */
+    abstract protected function getSearchableFields();
+
+    /**
      * {@inheritdoc}
      */
-    final public function query(
-        SearchCriteria $originalCriteria,
-        array $filterSelection,
-        Context $context,
-        FacetFiltersToIncludeInResult $facetFilterRequest,
-        $rowsPerPage,
-        $pageNumber,
-        SortOrderConfig $sortOrderConfig
-    ) {
-        $selectedFilters = array_filter($filterSelection);
+    final public function query(SearchCriteria $originalCriteria, QueryOptions $queryOptions)
+    {
+        $selectedFilters = array_filter($queryOptions->getFilterSelection());
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
         $allDocuments = $this->getSearchDocuments();
+        $context = $queryOptions->getContext();
         $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
 
         $facetFieldCollection = $this->createFacetFieldCollection(
             $originalCriteria,
             $context,
-            $facetFilterRequest,
+            $queryOptions->getFacetFiltersToIncludeInResult(),
             $selectedFilters,
             $matchingDocuments,
             $allDocuments
         );
 
+        $sortOrderConfig = $queryOptions->getSortOrderConfig();
         $sortedDocuments = $this->getSortedDocuments($sortOrderConfig, ...array_values($matchingDocuments));
 
+        $rowsPerPage = $queryOptions->getRowsPerPage();
+        $pageNumber = $queryOptions->getPageNumber();
+
         return $this->createSearchEngineResponse($facetFieldCollection, $sortedDocuments, $rowsPerPage, $pageNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function queryFullText($searchString, QueryOptions $queryOptions)
+    {
+        $criteriaBuilder = $this->getSearchCriteriaBuilder();
+        $searchableFields = $this->getSearchableFields();
+        $criteria = $criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString($searchableFields, $searchString);
+
+        return $this->query($criteria, $queryOptions);
     }
 
     /**

@@ -71,7 +71,16 @@ class TwentyOneRunFactory implements Factory
      */
     public function getSearchableAttributeCodes()
     {
-        return ['name', 'brand', 'product_group'];
+        return [
+            'brand',
+            'description',
+            'gender',
+            'mpn',
+            'name',
+            'product_group',
+            'series',
+            'style'
+        ];
     }
 
     /**
@@ -256,6 +265,7 @@ class TwentyOneRunFactory implements Factory
 
         return FileSearchEngine::create(
             $searchEngineStoragePath,
+            $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getFacetFieldTransformationRegistry()
         );

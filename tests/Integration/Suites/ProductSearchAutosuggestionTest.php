@@ -77,8 +77,6 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             $dataPoolReader,
             $pageBuilder,
             $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy(),
-            $this->factory->createSearchCriteriaBuilder(),
-            $this->factory->getSearchableAttributeCodes(),
             $sortOrderConfigs
         );
     }

@@ -5,19 +5,20 @@ namespace LizardsAndPumpkins\DataPool;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\Exception\InvalidKeyValueStoreKeyException;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Product\ProductId;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
  */
 class DataPoolReaderTest extends AbstractDataPoolTest
 {
@@ -200,34 +201,28 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
+        /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
+        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
         $mockCriteria = $this->getMock(SearchCriteria::class);
 
-        $selectedFilters = [];
+        $this->getMockSearchEngine()->expects($this->once())->method('query')->with($mockCriteria, $stubQueryOptions);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $this->dataPoolReader->getSearchResultsMatchingCriteria($mockCriteria, $stubQueryOptions);
+    }
 
-        $this->getMockSearchEngine()->expects($this->once())->method('query')
-            ->with($mockCriteria, $selectedFilters, $stubContext);
+    public function testFullTextQueriesAreDelegatedToSearchEngine()
+    {
+        /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
+        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
 
-        /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
-        $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
+        $testQueryString = 'foo';
 
-        $rowsPerPage = 100;
-        $pageNumber = 0;
-        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $sortOrderConfig */
-        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->getMockSearchEngine()->expects($this->once())->method('queryFullText')
+            ->with($testQueryString, $stubQueryOptions);
 
-        $this->dataPoolReader->getSearchResultsMatchingCriteria(
-            $mockCriteria,
-            $selectedFilters,
-            $stubContext,
-            $stubFacetFilterRequest,
-            $rowsPerPage,
-            $pageNumber,
-            $sortOrderConfig
-        );
+        $this->dataPoolReader->getSearchResultsMatchingString($testQueryString, $stubQueryOptions);
     }
 
     public function testItDelegatesUrlKeyReadsToUrlKeyStorage()

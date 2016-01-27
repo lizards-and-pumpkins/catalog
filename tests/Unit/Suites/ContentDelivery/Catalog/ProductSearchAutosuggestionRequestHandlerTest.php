@@ -4,8 +4,6 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
@@ -20,6 +18,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent
  */
 class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -71,15 +70,6 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $stubKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
 
-        $stubCriteria = $this->getMock(SearchCriteria::class);
-
-        /** @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject $stubSearchCriteriaBuilder */
-        $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class, [], [], '', false);
-        $stubSearchCriteriaBuilder->method('createCriteriaForAnyOfGivenFieldsContainsString')
-            ->willReturn($stubCriteria);
-
-        $testSearchableAttributeCodes = ['foo'];
-
         /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $sortOrderConfig */
         $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
@@ -88,8 +78,6 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
             $this->stubDataPoolReader,
             $this->mockPageBuilder,
             $stubKeyGeneratorLocator,
-            $stubSearchCriteriaBuilder,
-            $testSearchableAttributeCodes,
             $sortOrderConfig
         );
 
@@ -176,7 +164,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
 
-        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
 
         $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubHttpRequest));
     }
@@ -188,7 +176,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
 
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([]);
-        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
             PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',
@@ -211,7 +199,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
 
-        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
             PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',

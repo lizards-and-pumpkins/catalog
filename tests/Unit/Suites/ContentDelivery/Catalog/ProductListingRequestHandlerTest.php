@@ -17,6 +17,7 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -153,8 +154,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfResults = 1;
         $this->prepareMockDataPoolReader($numberOfResults);
 
+        $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $this->requestHandler->canProcess($this->stubRequest);
+
         $this->requestHandler->process($this->stubRequest);
     }
 
@@ -170,8 +173,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfResults = 1;
         $this->prepareMockDataPoolReader($numberOfResults);
 
+        $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
+
         $this->requestHandler->process($this->stubRequest);
     }
 
@@ -180,8 +185,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfResults = 1;
         $this->prepareMockDataPoolReader($numberOfResults);
 
+        $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $result = $this->requestHandler->process($this->stubRequest);
+
         $this->assertInstanceOf(HttpResponse::class, $result);
     }
 
