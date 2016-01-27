@@ -212,4 +212,14 @@ class DataPoolReader
 
         return array_values($searchResult->getProductIds());
     }
+
+    /**
+     * @param string $queryString
+     * @param QueryOptions $queryOptions
+     * @return SearchEngineResponse
+     */
+    public function getSearchResultsMatchingString($queryString, QueryOptions $queryOptions)
+    {
+        return $this->searchEngine->queryFullText($queryString, $queryOptions);
+    }
 }

@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
@@ -46,16 +45,6 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
     private $keyGeneratorLocator;
 
     /**
-     * @var string[]
-     */
-    private $searchableAttributeCodes;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private $criteriaBuilder;
-
-    /**
      * @var SortOrderConfig
      */
     private $sortOrderConfig;
@@ -65,8 +54,6 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      * @param DataPoolReader $dataPoolReader
      * @param PageBuilder $pageBuilder
      * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param SearchCriteriaBuilder $criteriaBuilder
-     * @param string[] $searchableAttributeCodes
      * @param SortOrderConfig $sortOrderConfig
      */
     public function __construct(
@@ -74,16 +61,12 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
         SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        SearchCriteriaBuilder $criteriaBuilder,
-        array $searchableAttributeCodes,
         SortOrderConfig $sortOrderConfig
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
         $this->pageBuilder = $pageBuilder;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->criteriaBuilder = $criteriaBuilder;
-        $this->searchableAttributeCodes = $searchableAttributeCodes;
         $this->sortOrderConfig = $sortOrderConfig;
     }
 
@@ -149,10 +132,6 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private function getSearchEngineResponse($queryString)
     {
-        $criteria = $this->criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString(
-            $this->searchableAttributeCodes,
-            $queryString
-        );
         $selectedFilters = [];
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
         $rowsPerPage = 5; // TODO: Replace with configured number of suggestions to show
@@ -167,7 +146,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             $this->sortOrderConfig
         );
 
-        return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
+        return $this->dataPoolReader->getSearchResultsMatchingString($queryString, $queryOptions);
     }
 
     private function addSearchResultsToPageBuilder(ProductId ...$productIds)

@@ -6,8 +6,6 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
@@ -63,7 +61,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
 
         $mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $mockDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
         $mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
         ]);
@@ -102,19 +100,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         return $stubPageContentBuilder;
     }
 
-    /**
-     * @return SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSearchCriteriaBuilder()
-    {
-        $stubSearchCriteria = $this->getMock(SearchCriteria::class);
-        $stubSearchCriteriaBuilder = $this->getMock(SearchCriteriaBuilder::class, [], [], '', false);
-        $stubSearchCriteriaBuilder->method('createCriteriaForAnyOfGivenFieldsContainsString')
-            ->willReturn($stubSearchCriteria);
-
-        return $stubSearchCriteriaBuilder;
-    }
-
     protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
@@ -130,8 +115,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
 
         $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
-        $stubSearchCriteriaBuilder = $this->createStubSearchCriteriaBuilder();
-        $testSearchableAttributeCodes = [];
 
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
@@ -142,8 +125,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubDataPoolReader,
             $stubSnippetKeyGenerator,
             $stubFacetFilterRequest,
-            $stubSearchCriteriaBuilder,
-            $testSearchableAttributeCodes,
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest
         );

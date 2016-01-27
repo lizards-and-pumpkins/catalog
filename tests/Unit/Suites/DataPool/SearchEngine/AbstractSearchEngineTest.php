@@ -816,4 +816,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedValues, $facetFields[0]->getValues());
     }
+
+    public function testFullTextQueryIsReturningSearchEngineResponse()
+    {
+        $result = $this->searchEngine->queryFullText('foo', $this->createStubQueryOptions());
+        $this->assertInstanceOf(SearchEngineResponse::class, $result);
+    }
 }

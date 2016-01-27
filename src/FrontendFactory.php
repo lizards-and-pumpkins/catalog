@@ -423,8 +423,6 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
-            $this->getMasterFactory()->createSearchCriteriaBuilder(),
-            $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest()
         );
@@ -448,8 +446,6 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
-            $this->getMasterFactory()->createSearchCriteriaBuilder(),
-            $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getProductSearchAutosuggestionSortOrderConfig()
         );
     }

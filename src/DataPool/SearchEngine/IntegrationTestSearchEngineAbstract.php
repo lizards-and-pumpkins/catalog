@@ -33,6 +33,11 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     abstract protected function getFacetFieldTransformationRegistry();
 
     /**
+     * @return string[]
+     */
+    abstract protected function getSearchableFields();
+
+    /**
      * {@inheritdoc}
      */
     final public function query(SearchCriteria $originalCriteria, QueryOptions $queryOptions)
@@ -60,6 +65,18 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $pageNumber = $queryOptions->getPageNumber();
 
         return $this->createSearchEngineResponse($facetFieldCollection, $sortedDocuments, $rowsPerPage, $pageNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function queryFullText($searchString, QueryOptions $queryOptions)
+    {
+        $criteriaBuilder = $this->getSearchCriteriaBuilder();
+        $searchableFields = $this->getSearchableFields();
+        $criteria = $criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString($searchableFields, $searchString);
+
+        return $this->query($criteria, $queryOptions);
     }
 
     /**

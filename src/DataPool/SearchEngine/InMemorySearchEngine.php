@@ -14,6 +14,11 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     private $index = [];
 
     /**
+     * @var string[]
+     */
+    private $searchableFields;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -23,10 +28,17 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $facetFieldTransformationRegistry;
 
+    /**
+     * @param string[] $searchableFields
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+     */
     public function __construct(
+        array $searchableFields,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
     ) {
+        $this->searchableFields = $searchableFields;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
     }
@@ -63,5 +75,13 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     final protected function getFacetFieldTransformationRegistry()
     {
         return $this->facetFieldTransformationRegistry;
+    }
+
+    /**
+     * @return string[]
+     */
+    final protected function getSearchableFields()
+    {
+        return $this->searchableFields;
     }
 }

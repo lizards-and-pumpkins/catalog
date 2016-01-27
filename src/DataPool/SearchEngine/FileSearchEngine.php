@@ -26,6 +26,11 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     private $storagePath;
 
     /**
+     * @var string[]
+     */
+    private $searchableFields;
+
+    /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -37,27 +42,32 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
 
     /**
      * @param string $storagePath
+     * @param string[] $searchableFields
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
      */
     private function __construct(
         $storagePath,
+        array $searchableFields,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
     ) {
         $this->storagePath = $storagePath;
+        $this->searchableFields = $searchableFields;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
     }
 
     /**
      * @param string $storagePath
+     * @param string[] $searchableFields
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
      * @return FileSearchEngine
      */
     public static function create(
         $storagePath,
+        array $searchableFields,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
     ) {
@@ -68,7 +78,7 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
             ));
         }
 
-        return new self($storagePath, $searchCriteriaBuilder, $facetFieldTransformationRegistry);
+        return new self($storagePath, $searchableFields, $searchCriteriaBuilder, $facetFieldTransformationRegistry);
     }
 
     public function addDocument(SearchDocument $searchDocument)
@@ -190,5 +200,13 @@ class FileSearchEngine extends IntegrationTestSearchEngineAbstract
     final protected function getFacetFieldTransformationRegistry()
     {
         return $this->facetFieldTransformationRegistry;
+    }
+
+    /**
+     * @return string[]
+     */
+    final protected function getSearchableFields()
+    {
+        return $this->searchableFields;
     }
 }

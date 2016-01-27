@@ -19,4 +19,11 @@ interface SearchEngine
      * @return SearchEngineResponse
      */
     public function query(SearchCriteria $criteria, QueryOptions $queryOptions);
+
+    /**
+     * @param string $searchString
+     * @param QueryOptions $queryOptions
+     * @return SearchEngineResponse
+     */
+    public function queryFullText($searchString, QueryOptions $queryOptions);
 }
