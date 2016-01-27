@@ -45,7 +45,15 @@ done
     exit 4
 }
 
-until false; do
+function clean_exit()
+{
+    runmode=0
+}
+
+trap clean_exit TERM
+
+runmode=1
+until [ $runmode -eq 0 ]; do
     if [ "$LOG" ]; then
         "$CONSUMER_SCRIPT" 2>"$LOG" 2>&1
     else
