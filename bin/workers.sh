@@ -21,6 +21,9 @@ function main() {
             -)
                 decrease_current_selection
                 ;;
+            r)
+                update_pid_list
+                ;;
             q)
                 runmode=0
                 ;;
@@ -40,14 +43,14 @@ function get_valid_choice() {
     choice=
     until [ ! -z "$choice" ]; do
         build_screen
-        read -s -n 1 -p"Select script or +/- to increase/decrease workers (q to quit): " choice
+        read -s -n 1 -p"Select script or +/- to increase/decrease workers (r to refresh, q to quit): " choice
         case $choice in
             [1-9])
                 if [ $choice -gt ${#workers[@]} ]; then
                     choice=
                 fi
                 ;;
-            +|-|q)
+            +|-|q|r)
                 ;;
             *)
                 choice=
