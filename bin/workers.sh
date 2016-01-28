@@ -2,7 +2,7 @@
 
 ########################################################
 
-declare -a names=(commandConsumer.php eventConsumer.php)
+declare -a workers=(commandConsumer.php eventConsumer.php)
 
 ########################################################
 
@@ -43,7 +43,7 @@ function get_valid_choice() {
         read -s -n 1 -p"Select script or +/- to increase/decrease workers (q to quit): " choice
         case $choice in
             [1-9])
-                if [ $choice -gt ${#names[@]} ]; then
+                if [ $choice -gt ${#workers[@]} ]; then
                     choice=
                 fi
                 ;;
@@ -65,9 +65,9 @@ function build_screen()
 
 function print_menu()
 {
-    for ((i=0; i < ${#names[@]}; i++)); do
+    for ((i=0; i < ${#workers[@]}; i++)); do
         [[ $current_selection = $i ]] && is_selected="*" || is_selected=" "
-        printf "%d) %-20s %1s [ %2d ]\n" $((i + 1)) ${names[$i]} "$is_selected" $(get_pid_count_for $i)
+        printf "%d) %-20s %1s [ %2d ]\n" $((i + 1)) ${workers[$i]} "$is_selected" $(get_pid_count_for $i)
         [ "$verbose" == "true" ] && echo "${pids[$i]}"
     done
 }
@@ -75,15 +75,15 @@ function print_menu()
 
 function update_pid_list()
 {
-    for ((i=0; i < ${#names[@]}; i++)); do
-        pids[$i]=" "$(get_pids_for ${names[$i]})
+    for ((i=0; i < ${#workers[@]}; i++)); do
+        pids[$i]=" "$(get_pids_for_worker ${workers[$i]})
     done
 }
 
-function get_pids_for()
+function get_pids_for_worker()
 {
     name=$1
-    echo $(ps x|grep $name|grep -v 'grep '|cut -d' ' -f1)
+    echo $(ps x|grep $name|grep -v 'grep '|awk '{ print $1 }')
 }
 
 function get_pid_count_for()
@@ -94,7 +94,7 @@ function get_pid_count_for()
 
 function increase_current_selection()
 {
-    "$supervisor" "$dir/${names[$current_selection]}" &
+    "$supervisor" "$dir/${workers[$current_selection]}" &
     pids[$current_selection]="${pids[$current_selection]} $!"
 }
 
@@ -109,7 +109,7 @@ function decrease_current_selection()
 
 ########################################################
 
-while test $# -ne 0; do
+while [ $# -ne 0 ]; do
     case "$1" in
         "-d"|"--debug"|"-v"|"--verbose")
             verbose=true
