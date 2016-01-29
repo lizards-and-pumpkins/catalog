@@ -43,6 +43,7 @@ function get_valid_choice() {
     choice=
     until [ ! -z "$choice" ]; do
         build_screen
+        echo
         read -s -n 1 -p"Select script or +/- to increase/decrease workers (r to refresh, q to quit): " choice
         case $choice in
             [1-9])
@@ -62,7 +63,7 @@ function get_valid_choice() {
 function build_screen()
 {
     clear
-    echo
+    printf "\n %-20s     Count\n\n" "Worker Process"
     print_menu 
 }
 
