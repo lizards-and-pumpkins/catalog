@@ -253,7 +253,7 @@ class TwentyOneRunFactory implements Factory
     {
         /** @var ConfigReader $configReader */
         $configReader = $this->getMasterFactory()->createConfigReader();
-        return $configReader->get('log_path');
+        return $configReader->get('file_log_path');
     }
 
     /**
