@@ -80,6 +80,26 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
         }, $facetFilterFields);
     }
 
+    /**
+     * @param mixed $newPath
+     * @return mixed
+     */
+    private function changeFileLogPathInEnvironmentConfig($newPath)
+    {
+        $oldState = null;
+
+        if (isset($_SERVER['LP_FILE_LOG_PATH'])) {
+            $oldState = $_SERVER['LP_FILE_LOG_PATH'];
+            unset($_SERVER['LP_FILE_LOG_PATH']);
+        }
+
+        if (null !== $newPath) {
+            $_SERVER['LP_FILE_LOG_PATH'] = $newPath;
+        }
+
+        return $oldState;
+    }
+
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
@@ -147,6 +167,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testItReturnsAListOfFacetFilterRequestFieldsForTheProductListings($fieldName)
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturn('DE');
         $fieldCodes = $this->getFacetCodes(...$this->factory->getProductListingFacetFilterRequestFields($stubContext));
@@ -155,6 +176,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItInjectsThePriceAfterTheBrandFacetForProductListings()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturn('DE');
         $fieldCodes = $this->getFacetCodes(...$this->factory->getProductListingFacetFilterRequestFields($stubContext));
@@ -168,6 +190,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testItReturnsAListOfFacetFilterRequestFieldsForTheSearchResults($fieldName)
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturn('DE');
         $fieldCodes = $this->getFacetCodes(...$this->factory->getProductSearchFacetFilterRequestFields($stubContext));
@@ -176,6 +199,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItInjectsThePriceAfterTheBrandFacetForSearchListings()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturn('DE');
         $fieldCodes = $this->getFacetCodes(...$this->factory->getProductSearchFacetFilterRequestFields($stubContext));
@@ -382,6 +406,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsASearchFieldToRequestParamMap()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $result = $this->factory->createSearchFieldToRequestParamMap($stubContext);
         $this->assertInstanceOf(SearchFieldToRequestParamMap::class, $result);
@@ -389,8 +414,25 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsThePriceFacetFieldName()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
         $stubContext->method('getValue')->willReturn('DE');
         $this->assertSame('price_incl_tax_de', $this->factory->getPriceFacetFieldNameForContext($stubContext));
+    }
+
+    public function testDefaultFileLogPathIsReturned()
+    {
+        $expectedPath = preg_replace('/tests\/Unit\/Suites/', 'src', __DIR__ . '/../log/system.log');
+        $this->assertSame($expectedPath, $this->factory->getLogFilePathConfig());
+    }
+
+    public function testFileLogPathStoredInEnvironmentIsReturned()
+    {
+        $expectedPath = 'foo';
+        $oldPath = $this->changeFileLogPathInEnvironmentConfig($expectedPath);
+
+        $this->assertSame($expectedPath, $this->factory->getLogFilePathConfig());
+
+        $this->changeFileLogPathInEnvironmentConfig($oldPath);
     }
 }
