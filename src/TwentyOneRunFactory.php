@@ -251,7 +251,9 @@ class TwentyOneRunFactory implements Factory
      */
     public function getLogFilePathConfig()
     {
-        return __DIR__ . '/../log/system.log';
+        /** @var ConfigReader $configReader */
+        $configReader = $this->getMasterFactory()->createConfigReader();
+        return $configReader->get('log_path');
     }
 
     /**
