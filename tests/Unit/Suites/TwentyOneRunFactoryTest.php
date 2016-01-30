@@ -88,13 +88,13 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $oldState = null;
 
-        if (isset($_SERVER['LP_FILE_LOG_PATH'])) {
-            $oldState = $_SERVER['LP_FILE_LOG_PATH'];
-            unset($_SERVER['LP_FILE_LOG_PATH']);
+        if (isset($_SERVER['LP_LOG_FILE_PATH'])) {
+            $oldState = $_SERVER['LP_LOG_FILE_PATH'];
+            unset($_SERVER['LP_LOG_FILE_PATH']);
         }
 
         if (null !== $newPath) {
-            $_SERVER['LP_FILE_LOG_PATH'] = $newPath;
+            $_SERVER['LP_LOG_FILE_PATH'] = $newPath;
         }
 
         return $oldState;
