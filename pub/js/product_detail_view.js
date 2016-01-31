@@ -273,6 +273,11 @@ require([
         return variationOption;
     }
 
+    function addClassLastToLastRecentlyViewedProductsItem() {
+        var items = Array.prototype.slice.call(document.querySelectorAll('#recently-viewed-products li'));
+        items[items.length - 1].className += ' last';
+    }
+
     function handleRecentlyViewedProducts() {
         recentlyViewed.addProductIntoLocalStorage(window.product);
         var products = recentlyViewed.getRecentlyViewedProductsExceptCurrent(product);
@@ -280,6 +285,7 @@ require([
         if (products.length > 0) {
             productGrid.renderGrid(products, '#recently-viewed-products .swipe-container');
             document.getElementById('recently-viewed-products').style.display = 'block';
+            addClassLastToLastRecentlyViewedProductsItem();
             productTitleScrolling('.grid-cell-container h2');
         }
     }
