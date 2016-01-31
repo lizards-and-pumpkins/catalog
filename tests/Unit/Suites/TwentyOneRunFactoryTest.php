@@ -6,6 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
@@ -336,20 +337,26 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSameInstanceOfProductListingSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductListingSortOrderConfig());
-        $this->assertSame(
-            $this->factory->getProductListingSortOrderConfig(),
-            $this->factory->getProductListingSortOrderConfig()
-        );
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->with(ContextCountry::CODE)->willReturn('foo');
+
+        $result = $this->factory->getProductListingSortOrderConfig($stubContext);
+
+        $this->assertContainsOnly(SortOrderConfig::class, $result);
+        $this->assertSame($result, $this->factory->getProductListingSortOrderConfig($stubContext));
     }
 
     public function testSameInstanceOfProductSearchSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductSearchSortOrderConfig());
-        $this->assertSame(
-            $this->factory->getProductSearchSortOrderConfig(),
-            $this->factory->getProductSearchSortOrderConfig()
-        );
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('getValue')->with(ContextCountry::CODE)->willReturn('foo');
+
+        $result = $this->factory->getProductSearchSortOrderConfig($stubContext);
+
+        $this->assertContainsOnly(SortOrderConfig::class, $result);
+        $this->assertSame($result, $this->factory->getProductSearchSortOrderConfig($stubContext));
     }
 
     public function testSameInstanceOfProductSearchAutosuggestionSortOrderConfigIsReturnedOnMultipleCalls()

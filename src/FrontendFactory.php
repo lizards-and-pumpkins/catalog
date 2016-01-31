@@ -54,6 +54,11 @@ class FrontendFactory implements Factory
      */
     private $request;
 
+    /**
+     * @var Context
+     */
+    private $memoizedContext;
+
     public function __construct(HttpRequest $request)
     {
         $this->request = $request;
@@ -223,12 +228,14 @@ class FrontendFactory implements Factory
      */
     public function createProductListingPageContentBuilder()
     {
+        $context = $this->createContext();
+
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
+            $this->getMasterFactory()->createSearchFieldToRequestParamMap($context),
             $this->getMasterFactory()->getTranslatorRegistry(),
-            ...$this->getMasterFactory()->getProductListingSortOrderConfig()
+            ...$this->getMasterFactory()->getProductListingSortOrderConfig($context)
         );
     }
 
@@ -237,10 +244,12 @@ class FrontendFactory implements Factory
      */
     public function createProductListingPageRequest()
     {
+        $context = $this->createContext();
+
         return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
-            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
-            ...$this->getMasterFactory()->getProductListingSortOrderConfig()
+            $this->getMasterFactory()->createSearchFieldToRequestParamMap($context),
+            ...$this->getMasterFactory()->getProductListingSortOrderConfig($context)
         );
     }
 
@@ -400,9 +409,13 @@ class FrontendFactory implements Factory
      */
     public function createContext()
     {
-        /** @var ContextBuilder $contextBuilder */
-        $contextBuilder = $this->getMasterFactory()->createContextBuilder();
-        return $contextBuilder->createFromRequest($this->request);
+        if (null === $this->memoizedContext) {
+            /** @var ContextBuilder $contextBuilder */
+            $contextBuilder = $this->getMasterFactory()->createContextBuilder();
+            $this->memoizedContext = $contextBuilder->createFromRequest($this->request);
+        }
+
+        return $this->memoizedContext;
     }
 
     /**

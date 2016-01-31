@@ -504,9 +504,10 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
+     * @param Context $context
      * @return SortOrderConfig[]
      */
-    public function getProductListingSortOrderConfig()
+    public function getProductListingSortOrderConfig(Context $context)
     {
         if (null === $this->memoizedProductListingSortOrderConfig) {
             $this->memoizedProductListingSortOrderConfig = [
@@ -515,7 +516,7 @@ class TwentyOneRunFactory implements Factory
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
-                    AttributeCode::fromString('price'),
+                    AttributeCode::fromString($this->getPriceFacetFieldNameForContext($context)),
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
@@ -529,9 +530,10 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
+     * @param Context $context
      * @return SortOrderConfig[]
      */
-    public function getProductSearchSortOrderConfig()
+    public function getProductSearchSortOrderConfig(Context $context)
     {
         if (null === $this->memoizedProductSearchSortOrderConfig) {
             $this->memoizedProductSearchSortOrderConfig = [
@@ -540,7 +542,7 @@ class TwentyOneRunFactory implements Factory
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
-                    AttributeCode::fromString('price'),
+                    AttributeCode::fromString($this->getPriceFacetFieldNameForContext($context)),
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
@@ -654,6 +656,7 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
+     * @param Context $context
      * @return SearchFieldToRequestParamMap
      */
     public function createSearchFieldToRequestParamMap(Context $context)

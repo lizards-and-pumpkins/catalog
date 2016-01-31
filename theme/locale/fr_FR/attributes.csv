@@ -2,6 +2,7 @@
 "gender","Sexe"
 "color","Couleur"
 "price","Prix"
+"price_incl_tax_fr","Prix"
 "mpn","Référence fabricant"
 "product_group","Groupe de produits"
 "series","Série"
