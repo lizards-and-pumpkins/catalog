@@ -1,20 +1,25 @@
-.products-grid { overflow: hidden }
-.products-grid::after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
+.products-grid { overflow: hidden; border-top: #ffffff solid 1px }
 .products-grid a { color: #000000 }
-.products-grid li { float: left; width: 33%; position: relative; font-size: 13px }
-.products-grid li .grid-cell-container { padding: 25px 15px 20px; border-bottom: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat; height: 193px }
+.products-grid li { display: inline-block; width: 33%; position: relative; vertical-align: top; margin-top: -1px }
+.products-grid li .grid-cell-container { padding: 25px 11px 20px; border-top: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat; height: 193px }
+.products-grid li .grid-cell-container:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 .products-grid li.last .grid-cell-container { border-right: none }
 .products-grid .product-image { display: block; margin: 0 0 10px 0 }
 .products-grid h2 { font-size: 14px; margin: 0; padding-top: 5px; padding-bottom: 5px }
-.products-grid p { margin: 7px 0 0 }
+.products-grid p { margin: 7px 0 0; float: left; max-width: 50% }
 
-.products-grid .price-container { position: absolute; bottom: 0; right: 14px; text-align: right; height: 51px }
+.products-grid .price-container { float: right; text-align: right; margin-top: 7px; max-width: 50% }
 .products-grid .regular-price, .products-grid .special-price { font-size: 15px; font-weight: bold }
 .products-grid .old-price { text-decoration: line-through }
 .products-grid .base-price { font-size: 12px }
 
 .products-grid li .new-product { background: #3CABD9; color: #ffffff; font-family: GeogrotesqueRegular, Helvetica, Arial, sans-serif; font-size: 16px; padding: 3px 7px; text-transform: uppercase; position: absolute; left: 0; top: 0 }
-.products-grid .you-save { color: #3cabd9 }
+.products-grid .you-save { color: #3cabd9; clear: left; margin-top: 2px }
 
-.swipe-container .products-grid li { display: table-cell; width: auto; float: none }
-.swipe-container .products-grid li .grid-cell-container { border-bottom: none; width: 213px }
+.swipe-container .products-grid li { display: table-cell; width: auto; float: none; margin-top: 0 }
+.swipe-container .products-grid li .grid-cell-container { border-top: none; width: 221px }
+
+/* Tablet */
+@media (max-width: 974px) {
+    .products-grid li .grid-cell-container { height: auto }
+}

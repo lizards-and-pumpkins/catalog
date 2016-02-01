@@ -100,12 +100,11 @@ define(['product', 'lib/translate'], function (Product, translate) {
         container.appendChild(wrapIntoProductLink(productImage, productUrl));
         container.appendChild(wrapIntoProductLink(title, productUrl));
         container.appendChild(gender);
+        container.appendChild(createPricesBlock(product));
 
         if (product.getDiscountPercentage() >= 5) {
             container.appendChild(createYouSaveBlock(product));
         }
-
-        container.appendChild(createPricesBlock(product));
 
         productLi.appendChild(container);
 
