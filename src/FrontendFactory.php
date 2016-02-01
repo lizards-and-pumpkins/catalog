@@ -54,11 +54,6 @@ class FrontendFactory implements Factory
      */
     private $request;
 
-    /**
-     * @var Context
-     */
-    private $memoizedContext;
-
     public function __construct(HttpRequest $request)
     {
         $this->request = $request;
@@ -409,13 +404,9 @@ class FrontendFactory implements Factory
      */
     public function createContext()
     {
-        if (null === $this->memoizedContext) {
-            /** @var ContextBuilder $contextBuilder */
-            $contextBuilder = $this->getMasterFactory()->createContextBuilder();
-            $this->memoizedContext = $contextBuilder->createFromRequest($this->request);
-        }
-
-        return $this->memoizedContext;
+        /** @var ContextBuilder $contextBuilder */
+        $contextBuilder = $this->getMasterFactory()->createContextBuilder();
+        return $contextBuilder->createFromRequest($this->request);
     }
 
     /**
