@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Snippet;
  * @covers \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
  * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\SnippetContainer
  */
 class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,7 +79,9 @@ class ProductListingCriteriaSnippetRendererTest extends \PHPUnit_Framework_TestC
             ProductListingCriteriaSnippetContent::KEY_CRITERIA => null,
             PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'product_listing',
             PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['product_listing'],
-            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [
+                'title' => [ProductListingTitleSnippetRenderer::CODE]
+            ],
         ]);
 
         $expectedSnippet = Snippet::create($testSnippetKey, $expectedSnippetContents);

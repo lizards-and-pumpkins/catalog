@@ -29,6 +29,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
+use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator;
@@ -101,6 +102,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
@@ -685,5 +687,17 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductListingImportCommandLocator();
         $this->assertInstanceOf(ProductListingImportCommandLocator::class, $result);
+    }
+
+    public function testItCreatesAcreateProductListingTitleSnippetRenderer()
+    {
+        $result = $this->commonFactory->createProductListingTitleSnippetRenderer();
+        $this->assertInstanceOf(ProductListingTitleSnippetRenderer::class, $result);
+    }
+
+    public function testItCreatesAProductListingTitleSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductListingTitleSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 }

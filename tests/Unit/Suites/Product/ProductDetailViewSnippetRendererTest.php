@@ -11,6 +11,7 @@ use LizardsAndPumpkins\SnippetRenderer;
 /**
  * @covers \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\SnippetContainer
  * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
