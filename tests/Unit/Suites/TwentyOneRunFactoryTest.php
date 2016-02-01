@@ -336,32 +336,26 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSameInstanceOfProductListingSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductListingSortOrderConfig());
-        $this->assertSame(
-            $this->factory->getProductListingSortOrderConfig(),
-            $this->factory->getProductListingSortOrderConfig()
-        );
+        $result = $this->factory->getProductListingSortOrderConfig();
+
+        $this->assertContainsOnly(SortOrderConfig::class, $result);
+        $this->assertSame($result, $this->factory->getProductListingSortOrderConfig());
     }
 
     public function testSameInstanceOfProductSearchSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductSearchSortOrderConfig());
-        $this->assertSame(
-            $this->factory->getProductSearchSortOrderConfig(),
-            $this->factory->getProductSearchSortOrderConfig()
-        );
+        $result = $this->factory->getProductSearchSortOrderConfig();
+
+        $this->assertContainsOnly(SortOrderConfig::class, $result);
+        $this->assertSame($result, $this->factory->getProductSearchSortOrderConfig());
     }
 
     public function testSameInstanceOfProductSearchAutosuggestionSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        $this->assertInstanceOf(
-            SortOrderConfig::class,
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
-        );
-        $this->assertSame(
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
-        );
+        $result = $this->factory->getProductSearchAutosuggestionSortOrderConfig();
+
+        $this->assertInstanceOf(SortOrderConfig::class, $result);
+        $this->assertSame($result, $this->factory->getProductSearchAutosuggestionSortOrderConfig());
     }
 
     public function testSameInstanceOfProductsPerPageIsReturned()

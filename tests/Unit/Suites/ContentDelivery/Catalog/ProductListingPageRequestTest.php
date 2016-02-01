@@ -6,6 +6,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderExce
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Product\AttributeCode;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -285,6 +286,30 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('price_with_tax', $result);
         $this->assertContains('10.00 to 19.99', $result['price_with_tax']);
+    }
+
+    public function testSortOrderConfigWithMappedAttributeCodeIsReturned()
+    {
+        $originalAttributeCodeString = 'foo';
+        $mappedAttributeCodeString = 'bar';
+
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode->method('__toString')->willReturn($originalAttributeCodeString);
+
+        $stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+
+        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortOrderConfig */
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+        $stubSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
+
+        $this->stubSearchFieldToRequestParamMap->method('getSearchFieldName')->willReturnMap([
+            [$originalAttributeCodeString, $mappedAttributeCodeString],
+        ]);
+
+        $result = $this->pageRequest->createSorOrderConfigForRequest($stubSortOrderConfig);
+
+        $this->assertEquals($mappedAttributeCodeString, $result->getAttributeCode());
     }
 }
 

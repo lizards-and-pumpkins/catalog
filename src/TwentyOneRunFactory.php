@@ -654,6 +654,7 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
+     * @param Context $context
      * @return SearchFieldToRequestParamMap
      */
     public function createSearchFieldToRequestParamMap(Context $context)
