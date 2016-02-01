@@ -223,14 +223,12 @@ class FrontendFactory implements Factory
      */
     public function createProductListingPageContentBuilder()
     {
-        $context = $this->createContext();
-
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->createSearchFieldToRequestParamMap($context),
+            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
             $this->getMasterFactory()->getTranslatorRegistry(),
-            ...$this->getMasterFactory()->getProductListingSortOrderConfig($context)
+            ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
     }
 
@@ -239,12 +237,10 @@ class FrontendFactory implements Factory
      */
     public function createProductListingPageRequest()
     {
-        $context = $this->createContext();
-
         return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
-            $this->getMasterFactory()->createSearchFieldToRequestParamMap($context),
-            ...$this->getMasterFactory()->getProductListingSortOrderConfig($context)
+            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
+            ...$this->getMasterFactory()->getProductListingSortOrderConfig()
         );
     }
 

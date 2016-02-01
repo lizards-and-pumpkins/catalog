@@ -154,6 +154,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfResults = 1;
         $this->prepareMockDataPoolReader($numberOfResults);
 
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+            ->willReturn($stubSortOrderConfig);
+
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $this->requestHandler->canProcess($this->stubRequest);
@@ -173,6 +177,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfResults = 1;
         $this->prepareMockDataPoolReader($numberOfResults);
 
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+            ->willReturn($stubSortOrderConfig);
+
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
@@ -184,6 +192,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $numberOfResults = 1;
         $this->prepareMockDataPoolReader($numberOfResults);
+
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+            ->willReturn($stubSortOrderConfig);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
         $this->mockDataPoolReader->expects($this->once())->method('getSnippet')->with($this->testMetaInfoKey);
@@ -197,6 +209,10 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfResults = 1;
         $this->prepareMockDataPoolReader($numberOfResults);
 
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+            ->willReturn($stubSortOrderConfig);
+
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(2);
         $this->mockDataPoolReader->expects($this->exactly(2))->method('getSearchResultsMatchingCriteria');
         $this->requestHandler->process($this->stubRequest);
@@ -207,8 +223,24 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfResults = 0;
         $this->prepareMockDataPoolReader($numberOfResults);
 
+        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+            ->willReturn($stubSortOrderConfig);
+
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
         $this->mockDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria');
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testSortOrderConfigAttributeCodesAreMappedBeforePassedToSearchEngine()
+    {
+        $numberOfResults = 1;
+        $this->prepareMockDataPoolReader($numberOfResults);
+
+        $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
+
+        $this->mockProductListingPageRequest->expects($this->once())->method('createSorOrderConfigForRequest')
+            ->willReturn($this->getMock(SortOrderConfig::class, [], [], '', false));
         $this->requestHandler->process($this->stubRequest);
     }
 }

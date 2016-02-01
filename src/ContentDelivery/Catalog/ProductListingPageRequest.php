@@ -155,6 +155,19 @@ class ProductListingPageRequest
     }
 
     /**
+     * @param SortOrderConfig $sortOrderConfig
+     * @return SortOrderConfig
+     */
+    public function createSorOrderConfigForRequest(SortOrderConfig $sortOrderConfig)
+    {
+        $attributeCodeString = (string) $sortOrderConfig->getAttributeCode();
+        $mappedAttributeCodeString = $this->searchFieldToRequestParamMap->getSearchFieldName($attributeCodeString);
+        $attributeCode = AttributeCode::fromString($mappedAttributeCodeString);
+
+        return SortOrderConfig::create($attributeCode, $sortOrderConfig->getSelectedDirection());
+    }
+
+    /**
      * @param HttpRequest $request
      * @return string
      */

@@ -6,7 +6,6 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
@@ -337,38 +336,26 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSameInstanceOfProductListingSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getValue')->with(ContextCountry::CODE)->willReturn('foo');
-
-        $result = $this->factory->getProductListingSortOrderConfig($stubContext);
+        $result = $this->factory->getProductListingSortOrderConfig();
 
         $this->assertContainsOnly(SortOrderConfig::class, $result);
-        $this->assertSame($result, $this->factory->getProductListingSortOrderConfig($stubContext));
+        $this->assertSame($result, $this->factory->getProductListingSortOrderConfig());
     }
 
     public function testSameInstanceOfProductSearchSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getValue')->with(ContextCountry::CODE)->willReturn('foo');
-
-        $result = $this->factory->getProductSearchSortOrderConfig($stubContext);
+        $result = $this->factory->getProductSearchSortOrderConfig();
 
         $this->assertContainsOnly(SortOrderConfig::class, $result);
-        $this->assertSame($result, $this->factory->getProductSearchSortOrderConfig($stubContext));
+        $this->assertSame($result, $this->factory->getProductSearchSortOrderConfig());
     }
 
     public function testSameInstanceOfProductSearchAutosuggestionSortOrderConfigIsReturnedOnMultipleCalls()
     {
-        $this->assertInstanceOf(
-            SortOrderConfig::class,
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
-        );
-        $this->assertSame(
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
-        );
+        $result = $this->factory->getProductSearchAutosuggestionSortOrderConfig();
+
+        $this->assertInstanceOf(SortOrderConfig::class, $result);
+        $this->assertSame($result, $this->factory->getProductSearchAutosuggestionSortOrderConfig());
     }
 
     public function testSameInstanceOfProductsPerPageIsReturned()

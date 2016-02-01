@@ -504,10 +504,9 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @param Context $context
      * @return SortOrderConfig[]
      */
-    public function getProductListingSortOrderConfig(Context $context)
+    public function getProductListingSortOrderConfig()
     {
         if (null === $this->memoizedProductListingSortOrderConfig) {
             $this->memoizedProductListingSortOrderConfig = [
@@ -516,7 +515,7 @@ class TwentyOneRunFactory implements Factory
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
-                    AttributeCode::fromString($this->getPriceFacetFieldNameForContext($context)),
+                    AttributeCode::fromString('price'),
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
@@ -530,10 +529,9 @@ class TwentyOneRunFactory implements Factory
     }
 
     /**
-     * @param Context $context
      * @return SortOrderConfig[]
      */
-    public function getProductSearchSortOrderConfig(Context $context)
+    public function getProductSearchSortOrderConfig()
     {
         if (null === $this->memoizedProductSearchSortOrderConfig) {
             $this->memoizedProductSearchSortOrderConfig = [
@@ -542,7 +540,7 @@ class TwentyOneRunFactory implements Factory
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
-                    AttributeCode::fromString($this->getPriceFacetFieldNameForContext($context)),
+                    AttributeCode::fromString('price'),
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
                 SortOrderConfig::create(
