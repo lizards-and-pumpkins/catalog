@@ -4,7 +4,7 @@
  */
 ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Laufschuhe online günstig kaufen –  | 21run.com</title>
+<title><?= $this->getChildOutput('title') ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="description" content="Laufschuhe günstig kaufen? Wir bieten mit unserem riesigen Sortiment an Laufschuhen, Lauftextilien und Accessoires alles, was das Läuferherz begehrt. Bestellen Sie ganz einfach bei Ihrem Online Shop für Läufer: 21run." />
 <meta name="keywords" content="Laufschuhe, Joggingschuhe, Runningschuhe, Laufschuh Kauf, Laufschuhe billig kaufen, Laufschuhe Angebot, günstige Laufschuhe" />
@@ -12,3 +12,4 @@
 <link type="text/css" rel="stylesheet" href="<?= $this->getBaseUrl() ?>css/<?= $this->getLayoutHandle() ?>.css" />
 
 <script data-main="<?= $this->getBaseUrl() ?>js/<?= $this->getLayoutHandle() ?>" src="<?= $this->getBaseUrl() ?>js/lib/require.js"></script>
+<?= $this->getChildOutput('head_container') ?>
