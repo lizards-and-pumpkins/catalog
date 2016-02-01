@@ -339,6 +339,12 @@ class FrontendFactory implements Factory
                 return $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
             }
         );
+        $registrySnippetKeyGeneratorLocator->register(
+            'product_title',
+            function () {
+                return $this->getMasterFactory()->createProductTitleSnippetKeyGenerator();
+            }
+        );
 
         return $registrySnippetKeyGeneratorLocator;
     }

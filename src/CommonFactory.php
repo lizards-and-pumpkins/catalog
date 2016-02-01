@@ -562,6 +562,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductTitleSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
         );
     }
@@ -588,6 +589,20 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             'product_detail_view_content',
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductTitleSnippetKeyGenerator()
+    {
+        $usedDataParts = [Product::ID];
+
+        return new GenericSnippetKeyGenerator(
+            'product_title',
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );

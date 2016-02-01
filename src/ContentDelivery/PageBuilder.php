@@ -122,7 +122,14 @@ class PageBuilder
     private function initFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
     {
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
-        $snippetCodes = $this->addRootSnippetCodeToPageSnippetCodesIfMissing($metaInfo->getPageSnippetCodes());
+        $containerSnippetCodes = array_reduce($metaInfo->getContainerSnippets(), function ($carry, $codes) {
+            return array_merge($carry, $codes);
+        }, []);
+        $snippetCodes = array_unique(array_merge(
+            $metaInfo->getPageSnippetCodes(),
+            [$this->rootSnippetCode],
+            $containerSnippetCodes
+        ));
         $this->snippetCodeToKeyMap = array_merge($this->snippetCodeToKeyMap, array_combine(
             $snippetCodes,
             array_map([$this, 'tryToGetSnippetKey'], $snippetCodes)
@@ -211,17 +218,6 @@ class PageBuilder
         if (count($missingSnippetCodes) > 0) {
             $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes, $this->context));
         }
-    }
-    /**
-     * @param string[] $snippetCodes
-     * @return string[]
-     */
-    private function addRootSnippetCodeToPageSnippetCodesIfMissing(array $snippetCodes)
-    {
-        if (!in_array($this->rootSnippetCode, $snippetCodes)) {
-            $snippetCodes[] = $this->rootSnippetCode;
-        }
-        return $snippetCodes;
     }
 
     private function applySnippetTransformations()

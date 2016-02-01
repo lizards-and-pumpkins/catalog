@@ -214,6 +214,12 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
+    public function testProductTitleSnippetKeyGeneratorIsReturned()
+    {
+        $result = $this->commonFactory->createProductTitleSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
     public function testProductXmlToProductBuilderLocatorIsReturned()
     {
         $result = $this->commonFactory->createProductXmlToProductBuilderLocator();
