@@ -48,11 +48,24 @@ class PageBuilderSnippets implements PageSnippets
     {
         $containerKeys = array_keys($containerSnippets);
         $containerCodeToContentMap = self::buildContainerCodeToContentMap($containerSnippets);
-        
-        return new self(
-            array_merge($codeToKeyMap, array_combine($containerKeys, $containerKeys)),
-            array_merge($keyToContentMap, $containerCodeToContentMap)
-        );
+        $combinedCodeToKeyMap = array_merge($codeToKeyMap, array_combine($containerKeys, $containerKeys));
+        $combinedKeyToContentMap = array_merge($keyToContentMap, $containerCodeToContentMap);
+        $sortedKeyToContentMap = self::sortKeyToContentByCodeToKeymap($combinedCodeToKeyMap, $combinedKeyToContentMap);
+        return new self($combinedCodeToKeyMap, $sortedKeyToContentMap);
+    }
+
+    /**
+     * @param string[] $codeToKeyMap
+     * @param string[] $keyToContentMap
+     * @return string[]
+     */
+    private static function sortKeyToContentByCodeToKeymap(array $codeToKeyMap, array $keyToContentMap)
+    {
+        return array_reduce($codeToKeyMap, function (array $carry, $key) use ($keyToContentMap) {
+            return isset($keyToContentMap[$key]) ?
+                array_merge($carry, [$key => $keyToContentMap[$key]]) :
+                $carry;
+        }, []);
     }
 
     /**

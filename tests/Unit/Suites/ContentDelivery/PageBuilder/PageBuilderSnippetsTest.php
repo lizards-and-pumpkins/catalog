@@ -140,4 +140,14 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->pageSnippets->hasSnippetCode('not-present-code'));
     }
+
+    public function testItDoesNotDependOnMapSortOrder()
+    {
+        $codeToKeyMap = ['code-a' => 'key-a', 'code-b' => 'key-b', 'root' => 'root'];
+        $keyToContentMap = ['key-b' => 'BBB', 'key-a' => 'AAA', 'root' => '{{snippet code-a}}{{snippet code-b}}'];
+        $containers = [];
+        $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
+        $result = $pageSnippets->buildPageContent('root');
+        $this->assertSame('AAABBB', $result);
+    }
 }

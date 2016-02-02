@@ -27,13 +27,20 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      */
     private $productDetailPageMetaSnippetKeyGenerator;
 
+    /**
+     * @var SnippetKeyGenerator
+     */
+    private $productTitleSnippetKeyGenerator;
+
     public function __construct(
         ProductDetailViewBlockRenderer $blockRenderer,
         SnippetKeyGenerator $productDetailViewSnippetKeyGenerator,
+        SnippetKeyGenerator $productTitleSnippetKeyGenerator,
         SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
     ) {
         $this->blockRenderer = $blockRenderer;
         $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
+        $this->productTitleSnippetKeyGenerator = $productTitleSnippetKeyGenerator;
         $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
     }
 
@@ -45,6 +52,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         return [
             $this->createdContentMetaSnippet($productView),
+            $this->createProductTitleSnippet($productView),
             $this->createProductDetailPageMetaSnippet($productView)
         ];
     }
@@ -61,6 +69,26 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         );
         $content = $this->blockRenderer->render($productView, $productView->getContext());
 
+        return Snippet::create($key, $content);
+    }
+
+    /**
+     * @param ProductView $productView
+     * @return Snippet
+     */
+    private function createProductTitleSnippet(ProductView $productView)
+    {
+        $key = $this->productTitleSnippetKeyGenerator->getKeyForContext(
+            $productView->getContext(),
+            [Product::ID => $productView->getId()]
+        );
+        $content = sprintf(
+            '%s | %s %s | 21run.com',
+            $productView->getFirstValueOfAttribute('name'),
+            $productView->getFirstValueOfAttribute('product_group'),
+            $productView->getFirstValueOfAttribute('style')
+        );
+        
         return Snippet::create($key, $content);
     }
 
@@ -90,7 +118,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             (string) $productView->getId(),
             $rootBlockName,
             $this->blockRenderer->getNestedSnippetCodes(),
-            []
+            ['title' => ['product_title']]
         );
 
         return $pageMetaInfo->getInfo();

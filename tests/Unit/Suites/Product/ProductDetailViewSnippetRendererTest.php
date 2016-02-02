@@ -11,6 +11,7 @@ use LizardsAndPumpkins\SnippetRenderer;
 /**
  * @covers \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\SnippetContainer
  * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
@@ -29,6 +30,11 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductDetailPageMetaSnippetKeyGenerator;
+
+    /**
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductTitleSnippetKeyGenerator;
 
     /**
      * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
@@ -68,11 +74,13 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $blockRenderer = $this->createStubProductDetailViewBlockRenderer();
         $this->stubProductDetailViewSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubProductTitleSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubProductDetailPageMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         $this->renderer = new ProductDetailViewSnippetRenderer(
             $blockRenderer,
             $this->stubProductDetailViewSnippetKeyGenerator,
+            $this->stubProductTitleSnippetKeyGenerator,
             $this->stubProductDetailPageMetaSnippetKeyGenerator
         );
 
@@ -89,14 +97,17 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $testContentSnippetKey = 'stub-content-key';
         $testMetaSnippetKey = 'stub-meta-key';
+        $testTitleSnippetKey = 'title';
 
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn($testContentSnippetKey);
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn($testTitleSnippetKey);
 
         $result = $this->renderer->render($this->stubProductView);
 
         $this->assertContainsSnippetWithGivenKey($testContentSnippetKey, ...$result);
         $this->assertContainsSnippetWithGivenKey($testMetaSnippetKey, ...$result);
+        $this->assertContainsSnippetWithGivenKey($testTitleSnippetKey, ...$result);
     }
 }

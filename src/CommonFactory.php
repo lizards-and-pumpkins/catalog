@@ -42,6 +42,7 @@ use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
+use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator;
@@ -525,7 +526,33 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return [
             $this->getMasterFactory()->createProductListingCriteriaSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingTitleSnippetRenderer(),
         ];
+    }
+
+    /**
+     * @return ProductListingTitleSnippetRenderer
+     */
+    public function createProductListingTitleSnippetRenderer()
+    {
+        return new ProductListingTitleSnippetRenderer(
+            $this->getMasterFactory()->createProductListingTitleSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder()
+        );
+    }
+
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
+    public function createProductListingTitleSnippetKeyGenerator()
+    {
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
+
+        return new GenericSnippetKeyGenerator(
+            ProductListingTitleSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
     }
 
     /**
@@ -562,6 +589,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new ProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductTitleSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
         );
     }
@@ -588,6 +616,20 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
 
         return new GenericSnippetKeyGenerator(
             'product_detail_view_content',
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductTitleSnippetKeyGenerator()
+    {
+        $usedDataParts = [Product::ID];
+
+        return new GenericSnippetKeyGenerator(
+            'product_title',
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );

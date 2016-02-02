@@ -50,15 +50,21 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $productListingCriteriaSnippetKeyGenerator = $this->factory->createProductListingCriteriaSnippetKeyGenerator();
-        $snippetKey = $productListingCriteriaSnippetKeyGenerator->getKeyForContext(
+        $pageInfoSnipperKey = $productListingCriteriaSnippetKeyGenerator->getKeyForContext(
             $context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippetJson = $dataPoolReader->getSnippet($snippetKey);
+        $metaInfoSnippetJson = $dataPoolReader->getSnippet($pageInfoSnipperKey);
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
-
+        
+        /** @var SnippetKeyGenerator $titleKeyGenerator */
+        $titleKeyGenerator = $this->factory->createProductListingTitleSnippetKeyGenerator();
+        $titleKey = $titleKeyGenerator->getKeyForContext($context, [PageMetaInfoSnippetContent::URL_KEY => $urlKey]);
+        $titleSnippet = $dataPoolReader->getSnippet($titleKey);
+        $this->assertSame('adidas-sale', $titleSnippet);
+        
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             SearchCriterionGreaterThan::create('stock_qty', '0'),
             SearchCriterionEqual::create('category', 'sale'),
