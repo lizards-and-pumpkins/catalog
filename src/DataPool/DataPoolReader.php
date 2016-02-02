@@ -88,17 +88,9 @@ class DataPoolReader
      * @param string[] $keys
      * @return string[]
      */
-    public function getSnippets($keys)
+    public function getSnippets(array $keys)
     {
-        if (!is_array($keys)) {
-            throw new \RuntimeException(
-                sprintf('multiGet needs an array to operated on, your keys is of type %s.', gettype($keys))
-            );
-        }
-        foreach ($keys as $key) {
-            $this->validateKey($key);
-        }
-
+        array_map([$this, 'validateKey'], $keys);
         return $this->keyValueStore->multiGet($keys);
     }
 

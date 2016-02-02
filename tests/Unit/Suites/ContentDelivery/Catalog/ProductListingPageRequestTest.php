@@ -307,7 +307,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [$originalAttributeCodeString, $mappedAttributeCodeString],
         ]);
 
-        $result = $this->pageRequest->createSorOrderConfigForRequest($stubSortOrderConfig);
+        $result = $this->pageRequest->createSortOrderConfigForRequest($stubSortOrderConfig);
 
         $this->assertEquals($mappedAttributeCodeString, $result->getAttributeCode());
     }

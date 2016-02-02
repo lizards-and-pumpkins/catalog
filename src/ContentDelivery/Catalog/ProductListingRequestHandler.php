@@ -181,7 +181,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $request,
             $this->facetFilterRequest
         );
-        $requestSortOrder = $this->productListingPageRequest->createSorOrderConfigForRequest($selectedSortOrderConfig);
+        $requestSortOrder = $this->productListingPageRequest->createSortOrderConfigForRequest($selectedSortOrderConfig);
 
         $queryOptions = QueryOptions::create(
             $selectedFilters,

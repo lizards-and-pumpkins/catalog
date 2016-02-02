@@ -141,13 +141,15 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
     ) {
+        $requestSortOrder = $this->productListingPageRequest->createSortOrderConfigForRequest($selectedSortOrderConfig);
+
         $queryOptions = QueryOptions::create(
             $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFilterRequest),
             $this->context,
             $this->facetFilterRequest,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $this->productListingPageRequest->getCurrentPageNumber($request),
-            $selectedSortOrderConfig
+            $requestSortOrder
         );
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);

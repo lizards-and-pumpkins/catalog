@@ -158,7 +158,7 @@ class ProductListingPageRequest
      * @param SortOrderConfig $sortOrderConfig
      * @return SortOrderConfig
      */
-    public function createSorOrderConfigForRequest(SortOrderConfig $sortOrderConfig)
+    public function createSortOrderConfigForRequest(SortOrderConfig $sortOrderConfig)
     {
         $attributeCodeString = (string) $sortOrderConfig->getAttributeCode();
         $mappedAttributeCodeString = $this->searchFieldToRequestParamMap->getSearchFieldName($attributeCodeString);
