@@ -131,29 +131,6 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     }
 
-    /**
-     * @dataProvider brokenKeysForSnippetsProvider
-     * @param mixed $key
-     */
-    public function testOnlyStringKeysAreAcceptedForGetSnippets($key)
-    {
-        $this->setExpectedException(\RuntimeException::class);
-        $this->dataPoolReader->getSnippets($key);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function brokenKeysForSnippetsProvider()
-    {
-        return [
-            [new \stdClass()],
-            [123],
-            [123.23],
-            ['string'],
-        ];
-    }
-
     public function testExceptionIsThrownIfTheKeyIsEmpty()
     {
         $this->setExpectedException(InvalidKeyValueStoreKeyException::class);
