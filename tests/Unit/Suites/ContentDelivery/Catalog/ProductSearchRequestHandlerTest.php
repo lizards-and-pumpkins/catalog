@@ -211,7 +211,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
 
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
-        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
         $this->requestHandler->process($stubRequest);
@@ -224,7 +224,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHttpResponseIsReturned(HttpRequest $stubRequest)
     {
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
         $result = $this->requestHandler->process($stubRequest);
@@ -238,7 +238,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSortOrderConfigAttributeCodesAreMappedBeforePassedToSearchEngine(HttpRequest $stubRequest)
     {
-        $this->mockProductListingPageRequest->expects($this->once())->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->expects($this->once())->method('createSortOrderConfigForRequest')
             ->willReturn($this->getMock(SortOrderConfig::class, [], [], '', false));
 
         $this->requestHandler->process($stubRequest);

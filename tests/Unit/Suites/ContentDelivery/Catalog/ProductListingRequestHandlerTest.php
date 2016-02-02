@@ -155,7 +155,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->prepareMockDataPoolReader($numberOfResults);
 
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
@@ -178,7 +178,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->prepareMockDataPoolReader($numberOfResults);
 
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
@@ -194,7 +194,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->prepareMockDataPoolReader($numberOfResults);
 
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
@@ -210,7 +210,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->prepareMockDataPoolReader($numberOfResults);
 
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(2);
@@ -224,7 +224,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->prepareMockDataPoolReader($numberOfResults);
 
         $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
-        $this->mockProductListingPageRequest->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
@@ -239,7 +239,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
 
-        $this->mockProductListingPageRequest->expects($this->once())->method('createSorOrderConfigForRequest')
+        $this->mockProductListingPageRequest->expects($this->once())->method('createSortOrderConfigForRequest')
             ->willReturn($this->getMock(SortOrderConfig::class, [], [], '', false));
         $this->requestHandler->process($this->stubRequest);
     }
