@@ -29,6 +29,7 @@ function main() {
                 ;;
         esac
     done
+    echo
 }
 
 function init_vars() {
@@ -87,7 +88,7 @@ function update_pid_list()
 function get_pids_for_worker()
 {
     name=$1
-    echo $(ps x|grep $name|grep -v 'grep '|awk '{ print $1 }')
+    echo $(ps x|grep $name|grep "$supervisor"|grep -v 'grep '|awk '{ print $1 }')
 }
 
 function get_pid_count_for()
