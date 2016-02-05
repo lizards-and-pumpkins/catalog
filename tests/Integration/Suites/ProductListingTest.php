@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 
 class ProductListingTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,7 +71,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
             SearchCriterionEqual::create('brand', 'Adidas')
         ));
 
-        $this->assertEquals(ProductListingPageSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
+        $this->assertEquals(ProductListingTemplateSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
         $this->assertEquals($expectedCriteriaJson, json_encode($metaInfoSnippet['product_selection_criteria']));
     }
 

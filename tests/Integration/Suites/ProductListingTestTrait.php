@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Queue\Queue;
 
 trait ProductListingTestTrait
@@ -88,7 +88,7 @@ trait ProductListingTestTrait
     private function registerProductListingSnippetKeyGenerator()
     {
         $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
-            ProductListingPageSnippetRenderer::CODE,
+            ProductListingTemplateSnippetRenderer::CODE,
             function () {
                 return $this->factory->createProductListingSnippetKeyGenerator();
             }

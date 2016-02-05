@@ -9,7 +9,7 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
 
-class ProductListingPageSnippetRenderer implements SnippetRenderer
+class ProductListingTemplateSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing';
 

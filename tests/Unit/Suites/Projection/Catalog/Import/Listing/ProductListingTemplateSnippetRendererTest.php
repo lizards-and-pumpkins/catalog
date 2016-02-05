@@ -10,13 +10,13 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
+ * @covers \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
  */
-class ProductListingPageSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingTemplateSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingPageSnippetRenderer
+     * @var ProductListingTemplateSnippetRenderer
      */
     private $renderer;
 
@@ -37,7 +37,7 @@ class ProductListingPageSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
-        $this->renderer = new ProductListingPageSnippetRenderer(
+        $this->renderer = new ProductListingTemplateSnippetRenderer(
             $stubSnippetKeyGenerator,
             $stubBlockRenderer,
             $stubContextSource

@@ -35,7 +35,7 @@ use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
@@ -275,7 +275,7 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductListingPageSnippetRenderer::CODE,
+            ProductListingTemplateSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductListingSnippetKeyGenerator();
             }

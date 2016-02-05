@@ -62,7 +62,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHa
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductProjector;
 use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
 use LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder;
@@ -184,7 +184,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         $templateProjectorLocator = new TemplateProjectorLocator();
         $templateProjectorLocator->register(
-            ProductListingPageSnippetRenderer::CODE,
+            ProductListingTemplateSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingTemplateProjector()
         );
         $templateProjectorLocator->register(
@@ -442,27 +442,27 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     private function createProductListingTemplateRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->createProductListingRendererList()
+            $this->createProductListingTemplateRendererList()
         );
     }
 
     /**
      * @return SnippetRenderer[]
      */
-    private function createProductListingRendererList()
+    private function createProductListingTemplateRendererList()
     {
         return [
-            $this->getMasterFactory()->createProductListingPageSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingTemplateSnippetRenderer(),
             $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer(),
         ];
     }
 
     /**
-     * @return ProductListingPageSnippetRenderer
+     * @return ProductListingTemplateSnippetRenderer
      */
-    public function createProductListingPageSnippetRenderer()
+    public function createProductListingTemplateSnippetRenderer()
     {
-        return new ProductListingPageSnippetRenderer(
+        return new ProductListingTemplateSnippetRenderer(
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createContextSource()
@@ -477,7 +477,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         $usedDataParts = [];
 
         return new GenericSnippetKeyGenerator(
-            ProductListingPageSnippetRenderer::CODE,
+            ProductListingTemplateSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -1381,7 +1381,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             );
 
             $this->translatorRegistry->register(
-                ProductListingPageSnippetRenderer::CODE,
+                ProductListingTemplateSnippetRenderer::CODE,
                 $this->getMasterFactory()->getProductListingTranslatorFactory()
             );
 

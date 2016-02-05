@@ -137,7 +137,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator

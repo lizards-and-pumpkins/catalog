@@ -31,7 +31,7 @@ use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
@@ -225,7 +225,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductDetailViewSnippetRenderer::CODE],
             [ProductInSearchAutosuggestionSnippetRenderer::CODE],
             [ProductInListingSnippetRenderer::CODE],
-            [ProductListingPageSnippetRenderer::CODE],
+            [ProductListingTemplateSnippetRenderer::CODE],
             [PriceSnippetRenderer::PRICE],
             [PriceSnippetRenderer::SPECIAL_PRICE],
             [ProductListingCriteriaSnippetRenderer::CODE],
