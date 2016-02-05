@@ -3,13 +3,10 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\CompositeProduct;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Product\SimpleProduct;
 use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
@@ -43,45 +40,9 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
      */
     private $stubProductImageFileLocator;
     
-    private $dummyAssociatedProductData = ['dummy product data'];
-
-    /**
-     * @param string $productIdString
-     * @return SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSimpleProductWithId($productIdString)
-    {
-        $stubSimpleProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $stubSimpleProductId->method('__toString')->willReturn($productIdString);
-
-        $stubSimpleProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
-        $stubSimpleProduct->method('getId')->willReturn($stubSimpleProductId);
-
-        return $stubSimpleProduct;
-    }
-
-    /**
-     * @return ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProductViewLocator()
-    {
-        $stubProductViewLocator = $this->getMock(ProductViewLocator::class);
-        $stubProductViewLocator->method('createForProduct')->willReturnCallback(function (Product $product) {
-            $stubProductViewType = $product instanceof CompositeProduct ?
-                CompositeProductView::class :
-                ProductView::class;
-            $stubProductView = $this->getMock($stubProductViewType);
-            $stubProductView->method('getId')->willReturn($product->getId());
-            $stubProductView->method('jsonSerialize')->willReturn($this->dummyAssociatedProductData);
-            return $stubProductView;
-        });
-
-        return $stubProductViewLocator;
-    }
-
     protected function setUp()
     {
-        $this->stubProductViewLocator = $this->createStubProductViewLocator();
+        $this->stubProductViewLocator = $this->getMock(ProductViewLocator::class);
         $this->mockProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
         $this->stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
         $this->stubProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
@@ -165,5 +126,20 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
 
         $this->assertCount(1, $result);
         $this->assertContains($nonPriceAttribute, $result->getAllAttributes());
+    }
+
+    public function testGettingProductMetaTitleIsDelegatedToASimpleProductView()
+    {
+        $simpleProductMetaTitle = 'foo';
+
+        $stubSimpleProductView = $this->getMock(ProductView::class);
+        $stubSimpleProductView->method('getProductMetaTitle')->willReturn($simpleProductMetaTitle);
+
+        $stubSimpleProduct = $this->getMock(Product::class);
+        $this->mockProduct->method('getSimpleProductDelegate')->willReturn($stubSimpleProduct);
+
+        $this->stubProductViewLocator->method('createForProduct')->willReturn($stubSimpleProductView);
+
+        $this->assertSame($simpleProductMetaTitle, $this->productView->getProductMetaTitle());
     }
 }

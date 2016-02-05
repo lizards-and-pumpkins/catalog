@@ -211,4 +211,12 @@ class SimpleProduct implements Product
     {
         return $this->taxClass;
     }
+
+    /**
+     * @return string
+     */
+    public function getProductMetaTitle()
+    {
+        return $this->getFirstValueOfAttribute('name');
+    }
 }

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
@@ -99,7 +100,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $attributeList = new ProductAttributeList($attribute);
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
         $this->mockProduct->method('jsonSerialize')->willReturn(['attributes' => $attributeList]);
-        
+
         $productData = json_decode(json_encode($this->productView), true);
 
         $this->assertArrayNotHasKey('backorders', $productData['attributes']);
@@ -183,5 +184,76 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProductImageFileLocator->expects($this->once())->method('getPlaceholder');
         json_encode($this->productView);
+    }
+
+    /**
+     * @dataProvider requiredAttributeCodeProvider
+     * @param string $requiredAttributeCode
+     */
+    public function testProductTitleContainsRequiredAttributes($requiredAttributeCode)
+    {
+        $testAttributeValue = 'foo';
+        $attributeCode = AttributeCode::fromString($requiredAttributeCode);
+        $attributeList = ProductAttributeList::fromArray([
+            [
+                'code'        => $attributeCode,
+                'value'       => $testAttributeValue,
+                'contextData' => []
+            ]
+        ]);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
+
+        $this->assertContains($testAttributeValue, $this->productView->getProductMetaTitle());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function requiredAttributeCodeProvider()
+    {
+        return [
+            ['name'],
+            ['product_group'],
+            ['brand'],
+            ['style'],
+        ];
+    }
+
+    public function testProductTitleContainsProductTitleSuffix()
+    {
+        $attributeList = ProductAttributeList::fromArray([]);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
+
+        $result = $this->productView->getProductMetaTitle();
+        $this->assertContains(TwentyOneRunSimpleProductView::PRODUCT_TITLE_SUFFIX, $result);
+    }
+
+    public function testProductMetaTitleIsNotExceedingDefinedLimit()
+    {
+        $maxTitleLength = TwentyOneRunSimpleProductView::MAX_PRODUCT_TITLE_LENGTH;
+        $attributeLength = ($maxTitleLength - TwentyOneRunSimpleProductView::PRODUCT_TITLE_SUFFIX) / 2;
+        $attributeValue = str_repeat('-', $attributeLength);
+
+        $attributeList = ProductAttributeList::fromArray([
+            [
+                'code'        => AttributeCode::fromString('name'),
+                'value'       => $attributeValue,
+                'contextData' => []
+            ],
+            [
+                'code'        => AttributeCode::fromString('brand'),
+                'value'       => $attributeValue,
+                'contextData' => []
+            ],
+            [
+                'code'        => AttributeCode::fromString('style'),
+                'value'       => $attributeValue,
+                'contextData' => []
+            ],
+        ]);
+
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
+
+        $this->assertLessThanOrEqual($maxTitleLength, $this->productView->getProductMetaTitle());
     }
 }

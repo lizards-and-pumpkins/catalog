@@ -87,4 +87,9 @@ interface Product extends \JsonSerializable
      * @return ProductTaxClass
      */
     public function getTaxClass();
+
+    /**
+     * @return string
+     */
+    public function getProductMetaTitle();
 }

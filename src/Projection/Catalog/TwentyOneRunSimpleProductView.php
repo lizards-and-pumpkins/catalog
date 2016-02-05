@@ -10,6 +10,10 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
 {
     const MAX_PURCHASABLE_QTY = 5;
 
+    const MAX_PRODUCT_TITLE_LENGTH = 58;
+
+    const PRODUCT_TITLE_SUFFIX = ' | 21run.com';
+
     /**
      * @var Product
      */
@@ -63,6 +67,40 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
             return $this->getBoundedStockQtyAttribute($attribute);
         }
         return parent::getProcessedAttribute($attribute);
+    }
+
+    /**
+     * @return string
+     */
+    final public function getProductMetaTitle()
+    {
+        $title = $this->getFirstValueOfAttribute('brand') . ' ' . $this->getFirstValueOfAttribute('name');
+        $productGroup = $this->getFirstValueOfAttribute('product_group');
+        $productStyle = $this->getFirstValueOfAttribute('style');
+
+        if ($productGroup) {
+            $title = $this->addProductTitleElement($title, ' | ' . $productGroup);
+        }
+
+        if ($productStyle) {
+            $title = $this->addProductTitleElement($title, ' | ' . $productStyle);
+        }
+
+        return $title . self::PRODUCT_TITLE_SUFFIX;
+    }
+
+    /**
+     * @param string $title
+     * @param string $element
+     * @return string
+     */
+    private function addProductTitleElement($title, $element)
+    {
+        if (strlen($title) + strlen($element) + strlen(self::PRODUCT_TITLE_SUFFIX) > self::MAX_PRODUCT_TITLE_LENGTH) {
+            return $title;
+        }
+
+        return $title . $element;
     }
 
     /**

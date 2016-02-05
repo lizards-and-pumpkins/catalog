@@ -41,12 +41,6 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubProductView;
 
-    private $testContentSnippetKey = 'stub-content-key';
-
-    private $testMetaSnippetKey = 'stub-meta-key';
-
-    private $testTitleSnippetKey = 'title';
-
     /**
      * @return ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -61,68 +55,27 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $key
-     * @param Snippet[] $snippets
-     * @return Snippet|null
-     */
-    private function getSnippetWithGivenKey($key, Snippet ...$snippets)
-    {
-        foreach ($snippets as $snippet) {
-            if ($snippet->getKey() === $key) {
-                return $snippet;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * @param string $expectedKey
      * @param Snippet[] $snippets
      */
     private function assertContainsSnippetWithGivenKey($expectedKey, Snippet ...$snippets)
     {
-        if ($this->getSnippetWithGivenKey($expectedKey, ...$snippets) !== null) {
-            $this->assertTrue(true);
-            return;
+        foreach ($snippets as $snippet) {
+            if ($snippet->getKey() === $expectedKey) {
+                $this->assertTrue(true);
+                return;
+            }
         }
 
         $this->fail(sprintf('Failed asserting snippet list contains snippet with "%s" key.', $expectedKey));
     }
 
-    /**
-     * @param Snippet[] $snippets
-     * @return Snippet
-     */
-    protected function getProductTitleSnippet(Snippet ...$snippets)
-    {
-        $titleSnippet = $this->getSnippetWithGivenKey($this->testTitleSnippetKey, ...$snippets);
-
-        if (null === $titleSnippet) {
-            $this->fail('Product title snippet has not been rendered.');
-        }
-
-        return $titleSnippet;
-    }
-
-    protected function prepareSnippetKeyGenerators()
-    {
-        $this->stubProductDetailViewSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')
-            ->willReturn($this->testContentSnippetKey);
-
-        $this->stubProductTitleSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testTitleSnippetKey);
-
-        $this->stubProductDetailPageMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
-            ->willReturn($this->testMetaSnippetKey);
-    }
-
     protected function setUp()
     {
         $blockRenderer = $this->createStubProductDetailViewBlockRenderer();
-        $this->prepareSnippetKeyGenerators();
+        $this->stubProductDetailViewSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubProductTitleSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubProductDetailPageMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         $this->renderer = new ProductDetailViewSnippetRenderer(
             $blockRenderer,
@@ -142,67 +95,19 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testProductDetailViewSnippetsAreRendered()
     {
+        $testContentSnippetKey = 'stub-content-key';
+        $testMetaSnippetKey = 'stub-meta-key';
+        $testTitleSnippetKey = 'title';
+
+        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn($testContentSnippetKey);
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn($testTitleSnippetKey);
+        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
+            ->willReturn($testMetaSnippetKey);
+
         $result = $this->renderer->render($this->stubProductView);
 
-        $this->assertContainsSnippetWithGivenKey($this->testContentSnippetKey, ...$result);
-        $this->assertContainsSnippetWithGivenKey($this->testMetaSnippetKey, ...$result);
-        $this->assertContainsSnippetWithGivenKey($this->testTitleSnippetKey, ...$result);
-    }
-
-    public function testTitleIsNotExceedingDefinedLimit()
-    {
-        $maxTitleLength = ProductDetailViewSnippetRenderer::MAX_PRODUCT_TITLE_LENGTH;
-        $attributeLength = ($maxTitleLength - ProductDetailViewSnippetRenderer::PRODUCT_TITLE_SUFFIX) / 2;
-        $this->stubProductView->method('getFirstValueOfAttribute')->willReturn(str_repeat('-', $attributeLength));
-
-        $snippets = $this->renderer->render($this->stubProductView);
-        $titleSnippet = $this->getProductTitleSnippet(...$snippets);
-
-        $this->assertLessThanOrEqual($maxTitleLength, $titleSnippet->getContent());
-    }
-
-    public function testProductTitleContainsProductTitleSuffix()
-    {
-        $snippets = $this->renderer->render($this->stubProductView);
-        $titleSnippet = $this->getProductTitleSnippet(...$snippets);
-
-        $this->assertContains(ProductDetailViewSnippetRenderer::PRODUCT_TITLE_SUFFIX, $titleSnippet->getContent());
-    }
-
-    /**
-     * @dataProvider requiredAttributeCodeProvider
-     * @param string $requiredAttributeCode
-     */
-    public function testProductTitleContainsRequiredAttributes($requiredAttributeCode)
-    {
-        $testAttributeValue = 'foo';
-
-        $this->stubProductView->method('getFirstValueOfAttribute')->willReturnCallback(
-            function ($attributeCode) use ($testAttributeValue, $requiredAttributeCode) {
-                if ($attributeCode === $requiredAttributeCode) {
-                    return $testAttributeValue;
-                }
-
-                return '';
-            }
-        );
-
-        $snippets = $this->renderer->render($this->stubProductView);
-        $titleSnippet = $this->getProductTitleSnippet(...$snippets);
-
-        $this->assertContains($testAttributeValue, $titleSnippet->getContent());
-    }
-
-    /**
-     * @return array[]
-     */
-    public function requiredAttributeCodeProvider()
-    {
-        return [
-            ['name'],
-            ['product_group'],
-            ['brand'],
-            ['style'],
-        ];
+        $this->assertContainsSnippetWithGivenKey($testContentSnippetKey, ...$result);
+        $this->assertContainsSnippetWithGivenKey($testMetaSnippetKey, ...$result);
+        $this->assertContainsSnippetWithGivenKey($testTitleSnippetKey, ...$result);
     }
 }

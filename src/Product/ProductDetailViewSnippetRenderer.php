@@ -12,10 +12,6 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
 
-    const MAX_PRODUCT_TITLE_LENGTH = 58;
-
-    const PRODUCT_TITLE_SUFFIX = ' | 21run.com';
-
     /**
      * @var ProductDetailViewBlockRenderer
      */
@@ -86,7 +82,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             $productView->getContext(),
             [Product::ID => $productView->getId()]
         );
-        $content = $this->createProductTitleSnippetContent($productView);
+        $content = $productView->getProductMetaTitle();
 
         return Snippet::create($key, $content);
     }
@@ -108,7 +104,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductView $productView
-     * @return \mixed[]
+     * @return mixed[]
      */
     private function getPageMetaSnippetContent(ProductView $productView)
     {
@@ -121,40 +117,5 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         );
 
         return $pageMetaInfo->getInfo();
-    }
-
-    /**
-     * @param ProductView $productView
-     * @return string
-     */
-    private function createProductTitleSnippetContent(ProductView $productView)
-    {
-        $title = $productView->getFirstValueOfAttribute('brand') . ' ' . $productView->getFirstValueOfAttribute('name');
-        $productGroup = $productView->getFirstValueOfAttribute('product_group');
-        $productStyle = $productView->getFirstValueOfAttribute('style');
-
-        if ($productGroup) {
-            $title = $this->addProductTitleElement($title, ' | ' . $productGroup);
-        }
-
-        if ($productStyle) {
-            $title = $this->addProductTitleElement($title, ' | ' . $productStyle);
-        }
-
-        return $title . self::PRODUCT_TITLE_SUFFIX;
-    }
-
-    /**
-     * @param string $title
-     * @param string $element
-     * @return string
-     */
-    private function addProductTitleElement($title, $element)
-    {
-        if (strlen($title) + strlen($element) + strlen(self::PRODUCT_TITLE_SUFFIX) > self::MAX_PRODUCT_TITLE_LENGTH) {
-            return $title;
-        }
-
-        return $title . $element;
     }
 }

@@ -226,4 +226,20 @@ class ConfigurableProduct implements CompositeProduct
     {
         return $this->simpleProductDelegate->getTaxClass();
     }
+
+    /**
+     * @return string
+     */
+    public function getProductMetaTitle()
+    {
+        return $this->simpleProductDelegate->getProductMetaTitle();
+    }
+
+    /**
+     * @return SimpleProduct
+     */
+    public function getSimpleProductDelegate()
+    {
+        return $this->simpleProductDelegate;
+    }
 }

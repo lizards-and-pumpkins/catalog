@@ -300,4 +300,16 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $this->mockSimpleProduct->method('getTaxClass')->willReturn('test');
         $this->assertSame('test', $this->configurableProduct->getTaxClass());
     }
+
+    public function testGettingProductMetaTitleIsDelegatedToSimpleProduct()
+    {
+        $testTitle = 'foo';
+        $this->mockSimpleProduct->method('getProductMetaTitle')->willReturn($testTitle);
+        $this->assertSame($testTitle, $this->configurableProduct->getProductMetaTitle());
+    }
+
+    public function testSimpleProductDelegateIsReturned()
+    {
+        $this->assertSame($this->mockSimpleProduct, $this->configurableProduct->getSimpleProductDelegate());
+    }
 }

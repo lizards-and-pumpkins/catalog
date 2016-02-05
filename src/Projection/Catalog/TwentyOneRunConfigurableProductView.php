@@ -69,4 +69,15 @@ class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductVie
     {
         return $this->productViewLocator;
     }
+
+    /**
+     * @return string
+     */
+    final public function getProductMetaTitle()
+    {
+        $simpleProductDelegate = $this->getOriginalProduct()->getSimpleProductDelegate();
+        $simpleProductView = $this->productViewLocator->createForProduct($simpleProductDelegate);
+
+        return $simpleProductView->getProductMetaTitle();
+    }
 }
