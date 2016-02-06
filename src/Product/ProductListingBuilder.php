@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionAttributeNameXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingProductListingAttributeNameXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
@@ -43,7 +44,10 @@ class ProductListingBuilder
 
         $criteria = $this->createSearchCriteria($criteriaNodes[0]);
 
-        return new ProductListing($urlKey, $contextData, $criteria);
+        $attributesNodes = $parser->getXmlNodesArrayByXPath('/listing/attributes');
+        $productListingAttributeList = $this->createProductListingAttributeList($attributesNodes);
+
+        return new ProductListing($urlKey, $contextData, $productListingAttributeList, $criteria);
     }
 
     /**
@@ -147,5 +151,35 @@ class ProductListingBuilder
     private function getCriterionClassNameForOperation($operationName)
     {
         return SearchCriterion::class . $operationName;
+    }
+
+    /**
+     * @param array[] $xmlNodes
+     * @return ProductListingAttributeList
+     */
+    private function createProductListingAttributeList(array $xmlNodes)
+    {
+        $attributesArray = $this->getAttributesFromXmlNodes($xmlNodes);
+        return ProductListingAttributeList::fromArray($attributesArray);
+    }
+
+    /**
+     * @param array[] $xmlNodes
+     * @return mixed[]
+     */
+    private function getAttributesFromXmlNodes(array $xmlNodes)
+    {
+        if (count($xmlNodes) === 0) {
+            return [];
+        }
+
+        return @array_reduce($xmlNodes[0]['value'], function (array $carry, array $attributeXmlNode) {
+            if (!isset($attributeXmlNode['attributes']['name'])) {
+                throw new MissingProductListingAttributeNameXmlAttributeException(
+                    'Missing "name" attribute in product listing "attribute" XML node.'
+                );
+            }
+            return array_merge($carry, [$attributeXmlNode['attributes']['name'] => $attributeXmlNode['value']]);
+        }, []);
     }
 }

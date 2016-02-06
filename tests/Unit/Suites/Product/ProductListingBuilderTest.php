@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionAttributeNameXmlAttributeException;
+use LizardsAndPumpkins\Product\Exception\MissingProductListingAttributeNameXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
@@ -17,17 +18,18 @@ use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
  * @covers \LizardsAndPumpkins\Product\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \LizardsAndPumpkins\Product\ProductListing
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
- * @uses   \LizardsAndPumpkins\UrlKey
  * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Product\ProductListing
+ * @uses   \LizardsAndPumpkins\Product\ProductListingAttributeList
+ * @uses   \LizardsAndPumpkins\UrlKey
+ * @uses   \LizardsAndPumpkins\Utils\XPathParser
  */
 class ProductListingBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ProductListingBuilder
      */
-    private $criteriaBuilder;
+    private $productListingBuilder;
 
     /**
      * @var DataVersion
@@ -36,7 +38,7 @@ class ProductListingBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->criteriaBuilder = new ProductListingBuilder();
+        $this->productListingBuilder = new ProductListingBuilder();
         $this->testDataVersion = DataVersion::fromVersionString('-1');
     }
 
@@ -51,7 +53,7 @@ class ProductListingBuilderTest extends \PHPUnit_Framework_TestCase
 </listing>
 EOX;
 
-        $criteria = $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $productListing = $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
 
         $expectedUrlKey = 'men-accessories';
         $expectedContextData = ['version' => '-1', 'website' => 'ru', 'locale' => 'en_US'];
@@ -60,10 +62,10 @@ EOX;
             SearchCriterionEqual::create('gender', 'male')
         );
 
-        $this->assertInstanceOf(ProductListing::class, $criteria);
-        $this->assertEquals($expectedUrlKey, $criteria->getUrlKey());
-        $this->assertEquals($expectedContextData, $criteria->getContextData());
-        $this->assertEquals($expectedCriteria, $criteria->getCriteria());
+        $this->assertInstanceOf(ProductListing::class, $productListing);
+        $this->assertEquals($expectedUrlKey, $productListing->getUrlKey());
+        $this->assertEquals($expectedContextData, $productListing->getContextData());
+        $this->assertEquals($expectedCriteria, $productListing->getCriteria());
     }
 
     public function testProductListingWithOrCriteriaTypeIsCreatedFromXml()
@@ -77,14 +79,14 @@ EOX;
 </listing>
 EOX;
 
-        $criteria = $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $productListing = $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
 
         $expectedCriteria = CompositeSearchCriterion::createOr(
             SearchCriterionEqual::create('category', 'accessories'),
             SearchCriterionEqual::create('gender', 'male')
         );
 
-        $this->assertEquals($expectedCriteria, $criteria->getCriteria());
+        $this->assertEquals($expectedCriteria, $productListing->getCriteria());
     }
 
     public function testProductListingWithMultiLevelCriteriaIsCreatedFromXml()
@@ -101,7 +103,7 @@ EOX;
 </listing>
 EOX;
 
-        $criteria = $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $productListing = $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
             SearchCriterionEqual::create('category', 'accessories'),
@@ -111,48 +113,82 @@ EOX;
             )
         );
 
-        $this->assertEquals($expectedCriteria, $criteria->getCriteria());
+        $this->assertEquals($expectedCriteria, $productListing->getCriteria());
     }
 
     public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
     {
         $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
         $xml = '<listing />';
-        $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriteriaNodeDoesNotExist()
     {
         $this->setExpectedException(InvalidNumberOfCriteriaXmlNodesException::class);
         $xml = '<listing url_key="foo"/>';
-        $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfTypeAttributeOfListingNodeIsMissing()
     {
         $this->setExpectedException(MissingTypeXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria/></listing>';
-        $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveAttributeName()
     {
         $this->setExpectedException(MissingCriterionAttributeNameXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute/></criteria></listing>';
-        $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
         $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute name="bar"/></criteria></listing>';
-        $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
         $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute name="bar" is="baz"/></criteria></listing>';
-        $this->criteriaBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+    }
+
+    public function testExceptionIsThrownIfNameAttributeIsMissingInProductListingAttributeNode()
+    {
+        $this->setExpectedException(MissingProductListingAttributeNameXmlAttributeException::class);
+        $xml = <<<EOX
+<listing url_key="men-accessories" website="ru" locale="en_US">
+    <criteria type="and">
+        <attribute name="category" is="Equal">accessories</attribute>
+    </criteria>
+    <attributes>
+        <attribute>foo</attribute>
+    </attributes>
+</listing>
+EOX;
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+    }
+
+    public function testProductListingWithGivenAttributeIsReturned()
+    {
+        $xml = <<<EOX
+<listing url_key="men-accessories" website="ru" locale="en_US">
+    <criteria type="and">
+        <attribute name="category" is="Equal">accessories</attribute>
+    </criteria>
+    <attributes>
+        <attribute name="foo">bar</attribute>
+    </attributes>
+</listing>
+EOX;
+        $productListing = $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
+
+        $this->assertTrue($productListing->hasAttribute('foo'));
+        $this->assertSame('bar', $productListing->getAttributeValueByCode('foo'));
     }
 }
