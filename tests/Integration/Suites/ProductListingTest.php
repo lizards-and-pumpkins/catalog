@@ -62,7 +62,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $titleKeyGenerator = $this->factory->createProductListingTitleSnippetKeyGenerator();
         $titleKey = $titleKeyGenerator->getKeyForContext($context, [PageMetaInfoSnippetContent::URL_KEY => $urlKey]);
         $titleSnippet = $dataPoolReader->getSnippet($titleKey);
-        $this->assertSame('adidas-sale', $titleSnippet);
+        $this->assertSame('Adidas Rausverkauf!', $titleSnippet);
         
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             SearchCriterionGreaterThan::create('stock_qty', '0'),

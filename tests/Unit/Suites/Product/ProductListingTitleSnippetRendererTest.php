@@ -12,8 +12,6 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     private $testSnippetKey = ProductListingTitleSnippetRenderer::CODE . '_foo';
 
-    private $testProductListingUrlKey = 'foo';
-
     /**
      * @var ProductListingTitleSnippetRenderer
      */
@@ -47,7 +45,6 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
         );
         $this->stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
         $this->stubProductListing->method('getContextData')->willReturn([]);
-        $this->stubProductListing->method('getUrlKey')->willReturn($this->testProductListingUrlKey);
     }
     
     public function testItImplementsTheSnippetRendererInterface()
@@ -55,14 +52,25 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
+    public function testEmptyArrayIsReturnedIfProductListingHasNoTitleAttribute()
+    {
+        $this->stubProductListing->method('hasAttribute')->with('meta_title')->willReturn(false);
+        $this->assertSame([], $this->renderer->render($this->stubProductListing));
+    }
+
     public function testItReturnsAProductListingTitleSnippet()
     {
+        $testTitle = 'foo';
+
+        $this->stubProductListing->method('hasAttribute')->with('meta_title')->willReturn(true);
+        $this->stubProductListing->method('getAttributeValueByCode')->with('meta_title')->willReturn($testTitle);
+
         $result = $this->renderer->render($this->stubProductListing);
         
         $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);
         $this->assertContainsOnlyInstancesOf(Snippet::class, $result);
         $this->assertSame($this->testSnippetKey, $result[0]->getKey());
-        $this->assertSame($this->testProductListingUrlKey, $result[0]->getContent());
+        $this->assertSame($testTitle, $result[0]->getContent());
     }
 }
