@@ -10,9 +10,9 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingCriteria;
+    private $stubProductListing;
     
     /**
      * @var ProductListingWasAddedDomainEvent
@@ -21,8 +21,8 @@ class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
-        $this->domainEvent = new ProductListingWasAddedDomainEvent($this->stubProductListingCriteria);
+        $this->stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $this->domainEvent = new ProductListingWasAddedDomainEvent($this->stubProductListing);
     }
 
     public function testDomainEventInterFaceIsImplemented()
@@ -30,9 +30,9 @@ class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testProductListingCriteriaIsReturned()
+    public function testProductListingIsReturned()
     {
-        $result = $this->domainEvent->getProductListingCriteria();
-        $this->assertEquals($this->stubProductListingCriteria, $result);
+        $result = $this->domainEvent->getListingCriteria();
+        $this->assertEquals($this->stubProductListing, $result);
     }
 }

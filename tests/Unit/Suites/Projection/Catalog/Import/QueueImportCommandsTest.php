@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Command;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
@@ -83,7 +83,7 @@ class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
             ->method('getProductListingImportCommands')
             ->willReturn([$this->stubCommand]);
         $this->mockCommandQueue->expects($this->once())->method('add')->with($this->stubCommand);
-        $this->createImportCommands->forListing($this->getMock(ProductListingCriteria::class, [], [], '', false));
+        $this->createImportCommands->forListing($this->getMock(ProductListing::class, [], [], '', false));
     }
 }
 

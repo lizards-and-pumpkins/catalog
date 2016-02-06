@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
 use LizardsAndPumpkins\Command;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory
@@ -41,8 +41,8 @@ class UpdatingProductListingImportCommandFactoryTest extends \PHPUnit_Framework_
 
     public function testItReturnsAnAddProductListingCommand()
     {
-        $stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
-        $commands = $this->factory->createProductListingImportCommands($stubProductListingCriteria);
+        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $commands = $this->factory->createProductListingImportCommands($stubProductListing);
         $this->assertInternalType('array', $commands);
         $this->assertContainsOnlyInstancesOf(Command::class, $commands);
         $this->assertContainsInstanceOf(AddProductListingCommand::class, $commands);

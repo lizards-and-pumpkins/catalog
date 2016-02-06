@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Projection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 use LizardsAndPumpkins\UrlKey;
 
 class UrlKeyForContextCollector
@@ -36,10 +36,10 @@ class UrlKeyForContextCollector
     }
 
     /**
-     * @param ProductListingCriteria $listingCriteria
+     * @param ProductListing $listingCriteria
      * @return UrlKeyForContextCollection
      */
-    public function collectListingUrlKeys(ProductListingCriteria $listingCriteria)
+    public function collectListingUrlKeys(ProductListing $listingCriteria)
     {
         $contexts = $this->contextSource->getContextsForParts(array_keys($listingCriteria->getContextData()));
         $urlKeysForContexts = $this->getListingUrlKeysForContexts($listingCriteria, $contexts);
@@ -47,11 +47,11 @@ class UrlKeyForContextCollector
     }
 
     /**
-     * @param ProductListingCriteria $listingCriteria
+     * @param ProductListing $listingCriteria
      * @param Context[] $contexts
      * @return UrlKeyForContext[]
      */
-    private function getListingUrlKeysForContexts(ProductListingCriteria $listingCriteria, array $contexts)
+    private function getListingUrlKeysForContexts(ProductListing $listingCriteria, array $contexts)
     {
         return array_map(function (Context $context) use ($listingCriteria) {
             return new UrlKeyForContext($listingCriteria->getUrlKey(), $context, self::URL_KEY_TYPE_LISTING);

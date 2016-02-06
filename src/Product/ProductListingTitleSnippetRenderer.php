@@ -29,15 +29,15 @@ class ProductListingTitleSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductListingCriteria $productListingCriteria
+     * @param ProductListing $productListing
      * @return Snippet[]
      */
-    public function render(ProductListingCriteria $productListingCriteria)
+    public function render(ProductListing $productListing)
     {
-        $context = $this->contextBuilder->createContext($productListingCriteria->getContextData());
-        $contextData = [PageMetaInfoSnippetContent::URL_KEY => $productListingCriteria->getUrlKey()];
+        $context = $this->contextBuilder->createContext($productListing->getContextData());
+        $contextData = [PageMetaInfoSnippetContent::URL_KEY => $productListing->getUrlKey()];
         $key = $this->keyGenerator->getKeyForContext($context, $contextData);
-        $content = $productListingCriteria->getUrlKey();
+        $content = $productListing->getUrlKey();
         
         return [Snippet::create($key, $content)];
     }

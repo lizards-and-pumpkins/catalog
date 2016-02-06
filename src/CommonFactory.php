@@ -53,8 +53,8 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Product\ProductListingBlockRenderer;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector;
+use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingSnippetProjector;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
@@ -64,7 +64,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportComm
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductProjector;
-use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
+use LizardsAndPumpkins\Product\ProductListingBuilder;
 use LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
@@ -203,16 +203,16 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     {
         return new ProductListingWasAddedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createProductListingCriteriaSnippetProjector()
+            $this->getMasterFactory()->createProductListingSnippetProjector()
         );
     }
 
     /**
-     * @return ProductListingCriteriaBuilder
+     * @return ProductListingBuilder
      */
-    public function createProductListingCriteriaBuilder()
+    public function createProductListingBuilder()
     {
-        return new ProductListingCriteriaBuilder();
+        return new ProductListingBuilder();
     }
 
     /**
@@ -463,7 +463,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingTemplateSnippetRenderer()
     {
         return new ProductListingTemplateSnippetRenderer(
-            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingTemplateSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createContextSource()
         );
@@ -472,7 +472,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetKeyGenerator
      */
-    public function createProductListingSnippetKeyGenerator()
+    public function createProductListingTemplateSnippetKeyGenerator()
     {
         $usedDataParts = [];
 
@@ -497,11 +497,11 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductListingCriteriaSnippetProjector
+     * @return ProductListingSnippetProjector
      */
-    public function createProductListingCriteriaSnippetProjector()
+    public function createProductListingSnippetProjector()
     {
-        return new ProductListingCriteriaSnippetProjector(
+        return new ProductListingSnippetProjector(
             $this->getMasterFactory()->createProductListingSnippetRendererCollection(),
             $this->getMasterFactory()->createUrlKeyForContextCollector(),
             $this->getMasterFactory()->createDataPoolWriter(),
@@ -525,7 +525,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingSnippetRendererList()
     {
         return [
-            $this->getMasterFactory()->createProductListingCriteriaSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createProductListingTitleSnippetRenderer(),
         ];
     }
@@ -556,13 +556,13 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     }
 
     /**
-     * @return ProductListingCriteriaSnippetRenderer
+     * @return ProductListingSnippetRenderer
      */
-    public function createProductListingCriteriaSnippetRenderer()
+    public function createProductListingSnippetRenderer()
     {
-        return new ProductListingCriteriaSnippetRenderer(
+        return new ProductListingSnippetRenderer(
             $this->getMasterFactory()->createProductListingBlockRenderer(),
-            $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
     }
@@ -570,12 +570,12 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     /**
      * @return SnippetKeyGenerator
      */
-    public function createProductListingCriteriaSnippetKeyGenerator()
+    public function createProductListingSnippetKeyGenerator()
     {
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductListingCriteriaSnippetRenderer::CODE,
+            ProductListingSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
         );
@@ -1349,7 +1349,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return new CatalogImport(
             $this->getMasterFactory()->createQueueImportCommands(),
             $this->getMasterFactory()->createProductXmlToProductBuilderLocator(),
-            $this->getMasterFactory()->createProductListingCriteriaBuilder(),
+            $this->getMasterFactory()->createProductListingBuilder(),
             $this->getMasterFactory()->getEventQueue(),
             $this->getMasterFactory()->createContextSource(),
             $this->getMasterFactory()->getLogger()

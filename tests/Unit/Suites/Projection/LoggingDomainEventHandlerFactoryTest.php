@@ -31,9 +31,9 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer

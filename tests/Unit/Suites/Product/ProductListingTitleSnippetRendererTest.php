@@ -20,9 +20,9 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $renderer;
 
     /**
-     * @var ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingCriteria;
+    private $stubProductListing;
 
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -45,9 +45,9 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $this->stubProductListingTitleSnippetKeyGenerator,
             $this->stubContextBuilder
         );
-        $this->stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
-        $this->stubProductListingCriteria->method('getContextData')->willReturn([]);
-        $this->stubProductListingCriteria->method('getUrlKey')->willReturn($this->testProductListingUrlKey);
+        $this->stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $this->stubProductListing->method('getContextData')->willReturn([]);
+        $this->stubProductListing->method('getUrlKey')->willReturn($this->testProductListingUrlKey);
     }
     
     public function testItImplementsTheSnippetRendererInterface()
@@ -57,7 +57,7 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProductListingTitleSnippet()
     {
-        $result = $this->renderer->render($this->stubProductListingCriteria);
+        $result = $this->renderer->render($this->stubProductListing);
         
         $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);

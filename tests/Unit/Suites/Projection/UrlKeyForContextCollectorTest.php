@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
@@ -62,8 +62,8 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAUrlKeyCollectionForListings()
     {
-        /** @var ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject $stubListingCriteria */
-        $stubListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubListingCriteria */
+        $stubListingCriteria = $this->getMock(ProductListing::class, [], [], '', false);
         $stubListingCriteria->method('getContextData')->willReturn($this->testContextData);
         $stubListingCriteria->expects($this->once())->method('getUrlKey')
             ->willReturn(UrlKey::fromString('listing.html'));

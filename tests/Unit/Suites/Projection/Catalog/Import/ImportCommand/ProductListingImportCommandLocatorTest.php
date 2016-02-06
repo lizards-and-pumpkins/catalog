@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
 use LizardsAndPumpkins\Command;
 use LizardsAndPumpkins\MasterFactory;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator
@@ -36,8 +36,8 @@ class ProductListingImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('createProductListingImportCommands')
             ->willReturn([$stubCommand]);
 
-        $stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
-        $result = $this->locator->getProductListingImportCommands($stubProductListingCriteria);
+        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $result = $this->locator->getProductListingImportCommands($stubProductListing);
 
         $this->assertSame([$stubCommand], $result);
     }

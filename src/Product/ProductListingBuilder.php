@@ -15,14 +15,14 @@ use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
 use LizardsAndPumpkins\UrlKey;
 use LizardsAndPumpkins\Utils\XPathParser;
 
-class ProductListingCriteriaBuilder
+class ProductListingBuilder
 {
     /**
      * @param string $xml
      * @param DataVersion $dataVersion
-     * @return ProductListingCriteria
+     * @return ProductListing
      */
-    public function createProductListingCriteriaFromXml($xml, DataVersion $dataVersion)
+    public function createProductListingFromXml($xml, DataVersion $dataVersion)
     {
         $parser = new XPathParser($xml);
 
@@ -43,7 +43,7 @@ class ProductListingCriteriaBuilder
 
         $criteria = $this->createSearchCriteria($criteriaNodes[0]);
 
-        return new ProductListingCriteria($urlKey, $contextData, $criteria);
+        return new ProductListing($urlKey, $contextData, $criteria);
     }
 
     /**

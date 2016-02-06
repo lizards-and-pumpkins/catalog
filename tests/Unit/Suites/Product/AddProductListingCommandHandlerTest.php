@@ -24,13 +24,13 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /**
-         * @var ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject $stubProductListingCriteria
+         * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing
          */
-        $stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
+        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
 
         /** @var AddProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(AddProductListingCommand::class, [], [], '', false);
-        $stubCommand->method('getProductListingCriteria')->willReturn($stubProductListingCriteria);
+        $stubCommand->method('getProductListing')->willReturn($stubProductListing);
 
         $this->mockDomainEventQueue = $this->getMock(Queue::class);
 

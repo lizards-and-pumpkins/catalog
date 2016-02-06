@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
+use LizardsAndPumpkins\Product\ProductListingSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
@@ -65,7 +65,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     }
 
     /**
-     * @var ProductListingCriteriaSnippetContent|bool
+     * @var ProductListingSnippetContent|bool
      */
     private $memoizedPageMetaInfo;
 
@@ -115,7 +115,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return bool|ProductListingCriteriaSnippetContent
+     * @return bool|ProductListingSnippetContent
      */
     private function getPageMetaInfoSnippet(HttpRequest $request)
     {
@@ -124,7 +124,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
             $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
             if ($json) {
-                $this->memoizedPageMetaInfo = ProductListingCriteriaSnippetContent::fromJson($json);
+                $this->memoizedPageMetaInfo = ProductListingSnippetContent::fromJson($json);
             }
         }
 

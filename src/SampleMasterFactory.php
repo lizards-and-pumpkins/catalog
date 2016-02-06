@@ -23,7 +23,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLoc
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  * @method ContentBlockSnippetKeyGeneratorLocatorStrategy createContentBlockSnippetKeyGeneratorLocatorStrategy
  * @method GenericSnippetKeyGenerator createProductSearchResultMetaSnippetKeyGenerator
- * @method GenericSnippetKeyGenerator createProductListingCriteriaSnippetKeyGenerator
+ * @method GenericSnippetKeyGenerator createProductListingTemplateSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductInSearchAutosuggestionSnippetKeyGenerator
@@ -44,6 +44,7 @@ use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLoc
  * @method DataPool\SearchEngine\SearchEngine getSearchEngine
  * @method callable getProductDetailsViewTranslatorFactory
  * @method Renderer\Translation\TranslatorRegistry getTranslatorRegistry
+ * @method SnippetKeyGenerator createProductListingTitleSnippetKeyGenerator
  */
 class SampleMasterFactory implements MasterFactory
 {

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
 use LizardsAndPumpkins\Command;
 use LizardsAndPumpkins\MasterFactory;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 
 class ProductListingImportCommandLocator
 {
@@ -19,11 +19,11 @@ class ProductListingImportCommandLocator
     }
 
     /**
-     * @param ProductListingCriteria $productListingCriteria
+     * @param ProductListing $productListing
      * @return Command[]
      */
-    public function getProductListingImportCommands(ProductListingCriteria $productListingCriteria)
+    public function getProductListingImportCommands(ProductListing $productListing)
     {
-        return $this->factory->createProductListingImportCommands($productListingCriteria);
+        return $this->factory->createProductListingImportCommands($productListing);
     }
 }

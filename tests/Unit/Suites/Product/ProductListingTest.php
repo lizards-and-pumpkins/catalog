@@ -6,9 +6,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\UrlKey;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingCriteria
+ * @covers \LizardsAndPumpkins\Product\ProductListing
  */
-class ProductListingCriteriaTest extends \PHPUnit_Framework_TestCase
+class ProductListingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var UrlKey|\PHPUnit_Framework_MockObject_MockObject
@@ -26,15 +26,15 @@ class ProductListingCriteriaTest extends \PHPUnit_Framework_TestCase
     private $stubCriteria;
 
     /**
-     * @var ProductListingCriteria
+     * @var ProductListing
      */
-    private $productListingCriteria;
+    private $productListing;
 
     protected function setUp()
     {
         $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
         $this->stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->productListingCriteria = new ProductListingCriteria(
+        $this->productListing = new ProductListing(
             $this->stubUrlKey,
             $this->dummyContextData,
             $this->stubCriteria
@@ -43,19 +43,19 @@ class ProductListingCriteriaTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingUrlKeyIsReturned()
     {
-        $result = $this->productListingCriteria->getUrlKey();
+        $result = $this->productListing->getUrlKey();
         $this->assertSame($this->stubUrlKey, $result);
     }
 
     public function testProductListingContextDataIsReturned()
     {
-        $result = $this->productListingCriteria->getContextData();
+        $result = $this->productListing->getContextData();
         $this->assertSame($this->dummyContextData, $result);
     }
 
-    public function testProductListingCriteriaAreReturned()
+    public function testProductListingIsReturned()
     {
-        $result = $this->productListingCriteria->getCriteria();
+        $result = $this->productListing->getCriteria();
         $this->assertSame($this->stubCriteria, $result);
     }
 }
