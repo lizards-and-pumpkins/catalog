@@ -56,4 +56,12 @@ class StubConfigurableProductView extends AbstractConfigurableProductView
     {
         return $this->productViewLocator;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductPageTitle()
+    {
+        // Intentionally left empty
+    }
 }

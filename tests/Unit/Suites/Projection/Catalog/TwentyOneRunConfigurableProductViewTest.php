@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
@@ -128,18 +127,15 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $this->assertContains($nonPriceAttribute, $result->getAllAttributes());
     }
 
-    public function testGettingProductMetaTitleIsDelegatedToASimpleProductView()
+    public function testGettingProductPageTitleIsDelegatedToASimpleProductView()
     {
-        $simpleProductMetaTitle = 'foo';
+        $testAttributeCode = 'name';
+        $testAttributeValue = 'foo';
 
-        $stubSimpleProductView = $this->getMock(ProductView::class);
-        $stubSimpleProductView->method('getProductTitle')->willReturn($simpleProductMetaTitle);
+        $attribute = new ProductAttribute($testAttributeCode, $testAttributeValue, []);
+        $attributeList = new ProductAttributeList($attribute);
+        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $stubSimpleProduct = $this->getMock(Product::class);
-        $this->mockProduct->method('getSimpleProductDelegate')->willReturn($stubSimpleProduct);
-
-        $this->stubProductViewLocator->method('createForProduct')->willReturn($stubSimpleProductView);
-
-        $this->assertSame($simpleProductMetaTitle, $this->productView->getProductTitle());
+        $this->assertSame($testAttributeValue, $this->productView->getProductPageTitle());
     }
 }

@@ -55,4 +55,12 @@ class IntegrationTestConfigurableProductView extends AbstractConfigurableProduct
     {
         return $this->productImageFileLocator;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductPageTitle()
+    {
+        // Intentionally left empty
+    }
 }

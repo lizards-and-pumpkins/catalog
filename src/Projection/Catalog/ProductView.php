@@ -94,5 +94,5 @@ interface ProductView extends \JsonSerializable
     /**
      * @return string
      */
-    public function getProductTitle();
+    public function getProductPageTitle();
 }

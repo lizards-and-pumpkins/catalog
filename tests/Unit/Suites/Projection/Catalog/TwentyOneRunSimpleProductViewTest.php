@@ -196,14 +196,14 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $attributeCode = AttributeCode::fromString($requiredAttributeCode);
         $attributeList = ProductAttributeList::fromArray([
             [
-                'code'        => $attributeCode,
-                'value'       => $testAttributeValue,
-                'contextData' => []
+                ProductAttribute::CODE => $attributeCode,
+                ProductAttribute::VALUE => $testAttributeValue,
+                ProductAttribute::CONTEXT => []
             ]
         ]);
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $this->assertContains($testAttributeValue, $this->productView->getProductTitle());
+        $this->assertContains($testAttributeValue, $this->productView->getProductPageTitle());
     }
 
     /**
@@ -224,7 +224,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $attributeList = ProductAttributeList::fromArray([]);
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $result = $this->productView->getProductTitle();
+        $result = $this->productView->getProductPageTitle();
         $this->assertContains(TwentyOneRunSimpleProductView::PRODUCT_TITLE_SUFFIX, $result);
     }
 
@@ -236,24 +236,24 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 
         $attributeList = ProductAttributeList::fromArray([
             [
-                'code'        => AttributeCode::fromString('name'),
-                'value'       => $attributeValue,
-                'contextData' => []
+                ProductAttribute::CODE => AttributeCode::fromString('name'),
+                ProductAttribute::VALUE => $attributeValue,
+                ProductAttribute::CONTEXT => []
             ],
             [
-                'code'        => AttributeCode::fromString('brand'),
-                'value'       => $attributeValue,
-                'contextData' => []
+                ProductAttribute::CODE => AttributeCode::fromString('brand'),
+                ProductAttribute::VALUE => $attributeValue,
+                ProductAttribute::CONTEXT => []
             ],
             [
-                'code'        => AttributeCode::fromString('style'),
-                'value'       => $attributeValue,
-                'contextData' => []
+                ProductAttribute::CODE => AttributeCode::fromString('style'),
+                ProductAttribute::VALUE => $attributeValue,
+                ProductAttribute::CONTEXT => []
             ],
         ]);
 
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $this->assertLessThanOrEqual($maxTitleLength, $this->productView->getProductTitle());
+        $this->assertLessThanOrEqual($maxTitleLength, $this->productView->getProductPageTitle());
     }
 }

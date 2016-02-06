@@ -38,4 +38,12 @@ class StubProductView extends AbstractProductView
     {
         return $this->imageFileLocator;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductPageTitle()
+    {
+        // Intentionally left empty
+    }
 }

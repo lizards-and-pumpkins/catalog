@@ -196,14 +196,6 @@ abstract class AbstractProductView implements ProductView
     /**
      * {@inheritdoc}
      */
-    public function getProductTitle()
-    {
-        return $this->getOriginalProduct()->getProductMetaTitle();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function jsonSerialize()
     {
         $original = $this->getOriginalProduct()->jsonSerialize();

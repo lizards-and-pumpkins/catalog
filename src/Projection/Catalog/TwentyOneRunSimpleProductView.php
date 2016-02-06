@@ -72,7 +72,7 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     /**
      * @return string
      */
-    final public function getProductTitle()
+    final public function getProductPageTitle()
     {
         $title = $this->getFirstValueOfAttribute('brand') . ' ' . $this->getFirstValueOfAttribute('name');
         $productGroup = $this->getFirstValueOfAttribute('product_group');

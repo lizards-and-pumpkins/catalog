@@ -82,7 +82,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             $productView->getContext(),
             [Product::ID => $productView->getId()]
         );
-        $content = $productView->getProductTitle();
+        $content = $productView->getProductPageTitle();
 
         return Snippet::create($key, $content);
     }

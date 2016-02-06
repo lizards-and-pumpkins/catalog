@@ -451,9 +451,9 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->productView->getAttributes();
     }
 
-    public function testGettingProductMetaTitleIsDelegatedToOriginalProduct()
+    public function testGettingProductPageTitleIsDelegatedToOriginalProduct()
     {
-        $this->mockProduct->expects($this->once())->method('getProductMetaTitle');
-        $this->productView->getProductTitle();
+        $this->mockProduct->expects($this->once())->method('getFirstValueOfAttribute')->with('name');
+        $this->productView->getProductPageTitle();
     }
 }
