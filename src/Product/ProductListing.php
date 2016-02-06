@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\UrlKey;
 
 class ProductListing
@@ -18,6 +19,11 @@ class ProductListing
     private $contextData;
 
     /**
+     * @var ProductListingAttributeList
+     */
+    private $attributeList;
+
+    /**
      * @var SearchCriteria
      */
     private $criteria;
@@ -25,13 +31,19 @@ class ProductListing
     /**
      * @param UrlKey $urlKey
      * @param string[] $contextData
+     * @param ProductListingAttributeList $attributeList
      * @param SearchCriteria $criteria
      */
-    public function __construct(UrlKey $urlKey, array $contextData, SearchCriteria $criteria)
-    {
+    public function __construct(
+        UrlKey $urlKey,
+        array $contextData,
+        ProductListingAttributeList $attributeList,
+        SearchCriteria $criteria
+    ) {
         $this->urlKey = $urlKey;
         $this->contextData = $contextData;
         $this->criteria = $criteria;
+        $this->attributeList = $attributeList;
     }
 
     /**
@@ -56,5 +68,29 @@ class ProductListing
     public function getCriteria()
     {
         return $this->criteria;
+    }
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    public function hasAttribute($code)
+    {
+        return $this->attributeList->hasAttribute($code);
+    }
+
+    /**
+     * @param string $code
+     * @return bool|float|int|string
+     */
+    public function getAttributeValueByCode($code)
+    {
+        if (!$this->hasAttribute($code)) {
+            throw new ProductListingAttributeNotFoundException(
+                sprintf('Product list attribute with code "%s" is not found.', $code)
+            );
+        }
+
+        return $this->attributeList->getAttributeValueByCode($code);
     }
 }

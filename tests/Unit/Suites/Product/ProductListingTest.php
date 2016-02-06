@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\UrlKey;
 
 /**
@@ -26,6 +27,11 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     private $stubCriteria;
 
     /**
+     * @var ProductListingAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductListingAttributeList;
+
+    /**
      * @var ProductListing
      */
     private $productListing;
@@ -34,9 +40,12 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
         $this->stubCriteria = $this->getMock(SearchCriteria::class);
+        $this->stubProductListingAttributeList = $this->getMock(ProductListingAttributeList::class, [], [], '', false);
+
         $this->productListing = new ProductListing(
             $this->stubUrlKey,
             $this->dummyContextData,
+            $this->stubProductListingAttributeList,
             $this->stubCriteria
         );
     }
@@ -57,5 +66,30 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->productListing->getCriteria();
         $this->assertSame($this->stubCriteria, $result);
+    }
+
+    public function testCheckingForProductListingAttributeExistenceIsDelegatedToProductAttributeList()
+    {
+        $this->stubProductListingAttributeList->method('hasAttribute')->willReturn(false);
+        $this->assertFalse($this->productListing->hasAttribute('foo'));
+    }
+
+    public function testExceptionIsThrownDuringAttemptToGetAValueOfNonExistingAttribute()
+    {
+        $this->setExpectedException(ProductListingAttributeNotFoundException::class);
+        $this->stubProductListingAttributeList->method('hasAttribute')->willReturn(false);
+        $this->productListing->getAttributeValueByCode('foo');
+    }
+
+    public function testProductListingAttributeValueIsReturned()
+    {
+        $attributeCode = 'foo';
+        $attributeValue = 'bar';
+
+        $this->stubProductListingAttributeList->method('hasAttribute')->willReturn(true);
+        $this->stubProductListingAttributeList->method('getAttributeValueByCode')->willReturn($attributeValue);
+
+        $this->assertSame($attributeValue, $this->productListing->getAttributeValueByCode($attributeCode));
+
     }
 }
