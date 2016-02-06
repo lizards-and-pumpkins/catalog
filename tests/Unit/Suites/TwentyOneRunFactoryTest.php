@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
 use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Product\TwentyOneRunProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
@@ -30,10 +31,15 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry
  * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\FactoryTrait
  * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
  * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
  * @uses   \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
@@ -44,6 +50,8 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
+ * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
  * @uses   \LizardsAndPumpkins\Image\ImageProcessor
  * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
@@ -56,11 +64,13 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator
  * @uses   \LizardsAndPumpkins\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator
+ * @uses   \LizardsAndPumpkins\Product\TwentyOneRunProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage
  * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\TwentyOneRunTaxableCountries
+ * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
  */
 class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -428,5 +438,11 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedPath, $this->factory->getLogFilePathConfig());
 
         $this->changeFileLogPathInEnvironmentConfig($oldPath);
+    }
+
+    public function testTwentyOneRunProductListingTitleSnippetRendererIsReturned()
+    {
+        $result = $this->factory->createProductListingTitleSnippetRenderer();
+        $this->assertInstanceOf(TwentyOneRunProductListingTitleSnippetRenderer::class, $result);
     }
 }
