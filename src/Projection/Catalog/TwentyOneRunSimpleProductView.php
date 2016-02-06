@@ -79,11 +79,11 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
         $productStyle = $this->getFirstValueOfAttribute('style');
 
         if ($productGroup) {
-            $title = $this->addProductTitleElement($title, ' | ' . $productGroup);
+            $title = $this->addStringToProductTitle($title, ' | ' . $productGroup);
         }
 
         if ($productStyle) {
-            $title = $this->addProductTitleElement($title, ' | ' . $productStyle);
+            $title = $this->addStringToProductTitle($title, ' | ' . $productStyle);
         }
 
         return $title . self::PRODUCT_TITLE_SUFFIX;
@@ -91,16 +91,16 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
 
     /**
      * @param string $title
-     * @param string $element
+     * @param string $string
      * @return string
      */
-    private function addProductTitleElement($title, $element)
+    private function addStringToProductTitle($title, $string)
     {
-        if (strlen($title) + strlen($element) + strlen(self::PRODUCT_TITLE_SUFFIX) > self::MAX_PRODUCT_TITLE_LENGTH) {
+        if (strlen($title) + strlen($string) + strlen(self::PRODUCT_TITLE_SUFFIX) > self::MAX_PRODUCT_TITLE_LENGTH) {
             return $title;
         }
 
-        return $title . $element;
+        return $title . $string;
     }
 
     /**
