@@ -140,6 +140,6 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
 
         $this->stubProductViewLocator->method('createForProduct')->willReturn($stubSimpleProductView);
 
-        $this->assertSame($simpleProductMetaTitle, $this->productView->getProductMetaTitle());
+        $this->assertSame($simpleProductMetaTitle, $this->productView->getProductTitle());
     }
 }
