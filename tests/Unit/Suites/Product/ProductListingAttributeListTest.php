@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidProductListingAttributeCodeException;
 use LizardsAndPumpkins\Product\Exception\InvalidProductListingAttributeValueException;
-use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFountException;
+use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductListingAttributeList
@@ -64,7 +64,7 @@ class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToRetrieveAttributeWhichIsAbsentInTheList()
     {
-        $this->setExpectedException(ProductListingAttributeNotFountException::class);
+        $this->setExpectedException(ProductListingAttributeNotFoundException::class);
         $productListingAttributeList = ProductListingAttributeList::fromArray([]);
         $productListingAttributeList->getAttributeValueByCode('foo');
     }

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Product\Exception\InvalidProductListingAttributeCodeException;
 use LizardsAndPumpkins\Product\Exception\InvalidProductListingAttributeValueException;
-use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFountException;
+use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
 
 class ProductListingAttributeList
 {
@@ -49,7 +49,7 @@ class ProductListingAttributeList
     public function getAttributeValueByCode($code)
     {
         if (!$this->hasAttribute($code)) {
-            throw new ProductListingAttributeNotFountException(
+            throw new ProductListingAttributeNotFoundException(
                 sprintf('Product list attribute with code "%s" is not found.', $code)
             );
         }
