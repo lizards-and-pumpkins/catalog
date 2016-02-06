@@ -35,6 +35,7 @@ use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
 use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
 use LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator;
+use LizardsAndPumpkins\Product\TwentyOneRunProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
@@ -664,5 +665,16 @@ class TwentyOneRunFactory implements Factory
         $facetFieldToQueryParameterMap = [$facetField => $queryParameter];
         $queryParameterToFacetFieldMap = [$queryParameter => $facetField];
         return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
+    }
+
+    /**
+     * @return SnippetRenderer
+     */
+    public function createProductListingTitleSnippetRenderer()
+    {
+        return new TwentyOneRunProductListingTitleSnippetRenderer(
+            $this->getMasterFactory()->createProductListingTitleSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder()
+        );
     }
 }
