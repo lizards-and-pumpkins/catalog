@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
 
 /**
  * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator
@@ -25,8 +26,11 @@ class TwentyOneRunProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var TwentyOneRunProductPageTitle|\PHPUnit_Framework_MockObject_MockObject $stubPageTitle */
+        $stubPageTitle = $this->getMock(TwentyOneRunProductPageTitle::class, [], [], '', false);
         $this->stubProductImageLocator = $this->getMock(ProductImageFileLocator::class);
-        $this->locator = new TwentyOneRunProductViewLocator($this->stubProductImageLocator);
+
+        $this->locator = new TwentyOneRunProductViewLocator($this->stubProductImageLocator, $stubPageTitle);
     }
 
     public function testProductViewInterfaceIsImplemented()

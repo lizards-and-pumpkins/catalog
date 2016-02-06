@@ -5,14 +5,11 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
 
 class TwentyOneRunSimpleProductView extends AbstractProductView
 {
     const MAX_PURCHASABLE_QTY = 5;
-
-    const MAX_PRODUCT_TITLE_LENGTH = 58;
-
-    const PRODUCT_TITLE_SUFFIX = ' | 21run.com';
 
     /**
      * @var Product
@@ -20,13 +17,22 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     private $product;
 
     /**
+     * @var TwentyOneRunProductPageTitle
+     */
+    private $pageTitle;
+
+    /**
      * @var ProductImageFileLocator
      */
     private $productImageFileLocator;
 
-    public function __construct(Product $product, ProductImageFileLocator $productImageFileLocator)
-    {
+    public function __construct(
+        Product $product,
+        TwentyOneRunProductPageTitle $pageTitle,
+        ProductImageFileLocator $productImageFileLocator
+    ) {
         $this->product = $product;
+        $this->pageTitle = $pageTitle;
         $this->productImageFileLocator = $productImageFileLocator;
     }
 
@@ -74,33 +80,7 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
      */
     final public function getProductPageTitle()
     {
-        $title = $this->getFirstValueOfAttribute('brand') . ' ' . $this->getFirstValueOfAttribute('name');
-        $productGroup = $this->getFirstValueOfAttribute('product_group');
-        $productStyle = $this->getFirstValueOfAttribute('style');
-
-        if ($productGroup) {
-            $title = $this->addStringToProductTitle($title, ' | ' . $productGroup);
-        }
-
-        if ($productStyle) {
-            $title = $this->addStringToProductTitle($title, ' | ' . $productStyle);
-        }
-
-        return $title . self::PRODUCT_TITLE_SUFFIX;
-    }
-
-    /**
-     * @param string $title
-     * @param string $string
-     * @return string
-     */
-    private function addStringToProductTitle($title, $string)
-    {
-        if (strlen($title) + strlen($string) + strlen(self::PRODUCT_TITLE_SUFFIX) > self::MAX_PRODUCT_TITLE_LENGTH) {
-            return $title;
-        }
-
-        return $title . $string;
+        return $this->pageTitle->createForProduct($this);
     }
 
     /**

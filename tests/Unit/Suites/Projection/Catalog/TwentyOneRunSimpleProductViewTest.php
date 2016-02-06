@@ -3,11 +3,11 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
 use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
@@ -31,6 +31,11 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     private $productView;
 
     /**
+     * @var TwentyOneRunProductPageTitle|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubPageTitle;
+
+    /**
      * @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductImageFileLocator;
@@ -38,10 +43,16 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
+        $this->stubPageTitle = $this->getMock(TwentyOneRunProductPageTitle::class, [], [], '', false);
         $this->mockProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
         $this->mockProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
         $this->mockProductImageFileLocator->method('getVariantCodes')->willReturn(['large']);
-        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct, $this->mockProductImageFileLocator);
+
+        $this->productView = new TwentyOneRunSimpleProductView(
+            $this->mockProduct,
+            $this->stubPageTitle,
+            $this->mockProductImageFileLocator
+        );
     }
 
     public function testOriginalProductIsReturned()
@@ -186,74 +197,11 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         json_encode($this->productView);
     }
 
-    /**
-     * @dataProvider requiredAttributeCodeProvider
-     * @param string $requiredAttributeCode
-     */
-    public function testProductTitleContainsRequiredAttributes($requiredAttributeCode)
+    public function testProductPageTitleCreationIsDelegatedToPageTitle()
     {
-        $testAttributeValue = 'foo';
-        $attributeCode = AttributeCode::fromString($requiredAttributeCode);
-        $attributeList = ProductAttributeList::fromArray([
-            [
-                ProductAttribute::CODE => $attributeCode,
-                ProductAttribute::VALUE => $testAttributeValue,
-                ProductAttribute::CONTEXT => []
-            ]
-        ]);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
+        $testTitle = 'foo';
+        $this->stubPageTitle->method('createForProduct')->willReturn($testTitle);
 
-        $this->assertContains($testAttributeValue, $this->productView->getProductPageTitle());
-    }
-
-    /**
-     * @return array[]
-     */
-    public function requiredAttributeCodeProvider()
-    {
-        return [
-            ['name'],
-            ['product_group'],
-            ['brand'],
-            ['style'],
-        ];
-    }
-
-    public function testProductTitleContainsProductTitleSuffix()
-    {
-        $attributeList = ProductAttributeList::fromArray([]);
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $result = $this->productView->getProductPageTitle();
-        $this->assertContains(TwentyOneRunSimpleProductView::PRODUCT_TITLE_SUFFIX, $result);
-    }
-
-    public function testProductMetaTitleIsNotExceedingDefinedLimit()
-    {
-        $maxTitleLength = TwentyOneRunSimpleProductView::MAX_PRODUCT_TITLE_LENGTH;
-        $attributeLength = ($maxTitleLength - TwentyOneRunSimpleProductView::PRODUCT_TITLE_SUFFIX) / 2;
-        $attributeValue = str_repeat('-', $attributeLength);
-
-        $attributeList = ProductAttributeList::fromArray([
-            [
-                ProductAttribute::CODE => AttributeCode::fromString('name'),
-                ProductAttribute::VALUE => $attributeValue,
-                ProductAttribute::CONTEXT => []
-            ],
-            [
-                ProductAttribute::CODE => AttributeCode::fromString('brand'),
-                ProductAttribute::VALUE => $attributeValue,
-                ProductAttribute::CONTEXT => []
-            ],
-            [
-                ProductAttribute::CODE => AttributeCode::fromString('style'),
-                ProductAttribute::VALUE => $attributeValue,
-                ProductAttribute::CONTEXT => []
-            ],
-        ]);
-
-        $this->mockProduct->method('getAttributes')->willReturn($attributeList);
-
-        $this->assertLessThanOrEqual($maxTitleLength, $this->productView->getProductPageTitle());
+        $this->assertSame($testTitle, $this->productView->getProductPageTitle());
     }
 }
