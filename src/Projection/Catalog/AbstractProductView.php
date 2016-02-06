@@ -196,7 +196,7 @@ abstract class AbstractProductView implements ProductView
     /**
      * {@inheritdoc}
      */
-    public function getProductMetaTitle()
+    public function getProductTitle()
     {
         return $this->getOriginalProduct()->getProductMetaTitle();
     }

@@ -203,7 +203,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $this->assertContains($testAttributeValue, $this->productView->getProductMetaTitle());
+        $this->assertContains($testAttributeValue, $this->productView->getProductTitle());
     }
 
     /**
@@ -224,7 +224,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $attributeList = ProductAttributeList::fromArray([]);
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $result = $this->productView->getProductMetaTitle();
+        $result = $this->productView->getProductTitle();
         $this->assertContains(TwentyOneRunSimpleProductView::PRODUCT_TITLE_SUFFIX, $result);
     }
 
@@ -254,6 +254,6 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
 
-        $this->assertLessThanOrEqual($maxTitleLength, $this->productView->getProductMetaTitle());
+        $this->assertLessThanOrEqual($maxTitleLength, $this->productView->getProductTitle());
     }
 }
