@@ -8,6 +8,10 @@ use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 
+/**
+ * @covers \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Snippet
+ */
 class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     private $testSnippetKey = ProductListingTitleSnippetRenderer::CODE . '_foo';
