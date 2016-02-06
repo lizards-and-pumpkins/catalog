@@ -133,7 +133,7 @@ class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCas
         $simpleProductMetaTitle = 'foo';
 
         $stubSimpleProductView = $this->getMock(ProductView::class);
-        $stubSimpleProductView->method('getProductMetaTitle')->willReturn($simpleProductMetaTitle);
+        $stubSimpleProductView->method('getProductTitle')->willReturn($simpleProductMetaTitle);
 
         $stubSimpleProduct = $this->getMock(Product::class);
         $this->mockProduct->method('getSimpleProductDelegate')->willReturn($stubSimpleProduct);
