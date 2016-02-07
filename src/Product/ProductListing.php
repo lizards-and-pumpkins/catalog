@@ -85,12 +85,6 @@ class ProductListing
      */
     public function getAttributeValueByCode($code)
     {
-        if (!$this->hasAttribute($code)) {
-            throw new ProductListingAttributeNotFoundException(
-                sprintf('Product list attribute with code "%s" is not found.', $code)
-            );
-        }
-
         return $this->attributeList->getAttributeValueByCode($code);
     }
 }

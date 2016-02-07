@@ -74,13 +74,6 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->productListing->hasAttribute('foo'));
     }
 
-    public function testExceptionIsThrownDuringAttemptToGetAValueOfNonExistingAttribute()
-    {
-        $this->setExpectedException(ProductListingAttributeNotFoundException::class);
-        $this->stubProductListingAttributeList->method('hasAttribute')->willReturn(false);
-        $this->productListing->getAttributeValueByCode('foo');
-    }
-
     public function testProductListingAttributeValueIsReturned()
     {
         $attributeCode = 'foo';
