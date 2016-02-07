@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
 
 class TwentyOneRunSimpleProductView extends AbstractProductView
 {
@@ -16,13 +17,22 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
     private $product;
 
     /**
+     * @var TwentyOneRunProductPageTitle
+     */
+    private $pageTitle;
+
+    /**
      * @var ProductImageFileLocator
      */
     private $productImageFileLocator;
 
-    public function __construct(Product $product, ProductImageFileLocator $productImageFileLocator)
-    {
+    public function __construct(
+        Product $product,
+        TwentyOneRunProductPageTitle $pageTitle,
+        ProductImageFileLocator $productImageFileLocator
+    ) {
         $this->product = $product;
+        $this->pageTitle = $pageTitle;
         $this->productImageFileLocator = $productImageFileLocator;
     }
 
@@ -63,6 +73,14 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
             return $this->getBoundedStockQtyAttribute($attribute);
         }
         return parent::getProcessedAttribute($attribute);
+    }
+
+    /**
+     * @return string
+     */
+    final public function getProductPageTitle()
+    {
+        return $this->pageTitle->forProductView($this);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
 
 class TwentyOneRunProductViewLocator implements ProductViewLocator
 {
@@ -13,9 +14,15 @@ class TwentyOneRunProductViewLocator implements ProductViewLocator
      */
     private $imageFileLocator;
 
-    public function __construct(ProductImageFileLocator $imageFileLocator)
+    /**
+     * @var TwentyOneRunProductPageTitle
+     */
+    private $pageTitle;
+
+    public function __construct(ProductImageFileLocator $imageFileLocator, TwentyOneRunProductPageTitle $pageTitle)
     {
         $this->imageFileLocator = $imageFileLocator;
+        $this->pageTitle = $pageTitle;
     }
 
     /**
@@ -25,9 +32,9 @@ class TwentyOneRunProductViewLocator implements ProductViewLocator
     public function createForProduct(Product $product)
     {
         if ($product instanceof ConfigurableProduct) {
-            return new TwentyOneRunConfigurableProductView($this, $product, $this->imageFileLocator);
+            return new TwentyOneRunConfigurableProductView($this, $product, $this->pageTitle, $this->imageFileLocator);
         }
 
-        return new TwentyOneRunSimpleProductView($product, $this->imageFileLocator);
+        return new TwentyOneRunSimpleProductView($product, $this->pageTitle, $this->imageFileLocator);
     }
 }

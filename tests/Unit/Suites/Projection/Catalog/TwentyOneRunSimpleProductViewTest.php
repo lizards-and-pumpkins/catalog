@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductAttributeList;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
 use LizardsAndPumpkins\Utils\ImageStorage\Image;
 
 /**
@@ -30,6 +31,11 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     private $productView;
 
     /**
+     * @var TwentyOneRunProductPageTitle|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubPageTitle;
+
+    /**
      * @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductImageFileLocator;
@@ -37,10 +43,16 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->mockProduct = $this->getMock(Product::class);
+        $this->stubPageTitle = $this->getMock(TwentyOneRunProductPageTitle::class, [], [], '', false);
         $this->mockProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
         $this->mockProductImageFileLocator->method('getPlaceholder')->willReturn($this->getMock(Image::class));
         $this->mockProductImageFileLocator->method('getVariantCodes')->willReturn(['large']);
-        $this->productView = new TwentyOneRunSimpleProductView($this->mockProduct, $this->mockProductImageFileLocator);
+
+        $this->productView = new TwentyOneRunSimpleProductView(
+            $this->mockProduct,
+            $this->stubPageTitle,
+            $this->mockProductImageFileLocator
+        );
     }
 
     public function testOriginalProductIsReturned()
@@ -99,7 +111,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
         $attributeList = new ProductAttributeList($attribute);
         $this->mockProduct->method('getAttributes')->willReturn($attributeList);
         $this->mockProduct->method('jsonSerialize')->willReturn(['attributes' => $attributeList]);
-        
+
         $productData = json_decode(json_encode($this->productView), true);
 
         $this->assertArrayNotHasKey('backorders', $productData['attributes']);
@@ -183,5 +195,13 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProductImageFileLocator->expects($this->once())->method('getPlaceholder');
         json_encode($this->productView);
+    }
+
+    public function testProductPageTitleCreationIsDelegatedToPageTitle()
+    {
+        $testTitle = 'foo';
+        $this->stubPageTitle->method('forProductView')->willReturn($testTitle);
+
+        $this->assertSame($testTitle, $this->productView->getProductPageTitle());
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;

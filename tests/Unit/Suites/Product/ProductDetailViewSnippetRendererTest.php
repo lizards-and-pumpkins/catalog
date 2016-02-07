@@ -100,9 +100,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $testTitleSnippetKey = 'title';
 
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn($testContentSnippetKey);
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn($testTitleSnippetKey);
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
-        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn($testTitleSnippetKey);
 
         $result = $this->renderer->render($this->stubProductView);
 

@@ -82,13 +82,8 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             $productView->getContext(),
             [Product::ID => $productView->getId()]
         );
-        $content = sprintf(
-            '%s | %s %s | 21run.com',
-            $productView->getFirstValueOfAttribute('name'),
-            $productView->getFirstValueOfAttribute('product_group'),
-            $productView->getFirstValueOfAttribute('style')
-        );
-        
+        $content = $productView->getProductPageTitle();
+
         return Snippet::create($key, $content);
     }
 
@@ -109,7 +104,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductView $productView
-     * @return \mixed[]
+     * @return mixed[]
      */
     private function getPageMetaSnippetContent(ProductView $productView)
     {

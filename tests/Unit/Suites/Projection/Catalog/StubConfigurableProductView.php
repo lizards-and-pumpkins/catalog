@@ -56,4 +56,12 @@ class StubConfigurableProductView extends AbstractConfigurableProductView
     {
         return $this->productViewLocator;
     }
+
+    /**
+     * @return string
+     */
+    public function getProductPageTitle()
+    {
+        $this->getFirstValueOfAttribute('name');
+    }
 }
