@@ -38,4 +38,12 @@ class IntegrationTestProductView extends AbstractProductView
     {
         return $this->productImageFileLocator;
     }
+
+    /**
+     * @return string
+     */
+    public function getProductPageTitle()
+    {
+        $this->getFirstValueOfAttribute('name');
+    }
 }

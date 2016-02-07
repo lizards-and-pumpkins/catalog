@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Product\ProductAttribute;
 use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
 
 class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductView implements CompositeProductView
 {
@@ -21,6 +22,11 @@ class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductVie
     private $product;
 
     /**
+     * @var TwentyOneRunProductPageTitle
+     */
+    private $pageTitle;
+
+    /**
      * @var ProductImageFileLocator
      */
     private $productImageFileLocator;
@@ -28,10 +34,12 @@ class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductVie
     public function __construct(
         ProductViewLocator $productViewLocator,
         ConfigurableProduct $product,
+        TwentyOneRunProductPageTitle $pageTitle,
         ProductImageFileLocator $productImageFileLocator
     ) {
         $this->productViewLocator = $productViewLocator;
         $this->product = $product;
+        $this->pageTitle = $pageTitle;
         $this->productImageFileLocator = $productImageFileLocator;
     }
 
@@ -73,11 +81,8 @@ class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductVie
     /**
      * @return string
      */
-    final public function getProductTitle()
+    final public function getProductPageTitle()
     {
-        $simpleProductDelegate = $this->getOriginalProduct()->getSimpleProductDelegate();
-        $simpleProductView = $this->productViewLocator->createForProduct($simpleProductDelegate);
-
-        return $simpleProductView->getProductTitle();
+        return $this->pageTitle->forProductView($this);
     }
 }

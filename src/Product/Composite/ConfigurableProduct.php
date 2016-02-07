@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
@@ -225,21 +224,5 @@ class ConfigurableProduct implements CompositeProduct
     public function getTaxClass()
     {
         return $this->simpleProductDelegate->getTaxClass();
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductMetaTitle()
-    {
-        return $this->simpleProductDelegate->getProductMetaTitle();
-    }
-
-    /**
-     * @return SimpleProduct
-     */
-    public function getSimpleProductDelegate()
-    {
-        return $this->simpleProductDelegate;
     }
 }

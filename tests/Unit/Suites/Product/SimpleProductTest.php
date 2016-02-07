@@ -288,17 +288,4 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(ProductAttributeList::class, $this->product->getAttributes());
     }
-    
-    public function testProductNameIsReturnedAsProductMetaTitle()
-    {
-        $testProductName = 'foo';
-
-        $stubAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
-        $stubAttribute->method('getValue')->willReturn($testProductName);
-
-        $this->stubProductAttributeList->method('hasAttribute')->with('name')->willReturn(true);
-        $this->stubProductAttributeList->method('getAttributesWithCode')->with('name')->willReturn([$stubAttribute]);
-
-        $this->assertSame($testProductName, $this->product->getProductMetaTitle());
-    }
 }
