@@ -27,8 +27,8 @@ class ProductListingAttributeList
      */
     public static function fromArray(array $attributes)
     {
-        array_map([self::class, 'validateAttributeCodes'], array_keys($attributes));
-        array_map([self::class, 'validateAttributeValues'], $attributes);
+        array_map([self::class, 'validateAttributeCode'], array_keys($attributes));
+        array_map([self::class, 'validateAttributeValue'], $attributes);
 
         return new self($attributes);
     }
@@ -60,7 +60,7 @@ class ProductListingAttributeList
     /**
      * @param string $code
      */
-    private static function validateAttributeCodes($code)
+    private static function validateAttributeCode($code)
     {
         if (!is_string($code)) {
             throw new InvalidProductListingAttributeCodeException(
@@ -78,7 +78,7 @@ class ProductListingAttributeList
     /**
      * @param int|float|string|bool $value
      */
-    private static function validateAttributeValues($value)
+    private static function validateAttributeValue($value)
     {
         if (!is_scalar($value)) {
             throw new InvalidProductListingAttributeValueException(
