@@ -200,7 +200,7 @@ class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
     public function testProductPageTitleCreationIsDelegatedToPageTitle()
     {
         $testTitle = 'foo';
-        $this->stubPageTitle->method('createForProduct')->willReturn($testTitle);
+        $this->stubPageTitle->method('forProductView')->willReturn($testTitle);
 
         $this->assertSame($testTitle, $this->productView->getProductPageTitle());
     }

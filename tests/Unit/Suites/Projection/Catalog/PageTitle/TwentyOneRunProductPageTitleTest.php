@@ -42,7 +42,7 @@ class TwentyOneRunProductPageTitleTest extends \PHPUnit_Framework_TestCase
             }
         );
 
-        $this->assertContains($testAttributeValue, $this->productPageTitle->createForProduct($this->stubProductView));
+        $this->assertContains($testAttributeValue, $this->productPageTitle->forProductView($this->stubProductView));
     }
 
     /**
@@ -60,7 +60,7 @@ class TwentyOneRunProductPageTitleTest extends \PHPUnit_Framework_TestCase
 
     public function testProductTitleContainsProductTitleSuffix()
     {
-        $result = $this->productPageTitle->createForProduct($this->stubProductView);
+        $result = $this->productPageTitle->forProductView($this->stubProductView);
         $this->assertContains(TwentyOneRunProductPageTitle::PRODUCT_TITLE_SUFFIX, $result);
     }
 
@@ -71,7 +71,7 @@ class TwentyOneRunProductPageTitleTest extends \PHPUnit_Framework_TestCase
 
         $this->stubProductView->method('getFirstValueOfAttribute')->willReturn(str_repeat('-', $attributeLength));
 
-        $result = $this->productPageTitle->createForProduct($this->stubProductView);
+        $result = $this->productPageTitle->forProductView($this->stubProductView);
 
         $this->assertLessThanOrEqual($maxTitleLength, strlen($result));
     }

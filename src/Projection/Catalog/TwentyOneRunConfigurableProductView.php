@@ -83,6 +83,6 @@ class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductVie
      */
     final public function getProductPageTitle()
     {
-        return $this->pageTitle->createForProduct($this);
+        return $this->pageTitle->forProductView($this);
     }
 }

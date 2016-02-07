@@ -80,7 +80,7 @@ class TwentyOneRunSimpleProductView extends AbstractProductView
      */
     final public function getProductPageTitle()
     {
-        return $this->pageTitle->createForProduct($this);
+        return $this->pageTitle->forProductView($this);
     }
 
     /**

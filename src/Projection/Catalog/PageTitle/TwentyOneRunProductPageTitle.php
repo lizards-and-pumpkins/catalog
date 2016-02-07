@@ -14,7 +14,7 @@ class TwentyOneRunProductPageTitle
      * @param ProductView $productView
      * @return string
      */
-    public function createForProduct(ProductView $productView)
+    public function forProductView(ProductView $productView)
     {
         $base = $productView->getFirstValueOfAttribute('brand') . ' ' . $productView->getFirstValueOfAttribute('name');
 
