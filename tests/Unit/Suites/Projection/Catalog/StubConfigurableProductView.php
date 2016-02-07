@@ -58,10 +58,10 @@ class StubConfigurableProductView extends AbstractConfigurableProductView
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getProductPageTitle()
     {
-        // Intentionally left empty
+        $this->getFirstValueOfAttribute('name');
     }
 }

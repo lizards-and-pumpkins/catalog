@@ -57,10 +57,10 @@ class IntegrationTestConfigurableProductView extends AbstractConfigurableProduct
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getProductPageTitle()
     {
-        // Intentionally left empty
+        $this->getFirstValueOfAttribute('name');
     }
 }
