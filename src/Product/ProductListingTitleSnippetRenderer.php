@@ -12,6 +12,8 @@ class ProductListingTitleSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing_title';
 
+    const TITLE_ATTRIBUTE_CODE = 'meta_title';
+
     /**
      * @var SnippetKeyGenerator
      */
@@ -34,14 +36,14 @@ class ProductListingTitleSnippetRenderer implements SnippetRenderer
      */
     public function render(ProductListing $productListing)
     {
-        if (!$productListing->hasAttribute('meta_title')) {
+        if (!$productListing->hasAttribute(self::TITLE_ATTRIBUTE_CODE)) {
             return [];
         }
 
         $context = $this->contextBuilder->createContext($productListing->getContextData());
         $contextData = [PageMetaInfoSnippetContent::URL_KEY => $productListing->getUrlKey()];
         $key = $this->keyGenerator->getKeyForContext($context, $contextData);
-        $content = $productListing->getAttributeValueByCode('meta_title');
+        $content = $productListing->getAttributeValueByCode(self::TITLE_ATTRIBUTE_CODE);
 
         return [Snippet::create($key, $content)];
     }

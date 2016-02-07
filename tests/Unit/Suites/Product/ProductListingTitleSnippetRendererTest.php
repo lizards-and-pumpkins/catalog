@@ -58,7 +58,9 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyArrayIsReturnedIfProductListingHasNoTitleAttribute()
     {
-        $this->stubProductListing->method('hasAttribute')->with('meta_title')->willReturn(false);
+        $this->stubProductListing->method('hasAttribute')
+            ->with(ProductListingTitleSnippetRenderer::TITLE_ATTRIBUTE_CODE)->willReturn(false);
+
         $this->assertSame([], $this->renderer->render($this->stubProductListing));
     }
 
@@ -66,8 +68,10 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $testTitle = 'foo';
 
-        $this->stubProductListing->method('hasAttribute')->with('meta_title')->willReturn(true);
-        $this->stubProductListing->method('getAttributeValueByCode')->with('meta_title')->willReturn($testTitle);
+        $this->stubProductListing->method('hasAttribute')
+            ->with(ProductListingTitleSnippetRenderer::TITLE_ATTRIBUTE_CODE)->willReturn(true);
+        $this->stubProductListing->method('getAttributeValueByCode')
+            ->with(ProductListingTitleSnippetRenderer::TITLE_ATTRIBUTE_CODE)->willReturn($testTitle);
 
         $result = $this->renderer->render($this->stubProductListing);
         
