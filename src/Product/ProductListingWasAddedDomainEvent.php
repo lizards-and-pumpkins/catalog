@@ -7,20 +7,20 @@ use LizardsAndPumpkins\DomainEvent;
 class ProductListingWasAddedDomainEvent implements DomainEvent
 {
     /**
-     * @var ProductListingCriteria
+     * @var ProductListing
      */
-    private $productListingCriteria;
+    private $listingCriteria;
 
-    public function __construct(ProductListingCriteria $productListingCriteria)
+    public function __construct(ProductListing $productListing)
     {
-        $this->productListingCriteria = $productListingCriteria;
+        $this->listingCriteria = $productListing;
     }
 
     /**
-     * @return ProductListingCriteria
+     * @return ProductListing
      */
-    public function getProductListingCriteria()
+    public function getListingCriteria()
     {
-        return $this->productListingCriteria;
+        return $this->listingCriteria;
     }
 }

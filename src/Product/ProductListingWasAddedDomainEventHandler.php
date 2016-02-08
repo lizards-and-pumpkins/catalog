@@ -12,13 +12,13 @@ class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
     private $domainEvent;
 
     /**
-     * @var ProductListingCriteriaSnippetProjector
+     * @var ProductListingSnippetProjector
      */
     private $projector;
 
     public function __construct(
         ProductListingWasAddedDomainEvent $domainEvent,
-        ProductListingCriteriaSnippetProjector $projector
+        ProductListingSnippetProjector $projector
     ) {
         $this->domainEvent = $domainEvent;
         $this->projector = $projector;
@@ -26,6 +26,6 @@ class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
-        $this->projector->project($this->domainEvent->getProductListingCriteria());
+        $this->projector->project($this->domainEvent->getListingCriteria());
     }
 }

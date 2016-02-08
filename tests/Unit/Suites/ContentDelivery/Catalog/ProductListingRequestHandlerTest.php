@@ -11,12 +11,12 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent;
+use LizardsAndPumpkins\Product\ProductListingSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetContent
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  */
@@ -59,7 +59,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
         $pageSnippetCodes = ['child-snippet1'];
 
-        $testMetaInfoSnippetJson = json_encode(ProductListingCriteriaSnippetContent::create(
+        $testMetaInfoSnippetJson = json_encode(ProductListingSnippetContent::create(
             $stubSelectionCriteria,
             'root-snippet-code',
             $pageSnippetCodes,

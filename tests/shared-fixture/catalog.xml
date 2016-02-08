@@ -602,6 +602,9 @@ Je nach Belastung 1 - 3 Riegel pro Tag, unmittelbar nach dem Sport verzehren.<br
                 <attribute name="category" is="Equal">sale</attribute>
                 <attribute name="brand" is="Equal">Adidas</attribute>
             </criteria>
+            <attributes>
+                <attribute name="meta_title">Adidas Rausverkauf!</attribute>
+            </attributes>
         </listing>
         <listing url_key="sale" website="ru" locale="de_DE">
             <criteria type="and">
@@ -614,6 +617,9 @@ Je nach Belastung 1 - 3 Riegel pro Tag, unmittelbar nach dem Sport verzehren.<br
                 <attribute name="stock_qty" is="GreaterThan">0</attribute>
                 <attribute name="category" is="Equal">sale</attribute>
             </criteria>
+            <attributes>
+                <attribute name="meta_title">Vendre</attribute>
+            </attributes>
         </listing>
         <listing url_key="asics" website="fr" locale="fr_FR">
             <criteria type="and">

@@ -5,12 +5,8 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
-use LizardsAndPumpkins\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Product\AddProductListingCommand;
+use LizardsAndPumpkins\Product\ProductListingBuilder;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Queue\Queue;
@@ -24,9 +20,9 @@ class CatalogImport
     private $productXmlToProductBuilder;
 
     /**
-     * @var ProductListingCriteriaBuilder
+     * @var ProductListingBuilder
      */
-    private $productListingCriteriaBuilder;
+    private $productListingBuilder;
 
     /**
      * @var Queue
@@ -61,14 +57,14 @@ class CatalogImport
     public function __construct(
         QueueImportCommands $quueImportCommands,
         ProductXmlToProductBuilderLocator $productXmlToProductBuilder,
-        ProductListingCriteriaBuilder $productListingCriteriaBuilder,
+        ProductListingBuilder $productListingBuilder,
         Queue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
     ) {
         $this->queueImportCommands = $quueImportCommands;
         $this->productXmlToProductBuilder = $productXmlToProductBuilder;
-        $this->productListingCriteriaBuilder = $productListingCriteriaBuilder;
+        $this->productListingBuilder = $productListingBuilder;
         $this->eventQueue = $eventQueue;
         $this->contextSource = $contextSource;
         $this->logger = $logger;
@@ -181,9 +177,9 @@ class CatalogImport
     private function processListingXml($listingXml)
     {
         try {
-            $productListingCriteria = $this->productListingCriteriaBuilder
-                ->createProductListingCriteriaFromXml($listingXml, $this->dataVersion);
-            $this->queueImportCommands->forListing($productListingCriteria);
+            $productListing = $this->productListingBuilder
+                ->createProductListingFromXml($listingXml, $this->dataVersion);
+            $this->queueImportCommands->forListing($productListing);
         } catch (\Exception $exception) {
             $this->logger->log(new CatalogListingImportCallbackFailureMessage($exception, $listingXml));
         }

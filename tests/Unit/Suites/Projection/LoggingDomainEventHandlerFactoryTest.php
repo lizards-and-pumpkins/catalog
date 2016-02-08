@@ -31,14 +31,14 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -113,6 +113,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedProductWasUpdatedDomainEventHandler()
     {
+        /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createProductWasUpdatedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
@@ -120,6 +121,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedTemplateWasUpdatedDomainEventHandler()
     {
+        /** @var TemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(TemplateWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createTemplateWasUpdatedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
@@ -127,6 +129,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedImageWasAddedDomainEventHandler()
     {
+        /** @var ImageWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(ImageWasAddedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createImageWasAddedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
@@ -134,6 +137,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedProductListingWasAddedDomainEventHandler()
     {
+        /** @var ProductListingWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(ProductListingWasAddedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createProductListingWasAddedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
@@ -141,6 +145,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedContentBlockWasUpdatedDomainEventHandler()
     {
+        /** @var ContentBlockWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createContentBlockWasUpdatedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
@@ -148,6 +153,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedCatalogWasImportedDomainEventHandler()
     {
+        /** @var CatalogWasImportedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
         $stubEvent = $this->getMock(CatalogWasImportedDomainEvent::class, [], [], '', false);
         $result = $this->factory->createCatalogWasImportedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);

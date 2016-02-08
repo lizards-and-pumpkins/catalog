@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Projection\Projector;
 use LizardsAndPumpkins\SnippetRendererCollection;
 use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 
-class ProductListingCriteriaSnippetProjector implements Projector
+class ProductListingSnippetProjector implements Projector
 {
     /**
      * @var SnippetRendererCollection
@@ -40,7 +40,7 @@ class ProductListingCriteriaSnippetProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductListingCriteria)) {
+        if (!($projectionSourceData instanceof ProductListing)) {
             throw new InvalidProjectionSourceDataTypeException(
                 'First argument must be instance of ProductListingMetaInfo.'
             );
@@ -49,7 +49,7 @@ class ProductListingCriteriaSnippetProjector implements Projector
         $this->projectProductListing($projectionSourceData);
     }
 
-    private function projectProductListing(ProductListingCriteria $listingCriteria)
+    private function projectProductListing(ProductListing $listingCriteria)
     {
         $snippets = $this->snippetRendererCollection->render($listingCriteria);
         $this->dataPoolWriter->writeSnippets(...$snippets);

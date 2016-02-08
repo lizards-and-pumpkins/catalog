@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Log\LogMessage;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 
 class ProductListingTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testProductListingCriteriaSnippetIsWrittenIntoDataPool()
+    public function testProductListingSnippetIsWrittenIntoDataPool()
     {
         $this->importCatalog();
 
@@ -49,21 +49,20 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $productListingCriteriaSnippetKeyGenerator = $this->factory->createProductListingCriteriaSnippetKeyGenerator();
-        $pageInfoSnipperKey = $productListingCriteriaSnippetKeyGenerator->getKeyForContext(
+        $productListingSnippetKeyGenerator = $this->factory->createProductListingSnippetKeyGenerator();
+        $pageInfoSnippetKey = $productListingSnippetKeyGenerator->getKeyForContext(
             $context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaInfoSnippetJson = $dataPoolReader->getSnippet($pageInfoSnipperKey);
+        $metaInfoSnippetJson = $dataPoolReader->getSnippet($pageInfoSnippetKey);
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
         
-        /** @var SnippetKeyGenerator $titleKeyGenerator */
         $titleKeyGenerator = $this->factory->createProductListingTitleSnippetKeyGenerator();
         $titleKey = $titleKeyGenerator->getKeyForContext($context, [PageMetaInfoSnippetContent::URL_KEY => $urlKey]);
         $titleSnippet = $dataPoolReader->getSnippet($titleKey);
-        $this->assertSame('adidas-sale', $titleSnippet);
+        $this->assertSame('Adidas Rausverkauf!', $titleSnippet);
         
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             SearchCriterionGreaterThan::create('stock_qty', '0'),
@@ -71,7 +70,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
             SearchCriterionEqual::create('brand', 'Adidas')
         ));
 
-        $this->assertEquals(ProductListingPageSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
+        $this->assertEquals(ProductListingTemplateSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
         $this->assertEquals($expectedCriteriaJson, json_encode($metaInfoSnippet['product_selection_criteria']));
     }
 

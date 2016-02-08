@@ -28,7 +28,7 @@ use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingCriteriaBuilder;
+use LizardsAndPumpkins\Product\ProductListingBuilder;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
@@ -98,10 +98,10 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaSnippetProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingCriteriaBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetProjector
+ * @uses   \LizardsAndPumpkins\Product\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
@@ -137,7 +137,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator
@@ -234,10 +234,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $proxy());
     }
 
-    public function testProductListingCriteriaBuilderIsReturned()
+    public function testProductListingBuilderIsReturned()
     {
-        $result = $this->commonFactory->createProductListingCriteriaBuilder();
-        $this->assertInstanceOf(ProductListingCriteriaBuilder::class, $result);
+        $result = $this->commonFactory->createProductListingBuilder();
+        $this->assertInstanceOf(ProductListingBuilder::class, $result);
     }
 
     public function testThemeLocatorIsReturned()

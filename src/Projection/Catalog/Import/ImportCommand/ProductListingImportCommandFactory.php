@@ -4,13 +4,13 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
 use LizardsAndPumpkins\Command;
 use LizardsAndPumpkins\Factory;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 
 interface ProductListingImportCommandFactory extends Factory
 {
     /**
-     * @param ProductListingCriteria $productListingCriteria
+     * @param ProductListing $productListing
      * @return Command[]
      */
-    public function createProductListingImportCommands(ProductListingCriteria $productListingCriteria);
+    public function createProductListingImportCommands(ProductListing $productListing);
 }

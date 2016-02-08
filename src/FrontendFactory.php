@@ -33,9 +33,9 @@ use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingCriteriaSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingPageSnippetRenderer;
+use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
@@ -194,7 +194,7 @@ class FrontendFactory implements Factory
         return new ProductListingRequestHandler(
             $this->createContext(),
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest()
@@ -275,9 +275,9 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductListingPageSnippetRenderer::CODE,
+            ProductListingTemplateSnippetRenderer::CODE,
             function () {
-                return $this->getMasterFactory()->createProductListingSnippetKeyGenerator();
+                return $this->getMasterFactory()->createProductListingTemplateSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
@@ -293,9 +293,9 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductListingCriteriaSnippetRenderer::CODE,
+            ProductListingSnippetRenderer::CODE,
             function () {
-                return $this->getMasterFactory()->createProductListingCriteriaSnippetKeyGenerator();
+                return $this->getMasterFactory()->createProductListingSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(

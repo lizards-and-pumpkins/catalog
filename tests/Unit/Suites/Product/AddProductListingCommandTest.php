@@ -10,9 +10,9 @@ use LizardsAndPumpkins\Command;
 class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductListingCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductListingCriteria;
+    private $stubProductListing;
 
     /**
      * @var AddProductListingCommand
@@ -21,8 +21,8 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListingCriteria = $this->getMock(ProductListingCriteria::class, [], [], '', false);
-        $this->command = new AddProductListingCommand($this->stubProductListingCriteria);
+        $this->stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $this->command = new AddProductListingCommand($this->stubProductListing);
     }
 
     public function testCommandInterFaceIsImplemented()
@@ -30,9 +30,8 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testProductListingCriteriaIsReturned()
+    public function testProductListingIsReturned()
     {
-        $result = $this->command->getProductListingCriteria();
-        $this->assertSame($this->stubProductListingCriteria, $result);
+        $this->assertSame($this->stubProductListing, $this->command->getProductListing());
     }
 }

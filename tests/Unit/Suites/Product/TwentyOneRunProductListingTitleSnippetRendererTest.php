@@ -9,10 +9,10 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
+ * @covers \LizardsAndPumpkins\Product\TwentyOneRunProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\Snippet
  */
-class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class TwentyOneRunProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     private $testSnippetKey = ProductListingTitleSnippetRenderer::CODE . '_foo';
 
@@ -43,7 +43,7 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->testSnippetKey);
         $this->stubContextBuilder = $this->getMock(ContextBuilder::class);
         $this->stubContextBuilder->method('createContext')->willReturn($this->getMock(Context::class));
-        $this->renderer = new ProductListingTitleSnippetRenderer(
+        $this->renderer = new TwentyOneRunProductListingTitleSnippetRenderer(
             $this->stubProductListingTitleSnippetKeyGenerator,
             $this->stubContextBuilder
         );
@@ -58,9 +58,7 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyArrayIsReturnedIfProductListingHasNoTitleAttribute()
     {
-        $this->stubProductListing->method('hasAttribute')
-            ->with(ProductListingTitleSnippetRenderer::TITLE_ATTRIBUTE_CODE)->willReturn(false);
-
+        $this->stubProductListing->method('hasAttribute')->with('meta_title')->willReturn(false);
         $this->assertSame([], $this->renderer->render($this->stubProductListing));
     }
 
@@ -68,17 +66,16 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $testTitle = 'foo';
 
-        $this->stubProductListing->method('hasAttribute')
-            ->with(ProductListingTitleSnippetRenderer::TITLE_ATTRIBUTE_CODE)->willReturn(true);
-        $this->stubProductListing->method('getAttributeValueByCode')
-            ->with(ProductListingTitleSnippetRenderer::TITLE_ATTRIBUTE_CODE)->willReturn($testTitle);
+        $this->stubProductListing->method('hasAttribute')->with('meta_title')->willReturn(true);
+        $this->stubProductListing->method('getAttributeValueByCode')->with('meta_title')->willReturn($testTitle);
 
         $result = $this->renderer->render($this->stubProductListing);
+        $expectedSnippetContents = $testTitle . TwentyOneRunProductListingTitleSnippetRenderer::TITLE_SUFFIX;
         
         $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);
         $this->assertContainsOnlyInstancesOf(Snippet::class, $result);
         $this->assertSame($this->testSnippetKey, $result[0]->getKey());
-        $this->assertSame($testTitle, $result[0]->getContent());
+        $this->assertSame($expectedSnippetContents, $result[0]->getContent());
     }
 }

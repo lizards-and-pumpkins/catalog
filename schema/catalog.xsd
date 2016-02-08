@@ -57,6 +57,7 @@
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="criteria" type="criteria" maxOccurs="1"/>
+                                        <xs:element name="attributes" type="attributes" minOccurs="0"/>
                                     </xs:sequence>
                                     <xs:attribute name="url_key" type="xs:string" use="required"/>
                                     <xs:anyAttribute processContents="skip"/>

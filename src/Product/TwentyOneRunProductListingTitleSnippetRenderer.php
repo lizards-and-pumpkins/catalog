@@ -8,11 +8,11 @@ use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 
-class ProductListingTitleSnippetRenderer implements SnippetRenderer
+class TwentyOneRunProductListingTitleSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing_title';
 
-    const TITLE_ATTRIBUTE_CODE = 'meta_title';
+    const TITLE_SUFFIX = ' | 21run.com';
 
     /**
      * @var SnippetKeyGenerator
@@ -36,14 +36,14 @@ class ProductListingTitleSnippetRenderer implements SnippetRenderer
      */
     public function render(ProductListing $productListing)
     {
-        if (!$productListing->hasAttribute(self::TITLE_ATTRIBUTE_CODE)) {
+        if (!$productListing->hasAttribute('meta_title')) {
             return [];
         }
 
         $context = $this->contextBuilder->createContext($productListing->getContextData());
         $contextData = [PageMetaInfoSnippetContent::URL_KEY => $productListing->getUrlKey()];
         $key = $this->keyGenerator->getKeyForContext($context, $contextData);
-        $content = $productListing->getAttributeValueByCode(self::TITLE_ATTRIBUTE_CODE);
+        $content = $productListing->getAttributeValueByCode('meta_title') . self::TITLE_SUFFIX;
 
         return [Snippet::create($key, $content)];
     }

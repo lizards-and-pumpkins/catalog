@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 use LizardsAndPumpkins\Command;
 use LizardsAndPumpkins\DataVersion;
 use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductListingCriteria;
+use LizardsAndPumpkins\Product\ProductListing;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
@@ -61,7 +61,7 @@ class QueueImportCommands
         $this->addCommandsToQueue($commands);
     }
 
-    public function forListing(ProductListingCriteria $listingCriteria)
+    public function forListing(ProductListing $listingCriteria)
     {
         $commands = $this->listingImportCommandLocator->getProductListingImportCommands($listingCriteria);
         $this->addCommandsToQueue($commands);
