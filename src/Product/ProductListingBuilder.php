@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Product\Exception\DuplicateProductListingAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionAttributeNameXmlAttributeException;
@@ -179,7 +180,16 @@ class ProductListingBuilder
                     'Missing "name" attribute in product listing "attribute" XML node.'
                 );
             }
-            return array_merge($carry, [$attributeXmlNode['attributes']['name'] => $attributeXmlNode['value']]);
+
+            $attributeCode = $attributeXmlNode['attributes']['name'];
+
+            if (isset($carry[$attributeCode])) {
+                throw new DuplicateProductListingAttributeException(
+                    sprintf('Attribute "%s" is encountered more than once in product listing XML.', $attributeCode)
+                );
+            }
+
+            return array_merge($carry, [$attributeCode => $attributeXmlNode['value']]);
         }, []);
     }
 }

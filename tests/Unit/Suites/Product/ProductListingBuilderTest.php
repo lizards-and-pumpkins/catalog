@@ -6,6 +6,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Product\Exception\DuplicateProductListingAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
 use LizardsAndPumpkins\Product\Exception\MissingCriterionAttributeNameXmlAttributeException;
@@ -190,5 +191,23 @@ EOX;
 
         $this->assertTrue($productListing->hasAttribute('foo'));
         $this->assertSame('bar', $productListing->getAttributeValueByCode('foo'));
+    }
+
+    public function testExceptionIsThrownIfSameAttributeIsSpecifiedMoreThenOnceForTheSameListing()
+    {
+        $this->setExpectedException(DuplicateProductListingAttributeException::class);
+
+        $xml = <<<EOX
+<listing url_key="men-accessories" website="ru" locale="en_US">
+    <criteria type="and">
+        <attribute name="category" is="Equal">accessories</attribute>
+    </criteria>
+    <attributes>
+        <attribute name="foo">bar</attribute>
+        <attribute name="foo">baz</attribute>
+    </attributes>
+</listing>
+EOX;
+        $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 }
