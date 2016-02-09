@@ -36,7 +36,7 @@
 #pagination .prev { background-position: -6px -5px }
 
 /* Scrolling */
-.filter-container { max-height: 220px; overflow: scroll }
+.filter-container { max-height: 220px; overflow-y: auto }
 
 .note-msg { padding: 60px 0 0 10px; font-weight: bold }
 
