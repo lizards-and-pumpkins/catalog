@@ -2,6 +2,7 @@ html { font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif }
 body { margin: 0 }
 form { display: inline }
 a { color: #37a3d4; text-decoration: none }
+img { border: 0 }
 ul, ol { list-style: none; margin: 0; padding: 0 }
 li { margin: 0; padding: 0 }
 
