@@ -1438,7 +1438,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function getProductSearchAutosuggestionTranslatorFactory()
     {
         return function ($locale) {
-            $files = [];
+            $files = ['product_search_autosuggestion.csv'];
             return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
         };
     }
