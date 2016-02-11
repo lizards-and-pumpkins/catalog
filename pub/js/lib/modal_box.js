@@ -37,9 +37,9 @@ define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
             return;
         }
 
-        popup.remove();
-        overlay.remove();
-        closeButton.remove();
+        popup.parentNode.removeChild(popup);
+        overlay.parentNode.removeChild(overlay);
+        closeButton.parentNode.removeChild(closeButton);
     }
 
     function processContent(content) {
