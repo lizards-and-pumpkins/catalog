@@ -167,7 +167,9 @@ define(function () {
 
             realSelect.value = newValue;
 
-            var changeEvent = new CustomEvent('change');
+            var changeEvent = document.createEvent('HTMLEvents');
+                changeEvent.initEvent('change', false, true);
+
             realSelect.dispatchEvent(changeEvent);
         };
 
