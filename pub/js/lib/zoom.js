@@ -12,7 +12,7 @@ define(function () {
     Zoom.prototype._init = function () {
         var self = this;
 
-        this.target.classList.add('zoom');
+        this.target.className += ' zoom';
 
         this._cache = {};
         this.link = {};

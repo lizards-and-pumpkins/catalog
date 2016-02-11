@@ -150,7 +150,7 @@ define(function () {
 
         var changeRealSelectBox = function (newValue, newLabel) {
             // Close styledSelect
-            styledSelect.classList.remove('open');
+            styledSelect.className = styledSelect.className.replace(/\bopen\b/i, '');
 
             // Update styled value
             selectedOption.textContent = newLabel;
@@ -159,15 +159,17 @@ define(function () {
             // Update the 'tick' that shows the option with the current value
             Array.prototype.map.call(styleSelectOptions, function (styleSelectOption) {
                 if (styleSelectOption.dataset.value === newValue) {
-                    styleSelectOption.classList.add('ticked')
+                    styleSelectOption.className += ' ticked';
                 } else {
-                    styleSelectOption.classList.remove('ticked')
+                    styleSelectOption.className = styleSelectOption.className.replace(/\bticked\b/i, '');
                 }
             });
 
             realSelect.value = newValue;
 
-            var changeEvent = new CustomEvent('change');
+            var changeEvent = document.createEvent('HTMLEvents');
+                changeEvent.initEvent('change', false, true);
+
             realSelect.dispatchEvent(changeEvent);
         };
 
@@ -187,23 +189,25 @@ define(function () {
             }, true);
 
             if (styleSelectOption.dataset.value === realSelect.value) {
-                styleSelectOption.classList.add('ticked');
+                styleSelectOption.className += ' ticked';
             }
         });
 
         var closeAllStyleSelectsExceptGiven = function (exception) {
             Array.prototype.map.call(document.querySelectorAll('.style-select'), function (styleSelectEl) {
                 if (styleSelectEl !== exception) {
-                    styleSelectEl.classList.remove('open');
+                    styleSelectEl.className = styleSelectEl.className.replace(/\bopen\b/i, '');
                 }
             });
         };
 
         var toggleStyledSelect = function (styledSelectBox) {
-            if (!styledSelectBox.classList.contains('open')) {
+            if (!styledSelectBox.className.match(/\bopen\b/i)) {
                 closeAllStyleSelectsExceptGiven(styledSelectBox);
+                styledSelectBox.className += ' open';
+                return;
             }
-            styledSelectBox.classList.toggle('open');
+            styledSelectBox.className = styledSelectBox.className.replace(/\bopen\b/i, '');
         };
 
         // When a styled select box is clicked
