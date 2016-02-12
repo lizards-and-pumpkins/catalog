@@ -4,7 +4,7 @@ define(['lib/ajax'], function (callAjax) {
         submitButton = searchInput.parentNode.querySelector('button'),
         minimalLength = 2;
 
-    searchInput.addEventListener('keyup', function (event) {
+    searchInput.addEventListener('input', function (event) {
         var value = event.target.value;
 
         submitButton.disabled = value.length === 0;
