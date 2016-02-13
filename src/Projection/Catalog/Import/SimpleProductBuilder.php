@@ -99,7 +99,7 @@ class SimpleProductBuilder implements ProductBuilder
         if (is_int($attribute->getValue())) {
             return $attribute;
         }
-        $price = Price::fromAmountWithDecimalPlaces($attribute->getValue());
+        $price = Price::fromDecimalValue($attribute->getValue());
         return new ProductAttribute($attribute->getCode(), $price->getAmount(), $attribute->getContextDataSet());
     }
 }

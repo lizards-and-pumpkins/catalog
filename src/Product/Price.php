@@ -32,12 +32,30 @@ class Price
 
     /**
      * @param int $fractions
+     * @return Price
+     */
+    public static function fromFractions($fractions)
+    {
+        return static::fromFractionsWithDecimalPlaces($fractions, self::DEFAULT_DECIMAL_PLACES);
+    }
+
+    /**
+     * @param int $fractions
      * @param int $numDecimalPoints
      * @return Price
      */
-    public static function fromFractions($fractions, $numDecimalPoints = self::DEFAULT_DECIMAL_PLACES)
+    public static function fromFractionsWithDecimalPlaces($fractions, $numDecimalPoints)
     {
         return new static($fractions, $numDecimalPoints);
+    }
+
+    /**
+     * @param int $amount
+     * @return Price
+     */
+    public static function fromDecimalValue($amount)
+    {
+        return self::fromDecimalValueWithPrecision($amount, static::DEFAULT_DECIMAL_PLACES);
     }
 
     /**
@@ -45,7 +63,7 @@ class Price
      * @param int $numDecimalPoints
      * @return Price
      */
-    public static function fromAmountWithDecimalPlaces($amount, $numDecimalPoints = self::DEFAULT_DECIMAL_PLACES)
+    public static function fromDecimalValueWithPrecision($amount, $numDecimalPoints)
     {
         $fractions = self::convertFloatToIntegerAmount((float) $amount, $numDecimalPoints);
         return new static($fractions, $numDecimalPoints);
@@ -90,7 +108,7 @@ class Price
         
         $base = pow(10, $this->numDecimalPlaces);
         $roundedFractions = round($this->fractions / $base, $numDecimalPoints);
-        return static::fromAmountWithDecimalPlaces($roundedFractions, $numDecimalPoints);
+        return static::fromDecimalValueWithPrecision($roundedFractions, $numDecimalPoints);
     }
 
     /**
@@ -122,6 +140,6 @@ class Price
     public function multiplyBy($factor)
     {
         $multipliedAmount = round($this->getAmount() * $factor, 0, PHP_ROUND_HALF_DOWN);
-        return static::fromFractions($multipliedAmount, $this->numDecimalPlaces);
+        return static::fromFractionsWithDecimalPlaces($multipliedAmount, $this->numDecimalPlaces);
     }
 }

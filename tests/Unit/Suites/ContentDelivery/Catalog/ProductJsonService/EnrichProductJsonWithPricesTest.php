@@ -40,7 +40,7 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
      */
     private function getPriceAsFractionUnits($amount)
     {
-        return Price::fromAmountWithDecimalPlaces($amount)->getAmount();
+        return Price::fromDecimalValue($amount)->getAmount();
     }
 
     protected function setUp()

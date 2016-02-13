@@ -15,7 +15,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             InvalidNumberOfDecimalPointsForPriceException::class,
             'The number of decimal points for a price have to be specified as an integer, got string'
         );
-        Price::fromFractions(1, '2');
+        Price::fromFractionsWithDecimalPlaces(1, '2');
     }
 
     public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsAreNegative()
@@ -24,12 +24,12 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             InvalidNumberOfDecimalPointsForPriceException::class,
             'The number of decimal points for a price have to be specified as a positive integer, got -2'
         );
-        Price::fromFractions(1, -2);
+        Price::fromFractionsWithDecimalPlaces(1, -2);
     }
 
     public function testPriceIsCreatedFromStringMultiplyingItByTheNumberOfDecimalPoints()
     {
-        $price = Price::fromAmountWithDecimalPlaces('1');
+        $price = Price::fromDecimalValue('1');
         $result = $price->getAmount();
 
         $expected = pow(10, Price::DEFAULT_DECIMAL_PLACES);
@@ -50,7 +50,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testItRoundsTheAmountToGivenFractions($amount, $numDecimalPoints, $expected)
     {
-        $price = Price::fromFractions($amount, 6);
+        $price = Price::fromFractionsWithDecimalPlaces($amount, 6);
         $roundedPrice = $price->round($numDecimalPoints);
         $this->assertSame($expected, $roundedPrice->getAmount());
     }
@@ -103,7 +103,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testItHasEnoughPrecision()
     {
-        $price = Price::fromAmountWithDecimalPlaces('21.76470588');
+        $price = Price::fromDecimalValue('21.76470588');
         $this->assertSame('2612', (string) $price->multiplyBy(1.2)->round(2));
     }
 }
