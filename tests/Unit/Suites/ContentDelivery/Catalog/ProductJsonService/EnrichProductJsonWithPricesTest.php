@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
+use LizardsAndPumpkins\Product\Price;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices
@@ -33,6 +34,15 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedValue, $attributeData[$attributeCode]);
     }
 
+    /**
+     * @param string $amount
+     * @return int
+     */
+    private function getPriceAsFractionUnits($amount)
+    {
+        return Price::fromAmountWithDecimalPlaces($amount)->getAmount();
+    }
+
     protected function setUp()
     {
         $this->stubContext = $this->getMock(Context::class);
@@ -54,8 +64,8 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
     public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation()
     {
         $productData = [];
-        $price = 19990000;
-        $specialPrice = 17990000;
+        $price = $this->getPriceAsFractionUnits('19.99');
+        $specialPrice = $this->getPriceAsFractionUnits('17.99');
         
         $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
 
