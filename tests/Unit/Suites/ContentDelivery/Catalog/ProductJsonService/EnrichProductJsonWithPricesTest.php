@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices
+ * @uses   \LizardsAndPumpkins\Product\Price
  */
 class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
 {
