@@ -31,7 +31,7 @@ class EnrichProductJsonWithPrices
     public function addPricesToProductData(array $productData, $priceInt, $specialPriceInt = null)
     {
         $currency = new Currency($this->getCurrencyCode());
-        $price = Price::fromFractions($priceInt)->roundToFractions($currency->getDefaultFractionDigits());
+        $price = Price::fromFractions($priceInt)->round($currency->getDefaultFractionDigits());
         $productData['attributes']['raw_price'] = $price->getAmount();
         $productData['attributes']['price'] = $this->formatPriceSnippet($price, $currency);
         $productData['attributes']['price_currency'] = $currency->getCurrencyCode();
@@ -40,7 +40,7 @@ class EnrichProductJsonWithPrices
 
         if (null !== $specialPriceInt) {
             $specialPrice = Price::fromFractions($specialPriceInt)
-                ->roundToFractions($currency->getDefaultFractionDigits());
+                ->round($currency->getDefaultFractionDigits());
             $productData['attributes']['raw_special_price'] = $specialPrice->getAmount();
             $productData['attributes']['special_price'] = $this->formatPriceSnippet($specialPrice, $currency);
         }

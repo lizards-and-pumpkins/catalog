@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Product\Exception\InvalidNumberOfDecimalPointsForPriceExc
 
 class Price
 {
-    const DEFAULT_DECIMAL_POINTS = 6;
+    const DEFAULT_DECIMAL_PLACES = 6;
 
     /**
      * @var int
@@ -16,36 +16,36 @@ class Price
     /**
      * @var int
      */
-    private $numDecimalPoints;
+    private $numDecimalPlaces;
 
     /**
      * @param int $fractions
-     * @param int $numDecimalPoints
+     * @param int $numDecimalPlaces
      */
-    private function __construct($fractions, $numDecimalPoints)
+    private function __construct($fractions, $numDecimalPlaces)
     {
-        $this->validateNumberOfDecimalPoints($numDecimalPoints);
+        $this->validateNumberOfDecimalPlaces($numDecimalPlaces);
 
         $this->fractions = (int) $fractions;
-        $this->numDecimalPoints = $numDecimalPoints;
+        $this->numDecimalPlaces = $numDecimalPlaces;
     }
 
     /**
      * @param int $fractions
      * @param int $numDecimalPoints
-     * @return static
+     * @return Price
      */
-    public static function fromFractions($fractions, $numDecimalPoints = self::DEFAULT_DECIMAL_POINTS)
+    public static function fromFractions($fractions, $numDecimalPoints = self::DEFAULT_DECIMAL_PLACES)
     {
-        return new static((int) $fractions, $numDecimalPoints);
+        return new static($fractions, $numDecimalPoints);
     }
 
     /**
      * @param string|float $amount
      * @param int $numDecimalPoints
-     * @return static
+     * @return Price
      */
-    public static function fromAmount($amount, $numDecimalPoints = self::DEFAULT_DECIMAL_POINTS)
+    public static function fromAmountWithDecimalPlaces($amount, $numDecimalPoints = self::DEFAULT_DECIMAL_PLACES)
     {
         $fractions = self::convertFloatToIntegerAmount((float) $amount, $numDecimalPoints);
         return new static($fractions, $numDecimalPoints);
@@ -84,19 +84,19 @@ class Price
      * @param int $numDecimalPoints
      * @return Price
      */
-    public function roundToFractions($numDecimalPoints)
+    public function round($numDecimalPoints)
     {
-        $this->validateNumberOfDecimalPoints($numDecimalPoints);
+        $this->validateNumberOfDecimalPlaces($numDecimalPoints);
         
-        $base = pow(10, $this->numDecimalPoints);
+        $base = pow(10, $this->numDecimalPlaces);
         $roundedFractions = round($this->fractions / $base, $numDecimalPoints);
-        return static::fromAmount($roundedFractions, $numDecimalPoints);
+        return static::fromAmountWithDecimalPlaces($roundedFractions, $numDecimalPoints);
     }
 
     /**
      * @param int $numDecimalPoints
      */
-    private function validateNumberOfDecimalPoints($numDecimalPoints)
+    private function validateNumberOfDecimalPlaces($numDecimalPoints)
     {
         if (!is_int($numDecimalPoints)) {
             $type = gettype($numDecimalPoints);
@@ -113,5 +113,15 @@ class Price
             );
             throw new InvalidNumberOfDecimalPointsForPriceException($isNegativeMessage);
         }
+    }
+
+    /**
+     * @param float|int $factor
+     * @return Price
+     */
+    public function multiplyBy($factor)
+    {
+        $multipliedAmount = round($this->getAmount() * $factor, 0, PHP_ROUND_HALF_DOWN);
+        return static::fromFractions($multipliedAmount, $this->numDecimalPlaces);
     }
 }

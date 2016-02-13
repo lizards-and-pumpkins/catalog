@@ -29,7 +29,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testPriceIsCreatedFromStringMultiplyingItByTheNumberOfDecimalPoints()
     {
-        $price = Price::fromAmount('1');
+        $price = Price::fromAmountWithDecimalPlaces('1');
         $result = $price->getAmount();
 
         $this->assertSame(1000000, $result);
@@ -47,7 +47,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testItRoundsTheAmountToGivenFractions($amount, $numDecimalPoints, $expected)
     {
         $price = Price::fromFractions($amount);
-        $roundedPrice = $price->roundToFractions($numDecimalPoints);
+        $roundedPrice = $price->round($numDecimalPoints);
         $this->assertSame($expected, $roundedPrice->getAmount());
     }
 
@@ -68,6 +68,31 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             [12345678, 7, 123456780],
             [12345678, 8, 1234567800],
             [19990000, 2, 1999],
+        ];
+    }
+
+    /**
+     * @dataProvider priceMultiplicationDataProvider
+     */
+    public function testItMultipliesByTheGivenFactor($amount, $factor, $expected)
+    {
+        $price = Price::fromFractions($amount);
+        $result = $price->multiplyBy($factor);
+        $this->assertSame($expected, $result->getAmount());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function priceMultiplicationDataProvider()
+    {
+        // amount, factor, expected
+        return [
+            [100, 0, 0],
+            [100, 1, 100],
+            [100, -1, -100],
+            [100, 1.26, 126],
+            [1000000, 1.234567, 1234567],
         ];
     }
 }

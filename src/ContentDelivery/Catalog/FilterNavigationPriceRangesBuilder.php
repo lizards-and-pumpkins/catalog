@@ -12,7 +12,7 @@ class FilterNavigationPriceRangesBuilder
      */
     public static function getPriceRanges()
     {
-        $base = pow(10, Price::DEFAULT_DECIMAL_POINTS);
+        $base = pow(10, Price::DEFAULT_DECIMAL_PLACES);
         $rangeStep = 20 * $base;
         $rangesTo = 500 * $base;
 
