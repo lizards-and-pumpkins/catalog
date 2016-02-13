@@ -50,7 +50,8 @@ Flasher abnehmbar.]]></attribute>
                 <attribute name="url_key" website="fr">adilette</attribute>
                 <attribute name="name" website="fr">Adilette</attribute>
                 <attribute name="category" website="fr">sale</attribute>
-                <attribute name="price" website="fr">14.92</attribute>
+                <attribute name="price" website="fr">23.487394957983</attribute>
+                <attribute name="special_price" website="fr">21.764705882353</attribute>
                 <attribute name="brand" website="fr">Adidas</attribute>
                 <attribute name="gender" website="fr">Herren</attribute>
                 <attribute name="stock_qty" website="fr">1</attribute>

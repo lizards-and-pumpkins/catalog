@@ -145,6 +145,6 @@ class PriceSnippetRenderer implements SnippetRenderer
             TaxServiceLocator::OPTION_COUNTRY => $context->getValue(ContextCountry::CODE),
         ];
         
-        return $this->taxServiceLocator->get($taxServiceLocatorOptions)->applyTo(new Price($amount));
+        return $this->taxServiceLocator->get($taxServiceLocatorOptions)->applyTo(Price::fromFractions($amount));
     }
 }

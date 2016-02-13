@@ -5,9 +5,11 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
+use LizardsAndPumpkins\Product\Price;
 
 /**
  * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices
+ * @uses   \LizardsAndPumpkins\Product\Price
  */
 class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,6 +34,15 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedValue, $attributeData[$attributeCode]);
     }
 
+    /**
+     * @param string $amount
+     * @return int
+     */
+    private function getPriceAsFractionUnits($amount)
+    {
+        return Price::fromDecimalValue($amount)->getAmount();
+    }
+
     protected function setUp()
     {
         $this->stubContext = $this->getMock(Context::class);
@@ -45,25 +56,25 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $this->stubContext->method('getValue')->willReturn(null);
 
         $productData = [];
-        $price = '10';
-        $specialPrice = '9';
+        $price = 10;
+        $specialPrice = 9;
         $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
     }
 
     public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation()
     {
         $productData = [];
-        $price = '1999';
-        $specialPrice = '1799';
+        $price = $this->getPriceAsFractionUnits('19.99');
+        $specialPrice = $this->getPriceAsFractionUnits('17.99');
         
         $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
 
         $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
 
         $this->assertProductJsonDataHas('price', '19,99 €', $result['attributes']);
-        $this->assertProductJsonDataHas('raw_price', '1999', $result['attributes']);
+        $this->assertProductJsonDataHas('raw_price', 1999, $result['attributes']);
         $this->assertProductJsonDataHas('special_price', '17,99 €', $result['attributes']);
-        $this->assertProductJsonDataHas('raw_special_price', '1799', $result['attributes']);
+        $this->assertProductJsonDataHas('raw_special_price', 1799, $result['attributes']);
         $this->assertProductJsonDataHas('price_currency', 'EUR', $result['attributes']);
         $this->assertProductJsonDataHas('price_faction_digits', 2, $result['attributes']);
         $this->assertProductJsonDataHas('price_base_unit', 100, $result['attributes']);

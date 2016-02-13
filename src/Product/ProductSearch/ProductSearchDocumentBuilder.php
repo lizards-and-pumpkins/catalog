@@ -141,7 +141,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     {
         $amount = (int) $this->getAttributeValuesForSearchDocument($product, 'price')[0];
         $options = $this->createTaxServiceLocatorOptions($product, $countryCode);
-        return $this->taxServiceLocator->get($options)->applyTo(new Price($amount));
+        return $this->taxServiceLocator->get($options)->applyTo(Price::fromFractions($amount));
     }
 
     /**

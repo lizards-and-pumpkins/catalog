@@ -51,7 +51,7 @@ class TriggerTemplateUpdate extends BaseCliCommand
             'processQueues' => [
                 'prefix' => 'p',
                 'longPrefix' => 'processQueues',
-                'description' => 'Process queues afterwards',
+                'description' => 'Process queues',
                 'noValue' => true,
             ],
             'templateId' => [

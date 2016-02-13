@@ -55,7 +55,7 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
      */
     public function testItAppliesTheTaxRate($rate, $price, $expected)
     {
-        $result = TwentyOneRunTaxRate::fromInt($rate)->applyTo(new Price($price));
+        $result = TwentyOneRunTaxRate::fromInt($rate)->applyTo(Price::fromFractions($price));
         $message = sprintf('Expected tax rate %s applied to %d to be %s, got %s', $rate, $price, $expected, $result);
         $this->assertSame($expected, $result->getAmount(), $message);
     }

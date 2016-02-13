@@ -2,36 +2,108 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\InvalidPriceSourceException;
+use LizardsAndPumpkins\Product\Exception\InvalidNumberOfDecimalPointsForPriceException;
 
 /**
  * @covers \LizardsAndPumpkins\Product\Price
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExceptionIsThrownIfNonStringArgumentIsPassedToFromStringConstructor()
+    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger()
     {
-        $this->setExpectedException(InvalidPriceSourceException::class, 'Can not create a price from integer');
-        Price::fromString(1);
+        $this->setExpectedException(
+            InvalidNumberOfDecimalPointsForPriceException::class,
+            'The number of decimal points for a price have to be specified as an integer, got string'
+        );
+        Price::fromFractionsWithDecimalPlaces(1, '2');
     }
 
-    public function testExceptionIsThrownIfNonIntegerArgumentIsPassed()
+    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsAreNegative()
     {
-        $this->setExpectedException(InvalidPriceSourceException::class, 'Can not create a price from string');
-        new Price('1');
+        $this->setExpectedException(
+            InvalidNumberOfDecimalPointsForPriceException::class,
+            'The number of decimal points for a price have to be specified as a positive integer, got -2'
+        );
+        Price::fromFractionsWithDecimalPlaces(1, -2);
     }
 
     public function testPriceIsCreatedFromStringMultiplyingItByTheNumberOfDecimalPoints()
     {
-        $price = Price::fromString('1');
+        $price = Price::fromDecimalValue('1');
         $result = $price->getAmount();
 
-        $this->assertSame(100, $result);
+        $expected = pow(10, Price::DEFAULT_DECIMAL_PLACES);
+        $this->assertSame($expected, $result);
     }
 
     public function testItReturnsTheAmountAsAString()
     {
-        $price = new Price(123);
+        $price = Price::fromFractions(123);
         $this->assertSame('123', (string) $price);
+    }
+
+    /**
+     * @param int $amount
+     * @param int $numDecimalPoints
+     * @param int $expected
+     * @dataProvider fractionConversionDataProvider
+     */
+    public function testItRoundsTheAmountToGivenFractions($amount, $numDecimalPoints, $expected)
+    {
+        $price = Price::fromFractionsWithDecimalPlaces($amount, 6);
+        $roundedPrice = $price->round($numDecimalPoints);
+        $this->assertSame($expected, $roundedPrice->getAmount());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function fractionConversionDataProvider()
+    {
+        // amount, fractions, expected
+        return [
+            [12345678, 6, 12345678],
+            [12345678, 5, 1234568],
+            [12345678, 4, 123457],
+            [12345678, 3, 12346],
+            [12345678, 2, 1235],
+            [12345678, 1, 123],
+            [12345678, 0, 12],
+            [12345678, 7, 123456780],
+            [12345678, 8, 1234567800],
+            [19990000, 2, 1999],
+        ];
+    }
+
+    /**
+     * @dataProvider priceMultiplicationDataProvider
+     */
+    public function testItMultipliesByTheGivenFactor($amount, $factor, $expected)
+    {
+        $price = Price::fromFractions($amount);
+        $result = $price->multiplyBy($factor);
+        $this->assertSame($expected, $result->getAmount());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function priceMultiplicationDataProvider()
+    {
+        // amount, factor, expected
+        return [
+            [100, 0, 0],
+            [100, 1, 100],
+            [100, -1, -100],
+            [100, 1.26, 126],
+            [1000000, 1.234567, 1234567],
+            [2176470588, 1.2, 2611764706] 
+        ];
+    }
+
+    public function testItHasEnoughPrecision()
+    {
+        $price = Price::fromDecimalValue('21.76470588');
+        $this->assertSame('2612', (string) $price->multiplyBy(1.2)->round(2));
     }
 }

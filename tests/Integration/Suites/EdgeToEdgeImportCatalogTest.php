@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
 use LizardsAndPumpkins\Log\LogMessage;
 use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Product\Price;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
@@ -54,7 +55,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
     {
         $productId = ProductId::fromString('118235-251');
         $productName = 'LED Arm-Signallampe';
-        $productPrice = 1145;
+        $expectedProductPrice = Price::fromDecimalValue(11.45)->getAmount();
 
         $this->importCatalog('catalog.xml');
 
@@ -110,7 +111,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
                 [Product::ID => $productId]
             );
             $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
-            $this->assertEquals($productPrice, $priceSnippetContents);
+            $this->assertEquals($expectedProductPrice, $priceSnippetContents);
         }
 
         $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
