@@ -54,7 +54,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
     {
         $productId = ProductId::fromString('118235-251');
         $productName = 'LED Arm-Signallampe';
-        $productPrice = 1145;
+        $productPrice = 11450000;
 
         $this->importCatalog('catalog.xml');
 

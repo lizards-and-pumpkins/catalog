@@ -2,42 +2,66 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\InvalidPriceSourceException;
+use LizardsAndPumpkins\Product\Exception\InvalidNumberOfDecimalPointsForPriceException;
 
 class Price
 {
-    const NUM_DECIMAL_POINTS = 2;
+    const DEFAULT_DECIMAL_POINTS = 6;
 
     /**
      * @var int
      */
-    private $amount;
+    private $fractions;
 
     /**
-     * @param int $amount
+     * @var int
      */
-    public function __construct($amount)
-    {
-        if (!is_int($amount)) {
-            throw new InvalidPriceSourceException(sprintf('Can not create a price from %s', gettype($amount)));
-        }
+    private $numDecimalPoints;
 
-        $this->amount = $amount;
+    /**
+     * @param int $fractions
+     * @param int $numDecimalPoints
+     */
+    private function __construct($fractions, $numDecimalPoints)
+    {
+        $this->validateNumberOfDecimalPoints($numDecimalPoints);
+
+        $this->fractions = (int) $fractions;
+        $this->numDecimalPoints = $numDecimalPoints;
     }
 
     /**
-     * @param string $amountString
-     * @return Price
+     * @param int $fractions
+     * @param int $numDecimalPoints
+     * @return static
      */
-    public static function fromString($amountString)
+    public static function fromFractions($fractions, $numDecimalPoints = self::DEFAULT_DECIMAL_POINTS)
     {
-        if (!is_string($amountString)) {
-            throw new InvalidPriceSourceException(sprintf('Can not create a price from %s', gettype($amountString)));
-        }
+        return new static((int) $fractions, $numDecimalPoints);
+    }
 
-        $amountInt = self::convertStringPriceIntoInt($amountString, self::NUM_DECIMAL_POINTS);
+    /**
+     * @param string|float $amount
+     * @param int $numDecimalPoints
+     * @return static
+     */
+    public static function fromAmount($amount, $numDecimalPoints = self::DEFAULT_DECIMAL_POINTS)
+    {
+        $fractions = self::convertFloatToIntegerAmount((float) $amount, $numDecimalPoints);
+        return new static($fractions, $numDecimalPoints);
+    }
 
-        return new static($amountInt);
+    /**
+     * @param string $amountFloat
+     * @param int $numDecimalPoints
+     * @return int
+     */
+    private static function convertFloatToIntegerAmount($amountFloat, $numDecimalPoints)
+    {
+        $roundedAmount = round($amountFloat, $numDecimalPoints);
+        $base = pow(10, $numDecimalPoints);
+
+        return intval(($roundedAmount * $base) + .0000000001);
     }
 
     /**
@@ -45,20 +69,7 @@ class Price
      */
     public function getAmount()
     {
-        return $this->amount;
-    }
-
-    /**
-     * @param string $amountString
-     * @param int $numDecimalPoints
-     * @return int
-     */
-    private static function convertStringPriceIntoInt($amountString, $numDecimalPoints)
-    {
-        $base = pow(10, $numDecimalPoints);
-        $priceFloat = round($amountString, $numDecimalPoints);
-
-        return intval($priceFloat * $base);
+        return $this->fractions;
     }
 
     /**
@@ -66,6 +77,41 @@ class Price
      */
     public function __toString()
     {
-        return (string) $this->amount;
+        return (string) $this->fractions;
+    }
+
+    /**
+     * @param int $numDecimalPoints
+     * @return Price
+     */
+    public function roundToFractions($numDecimalPoints)
+    {
+        $this->validateNumberOfDecimalPoints($numDecimalPoints);
+        
+        $base = pow(10, $this->numDecimalPoints);
+        $roundedFractions = round($this->fractions / $base, $numDecimalPoints);
+        return static::fromAmount($roundedFractions, $numDecimalPoints);
+    }
+
+    /**
+     * @param int $numDecimalPoints
+     */
+    private function validateNumberOfDecimalPoints($numDecimalPoints)
+    {
+        if (!is_int($numDecimalPoints)) {
+            $type = gettype($numDecimalPoints);
+            $nonIntErrorMessage = sprintf(
+                'The number of decimal points for a price have to be specified as an integer, got %s',
+                $type
+            );
+            throw new InvalidNumberOfDecimalPointsForPriceException($nonIntErrorMessage);
+        }
+        if ($numDecimalPoints < 0) {
+            $isNegativeMessage = sprintf(
+                'The number of decimal points for a price have to be specified as a positive integer, got %d',
+                $numDecimalPoints
+            );
+            throw new InvalidNumberOfDecimalPointsForPriceException($isNegativeMessage);
+        }
     }
 }

@@ -60,7 +60,7 @@ class TwentyOneRunTaxRate implements TaxService
     public function applyTo(Price $price)
     {
         $result = round($price->getAmount() * $this->getFactor(), 0, PHP_ROUND_HALF_DOWN);
-        return new Price((int) $result);
+        return Price::fromFractions((int) $result);
     }
 
     /**

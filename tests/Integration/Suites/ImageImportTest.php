@@ -18,7 +18,7 @@ class ImageImportTest extends AbstractIntegrationTest
         if (is_dir($processedImagesDir)) {
             $localFilesystem->removeDirectoryAndItsContent($processedImagesDir);
         }
-        mkdir($processedImagesDir);
+        mkdir($processedImagesDir, 0700, true);
     }
 
     protected function setUp()

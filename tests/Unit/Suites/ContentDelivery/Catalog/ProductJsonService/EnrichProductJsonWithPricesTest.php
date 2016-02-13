@@ -45,25 +45,25 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $this->stubContext->method('getValue')->willReturn(null);
 
         $productData = [];
-        $price = '10';
-        $specialPrice = '9';
+        $price = 10;
+        $specialPrice = 9;
         $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
     }
 
     public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation()
     {
         $productData = [];
-        $price = '1999';
-        $specialPrice = '1799';
+        $price = 19990000;
+        $specialPrice = 17990000;
         
         $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
 
         $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
 
         $this->assertProductJsonDataHas('price', '19,99 €', $result['attributes']);
-        $this->assertProductJsonDataHas('raw_price', '1999', $result['attributes']);
+        $this->assertProductJsonDataHas('raw_price', 1999, $result['attributes']);
         $this->assertProductJsonDataHas('special_price', '17,99 €', $result['attributes']);
-        $this->assertProductJsonDataHas('raw_special_price', '1799', $result['attributes']);
+        $this->assertProductJsonDataHas('raw_special_price', 1799, $result['attributes']);
         $this->assertProductJsonDataHas('price_currency', 'EUR', $result['attributes']);
         $this->assertProductJsonDataHas('price_faction_digits', 2, $result['attributes']);
         $this->assertProductJsonDataHas('price_base_unit', 100, $result['attributes']);

@@ -94,7 +94,6 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductPriceAttributeIsInteger()
     {
         $sourcePrice = '11.99';
-        $expectedPrice = 1199;
         $priceAttributeCodes = ['price', 'special_price'];
 
         $sourcePriceAttribute = $this->createProductAttribute('price', $sourcePrice);
@@ -113,10 +112,9 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->getMock(Context::class);
         $product = $this->productBuilder->getProductForContext($stubContext);
 
-        array_map(function ($priceAttributeCode) use ($product, $expectedPrice) {
+        array_map(function ($priceAttributeCode) use ($product) {
             $price = $product->getFirstValueOfAttribute($priceAttributeCode);
             $this->assertInternalType('integer', $price);
-            $this->assertSame($expectedPrice, $price);
         }, $priceAttributeCodes);
     }
 
