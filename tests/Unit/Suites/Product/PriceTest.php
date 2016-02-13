@@ -32,7 +32,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $price = Price::fromAmountWithDecimalPlaces('1');
         $result = $price->getAmount();
 
-        $this->assertSame(1000000, $result);
+        $expected = pow(10, Price::DEFAULT_DECIMAL_PLACES);
+        $this->assertSame($expected, $result);
     }
 
     public function testItReturnsTheAmountAsAString()
@@ -42,11 +43,14 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $amount
+     * @param int $numDecimalPoints
+     * @param int $expected
      * @dataProvider fractionConversionDataProvider
      */
     public function testItRoundsTheAmountToGivenFractions($amount, $numDecimalPoints, $expected)
     {
-        $price = Price::fromFractions($amount);
+        $price = Price::fromFractions($amount, 6);
         $roundedPrice = $price->round($numDecimalPoints);
         $this->assertSame($expected, $roundedPrice->getAmount());
     }
@@ -93,6 +97,13 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             [100, -1, -100],
             [100, 1.26, 126],
             [1000000, 1.234567, 1234567],
+            [2176470588, 1.2, 2611764706] 
         ];
+    }
+
+    public function testItHasEnoughPrecision()
+    {
+        $price = Price::fromAmountWithDecimalPlaces('21.76470588');
+        $this->assertSame('2612', (string) $price->multiplyBy(1.2)->round(2));
     }
 }
