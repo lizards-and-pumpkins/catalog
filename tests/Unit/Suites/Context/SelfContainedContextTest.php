@@ -49,10 +49,8 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheRequestedPartIsNotPresent()
     {
-        $this->setExpectedException(
-            ContextCodeNotFoundException::class,
-            'No value found in the current context for the code "test"'
-        );
+        $this->expectException(ContextCodeNotFoundException::class);
+        $this->expectExceptionMessage('No value found in the current context for the code "test"');
         $this->createContext([])->getValue('test');
     }
 

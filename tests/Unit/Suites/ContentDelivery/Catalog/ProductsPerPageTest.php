@@ -40,7 +40,7 @@ class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfNumbersOfProductsPerPageIsNotArrayOfIntegers(
         array $invalidNumbersOfProductsPerPage
     ) {
-        $this->setExpectedException(InvalidNumberOfProductsPerPageException::class);
+        $this->expectException(InvalidNumberOfProductsPerPageException::class);
         ProductsPerPage::create($invalidNumbersOfProductsPerPage, $this->selectedNumberOfProductsPerPage);
     }
 
@@ -59,14 +59,14 @@ class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfSelectedNumberOfProductsIsNotInteger()
     {
         $invalidSelectedNumberOfProductsPerPage = '1';
-        $this->setExpectedException(InvalidSelectedNumberOfProductsPerPageException::class);
+        $this->expectException(InvalidSelectedNumberOfProductsPerPageException::class);
         ProductsPerPage::create($this->numbersOfProductsPerPage, $invalidSelectedNumberOfProductsPerPage);
     }
 
     public function testExceptionIsThrownIfSelectedNumberOfProductsPerPageIsAbsentInTheList()
     {
         $selectedNumberOfProductsPerPage = 4;
-        $this->setExpectedException(InvalidSelectedNumberOfProductsPerPageException::class);
+        $this->expectException(InvalidSelectedNumberOfProductsPerPageException::class);
         ProductsPerPage::create($this->numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
     }
 

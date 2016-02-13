@@ -11,7 +11,7 @@ class ProductIdTest extends \PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownDuringAttemptToCreateProductIdFromNonString()
     {
-        $this->setExpectedException(InvalidProductIdException::class);
+        $this->expectException(InvalidProductIdException::class);
         ProductId::fromString(1);
     }
 

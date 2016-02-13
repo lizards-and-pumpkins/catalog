@@ -181,7 +181,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownDuringAttemptToProcessInvalidRequest(HttpRequest $stubHttpRequest)
     {
-        $this->setExpectedException(UnableToHandleRequestException::class);
+        $this->expectException(UnableToHandleRequestException::class);
         $this->requestHandler->process($stubHttpRequest);
     }
 

@@ -147,10 +147,8 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTwoProductsWithTheSameIdAreInjectedAsAssociatedProducts()
     {
-        $this->setExpectedException(
-            DuplicateAssociatedProductException::class,
-            'The product "test" is associated two times to the same composite product'
-        );
+        $this->expectException(DuplicateAssociatedProductException::class);
+        $this->expectExceptionMessage('The product "test" is associated two times to the same composite product');
         $stubProductOne = $this->getMock(Product::class);
         $stubProductOne->method('getId')->willReturn(ProductId::fromString('test'));
         $stubProductTwo = $this->getMock(Product::class);
@@ -161,8 +159,8 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheValueCombinationsForTheGivenAttributesAreNotUnique()
     {
-        $this->setExpectedException(
-            ProductAttributeValueCombinationNotUniqueException::class,
+        $this->expectException(ProductAttributeValueCombinationNotUniqueException::class);
+        $this->expectExceptionMessage(
             'The associated products "test1" and "test2" have the same value combination ' .
             'for the attributes "attribute_1" and "attribute_2"'
         );
@@ -198,10 +196,8 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfAssociatedProductsAreMissingGivenAttributes()
     {
-        $this->setExpectedException(
-            AssociatedProductIsMissingRequiredAttributesException::class,
-            'The associated product "test" is missing the required attribute "attribute_2"'
-        );
+        $this->expectException(AssociatedProductIsMissingRequiredAttributesException::class);
+        $this->expectExceptionMessage('The associated product "test" is missing the required attribute "attribute_2"');
 
         $stubAttribute = $this->createStubAttribute('attribute_1', 'foo');
 

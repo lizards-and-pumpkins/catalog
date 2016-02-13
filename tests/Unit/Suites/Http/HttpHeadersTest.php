@@ -12,7 +12,7 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
 {
     public function testItThrowsAnExceptionIfAnInvalidHeaderIsRequested()
     {
-        $this->setExpectedException(HeaderNotPresentException::class);
+        $this->expectException(HeaderNotPresentException::class);
         HttpHeaders::fromArray([])->get('a-http-request-header');
     }
 
@@ -68,7 +68,7 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownDuringAttemptToCreateHeadersFromArrayContainingNonStringKeysOrValues(
         array $malformedHeadersSource
     ) {
-        $this->setExpectedException(InvalidHttpHeadersException::class);
+        $this->expectException(InvalidHttpHeadersException::class);
         HttpHeaders::fromArray($malformedHeadersSource);
     }
 

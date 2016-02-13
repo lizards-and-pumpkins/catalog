@@ -51,7 +51,8 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfContextDoesNotHaveLocaleData()
     {
-        $this->setExpectedException(NoValidLocaleInContextException::class, 'No locale found in context');
+        $this->expectException(NoValidLocaleInContextException::class);
+        $this->expectExceptionMessage('No locale found in context');
         
         $this->stubContext->method('getValue')->willReturn(null);
 

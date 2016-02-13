@@ -256,7 +256,7 @@ EOH;
         $allSnippetContent = [];
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
-        $this->setExpectedException(NonExistingSnippetException::class);
+        $this->expectException(NonExistingSnippetException::class);
 
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }

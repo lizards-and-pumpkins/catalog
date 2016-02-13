@@ -37,8 +37,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNumericKeys()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             sprintf('The Search Field to Query Parameter Map must have string keys, got "%s"', 0)
         );
         new SearchFieldToRequestParamMap([0 => 'test'], []);
@@ -46,8 +46,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNonStringValues()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             sprintf('The Search Field to Query Parameter Map must have string values, got "integer"')
         );
         new SearchFieldToRequestParamMap(['test' => 0], []);
@@ -55,8 +55,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheSearchFieldArrayHasAnEmptyStringKey()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             'The Search Field to Query Parameter Map must have not have empty string keys'
         );
         new SearchFieldToRequestParamMap(['' => 'Empty Key'], []);
@@ -64,8 +64,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheSearchFieldArrayHasAnEmptyStringValue()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             'The Search Field to Query Parameter Map must have not have empty string values'
         );
         new SearchFieldToRequestParamMap(['empty_value' => ''], []);
@@ -73,8 +73,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
     
     public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNumericKeys()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             sprintf('The Query Parameter to Search Field Map must have string keys, got "%s"', 0)
         );
         new SearchFieldToRequestParamMap([], [0 => 'test']);
@@ -82,8 +82,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNonStringValues()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             sprintf('The Query Parameter to Search Field Map must have string values, got "integer"')
         );
         new SearchFieldToRequestParamMap([], ['test' => 0]);
@@ -91,8 +91,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheQueryParameterArrayHasAnEmptyStringKey()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             'The Query Parameter to Search Field Map must have not have empty string keys'
         );
         new SearchFieldToRequestParamMap([], ['' => 'Empty Key']);
@@ -100,8 +100,8 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheQueryParameterHasAnEmptyStringValue()
     {
-        $this->setExpectedException(
-            InvalidSearchFieldToQueryParameterMapException::class,
+        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
+        $this->expectExceptionMessage(
             'The Query Parameter to Search Field Map must have not have empty string values'
         );
         new SearchFieldToRequestParamMap([], ['empty_value' => '']);

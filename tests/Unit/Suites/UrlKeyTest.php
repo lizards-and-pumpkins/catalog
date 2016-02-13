@@ -11,7 +11,7 @@ class UrlKeyTest extends \PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownDuringAttemptToCreateUrlKeyFromNonString()
     {
-        $this->setExpectedException(InvalidUrlKeySourceException::class);
+        $this->expectException(InvalidUrlKeySourceException::class);
         UrlKey::fromString(1);
     }
 

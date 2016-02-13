@@ -15,7 +15,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIfNonStringIsSpecifiedAsDirectoryPath()
     {
-        $this->setExpectedException(InvalidDirectoryPathException::class);
+        $this->expectException(InvalidDirectoryPathException::class);
         Directory::fromPath(1);
     }
 
@@ -24,7 +24,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
         $filePath = $this->getUniqueTempDir() . '/' . uniqid();
         $this->createFixtureFile($filePath, '');
 
-        $this->setExpectedException(FileAlreadyExistsWithinGivenPathException::class);
+        $this->expectException(FileAlreadyExistsWithinGivenPathException::class);
 
         Directory::fromPath($filePath);
     }

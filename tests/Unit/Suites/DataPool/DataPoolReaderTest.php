@@ -78,7 +78,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function testExceptionIsThrownIfJsonIsBroken($brokenJson)
     {
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->addGetMethodToStubKeyValueStore($brokenJson);
         $this->dataPoolReader->getChildSnippetKeys('some_key');
     }
@@ -103,7 +103,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function testOnlyStringKeyIsAcceptedForSnippets($key)
     {
-        $this->setExpectedException(InvalidKeyValueStoreKeyException::class);
+        $this->expectException(InvalidKeyValueStoreKeyException::class);
         $this->dataPoolReader->getChildSnippetKeys($key);
     }
 
@@ -113,7 +113,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     public function testOnlyStringKeysAreAcceptedForGetSnippet($key)
     {
-        $this->setExpectedException(InvalidKeyValueStoreKeyException::class);
+        $this->expectException(InvalidKeyValueStoreKeyException::class);
         $this->dataPoolReader->getSnippet($key);
     }
 
@@ -133,7 +133,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
     public function testExceptionIsThrownIfTheKeyIsEmpty()
     {
-        $this->setExpectedException(InvalidKeyValueStoreKeyException::class);
+        $this->expectException(InvalidKeyValueStoreKeyException::class);
         $this->dataPoolReader->getSnippet('');
     }
 

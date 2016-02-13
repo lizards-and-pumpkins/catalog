@@ -68,7 +68,8 @@ class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_T
 
     public function testItThrowsAnExceptionIfTheContextReturnsNoValidLocale()
     {
-        $this->setExpectedException(NoValidLocaleInContextException::class, 'No valid locale in context');
+        $this->expectException(NoValidLocaleInContextException::class);
+        $this->expectExceptionMessage('No valid locale in context');
         call_user_func($this->transformation, 0, $this->mockContext, $this->stubPageSnippets);
     }
 

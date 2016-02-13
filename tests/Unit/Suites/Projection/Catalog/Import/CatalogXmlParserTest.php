@@ -244,8 +244,8 @@ EOT;
         $invalidSourceFilePath,
         $expectedType
     ) {
-        $this->setExpectedException(
-            CatalogImportSourceFilePathIsNotAStringException::class,
+        $this->expectException(CatalogImportSourceFilePathIsNotAStringException::class);
+        $this->expectExceptionMessage(
             sprintf('Expected the catalog XML import file path to be a string, got "%s"', $expectedType)
         );
         CatalogXmlParser::fromFilePath($invalidSourceFilePath, $this->mockLogger);
@@ -260,10 +260,8 @@ EOT;
         $noXmlStringInput,
         $expectedType
     ) {
-        $this->setExpectedException(
-            CatalogImportSourceXMLNotAStringException::class,
-            sprintf('Expected the catalog XML to be a string, got "%s"', $expectedType)
-        );
+        $this->expectException(CatalogImportSourceXMLNotAStringException::class);
+        $this->expectExceptionMessage(sprintf('Expected the catalog XML to be a string, got "%s"', $expectedType));
         CatalogXmlParser::fromXml($noXmlStringInput, $this->mockLogger);
     }
 
@@ -282,10 +280,8 @@ EOT;
     public function testItThrowsAnExceptionIfTheInputFileDoesNotExist()
     {
         $sourceFilePath = 'non-existent-file.xml';
-        $this->setExpectedException(
-            CatalogImportSourceXmlFileDoesNotExistException::class,
-            sprintf('The catalog XML import file "%s" does not exist', $sourceFilePath)
-        );
+        $this->expectException(CatalogImportSourceXmlFileDoesNotExistException::class);
+        $this->expectExceptionMessage(sprintf('The catalog XML import file "%s" does not exist', $sourceFilePath));
         CatalogXmlParser::fromFilePath($sourceFilePath, $this->mockLogger);
     }
 
@@ -296,10 +292,8 @@ EOT;
         $this->createFixtureDirectory($dirPath);
         $this->createFixtureFile($sourceFilePath, '', 0000);
 
-        $this->setExpectedException(
-            CatalogImportSourceXmlFileIsNotReadableException::class,
-            sprintf('The catalog XML import file "%s" is not readable', $sourceFilePath)
-        );
+        $this->expectException(CatalogImportSourceXmlFileIsNotReadableException::class);
+        $this->expectExceptionMessage(sprintf('The catalog XML import file "%s" is not readable', $sourceFilePath));
         CatalogXmlParser::fromFilePath($sourceFilePath, $this->mockLogger);
     }
 

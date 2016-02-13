@@ -43,7 +43,7 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotAnInstanceOfContentBlockSource()
     {
-        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->expectException(InvalidProjectionSourceDataTypeException::class);
 
         $stubProjectionSourceData = 'stub-projection-source-data';
 

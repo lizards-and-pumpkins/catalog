@@ -66,7 +66,7 @@ class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
-        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->projector->project('invalid-projection-source-data');
     }
 

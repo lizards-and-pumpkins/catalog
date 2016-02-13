@@ -48,7 +48,7 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownForNonHttpRequest()
     {
-        $this->setExpectedException(UnknownProtocolException::class);
+        $this->expectException(UnknownProtocolException::class);
         HttpUrl::fromString('ftp://user:pass@example.com');
     }
 
@@ -59,7 +59,7 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNotValidUrlIsPassed()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         HttpUrl::fromString('this is not a valid url');
     }
 

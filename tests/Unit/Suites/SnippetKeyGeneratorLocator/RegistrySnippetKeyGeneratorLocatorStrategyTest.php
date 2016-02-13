@@ -54,14 +54,15 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     public function testExceptionIsThrownDuringAttemptToLocateSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
         $unsupportedSnippetCode = 'foo';
-        $this->setExpectedException(SnippetCodeCanNotBeProcessedException::class);
+        $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 
     public function testExceptionIsThrownIfNonStringSnippetRendererCodeIsPassed()
     {
         $stubSnippetRenderer = $this->getMock(SnippetRenderer::class);
-        $this->setExpectedException(InvalidSnippetCodeException::class, 'Expected snippet code to be a string');
+        $this->expectException(InvalidSnippetCodeException::class);
+        $this->expectExceptionMessage('Expected snippet code to be a string');
         $this->strategy->getKeyGeneratorForSnippetCode($stubSnippetRenderer);
     }
 
@@ -71,7 +72,8 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
      */
     public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed($emptySnippetCode)
     {
-        $this->setExpectedException(InvalidSnippetCodeException::class, 'Snippet code must not be empty');
+        $this->expectException(InvalidSnippetCodeException::class);
+        $this->expectExceptionMessage('Snippet code must not be empty');
         $this->strategy->getKeyGeneratorForSnippetCode($emptySnippetCode);
     }
 
@@ -105,7 +107,8 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
             // intentionally left empty
         };
 
-        $this->setExpectedException(InvalidSnippetCodeException::class, 'Expected snippet code to be a string');
+        $this->expectException(InvalidSnippetCodeException::class);
+        $this->expectExceptionMessage('Expected snippet code to be a string');
 
         $this->strategy->register($invalidSnippetCode, $testClosure);
     }

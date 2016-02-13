@@ -59,7 +59,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfRootElementIsNotAnArray()
     {
-        $this->setExpectedException(RootElementOfLayoutMustBeAnArrayException::class);
+        $this->expectException(RootElementOfLayoutMustBeAnArrayException::class);
         Layout::fromArray(['foo']);
     }
 

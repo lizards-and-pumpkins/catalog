@@ -50,10 +50,8 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfAttributeIsNotAScalar()
     {
-        $this->setExpectedException(
-            InvalidProductAttributeValueException::class,
-            'The product attribute "foo" has to have a scalar value, got "array"'
-        );
+        $this->expectException(InvalidProductAttributeValueException::class);
+        $this->expectExceptionMessage('The product attribute "foo" has to have a scalar value, got "array"');
         $value = [
             ProductAttribute::CODE => 'bar',
             ProductAttribute::CONTEXT => [],
@@ -85,11 +83,9 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfRequestedContextPartIsNotPresent()
     {
-        $this->setExpectedException(
-            ProductAttributeDoesNotContainContextPartException::class,
-            'The context part "foo" is not present on the attribute "attribute_code"'
-        );
-        
+        $this->expectException(ProductAttributeDoesNotContainContextPartException::class);
+        $this->expectExceptionMessage('The context part "foo" is not present on the attribute "attribute_code"');
+
         $attribute = new ProductAttribute('attribute_code', 'attributeValue', []);
         $attribute->getContextPartValue('foo');
     }

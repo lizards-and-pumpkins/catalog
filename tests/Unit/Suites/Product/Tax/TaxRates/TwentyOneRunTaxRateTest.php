@@ -26,19 +26,15 @@ class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheTaxRateIsNotAnInteger()
     {
-        $this->setExpectedException(
-            InvalidTaxRateException::class,
-            'The tax rate has to be an integer value, got "'
-        );
+        $this->expectException(InvalidTaxRateException::class);
+        $this->expectExceptionMessage('The tax rate has to be an integer value, got "');
         TwentyOneRunTaxRate::fromInt('10');
     }
 
     public function testItThrowsAnExceptionIfTheTaxRateIsZero()
     {
-        $this->setExpectedException(
-            InvalidTaxRateException::class,
-            'The tax rate must not be zero'
-        );
+        $this->expectException(InvalidTaxRateException::class);
+        $this->expectExceptionMessage('The tax rate must not be zero');
         TwentyOneRunTaxRate::fromInt(0);
     }
 

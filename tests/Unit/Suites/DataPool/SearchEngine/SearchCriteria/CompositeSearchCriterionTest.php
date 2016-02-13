@@ -124,7 +124,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfConditionIsNotSupported()
     {
         $invalidCondition = 'foo';
-        $this->setExpectedException(InvalidCriterionConditionException::class);
+        $this->expectException(InvalidCriterionConditionException::class);
         CompositeSearchCriterion::create($invalidCondition);
     }
 

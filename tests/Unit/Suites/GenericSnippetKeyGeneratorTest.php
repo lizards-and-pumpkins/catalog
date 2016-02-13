@@ -58,7 +58,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfTheSnippetCodeIsNoString($invalidSnippetType)
     {
-        $this->setExpectedException(InvalidSnippetCodeException::class);
+        $this->expectException(InvalidSnippetCodeException::class);
         new GenericSnippetKeyGenerator($invalidSnippetType, $this->dummyContextParts, $this->dummyUsedDataParts);
     }
 
@@ -92,7 +92,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfUsedDataPartIsNotPresent()
     {
-        $this->setExpectedException(MissingSnippetKeyGenerationDataException::class);
+        $this->expectException(MissingSnippetKeyGenerationDataException::class);
         $this->keyGenerator->getKeyForContext($this->stubContext, []);
     }
 

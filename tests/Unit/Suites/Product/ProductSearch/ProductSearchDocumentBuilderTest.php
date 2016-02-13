@@ -119,7 +119,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
-        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->createInstance([])->aggregate('invalid-projection-source-data');
     }
 

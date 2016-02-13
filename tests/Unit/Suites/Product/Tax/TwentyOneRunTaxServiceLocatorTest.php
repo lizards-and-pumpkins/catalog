@@ -79,8 +79,8 @@ class TwentyOneRunTaxServiceLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheTaxServiceCanNotBeDetermined()
     {
-        $this->setExpectedException(
-            UnableToLocateTaxServiceException::class,
+        $this->expectException(UnableToLocateTaxServiceException::class);
+        $this->expectExceptionMessage(
             'Unable to locate a tax service for website "test", product tax class "tax class" and country "GG"'
         );
 

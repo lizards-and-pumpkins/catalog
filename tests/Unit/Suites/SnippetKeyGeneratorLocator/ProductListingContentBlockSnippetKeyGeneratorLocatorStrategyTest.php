@@ -51,7 +51,7 @@ class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \
     public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
         $unsupportedSnippetCode = 'foo';
-        $this->setExpectedException(SnippetCodeCanNotBeProcessedException::class);
+        $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 

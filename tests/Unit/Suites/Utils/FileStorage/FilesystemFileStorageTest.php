@@ -100,10 +100,8 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
     public function testGetContentThrowsAnExceptionIfTheFileDoesNotExist()
     {
         $fileURI = 'non-existing-file';
-        $this->setExpectedException(
-            FileDoesNotExistException::class,
-            'Unable to get contents of non-existing file "non-existing-file"'
-        );
+        $this->expectException(FileDoesNotExistException::class);
+        $this->expectExceptionMessage('Unable to get contents of non-existing file "non-existing-file"');
         $identifier = StorageAgnosticFileUri::fromString($fileURI);
         $this->fileStorage->getContent($identifier);
     }
@@ -132,8 +130,8 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheFileStorageTypeDoesNotMatch($methodWithFileArgument)
     {
-        $this->setExpectedException(
-            FileStorageTypeMismatchException::class,
+        $this->expectException(FileStorageTypeMismatchException::class);
+        $this->expectExceptionMessage(
             sprintf('FileStorage %s not compatible with file OtherFileStorageUri', get_class($this->fileStorage))
         );
         $stubOtherStorageTypeURI = $this->getMockBuilder(StorageSpecificFileUri::class)
@@ -224,10 +222,8 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/file-to-read');
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;
-        $this->setExpectedException(
-            FileDoesNotExistException::class,
-            sprintf('Unable to get contents of non-existing file "%s"', $filesystemPath)
-        );
+        $this->expectException(FileDoesNotExistException::class);
+        $this->expectExceptionMessage(sprintf('Unable to get contents of non-existing file "%s"', $filesystemPath));
         $this->mockFile->method('getInStorageUri')->willReturn(FilesystemFileUri::fromString($filesystemPath));
         $this->mockFile->method('__toString')->willReturn($filesystemPath);
 

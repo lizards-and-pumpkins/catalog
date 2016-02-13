@@ -13,10 +13,8 @@ class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfAttributeCodeIsNotAString()
     {
-        $this->setExpectedException(
-            InvalidProductListingAttributeCodeException::class,
-            'Product listing attribute code must be a string, got "integer".'
-        );
+        $this->expectException(InvalidProductListingAttributeCodeException::class);
+        $this->expectExceptionMessage('Product listing attribute code must be a string, got "integer".');
 
         $attributeCode = 0;
         $attributeValue = 'foo';
@@ -26,10 +24,8 @@ class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfAttributeCodeIsAnEmptyString()
     {
-        $this->setExpectedException(
-            InvalidProductListingAttributeCodeException::class,
-            'Product listing attribute code can not be empty string.'
-        );
+        $this->expectException(InvalidProductListingAttributeCodeException::class);
+        $this->expectExceptionMessage('Product listing attribute code can not be empty string.');
 
         $attributeCode = '';
         $attributeValue = 'foo';
@@ -39,7 +35,7 @@ class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfAttributeValueIsNotScalar()
     {
-        $this->setExpectedException(InvalidProductListingAttributeValueException::class);
+        $this->expectException(InvalidProductListingAttributeValueException::class);
 
         $attributeCode = 'foo';
         $nonScalarAttributeValue = [];
@@ -64,7 +60,7 @@ class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToRetrieveAttributeWhichIsAbsentInTheList()
     {
-        $this->setExpectedException(ProductListingAttributeNotFoundException::class);
+        $this->expectException(ProductListingAttributeNotFoundException::class);
         $productListingAttributeList = ProductListingAttributeList::fromArray([]);
         $productListingAttributeList->getAttributeValueByCode('foo');
     }

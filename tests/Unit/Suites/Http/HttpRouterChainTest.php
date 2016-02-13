@@ -24,7 +24,7 @@ class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
 
-        $this->setExpectedException(UnableToRouteRequestException::class);
+        $this->expectException(UnableToRouteRequestException::class);
 
         $this->routerChain->route($stubHttpRequest);
     }

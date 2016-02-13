@@ -83,7 +83,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
     {
-        $this->setExpectedException(CatalogImportApiDirectoryNotReadableException::class);
+        $this->expectException(CatalogImportApiDirectoryNotReadableException::class);
         CatalogImportApiV1PutRequestHandler::create(
             $this->mockCatalogImport,
             '/some-not-existing-directory',
@@ -93,7 +93,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
     {
-        $this->setExpectedException(CatalogImportFileNameNotFoundInRequestBodyException::class);
+        $this->expectException(CatalogImportFileNameNotFoundInRequestBodyException::class);
         $this->requestHandler->process($this->mockRequest);
     }
 

@@ -16,10 +16,8 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheFileUriIsNotAString($notStringURI, $expectedType)
     {
-        $this->setExpectedException(
-            InvalidFileURIException::class,
-            sprintf('The file URI has to be a string, got "%s"', $expectedType)
-        );
+        $this->expectException(InvalidFileURIException::class);
+        $this->expectExceptionMessage(sprintf('The file URI has to be a string, got "%s"', $expectedType));
         FilesystemFileUri::fromString($notStringURI);
     }
 
@@ -40,10 +38,8 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheUriIsEmpty($emptyURI)
     {
-        $this->setExpectedException(
-            InvalidFileURIException::class,
-            'The file URI must not be an empty string'
-        );
+        $this->expectException(InvalidFileURIException::class);
+        $this->expectExceptionMessage('The file URI must not be an empty string');
         FilesystemFileUri::fromString($emptyURI);
     }
 

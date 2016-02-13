@@ -167,7 +167,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoSortOrderConfigIsSpecified()
     {
-        $this->setExpectedException(NoSelectedSortOrderException::class);
+        $this->expectException(NoSelectedSortOrderException::class);
         $this->pageRequest->getSelectedSortOrderConfig($this->stubRequest);
     }
 

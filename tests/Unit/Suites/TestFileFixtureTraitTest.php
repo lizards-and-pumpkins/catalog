@@ -127,7 +127,8 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfFileAlreadyExists()
     {
         $file = $this->getTestFilePath();
-        $this->setExpectedException(\RuntimeException::class, 'Fixture file already exists');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Fixture file already exists');
 
         $this->createFixtureFile($file, '');
         $this->createFixtureFile($file, '');

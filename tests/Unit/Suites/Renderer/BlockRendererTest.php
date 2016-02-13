@@ -36,7 +36,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testExceptionIsThrownIfNoRootBlockIsDefined()
     {
         $this->getStubLayout()->method('getNodeChildren')->willReturn([]);
-        $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
+        $this->expectException(BlockRendererMustHaveOneRootBlockException::class);
 
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
@@ -44,7 +44,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testExceptionIsThrownIfMoreThenOneRootBlockIsDefined()
     {
         $this->getStubLayout()->method('getNodeChildren')->willReturn([['test-dummy-1'], ['test-dummy-2']]);
-        $this->setExpectedException(BlockRendererMustHaveOneRootBlockException::class);
+        $this->expectException(BlockRendererMustHaveOneRootBlockException::class);
 
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
@@ -52,7 +52,8 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testExceptionIsThrownIfNoBlockClassIsSpecified()
     {
         $this->addStubRootBlock(null, 'dummy-template');
-        $this->setExpectedException(CanNotInstantiateBlockException::class, 'Block class is not specified.');
+        $this->expectException(CanNotInstantiateBlockException::class);
+        $this->expectExceptionMessage('Block class is not specified.');
 
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
@@ -60,7 +61,8 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testExceptionIsThrownIfTheClassDoesNotExist()
     {
         $this->addStubRootBlock('None\\Existing\\BlockClass', 'dummy-template');
-        $this->setExpectedException(CanNotInstantiateBlockException::class, 'Block class does not exist');
+        $this->expectException(CanNotInstantiateBlockException::class);
+        $this->expectExceptionMessage('Block class does not exist');
 
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
@@ -68,10 +70,8 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testExceptionIsThrownIfTheSpecifiedClassIsNotABlock()
     {
         $nonBlockClass = __CLASS__;
-        $this->setExpectedException(
-            CanNotInstantiateBlockException::class,
-            sprintf('Block class "%s" must extend "%s"', $nonBlockClass, Block::class)
-        );
+        $this->expectException(CanNotInstantiateBlockException::class);
+        $this->expectExceptionMessage(sprintf('Block class "%s" must extend "%s"', $nonBlockClass, Block::class));
         $this->addStubRootBlock($nonBlockClass, 'dummy-template');
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
@@ -126,8 +126,8 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testExceptionIsThrownIfTheListOfNestedSnippetsIsFetchedBeforeRendering()
     {
-        $this->setExpectedException(
-            MethodNotYetAvailableException::class,
+        $this->expectException(MethodNotYetAvailableException::class);
+        $this->expectExceptionMessage(
             'The method "getNestedSnippetCodes()" can not be called before "render()" is executed'
         );
         $this->getBlockRenderer()->getNestedSnippetCodes();

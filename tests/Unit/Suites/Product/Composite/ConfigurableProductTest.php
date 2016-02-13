@@ -160,10 +160,8 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             ConfigurableProduct::VARIATION_ATTRIBUTES => [],
             ConfigurableProduct::ASSOCIATED_PRODUCTS => []
         ];
-        $this->setExpectedException(
-            ProductTypeCodeMissingException::class,
-            sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY)
-        );
+        $this->expectException(ProductTypeCodeMissingException::class);
+        $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY));
         ConfigurableProduct::fromArray($allFieldsExceptTypeCode);
     }
 
@@ -174,8 +172,8 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch($invalidTypeCode, $typeCodeString)
     {
-        $this->setExpectedException(
-            ProductTypeCodeMismatchException::class,
+        $this->expectException(ProductTypeCodeMismatchException::class);
+        $this->expectExceptionMessage(
             sprintf('Expected the product type code string "configurable", got "%s"', $typeCodeString)
         );
         ConfigurableProduct::fromArray([
@@ -273,10 +271,8 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfAnAssociatedProductIsMissingVariationAttributes(
         AssociatedProductListDomainException $exception
     ) {
-        $this->setExpectedException(
-            ConfigurableProductAssociatedProductListInvariantViolationException::class,
-            'Invalid configurable product "test":'
-        );
+        $this->expectException(ConfigurableProductAssociatedProductListInvariantViolationException::class);
+        $this->expectExceptionMessage('Invalid configurable product "test":');
         $this->mockSimpleProduct->method('getId')->willReturn('test');
 
         $this->mockAssociatedProductList->method('validateUniqueValueCombinationForEachProductAttribute')

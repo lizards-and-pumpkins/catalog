@@ -69,7 +69,7 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotAProductBuilder()
     {
-        $this->setExpectedException(InvalidProjectionSourceDataTypeException::class);
+        $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->snippetRenderer->render('invalid-projection-source-data');
     }
 

@@ -41,20 +41,16 @@ class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheMediaBaseUrlPathIsNoString()
     {
-        $this->setExpectedException(
-            InvalidMediaBaseUrlPathException::class,
-            'The media base URL path has to be a string, got "integer"'
-        );
+        $this->expectException(InvalidMediaBaseUrlPathException::class);
+        $this->expectExceptionMessage('The media base URL path has to be a string, got "integer"');
         $invalidPath = 123;
         new MediaDirectoryBaseUrlBuilder($this->mockBaseUrlBuilder, $invalidPath);
     }
 
     public function testItThrowsAnExceptionIfTheMediaBaseUrlPathDoesNotEndWithASlash()
     {
-        $this->setExpectedException(
-            InvalidMediaBaseUrlPathException::class,
-            'The media base URL path has to end with a training slash'
-        );
+        $this->expectException(InvalidMediaBaseUrlPathException::class);
+        $this->expectExceptionMessage('The media base URL path has to end with a training slash');
         $invalidPath = 'media/without/slash/at/the/end';
         new MediaDirectoryBaseUrlBuilder($this->mockBaseUrlBuilder, $invalidPath);
     }

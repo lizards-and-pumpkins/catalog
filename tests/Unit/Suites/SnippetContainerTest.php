@@ -34,20 +34,16 @@ class SnippetContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheContainerCodeIsNotAString()
     {
-        $this->setExpectedException(
-            InvalidSnippetContainerCodeException::class,
-            'The snippet container code has to be a string'
-        );
+        $this->expectException(InvalidSnippetContainerCodeException::class);
+        $this->expectExceptionMessage('The snippet container code has to be a string');
 
         new SnippetContainer(12, []);
     }
 
     public function testItThrowsAnExceptionIfTheContainerCodeIsTooShort()
     {
-        $this->setExpectedException(
-            InvalidSnippetContainerCodeException::class,
-            'The snippet container code has to be at least 2 characters long'
-        );
+        $this->expectException(InvalidSnippetContainerCodeException::class);
+        $this->expectExceptionMessage('The snippet container code has to be at least 2 characters long');
 
         $this->createInstance('i', []);
     }

@@ -33,7 +33,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Command|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(Command::class);
-        $this->setExpectedException(UnableToFindCommandHandlerException::class);
+        $this->expectException(UnableToFindCommandHandlerException::class);
         $this->locator->getHandlerFor($stubCommand);
     }
 

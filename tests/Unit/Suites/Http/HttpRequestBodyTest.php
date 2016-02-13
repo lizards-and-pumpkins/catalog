@@ -18,7 +18,7 @@ class HttpRequestBodyTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfANonStringIsSpecified()
     {
-        $this->setExpectedException(InvalidHttpRequestBodyException::class);
+        $this->expectException(InvalidHttpRequestBodyException::class);
         HttpRequestBody::fromString([]);
     }
 }

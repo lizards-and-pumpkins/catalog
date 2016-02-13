@@ -45,7 +45,7 @@ class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfDestinationIsNotWritable()
     {
-        $this->setExpectedException(FileNotWritableException::class);
+        $this->expectException(FileNotWritableException::class);
         chmod($this->testBaseDirPath, 0000);
         $this->writer->putFileContents($this->testBaseDirPath . '/foo', 'bar');
     }

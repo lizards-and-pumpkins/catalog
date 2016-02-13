@@ -57,10 +57,8 @@ class AddImageCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheImageDoesNotExist()
     {
-        $this->setExpectedException(
-            ImageFileDoesNotExistException::class,
-            'The image file does not exist: "foo.png"'
-        );
+        $this->expectException(ImageFileDoesNotExistException::class);
+        $this->expectExceptionMessage('The image file does not exist: "foo.png"');
         new AddImageCommand('foo.png', $this->stubDataVersion);
     }
 

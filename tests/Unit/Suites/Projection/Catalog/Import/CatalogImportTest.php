@@ -147,19 +147,15 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfImportFileDoesNotExist()
     {
-        $this->setExpectedException(
-            CatalogImportFileDoesNotExistException::class,
-            'Catalog import file not found'
-        );
+        $this->expectException(CatalogImportFileDoesNotExistException::class);
+        $this->expectExceptionMessage('Catalog import file not found');
         $this->catalogImport->importFile('/some-not-existing-file.xml');
     }
 
     public function testExceptionIsThrownIfImportFileIsNotReadable()
     {
-        $this->setExpectedException(
-            CatalogImportFileNotReadableException::class,
-            'Catalog import file is not readable'
-        );
+        $this->expectException(CatalogImportFileNotReadableException::class);
+        $this->expectExceptionMessage('Catalog import file is not readable');
 
         $importFilePath = $this->testDirectoryPath . '/some-not-readable-file.xml';
         $this->createFixtureFile($importFilePath, '', 0000);

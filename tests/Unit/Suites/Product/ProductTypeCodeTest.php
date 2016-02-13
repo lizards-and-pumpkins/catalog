@@ -13,28 +13,22 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
 {
     public function testItThrowsAnExceptionIfTheTypeIsNotAString()
     {
-        $this->setExpectedException(
-            InvalidProductTypeCodeException::class,
-            'The product type code has to be a string, got "integer"'
-        );
+        $this->expectException(InvalidProductTypeCodeException::class);
+        $this->expectExceptionMessage('The product type code has to be a string, got "integer"');
         ProductTypeCode::fromString(123);
     }
 
     public function testItThrowsAnExceptionIfTheTypeStringIsEmpty()
     {
-        $this->setExpectedException(
-            InvalidProductTypeCodeException::class,
-            'The product type code can not be empty'
-        );
+        $this->expectException(InvalidProductTypeCodeException::class);
+        $this->expectExceptionMessage('The product type code can not be empty');
         ProductTypeCode::fromString('');
     }
 
     public function testItTrimsWhitespaceWhenCheckingIfEmpty()
     {
-        $this->setExpectedException(
-            InvalidProductTypeCodeException::class,
-            'The product type code can not be empty'
-        );
+        $this->expectException(InvalidProductTypeCodeException::class);
+        $this->expectExceptionMessage('The product type code can not be empty');
         ProductTypeCode::fromString(' ');
     }
 
@@ -49,7 +43,7 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testItReturnsTheTypeStringWhenCastToString($typeString)
     {
-        $this->assertSame($typeString, (string)ProductTypeCode::fromString($typeString));
+        $this->assertSame($typeString, (string) ProductTypeCode::fromString($typeString));
     }
 
     /**

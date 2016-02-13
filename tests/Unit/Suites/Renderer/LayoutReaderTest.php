@@ -26,7 +26,7 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfFileDesNotExist()
     {
-        $this->setExpectedException(LayoutFileNotReadableException::class);
+        $this->expectException(LayoutFileNotReadableException::class);
         $this->layoutReader->loadLayoutFromXmlFile('some-non-existing-file-name.xml');
     }
 
@@ -34,14 +34,14 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
     {
         $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
         $this->createFixtureFile($filePath, '', 0000);
-        $this->setExpectedException(LayoutFileNotReadableException::class);
+        $this->expectException(LayoutFileNotReadableException::class);
 
         $this->layoutReader->loadLayoutFromXmlFile($filePath);
     }
 
     public function testExceptionIsThrownIfPathIsADirectory()
     {
-        $this->setExpectedException(LayoutFileNotReadableException::class);
+        $this->expectException(LayoutFileNotReadableException::class);
         $this->layoutReader->loadLayoutFromXmlFile(sys_get_temp_dir());
     }
 

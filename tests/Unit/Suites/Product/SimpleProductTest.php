@@ -192,10 +192,8 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
             'images' => [],
             'context' => []
         ];
-        $this->setExpectedException(
-            ProductTypeCodeMissingException::class,
-            sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY)
-        );
+        $this->expectException(ProductTypeCodeMissingException::class);
+        $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY));
         SimpleProduct::fromArray($allFieldsExceptTypeCode);
     }
 
@@ -206,8 +204,8 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch($invalidTypeCode, $typeCodeString)
     {
-        $this->setExpectedException(
-            ProductTypeCodeMismatchException::class,
+        $this->expectException(ProductTypeCodeMismatchException::class);
+        $this->expectExceptionMessage(
             sprintf('Expected the product type code string "simple", got "%s"', $typeCodeString)
         );
         SimpleProduct::fromArray([

@@ -17,10 +17,8 @@ class FileContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheInputIsNotCastableToString($invalidStringContent, $expectedType)
     {
-        $this->setExpectedException(
-            InvalidFileContentTypeException::class,
-            sprintf('Unable to cast file content to string, got "%s"', $expectedType)
-        );
+        $this->expectException(InvalidFileContentTypeException::class);
+        $this->expectExceptionMessage(sprintf('Unable to cast file content to string, got "%s"', $expectedType));
         FileContent::fromString($invalidStringContent);
     }
 

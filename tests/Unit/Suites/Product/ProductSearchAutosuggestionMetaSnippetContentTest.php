@@ -38,7 +38,7 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
 
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         ProductSearchAutosuggestionMetaSnippetContent::create(1, [], []);
     }
 
@@ -97,7 +97,8 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
         $pageMetaInfo = $this->metaSnippetContent->getInfo();
         unset($pageMetaInfo[$missingKey]);
 
-        $this->setExpectedException(\RuntimeException::class, sprintf('Missing "%s" in input JSON', $missingKey));
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage(sprintf('Missing "%s" in input JSON', $missingKey));
 
         ProductSearchAutosuggestionMetaSnippetContent::fromJson(json_encode($pageMetaInfo));
     }
@@ -116,7 +117,7 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
 
     public function testExceptionIsThrownInCaseOfJsonErrors()
     {
-        $this->setExpectedException(\OutOfBoundsException::class);
+        $this->expectException(\OutOfBoundsException::class);
         ProductSearchAutosuggestionMetaSnippetContent::fromJson('malformed-json');
     }
 

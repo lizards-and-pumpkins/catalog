@@ -58,13 +58,13 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
 
     public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], []);
     }
 
     public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, [], []);
     }
 
@@ -86,7 +86,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
     
     public function testExceptionIsThrownInCaseOfJsonErrors()
     {
-        $this->setExpectedException(\OutOfBoundsException::class);
+        $this->expectException(\OutOfBoundsException::class);
         ProductDetailPageMetaInfoSnippetContent::fromJson('malformed-json');
     }
 
@@ -96,7 +96,8 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
      */
     public function testExceptionIsThrownIfRequiredKeyIsMissing($key)
     {
-        $this->setExpectedException(\RuntimeException::class, 'Missing key in input JSON');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Missing key in input JSON');
         $pageInfo = $this->pageMetaInfo->getInfo();
         unset($pageInfo[$key]);
         ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($pageInfo));

@@ -69,28 +69,28 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testExceptionIsThrownIfContentBlockContentIsMissingInRequestBody()
     {
-        $this->setExpectedException(ContentBlockBodyIsMissingInRequestBodyException::class);
+        $this->expectException(ContentBlockBodyIsMissingInRequestBodyException::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode([]));
         $this->requestHandler->process($this->mockRequest);
     }
 
     public function testExceptionIsThrownIfContentBlockContextIsMissingInRequestBody()
     {
-        $this->setExpectedException(ContentBlockContextIsMissingInRequestBodyException::class);
+        $this->expectException(ContentBlockContextIsMissingInRequestBodyException::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '']));
         $this->requestHandler->process($this->mockRequest);
     }
 
     public function testExceptionIsThrownIfContentBlockContextIsNotAnArray()
     {
-        $this->setExpectedException(InvalidContentBlockContext::class);
+        $this->expectException(InvalidContentBlockContext::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '', 'context' => '']));
         $this->requestHandler->process($this->mockRequest);
     }
 
     public function testExceptionIsThrownIfContentBlockUrlKeyIsInvalid()
     {
-        $this->setExpectedException(InvalidContentBlockUrlKey::class);
+        $this->expectException(InvalidContentBlockUrlKey::class);
         $this->mockRequest->method('getRawBody')
             ->willReturn(json_encode(['content' => '', 'context' => [], 'url_key' => 1]));
         $this->requestHandler->process($this->mockRequest);

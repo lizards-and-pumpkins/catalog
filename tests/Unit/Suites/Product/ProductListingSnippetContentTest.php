@@ -75,7 +75,7 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
-        $this->setExpectedException(\InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         ProductListingSnippetContent::create($this->stubSelectionCriteria, 1.0, [], []);
     }
 
@@ -102,7 +102,7 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
     
     public function testExceptionIsThrownInCaseOfJsonErrors()
     {
-        $this->setExpectedException(\OutOfBoundsException::class);
+        $this->expectException(\OutOfBoundsException::class);
         ProductListingSnippetContent::fromJson('malformed-json');
     }
 
@@ -112,7 +112,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfARequiredKeyIsMissing($key)
     {
-        $this->setExpectedException(\RuntimeException::class, 'Missing key in input JSON');
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Missing key in input JSON');
         $pageInfo = $this->pageMetaInfo->getInfo();
         unset($pageInfo[$key]);
         ProductListingSnippetContent::fromJson(json_encode($pageInfo));
@@ -148,7 +149,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfSearchCriteriaConditionIsMissing()
     {
-        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria condition.');
+        $this->expectException(MalformedSearchCriteriaMetaException::class);
+        $this->expectExceptionMessage('Missing criteria condition.');
 
         $json = json_encode([
             ProductListingSnippetContent::KEY_CRITERIA           => [],
@@ -162,7 +164,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfSearchCriteriaCriteriaIsMissing()
     {
-        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criteria.');
+        $this->expectException(MalformedSearchCriteriaMetaException::class);
+        $this->expectExceptionMessage('Missing criteria.');
 
         $json = json_encode([
             ProductListingSnippetContent::KEY_CRITERIA           => [
@@ -178,7 +181,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfCriterionFieldNameIsMissing()
     {
-        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion field name.');
+        $this->expectException(MalformedSearchCriteriaMetaException::class);
+        $this->expectExceptionMessage('Missing criterion field name.');
 
         $json = json_encode([
             ProductListingSnippetContent::KEY_CRITERIA           => [
@@ -195,7 +199,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfCriterionFieldValueIsMissing()
     {
-        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion field value.');
+        $this->expectException(MalformedSearchCriteriaMetaException::class);
+        $this->expectExceptionMessage('Missing criterion field value.');
 
         $json = json_encode([
             ProductListingSnippetContent::KEY_CRITERIA           => [
@@ -214,7 +219,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfCriterionOperationIsMissing()
     {
-        $this->setExpectedException(MalformedSearchCriteriaMetaException::class, 'Missing criterion operation.');
+        $this->expectException(MalformedSearchCriteriaMetaException::class);
+        $this->expectExceptionMessage('Missing criterion operation.');
 
         $json = json_encode([
             ProductListingSnippetContent::KEY_CRITERIA           => [
@@ -235,10 +241,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
     {
         $invalidOperationName = 'baz';
 
-        $this->setExpectedException(
-            MalformedSearchCriteriaMetaException::class,
-            sprintf('Unknown criterion operation "%s"', $invalidOperationName)
-        );
+        $this->expectException(MalformedSearchCriteriaMetaException::class);
+        $this->expectExceptionMessage(sprintf('Unknown criterion operation "%s"', $invalidOperationName));
 
         $json = json_encode([
             ProductListingSnippetContent::KEY_CRITERIA           => [

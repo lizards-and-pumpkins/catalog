@@ -130,7 +130,7 @@ class XPathParserTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfXmlIsNotValid()
     {
-        $this->setExpectedException(\OutOfBoundsException::class);
+        $this->expectException(\OutOfBoundsException::class);
         (new XPathParser('<root xmlns="blah"></root>'));
     }
 

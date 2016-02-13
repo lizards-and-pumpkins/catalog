@@ -26,7 +26,7 @@ class FacetFieldValueTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfFacetFieldValueIsNotAString()
     {
-        $this->setExpectedException(InvalidFacetFieldValueException::class);
+        $this->expectException(InvalidFacetFieldValueException::class);
 
         $invalidValue = new \stdClass;
         FacetFieldValue::create($invalidValue, $this->testFieldCount);
@@ -34,7 +34,7 @@ class FacetFieldValueTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfFacetFieldValueCountIsNotInteger()
     {
-        $this->setExpectedException(InvalidFacetFieldValueCountException::class);
+        $this->expectException(InvalidFacetFieldValueCountException::class);
 
         $invalidValueCount = [];
         FacetFieldValue::create($this->testFieldValue, $invalidValueCount);

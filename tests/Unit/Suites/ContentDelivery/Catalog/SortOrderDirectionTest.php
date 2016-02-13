@@ -12,7 +12,7 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified()
     {
         $invalidSortOrderDirection = 'foo';
-        $this->setExpectedException(InvalidSortOrderDirectionException::class);
+        $this->expectException(InvalidSortOrderDirectionException::class);
         SortOrderDirection::create($invalidSortOrderDirection);
     }
 

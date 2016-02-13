@@ -27,7 +27,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfInvalidKeyIsSpecified($invalidKey)
     {
-        $this->setExpectedException(InvalidSearchDocumentFieldKeyException::class);
+        $this->expectException(InvalidSearchDocumentFieldKeyException::class);
         SearchDocumentField::fromKeyAndValues($invalidKey, ['foo']);
     }
 
@@ -54,8 +54,8 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheValuesContainNonScalars()
     {
-        $this->setExpectedException(
-            InvalidSearchDocumentFieldValueException::class,
+        $this->expectException(InvalidSearchDocumentFieldValueException::class);
+        $this->expectExceptionMessage(
             'Only string, integer, float and boolean attribute values are allowed, got "array"'
         );
         SearchDocumentField::fromKeyAndValues('foo', [[]]);

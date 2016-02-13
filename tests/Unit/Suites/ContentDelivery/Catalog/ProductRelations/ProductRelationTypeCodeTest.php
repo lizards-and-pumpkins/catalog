@@ -22,8 +22,8 @@ class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheTypeCodeIsNotAString($nonStringTypeCode, $expectedType)
     {
-        $this->setExpectedException(
-            InvalidProductRelationTypeCodeException::class,
+        $this->expectException(InvalidProductRelationTypeCodeException::class);
+        $this->expectExceptionMessage(
             sprintf('Expected the product relation type code to be a string, got "%s"', $expectedType)
         );
         ProductRelationTypeCode::fromString($nonStringTypeCode);
@@ -47,10 +47,8 @@ class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheProductRelationTypeCodeIsEmpty($emptyRelationTypeCode)
     {
-        $this->setExpectedException(
-            InvalidProductRelationTypeCodeException::class,
-            'The product relation type code can not be empty'
-        );
+        $this->expectException(InvalidProductRelationTypeCodeException::class);
+        $this->expectExceptionMessage('The product relation type code can not be empty');
         ProductRelationTypeCode::fromString($emptyRelationTypeCode);
     }
 

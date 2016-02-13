@@ -81,19 +81,15 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheGivenKeyIsNotKnown()
     {
-        $this->setExpectedException(
-            NonExistingSnippetException::class,
-            'The snippet key "not-existing-key" does not exist on the current page'
-        );
+        $this->expectException(NonExistingSnippetException::class);
+        $this->expectExceptionMessage('The snippet key "not-existing-key" does not exist on the current page');
         $this->pageSnippets->updateSnippetByKey('not-existing-key', 'new content');
     }
 
     public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithKeySpec()
     {
-        $this->setExpectedException(
-            InvalidSnippetContentException::class,
-            'Invalid snippet content for the key "a-key" specified: expected string, got "NULL"'
-        );
+        $this->expectException(InvalidSnippetContentException::class);
+        $this->expectExceptionMessage('Invalid snippet content for the key "a-key" specified: expected string, got "NULL"');
         $this->pageSnippets->updateSnippetByKey('a-key', null);
     }
 
@@ -105,17 +101,15 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionWhenUpdatingANonExistingSnippet()
     {
-        $this->setExpectedException(
-            NonExistingSnippetException::class,
-            'The snippet code "not-existing-code" does not exist on the current page'
-        );
+        $this->expectException(NonExistingSnippetException::class);
+        $this->expectExceptionMessage('The snippet code "not-existing-code" does not exist on the current page');
         $this->pageSnippets->updateSnippetByCode('not-existing-code', 'new content');
     }
 
     public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithCodeSpec()
     {
-        $this->setExpectedException(
-            InvalidSnippetContentException::class,
+        $this->expectException(InvalidSnippetContentException::class);
+        $this->expectExceptionMessage(
             'Invalid snippet content for the code "a-code" specified: expected string, got "integer"'
         );
         $this->pageSnippets->updateSnippetByCode($this->testCode, 123);
@@ -123,10 +117,8 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfThePageIsBuiltTwice()
     {
-        $this->setExpectedException(
-            PageContentBuildAlreadyTriggeredException::class,
-            'The method buildPageContent() may only be called once an an instance'
-        );
+        $this->expectException(PageContentBuildAlreadyTriggeredException::class);
+        $this->expectExceptionMessage('The method buildPageContent() may only be called once an an instance');
         $this->pageSnippets->buildPageContent($this->testCode);
         $this->pageSnippets->buildPageContent($this->testCode);
     }
