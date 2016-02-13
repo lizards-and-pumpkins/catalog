@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Product\Exception\InvalidNumberOfDecimalPointsForPriceExc
 
 class Price
 {
-    const DEFAULT_DECIMAL_PLACES = 6;
+    const DEFAULT_DECIMAL_PLACES = 4;
 
     /**
      * @var int
