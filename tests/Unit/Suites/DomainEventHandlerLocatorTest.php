@@ -43,7 +43,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var DomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(DomainEvent::class);
-        $this->setExpectedException(UnableToFindDomainEventHandlerException::class);
+        $this->expectException(UnableToFindDomainEventHandlerException::class);
         $this->locator->getHandlerFor($stubDomainEvent);
     }
 

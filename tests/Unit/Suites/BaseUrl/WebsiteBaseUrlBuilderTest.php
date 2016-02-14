@@ -79,10 +79,8 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheConfigReaderReturnsNoValue()
     {
-        $this->setExpectedException(
-            NoConfiguredBaseUrlException::class,
-            'No base URL configuration found for the website "test_website"'
-        );
+        $this->expectException(NoConfiguredBaseUrlException::class);
+        $this->expectExceptionMessage('No base URL configuration found for the website "test_website"');
         $emptyBaseUrl = null;
         $emptyStubConfigReader = $this->createStubConfigReader($emptyBaseUrl);
         (new WebsiteBaseUrlBuilder($emptyStubConfigReader))->create($this->stubContext);

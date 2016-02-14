@@ -32,7 +32,7 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownDuringAttemptToRegisterTransformationWithInvalidCode($invalidCode)
     {
-        $this->setExpectedException(InvalidTransformationCodeException::class);
+        $this->expectException(InvalidTransformationCodeException::class);
         $this->registry->register($invalidCode, $this->stubFacetFieldTransformation);
     }
 
@@ -42,7 +42,7 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownDuringAttemptToRetrieveTransformationByInvalidCode($invalidCode)
     {
-        $this->setExpectedException(InvalidTransformationCodeException::class);
+        $this->expectException(InvalidTransformationCodeException::class);
         $this->registry->getTransformationByCode($invalidCode);
     }
 
@@ -52,7 +52,7 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownDuringAttemptToCheckIfTransformationForInvalidCodeIsRegistered($invalidCode)
     {
-        $this->setExpectedException(InvalidTransformationCodeException::class);
+        $this->expectException(InvalidTransformationCodeException::class);
         $this->registry->hasTransformationForCode($invalidCode);
     }
 
@@ -84,7 +84,7 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoTransformationWithGivenCodeIsRegistered()
     {
-        $this->setExpectedException(UnableToFindTransformationException::class);
+        $this->expectException(UnableToFindTransformationException::class);
         $code = 'foo';
         $this->assertSame($this->stubFacetFieldTransformation, $this->registry->getTransformationByCode($code));
     }

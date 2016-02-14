@@ -16,7 +16,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfVersionIsEmpty($emptyVersion)
     {
-        $this->setExpectedException(EmptyVersionException::class);
+        $this->expectException(EmptyVersionException::class);
         DataVersion::fromVersionString($emptyVersion);
     }
 
@@ -37,7 +37,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfVersionIsInvalid($invalidVersion)
     {
-        $this->setExpectedException(InvalidVersionException::class);
+        $this->expectException(InvalidVersionException::class);
         DataVersion::fromVersionString($invalidVersion);
     }
 

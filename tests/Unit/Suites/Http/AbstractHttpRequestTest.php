@@ -59,7 +59,8 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
 
-        $this->setExpectedException(UnsupportedRequestMethodException::class, 'Unsupported request method: "XXX"');
+        $this->expectException(UnsupportedRequestMethodException::class);
+        $this->expectExceptionMessage('Unsupported request method: "XXX"');
 
         HttpRequest::fromParameters('XXX', $stubHttpUrl, HttpHeaders::fromArray([]), HttpRequestBody::fromString(''));
     }
@@ -193,7 +194,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownDuringAttemptToGetValueOfCookieWhichIsNotSet()
     {
         $request = HttpRequest::fromGlobalState();
-        $this->setExpectedException(CookieNotSetException::class);
+        $this->expectException(CookieNotSetException::class);
         $request->getCookieValue('foo');
     }
 

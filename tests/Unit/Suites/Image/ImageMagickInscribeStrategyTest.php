@@ -27,55 +27,47 @@ class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfWidthIsNotAnInteger()
     {
-        $this->setExpectedException(
-            InvalidImageDimensionException::class,
-            'Expected integer as image width, got string.'
-        );
+        $this->expectException(InvalidImageDimensionException::class);
+        $this->expectExceptionMessage('Expected integer as image width, got string.');
         (new ImageMagickInscribeStrategy('foo', 1, 'none'))->processBinaryImageData('');
     }
 
     public function testExceptionIsThrownIfWidthIsNotPositive()
     {
-        $this->setExpectedException(
-            InvalidImageDimensionException::class,
-            'Image width should be greater then zero, got 0.'
-        );
+        $this->expectException(InvalidImageDimensionException::class);
+        $this->expectExceptionMessage('Image width should be greater then zero, got 0.');
         (new ImageMagickInscribeStrategy(0, 1, 'none'))->processBinaryImageData('');
     }
 
     public function testExceptionIsThrownIfHeightIsNotAnInteger()
     {
-        $this->setExpectedException(
-            InvalidImageDimensionException::class,
-            'Expected integer as image height, got string.'
-        );
+        $this->expectException(InvalidImageDimensionException::class);
+        $this->expectExceptionMessage('Expected integer as image height, got string.');
         (new ImageMagickInscribeStrategy(1, 'foo', 'none'))->processBinaryImageData('');
     }
 
     public function testExceptionIsThrownIfHeightIsNotPositive()
     {
-        $this->setExpectedException(
-            InvalidImageDimensionException::class,
-            'Image height should be greater then zero, got -1.'
-        );
+        $this->expectException(InvalidImageDimensionException::class);
+        $this->expectExceptionMessage('Image height should be greater then zero, got -1.');
         (new ImageMagickInscribeStrategy(1, -1, 'none'))->processBinaryImageData('');
     }
 
     public function testExceptionIsThrownIfInvalidBackgroundColorIsSpecified()
     {
-        $this->setExpectedException(InvalidColorException::class);
+        $this->expectException(InvalidColorException::class);
         (new ImageMagickInscribeStrategy(1, 1, 'foo'))->processBinaryImageData('');
     }
 
     public function testExceptionIsThrownIfImageStreamIsNotValid()
     {
-        $this->setExpectedException(InvalidBinaryImageDataException::class);
+        $this->expectException(InvalidBinaryImageDataException::class);
         (new ImageMagickInscribeStrategy(1, 1, 'none'))->processBinaryImageData('');
     }
 
     public function testExceptionIsThrownIfImageFormatIsNotSupported()
     {
-        $this->setExpectedException(InvalidBinaryImageDataException::class);
+        $this->expectException(InvalidBinaryImageDataException::class);
 
         $imageStream = file_get_contents(__DIR__ . '/../../../shared-fixture/blank.ico');
 

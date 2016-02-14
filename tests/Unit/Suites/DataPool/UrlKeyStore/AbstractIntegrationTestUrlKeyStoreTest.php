@@ -40,73 +40,57 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
 
     public function testItThrowsAnExceptionIfTheUrkKeyToAddIsNotAString()
     {
-        $this->setExpectedException(
-            UrlKeyIsNotAStringException::class,
-            'URL keys have to be strings for storage in the UrlKeyStore, got '
-        );
+        $this->expectException(UrlKeyIsNotAStringException::class);
+        $this->expectExceptionMessage('URL keys have to be strings for storage in the UrlKeyStore, got ');
         $this->urlKeyStore->addUrlKeyForVersion('1.0', 123, 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfAVersionToAddIsNotAString()
     {
-        $this->setExpectedException(
-            DataVersionIsNotAStringException::class,
-            'The data version has to be string for use with the UrlKeyStore, got '
-        );
+        $this->expectException(DataVersionIsNotAStringException::class);
+        $this->expectExceptionMessage('The data version has to be string for use with the UrlKeyStore, got ');
         $this->urlKeyStore->addUrlKeyForVersion(123, 'test.html', 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfTheUrlKeyIsEmpty()
     {
-        $this->setExpectedException(
-            UrlKeyToWriteIsEmptyStringException::class,
-            'Invalid URL key: url key strings have to be one or more characters long'
-        );
+        $this->expectException(UrlKeyToWriteIsEmptyStringException::class);
+        $this->expectExceptionMessage('Invalid URL key: url key strings have to be one or more characters long');
         $this->urlKeyStore->addUrlKeyForVersion('1.0', '', 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfADataVersionToGetUrlKeysForIsNotAString()
     {
-        $this->setExpectedException(
-            DataVersionIsNotAStringException::class,
-            'The data version has to be string for use with the UrlKeyStore, got '
-        );
+        $this->expectException(DataVersionIsNotAStringException::class);
+        $this->expectExceptionMessage('The data version has to be string for use with the UrlKeyStore, got ');
         $this->urlKeyStore->getForDataVersion(555);
     }
 
     public function testItThrowsAnExceptionIfADataVersionToWriteIsAnEmptyString()
     {
-        $this->setExpectedException(
-            DataVersionToWriteIsEmptyStringException::class,
-            'Invalid data version: version strings have to be one or more characters long'
-        );
+        $this->expectException(DataVersionToWriteIsEmptyStringException::class);
+        $this->expectExceptionMessage('Invalid data version: version strings have to be one or more characters long');
         $this->urlKeyStore->addUrlKeyForVersion('', 'test.html', 'dummy-context-string', 'type-string');
     }
 
     public function testItThrowsAnExceptionIfADataVersionToGetIsAnEmptyString()
     {
-        $this->setExpectedException(
-            DataVersionToWriteIsEmptyStringException::class,
-            'Invalid data version: version strings have to be one or more characters long'
-        );
+        $this->expectException(DataVersionToWriteIsEmptyStringException::class);
+        $this->expectExceptionMessage('Invalid data version: version strings have to be one or more characters long');
         $this->urlKeyStore->getForDataVersion('');
     }
 
     public function testItThrowsAnExceptionIfTheContextIsNotAString()
     {
-        $this->setExpectedException(
-            ContextDataIsNotAStringException::class,
-            'The context data has to be string for use with the UrlKeyStore, got '
-        );
+        $this->expectException(ContextDataIsNotAStringException::class);
+        $this->expectExceptionMessage('The context data has to be string for use with the UrlKeyStore, got ');
         $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', [], 'type-string');
     }
 
     public function testItThrowsAnExceptionIfTheUrlKeyTypeIsNotAString()
     {
-        $this->setExpectedException(
-            UrlKeyTypeIsNotAStringException::class,
-            'The url key type has to be string, got '
-        );
+        $this->expectException(UrlKeyTypeIsNotAStringException::class);
+        $this->expectExceptionMessage('The url key type has to be string, got ');
         $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', '', 42);
     }
 

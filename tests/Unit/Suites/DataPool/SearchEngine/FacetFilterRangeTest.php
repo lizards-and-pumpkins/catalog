@@ -17,7 +17,8 @@ class FacetFilterRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfEitherOfRangeBoundariesIsNotScalar($rangeFrom, $rangeTo, $exceptionMessage)
     {
-        $this->setExpectedException(InvalidFacetFilterRangeBoundariesException::class, $exceptionMessage);
+        $this->expectException(InvalidFacetFilterRangeBoundariesException::class);
+        $this->expectExceptionMessage($exceptionMessage);
         FacetFilterRange::create($rangeFrom, $rangeTo);
     }
 
@@ -40,10 +41,8 @@ class FacetFilterRangeTest extends \PHPUnit_Framework_TestCase
     {
         $rangeFrom = 'a';
         $rangeTo = 1;
-        $this->setExpectedException(
-            InvalidFacetFilterRangeBoundariesException::class,
-            'Facet filter rage boundaries must be the same type.'
-        );
+        $this->expectException(InvalidFacetFilterRangeBoundariesException::class);
+        $this->expectExceptionMessage('Facet filter rage boundaries must be the same type.');
         FacetFilterRange::create($rangeFrom, $rangeTo);
     }
 

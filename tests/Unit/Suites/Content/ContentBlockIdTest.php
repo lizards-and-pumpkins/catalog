@@ -11,7 +11,7 @@ class ContentBlockIdTest extends \PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownDuringAttemptToCreateContentBlockIdFromNonString()
     {
-        $this->setExpectedException(InvalidContentBlockIdException::class);
+        $this->expectException(InvalidContentBlockIdException::class);
         ContentBlockId::fromString(1);
     }
 

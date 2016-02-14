@@ -173,7 +173,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoMasterFactoryIsSet()
     {
-        $this->setExpectedException(NoMasterFactorySetException::class);
+        $this->expectException(NoMasterFactorySetException::class);
         (new CommonFactory())->createDomainEventConsumer();
     }
 
@@ -301,10 +301,8 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
-        $this->setExpectedException(
-            UndefinedFactoryMethodException::class,
-            'Unable to create KeyValueStore. Is the factory registered?'
-        );
+        $this->expectException(UndefinedFactoryMethodException::class);
+        $this->expectExceptionMessage('Unable to create KeyValueStore. Is the factory registered?');
 
         $commonFactory->createDataPoolReader();
     }
@@ -315,10 +313,8 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
-        $this->setExpectedException(
-            UndefinedFactoryMethodException::class,
-            'Unable to create EventQueue. Is the factory registered?'
-        );
+        $this->expectException(UndefinedFactoryMethodException::class);
+        $this->expectExceptionMessage('Unable to create EventQueue. Is the factory registered?');
 
         $commonFactory->getEventQueue();
     }
@@ -329,10 +325,8 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
-        $this->setExpectedException(
-            UndefinedFactoryMethodException::class,
-            'Unable to create Logger. Is the factory registered?'
-        );
+        $this->expectException(UndefinedFactoryMethodException::class);
+        $this->expectExceptionMessage('Unable to create Logger. Is the factory registered?');
 
         $commonFactory->getLogger();
     }

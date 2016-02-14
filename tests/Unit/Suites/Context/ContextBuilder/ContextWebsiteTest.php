@@ -47,8 +47,8 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheWebsiteCanNotBeDeterminedFromTheInputArray()
     {
-        $this->setExpectedException(
-            UnableToDetermineContextWebsiteException::class,
+        $this->expectException(UnableToDetermineContextWebsiteException::class);
+        $this->expectExceptionMessage(
             'Unable to determine context website because neither the ' .
             'website nor the request are set in the input array.'
         );

@@ -37,7 +37,7 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
         $pageCode = 'foo';
         $locale = 'foo_BAR';
 
-        $this->setExpectedException(UndefinedTranslatorException::class);
+        $this->expectException(UndefinedTranslatorException::class);
         $this->registry->getTranslator($pageCode, $locale);
     }
 

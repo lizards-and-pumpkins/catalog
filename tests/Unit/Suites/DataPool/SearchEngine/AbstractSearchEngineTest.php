@@ -568,7 +568,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
 
-        $this->setExpectedException(NoFacetFieldTransformationRegisteredException::class);
+        $this->expectException(NoFacetFieldTransformationRegisteredException::class);
 
         $this->searchEngine->query($criteria, $queryOptions);
     }

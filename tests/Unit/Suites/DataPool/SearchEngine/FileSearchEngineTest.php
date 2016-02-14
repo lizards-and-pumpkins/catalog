@@ -95,7 +95,7 @@ class FileSearchEngineTest extends AbstractSearchEngineTest
 
     public function testExceptionIsThrownIfSearchEngineStorageDirIsNotWritable()
     {
-        $this->setExpectedException(SearchEngineNotAvailableException::class);
+        $this->expectException(SearchEngineNotAvailableException::class);
 
         /** @var FacetFieldTransformationRegistry|MockObject $stubFacetFieldTransformationRegistry */
         $stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);

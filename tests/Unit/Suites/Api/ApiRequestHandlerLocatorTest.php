@@ -21,7 +21,7 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToRegisterRequestHandlerWithNonIntVersion()
     {
-        $this->setExpectedException(ApiVersionMustBeIntException::class);
+        $this->expectException(ApiVersionMustBeIntException::class);
 
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 'bar';
@@ -33,7 +33,7 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToLocateRequestHandlerWithNonIntVersion()
     {
-        $this->setExpectedException(ApiVersionMustBeIntException::class);
+        $this->expectException(ApiVersionMustBeIntException::class);
 
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 'bar';

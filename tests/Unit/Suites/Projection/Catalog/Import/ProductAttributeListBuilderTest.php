@@ -99,8 +99,8 @@ class ProductAttributeListBuilderTest extends \PHPUnit_Framework_TestCase
             ProductAttribute::VALUE => 'C'
         ]);
 
-        $this->setExpectedException(
-            ProductAttributeContextPartsMismatchException::class,
+        $this->expectException(ProductAttributeContextPartsMismatchException::class);
+        $this->expectExceptionMessage(
             'The attribute "attribute_code2" has multiple values with different contexts ' .
             'which can not be part of one product attribute list'
         );

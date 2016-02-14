@@ -19,19 +19,15 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
     {
-        $this->setExpectedException(
-            EnvironmentConfigKeyIsNotAStringException::class,
-            'The given environment configuration key is not a string: "'
-        );
+        $this->expectException(EnvironmentConfigKeyIsNotAStringException::class);
+        $this->expectExceptionMessage('The given environment configuration key is not a string: "');
         EnvironmentConfigReader::fromArray([])->has(123);
     }
 
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsEmpty()
     {
-        $this->setExpectedException(
-            EnvironmentConfigKeyIsEmptyException::class,
-            'The given environment configuration key is empty.'
-        );
+        $this->expectException(EnvironmentConfigKeyIsEmptyException::class);
+        $this->expectExceptionMessage('The given environment configuration key is empty.');
         EnvironmentConfigReader::fromArray([])->has('');
     }
 
@@ -48,10 +44,8 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
     {
-        $this->setExpectedException(
-            EnvironmentConfigKeyIsNotAStringException::class,
-            'The given environment configuration key is not a string: "'
-        );
+        $this->expectException(EnvironmentConfigKeyIsNotAStringException::class);
+        $this->expectExceptionMessage('The given environment configuration key is not a string: "');
         EnvironmentConfigReader::fromArray([])->get(123);
     }
 
@@ -61,10 +55,8 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsEmpty($emptyConfigKey)
     {
-        $this->setExpectedException(
-            EnvironmentConfigKeyIsEmptyException::class,
-            'The given environment configuration key is empty.'
-        );
+        $this->expectException(EnvironmentConfigKeyIsEmptyException::class);
+        $this->expectExceptionMessage('The given environment configuration key is empty.');
         EnvironmentConfigReader::fromArray([])->get($emptyConfigKey);
     }
 

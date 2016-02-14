@@ -61,8 +61,8 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfRowsPerPageIsNotAnInteger($invalidRowsPerPage)
     {
-        $this->setExpectedException(
-            InvalidRowsPerPageException::class,
+        $this->expectException(InvalidRowsPerPageException::class);
+        $this->expectExceptionMessage(
             sprintf('Number of rows per page must be an integer, got "%s".', gettype($invalidRowsPerPage))
         );
 
@@ -80,8 +80,8 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $invalidRowsPerPage = 0;
 
-        $this->setExpectedException(
-            InvalidRowsPerPageException::class,
+        $this->expectException(InvalidRowsPerPageException::class);
+        $this->expectExceptionMessage(
             sprintf('Number of rows per page must be positive, got "%s".', $invalidRowsPerPage)
         );
 
@@ -101,8 +101,8 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfCurrentPageNumberIsNotAnInteger($invalidPageNumber)
     {
-        $this->setExpectedException(
-            InvalidRowsPerPageException::class,
+        $this->expectException(InvalidRowsPerPageException::class);
+        $this->expectExceptionMessage(
             sprintf('Current page number must be an integer, got "%s".', gettype($invalidPageNumber))
         );
 
@@ -120,8 +120,8 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $invalidPageNumber = -1;
 
-        $this->setExpectedException(
-            InvalidRowsPerPageException::class,
+        $this->expectException(InvalidRowsPerPageException::class);
+        $this->expectExceptionMessage(
             sprintf('Current page number can not be negative, got "%s".', $invalidPageNumber)
         );
 

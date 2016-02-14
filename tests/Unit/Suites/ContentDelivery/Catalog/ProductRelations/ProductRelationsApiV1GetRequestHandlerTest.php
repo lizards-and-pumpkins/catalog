@@ -109,8 +109,8 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
 
     public function testItThrowsAnExceptionIfANonProcessableRequestIsPassed()
     {
-        $this->setExpectedException(
-            UnableToProcessProductRelationsRequestException::class,
+        $this->expectException(UnableToProcessProductRelationsRequestException::class);
+        $this->expectExceptionMessage(
             sprintf('Unable to process a %s request to "%s"', HttpRequest::METHOD_POST, $this->testMatchingRequestPath)
         );
 

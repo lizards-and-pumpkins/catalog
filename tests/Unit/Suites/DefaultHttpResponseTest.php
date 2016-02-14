@@ -23,7 +23,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToCreateResponseWithNonStringBody()
     {
-        $this->setExpectedException(InvalidResponseBodyException::class);
+        $this->expectException(InvalidResponseBodyException::class);
         DefaultHttpResponse::create(1, []);
     }
 

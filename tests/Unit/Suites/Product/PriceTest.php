@@ -11,8 +11,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 {
     public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger()
     {
-        $this->setExpectedException(
-            InvalidNumberOfDecimalPointsForPriceException::class,
+        $this->expectException(InvalidNumberOfDecimalPointsForPriceException::class);
+        $this->expectExceptionMessage(
             'The number of decimal points for a price have to be specified as an integer, got string'
         );
         Price::fromFractionsWithDecimalPlaces(1, '2');
@@ -20,8 +20,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsAreNegative()
     {
-        $this->setExpectedException(
-            InvalidNumberOfDecimalPointsForPriceException::class,
+        $this->expectException(InvalidNumberOfDecimalPointsForPriceException::class);
+        $this->expectExceptionMessage(
             'The number of decimal points for a price have to be specified as a positive integer, got -2'
         );
         Price::fromFractionsWithDecimalPlaces(1, -2);
@@ -97,7 +97,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             [100, -1, -100],
             [100, 1.26, 126],
             [1000000, 1.234567, 1234567],
-            [2176470588, 1.2, 2611764706] 
+            [2176470588, 1.2, 2611764706],
         ];
     }
 

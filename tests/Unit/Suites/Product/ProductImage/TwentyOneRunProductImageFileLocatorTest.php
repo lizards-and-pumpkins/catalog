@@ -77,10 +77,8 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
     public function testItThrowsAnExceptionIfImageVariantCodeNotValid($invalidImageVariantCode, $invalidType)
     {
         $msg = 'The image variant code must be one of original, large, medium, small, search-autosuggestion, got "%s"';
-        $this->setExpectedException(
-            InvalidImageVariantCodeException::class,
-            sprintf($msg, $invalidType)
-        );
+        $this->expectException(InvalidImageVariantCodeException::class);
+        $this->expectExceptionMessage(sprintf($msg, $invalidType));
 
         $imageFileName = 'test.jpg';
         $this->productImageFileLocator->get($imageFileName, $invalidImageVariantCode, $this->stubContext);
@@ -100,11 +98,8 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
 
     public function testItThrowsAnExceptionIfTheFileNameIsNotAString()
     {
-        $message = 'The image file name must be a string, got "integer"';
-        $this->setExpectedException(
-            InvalidImageFileNameException::class,
-            sprintf($message)
-        );
+        $this->expectException(InvalidImageFileNameException::class);
+        $this->expectExceptionMessage(sprintf('The image file name must be a string, got "integer"'));
 
         $invalidImageFileName = 123;
         $variantCode = TwentyOneRunProductImageFileLocator::SMALL;

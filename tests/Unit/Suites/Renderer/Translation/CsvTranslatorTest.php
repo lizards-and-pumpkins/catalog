@@ -46,7 +46,7 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfLocaleDirectoryIsNotReadable()
     {
-        $this->setExpectedException(LocaleDirectoryNotReadableException::class);
+        $this->expectException(LocaleDirectoryNotReadableException::class);
 
         $testThemeDirectoryPath = sys_get_temp_dir();
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
@@ -63,7 +63,7 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTranslationFileIsNotReadable()
     {
-        $this->setExpectedException(TranslationFileNotReadableException::class);
+        $this->expectException(TranslationFileNotReadableException::class);
 
         $testThemeDirectoryPath = sys_get_temp_dir();
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
@@ -80,7 +80,7 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTranslationFileHasWrongFormatting()
     {
-        $this->setExpectedException(MalformedTranslationFileException::class);
+        $this->expectException(MalformedTranslationFileException::class);
 
         $testThemeDirectoryPath = sys_get_temp_dir();
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;

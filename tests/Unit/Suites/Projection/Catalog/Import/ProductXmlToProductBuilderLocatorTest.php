@@ -184,7 +184,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfSkuIsMissing()
     {
-        $this->setExpectedException(InvalidNumberOfSkusForImportedProductException::class);
+        $this->expectException(InvalidNumberOfSkusForImportedProductException::class);
         $xml = '<product type="simple" tax_class="test"></product>';
 
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
@@ -192,7 +192,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProductTypeCodeIsMissing()
     {
-        $this->setExpectedException(InvalidProductTypeCodeForImportedProductException::class);
+        $this->expectException(InvalidProductTypeCodeForImportedProductException::class);
         $xml = '<product sku="foo" tax_class="test"></product>';
 
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
@@ -200,7 +200,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTaxClassIsMissing()
     {
-        $this->setExpectedException(TaxClassAttributeMissingForImportedProductException::class);
+        $this->expectException(TaxClassAttributeMissingForImportedProductException::class);
         $xml = '<product sku="foo" type="simple"></product>';
 
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
@@ -208,10 +208,8 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoFactoryForGivenTypeCodeIsFound()
     {
-        $this->setExpectedException(
-            NoMatchingProductTypeBuilderFactoryFoundException::class,
-            'No product type builder factory for the product type code "invalid" was found'
-        );
+        $this->expectException(NoMatchingProductTypeBuilderFactoryFoundException::class);
+        $this->expectExceptionMessage('No product type builder factory for the product type code "invalid" was found');
         $xml = '<product type="invalid" sku="test" tax_class="test"></product>';
 
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);

@@ -87,13 +87,13 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfDirectoryDoesNotExist()
     {
-        $this->setExpectedException(DirectoryDoesNotExistException::class);
+        $this->expectException(DirectoryDoesNotExistException::class);
         $this->filesystem->removeDirectoryAndItsContent('/non-existing-directory');
     }
 
     public function testExceptionIsThrownIfDirectoryIsNotWritable()
     {
-        $this->setExpectedException(DirectoryNotWritableException::class);
+        $this->expectException(DirectoryNotWritableException::class);
         $this->filesystem->removeDirectoryAndItsContent($this->nonWritableDirectoryPath);
     }
 
@@ -105,7 +105,8 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheDirectoryIsAFile()
     {
-        $this->setExpectedException(NotADirectoryException::class, 'The given path is not a directory: "');
+        $this->expectException(NotADirectoryException::class);
+        $this->expectExceptionMessage('The given path is not a directory: "');
         
         $filePath = $directoryPath = $this->testDirectoryPath . '/existing-file';
         touch($filePath);

@@ -168,7 +168,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
     {
         $this->mockDataPoolReader->method('getSnippet')->willThrowException(new KeyNotFoundException);
-        $this->setExpectedException(UnableToHandleRequestException::class);
+        $this->expectException(UnableToHandleRequestException::class);
         $this->requestHandler->process($this->stubRequest);
     }
 

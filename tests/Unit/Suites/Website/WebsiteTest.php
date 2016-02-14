@@ -11,10 +11,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
     public function testItThrowsAnExceptionIfTheInputIsNotAString()
     {
-        $this->setExpectedException(
-            InvalidWebsiteCodeException::class,
-            'The website code must be a string, got "'
-        );
+        $this->expectException(InvalidWebsiteCodeException::class);
+        $this->expectExceptionMessage('The website code must be a string, got "');
         Website::fromString(123);
     }
 
@@ -24,10 +22,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty($emptyWebsiteCode)
     {
-        $this->setExpectedException(
-            InvalidWebsiteCodeException::class,
-            'The website code may not be empty'
-        );
+        $this->expectException(InvalidWebsiteCodeException::class);
+        $this->expectExceptionMessage('The website code may not be empty');
         Website::fromString($emptyWebsiteCode);
     }
 

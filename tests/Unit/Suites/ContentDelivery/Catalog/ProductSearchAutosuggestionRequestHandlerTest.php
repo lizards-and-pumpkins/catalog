@@ -140,7 +140,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
      */
     public function testExceptionIsThrownDuringAttemptToProcessInvalidRequest()
     {
-        $this->setExpectedException(UnableToHandleRequestException::class);
+        $this->expectException(UnableToHandleRequestException::class);
         $this->requestHandler->process($this->stubHttpRequest);
     }
 

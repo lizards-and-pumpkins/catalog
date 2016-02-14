@@ -26,10 +26,8 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheVariationListIsEmpty()
     {
-        $this->setExpectedException(
-            ProductVariationAttributesEmptyException::class,
-            'The product variation attribute list can not be empty'
-        );
+        $this->expectException(ProductVariationAttributesEmptyException::class);
+        $this->expectExceptionMessage('The product variation attribute list can not be empty');
         new ProductVariationAttributeList();
     }
 
@@ -38,8 +36,8 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
         $attributeCodeOne = AttributeCode::fromString('test');
         $attributeCodeTwo = AttributeCode::fromString('test');
 
-        $this->setExpectedException(
-            ProductVariationAttributesNotUniqueException::class,
+        $this->expectException(ProductVariationAttributesNotUniqueException::class);
+        $this->expectExceptionMessage(
             'The product variation attribute list contained the attribute "test" more then once'
         );
         new ProductVariationAttributeList($attributeCodeOne, $attributeCodeTwo);

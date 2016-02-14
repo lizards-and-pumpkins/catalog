@@ -73,7 +73,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoAttributeWithGivenCodeIsSet()
     {
-        $this->setExpectedException(ProductAttributeNotFoundException::class);
+        $this->expectException(ProductAttributeNotFoundException::class);
         (new ProductAttributeList())->getAttributesWithCode('foo');
     }
 
@@ -184,9 +184,10 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfContextWithIncompatibleContextDataAreInjected()
     {
+        $this->expectException(ConflictingContextDataForProductAttributeListException::class);
         $expectedMessage = 'Conflicting context "locale" data set values found ' .
             'for attributes to be included in one attribute list: "xx_XX" != "yy_YY"';
-        $this->setExpectedException(ConflictingContextDataForProductAttributeListException::class, $expectedMessage);
+        $this->expectExceptionMessage($expectedMessage);
         $attributesArray = [
             [
                 ProductAttribute::CODE => 'test1',

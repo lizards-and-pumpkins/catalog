@@ -20,10 +20,8 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheInputIsNotAString($nonString)
     {
-        $this->setExpectedException(
-            InvalidCountrySpecificationException::class,
-            'The country specification has to be a string, got "'
-        );
+        $this->expectException(InvalidCountrySpecificationException::class);
+        $this->expectExceptionMessage('The country specification has to be a string, got "');
         Country::from2CharIso3166($nonString);
     }
 
@@ -44,10 +42,8 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheInputStringIsNotTwoCharactersLong($invalidCountrySpec)
     {
-        $this->setExpectedException(
-            InvalidCountrySpecificationException::class,
-            'Two character string country specification expected (ISO 3166), got "'
-        );
+        $this->expectException(InvalidCountrySpecificationException::class);
+        $this->expectExceptionMessage('Two character string country specification expected (ISO 3166), got "');
         Country::from2CharIso3166($invalidCountrySpec);
     }
 
@@ -69,10 +65,8 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheInputStringIsEmpty($emptyStringProvider)
     {
-        $this->setExpectedException(
-            InvalidCountrySpecificationException::class,
-            'The country specification must not be empty'
-        );
+        $this->expectException(InvalidCountrySpecificationException::class);
+        $this->expectExceptionMessage('The country specification must not be empty');
         Country::from2CharIso3166($emptyStringProvider);
     }
 
@@ -93,8 +87,8 @@ class CountryTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfItContainsCharactersBeyondAToZ($outOfBoundsCountrySpec)
     {
-        $this->setExpectedException(
-            InvalidCountrySpecificationException::class,
+        $this->expectException(InvalidCountrySpecificationException::class);
+        $this->expectExceptionMessage(
             'The country specification may only contain characters from a-z, got "' . $outOfBoundsCountrySpec . '"'
         );
         Country::from2CharIso3166($outOfBoundsCountrySpec);

@@ -45,10 +45,8 @@ class ProductRelationsLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testItThrowsAnExceptionIfThereIsNoRelationForTheGivenTypeCode()
     {
-        $this->setExpectedException(
-            UnknownProductRelationTypeException::class,
-            'The product relation "unknown" is unknown'
-        );
+        $this->expectException(UnknownProductRelationTypeException::class);
+        $this->expectExceptionMessage('The product relation "unknown" is unknown');
         $this->productRelationLocator->locate(ProductRelationTypeCode::fromString('unknown'));
     }
 
@@ -66,8 +64,8 @@ class ProductRelationsLocatorTest extends \PHPUnit_Framework_TestCase
         };
         $this->productRelationLocator->register($typeCode, $invalidFactoryMethod);
         
-        $this->setExpectedException(
-            InvalidProductRelationTypeException::class,
+        $this->expectException(InvalidProductRelationTypeException::class);
+        $this->expectExceptionMessage(
             'Product Relation Type "stdClass" has to implement the ProductRelationType interface'
         );
         $this->productRelationLocator->locate($typeCode);

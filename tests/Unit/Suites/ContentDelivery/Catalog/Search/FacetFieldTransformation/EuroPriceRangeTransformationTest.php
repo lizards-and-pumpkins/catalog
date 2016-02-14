@@ -60,7 +60,7 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownIfInputCanNotBeDecoded($nonMatchingEncodedInput)
     {
-        $this->setExpectedException(InvalidTransformationInputException::class);
+        $this->expectException(InvalidTransformationInputException::class);
         $this->transformation->decode($nonMatchingEncodedInput);
     }
 

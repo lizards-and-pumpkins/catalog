@@ -43,7 +43,7 @@ class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfFileIsNotReadable()
     {
-        $this->setExpectedException(FileNotReadableException::class);
+        $this->expectException(FileNotReadableException::class);
         $this->reader->getFileContents('/some-non-existing-file');
     }
 

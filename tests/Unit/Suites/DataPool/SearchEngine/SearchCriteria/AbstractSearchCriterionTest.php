@@ -78,13 +78,13 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfFieldNameIsNotValid()
     {
-        $this->setExpectedException(InvalidCriterionNameException::class);
+        $this->expectException(InvalidCriterionNameException::class);
         $this->createInstanceOfClassUnderTest(1, 'bar');
     }
 
     public function testExceptionIsThrownIfFieldValueIsNotValid()
     {
-        $this->setExpectedException(InvalidCriterionValueTypeException::class);
+        $this->expectException(InvalidCriterionValueTypeException::class);
         $this->createInstanceOfClassUnderTest('foo', []);
     }
 

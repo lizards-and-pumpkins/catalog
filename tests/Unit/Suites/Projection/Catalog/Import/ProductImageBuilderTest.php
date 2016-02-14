@@ -46,10 +46,8 @@ class ProductImageBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfThereIsNoFileAttribute()
     {
-        $this->setExpectedException(
-            InvalidProductImageAttributeListException::class,
-            'The image attribute "file" is missing for product "test-sku"'
-        );
+        $this->expectException(InvalidProductImageAttributeListException::class);
+        $this->expectExceptionMessage('The image attribute "file" is missing for product "test-sku"');
         ProductImageBuilder::fromArray($this->testProductId, []);
     }
 

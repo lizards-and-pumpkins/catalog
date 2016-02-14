@@ -15,7 +15,7 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrownOnInvalidKey($invalidKey)
     {
-        $this->setExpectedException(InvalidKeyException::class);
+        $this->expectException(InvalidKeyException::class);
 
         $content = 'doesn\'t matter';
         Snippet::create($invalidKey, $content);

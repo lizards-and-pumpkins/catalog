@@ -90,15 +90,15 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheLogDirectoryCanNotBeCreated()
     {
-        $this->setExpectedException(UnableToCreateLogDirectoryException::class);
+        $this->expectException(UnableToCreateLogDirectoryException::class);
         $writer = new FileLogMessageWriter('');
         $writer->write($this->stubLogMessage);
     }
 
     public function testItThrowsAnExceptionIfTheLogDirectoryIsNotWritable()
     {
-        $this->setExpectedException(
-            UnableToCreateLogFileException::class,
+        $this->expectException(UnableToCreateLogFileException::class);
+        $this->expectExceptionMessage(
             sprintf('The log directory is not writable: "%s"', dirname($this->testLogFilePath))
         );
         $logDirectoryPath = dirname($this->testLogFilePath);
@@ -109,10 +109,8 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheLogFileIsNotWritable()
     {
-        $this->setExpectedException(
-            UnableToWriteToLogFileException::class,
-            sprintf('The log file is not writable: "%s"', $this->testLogFilePath)
-        );
+        $this->expectException(UnableToWriteToLogFileException::class);
+        $this->expectExceptionMessage(sprintf('The log file is not writable: "%s"', $this->testLogFilePath));
         $this->createFixtureFile($this->testLogFilePath, '', 0400);
         $this->writer->write($this->stubLogMessage);
     }

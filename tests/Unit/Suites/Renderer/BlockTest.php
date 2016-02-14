@@ -66,13 +66,13 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTemplateFileDoesNotExist()
     {
-        $this->setExpectedException(TemplateFileNotReadableException::class);
+        $this->expectException(TemplateFileNotReadableException::class);
         $this->block->render();
     }
 
     public function testExceptionIsThrownIfTemplateFileIsNotReadable()
     {
-        $this->setExpectedException(TemplateFileNotReadableException::class);
+        $this->expectException(TemplateFileNotReadableException::class);
         $this->createFixtureFile($this->testTemplateFilePath, '', 0000);
         $this->block->render();
     }

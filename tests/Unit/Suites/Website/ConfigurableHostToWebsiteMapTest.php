@@ -45,10 +45,8 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfAHostNameIsNotKnown()
     {
-        $this->setExpectedException(
-            UnknownWebsiteHostException::class,
-            'No website code found for host "www.example.com"'
-        );
+        $this->expectException(UnknownWebsiteHostException::class);
+        $this->expectExceptionMessage('No website code found for host "www.example.com"');
         $this->websiteMap->getWebsiteCodeByHost('www.example.com');
     }
 
@@ -79,10 +77,8 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfAMapValueNotMatchesTheExpectedFormat()
     {
-        $this->setExpectedException(
-            InvalidWebsiteMapConfigRecordException::class,
-            'Unable to parse the website to code mapping record "test="'
-        );
+        $this->expectException(InvalidWebsiteMapConfigRecordException::class);
+        $this->expectExceptionMessage('Unable to parse the website to code mapping record "test="');
         $map = 'test=';
         $this->stubConfigReader->method('get')->willReturn($map);
 

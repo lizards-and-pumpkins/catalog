@@ -41,7 +41,7 @@ class SampleMasterFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToCallNotRegisteredFactoryMethod()
     {
-        $this->setExpectedException(UndefinedFactoryMethodException::class);
+        $this->expectException(UndefinedFactoryMethodException::class);
         $this->sampleMasterFactory->nonRegisteredMethod();
     }
 

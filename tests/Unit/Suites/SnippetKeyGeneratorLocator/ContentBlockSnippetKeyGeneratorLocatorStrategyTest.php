@@ -49,7 +49,7 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framew
     public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
         $unsupportedSnippetCode = 'foo';
-        $this->setExpectedException(SnippetCodeCanNotBeProcessedException::class);
+        $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 

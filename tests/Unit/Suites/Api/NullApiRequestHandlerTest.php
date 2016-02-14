@@ -38,7 +38,7 @@ class NullApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToProcess()
     {
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->requestHandler->process($this->stubRequest);
     }
 }

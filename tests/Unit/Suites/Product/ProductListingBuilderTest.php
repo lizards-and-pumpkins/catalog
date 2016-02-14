@@ -119,49 +119,49 @@ EOX;
 
     public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
     {
-        $this->setExpectedException(MissingUrlKeyXmlAttributeException::class);
+        $this->expectException(MissingUrlKeyXmlAttributeException::class);
         $xml = '<listing />';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriteriaNodeDoesNotExist()
     {
-        $this->setExpectedException(InvalidNumberOfCriteriaXmlNodesException::class);
+        $this->expectException(InvalidNumberOfCriteriaXmlNodesException::class);
         $xml = '<listing url_key="foo"/>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfTypeAttributeOfListingNodeIsMissing()
     {
-        $this->setExpectedException(MissingTypeXmlAttributeException::class);
+        $this->expectException(MissingTypeXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria/></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveAttributeName()
     {
-        $this->setExpectedException(MissingCriterionAttributeNameXmlAttributeException::class);
+        $this->expectException(MissingCriterionAttributeNameXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute/></criteria></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
     {
-        $this->setExpectedException(MissingCriterionOperationXmlAttributeException::class);
+        $this->expectException(MissingCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute name="bar"/></criteria></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
     {
-        $this->setExpectedException(InvalidCriterionOperationXmlAttributeException::class);
+        $this->expectException(InvalidCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute name="bar" is="baz"/></criteria></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfNameAttributeIsMissingInProductListingAttributeNode()
     {
-        $this->setExpectedException(MissingProductListingAttributeNameXmlAttributeException::class);
+        $this->expectException(MissingProductListingAttributeNameXmlAttributeException::class);
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
     <criteria type="and">
@@ -195,7 +195,7 @@ EOX;
 
     public function testExceptionIsThrownIfSameAttributeIsSpecifiedMoreThenOnceForTheSameListing()
     {
-        $this->setExpectedException(DuplicateProductListingAttributeException::class);
+        $this->expectException(DuplicateProductListingAttributeException::class);
 
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">

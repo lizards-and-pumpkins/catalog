@@ -17,10 +17,8 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheFileIdentifierIsInvalid($invalidIdentifier, $expectedType)
     {
-        $this->setExpectedException(
-            InvalidFileIdentifierException::class,
-            sprintf('The file identifier has to be a string, got "%s"', $expectedType)
-        );
+        $this->expectException(InvalidFileIdentifierException::class);
+        $this->expectExceptionMessage(sprintf('The file identifier has to be a string, got "%s"', $expectedType));
         StorageAgnosticFileUri::fromString($invalidIdentifier);
     }
 
@@ -41,10 +39,8 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheFileIdentifierStringIsEmpty($emptyIdentifier)
     {
-        $this->setExpectedException(
-            InvalidFileIdentifierException::class,
-            'The file identifier must not be empty'
-        );
+        $this->expectException(InvalidFileIdentifierException::class);
+        $this->expectExceptionMessage('The file identifier must not be empty');
         StorageAgnosticFileUri::fromString($emptyIdentifier);
     }
 

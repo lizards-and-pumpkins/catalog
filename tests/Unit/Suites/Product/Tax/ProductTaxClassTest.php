@@ -22,10 +22,8 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheNameIsEmpty($emptyName)
     {
-        $this->setExpectedException(
-            InvalidTaxClassNameException::class,
-            'The tax class name can not be empty'
-        );
+        $this->expectException(InvalidTaxClassNameException::class);
+        $this->expectExceptionMessage('The tax class name can not be empty');
         ProductTaxClass::fromString($emptyName);
     }
 
@@ -47,10 +45,8 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheTaxClassNameIsNotAString($nonString, $expectedType)
     {
-        $this->setExpectedException(
-            InvalidTaxClassNameException::class,
-            'The tax class name has to be a string, got "' . $expectedType . '"'
-        );
+        $this->expectException(InvalidTaxClassNameException::class);
+        $this->expectExceptionMessage('The tax class name has to be a string, got "' . $expectedType . '"');
         ProductTaxClass::fromString($nonString);
     }
 

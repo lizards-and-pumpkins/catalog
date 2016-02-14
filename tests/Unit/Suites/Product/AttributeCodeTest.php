@@ -30,10 +30,8 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
         $type = is_object($invalidAttributeCode) ?
             get_class($invalidAttributeCode) :
             gettype($invalidAttributeCode);
-        $this->setExpectedException(
-            InvalidAttributeCodeException::class,
-            sprintf('The attribute code has to be a string, got "%s"', $type)
-        );
+        $this->expectException(InvalidAttributeCodeException::class);
+        $this->expectExceptionMessage(sprintf('The attribute code has to be a string, got "%s"', $type));
         AttributeCode::fromString($invalidAttributeCode);
     }
 
@@ -57,8 +55,8 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong($shortAttributeCode)
     {
-        $this->setExpectedException(
-            InvalidAttributeCodeException::class,
+        $this->expectException(InvalidAttributeCodeException::class);
+        $this->expectExceptionMessage(
             sprintf('The attribute code has to be at least 3 characters long, got "%s"', $shortAttributeCode)
         );
         AttributeCode::fromString($shortAttributeCode);
@@ -82,10 +80,8 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ($attributeCode)
     {
-        $this->setExpectedException(
-            InvalidAttributeCodeException::class,
-            'The first letter of the attribute code has to be a character from a-z, got '
-        );
+        $this->expectException(InvalidAttributeCodeException::class);
+        $this->expectExceptionMessage('The first letter of the attribute code has to be a character from a-z, got ');
         AttributeCode::fromString($attributeCode);
     }
 
@@ -106,8 +102,8 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheAttributeCodeContainsInvalidCharacters()
     {
-        $this->setExpectedException(
-            InvalidAttributeCodeException::class,
+        $this->expectException(InvalidAttributeCodeException::class);
+        $this->expectExceptionMessage(
             'The attribute code may only contain letters from a-z, numbers and underscores, got "abc."'
         );
         AttributeCode::fromString('abc.');
@@ -115,10 +111,8 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheAttributeCodeEndsWithAnUnderscore()
     {
-        $this->setExpectedException(
-            InvalidAttributeCodeException::class,
-            'The attribute code may not end with an underscore, got "abc_"'
-        );
+        $this->expectException(InvalidAttributeCodeException::class);
+        $this->expectExceptionMessage('The attribute code may not end with an underscore, got "abc_"');
         AttributeCode::fromString('abc_');
     }
 

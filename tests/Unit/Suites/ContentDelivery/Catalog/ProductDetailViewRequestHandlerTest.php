@@ -168,7 +168,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfProcessWithoutMetaInfoContentIsCalled()
     {
-        $this->setExpectedException(UnableToHandleRequestException::class);
+        $this->expectException(UnableToHandleRequestException::class);
         $this->requestHandler->process($this->stubRequest);
     }
 

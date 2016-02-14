@@ -29,7 +29,7 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfUnknownBlockParentIsSpecified()
     {
-        $this->setExpectedException(BlockDoesNotExistException::class);
+        $this->expectException(BlockDoesNotExistException::class);
         $this->blockStructure->setParentBlock('unknown-parent', $this->getStubBlock());
     }
 
@@ -82,7 +82,8 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownForUnknownBlocks()
     {
-        $this->setExpectedException(BlockDoesNotExistException::class, 'Block does not exist:');
+        $this->expectException(BlockDoesNotExistException::class);
+        $this->expectExceptionMessage('Block does not exist:');
         $this->blockStructure->getBlock('unknown-block');
     }
 
@@ -101,10 +102,8 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
         $parentName = 'parent';
         $childName = 'child';
 
-        $this->setExpectedException(
-            BlockIsNotAChildOfParentBlockException::class,
-            'The block "child" is not a child of the parent block "parent"'
-        );
+        $this->expectException(BlockIsNotAChildOfParentBlockException::class);
+        $this->expectExceptionMessage('The block "child" is not a child of the parent block "parent"');
 
         $this->blockStructure->getChildBlock($parentName, $childName);
     }
@@ -115,10 +114,8 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
         $childName = 'child';
         $this->blockStructure->addBlock($this->getStubBlockWithName($parentName));
 
-        $this->setExpectedException(
-            BlockIsNotAChildOfParentBlockException::class,
-            'The block "child" is not a child of the parent block "parent"'
-        );
+        $this->expectException(BlockIsNotAChildOfParentBlockException::class);
+        $this->expectExceptionMessage('The block "child" is not a child of the parent block "parent"');
 
         $this->blockStructure->getChildBlock($parentName, $childName);
     }

@@ -91,10 +91,8 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfTheTargetDirectoryCanNotBeCreated()
     {
         chmod(dirname($this->targetImageDirectoryPath), 0000);
-        $this->setExpectedException(
-            UnableToCreateTargetDirectoryForProcessedImagesException::class,
-            'Unable to create the target directory for processed images "'
-        );
+        $this->expectException(UnableToCreateTargetDirectoryForProcessedImagesException::class);
+        $this->expectExceptionMessage('Unable to create the target directory for processed images "');
         $this->imageProcessor->process('will-not-get-this-far.jpg');
     }
 }
