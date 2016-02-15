@@ -1,7 +1,7 @@
 .products-grid { overflow: hidden; border-top: #ffffff solid 1px }
 .products-grid a { color: #000000 }
 .products-grid li { display: inline-block; width: 33%; position: relative; vertical-align: top; margin-top: -1px }
-.products-grid li .grid-cell-container { padding: 25px 11px 20px; border-top: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat; height: 193px }
+.products-grid li .grid-cell-container { padding: 26px 11px 20px; border-top: 1px solid #eaeaea; border-right: 1px solid #eaeaea; background-position: 99% 1px; background-repeat: no-repeat; height: 193px }
 .products-grid li .grid-cell-container:after { content: ""; display: block; height: 0; clear: both; visibility: hidden }
 .products-grid li.last .grid-cell-container { border-right: none }
 .products-grid .product-image { display: block; margin: 0 0 10px 0 }
