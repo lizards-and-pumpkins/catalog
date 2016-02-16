@@ -1,6 +1,6 @@
 define(['lib/local_storage'], function (storage) {
 
-    var storageKey = 'recently-viewed-products',
+    var storageKey = 'lizards-and-pumpkins-recently-viewed-products', // TODO: Append application version
         numProducts = 4;
 
     function removeProductFromListBySku(list, sku) {
