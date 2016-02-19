@@ -30,7 +30,8 @@ require([
     var tabletWidth = 768,
         selectBoxIdPrefix = 'variation_',
         addToCartButton,
-        product;
+        product,
+        currentGalleryImageIndex = 1;
 
     domReady(function() {
 
@@ -40,6 +41,7 @@ require([
         handleRecentlyViewedProducts();
         initializeAddToCartButton();
         showNextSelectBox();
+        initializeImageGalleryArrows();
 
         adjustToPageWidth();
         window.addEventListener('resize', adjustToPageWidth);
@@ -337,17 +339,15 @@ require([
     }
 
     function adjustToPageWidth() {
-        var currentWidth = document.body.clientWidth,
         /* Maybe it makes sense to initialize variables on load only ? */
-            productTitle = document.querySelector('.product-essential h1'),
+        var productTitle = document.querySelector('.product-essential h1'),
             brandLogo = document.getElementById('brandLogo'),
             productTopContainer = document.querySelector('.product-shop > .top'),
             productControls = document.querySelector('.product-controls'),
             similarProductsLink = document.querySelector('.similarProducts'),
             articleInformation = document.querySelector('.articleInformations');
 
-        /* Phone only */
-        if (currentWidth < tabletWidth) {
+        if (isPhone()) {
             var phoneTitlePlaceholder = document.getElementById('phoneTitlePlaceholder');
 
             if (!isParent(phoneTitlePlaceholder, productTitle)) {
@@ -365,9 +365,6 @@ require([
             if (!isParent(productControls, articleInformation)) {
                 productControls.appendChild(articleInformation);
             }
-
-            /* TODO: Implement image slider */
-            /* TODO: From 767px to 366px an "original" image could be used and below 366px a "large" one. */
         } else {
             var originalTitleContainer = document.querySelector('.product-title');
 
@@ -389,6 +386,7 @@ require([
         }
 
         initializeSwiping('.swipe-container', 'ul');
+        updateImageGalleryArrowsVisibility();
     }
 
     function showAvailabilityStatus() {
@@ -437,5 +435,62 @@ require([
             node = node.parentNode;
         }
         return false;
+    }
+
+    function isPhone() {
+        return document.body.clientWidth < tabletWidth;
+    }
+
+    function initializeImageGalleryArrows() {
+        var container = document.querySelector('.main-image-area');
+        container.appendChild(createArrow('swipe-prev', showPreviousGalleryImage));
+        container.appendChild(createArrow('swipe-next', showNextGalleryImage));
+    }
+
+    function createArrow(className, callback) {
+        var arrow = document.createElement('A');
+        arrow.className = className;
+        arrow.addEventListener('click', callback, true);
+
+        return arrow;
+    }
+
+    function showPreviousGalleryImage() {
+        if (currentGalleryImageIndex > 1) {
+            setMainProductImageSrc(product.getImageUrlByNumber('large', --currentGalleryImageIndex));
+            updateImageGalleryArrowsVisibility();
+        }
+    }
+
+    function showNextGalleryImage() {
+        if (currentGalleryImageIndex < product.getNumberOfImages()) {
+            setMainProductImageSrc(product.getImageUrlByNumber('large', ++currentGalleryImageIndex));
+            updateImageGalleryArrowsVisibility();
+        }
+    }
+
+    function setMainProductImageSrc(src) {
+        document.querySelector('.main-image-area img').src = src;
+    }
+
+    function updateImageGalleryArrowsVisibility() {
+        document.querySelector('.main-image-area .swipe-prev').style.opacity = getPreviousImageGalleryArrowOpacity();
+        document.querySelector('.main-image-area .swipe-next').style.opacity = getNextImageGalleryArrowOpacity();
+    }
+
+    function getPreviousImageGalleryArrowOpacity() {
+        if (!isPhone() || 1 === currentGalleryImageIndex) {
+            return 0;
+        }
+
+        return 1;
+    }
+
+    function getNextImageGalleryArrowOpacity() {
+        if (!isPhone() || product.getNumberOfImages() === currentGalleryImageIndex) {
+            return 0;
+        }
+
+        return 1;
     }
 });

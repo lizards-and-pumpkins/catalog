@@ -118,5 +118,19 @@ define(function () {
         this.getDiscountPercentage = function () {
             return 100 - Math.round(getRawSpecialPrice(this) * 100 / getRawPrice(this));
         };
+
+        this.getImageUrlByNumber = function (size, number) {
+            if (typeof product['images'][size] === 'undefined' ||
+                typeof product['images'][size][number - 1] === 'undefined'
+            ) {
+                return null;
+            }
+
+            return product['images'][size][number - 1]['url'];
+        };
+
+        this.getNumberOfImages = function () {
+            return product['images']['original'].length;
+        }
     }
 });
