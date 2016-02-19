@@ -163,5 +163,25 @@ define(['../../pub/js/product'], function (Product) {
             product = new Product({"attributes": {"raw_price": '1800', "raw_special_price": '1700'}});
             expect(product.getDiscountPercentage()).toBe(100 - Math.round(1700 * 100 / 1800));
         });
+
+        it('null is returned if non existing product size is requested', function () {
+           product = new Product({"images": {"large": []}});
+           expect(product.getImageUrlByNumber('huge', 1)).toBeNull();
+        });
+
+        it('null is returned if non existing product number is requested', function () {
+           product = new Product({"images": {"large": []}});
+           expect(product.getImageUrlByNumber('large', 1)).toBeNull();
+        });
+
+        it('image URL of an image with a given size and number is returned', function () {
+            product = new Product({"images": {"large": [{"url": 'foo'}, {"url": 'bar'}]}});
+            expect(product.getImageUrlByNumber('large', 2)).toBe('bar');
+        });
+
+        it('number of product images is returned', function () {
+            product = new Product({"images": {"original": [{"url": 'foo'}]}});
+            expect(product.getNumberOfImages()).toBe(1);
+        });
     });
 });

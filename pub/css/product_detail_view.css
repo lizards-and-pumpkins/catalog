@@ -106,7 +106,6 @@
     .product-img-box .flexslider { display: block }
     .more-views { display: none }
     .main-image-area > img { width: 100% }
-    .zoom { position: static; display: inline }
 }
 
 /* Clearer */
