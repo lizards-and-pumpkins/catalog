@@ -70,9 +70,8 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
         $context = $this->getContextFromProductListingData($productListing);
         $snippetKeyData = [PageMetaInfoSnippetContent::URL_KEY => $productListing->getUrlKey()];
         $snippetKey = $this->keyGenerator->getKeyForContext($context, $snippetKeyData);
-        
         $snippetContent = $this->blockRenderer->render($productListing, $context);
-        //$snippetContent = $productListing->getAttributeValueByCode('description');
+        
         return Snippet::create($snippetKey, $snippetContent);
     }
 }
