@@ -10,7 +10,8 @@ use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRendererTest
+ * @covers \LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer
+ * @uses \LizardsAndPumpkins\Snippet
  */
 class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,6 +26,11 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockSnippetKeyGenerator;
+
+    /**
+     * @var ProductListingDescriptionBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubDescriptionBlockRenderer;
 
     /**
      * @param string[] $attributes
@@ -46,7 +52,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
         
         $stubProductListing->method('getAttributeValueByCode')->willReturnMap($getAttributeValueMap);
         $stubProductListing->method('hasAttribute')->willReturnMap($hasAttributeValueMap);
-
+        
         return $stubProductListing;
     }
 
@@ -67,6 +73,9 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
+        $class = ProductListingDescriptionBlockRenderer::class;
+        $this->stubDescriptionBlockRenderer = $this->getMock($class, [], [], '', false);
+        
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testSnippetKey);
 
@@ -76,6 +85,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
         $mockContextBuilder->method('createContext')->willReturn($mockContext);
 
         $this->renderer = new ProductListingDescriptionSnippetRenderer(
+            $this->stubDescriptionBlockRenderer,
             $this->mockSnippetKeyGenerator,
             $mockContextBuilder
         );
@@ -89,6 +99,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
     public function testItReturnsASnippetList()
     {
         $productListing = $this->createStubProductListingWithAttributes(['description' => 'Test']);
+        $this->stubDescriptionBlockRenderer->method('render')->willReturn('Test');
         $result = $this->renderer->render($productListing);
 
         $this->assertInternalType('array', $result);
@@ -98,6 +109,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
     public function testItReturnsAProductListingDescriptionSnippetIfTheListingHasADescription()
     {
         $productListing = $this->createStubProductListingWithAttributes(['description' => 'Test']);
+        $this->stubDescriptionBlockRenderer->method('render')->willReturn('Test');
         $result = $this->renderer->render($productListing);
         $descriptionSnippet = $this->findSnippetByKey($this->testSnippetKey, $result);
 

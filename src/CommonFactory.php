@@ -41,6 +41,7 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
@@ -1583,8 +1584,9 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingDescriptionSnippetRenderer()
     {
         return new ProductListingDescriptionSnippetRenderer(
-            $this->createProductListingDescriptionSnippetKeyGenerator(),
-            $this->createContextBuilder()
+            $this->getMasterFactory()->createProductListingDescriptionBlockRenderer(),
+            $this->getMasterFactory()->createProductListingDescriptionSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder()
         );
     }
 
@@ -1599,6 +1601,19 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
             ProductListingDescriptionSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContexts(),
             $usedDataParts
+        );
+    }
+
+    /**
+     * @return ProductListingDescriptionBlockRenderer
+     */
+    public function createProductListingDescriptionBlockRenderer()
+    {
+        return new ProductListingDescriptionBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
 }

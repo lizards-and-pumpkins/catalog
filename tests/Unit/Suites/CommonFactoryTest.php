@@ -29,6 +29,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingBuilder;
+use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
@@ -105,6 +106,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
@@ -736,5 +738,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingTitleSnippetRenderer::class],
             [ProductListingSnippetRenderer::class],
         ];
+    }
+
+    public function testItReturnsAProductListingDescriptionBlockRenderer()
+    {
+        $result = $this->commonFactory->createProductListingDescriptionBlockRenderer();
+        $this->assertInstanceOf(ProductListingDescriptionBlockRenderer::class, $result);
     }
 }

@@ -23,10 +23,17 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
      */
     private $contextBuilder;
 
+    /**
+     * @var ProductListingDescriptionBlockRenderer
+     */
+    private $blockRenderer;
+
     public function __construct(
+        ProductListingDescriptionBlockRenderer $blockRenderer,
         SnippetKeyGenerator $keyGenerator,
         ContextBuilder $contextBuilder
     ) {
+        $this->blockRenderer = $blockRenderer;
         $this->keyGenerator = $keyGenerator;
         $this->contextBuilder = $contextBuilder;
     }
@@ -60,11 +67,12 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
      */
     private function createListingDescriptionSnippet(ProductListing $productListing)
     {
-        $snippetKey = $this->keyGenerator->getKeyForContext(
-            $this->getContextFromProductListingData($productListing),
-            [PageMetaInfoSnippetContent::URL_KEY => $productListing->getUrlKey()]
-        );
-        $snippetContent = $productListing->getAttributeValueByCode('description');
+        $context = $this->getContextFromProductListingData($productListing);
+        $snippetKeyData = [PageMetaInfoSnippetContent::URL_KEY => $productListing->getUrlKey()];
+        $snippetKey = $this->keyGenerator->getKeyForContext($context, $snippetKeyData);
+        
+        $snippetContent = $this->blockRenderer->render($productListing, $context);
+        //$snippetContent = $productListing->getAttributeValueByCode('description');
         return Snippet::create($snippetKey, $snippetContent);
     }
 }
