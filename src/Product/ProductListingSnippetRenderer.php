@@ -86,7 +86,10 @@ class ProductListingSnippetRenderer implements SnippetRenderer
             $productListing->getCriteria(),
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getPageSnippetCodes($productListing),
-            ['title' => [ProductListingTitleSnippetRenderer::CODE]]
+            [
+                'title' => [ProductListingTitleSnippetRenderer::CODE],
+                'sidebar_container' => [ProductListingDescriptionSnippetRenderer::CODE]
+            ]
         );
 
         return json_encode($metaSnippetContent->getInfo());
