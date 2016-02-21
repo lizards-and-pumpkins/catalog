@@ -33,6 +33,7 @@ use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
@@ -350,6 +351,12 @@ class FrontendFactory implements Factory
             ProductListingTitleSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductListingTitleSnippetKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            ProductListingDescriptionSnippetRenderer::CODE,
+            function () {
+                return $this->getMasterFactory()->createProductListingDescriptionSnippetKeyGenerator();
             }
         );
 
