@@ -40,16 +40,6 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductListing $productListing
-     * @return Context
-     */
-    private function getContextFromProductListingData(ProductListing $productListing)
-    {
-        $contextData = $productListing->getContextData();
-        return $this->contextBuilder->createContext($contextData);
-    }
-
-    /**
-     * @param ProductListing $productListing
      * @return Snippet[]
      */
     public function render(ProductListing $productListing)
@@ -73,5 +63,15 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
         $snippetContent = $this->blockRenderer->render($productListing, $context);
         
         return Snippet::create($snippetKey, $snippetContent);
+    }
+
+    /**
+     * @param ProductListing $productListing
+     * @return Context
+     */
+    private function getContextFromProductListingData(ProductListing $productListing)
+    {
+        $contextData = $productListing->getContextData();
+        return $this->contextBuilder->createContext($contextData);
     }
 }

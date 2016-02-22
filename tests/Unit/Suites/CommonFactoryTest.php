@@ -717,7 +717,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testItContainsTheProductListingDescriptionSnippetRendererInTheListingRendererList($expected)
     {
-        $expected = ProductListingDescriptionSnippetRenderer::class;
         $found = array_reduce(
             $this->commonFactory->createProductListingSnippetRendererList(),
             function ($found, SnippetRenderer $snippetRenderer) use ($expected) {

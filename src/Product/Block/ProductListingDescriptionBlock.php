@@ -12,7 +12,7 @@ class ProductListingDescriptionBlock extends Block
      */
     private function getProductListing()
     {
-        return $productListing = $this->getDataObject();
+        return $this->getDataObject();
     }
 
     /**
