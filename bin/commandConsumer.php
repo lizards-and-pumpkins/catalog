@@ -25,8 +25,13 @@ class CommandConsumerWorker
         $implementationFactory = new TwentyOneRunFactory();
         $this->factory->register($commonFactory);
         $this->factory->register($implementationFactory);
-//        $this->factory->register(new LoggingCommandHandlerFactory($commonFactory));
-//        $this->factory->register(new LoggingQueueFactory($implementationFactory));
+        //$this->enableDebugLogging($commonFactory, $implementationFactory);
+    }
+
+    private function enableDebugLogging(CommonFactory $commonFactory, TwentyOneRunFactory $implementationFactory)
+    {
+        $this->factory->register(new LoggingCommandHandlerFactory($commonFactory));
+        $this->factory->register(new LoggingQueueFactory($implementationFactory));
     }
 
     public static function run()

@@ -7,6 +7,7 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\Content\ContentBlockId;
 use LizardsAndPumpkins\Content\ContentBlockSource;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
@@ -37,11 +38,22 @@ class RunContentBlockImport extends BaseCliCommand
     {
         $factory = new SampleMasterFactory();
         $commonFactory = new CommonFactory();
+        $implementationFactory = new TwentyOneRunFactory();
         $factory->register($commonFactory);
-        $factory->register(new TwentyOneRunFactory());
-//        $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+        $factory->register($implementationFactory);
+        //self::enableDebugLogging($factory, $implementationFactory, $commonFactory);
 
         return new self($factory, new CLImate());
+    }
+
+    private static function enableDebugLogging(
+        MasterFactory $factory,
+        TwentyOneRunFactory $implementationFactory,
+        CommonFactory $commonFactory
+    ) {
+        $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+        $factory->register(new LoggingCommandHandlerFactory($commonFactory));
+        $factory->register(new LoggingQueueFactory($implementationFactory));
     }
 
     /**
@@ -51,15 +63,15 @@ class RunContentBlockImport extends BaseCliCommand
     protected function getCommandLineArgumentsArray(CLImate $climate)
     {
         return array_merge(parent::getCommandLineArgumentsArray($climate), [
-            'processQueues' => [
-                'prefix' => 'p',
-                'longPrefix' => 'processQueues',
+            'processQueues'   => [
+                'prefix'      => 'p',
+                'longPrefix'  => 'processQueues',
                 'description' => 'Process queues after the import',
-                'noValue' => true,
+                'noValue'     => true,
             ],
             'importDirectory' => [
                 'description' => 'Path to directory with import files',
-                'required' => true
+                'required'    => true,
             ],
         ]);
     }

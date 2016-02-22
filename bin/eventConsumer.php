@@ -11,7 +11,6 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../../../autoload.php';
 }
 
-
 class EventConsumerWorker
 {
     /**
@@ -21,14 +20,18 @@ class EventConsumerWorker
 
     private function __construct()
     {
-        $implementationFactory = new TwentyOneRunFactory();
-        $commonFactory = new CommonFactory();
-        
         $this->factory = new SampleMasterFactory();
+        $commonFactory = new CommonFactory();
+        $implementationFactory = new TwentyOneRunFactory();
         $this->factory->register($commonFactory);
         $this->factory->register($implementationFactory);
-//        $this->factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
-//        $this->factory->register(new LoggingQueueFactory($implementationFactory));
+        //$this->enableDebugLogging($commonFactory, $implementationFactory);
+    }
+
+    private function enableDebugLogging(CommonFactory $commonFactory, TwentyOneRunFactory $implementationFactory)
+    {
+        $this->factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+        $this->factory->register(new LoggingQueueFactory($implementationFactory));
     }
 
     public static function run()
