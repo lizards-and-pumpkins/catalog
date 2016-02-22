@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Exception\UnableToFindCommandHandlerException;
 class CommandHandlerLocator
 {
     /**
-     * @var CommandFactory
+     * @var CommandHandlerFactory
      */
     private $factory;
 
@@ -25,7 +25,7 @@ class CommandHandlerLocator
         $commandClass = $this->getUnqualifiedCommandClassName($command);
         $method = 'create' . $commandClass . 'Handler';
 
-        if (!method_exists(CommandFactory::class, $method)) {
+        if (!method_exists(CommandHandlerFactory::class, $method)) {
             throw new UnableToFindCommandHandlerException(
                 sprintf('Unable to find a handler for %s command', $commandClass)
             );

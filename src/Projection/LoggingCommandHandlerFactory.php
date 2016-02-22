@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\CommandFactory;
+use LizardsAndPumpkins\CommandHandlerFactory;
 use LizardsAndPumpkins\CommandHandlerLocator;
 use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
@@ -16,22 +16,22 @@ use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
 
-class LoggingCommandHandlerFactory implements CommandFactory, Factory
+class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
 {
     use FactoryTrait;
 
     /**
-     * @var CommandFactory
+     * @var CommandHandlerFactory
      */
     private $commandFactoryDelegate;
 
-    public function __construct(CommandFactory $commandFactoryDelegate)
+    public function __construct(CommandHandlerFactory $commandFactoryDelegate)
     {
         $this->commandFactoryDelegate = $commandFactoryDelegate;
     }
     
     /**
-     * @return CommandFactory
+     * @return CommandHandlerFactory
      */
     private function getCommandFactoryDelegate()
     {

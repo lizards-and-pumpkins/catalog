@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\CommandFactory;
+use LizardsAndPumpkins\CommandHandlerFactory;
 use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Factory;
@@ -42,7 +42,7 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItImplementsTheCommandFactoryInterfaceAndFactoryInterface()
     {
-        $this->assertInstanceOf(CommandFactory::class, $this->loggingCommandHandlerFactory);
+        $this->assertInstanceOf(CommandHandlerFactory::class, $this->loggingCommandHandlerFactory);
         $this->assertInstanceOf(Factory::class, $this->loggingCommandHandlerFactory);
     }
 

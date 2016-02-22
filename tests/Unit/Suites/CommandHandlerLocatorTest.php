@@ -26,7 +26,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $methods = array_merge(
-            get_class_methods(CommandFactory::class),
+            get_class_methods(CommandHandlerFactory::class),
             get_class_methods(MasterFactory::class)
         );
         $this->factory = $this->getMockBuilder(MasterFactory::class)
