@@ -6,6 +6,8 @@ use LizardsAndPumpkins\Http\HttpRouterChain;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
+use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
+use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 
 class DefaultWebFront extends WebFront
 {
@@ -19,12 +21,17 @@ class DefaultWebFront extends WebFront
 
     protected function registerFactories(MasterFactory $masterFactory)
     {
-        $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new TwentyOneRunFactory());
+        $commonFactory = new CommonFactory();
+        $implementationFactory = new TwentyOneRunFactory();
+        $masterFactory->register($commonFactory);
+        $masterFactory->register($implementationFactory);
         $masterFactory->register(new UpdatingProductImportCommandFactory());
         $masterFactory->register(new UpdatingProductImageImportCommandFactory());
         $masterFactory->register(new UpdatingProductListingImportCommandFactory());
         $masterFactory->register(new FrontendFactory($this->getRequest()));
+//        $masterFactory->register(new LoggingQueueFactory($implementationFactory));
+//        $masterFactory->register(new LoggingCommandHandlerFactory($commonFactory));
+//        $masterFactory->register(new LoggingDomainEventHandlerFactory($commonFactory));
     }
 
     protected function registerRouters(HttpRouterChain $router)
