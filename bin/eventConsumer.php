@@ -27,8 +27,8 @@ class EventConsumerWorker
         $this->factory = new SampleMasterFactory();
         $this->factory->register($commonFactory);
         $this->factory->register($implementationFactory);
-        $this->factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
-        $this->factory->register(new LoggingQueueFactory($implementationFactory));
+//        $this->factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+//        $this->factory->register(new LoggingQueueFactory($implementationFactory));
     }
 
     public static function run()
