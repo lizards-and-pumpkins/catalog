@@ -80,6 +80,7 @@ use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Projection\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\TemplateProjectorLocator;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
@@ -1336,10 +1337,22 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
      * @param DomainEventHandler $eventHandlerToDecorate
      * @return ProcessTimeLoggingDomainEventHandlerDecorator
      */
-    public function createProcessTimeLoggingDomainEventDecorator(DomainEventHandler $eventHandlerToDecorate)
+    public function createProcessTimeLoggingDomainEventHandlerDecorator(DomainEventHandler $eventHandlerToDecorate)
     {
         return new ProcessTimeLoggingDomainEventHandlerDecorator(
             $eventHandlerToDecorate,
+            $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    /**
+     * @param CommandHandler $commandHandlerToDecorate
+     * @return ProcessTimeLoggingCommandHandlerDecorator
+     */
+    public function createProcessTimeLoggingCommandHandlerDecorator(CommandHandler $commandHandlerToDecorate)
+    {
+        return new ProcessTimeLoggingCommandHandlerDecorator(
+            $commandHandlerToDecorate,
             $this->getMasterFactory()->getLogger()
         );
     }
