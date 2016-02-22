@@ -61,10 +61,8 @@ class PageBuilder
      */
     private $containerSnippets = [];
 
-    public function __construct(
-        DataPoolReader $dataPoolReader,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator
-    ) {
+    public function __construct(DataPoolReader $dataPoolReader, SnippetKeyGeneratorLocator $keyGeneratorLocator)
+    {
         $this->dataPoolReader = $dataPoolReader;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
     }
@@ -87,7 +85,7 @@ class PageBuilder
             $keyToContentMap,
             array_merge_recursive($metaInfo->getContainerSnippets(), $this->containerSnippets)
         );
-        
+
         $this->applySnippetTransformations();
 
         $content = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
