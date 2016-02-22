@@ -29,9 +29,17 @@ class DefaultWebFront extends WebFront
         $masterFactory->register(new UpdatingProductImageImportCommandFactory());
         $masterFactory->register(new UpdatingProductListingImportCommandFactory());
         $masterFactory->register(new FrontendFactory($this->getRequest()));
-//        $masterFactory->register(new LoggingQueueFactory($implementationFactory));
-//        $masterFactory->register(new LoggingCommandHandlerFactory($commonFactory));
-//        $masterFactory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+        //$this->enableDebugLogging($masterFactory, $commonFactory, $implementationFactory);
+    }
+
+    private function enableDebugLogging(
+        MasterFactory $masterFactory,
+        CommonFactory $commonFactory,
+        TwentyOneRunFactory $implementationFactory
+    ) {
+        $masterFactory->register(new LoggingQueueFactory($implementationFactory));
+        $masterFactory->register(new LoggingCommandHandlerFactory($commonFactory));
+        $masterFactory->register(new LoggingDomainEventHandlerFactory($commonFactory));
     }
 
     protected function registerRouters(HttpRouterChain $router)
