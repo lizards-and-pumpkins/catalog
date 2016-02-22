@@ -101,7 +101,7 @@ use LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder;
 use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
 use LizardsAndPumpkins\Website\HostToWebsiteMap;
 
-class CommonFactory implements Factory, DomainEventFactory, CommandHandlerFactory
+class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
     use FactoryTrait;
 

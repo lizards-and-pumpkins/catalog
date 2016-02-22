@@ -25,7 +25,7 @@ class DomainEventHandlerLocator
         $eventClass = $this->getUnqualifiedDomainEventClassName($event);
         $method = 'create' . $eventClass . 'Handler';
 
-        if (!method_exists(DomainEventFactory::class, $method)) {
+        if (!method_exists(DomainEventHandlerFactory::class, $method)) {
             throw new UnableToFindDomainEventHandlerException(
                 sprintf('Unable to find a handler for %s domain event', $eventClass)
             );

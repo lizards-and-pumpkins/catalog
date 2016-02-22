@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Projection;
 use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\DomainEventFactory;
+use LizardsAndPumpkins\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Factory;
 use LizardsAndPumpkins\FactoryTrait;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
@@ -17,22 +17,22 @@ use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 
-class LoggingDomainEventHandlerFactory implements Factory, DomainEventFactory
+class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFactory
 {
     use FactoryTrait;
 
     /**
-     * @var DomainEventFactory
+     * @var DomainEventHandlerFactory
      */
     private $domainEventFactoryDelegate;
 
-    public function __construct(DomainEventFactory $domainEventFactoryDelegate)
+    public function __construct(DomainEventHandlerFactory $domainEventFactoryDelegate)
     {
         $this->domainEventFactoryDelegate = $domainEventFactoryDelegate;
     }
 
     /**
-     * @return DomainEventFactory
+     * @return DomainEventHandlerFactory
      */
     private function getDomainEventFactoryDelegate()
     {
