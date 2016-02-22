@@ -148,10 +148,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
 
-        $this->pageBuilder = new PageBuilder(
-            $this->mockDataPoolReader,
-            $this->stubSnippetKeyGeneratorLocator
-        );
+        $this->pageBuilder = new PageBuilder($this->mockDataPoolReader, $this->stubSnippetKeyGeneratorLocator);
     }
 
     public function testHttpResponseIsReturned()
@@ -292,10 +289,7 @@ EOH;
         $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubKeyGeneratorLocator);
 
-        $this->pageBuilder = new PageBuilder(
-            $this->mockDataPoolReader,
-            $stubKeyGeneratorLocator
-        );
+        $this->pageBuilder = new PageBuilder($this->mockDataPoolReader, $stubKeyGeneratorLocator);
 
         $childSnippetCodes = ['child1'];
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
