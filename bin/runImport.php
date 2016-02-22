@@ -39,9 +39,10 @@ class RunImport extends BaseCliCommand
     public static function bootstrap()
     {
         $factory = new SampleMasterFactory();
-        $factory->register(new CommonFactory());
+        $commonFactory = new CommonFactory();
+        $factory->register($commonFactory);
         $factory->register(new TwentyOneRunFactory());
-        $factory->register(new LoggingDomainEventHandlerFactory());
+        $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
         $factory->register(new UpdatingProductImportCommandFactory());
         $factory->register(new UpdatingProductListingImportCommandFactory());
 
