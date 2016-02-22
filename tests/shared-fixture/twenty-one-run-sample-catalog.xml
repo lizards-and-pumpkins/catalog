@@ -407,6 +407,10 @@ TEXTILE/SYNTHETICS]]></attribute>
                 <attribute name="stock_qty" is="GreaterThan">0</attribute>
                 <attribute name="category" is="Equal">sale</attribute>
             </criteria>
+            <attributes>
+                <attribute name="title">Sale</attribute>
+                <attribute name="description">Special Offers!!</attribute>
+            </attributes>
         </listing>
         <listing url_key="asics" website="fr" locale="fr_FR">
             <criteria type="and">

@@ -36,6 +36,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer

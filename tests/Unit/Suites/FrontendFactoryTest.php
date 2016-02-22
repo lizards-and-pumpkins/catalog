@@ -27,7 +27,9 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
@@ -235,6 +237,9 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductJsonSnippetRenderer::CODE],
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
             [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],
+            ['product_title'],
+            [ProductListingTitleSnippetRenderer::CODE],
+            [ProductListingDescriptionSnippetRenderer::CODE],
         ];
     }
 

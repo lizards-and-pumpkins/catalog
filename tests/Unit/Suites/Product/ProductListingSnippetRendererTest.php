@@ -80,7 +80,8 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'product_listing',
             PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['product_listing'],
             PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [
-                'title' => [ProductListingTitleSnippetRenderer::CODE]
+                'title' => [ProductListingTitleSnippetRenderer::CODE],
+                'sidebar_container' => [ProductListingDescriptionSnippetRenderer::CODE]
             ],
         ]);
 

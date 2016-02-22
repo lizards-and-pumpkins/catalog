@@ -29,6 +29,9 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingBuilder;
+use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
+use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
@@ -103,6 +106,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\Product\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
@@ -490,7 +494,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result2 = $this->commonFactory->getUrlKeyStore();
         $this->assertSame($result1, $result2);
     }
-    
+
     public function testProductSearchAutosuggestionTranslatorFactoryIsReturningATranslator()
     {
         $translatorFactory = $this->commonFactory->getProductSearchAutosuggestionTranslatorFactory();
@@ -693,5 +697,51 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductListingTitleSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testItCreatesAProductListingDescriptionSnippetRenderer()
+    {
+        $result = $this->commonFactory->createProductListingDescriptionSnippetRenderer();
+        $this->assertInstanceOf(ProductListingDescriptionSnippetRenderer::class, $result);
+    }
+
+    public function testItCreatesAProductListingDescriptionSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductListingDescriptionSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    /**
+     * @param string $expected
+     * @dataProvider productListSnippetRenderersProvider
+     */
+    public function testItContainsTheProductListingDescriptionSnippetRendererInTheListingRendererList($expected)
+    {
+        $found = array_reduce(
+            $this->commonFactory->createProductListingSnippetRendererList(),
+            function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
+                return $found || is_a($snippetRenderer, $expected);
+            }
+        );
+        $message = sprintf('SnippetRenderer "%s" not found in product listing snippet renderer list', $expected);
+        $this->assertTrue($found, $message);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function productListSnippetRenderersProvider()
+    {
+        return [
+            [ProductListingDescriptionSnippetRenderer::class],
+            [ProductListingTitleSnippetRenderer::class],
+            [ProductListingSnippetRenderer::class],
+        ];
+    }
+
+    public function testItReturnsAProductListingDescriptionBlockRenderer()
+    {
+        $result = $this->commonFactory->createProductListingDescriptionBlockRenderer();
+        $this->assertInstanceOf(ProductListingDescriptionBlockRenderer::class, $result);
     }
 }

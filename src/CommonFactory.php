@@ -41,6 +41,8 @@ use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
+use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
@@ -527,6 +529,7 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
         return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createProductListingTitleSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingDescriptionSnippetRenderer(),
         ];
     }
 
@@ -1573,5 +1576,44 @@ class CommonFactory implements Factory, DomainEventFactory, CommandFactory
     public function createProductListingImportCommandLocator()
     {
         return new ProductListingImportCommandLocator($this->getMasterFactory());
+    }
+
+    /**
+     * @return ProductListingDescriptionSnippetRenderer
+     */
+    public function createProductListingDescriptionSnippetRenderer()
+    {
+        return new ProductListingDescriptionSnippetRenderer(
+            $this->getMasterFactory()->createProductListingDescriptionBlockRenderer(),
+            $this->getMasterFactory()->createProductListingDescriptionSnippetKeyGenerator(),
+            $this->getMasterFactory()->createContextBuilder()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductListingDescriptionSnippetKeyGenerator()
+    {
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
+
+        return new GenericSnippetKeyGenerator(
+            ProductListingDescriptionSnippetRenderer::CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return ProductListingDescriptionBlockRenderer
+     */
+    public function createProductListingDescriptionBlockRenderer()
+    {
+        return new ProductListingDescriptionBlockRenderer(
+            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->createBlockStructure(),
+            $this->getMasterFactory()->getTranslatorRegistry(),
+            $this->getMasterFactory()->createBaseUrlBuilder()
+        );
     }
 }
