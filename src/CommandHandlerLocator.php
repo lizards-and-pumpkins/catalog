@@ -11,7 +11,7 @@ class CommandHandlerLocator
      */
     private $factory;
 
-    public function __construct(CommandFactory $factory)
+    public function __construct(MasterFactory $factory)
     {
         $this->factory = $factory;
     }
@@ -25,7 +25,7 @@ class CommandHandlerLocator
         $commandClass = $this->getUnqualifiedCommandClassName($command);
         $method = 'create' . $commandClass . 'Handler';
 
-        if (!method_exists($this->factory, $method)) {
+        if (!method_exists(CommandFactory::class, $method)) {
             throw new UnableToFindCommandHandlerException(
                 sprintf('Unable to find a handler for %s command', $commandClass)
             );

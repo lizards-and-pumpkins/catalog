@@ -3,9 +3,6 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
-use LizardsAndPumpkins\Log\Writer\StdOutLogMessageWriter;
-use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\LoggingQueueDecorator;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\Clearable;

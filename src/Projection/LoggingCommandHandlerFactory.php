@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\CommandFactory;
+use LizardsAndPumpkins\CommandHandlerLocator;
 use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;

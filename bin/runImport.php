@@ -40,8 +40,9 @@ class RunImport extends BaseCliCommand
     {
         $factory = new SampleMasterFactory();
         $commonFactory = new CommonFactory();
+        $implementationFactory = new TwentyOneRunFactory();
         $factory->register($commonFactory);
-        $factory->register(new TwentyOneRunFactory());
+        $factory->register($implementationFactory);
         $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
         $factory->register(new UpdatingProductImportCommandFactory());
         $factory->register(new UpdatingProductListingImportCommandFactory());
