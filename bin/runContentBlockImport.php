@@ -39,7 +39,7 @@ class RunContentBlockImport extends BaseCliCommand
         $commonFactory = new CommonFactory();
         $factory->register($commonFactory);
         $factory->register(new TwentyOneRunFactory());
-        $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+//        $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
 
         return new self($factory, new CLImate());
     }
