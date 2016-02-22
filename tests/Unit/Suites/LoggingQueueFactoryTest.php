@@ -24,11 +24,13 @@ class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factory = new LoggingQueueFactory();
 
+        $implementationFactory = new UnitTestFactory();
+        
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new UnitTestFactory());
+        $masterFactory->register($implementationFactory);
+        $this->factory = new LoggingQueueFactory($implementationFactory);
         $masterFactory->register($this->factory);
     }
 
@@ -44,11 +46,5 @@ class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->factory->createCommandQueue();
         $this->assertInstanceOf(LoggingQueueDecorator::class, $result);
         $this->assertAttributeInstanceOf(Queue::class, 'component', $result);
-    }
-
-    public function testItReturnsAStdOutLogMessageWriter()
-    {
-        $result = $this->factory->createLogMessageWriter();
-        $this->assertInstanceOf(StdOutLogMessageWriter::class, $result);
     }
 }

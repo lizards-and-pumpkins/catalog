@@ -33,9 +33,10 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new CommonFactory());
+        $commonFactory = new CommonFactory();
+        $masterFactory->register($commonFactory);
         $masterFactory->register(new UnitTestFactory());
-        $this->loggingCommandHandlerFactory = new LoggingCommandHandlerFactory();
+        $this->loggingCommandHandlerFactory = new LoggingCommandHandlerFactory($commonFactory);
         $masterFactory->register($this->loggingCommandHandlerFactory);
     }
 

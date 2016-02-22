@@ -26,15 +26,16 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventFactory
      */
     private $domainEventFactoryDelegate;
 
+    public function __construct(DomainEventFactory $domainEventFactoryDelegate)
+    {
+        $this->domainEventFactoryDelegate = $domainEventFactoryDelegate;
+    }
+
     /**
      * @return DomainEventFactory
      */
     private function getDomainEventFactoryDelegate()
     {
-        if (null === $this->domainEventFactoryDelegate) {
-            $this->domainEventFactoryDelegate = new CommonFactory();
-            $this->domainEventFactoryDelegate->setMasterFactory($this->getMasterFactory());
-        }
         return $this->domainEventFactoryDelegate;
     }
 

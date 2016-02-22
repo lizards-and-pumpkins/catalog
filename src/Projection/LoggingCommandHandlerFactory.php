@@ -24,15 +24,16 @@ class LoggingCommandHandlerFactory implements CommandFactory, Factory
      */
     private $commandFactoryDelegate;
 
+    public function __construct(CommandFactory $commandFactoryDelegate)
+    {
+        $this->commandFactoryDelegate = $commandFactoryDelegate;
+    }
+    
     /**
      * @return CommandFactory
      */
     private function getCommandFactoryDelegate()
     {
-        if (null === $this->commandFactoryDelegate) {
-            $this->commandFactoryDelegate = new CommonFactory();
-            $this->commandFactoryDelegate->setMasterFactory($this->getMasterFactory());
-        }
         return $this->commandFactoryDelegate;
     }
     
