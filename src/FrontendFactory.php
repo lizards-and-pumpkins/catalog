@@ -381,8 +381,7 @@ class FrontendFactory implements Factory
     {
         $pageBuilder = new PageBuilder(
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
-            $this->getMasterFactory()->getLogger()
+            $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
         );
         $this->registerSnippetTransformations($pageBuilder);
 

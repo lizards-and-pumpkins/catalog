@@ -7,7 +7,6 @@ use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SnippetTransformati
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGenerator;
@@ -19,7 +18,6 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderSnippets
  * @uses   \LizardsAndPumpkins\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\MissingSnippetCodeMessage
  */
 class PageBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,11 +45,6 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @var Context|MockObject
      */
     private $stubContext;
-
-    /**
-     * @var Logger|MockObject
-     */
-    private $stubLogger;
 
     /**
      * @var PageMetaInfoSnippetContent|MockObject
@@ -155,12 +148,9 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
 
-        $this->stubLogger = $this->getMock(Logger::class);
-
         $this->pageBuilder = new PageBuilder(
             $this->mockDataPoolReader,
-            $this->stubSnippetKeyGeneratorLocator,
-            $this->stubLogger
+            $this->stubSnippetKeyGeneratorLocator
         );
     }
 
@@ -261,18 +251,6 @@ EOH;
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }
 
-    public function testLogIsWrittenIfChildSnippetContentIsNotFound()
-    {
-        $childSnippetCodes = ['child1'];
-        $allSnippetCodes = [$this->testRootSnippetCode];
-        $allSnippetContent = ['Dummy Root Content'];
-        $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
-        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
-        $this->stubLogger->expects($this->once())
-            ->method('log');
-        $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
-    }
-
     public function testPageSpecificAdditionalSnippetsAreMergedIntoList()
     {
         $rootSnippetContent = 'Stub Content - {{snippet child1}}';
@@ -316,8 +294,7 @@ EOH;
 
         $this->pageBuilder = new PageBuilder(
             $this->mockDataPoolReader,
-            $stubKeyGeneratorLocator,
-            $this->stubLogger
+            $stubKeyGeneratorLocator
         );
 
         $childSnippetCodes = ['child1'];
