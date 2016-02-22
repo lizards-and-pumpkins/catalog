@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\NullProductImageI
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
+use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
@@ -39,13 +40,25 @@ class RunImport extends BaseCliCommand
     public static function bootstrap()
     {
         $factory = new SampleMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new TwentyOneRunFactory());
-        $factory->register(new LoggingDomainEventHandlerFactory());
+        $commonFactory = new CommonFactory();
+        $implementationFactory = new TwentyOneRunFactory();
+        $factory->register($commonFactory);
+        $factory->register($implementationFactory);
         $factory->register(new UpdatingProductImportCommandFactory());
         $factory->register(new UpdatingProductListingImportCommandFactory());
+        //self::enableDebugLogging($factory, $commonFactory, $implementationFactory);
 
         return new self($factory, new CLImate());
+    }
+
+    private static function enableDebugLogging(
+        MasterFactory $factory,
+        CommonFactory $commonFactory,
+        TwentyOneRunFactory $implementationFactory
+    ) {
+        $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+        $factory->register(new LoggingCommandHandlerFactory($commonFactory));
+        $factory->register(new LoggingQueueFactory($implementationFactory));
     }
 
     /**
@@ -55,31 +68,30 @@ class RunImport extends BaseCliCommand
     protected function getCommandLineArgumentsArray(CLImate $climate)
     {
         return array_merge(parent::getCommandLineArgumentsArray($climate), [
-            'clearStorage' => [
-                'prefix' => 'c',
-                'longPrefix' => 'clearStorage',
+            'clearStorage'  => [
+                'prefix'      => 'c',
+                'longPrefix'  => 'clearStorage',
                 'description' => 'Clear queues and data pool before the import',
-                'noValue' => true,
+                'noValue'     => true,
             ],
             'processQueues' => [
-                'prefix' => 'p',
-                'longPrefix' => 'processQueues',
+                'prefix'      => 'p',
+                'longPrefix'  => 'processQueues',
                 'description' => 'Process queues after the import',
-                'noValue' => true,
+                'noValue'     => true,
             ],
-            'importImages' => [
-                'prefix' => 'i',
-                'longPrefix' => 'importImages',
+            'importImages'  => [
+                'prefix'      => 'i',
+                'longPrefix'  => 'importImages',
                 'description' => 'Process images during import',
-                'noValue' => true,
+                'noValue'     => true,
             ],
-            'importFile' => [
+            'importFile'    => [
                 'description' => 'Import XML file',
-                'required' => true
-            ]
+                'required'    => true,
+            ],
         ]);
     }
-
 
     protected function execute(CLImate $CLImate)
     {

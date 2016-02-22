@@ -60,7 +60,7 @@ class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framewo
         $this->mockLogger->expects($this->once())->method('log')
             ->willReturnCallback(function (LogMessage $logMessage) {
                 if (!preg_match('/^DomainEventHandler::process [a-z0-9_\\\]+ \d+\.\d+/i', (string)$logMessage)) {
-                    $message = sprintf('%s format does not expectation, got "%s"', get_class($logMessage), $logMessage);
+                    $message = sprintf('%s unexpected message format, got "%s"', get_class($logMessage), $logMessage);
                     $this->fail($message);
                 }
             });

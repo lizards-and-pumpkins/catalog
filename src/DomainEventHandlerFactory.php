@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHa
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
 
-interface DomainEventFactory
+interface DomainEventHandlerFactory
 {
     /**
      * @param ProductWasUpdatedDomainEvent $event

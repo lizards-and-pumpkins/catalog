@@ -6,8 +6,6 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DefaultHttpResponse;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\MissingSnippetCodeMessage;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
@@ -49,11 +47,6 @@ class PageBuilder
     private $keyGeneratorParams;
 
     /**
-     * @var Logger
-     */
-    private $logger;
-
-    /**
      * @var array[]
      */
     private $snippetTransformations = [];
@@ -68,14 +61,10 @@ class PageBuilder
      */
     private $containerSnippets = [];
 
-    public function __construct(
-        DataPoolReader $dataPoolReader,
-        SnippetKeyGeneratorLocator $keyGeneratorLocator,
-        Logger $logger
-    ) {
+    public function __construct(DataPoolReader $dataPoolReader, SnippetKeyGeneratorLocator $keyGeneratorLocator)
+    {
         $this->dataPoolReader = $dataPoolReader;
         $this->keyGeneratorLocator = $keyGeneratorLocator;
-        $this->logger = $logger;
     }
 
     /**
@@ -96,8 +85,7 @@ class PageBuilder
             $keyToContentMap,
             array_merge_recursive($metaInfo->getContainerSnippets(), $this->containerSnippets)
         );
-        
-        $this->logMissingSnippets();
+
         $this->applySnippetTransformations();
 
         $content = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
@@ -210,14 +198,6 @@ class PageBuilder
     private function removeCodesThatCouldNotBeMappedToAKey(array $snippetKeys)
     {
         return array_filter($snippetKeys);
-    }
-
-    private function logMissingSnippets()
-    {
-        $missingSnippetCodes = $this->pageSnippets->getNotLoadedSnippetCodes();
-        if (count($missingSnippetCodes) > 0) {
-            $this->logger->log(new MissingSnippetCodeMessage($missingSnippetCodes, $this->context));
-        }
     }
 
     private function applySnippetTransformations()

@@ -4,6 +4,7 @@
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
+use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Queue\Queue;
@@ -34,11 +35,23 @@ class TriggerTemplateUpdate extends BaseCliCommand
     public static function bootstrap()
     {
         $factory = new SampleMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new TwentyOneRunFactory());
-        $factory->register(new LoggingDomainEventHandlerFactory());
+        $commonFactory = new CommonFactory();
+        $implementationFactory = new TwentyOneRunFactory();
+        $factory->register($commonFactory);
+        $factory->register($implementationFactory);
+        //self::enableDebugLogging($factory, $commonFactory, $implementationFactory);
 
         return new self($factory, new CLImate());
+    }
+
+    private static function enableDebugLogging(
+        MasterFactory $factory,
+        CommonFactory $commonFactory,
+        TwentyOneRunFactory $implementationFactory
+    ) {
+        $factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+        $factory->register(new LoggingCommandHandlerFactory($commonFactory));
+        $factory->register(new LoggingQueueFactory($implementationFactory));
     }
 
     /**
@@ -49,15 +62,15 @@ class TriggerTemplateUpdate extends BaseCliCommand
     {
         return array_merge(parent::getCommandLineArgumentsArray($climate), [
             'processQueues' => [
-                'prefix' => 'p',
-                'longPrefix' => 'processQueues',
+                'prefix'      => 'p',
+                'longPrefix'  => 'processQueues',
                 'description' => 'Process queues',
-                'noValue' => true,
+                'noValue'     => true,
             ],
-            'templateId' => [
+            'templateId'    => [
                 'description' => 'Template ID',
-                'required' => true
-            ]
+                'required'    => true,
+            ],
         ]);
     }
 

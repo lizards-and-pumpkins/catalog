@@ -11,10 +11,35 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../../../autoload.php';
 }
 
-$factory = new SampleMasterFactory();
-$factory->register(new CommonFactory());
-$factory->register(new TwentyOneRunFactory());
-$factory->register(new LoggingDomainEventHandlerFactory());
+class EventConsumerWorker
+{
+    /**
+     * @var SampleMasterFactory
+     */
+    private $factory;
 
-$eventConsumer = $factory->createDomainEventConsumer();
-$eventConsumer->process();
+    private function __construct()
+    {
+        $this->factory = new SampleMasterFactory();
+        $commonFactory = new CommonFactory();
+        $implementationFactory = new TwentyOneRunFactory();
+        $this->factory->register($commonFactory);
+        $this->factory->register($implementationFactory);
+        //$this->enableDebugLogging($commonFactory, $implementationFactory);
+    }
+
+    private function enableDebugLogging(CommonFactory $commonFactory, TwentyOneRunFactory $implementationFactory)
+    {
+        $this->factory->register(new LoggingDomainEventHandlerFactory($commonFactory));
+        $this->factory->register(new LoggingQueueFactory($implementationFactory));
+    }
+
+    public static function run()
+    {
+        $worker = new self();
+        $eventConsumer = $worker->factory->createDomainEventConsumer();
+        $eventConsumer->process();
+    }
+}
+
+EventConsumerWorker::run();

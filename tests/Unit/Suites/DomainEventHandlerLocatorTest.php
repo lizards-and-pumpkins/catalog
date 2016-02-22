@@ -34,7 +34,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->factory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods(array_merge(get_class_methods(DomainEventFactory::class), ['register']))
+            ->setMethods(array_merge(get_class_methods(DomainEventHandlerFactory::class), ['register']))
             ->getMock();
         $this->locator = new DomainEventHandlerLocator($this->factory);
     }

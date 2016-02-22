@@ -53,6 +53,7 @@ use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands;
+use LizardsAndPumpkins\Projection\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
@@ -138,6 +139,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
  * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingCommandHandlerDecorator
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
@@ -472,8 +474,16 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
         $eventHandlerToDecorate = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
-        $result = $this->commonFactory->createProcessTimeLoggingDomainEventDecorator($eventHandlerToDecorate);
+        $result = $this->commonFactory->createProcessTimeLoggingDomainEventHandlerDecorator($eventHandlerToDecorate);
         $this->assertInstanceOf(ProcessTimeLoggingDomainEventHandlerDecorator::class, $result);
+    }
+
+    public function testItReturnsAProcessTimeLoggingCommandHandlerDecorator()
+    {
+        $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
+        $commandHandlerToDecorate = $this->commonFactory->createAddImageCommandHandler($stubCommand);
+        $result = $this->commonFactory->createProcessTimeLoggingCommandHandlerDecorator($commandHandlerToDecorate);
+        $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $result);
     }
 
     public function testCatalogImportIsReturned()

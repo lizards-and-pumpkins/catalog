@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Product\AddProductListingCommand;
 use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
 
-interface CommandFactory
+interface CommandHandlerFactory
 {
     /**
      * @param UpdateContentBlockCommand $command

@@ -106,9 +106,10 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new CommonFactory());
+        $commonFactory = new CommonFactory();
+        $masterFactory->register($commonFactory);
         $masterFactory->register(new UnitTestFactory());
-        $this->factory = new LoggingDomainEventHandlerFactory();
+        $this->factory = new LoggingDomainEventHandlerFactory($commonFactory);
         $masterFactory->register($this->factory);
     }
 
