@@ -428,3 +428,11 @@ function setcookie($name, $value, $expire)
 {
     ProductListingPageRequestTest::trackSetCookieCalls($name, $value, $expire);
 }
+
+/**
+ * @return int
+ */
+function time()
+{
+    return 0;
+}
