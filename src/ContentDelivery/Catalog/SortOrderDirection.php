@@ -28,7 +28,7 @@ class SortOrderDirection
      */
     public static function create($direction)
     {
-        if (self::ASC !== $direction && self::DESC !== $direction) {
+        if (!self::isValid($direction)) {
             throw new InvalidSortOrderDirectionException(
                 sprintf('Invalid selected sort order direction "%s" specified.', $direction)
             );
@@ -43,5 +43,14 @@ class SortOrderDirection
     public function __toString()
     {
         return $this->direction;
+    }
+
+    /**
+     * @param string $direction
+     * @return bool
+     */
+    public static function isValid($direction)
+    {
+        return self::ASC === $direction || self::DESC === $direction;
     }
 }
