@@ -61,6 +61,16 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $name
      * @param mixed $value
+     * @param int $ttl
+     */
+    private function assertCookieHasNotBeenSet($name, $value, $ttl)
+    {
+        $this->assertNotContains([$name, $value, time() + $ttl], self::$setCookieValues);
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
      * @param int $expire
      */
     public static function trackSetCookieCalls($name, $value, $expire)
@@ -239,33 +249,62 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSortOrderCookieIsSetIfCorrespondingQueryParameterIsPresent()
+    public function testSortOrderAndDirectionCookiesAreNotSetIfSortOrderQueryParametersIsNotAmongConfiguredSortOrders()
     {
         $sortOrderAttributeName = 'foo';
+        $sortOrderDirection = SortOrderDirection::ASC;
+
+        $defaultSortOrderAttributeName = 'bar';
 
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, $sortOrderAttributeName],
+            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
         ]);
+
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode->method('isEqualTo')
+            ->willReturnCallback(function ($attributeName) use ($defaultSortOrderAttributeName) {
+                return $attributeName === $defaultSortOrderAttributeName;
+            });
+
+        $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+
+        $this->pageRequest->processCookies($this->stubRequest);
+
+        $this->assertCookieHasNotBeenSet(
+            ProductListingPageRequest::SORT_ORDER_COOKIE_NAME,
+            $sortOrderAttributeName,
+            ProductListingPageRequest::SORT_ORDER_COOKIE_TTL
+        );
+        $this->assertCookieHasNotBeenSet(
+            ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME,
+            $sortOrderDirection,
+            ProductListingPageRequest::SORT_DIRECTION_COOKIE_TTL
+        );
+    }
+
+    public function testSortOrderAndDirectionCookiesAreSetIfCorrespondingQueryParametersArePresent()
+    {
+        $sortOrderAttributeName = 'foo';
+        $sortOrderDirection = SortOrderDirection::ASC;
+
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([
+            [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, $sortOrderAttributeName],
+            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
+        ]);
+
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode->method('isEqualTo')->with($sortOrderAttributeName)->willReturn(true);
+
+        $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
 
         $this->pageRequest->processCookies($this->stubRequest);
 
         $this->assertCookieHasBeenSet(
             ProductListingPageRequest::SORT_ORDER_COOKIE_NAME,
             $sortOrderAttributeName,
-            ProductListingPageRequest::SORT_DIRECTION_COOKIE_TTL
+            ProductListingPageRequest::SORT_ORDER_COOKIE_TTL
         );
-    }
-
-    public function testSortOrderDirectionCookieIsSetIfCorrespondingQueryParameterIsPresent()
-    {
-        $sortOrderDirection = SortOrderDirection::ASC;
-
-        $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
-        ]);
-
-        $this->pageRequest->processCookies($this->stubRequest);
-
         $this->assertCookieHasBeenSet(
             ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME,
             $sortOrderDirection,

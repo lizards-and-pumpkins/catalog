@@ -127,6 +127,7 @@ class ProductListingPageRequest
     public function processCookies(HttpRequest $request)
     {
         $productsPerPage = $this->getProductsPerPageQueryStringValue($request);
+
         if ($productsPerPage !== null) {
             setcookie(
                 self::PRODUCTS_PER_PAGE_COOKIE_NAME,
@@ -136,21 +137,11 @@ class ProductListingPageRequest
         }
 
         $sortOrder = $this->getSortOrderQueryStringValue($request);
-        if ($sortOrder !== null) {
-            setcookie(
-                self::SORT_ORDER_COOKIE_NAME,
-                $sortOrder,
-                time() + self::SORT_ORDER_COOKIE_TTL
-            );
-        }
-
         $sortDirection = $this->getSortDirectionQueryStringValue($request);
-        if ($sortDirection !== null) {
-            setcookie(
-                self::SORT_DIRECTION_COOKIE_NAME,
-                $sortDirection,
-                time() + self::SORT_DIRECTION_COOKIE_TTL
-            );
+
+        if ($this->isValidSortOrder($sortOrder, $sortDirection)) {
+            setcookie(self::SORT_ORDER_COOKIE_NAME, $sortOrder, time() + self::SORT_ORDER_COOKIE_TTL);
+            setcookie(self::SORT_DIRECTION_COOKIE_NAME, $sortDirection, time() + self::SORT_DIRECTION_COOKIE_TTL);
         }
     }
 
