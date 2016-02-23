@@ -100,7 +100,7 @@ class ProductListingPageRequest
         $sortOrderQueryStringValue = $this->getSortOrderQueryStringValue($request);
         $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
 
-        if ($sortOrderQueryStringValue !== null && $sortDirectionQueryStringValue !== null) {
+        if ($this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue)) {
             $sortOrderDirection = SortOrderDirection::create($sortDirectionQueryStringValue);
             return $this->createSelectedSortOrderConfig($sortOrderQueryStringValue, $sortOrderDirection);
         }
@@ -203,5 +203,25 @@ class ProductListingPageRequest
     private function getSortDirectionQueryStringValue(HttpRequest $request)
     {
         return $request->getQueryParameter(self::SORT_DIRECTION_QUERY_PARAMETER_NAME);
+    }
+
+    /**
+     * @param string $sortOrder
+     * @param string $direction
+     * @return bool
+     */
+    private function isValidSortOrder($sortOrder, $direction)
+    {
+        if (null === $sortOrder || null === $direction) {
+            return false;
+        }
+
+        foreach ($this->sortOrderConfigs as $config) {
+            if ($config->getAttributeCode()->isEqualTo($sortOrder) && SortOrderDirection::isValid($direction)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
