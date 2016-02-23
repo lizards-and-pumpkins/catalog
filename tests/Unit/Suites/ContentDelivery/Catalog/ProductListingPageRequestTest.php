@@ -225,6 +225,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME, $sortOrderDirection],
         ]);
 
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode->method('isEqualTo')->with($sortOrderAttributeName)->willReturn(true);
+
+        $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+
         $result = $this->pageRequest->getSelectedSortOrderConfig($this->stubRequest);
 
         $this->assertTrue($result->isSelected());
@@ -366,6 +371,37 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, $sortOrderAttributeName],
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
+        ]);
+
+        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode->method('isEqualTo')
+            ->willReturnCallback(function ($attributeName) use ($defaultSortOrderAttributeName) {
+                return $attributeName === $defaultSortOrderAttributeName;
+            });
+
+        $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
+        $this->stubSortOrderConfig->method('isSelected')->willReturn(true);
+
+        $result = $this->pageRequest->getSelectedSortOrderConfig($this->stubRequest);
+
+        $this->assertSame($this->stubSortOrderConfig, $result);
+    }
+
+    public function testInitialSelectedSortOrderConfigIsReturnedIfCookieValuesAreNotAmongConfiguredSortOrders()
+    {
+        $sortOrderAttributeName = 'foo';
+        $sortOrderDirection = SortOrderDirection::ASC;
+
+        $defaultSortOrderAttributeName = 'bar';
+
+        $this->stubRequest->method('hasCookie')->willReturnMap([
+            [ProductListingPageRequest::SORT_ORDER_COOKIE_NAME, true],
+            [ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME, true],
+        ]);
+
+        $this->stubRequest->method('getCookieValue')->willReturnMap([
+            [ProductListingPageRequest::SORT_ORDER_COOKIE_NAME, $sortOrderAttributeName],
+            [ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME, $sortOrderDirection],
         ]);
 
         $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);

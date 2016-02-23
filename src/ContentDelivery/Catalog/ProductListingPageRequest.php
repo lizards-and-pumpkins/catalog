@@ -110,9 +110,11 @@ class ProductListingPageRequest
         ) {
             $sortOrder = $request->getCookieValue(self::SORT_ORDER_COOKIE_NAME);
             $direction = $request->getCookieValue(self::SORT_DIRECTION_COOKIE_NAME);
-            $sortOrderDirection = SortOrderDirection::create($direction);
 
-            return $this->createSelectedSortOrderConfig($sortOrder, $sortOrderDirection);
+            if ($this->isValidSortOrder($sortOrder, $direction)) {
+                $sortOrderDirection = SortOrderDirection::create($direction);
+                return $this->createSelectedSortOrderConfig($sortOrder, $sortOrderDirection);
+            }
         }
 
         foreach ($this->sortOrderConfigs as $sortOrderConfig) {
