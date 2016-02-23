@@ -100,7 +100,7 @@ class ProductListingPageRequest
         $sortOrderQueryStringValue = $this->getSortOrderQueryStringValue($request);
         $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
 
-        if ($sortOrderQueryStringValue !== null && $sortDirectionQueryStringValue !== null) {
+        if ($this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue)) {
             $sortOrderDirection = SortOrderDirection::create($sortDirectionQueryStringValue);
             return $this->createSelectedSortOrderConfig($sortOrderQueryStringValue, $sortOrderDirection);
         }
@@ -110,9 +110,11 @@ class ProductListingPageRequest
         ) {
             $sortOrder = $request->getCookieValue(self::SORT_ORDER_COOKIE_NAME);
             $direction = $request->getCookieValue(self::SORT_DIRECTION_COOKIE_NAME);
-            $sortOrderDirection = SortOrderDirection::create($direction);
 
-            return $this->createSelectedSortOrderConfig($sortOrder, $sortOrderDirection);
+            if ($this->isValidSortOrder($sortOrder, $direction)) {
+                $sortOrderDirection = SortOrderDirection::create($direction);
+                return $this->createSelectedSortOrderConfig($sortOrder, $sortOrderDirection);
+            }
         }
 
         foreach ($this->sortOrderConfigs as $sortOrderConfig) {
@@ -127,6 +129,7 @@ class ProductListingPageRequest
     public function processCookies(HttpRequest $request)
     {
         $productsPerPage = $this->getProductsPerPageQueryStringValue($request);
+
         if ($productsPerPage !== null) {
             setcookie(
                 self::PRODUCTS_PER_PAGE_COOKIE_NAME,
@@ -136,21 +139,11 @@ class ProductListingPageRequest
         }
 
         $sortOrder = $this->getSortOrderQueryStringValue($request);
-        if ($sortOrder !== null) {
-            setcookie(
-                self::SORT_ORDER_COOKIE_NAME,
-                $sortOrder,
-                time() + self::SORT_ORDER_COOKIE_TTL
-            );
-        }
-
         $sortDirection = $this->getSortDirectionQueryStringValue($request);
-        if ($sortDirection !== null) {
-            setcookie(
-                self::SORT_DIRECTION_COOKIE_NAME,
-                $sortDirection,
-                time() + self::SORT_DIRECTION_COOKIE_TTL
-            );
+
+        if ($this->isValidSortOrder($sortOrder, $sortDirection)) {
+            setcookie(self::SORT_ORDER_COOKIE_NAME, $sortOrder, time() + self::SORT_ORDER_COOKIE_TTL);
+            setcookie(self::SORT_DIRECTION_COOKIE_NAME, $sortDirection, time() + self::SORT_DIRECTION_COOKIE_TTL);
         }
     }
 
@@ -203,5 +196,25 @@ class ProductListingPageRequest
     private function getSortDirectionQueryStringValue(HttpRequest $request)
     {
         return $request->getQueryParameter(self::SORT_DIRECTION_QUERY_PARAMETER_NAME);
+    }
+
+    /**
+     * @param string $sortOrder
+     * @param string $direction
+     * @return bool
+     */
+    private function isValidSortOrder($sortOrder, $direction)
+    {
+        if (null === $sortOrder || null === $direction) {
+            return false;
+        }
+
+        foreach ($this->sortOrderConfigs as $config) {
+            if ($config->getAttributeCode()->isEqualTo($sortOrder) && SortOrderDirection::isValid($direction)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
