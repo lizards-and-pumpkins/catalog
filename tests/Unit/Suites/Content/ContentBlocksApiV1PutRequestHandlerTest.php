@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockContextException;
 use LizardsAndPumpkins\Content\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
@@ -83,7 +84,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testExceptionIsThrownIfContentBlockContextIsNotAnArray()
     {
-        $this->expectException(InvalidContentBlockContext::class);
+        $this->expectException(InvalidContentBlockContextException::class);
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '', 'context' => '']));
         $this->requestHandler->process($this->mockRequest);
     }
