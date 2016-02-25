@@ -25,6 +25,20 @@ define(['lib/url', 'pagination', 'lib/translate'], function (url, pagination, tr
         event.target.nextSibling.style.display = 'block';
     }
 
+    function scrollSelectedFilterOptionsIntoView(filterContainer) {
+        if (domElementHasVerticalScrolling(filterContainer)) {
+            var activeOption = filterContainer.querySelector('.active');
+
+            if (null !== activeOption) {
+                filterContainer.scrollTop = activeOption.offsetTop;
+            }
+        }
+    }
+
+    function domElementHasVerticalScrolling(domElement) {
+        return domElement.scrollHeight > domElement.offsetHeight;
+    }
+
     var FilterNavigation = {
         renderLayeredNavigation: function (filterNavigationJson, placeholderSelector) {
             if (typeof filterNavigationJson !== 'object') {
@@ -62,6 +76,8 @@ define(['lib/url', 'pagination', 'lib/translate'], function (url, pagination, tr
                 filterNavigation.appendChild(heading);
                 filterContainer.appendChild(optionList);
                 filterNavigation.appendChild(filterContainer);
+
+                scrollSelectedFilterOptionsIntoView(filterContainer);
             });
         },
 
