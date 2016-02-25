@@ -4,8 +4,8 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 
 class ProductDetailViewSnippetRenderer implements SnippetRenderer
@@ -15,13 +15,13 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     /**
      * @var ProductDetailViewBlockRenderer
      */
-    private $blockRenderer;
+    private $productDetailViewBlockRenderer;
 
     /**
      * @var SnippetKeyGenerator
      */
     private $productDetailViewSnippetKeyGenerator;
-    
+
     /**
      * @var SnippetKeyGenerator
      */
@@ -31,17 +31,23 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      * @var SnippetKeyGenerator
      */
     private $productTitleSnippetKeyGenerator;
+    /**
+     * @var SnippetKeyGenerator
+     */
+    private $productDetailPageMetaDescriptionSnippetKeyGenerator;
 
     public function __construct(
         ProductDetailViewBlockRenderer $blockRenderer,
         SnippetKeyGenerator $productDetailViewSnippetKeyGenerator,
         SnippetKeyGenerator $productTitleSnippetKeyGenerator,
-        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
+        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator,
+        SnippetKeyGenerator $productDetailPageMetaDescriptionSnippetKeyGenerator
     ) {
-        $this->blockRenderer = $blockRenderer;
-        $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
-        $this->productTitleSnippetKeyGenerator = $productTitleSnippetKeyGenerator;
+        $this->productDetailViewBlockRenderer           = $blockRenderer;
+        $this->productDetailViewSnippetKeyGenerator     = $productDetailViewSnippetKeyGenerator;
+        $this->productTitleSnippetKeyGenerator          = $productTitleSnippetKeyGenerator;
         $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
+        $this->productDetailPageMetaDescriptionSnippetKeyGenerator = $productDetailPageMetaDescriptionSnippetKeyGenerator;
     }
 
     /**
@@ -53,7 +59,8 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         return [
             $this->createdContentMetaSnippet($productView),
             $this->createProductTitleSnippet($productView),
-            $this->createProductDetailPageMetaSnippet($productView)
+            $this->createProductDetailPageMetaSnippet($productView),
+            $this->createProductDetailPageMetaDescriptionSnippet($productView)
         ];
     }
 
@@ -67,7 +74,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             $productView->getContext(),
             [Product::ID => $productView->getId()]
         );
-        $content = $this->blockRenderer->render($productView, $productView->getContext());
+        $content = $this->productDetailViewBlockRenderer->render($productView, $productView->getContext());
 
         return Snippet::create($key, $content);
     }
@@ -108,14 +115,28 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      */
     private function getPageMetaSnippetContent(ProductView $productView)
     {
-        $rootBlockName = $this->blockRenderer->getRootSnippetCode();
+        $rootBlockName = $this->productDetailViewBlockRenderer->getRootSnippetCode();
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             (string) $productView->getId(),
             $rootBlockName,
-            $this->blockRenderer->getNestedSnippetCodes(),
-            ['title' => ['product_title']]
+            $this->productDetailViewBlockRenderer->getNestedSnippetCodes(),
+            [
+                'title' => ['product_title'],
+                'head_container' => ['product_detail_meta_description']
+            ]
         );
 
         return $pageMetaInfo->getInfo();
+    }
+
+    private function createProductDetailPageMetaDescriptionSnippet(ProductView $productView)
+    {
+        $metaDescription = sprintf('<meta name="description" content="%s" />', $productView->getFirstValueOfAttribute('meta_description'));
+        $key             = $this->productDetailPageMetaDescriptionSnippetKeyGenerator->getKeyForContext(
+            $productView->getContext(),
+            [Product::ID => $productView->getId()]
+        );
+
+        return Snippet::create($key, $metaDescription);
     }
 }
