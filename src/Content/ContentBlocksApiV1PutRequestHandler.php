@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Content;
 use LizardsAndPumpkins\Api\ApiRequestHandler;
 use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Content\Exception\InvalidContentBlockContextException;
 use LizardsAndPumpkins\Content\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Queue\Queue;
@@ -89,7 +90,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         }
 
         if (!is_array($requestBody['context'])) {
-            throw new InvalidContentBlockContext(
+            throw new InvalidContentBlockContextException(
                 sprintf('Content block context supposed to be an array, got %s.', gettype($requestBody['context']))
             );
         }
