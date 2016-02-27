@@ -1,5 +1,6 @@
 {
     "name": "lizards-and-pumpkins/catalog",
+    "version": "dev-master",
     "description": "Lizards & Pumpkins catalog module",
     "license": "BSD-3-Clause",
     "authors": [
