@@ -117,7 +117,7 @@ define(['../../pub/js/product_grid'], function (ProductGrid) {
 
             expect(gridItemContainers.length).toBe(1);
             Array.prototype.map.call(gridItemContainers, function (gridItemContainer) {
-                var expectedImage = 'url(http://example.com/media/brands/brands-slider/' + testProductBrand + '.png)';
+                var expectedImage = 'url(http://example.com/media/brands/product-grid/' + testProductBrand + '.png)';
                 expect(gridItemContainer.style.backgroundImage).toBe(expectedImage);
             });
         });

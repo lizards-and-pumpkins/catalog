@@ -16,7 +16,7 @@ define(['product', 'lib/translate'], function (Product, translate) {
 
     var getBrandLogoSrc = function (brandName) {
         var brand = brandName.toString().toLocaleLowerCase().replace(/\W/, '_');
-        return baseUrl + 'media/brands/brands-slider/' + brand + '.png';
+        return baseUrl + 'media/brands/product-grid/' + brand + '.png';
     };
 
     var turnIntoStringIfIsArray = function (operand) {
