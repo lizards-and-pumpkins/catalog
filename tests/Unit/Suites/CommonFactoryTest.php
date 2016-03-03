@@ -754,4 +754,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createProductListingDescriptionBlockRenderer();
         $this->assertInstanceOf(ProductListingDescriptionBlockRenderer::class, $result);
     }
+
+    public function testItReturnsAProductDetailPageMetaDescriptionSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductDetailPageMetaDescriptionSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
 }

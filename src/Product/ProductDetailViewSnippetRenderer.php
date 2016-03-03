@@ -11,6 +11,7 @@ use LizardsAndPumpkins\SnippetRenderer;
 class ProductDetailViewSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
+    const META_DESCRIPTION_CODE = 'product_detail_view_meta_description';
 
     /**
      * @var ProductDetailViewBlockRenderer
