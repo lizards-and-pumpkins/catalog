@@ -594,7 +594,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductTitleSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator(),
+            $this->getMasterFactory()->createProductDetailPageMetaDescriptionSnippetKeyGenerator()
         );
     }
 
@@ -1627,6 +1628,17 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
+        );
+    }
+
+    public function createProductDetailPageMetaDescriptionSnippetKeyGenerator()
+    {
+        $usedDataParts = [Product::ID];
+
+        return new GenericSnippetKeyGenerator(
+            ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE,
+            $this->getMasterFactory()->getRequiredContexts(),
+            $usedDataParts
         );
     }
 }
