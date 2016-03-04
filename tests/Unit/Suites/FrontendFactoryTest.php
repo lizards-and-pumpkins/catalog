@@ -237,6 +237,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductJsonSnippetRenderer::CODE],
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
             [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],
+            [ProductListingSnippetRenderer::CANONICAL_TAG_KEY],
             ['product_title'],
             [ProductListingTitleSnippetRenderer::CODE],
             [ProductListingDescriptionSnippetRenderer::CODE],

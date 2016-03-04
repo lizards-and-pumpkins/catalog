@@ -300,6 +300,12 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
+            ProductListingSnippetRenderer::CANONICAL_TAG_KEY,
+            function () {
+                return $this->getMasterFactory()->createProductListingCanonicalTagSnippetKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator();
