@@ -23,6 +23,7 @@ use LizardsAndPumpkins\Http\HttpsUrl;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
@@ -238,10 +239,11 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
             [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],
             [ProductListingSnippetRenderer::CANONICAL_TAG_KEY],
-            ['product_title'],
+            [ProductDetailViewSnippetRenderer::TITLE_KEY_CODE],
             [ProductListingTitleSnippetRenderer::CODE],
             [ProductListingDescriptionSnippetRenderer::CODE],
             [ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE],
+            [ProductCanonicalTagSnippetRenderer::CODE],
         ];
     }
 

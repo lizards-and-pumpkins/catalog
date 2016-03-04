@@ -77,6 +77,23 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $snippetKey
+     * @param Snippet[] $result
+     * @return Snippet
+     */
+    private function findSnippetByKey($snippetKey, array $result)
+    {
+        return array_reduce($result, function ($found, Snippet $snippet) use ($snippetKey) {
+            if ($found) {
+                return $found;
+            }
+            return $snippet->getKey() === $snippetKey ?
+                $snippet :
+                null;
+        });
+    }
+
+    /**
      * @param Snippet $metaSnippet
      * @param string $containerCode
      * @param string $expectedSnippetCode
@@ -153,5 +170,21 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             'head_container',
             ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE
         );
+    }
+
+    public function testContainerSnippetsAreAssigned()
+    {
+        $testMetaSnippetKey = 'stub-meta-key';
+
+        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('foo');
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('bar');
+        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
+            ->willReturn($testMetaSnippetKey);
+
+        $result = $this->renderer->render($this->stubProductView);
+        
+        $metaSnippet = $this->findSnippetByKey($testMetaSnippetKey, $result);
+        $this->assertContainerContainsSnippet($metaSnippet, 'title', ProductDetailViewSnippetRenderer::TITLE_KEY_CODE);
+        $this->assertContainerContainsSnippet($metaSnippet, 'head_container', ProductCanonicalTagSnippetRenderer::CODE);
     }
 }

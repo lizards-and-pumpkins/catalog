@@ -30,6 +30,7 @@ use LizardsAndPumpkins\Http\HttpRouter;
 use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
@@ -348,9 +349,15 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            'product_title',
+            ProductDetailViewSnippetRenderer::TITLE_KEY_CODE,
             function () {
                 return $this->getMasterFactory()->createProductTitleSnippetKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            ProductCanonicalTagSnippetRenderer::CODE,
+            function () {
+                return $this->getMasterFactory()->createProductCanonicalTagSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
