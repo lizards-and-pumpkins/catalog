@@ -11,7 +11,6 @@
         convertNoticesToExceptions="true"
         convertWarningsToExceptions="true"
         forceCoversAnnotation="false"
-        checkForUnintentionallyCoveredCode="false"
         processIsolation="false"
         stopOnError="false"
         stopOnFailure="false"
@@ -21,6 +20,7 @@
         timeoutForSmallTests="1"
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
+        beStrictAboutCoversAnnotation="false"
         beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"
         verbose="false">
