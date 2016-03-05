@@ -144,9 +144,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsSnippetWithGivenKey($testTitleSnippetKey, ...$result);
         $this->assertContainsSnippetWithGivenKey($testMetaDescriptionSnippetKey, ...$result);
 
-        $metaSnippet = array_reduce($result, function ($carry, Snippet $item) {
-            return $item->getKey() === $carry ? $item : $carry;
-        }, $testMetaSnippetKey);
+        $metaSnippet = array_reduce($result, function ($carry, Snippet $item) use ($testMetaSnippetKey) {
+            return $item->getKey() === $testMetaSnippetKey ? $item : $carry;
+        });
 
         $this->assertContainerContainsSnippet(
             $metaSnippet,
