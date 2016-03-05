@@ -165,11 +165,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             return $item->getKey() === $testMetaSnippetKey ? $item : $carry;
         });
 
-        $this->assertContainerContainsSnippet(
-            $metaSnippet,
-            'head_container',
-            ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE
-        );
+        $expectedSnippetCode = ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE;
+        $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $expectedSnippetCode);
     }
 
     public function testContainerSnippetsAreAssigned()
@@ -178,6 +175,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('foo');
         $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('bar');
+        $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator->method('getKeyForContext')->willReturn('buz');
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
 
