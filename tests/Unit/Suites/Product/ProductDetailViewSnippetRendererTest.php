@@ -154,6 +154,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaDescriptionSnippetKey);
 
+        $this->stubProductView->method('getAllValuesOfAttribute')->willReturn([]);
         $result = $this->renderer->render($this->stubProductView);
 
         $this->assertContainsSnippetWithGivenKey($testContentSnippetKey, ...$result);
@@ -184,5 +185,27 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $metaSnippet = $this->findSnippetByKey($testMetaSnippetKey, $result);
         $this->assertContainerContainsSnippet($metaSnippet, 'title', ProductDetailViewSnippetRenderer::TITLE_KEY_CODE);
         $this->assertContainerContainsSnippet($metaSnippet, 'head_container', ProductCanonicalTagSnippetRenderer::CODE);
+    }
+
+    public function testCreatesAMetaSnippetForEachUrlTheProductIsAvailableOn()
+    {
+        $expectedMetaInfoSnippetKeys = ['canonical-key', 'non-canonical1-key', 'non-canonical2-key'];
+        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
+        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
+            ->willReturnOnConsecutiveCalls(...$expectedMetaInfoSnippetKeys);
+
+        $this->stubProductView->method('getAllValuesOfAttribute')->willReturnMap([
+            [Product::NON_CANONICAL_URL_KEY, ['non-canonical1', 'non-canonical2']],
+        ]);
+        $this->stubProductView->method('getFirstValueOfAttribute')->willReturnMap([
+            [Product::URL_KEY, 'canonical'],
+        ]);
+
+        $result = $this->renderer->render($this->stubProductView);
+
+        foreach ($expectedMetaInfoSnippetKeys as $key) {
+            $this->assertContainsSnippetWithGivenKey($key, ...$result);
+        }
     }
 }
