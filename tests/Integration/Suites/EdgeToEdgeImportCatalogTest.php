@@ -157,6 +157,27 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->assertContains('<body>', $response->getBody());
     }
 
+    public function testImportedProductIsAccessibleViaNonCanonicalUrlFromTheFrontend()
+    {
+        $this->importCatalog('catalog.xml');
+
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $urlKeys = (new XPathParser($xml))->getXmlNodesArrayByXPath(
+            '//catalog/products/product/attributes/attribute[@name="non_canonical_url_key" and @locale="fr_FR"]'
+        );
+
+        $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
+        $httpHeaders = HttpHeaders::fromArray([]);
+        $httpRequestBody = HttpRequestBody::fromString('');
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+        $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        
+        $website = new InjectableDefaultWebFront($request, $this->factory);
+        $response = $website->runWithoutSendingResponse();
+
+        $this->assertContains('<body>', $response->getBody());
+    }
+
     public function testHttpResourceNotFoundResponseIsReturned()
     {
         $url = HttpUrl::fromString('http://example.com/non/existent/path');
