@@ -123,7 +123,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             $this->productDetailViewBlockRenderer->getNestedSnippetCodes(),
             [
                 'title' => ['product_title'],
-                'head_container' => ['product_detail_meta_description']
+                'head_container' => [self::META_DESCRIPTION_CODE]
             ]
         );
 
