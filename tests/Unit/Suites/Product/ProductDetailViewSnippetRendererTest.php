@@ -3,9 +3,10 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 
 /**
@@ -75,6 +76,28 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->fail(sprintf('Failed asserting snippet list contains snippet with "%s" key.', $expectedKey));
     }
 
+    /**
+     * @param Snippet $metaSnippet
+     * @param string $containerCode
+     * @param string $expectedSnippetCode
+     */
+    private function assertContainerContainsSnippet(Snippet $metaSnippet, $containerCode, $expectedSnippetCode)
+    {
+        $pageData = json_decode($metaSnippet->getContent(), true);
+
+        $this->assertArrayHasKey(
+            $containerCode,
+            $pageData[PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS],
+            sprintf('Container %s does not exist.', $containerCode)
+        );
+
+        $this->assertContains(
+            $expectedSnippetCode,
+            $pageData[PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS][$containerCode],
+            sprintf('Container %s does not contain a snippet with key %s', $containerCode, $expectedSnippetCode)
+        );
+    }
+
     protected function setUp()
     {
         $blockRenderer = $this->createStubProductDetailViewBlockRenderer();
@@ -120,5 +143,15 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsSnippetWithGivenKey($testMetaSnippetKey, ...$result);
         $this->assertContainsSnippetWithGivenKey($testTitleSnippetKey, ...$result);
         $this->assertContainsSnippetWithGivenKey($testMetaDescriptionSnippetKey, ...$result);
+
+        $metaSnippet = array_reduce($result, function ($carry, Snippet $item) {
+            return $item->getKey() === $carry ? $item : $carry;
+        }, $testMetaSnippetKey);
+
+        $this->assertContainerContainsSnippet(
+            $metaSnippet,
+            'head_container',
+            ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE
+        );
     }
 }
