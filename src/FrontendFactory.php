@@ -359,6 +359,12 @@ class FrontendFactory implements Factory
                 return $this->getMasterFactory()->createProductListingDescriptionSnippetKeyGenerator();
             }
         );
+        $registrySnippetKeyGeneratorLocator->register(
+            ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE,
+            function () {
+                return $this->getMasterFactory()->createProductDetailPageMetaDescriptionSnippetKeyGenerator();
+            }
+        );
 
         return $registrySnippetKeyGeneratorLocator;
     }

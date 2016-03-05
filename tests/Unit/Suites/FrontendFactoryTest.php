@@ -240,6 +240,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             ['product_title'],
             [ProductListingTitleSnippetRenderer::CODE],
             [ProductListingDescriptionSnippetRenderer::CODE],
+            [ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE],
         ];
     }
 
