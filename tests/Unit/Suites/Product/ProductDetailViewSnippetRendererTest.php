@@ -192,6 +192,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $expectedMetaInfoSnippetKeys = ['canonical-key', 'non-canonical1-key', 'non-canonical2-key'];
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
         $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
+        $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator->method('getKeyForContext')->willReturn('meta');
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturnOnConsecutiveCalls(...$expectedMetaInfoSnippetKeys);
 
