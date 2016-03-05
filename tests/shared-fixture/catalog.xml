@@ -23,11 +23,17 @@
                 <attribute name="category" website="ru" locale="de_DE">sale</attribute>
                 <attribute name="category" website="ru" locale="de_DE">men</attribute>
                 <attribute name="category" website="ru" locale="de_DE">women</attribute>
-                <attribute name="category" website="ru" locale="de_DE">sale</attribute>
                 <attribute name="category" website="ru" locale="de_DE">women-accessories</attribute>
                 <attribute name="category" website="ru" locale="en_US">sale</attribute>
                 <attribute name="category" website="ru" locale="en_US">women-accessories</attribute>
                 <attribute name="category" website="fr" locale="fr_FR">sale</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">sale/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">men/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">women/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">women-accessories/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="en_US">women/led-armflasher</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="en_US">women-accessories/led-armflasher</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="fr_FR">sale/armer-conduit</attribute>
                 <attribute name="stock_qty">5</attribute>
                 <attribute name="backorders">true</attribute>
                 <attribute name="url_key" locale="de_DE">led-arm-signallampe</attribute>
