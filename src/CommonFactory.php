@@ -1647,13 +1647,16 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
     public function createProductDetailPageMetaDescriptionSnippetKeyGenerator()
     {
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
