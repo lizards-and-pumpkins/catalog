@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\EuroPriceRangeTransformation;
+use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\CurrencyPriceRangeTransformation;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
@@ -43,6 +43,7 @@ use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
+use SebastianBergmann\Money\Currency;
 
 class TwentyOneRunFactory implements Factory
 {
@@ -296,7 +297,7 @@ class TwentyOneRunFactory implements Factory
     public function createFacetFieldTransformationRegistry()
     {
         $registry = new FacetFieldTransformationRegistry();
-        $priceTransformation = new EuroPriceRangeTransformation();
+        $priceTransformation = $this->createEuroPriceRangeTransformation();
         $registry->register('price', $priceTransformation);
         $countries = $this->getMasterFactory()->createTaxableCountries()->getCountries();
         array_map(function ($country) use ($registry, $priceTransformation) {
@@ -304,6 +305,18 @@ class TwentyOneRunFactory implements Factory
         }, $countries);
 
         return $registry;
+    }
+
+    /**
+     * @return CurrencyPriceRangeTransformation
+     */
+    private function createEuroPriceRangeTransformation()
+    {
+        // FIXME: Unable to use context to determine locale here due to circular dependency
+        return new CurrencyPriceRangeTransformation(
+            new Currency('EUR'),
+            'fr_FR'
+        );
     }
 
     /**

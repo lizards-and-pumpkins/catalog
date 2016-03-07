@@ -4,21 +4,30 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransforma
 
 use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\Exception\InvalidTransformationInputException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
+use LizardsAndPumpkins\Product\Price;
+use SebastianBergmann\Money\Currency;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\EuroPriceRangeTransformation
+ * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\CurrencyPriceRangeTransformation
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
+ * @uses   \LizardsAndPumpkins\Product\Price
  */
-class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
+class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var EuroPriceRangeTransformation
+     * @var CurrencyPriceRangeTransformation
      */
     private $transformation;
 
+    /**
+     * @var Currency
+     */
+    private $testCurrency;
+
     protected function setUp()
     {
-        $this->transformation = new EuroPriceRangeTransformation;
+        $this->testCurrency = new Currency('EUR');
+        $this->transformation = new CurrencyPriceRangeTransformation($this->testCurrency, 'fr_FR');
     }
 
     public function testFacetFieldTransformationInterfaceIsImplemented()
@@ -47,10 +56,13 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      */
     public function rangeDataProvider()
     {
+        $conv = function ($price) {
+            return Price::fromDecimalValue($price)->getAmount();
+        };
         return [
-            [1, 2, '0,01 € - 0,02 €'],
-            [1, 20, '0,01 € - 0,20 €'],
-            [1000, 1999, '10,00 € - 19,99 €'],
+            [$conv('0.01'), $conv('0.02'), '0,01 € - 0,02 €'],
+            [$conv('0.01'), $conv('0.20'), '0,01 € - 0,20 €'],
+            [$conv('10'), $conv('19.00'), '10,00 € - 19,00 €'],
         ];
     }
 
@@ -96,10 +108,13 @@ class EuroPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      */
     public function matchingEncodedInputDataProvider()
     {
+        $conv = function ($price) {
+            return Price::fromDecimalValue($price)->getAmount();
+        };
         return [
-            ['0.01-0.02', 1, 2],
-            ['0.01-0.20', 1, 20],
-            ['10.00-19.99', 1000, 1999],
+            ['0.01-0.02', $conv('0.01'), $conv('0.02')],
+            ['0.01-0.20', $conv('0.01'), $conv('0.20')],
+            ['10.00-19.99', $conv('10'), $conv('19.99')],
         ];
     }
 }
