@@ -71,6 +71,7 @@ use LizardsAndPumpkins\Website\WebsiteToCountryMap;
  * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\TwentyOneRunTaxableCountries
  * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
+ * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\CurrencyPriceRangeTransformation
  */
 class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {

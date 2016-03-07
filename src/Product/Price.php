@@ -50,7 +50,7 @@ class Price
     }
 
     /**
-     * @param int $amount
+     * @param string|float $amount
      * @return Price
      */
     public static function fromDecimalValue($amount)
