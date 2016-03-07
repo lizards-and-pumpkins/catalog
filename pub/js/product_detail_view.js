@@ -11,6 +11,7 @@ require([
     'lib/overflow_scrolling',
     'product_grid',
     'lib/translate',
+    'magento_data',
     'ekomi'
 ], function(
     Product,
@@ -24,7 +25,8 @@ require([
     showModalBox,
     productTitleScrolling,
     productGrid,
-    translate
+    translate,
+    magentoData
 ) {
 
     var tabletWidth = 768,
@@ -53,6 +55,7 @@ require([
         showAvailabilityStatus();
         loadRelatedModels(product.getSku());
         bindShippingInfoModalBoxEvent();
+        processGoogleTagManager();
     });
 
     function renderBasePrice() {
@@ -492,5 +495,51 @@ require([
         }
 
         return 1;
+    }
+
+    function processGoogleTagManager() {
+        var price = formatPriceForGoogleTagManager(product.getFinalPrice());
+
+        window.dataLayer = [
+            {
+                "google_tag_params": {
+                    "ecomm_prodid" : product.getSku(),
+                    "ecomm_category" : product.getSku(),
+                    "ecomm_pagetype" : "product",
+                    "ecomm_totalvalue" : price
+                }
+            },
+            {
+                "ecommerce": {
+                    "detail": {
+                        "products": [{
+                            "name": product.getName(),
+                            "id": product.getSku(),
+                            "price": price,
+                            "brand": ''
+                        }]
+                    }
+                }
+            },
+            {
+                "CriteoPartnerID": 5258,
+                "PageType": 'ProductPage',
+                "CustomerEmail": '',
+                "ProductID": product.getSku()
+            },
+            {
+                "cartItems" : magentoData.getCartItems()
+            }
+        ];
+
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5F3F');
+    }
+
+    function formatPriceForGoogleTagManager(priceString) {
+        return priceString.replace(/[^0-9,]/g, '').replace(/,/, '.');
     }
 });
