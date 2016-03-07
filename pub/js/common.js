@@ -41,13 +41,13 @@ define(['lib/domReady', 'magento_data', 'search_autosuggestion'], function (domR
     }
 
     function processLoginLogoutMetaLinks() {
-        var elementIdToHideId = 'meta-menu-logout-link';
+        var elementIdToHide = 'meta-menu-logout-link';
 
         if (magentoData.isCustomerLoggedIn()) {
-            elementIdToHideId = 'meta-menu-login-link';
+            elementIdToHide = 'meta-menu-login-link';
         }
 
-        document.getElementById(elementIdToHideId).style.display = 'none';
+        document.getElementById(elementIdToHide).style.display = 'none';
     }
 
     function processCartMetaInfo() {
