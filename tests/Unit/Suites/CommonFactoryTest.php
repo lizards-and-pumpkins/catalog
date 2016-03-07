@@ -27,6 +27,7 @@ use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingBuilder;
 use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
@@ -161,6 +162,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
  * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -765,5 +767,17 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductDetailPageMetaDescriptionSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+    
+    public function testReturnsProductCanonicalSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductCanonicalTagSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testReturnsProductCanonicalTagSnippetRenderer()
+    {
+        $result = $this->commonFactory->createProductCanonicalTagSnippetRenderer();
+        $this->assertInstanceOf(ProductCanonicalTagSnippetRenderer::class, $result);
     }
 }
