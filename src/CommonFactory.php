@@ -1672,7 +1672,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductCanonicalTagSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
