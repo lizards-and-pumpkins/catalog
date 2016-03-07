@@ -46,11 +46,11 @@ define(['../../pub/js/magento_data'], function (MagentoData) {
             document.cookie = originalCookieValue;
         });
 
-        it('cart items is empty array if transport cookie value is not set', function () {
+        it('cart items are empty array if transport cookie value is not set', function () {
             expect(MagentoData.getCartItems()).toEqual([]);
         });
 
-        it('cart items is empty array if transport cookie value is not an array', function () {
+        it('cart items are empty array if transport cookie value is not an array', function () {
             setTransportCookie({"cartItems": 'foo'});
             expect(MagentoData.getCartItems()).toEqual([]);
         });
