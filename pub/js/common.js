@@ -52,11 +52,11 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
     }
 
     function processCartMetaInfo() {
-        var cartNumItems = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartNumItems');
+        var cartItems = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartItems');
 
-        if (cartNumItems) {
+        if (Array.isArray(cartItems)) {
             var cartNumItemsElement = document.getElementById('meta-menu-cart-num-items');
-            cartNumItemsElement.innerHTML = cartNumItems;
+            cartNumItemsElement.innerHTML = cartItems.length;
         }
 
         var cartTotal = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartTotal');
