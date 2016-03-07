@@ -11,6 +11,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
+use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
@@ -312,11 +313,11 @@ class TwentyOneRunFactory implements Factory
      */
     private function createEuroPriceRangeTransformation()
     {
-        // FIXME: Unable to use context to determine locale here due to circular dependency
-        return new CurrencyPriceRangeTransformation(
-            new Currency('EUR'),
-            'fr_FR'
-        );
+        // Note: unable to use context directly to determine locale here due to circular dependency
+        $localFactory = function () {
+            return $this->getMasterFactory()->createContext()->getValue(ContextLocale::CODE);
+        };
+        return new CurrencyPriceRangeTransformation(new Currency('EUR'), $localFactory);
     }
 
     /**

@@ -27,7 +27,10 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->testCurrency = new Currency('EUR');
-        $this->transformation = new CurrencyPriceRangeTransformation($this->testCurrency, 'fr_FR');
+        $localeFactory = function () {
+            return 'fr_FR';
+        };
+        $this->transformation = new CurrencyPriceRangeTransformation($this->testCurrency, $localeFactory);
     }
 
     public function testFacetFieldTransformationInterfaceIsImplemented()

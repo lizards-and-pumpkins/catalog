@@ -16,7 +16,7 @@ class CurrencyPriceRangeTransformation implements FacetFieldTransformation
     /**
      * @var string
      */
-    private $locale;
+    private $localeFactory;
 
     /**
      * @var Currency
@@ -24,12 +24,13 @@ class CurrencyPriceRangeTransformation implements FacetFieldTransformation
     private $currency;
 
     /**
-     * @param Currency $currency
-     * @param string $locale
+     * @var string
      */
-    public function __construct(Currency $currency, $locale)
+    private $memoizedLocale;
+
+    public function __construct(Currency $currency, callable $localeFactory)
     {
-        $this->locale = $locale;
+        $this->localeFactory = $localeFactory;
         $this->currency = $currency;
     }
 
@@ -48,7 +49,7 @@ class CurrencyPriceRangeTransformation implements FacetFieldTransformation
     private function priceIntToString($price)
     {
         $price = Price::fromFractions($price)->round($this->currency->getDefaultFractionDigits());
-        return (new IntlFormatter($this->locale))->format(new Money($price->getAmount(), $this->currency));
+        return (new IntlFormatter($this->getLocale()))->format(new Money($price->getAmount(), $this->currency));
     }
 
     /**
@@ -71,5 +72,16 @@ class CurrencyPriceRangeTransformation implements FacetFieldTransformation
     private function priceStringToInt($price)
     {
         return Price::fromDecimalValue($price)->getAmount();
+    }
+
+    /**
+     * @return string
+     */
+    private function getLocale()
+    {
+        if (! $this->memoizedLocale) {
+            $this->memoizedLocale = call_user_func($this->localeFactory);
+        }
+        return $this->memoizedLocale;
     }
 }
