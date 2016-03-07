@@ -1,4 +1,4 @@
-define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domReady, cookie) {
+define(['lib/domReady', 'magento_data', 'search_autosuggestion'], function (domReady, magentoData) {
     var tabletWidth = 768,
         siteFullWidth = 975,
         navItemsOriginalWidth = [];
@@ -43,28 +43,16 @@ define(['lib/domReady', 'lib/cookie', 'search_autosuggestion'], function (domRea
     function processLoginLogoutMetaLinks() {
         var elementIdToHide = 'meta-menu-logout-link';
 
-        if (cookie.getJsonValue('lizardsAndPumpkinsTransport', 'isCustomerLoggedIn')) {
+        if (magentoData.isCustomerLoggedIn()) {
             elementIdToHide = 'meta-menu-login-link';
         }
 
-        var elementToHide = document.getElementById(elementIdToHide);
-        elementToHide.style.display = 'none';
+        document.getElementById(elementIdToHide).style.display = 'none';
     }
 
     function processCartMetaInfo() {
-        var cartNumItems = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartNumItems');
-
-        if (cartNumItems) {
-            var cartNumItemsElement = document.getElementById('meta-menu-cart-num-items');
-            cartNumItemsElement.innerHTML = cartNumItems;
-        }
-
-        var cartTotal = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartTotal');
-
-        if (cartTotal) {
-            var cartTotalElement = document.getElementById('meta-menu-cart-total');
-            cartTotalElement.innerHTML = cartTotal;
-        }
+        document.getElementById('meta-menu-cart-num-items').innerHTML = magentoData.getCartItems().length;
+        document.getElementById('meta-menu-cart-total').innerHTML = magentoData.getCartTotal();
     }
 
     function toggleMainNavigationSubMenu(event) {
