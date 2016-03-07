@@ -19,8 +19,10 @@
                 <attribute name="category" website="fr" locale="fr_FR">women</attribute>
                 <attribute name="stock_qty" website="fr">5</attribute>
                 <attribute name="backorders" website="fr">true</attribute>
-                <attribute name="url_key" locale="fr_FR">led-arm-signallampe</attribute>
                 <attribute name="url_key" locale="fr_FR">armer-conduit</attribute>
+                <attribute name="non_canonical_url_key" locale="fr_FR">sale/armer-conduit</attribute>
+                <attribute name="non_canonical_url_key" locale="fr_FR">men/armer-conduit</attribute>
+                <attribute name="non_canonical_url_key" locale="fr_FR">women/armer-conduit</attribute>
                 <attribute name="name" locale="fr_FR">LED Arm-Signallampe</attribute>
                 <attribute name="name" locale="fr_FR">Armer Conduit</attribute>
                 <attribute name="price" website="fr">12.95</attribute>

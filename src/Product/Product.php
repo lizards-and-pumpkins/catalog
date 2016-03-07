@@ -12,6 +12,7 @@ interface Product extends \JsonSerializable
     const URL_KEY = 'url_key';
     const ID = 'product_id';
     const TYPE_KEY = 'type_code';
+    const NON_CANONICAL_URL_KEY = 'non_canonical_url_key';
     
     /**
      * @return ProductId
