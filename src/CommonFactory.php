@@ -287,7 +287,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductJsonSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -312,7 +312,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -326,7 +326,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -396,7 +396,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductSearchAutosuggestionSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -410,7 +410,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -481,7 +481,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductListingTemplateSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -554,7 +554,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductListingTitleSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -567,7 +567,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new ProductListingSnippetRenderer(
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
-            $this->getMasterFactory()->createContextBuilder()
+            $this->getMasterFactory()->createContextBuilder(),
+            $this->getMasterFactory()->createProductListingCanonicalTagSnippetKeyGenerator(),
+            $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
 
@@ -580,7 +582,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -621,7 +623,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             'product_detail_view_content',
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -635,7 +637,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             'product_title',
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -649,7 +651,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -716,7 +718,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductInListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -743,7 +745,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductInSearchAutosuggestionSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -794,7 +796,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             $snippetCode,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -809,7 +811,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             $snippetCode,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -1280,7 +1282,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     /**
      * @return string[]
      */
-    public function getRequiredContexts()
+    public function getRequiredContextParts()
     {
         return [WebsiteContextPartBuilder::CODE, LocaleContextPartBuilder::CODE, VersionContextPartBuilder::CODE];
     }
@@ -1292,7 +1294,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new GenericSnippetKeyGenerator(
             'content_block_in_product_listing',
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             [PageMetaInfoSnippetContent::URL_KEY]
         );
     }
@@ -1318,7 +1320,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductSearchResultMetaSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -1613,7 +1615,21 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductListingDescriptionSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductListingCanonicalTagSnippetKeyGenerator()
+    {
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
+
+        return new GenericSnippetKeyGenerator(
+            ProductListingSnippetRenderer::CANONICAL_TAG_KEY,
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }
@@ -1631,13 +1647,16 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
     public function createProductDetailPageMetaDescriptionSnippetKeyGenerator()
     {
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE,
-            $this->getMasterFactory()->getRequiredContexts(),
+            $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
     }

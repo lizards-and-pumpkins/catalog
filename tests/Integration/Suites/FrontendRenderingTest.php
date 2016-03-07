@@ -74,17 +74,17 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     {
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::CODE,
-            $this->factory->getRequiredContexts(),
+            $this->factory->getRequiredContextParts(),
             [Product::ID]
         );
         $this->snippetKeyGeneratorLocator->register($rootSnippetCode, function () use ($rootSnippetKeyGenerator) {
             return $rootSnippetKeyGenerator;
         });
         $this->snippetKeyGeneratorLocator->register('head', function () {
-            return new GenericSnippetKeyGenerator('head', $this->factory->getRequiredContexts(), []);
+            return new GenericSnippetKeyGenerator('head', $this->factory->getRequiredContextParts(), []);
         });
         $this->snippetKeyGeneratorLocator->register('body', function () {
-            return new GenericSnippetKeyGenerator('body', $this->factory->getRequiredContexts(), []);
+            return new GenericSnippetKeyGenerator('body', $this->factory->getRequiredContextParts(), []);
         });
     }
 

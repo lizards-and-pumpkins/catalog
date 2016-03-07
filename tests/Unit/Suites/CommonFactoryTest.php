@@ -721,6 +721,12 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
+    public function testItCreatesAProductListingCanonicalTagSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductListingCanonicalTagSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
     /**
      * @param string $expected
      * @dataProvider productListSnippetRenderersProvider
