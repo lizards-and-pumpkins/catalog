@@ -180,6 +180,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
 
+        $this->stubProductView->method('getAllValuesOfAttribute')->with(Product::NON_CANONICAL_URL_KEY)->willReturn([]);
+        
         $result = $this->renderer->render($this->stubProductView);
         
         $metaSnippet = $this->findSnippetByKey($testMetaSnippetKey, $result);
