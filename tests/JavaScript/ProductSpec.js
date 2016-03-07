@@ -183,5 +183,33 @@ define(['../../pub/js/product'], function (Product) {
             product = new Product({"images": {"original": [{"url": 'foo'}]}});
             expect(product.getNumberOfImages()).toBe(1);
         });
+
+        it('final price is equal to original price if product does not have special price', function () {
+            product = new Product({"attributes": {"price": '107,94 €'}});
+            expect(product.getFinalPrice()).toBe('107,94 €');
+        });
+
+        it('final price is equal to original price if special price is not less than original price', function () {
+            product = new Product({
+                "attributes": {
+                    "price": '107,94 €',
+                    "raw_price": 10794,
+                    "raw_special_price": 10794
+                }
+            });
+            expect(product.getFinalPrice()).toBe('107,94 €');
+        });
+
+        it('final price is equal to special price if it is less than original price', function () {
+            product = new Product({
+                "attributes": {
+                    "price": '107,94 €',
+                    "special_price": '100,00 €',
+                    "raw_price": 10794,
+                    "raw_special_price": 10000
+                }
+            });
+            expect(product.getFinalPrice()).toBe('100,00 €');
+        });
     });
 });

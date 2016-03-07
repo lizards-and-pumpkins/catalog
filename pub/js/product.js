@@ -131,6 +131,14 @@ define(function () {
 
         this.getNumberOfImages = function () {
             return product['images']['original'].length;
-        }
+        };
+
+        this.getFinalPrice = function () {
+            if (this.hasSpecialPrice() && getRawSpecialPrice() < getRawPrice()) {
+                return this.getSpecialPrice();
+            }
+
+            return this.getPrice();
+        };
     }
 });
