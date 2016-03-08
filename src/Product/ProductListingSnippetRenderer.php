@@ -15,6 +15,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing_meta';
     const CANONICAL_TAG_KEY = 'listing_canonical_tag';
+    const HTML_HEAD_META_KEY = 'html_head_meta';
 
     /**
      * @var ProductListingBlockRenderer
@@ -64,6 +65,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return [
             $this->createPageMetaSnippet($productListing),
             $this->createListingCanonicalTagSnippet($productListing),
+//            $this->createHtmlHeadMetaSnippet($productListing),
         ];
     }
 
@@ -106,7 +108,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
             [
                 'title' => [ProductListingTitleSnippetRenderer::CODE],
                 'sidebar_container' => [ProductListingDescriptionSnippetRenderer::CODE],
-                'head_container' => [self::CANONICAL_TAG_KEY],
+                'head_container' => [self::CANONICAL_TAG_KEY, self::HTML_HEAD_META_KEY],
             ]
         );
 
@@ -168,4 +170,18 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         $urlKey = $productListing->getUrlKey();
         return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
     }
+
+//    private function createHtmlHeadMetaSnippet(ProductListing $productListing)
+//    {
+//        $productListingUrlKey = $productListing->getUrlKey();
+//        $key = $this->canonicalTagSnippetKeyGenerator->getKeyForContext(
+//            $this->getContextFromProductListingData($productListing),
+//            [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
+//        );
+//
+//        $metaDescription = $productListing->getAttributeValueByCode('meta_description');
+//        $content = sprintf('<meta name="description" content="%s" />', $metaDescription);
+//
+//        return Snippet::create('$key', '$content');
+//    }
 }
