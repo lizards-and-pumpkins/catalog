@@ -37,6 +37,11 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $renderer;
 
     /**
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubHtmlHeadMetaKeyGenerator;
+
+    /**
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProductListing()
@@ -52,6 +57,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $snippetKey
      * @param Snippet[] $result
+     *
      * @return Snippet|null
      */
     private function findSnippetByKey($snippetKey, $result)
@@ -60,6 +66,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             if ($carry) {
                 return $carry;
             }
+
             return $snippet->getKey() === $snippetKey ?
                 $snippet :
                 null;
@@ -90,6 +97,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->stubMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubCanonicalTagSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubHtmlHeadMetaKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
         $stubContextBuilder = $this->getMock(ContextBuilder::class);
@@ -103,7 +111,8 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $this->stubMetaSnippetKeyGenerator,
             $stubContextBuilder,
             $this->stubCanonicalTagSnippetKeyGenerator,
-            $stubBaseUrlBuilder
+            $stubBaseUrlBuilder,
+            $this->stubHtmlHeadMetaKeyGenerator
         );
     }
 
@@ -120,7 +129,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $stubProductListing = $this->createStubProductListing();
         $result = $this->renderer->render($stubProductListing);
-        
+
         $metaSnippet = $this->findSnippetByKey($testSnippetKey, $result);
         $pageData = json_decode($metaSnippet->getContent(), true);
         $this->assertSame('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE]);
@@ -156,11 +165,13 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $result = $this->renderer->render($stubProductListing);
 
         $metaSnippet = $this->findSnippetByKey($testSnippetKey, $result);
-        
+
         $listingDescriptionSnippetKey = ProductListingDescriptionSnippetRenderer::CODE;
         $canonicalTagSnippetKey = ProductListingSnippetRenderer::CANONICAL_TAG_KEY;
+        $htmlHeadSnippetKey = ProductListingSnippetRenderer::HTML_HEAD_META_KEY;
         $this->assertContainerContainsSnippet($metaSnippet, 'title', ProductListingTitleSnippetRenderer::CODE);
         $this->assertContainerContainsSnippet($metaSnippet, 'sidebar_container', $listingDescriptionSnippetKey);
         $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $canonicalTagSnippetKey);
+        $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $htmlHeadSnippetKey);
     }
 }
