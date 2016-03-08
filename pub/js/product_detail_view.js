@@ -44,6 +44,7 @@ require([
         initializeAddToCartButton();
         showNextSelectBox();
         initializeImageGalleryArrows();
+        processGoogleTagManager();
 
         adjustToPageWidth();
         window.addEventListener('resize', adjustToPageWidth);
@@ -55,7 +56,6 @@ require([
         showAvailabilityStatus();
         loadRelatedModels(product.getSku());
         bindShippingInfoModalBoxEvent();
-        processGoogleTagManager();
     });
 
     function renderBasePrice() {
