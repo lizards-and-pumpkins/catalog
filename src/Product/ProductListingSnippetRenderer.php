@@ -42,18 +42,25 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      */
     private $baseUrlBuilder;
 
+    /**
+     * @var SnippetKeyGenerator
+     */
+    private $htmlHeadMetaKeyGenerator;
+
     public function __construct(
         ProductListingBlockRenderer $blockRenderer,
         SnippetKeyGenerator $metaSnippetKeyGenerator,
         ContextBuilder $contextBuilder,
         SnippetKeyGenerator $canonicalTagSnippetKeyGenerator,
-        BaseUrlBuilder $baseUrlBuilder
+        BaseUrlBuilder $baseUrlBuilder,
+        SnippetKeyGenerator $htmlHeadMetaKeyGenerator
     ) {
         $this->blockRenderer = $blockRenderer;
         $this->metaSnippetKeyGenerator = $metaSnippetKeyGenerator;
         $this->contextBuilder = $contextBuilder;
         $this->canonicalTagSnippetKeyGenerator = $canonicalTagSnippetKeyGenerator;
         $this->baseUrlBuilder = $baseUrlBuilder;
+        $this->htmlHeadMetaKeyGenerator = $htmlHeadMetaKeyGenerator;
     }
 
     /**
@@ -65,7 +72,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return [
             $this->createPageMetaSnippet($productListing),
             $this->createListingCanonicalTagSnippet($productListing),
-//            $this->createHtmlHeadMetaSnippet($productListing),
+            $this->createHtmlHeadMetaSnippet($productListing),
         ];
     }
 
@@ -171,17 +178,17 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
     }
 
-//    private function createHtmlHeadMetaSnippet(ProductListing $productListing)
-//    {
-//        $productListingUrlKey = $productListing->getUrlKey();
-//        $key = $this->canonicalTagSnippetKeyGenerator->getKeyForContext(
-//            $this->getContextFromProductListingData($productListing),
-//            [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
-//        );
-//
-//        $metaDescription = $productListing->getAttributeValueByCode('meta_description');
-//        $content = sprintf('<meta name="description" content="%s" />', $metaDescription);
-//
-//        return Snippet::create('$key', '$content');
-//    }
+    private function createHtmlHeadMetaSnippet(ProductListing $productListing)
+    {
+        $productListingUrlKey = $productListing->getUrlKey();
+        $key = $this->htmlHeadMetaKeyGenerator->getKeyForContext(
+            $this->getContextFromProductListingData($productListing),
+            [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
+        );
+
+        $metaDescription = $productListing->getAttributeValueByCode('meta_description');
+        $content = sprintf('<meta name="description" content="%s" />', $metaDescription);
+
+        return Snippet::create($key, $content);
+    }
 }
