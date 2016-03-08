@@ -121,6 +121,7 @@ define(['product', 'lib/translate'], function (Product, translate) {
 
             var grid = document.createElement('UL');
             grid.className = 'products-grid';
+            grid.id = 'productList';
 
             productGridPlaceholder.appendChild(grid);
 
