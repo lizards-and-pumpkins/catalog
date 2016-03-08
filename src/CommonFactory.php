@@ -571,7 +571,19 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder(),
             $this->getMasterFactory()->createProductListingCanonicalTagSnippetKeyGenerator(),
-            $this->getMasterFactory()->createBaseUrlBuilder()
+            $this->getMasterFactory()->createBaseUrlBuilder(),
+            $this->getMasterFactory()->createHtmlHeadMetaKeyGenerator()
+        );
+    }
+
+    public function createHtmlHeadMetaKeyGenerator()
+    {
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
+
+        return new GenericSnippetKeyGenerator(
+            ProductListingSnippetRenderer::HTML_HEAD_META_KEY,
+            $this->getMasterFactory()->getRequiredContextParts(),
+            $usedDataParts
         );
     }
 
@@ -1662,7 +1674,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $usedDataParts
         );
     }
-    
+
     /**
      * @return SnippetKeyGenerator
      */
