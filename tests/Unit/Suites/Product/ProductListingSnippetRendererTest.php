@@ -126,6 +126,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $testSnippetKey = 'foo';
         $this->stubMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
         $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn('canonical');
+        $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn('dummy_meta_key');
 
         $stubProductListing = $this->createStubProductListing();
         $result = $this->renderer->render($stubProductListing);
@@ -184,6 +185,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $testSnippetKey = 'listing';
         $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn('canonical');
         $this->stubMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
+        $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn('dummy_meta_key');
 
         $stubProductListing = $this->createStubProductListing();
         $result = $this->renderer->render($stubProductListing);
