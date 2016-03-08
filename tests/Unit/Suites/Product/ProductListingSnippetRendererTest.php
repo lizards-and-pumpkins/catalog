@@ -140,6 +140,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $testSnippetKey = 'canonical';
         $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
+        $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn('dummy_meta_key');
         $this->stubMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('listing');
 
         $stubProductListing = $this->createStubProductListing();
@@ -152,6 +153,29 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             '<link rel="canonical" href="https://example.com/listing.html" />',
             $canonicalTagSnippet->getContent()
+        );
+    }
+
+    public function testReturnsProductListingMetaDescriptionSnippet()
+    {
+        $testMetaDescription = 'META DESCRIPTION FOR LISTING';
+
+        $testSnippetKey = 'meta_description';
+        $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
+        $this->stubMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('listing');
+        $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn('dummy_canonical_key');
+
+        $stubProductListing = $this->createStubProductListing();
+        $stubProductListing->method('getUrlKey')->willReturn('listing.html');
+        $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaDescription);
+        $result = $this->renderer->render($stubProductListing);
+
+        $metaDescriptionSnippet = $this->findSnippetByKey($testSnippetKey, $result);
+        $this->assertInstanceOf(Snippet::class, $metaDescriptionSnippet);
+
+        $this->assertSame(
+            '<meta name="description" content="META DESCRIPTION FOR LISTING" />',
+            $metaDescriptionSnippet->getContent()
         );
     }
 
