@@ -14,7 +14,7 @@ define(['lib/cookie'], function (cookie) {
             var cartTotal = cookie.getJsonValue('lizardsAndPumpkinsTransport', 'cartTotal');
 
             if ('' === cartTotal) {
-                return encodeURIComponent('0,00 €');
+                return '0,00 €';
             }
 
             return cartTotal;

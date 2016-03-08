@@ -62,7 +62,7 @@ define(['../../pub/js/magento_data'], function (MagentoData) {
         });
 
         it('cart total equals to 0,00 € if transport cookie value is not set', function () {
-            expect(MagentoData.getCartTotal()).toBe(encodeURIComponent('0,00 €'));
+            expect(MagentoData.getCartTotal()).toBe('0,00 €');
         });
 
         it('cart total equals to value from transport cookie', function () {
