@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
 use LizardsAndPumpkins\Snippet;
@@ -85,6 +86,17 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $expectedSnippetCode,
             $pageData[PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS][$containerCode]
         );
+    }
+
+    /**
+     * @param string $testSnippetKey
+     * @param string $htmlHeadMetaKey
+     */
+    private function prepareKeyGeneratorsForProductListing($testSnippetKey, $htmlHeadMetaKey)
+    {
+        $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn('canonical');
+        $this->stubMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
+        $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn($htmlHeadMetaKey);
     }
 
     protected function setUp()
@@ -168,6 +180,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $stubProductListing = $this->createStubProductListing();
         $stubProductListing->method('getUrlKey')->willReturn('listing.html');
+        $stubProductListing->method('hasAttribute')->willReturn(true);
         $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaDescription);
         $result = $this->renderer->render($stubProductListing);
 
@@ -183,21 +196,49 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     public function testFillsConainerSnippets()
     {
         $testSnippetKey = 'listing';
-        $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn('canonical');
-        $this->stubMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
-        $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn('dummy_meta_key');
+        $htmlHeadMetaKey = 'dummy_meta_key';
+        $this->prepareKeyGeneratorsForProductListing($testSnippetKey, $htmlHeadMetaKey);
 
         $stubProductListing = $this->createStubProductListing();
+        $stubProductListing->method('getAttributeValueByCode')->willReturn('meta_description_value');
+        $stubProductListing->method('hasAttribute')->willReturn(true);
         $result = $this->renderer->render($stubProductListing);
 
         $metaSnippet = $this->findSnippetByKey($testSnippetKey, $result);
+        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
 
+        $this->assertSame(
+            '<meta name="description" content="meta_description_value" />',
+            $htmlHeadMetaKeySnippet->getContent()
+        );
         $listingDescriptionSnippetKey = ProductListingDescriptionSnippetRenderer::CODE;
         $canonicalTagSnippetKey = ProductListingSnippetRenderer::CANONICAL_TAG_KEY;
         $htmlHeadSnippetKey = ProductListingSnippetRenderer::HTML_HEAD_META_KEY;
+
         $this->assertContainerContainsSnippet($metaSnippet, 'title', ProductListingTitleSnippetRenderer::CODE);
         $this->assertContainerContainsSnippet($metaSnippet, 'sidebar_container', $listingDescriptionSnippetKey);
         $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $canonicalTagSnippetKey);
         $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $htmlHeadSnippetKey);
+    }
+
+    public function testProductListingDoesNotThrowExceptionOnUndefinedMetaDescription()
+    {
+        $testSnippetKey = 'listing';
+        $htmlHeadMetaKey = 'dummy_meta_key';
+        $this->prepareKeyGeneratorsForProductListing($testSnippetKey, $htmlHeadMetaKey);
+
+        $stubProductListing = $this->createStubProductListing();
+        $stubProductListing->method('getAttributeValueByCode')->willThrowException(
+            new ProductListingAttributeNotFoundException(
+                sprintf('Product list attribute with code "meta_description" is not found.')
+            )
+        );
+        $result = $this->renderer->render($stubProductListing);
+
+        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+        $this->assertSame(
+            '<meta name="description" content="" />',
+            $htmlHeadMetaKeySnippet->getContent()
+        );
     }
 }

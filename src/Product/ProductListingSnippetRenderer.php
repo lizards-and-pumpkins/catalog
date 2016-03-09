@@ -186,7 +186,10 @@ class ProductListingSnippetRenderer implements SnippetRenderer
             [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
         );
 
-        $metaDescription = $productListing->getAttributeValueByCode('meta_description');
+        $metaDescription = '';
+        if ($productListing->hasAttribute('meta_description')) {
+            $metaDescription = $productListing->getAttributeValueByCode('meta_description');
+        }
         $content = sprintf('<meta name="description" content="%s" />', $metaDescription);
 
         return Snippet::create($key, $content);
