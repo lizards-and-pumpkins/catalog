@@ -54,7 +54,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
                 $criterion['fieldValue'] === $value &&
                 $criterion['operation'] === $condition
             ) {
-                return true;
+                return;
             }
         }
         $this->fail(sprintf('Condition "%s" %s "%s" not set', $field, $condition, $value));
