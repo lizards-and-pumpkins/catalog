@@ -58,7 +58,6 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $snippetKey
      * @param Snippet[] $result
-     *
      * @return Snippet|null
      */
     private function findSnippetByKey($snippetKey, $result)

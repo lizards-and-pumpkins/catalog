@@ -178,6 +178,10 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
     }
 
+    /**
+     * @param ProductListing $productListing
+     * @return Snippet
+     */
     private function createHtmlHeadMetaSnippet(ProductListing $productListing)
     {
         $productListingUrlKey = $productListing->getUrlKey();

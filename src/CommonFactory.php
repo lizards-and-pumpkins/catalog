@@ -576,6 +576,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
+    /**
+     * @return GenericSnippetKeyGenerator
+     */
     public function createHtmlHeadMetaKeyGenerator()
     {
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
