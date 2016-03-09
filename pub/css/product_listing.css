@@ -17,6 +17,10 @@
 .filter-color li a { background: none; width: 26px; height: 26px; border-radius: 2px; border: #ececec solid 1px; padding: 0; font-size: 18px; text-align: center; line-height: 25px; color: #37a3d4 }
 #filters-button { display: none }
 
+.category-description-text { padding: 5px; font-size: 12px; color: #777777 }
+.category-description-text h2 { font-size: 14px; color: #777777; margin: 4px 0; font-weight: normal; text-transform: uppercase }
+.category-description-text h3 { font-size: 13px; margin: 4px 0 }
+
 /* Toolbar */
 .toolbar { margin-bottom: 15px; background: #e3e3e3; border-top: 1px solid #dfdfdf; color: #474747; padding: 0 30px }
 .toolbar .amount { float:left; width: 220px; font-size: 16px; margin: 25px 0 }
@@ -61,6 +65,8 @@
     .block-title { background-color: #3cabd9; border-radius: 0; border: #228bb6 solid 1px; color: #ffffff }
     .filter-content { border-left: #c1c1c1 solid 1px; border-right: #cfcfcf solid 1px }
     #filters-button { border-bottom: #cfcfcf solid 1px }
+
+    .category-description-heading, .category-description-text { display: none }
 }
 
 /* Clearer */
