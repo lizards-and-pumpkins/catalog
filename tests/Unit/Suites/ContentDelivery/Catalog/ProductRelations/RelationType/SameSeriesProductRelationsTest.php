@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationTy
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelations;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\Product\ProductId;
 use LizardsAndPumpkins\SnippetKeyGenerator;
@@ -49,15 +50,29 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
      */
     private function failIfNotContainsCondition(array $criteria, $field, $condition, $value)
     {
-        foreach ($criteria as $criterion) {
-            if ($criterion['fieldName'] === $field &&
-                $criterion['fieldValue'] === $value &&
-                $criterion['operation'] === $condition
-            ) {
-                return true;
-            }
+        $expectedCriterion = ['fieldName' => $field, 'fieldValue' => $value, 'operation' => $condition];
+
+        if (!in_array($expectedCriterion, $criteria)) {
+            $this->fail(sprintf('Condition "%s" %s "%s" not set', $field, $condition, $value));
         }
-        $this->fail(sprintf('Condition "%s" %s "%s" not set', $field, $condition, $value));
+    }
+
+    /**
+     * @param array[] $criteria
+     */
+    private function failIfStockAvailabilityConditionIsNotFound($criteria)
+    {
+        $expectedCriterion = [
+            'condition' => CompositeSearchCriterion::OR_CONDITION,
+            'criteria' => [
+                ['fieldName' => 'stock_qty', 'fieldValue' => 0, 'operation' => 'GreaterThan'],
+                ['fieldName' => 'backorders', 'fieldValue' => 'true', 'operation' => 'Equal']
+            ]
+        ];
+
+        if (!in_array($expectedCriterion, $criteria)) {
+            $this->fail('Stock availability condition is not found in criteria.');
+        }
     }
 
     /**
@@ -130,7 +145,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
         $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
 
-        $productJson =json_encode($this->getStubProductDataWithBrandAndGenderAndSeries('Pooma', 'Ladies', 'Example'));
+        $productJson = json_encode($this->getStubProductDataWithBrandAndGenderAndSeries('Pooma', 'Ladies', 'Example'));
         $this->stubDataPoolReader->method('getSnippet')->willReturn($productJson);
 
         $stubMatchingProductIds = [$this->getMock(ProductId::class, [], [], '', false)];
@@ -141,6 +156,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
                 $this->failIfNotContainsCondition($json['criteria'], 'brand', 'Equal', 'Pooma');
                 $this->failIfNotContainsCondition($json['criteria'], 'gender', 'Equal', 'Ladies');
                 $this->failIfNotContainsCondition($json['criteria'], 'series', 'Equal', 'Example');
+                $this->failIfStockAvailabilityConditionIsNotFound($json['criteria']);
                 return $stubMatchingProductIds;
             });
 

@@ -7,10 +7,10 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
 use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\Product;
@@ -100,7 +100,11 @@ class SameSeriesProductRelations implements ProductRelations
             $this->getBrandCriteria($productData),
             $this->getGenderCriteria($productData),
             $this->getSeriesCriteria($productData),
-            SearchCriterionNotEqual::create('product_id', $productData['product_id'])
+            SearchCriterionNotEqual::create('product_id', $productData['product_id']),
+            CompositeSearchCriterion::createOr(
+                SearchCriterionGreaterThan::create('stock_qty', 0),
+                SearchCriterionEqual::create('backorders', 'true')
+            )
         );
     }
 
