@@ -33,13 +33,17 @@ define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
     }
 
     function hidePopupAndOverlayIfShown() {
-        if (typeof popup === 'undefined' || typeof overlay === 'undefined' || typeof closeButton === 'undefined') {
-            return;
+        if (typeof popup !== 'undefined' && null !== popup.parentNode) {
+            popup.parentNode.removeChild(popup);
         }
 
-        popup.parentNode.removeChild(popup);
-        overlay.parentNode.removeChild(overlay);
-        closeButton.parentNode.removeChild(closeButton);
+        if (typeof overlay !== 'undefined' && null !== overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+        }
+
+        if (typeof closeButton !== 'undefined' && null !== closeButton.parentNode) {
+            closeButton.parentNode.removeChild(closeButton);
+        }
     }
 
     function processContent(content) {
