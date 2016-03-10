@@ -201,12 +201,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      */
     private function getMetaDescriptionHtml(ProductListing $productListing)
     {
-        $metaDescription = '';
-        if ($productListing->hasAttribute('meta_description')) {
-            $metaDescription = $productListing->getAttributeValueByCode('meta_description');
-        }
-        $metaDescription = sprintf('<meta name="description" content="%s" />', $metaDescription);
-        return $metaDescription;
+        return $this->getMetaHtmlFromAttribute($productListing, 'meta_description', 'description');
     }
 
     /**
@@ -215,11 +210,22 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      */
     private function getMetaKeywordsHtml(ProductListing $productListing)
     {
-        $metaDescription = '';
-        if ($productListing->hasAttribute('meta_keywords')) {
-            $metaDescription = $productListing->getAttributeValueByCode('meta_keywords');
+        return $this->getMetaHtmlFromAttribute($productListing, 'meta_keywords', 'keywords');
+    }
+
+    /**
+     * @param ProductListing $productListing
+     * @param string $attribute
+     * @param string $metaName
+     * @return string
+     */
+    private function getMetaHtmlFromAttribute(ProductListing $productListing, $attribute, $metaName)
+    {
+        $attributeValue = '';
+        if ($productListing->hasAttribute($attribute)) {
+            $attributeValue = $productListing->getAttributeValueByCode($attribute);
         }
-        $metaDescription = sprintf('<meta name="keywords" content="%s" />', $metaDescription);
-        return $metaDescription;
+        $metaHtml = sprintf('<meta name="%s" content="%s" />', $metaName, $attributeValue);
+        return $metaHtml;
     }
 }
