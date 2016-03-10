@@ -45,7 +45,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductDetailPageMetaDescriptionSnippetKeyGenerator;
+    private $stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator;
 
     /**
      * @return ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
@@ -121,14 +121,14 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubProductDetailViewSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubProductTitleSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->stubProductDetailPageMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
         $this->renderer = new ProductDetailViewSnippetRenderer(
             $blockRenderer,
             $this->stubProductDetailViewSnippetKeyGenerator,
             $this->stubProductTitleSnippetKeyGenerator,
             $this->stubProductDetailPageMetaSnippetKeyGenerator,
-            $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator
+            $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator
         );
 
         $this->stubProductView = $this->getMock(ProductView::class);
@@ -145,14 +145,14 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $testContentSnippetKey = 'stub-content-key';
         $testMetaSnippetKey = 'stub-meta-key';
         $testTitleSnippetKey = 'title';
-        $testMetaDescriptionSnippetKey = 'meta-description';
+        $testHtmlHeadMetaSnippetKey = 'meta-description';
 
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn($testContentSnippetKey);
         $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn($testTitleSnippetKey);
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
-        $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator->method('getKeyForContext')
-            ->willReturn($testMetaDescriptionSnippetKey);
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator->method('getKeyForContext')
+            ->willReturn($testHtmlHeadMetaSnippetKey);
 
         $this->stubProductView->method('getAllValuesOfAttribute')->willReturn([]);
         $result = $this->renderer->render($this->stubProductView);
@@ -160,14 +160,14 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsSnippetWithGivenKey($testContentSnippetKey, ...$result);
         $this->assertContainsSnippetWithGivenKey($testMetaSnippetKey, ...$result);
         $this->assertContainsSnippetWithGivenKey($testTitleSnippetKey, ...$result);
-        $this->assertContainsSnippetWithGivenKey($testMetaDescriptionSnippetKey, ...$result);
+        $this->assertContainsSnippetWithGivenKey($testHtmlHeadMetaSnippetKey, ...$result);
 
         $metaSnippet = array_reduce($result, function ($carry, Snippet $item) use ($testMetaSnippetKey) {
             return $item->getKey() === $testMetaSnippetKey ? $item : $carry;
         });
 
-        $expectedSnippetCode = ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE;
-        $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $expectedSnippetCode);
+        $expectedHtmlHeadMetaSnippeyKey = ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE;
+        $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $expectedHtmlHeadMetaSnippeyKey);
     }
 
     public function testContainerSnippetsAreAssigned()
@@ -176,14 +176,14 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('foo');
         $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('bar');
-        $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator->method('getKeyForContext')->willReturn('buz');
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('buz');
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
 
         $this->stubProductView->method('getAllValuesOfAttribute')->with(Product::NON_CANONICAL_URL_KEY)->willReturn([]);
-        
+
         $result = $this->renderer->render($this->stubProductView);
-        
+
         $metaSnippet = $this->findSnippetByKey($testMetaSnippetKey, $result);
         $this->assertContainerContainsSnippet($metaSnippet, 'title', ProductDetailViewSnippetRenderer::TITLE_KEY_CODE);
         $this->assertContainerContainsSnippet($metaSnippet, 'head_container', ProductCanonicalTagSnippetRenderer::CODE);
@@ -194,7 +194,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $expectedMetaInfoSnippetKeys = ['canonical-key', 'non-canonical1-key', 'non-canonical2-key'];
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
         $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
-        $this->stubProductDetailPageMetaDescriptionSnippetKeyGenerator->method('getKeyForContext')->willReturn('meta');
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('meta');
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturnOnConsecutiveCalls(...$expectedMetaInfoSnippetKeys);
 
@@ -210,5 +210,51 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedMetaInfoSnippetKeys as $key) {
             $this->assertContainsSnippetWithGivenKey($key, ...$result);
         }
+    }
+
+    public function testHtmlHeadMetaTagsAreRendererdEmpty()
+    {
+        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
+        $metaKey = 'meta';
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn($metaKey);
+        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-meta-key');
+
+        $this->stubProductView->method('getAllValuesOfAttribute')->willReturn([]);
+
+        $result = $this->renderer->render($this->stubProductView);
+
+        $metaSnippet = $this->findSnippetByKey($metaKey, $result);
+
+        $this->assertContains('<meta name="description" content="" />', $metaSnippet->getContent());
+        $this->assertContains('<meta name="keywords" content="" />', $metaSnippet->getContent());
+    }
+
+    public function testHtmlHeadMetaTagsAreRendererdWithValue()
+    {
+        $metaDescription = 'html head meta description value';
+        $metaKeywords = 'html head meta keywords value';
+
+        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
+        $metaKey = 'meta';
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn($metaKey);
+        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-meta-key');
+
+        $this->stubProductView->method('getAllValuesOfAttribute')->willReturn([]);
+
+        $this->stubProductView->method('getFirstValueOfAttribute')->willReturnMap(
+            [
+                ['meta_description', $metaDescription],
+                ['meta_keywords', $metaKeywords],
+            ]
+        );
+
+        $result = $this->renderer->render($this->stubProductView);
+
+        $metaSnippet = $this->findSnippetByKey($metaKey, $result);
+
+        $this->assertContains("<meta name=\"description\" content=\"$metaDescription\" />", $metaSnippet->getContent());
+        $this->assertContains("<meta name=\"keywords\" content=\"$metaKeywords\" />", $metaSnippet->getContent());
     }
 }

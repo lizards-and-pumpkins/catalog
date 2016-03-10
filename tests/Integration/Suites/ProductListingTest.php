@@ -96,7 +96,16 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $expectedProductName = 'Gel-Noosa';
         $unExpectedProductName = 'LED Armflasher';
 
+        $expectedMetaDescription = 'Acheter des chaussures de sport moins chères ? C’est possible grâce à
+                    nos offres à prix discount. Commandez très simplement vos futures chaussures de course qui vous
+                    seront expédiées rapidement.';
+        
+        $expectedKeywords = 'vendre, offre, proposition';
+
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
+
+        $this->assertContains($expectedMetaDescription, $body);
+        $this->assertContains($expectedKeywords, $body);
     }
 }

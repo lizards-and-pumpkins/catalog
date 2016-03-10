@@ -11,7 +11,7 @@ use LizardsAndPumpkins\SnippetRenderer;
 class ProductDetailViewSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
-    const META_DESCRIPTION_CODE = 'product_detail_view_meta_description';
+    const HTML_HEAD_META_CODE = 'product_detail_view_meta_description';
     const TITLE_KEY_CODE = 'product_view_title';
 
     /**
@@ -37,20 +37,20 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     /**
      * @var SnippetKeyGenerator
      */
-    private $productDetailPageMetaDescriptionSnippetKeyGenerator;
+    private $productDetailViewHtmlHeadMetaSnippetKeyGenerator;
 
     public function __construct(
         ProductDetailViewBlockRenderer $blockRenderer,
         SnippetKeyGenerator $productDetailViewSnippetKeyGenerator,
         SnippetKeyGenerator $productTitleSnippetKeyGenerator,
         SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator,
-        SnippetKeyGenerator $productPageMetaDescriptionSnippetKeyGenerator
+        SnippetKeyGenerator $productDetailViewHtmlHeadMetaSnippetKeyGenerator
     ) {
         $this->productDetailViewBlockRenderer = $blockRenderer;
         $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
         $this->productTitleSnippetKeyGenerator = $productTitleSnippetKeyGenerator;
         $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
-        $this->productDetailPageMetaDescriptionSnippetKeyGenerator = $productPageMetaDescriptionSnippetKeyGenerator;
+        $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator = $productDetailViewHtmlHeadMetaSnippetKeyGenerator;
     }
 
     /**
@@ -114,21 +114,6 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductView $productView
-     * @return Snippet
-     */
-    private function createProductDetailPageMetaSnippet(ProductView $productView)
-    {
-        $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
-            $productView->getContext(),
-            [PageMetaInfoSnippetContent::URL_KEY => $productView->getFirstValueOfAttribute(Product::URL_KEY)]
-        );
-        $metaData = $this->getPageMetaSnippetContent($productView);
-
-        return Snippet::create($snippetKey, json_encode($metaData));
-    }
-
-    /**
-     * @param ProductView $productView
      * @return mixed[]
      */
     private function getPageMetaSnippetContent(ProductView $productView)
@@ -139,8 +124,8 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             $rootBlockName,
             $this->productDetailViewBlockRenderer->getNestedSnippetCodes(),
             [
-                'title'          => [self::TITLE_KEY_CODE],
-                'head_container' => [self::META_DESCRIPTION_CODE, ProductCanonicalTagSnippetRenderer::CODE],
+                'title' => [self::TITLE_KEY_CODE],
+                'head_container' => [self::HTML_HEAD_META_CODE, ProductCanonicalTagSnippetRenderer::CODE],
             ]
         );
 
@@ -154,13 +139,17 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     private function createProductDetailPageMetaDescriptionSnippet(ProductView $productView)
     {
         $productMetaDescription = $productView->getFirstValueOfAttribute('meta_description');
-        $content = sprintf('<meta name="description" content="%s" />', $productMetaDescription);
-        $key = $this->productDetailPageMetaDescriptionSnippetKeyGenerator->getKeyForContext(
+        $description = sprintf('<meta name="description" content="%s" />', $productMetaDescription);
+
+        $productMetaKeywords = $productView->getFirstValueOfAttribute('meta_keywords');
+        $keywords = sprintf('<meta name="keywords" content="%s" />', $productMetaKeywords);
+
+        $key = $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
             [Product::ID => $productView->getId()]
         );
 
-        return Snippet::create($key, $content);
+        return Snippet::create($key, $description . $keywords);
     }
 
     /**

@@ -104,7 +104,7 @@ class FrontendFactory implements Factory
             $version,
             $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
         );
-        
+
         $requestHandlerLocator->register(
             'get_products',
             $version,
@@ -373,12 +373,17 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE,
+            ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE,
             function () {
                 return $this->getMasterFactory()->createProductDetailPageMetaDescriptionSnippetKeyGenerator();
             }
         );
-
+        $registrySnippetKeyGeneratorLocator->register(
+            ProductListingSnippetRenderer::HTML_HEAD_META_KEY,
+            function () {
+                return $this->getMasterFactory()->createHtmlHeadMetaKeyGenerator();
+            }
+        );
         return $registrySnippetKeyGeneratorLocator;
     }
 
@@ -425,7 +430,7 @@ class FrontendFactory implements Factory
             PriceSnippetRenderer::SPECIAL_PRICE,
             $this->getMasterFactory()->createPriceSnippetTransformation()
         );
-        
+
         // Todo: remove when product listing page uses ProductJsonService
         $pageBuilder->registerSnippetTransformation(
             'product_prices',

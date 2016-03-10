@@ -157,7 +157,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->frontendFactory->createProductListingRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
-    
+
     public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
         $result = $this->frontendFactory->createProductListingFacetFiltersToIncludeInResult();
@@ -242,8 +242,9 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductDetailViewSnippetRenderer::TITLE_KEY_CODE],
             [ProductListingTitleSnippetRenderer::CODE],
             [ProductListingDescriptionSnippetRenderer::CODE],
-            [ProductDetailViewSnippetRenderer::META_DESCRIPTION_CODE],
+            [ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE],
             [ProductCanonicalTagSnippetRenderer::CODE],
+            [ProductListingSnippetRenderer::HTML_HEAD_META_KEY],
         ];
     }
 

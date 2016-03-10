@@ -11,7 +11,7 @@ use LizardsAndPumpkins\SnippetRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer
- * @uses \LizardsAndPumpkins\Snippet
+ * @uses   \LizardsAndPumpkins\Snippet
  */
 class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,10 +49,10 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
             $hasAttributeValueMap[] = [$attributeCode, true];
         }
         $hasAttributeValueMap[] = [$this->anything(), false];
-        
+
         $stubProductListing->method('getAttributeValueByCode')->willReturnMap($getAttributeValueMap);
         $stubProductListing->method('hasAttribute')->willReturnMap($hasAttributeValueMap);
-        
+
         return $stubProductListing;
     }
 
@@ -75,7 +75,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
     {
         $class = ProductListingDescriptionBlockRenderer::class;
         $this->stubDescriptionBlockRenderer = $this->getMock($class, [], [], '', false);
-        
+
         $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testSnippetKey);
 
@@ -120,7 +120,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
     {
         $productListing = $this->createStubProductListingWithAttributes([]);
         $result = $this->renderer->render($productListing);
-        
+
         $this->assertCount(0, $result);
     }
 }

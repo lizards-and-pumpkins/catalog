@@ -15,6 +15,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing_meta';
     const CANONICAL_TAG_KEY = 'listing_canonical_tag';
+    const HTML_HEAD_META_KEY = 'html_head_meta';
 
     /**
      * @var ProductListingBlockRenderer
@@ -41,18 +42,25 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      */
     private $baseUrlBuilder;
 
+    /**
+     * @var SnippetKeyGenerator
+     */
+    private $htmlHeadMetaKeyGenerator;
+
     public function __construct(
         ProductListingBlockRenderer $blockRenderer,
         SnippetKeyGenerator $metaSnippetKeyGenerator,
         ContextBuilder $contextBuilder,
         SnippetKeyGenerator $canonicalTagSnippetKeyGenerator,
-        BaseUrlBuilder $baseUrlBuilder
+        BaseUrlBuilder $baseUrlBuilder,
+        SnippetKeyGenerator $htmlHeadMetaKeyGenerator
     ) {
         $this->blockRenderer = $blockRenderer;
         $this->metaSnippetKeyGenerator = $metaSnippetKeyGenerator;
         $this->contextBuilder = $contextBuilder;
         $this->canonicalTagSnippetKeyGenerator = $canonicalTagSnippetKeyGenerator;
         $this->baseUrlBuilder = $baseUrlBuilder;
+        $this->htmlHeadMetaKeyGenerator = $htmlHeadMetaKeyGenerator;
     }
 
     /**
@@ -64,6 +72,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return [
             $this->createPageMetaSnippet($productListing),
             $this->createListingCanonicalTagSnippet($productListing),
+            $this->createHtmlHeadMetaSnippet($productListing),
         ];
     }
 
@@ -106,7 +115,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
             [
                 'title' => [ProductListingTitleSnippetRenderer::CODE],
                 'sidebar_container' => [ProductListingDescriptionSnippetRenderer::CODE],
-                'head_container' => [self::CANONICAL_TAG_KEY],
+                'head_container' => [self::CANONICAL_TAG_KEY, self::HTML_HEAD_META_KEY],
             ]
         );
 
@@ -167,5 +176,56 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         $baseUrl = $this->baseUrlBuilder->create($this->getContextFromProductListingData($productListing));
         $urlKey = $productListing->getUrlKey();
         return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
+    }
+
+    /**
+     * @param ProductListing $productListing
+     * @return Snippet
+     */
+    private function createHtmlHeadMetaSnippet(ProductListing $productListing)
+    {
+        $productListingUrlKey = $productListing->getUrlKey();
+        $key = $this->htmlHeadMetaKeyGenerator->getKeyForContext(
+            $this->getContextFromProductListingData($productListing),
+            [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
+        );
+
+        $metaDescription = $this->getMetaDescriptionHtml($productListing);
+        $metaKeywords = $this->getMetaKeywordsHtml($productListing);
+        return Snippet::create($key, $metaDescription . $metaKeywords);
+    }
+
+    /**
+     * @param ProductListing $productListing
+     * @return string
+     */
+    private function getMetaDescriptionHtml(ProductListing $productListing)
+    {
+        return $this->getMetaHtmlFromAttribute($productListing, 'meta_description', 'description');
+    }
+
+    /**
+     * @param ProductListing $productListing
+     * @return string
+     */
+    private function getMetaKeywordsHtml(ProductListing $productListing)
+    {
+        return $this->getMetaHtmlFromAttribute($productListing, 'meta_keywords', 'keywords');
+    }
+
+    /**
+     * @param ProductListing $productListing
+     * @param string $attribute
+     * @param string $metaName
+     * @return string
+     */
+    private function getMetaHtmlFromAttribute(ProductListing $productListing, $attribute, $metaName)
+    {
+        $attributeValue = '';
+        if ($productListing->hasAttribute($attribute)) {
+            $attributeValue = $productListing->getAttributeValueByCode($attribute);
+        }
+        $metaHtml = sprintf('<meta name="%s" content="%s" />', $metaName, $attributeValue);
+        return $metaHtml;
     }
 }
