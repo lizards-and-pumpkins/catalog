@@ -190,12 +190,36 @@ class ProductListingSnippetRenderer implements SnippetRenderer
             [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
         );
 
+        $metaDescription = $this->getMetaDescriptionHtml($productListing);
+        $metaKeywords = $this->getMetaKeywordsHtml($productListing);
+        return Snippet::create($key, $metaDescription . $metaKeywords);
+    }
+
+    /**
+     * @param ProductListing $productListing
+     * @return string
+     */
+    private function getMetaDescriptionHtml(ProductListing $productListing)
+    {
         $metaDescription = '';
         if ($productListing->hasAttribute('meta_description')) {
             $metaDescription = $productListing->getAttributeValueByCode('meta_description');
         }
-        $content = sprintf('<meta name="description" content="%s" />', $metaDescription);
+        $metaDescription = sprintf('<meta name="description" content="%s" />', $metaDescription);
+        return $metaDescription;
+    }
 
-        return Snippet::create($key, $content);
+    /**
+     * @param ProductListing $productListing
+     * @return string
+     */
+    private function getMetaKeywordsHtml(ProductListing $productListing)
+    {
+        $metaDescription = '';
+        if ($productListing->hasAttribute('meta_keywords')) {
+            $metaDescription = $productListing->getAttributeValueByCode('meta_keywords');
+        }
+        $metaDescription = sprintf('<meta name="keywords" content="%s" />', $metaDescription);
+        return $metaDescription;
     }
 }

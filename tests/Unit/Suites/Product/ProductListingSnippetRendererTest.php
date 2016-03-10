@@ -165,24 +165,34 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testReturnsProductListingMetaDescriptionSnippet()
+    public function testReturnsProductListingHtmlHeadMetaSnippet()
     {
         $testMetaDescription = 'META DESCRIPTION FOR LISTING';
-
+        $testMetaKeywords = 'meta keywords for listing';
         $htmlHeadMetaKey = 'meta_description';
         $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey, 'dummy_canonical_key');
 
         $stubProductListing = $this->createStubProductListing();
         $stubProductListing->method('getUrlKey')->willReturn('listing.html');
         $stubProductListing->method('hasAttribute')->willReturn(true);
-        $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaDescription);
+        $stubProductListing->method('getAttributeValueByCode')->willReturnMap(
+            [
+                ['meta_description', $testMetaDescription],
+                ['meta_keywords', $testMetaKeywords],
+            ]
+        );
         $result = $this->renderer->render($stubProductListing);
 
         $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
         $this->assertInstanceOf(Snippet::class, $metaDescriptionSnippet);
 
-        $this->assertSame(
-            '<meta name="description" content="META DESCRIPTION FOR LISTING" />',
+        $this->assertContains(
+            "<meta name=\"description\" content=\"$testMetaDescription\" />",
+            $metaDescriptionSnippet->getContent()
+        );
+
+        $this->assertContains(
+            "<meta name=\"keywords\" content=\"$testMetaKeywords\" />",
             $metaDescriptionSnippet->getContent()
         );
     }
@@ -201,7 +211,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $metaSnippet = $this->findSnippetByKey($testSnippetKey, $result);
         $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
 
-        $this->assertSame(
+        $this->assertContains(
             '<meta name="description" content="meta_description_value" />',
             $htmlHeadMetaKeySnippet->getContent()
         );
@@ -230,8 +240,29 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $result = $this->renderer->render($stubProductListing);
 
         $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
-        $this->assertSame(
+        $this->assertContains(
             '<meta name="description" content="" />',
+            $htmlHeadMetaKeySnippet->getContent()
+        );
+    }
+
+    public function testProductListingDoesNotThrowExceptionOnUndefinedMetaKeywords()
+    {
+        $testSnippetKey = 'listing';
+        $htmlHeadMetaKey = 'dummy_meta_key';
+        $this->prepareKeyGeneratorsForProductListing($testSnippetKey, $htmlHeadMetaKey, 'canonical');
+
+        $stubProductListing = $this->createStubProductListing();
+        $stubProductListing->method('getAttributeValueByCode')->willThrowException(
+            new ProductListingAttributeNotFoundException(
+                sprintf('Product list attribute with code "meta_description" is not found.')
+            )
+        );
+        $result = $this->renderer->render($stubProductListing);
+
+        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+        $this->assertContains(
+            '<meta name="keywords" content="" />',
             $htmlHeadMetaKeySnippet->getContent()
         );
     }
