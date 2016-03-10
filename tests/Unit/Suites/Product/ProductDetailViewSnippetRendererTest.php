@@ -235,7 +235,6 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $metaDescription = 'html head meta description value';
         $metaKeywords = 'html head meta keywords value';
 
-
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
         $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
         $metaKey = 'meta';
