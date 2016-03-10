@@ -114,21 +114,6 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductView $productView
-     * @return Snippet
-     */
-    private function createProductDetailPageMetaSnippet(ProductView $productView)
-    {
-        $snippetKey = $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
-            $productView->getContext(),
-            [PageMetaInfoSnippetContent::URL_KEY => $productView->getFirstValueOfAttribute(Product::URL_KEY)]
-        );
-        $metaData = $this->getPageMetaSnippetContent($productView);
-
-        return Snippet::create($snippetKey, json_encode($metaData));
-    }
-
-    /**
-     * @param ProductView $productView
      * @return mixed[]
      */
     private function getPageMetaSnippetContent(ProductView $productView)
