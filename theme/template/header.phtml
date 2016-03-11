@@ -55,6 +55,8 @@
             <li><a href="<?= $this->getBaseUrl() ?>customer/account/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-account.png" alt=""/></a></li>
             <li><a href="<?= $this->getBaseUrl() ?>checkout/cart/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-cart.png" alt=""/></a></li>
             <li class="active"><a href="#" data-block="search"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-search.png" alt=""/></a></li>
+            <li><a href="#" data-block="lang"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-lang-deutsch.png" alt=""/></a></li>
+            <li class="last"><a href="#" data-block="store"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-store-21run-com.png" alt=""/></a></li>
         </ul>
         <div id="phone-meta-menu-content" class="search">
             <form autocomplete="off" action="<?= $this->getBaseUrl() ?>catalogsearch/result/" class="search-form">
@@ -66,6 +68,15 @@
                     <div id="search-autosuggestion"></div>
                 </div>
             </form>
+            <div class="lang">
+                <a href="http://www.21run.com/ru_de/" class="lang-de">Deutsch</a>
+                <a href="http://www.21run.com/ru_en/" class="lang-en">English</a>
+                <a href="https://www.21run.com/es/" class="lang-es">Español</a>
+            </div>
+            <div class="store">
+                <a href="http://www.21streetwear.com/st_de/">21streetwear.com</a>
+                <a href="http://www.21cycles.com/cy_de/">21cycles.com</a>
+            </div>
         </div>
         <?= $this->getChildOutput('content_block_top-menu') ?>
     </div>

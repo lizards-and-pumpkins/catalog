@@ -158,6 +158,7 @@ nav { clear: both; color: #ffffff }
 
 /* Phone */
 @media (max-width: 767px) {
+    .header-panel .style-select { display: none }
 
     /* Layout */
     .col2-left-layout .main, .col2-left-layout .main > div { display: block }
@@ -173,7 +174,7 @@ nav { clear: both; color: #ffffff }
     .nav.last { border-bottom: none }
     .nav > li { display: table-cell; float: none; text-align: center }
     #phone-meta-menu { display: table; width: 100%; clear: both }
-    #phone-meta-menu li { display: table-cell; padding-bottom: 10px }
+    #phone-meta-menu li { display: table-cell; padding-bottom: 10px; width: 20% }
     #phone-meta-menu li a { display: block; border-right: #21719f solid 1px; padding: 11px 0; text-align: center; background-color: #228bb6 }
     #phone-meta-menu li.active { background: url("../images/phone-menu-arrow.png") no-repeat bottom center }
     #phone-meta-menu li.active a { background-color: #0b4e76; border-color: #0b4e76 }

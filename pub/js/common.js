@@ -31,7 +31,7 @@ define(
             phoneMetaMenuContent = document.getElementById('phone-meta-menu-content');
 
         Array.prototype.map.call(document.querySelectorAll('#phone-meta-menu li a'), function (menuItem) {
-            if (menuItem.getAttribute('data-block') === null) {
+            if (!menuItem.hasAttribute('data-block')) {
                 return;
             }
 
