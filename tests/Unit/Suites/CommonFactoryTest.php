@@ -27,11 +27,17 @@ use LizardsAndPumpkins\Image\AddImageCommand;
 use LizardsAndPumpkins\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingBuilder;
 use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
@@ -62,6 +68,7 @@ use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
+use LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
@@ -163,6 +170,9 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -733,7 +743,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
      * @param string $expected
      * @dataProvider productListSnippetRenderersProvider
      */
-    public function testItContainsTheProductListingDescriptionSnippetRendererInTheListingRendererList($expected)
+    public function testContainsProductListingPageSnippetRenderersinSnippetRendererList($expected)
     {
         $found = array_reduce(
             $this->commonFactory->createProductListingSnippetRendererList(),
@@ -754,6 +764,40 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingDescriptionSnippetRenderer::class],
             [ProductListingTitleSnippetRenderer::class],
             [ProductListingSnippetRenderer::class],
+            [ProductListingRobotsMetaTagSnippetRenderer::class],
+        ];
+    }
+
+    /**
+     * @param string $expected
+     * @dataProvider productSnippetRenderersProvider
+     */
+    public function testContainsProductSnippetRenderersinSnippetRendererList($expected)
+    {
+        $found = array_reduce(
+            $this->commonFactory->createProductDetailPageSnippetRendererList(),
+            function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
+                return $found || is_a($snippetRenderer, $expected);
+            }
+        );
+        $message = sprintf('SnippetRenderer "%s" not found in product detail snippet renderer list', $expected);
+        $this->assertTrue($found, $message);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function productSnippetRenderersProvider()
+    {
+        return [
+            [ProductDetailViewSnippetRenderer::class],
+            [ProductInListingSnippetRenderer::class],
+            [ProductInSearchAutosuggestionSnippetRenderer::class],
+            [PriceSnippetRenderer::class],
+            [ProductJsonSnippetRenderer::class],
+            [ConfigurableProductJsonSnippetRenderer::class],
+            [ProductCanonicalTagSnippetRenderer::class],
+            [ProductDetailPageRobotsMetaTagSnippetRenderer::class],
         ];
     }
 
@@ -768,7 +812,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createProductDetailPageMetaDescriptionSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
-    
+
     public function testReturnsProductCanonicalSnippetKeyGenerator()
     {
         $result = $this->commonFactory->createProductCanonicalTagSnippetKeyGenerator();
@@ -779,5 +823,35 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductCanonicalTagSnippetRenderer();
         $this->assertInstanceOf(ProductCanonicalTagSnippetRenderer::class, $result);
+    }
+
+    public function testReturnsProductDetailPageRobotsMetaTagAllSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductDetailPageRobotsMetaTagSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testReturnsProductListingPageRobotsMetaTagAllSnippetKeyGenerator()
+    {
+        $result = $this->commonFactory->createProductListingPageRobotsMetaTagSnippetKeyGenerator();
+        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
+    }
+
+    public function testReturnsRobotsMetaTagSnippetRenderer()
+    {
+        $result = $this->commonFactory->createRobotsMetaTagSnippetRenderer($this->getMock(SnippetKeyGenerator::class));
+        $this->assertInstanceOf(RobotsMetaTagSnippetRenderer::class, $result);
+    }
+
+    public function testReturnsProductListingPageRobotsMetaTagSnippetRenderer()
+    {
+        $result = $this->commonFactory->createProductListingPageRobotsMetaTagSnippetRenderer();
+        $this->assertInstanceOf(ProductListingRobotsMetaTagSnippetRenderer::class, $result);
+    }
+
+    public function testReturnsProductDetailPageRobotsMetaTagSnippetRenderer()
+    {
+        $result = $this->commonFactory->createProductDetailPageRobotsMetaTagSnippetRenderer();
+        $this->assertInstanceOf(ProductDetailPageRobotsMetaTagSnippetRenderer::class, $result);
     }
 }

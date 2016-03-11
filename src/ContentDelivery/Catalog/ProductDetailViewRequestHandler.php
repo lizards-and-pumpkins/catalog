@@ -14,6 +14,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGenerator;
@@ -86,13 +87,15 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     public function process(HttpRequest $request)
     {
         if (!$this->canProcess($request)) {
-            throw new UnableToHandleRequestException;
+            throw new UnableToHandleRequestException(sprintf('Unable to handle request to "%s"', $request->getUrl()));
         }
 
         $keyGeneratorParams = [
-            Product::ID => $this->pageMetaInfo->getProductId()
+            Product::ID => $this->pageMetaInfo->getProductId(),
+            'robots' => 'all'
         ];
 
+        $this->addRobotsMetaTagToHeadContainer();
         $this->addTranslationsToPageBuilder($this->context);
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
@@ -159,5 +162,11 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
+    }
+
+    private function addRobotsMetaTagToHeadContainer()
+    {
+        $snippetCode = ProductDetailPageRobotsMetaTagSnippetRenderer::CODE;
+        $this->pageBuilder->addSnippetToContainer('head_container', $snippetCode);
     }
 }

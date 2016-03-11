@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Api\ApiRouter;
+use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices;
@@ -10,6 +11,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelations
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SelectProductListingRobotsMetaTagContent;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
@@ -24,17 +26,20 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
@@ -208,8 +213,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider registeredSnippetCodeDataProvider
      * @param string $snippetCode
+     * @dataProvider registeredSnippetCodeDataProvider
      */
     public function testSnippetKeyGeneratorForGivenCodeIsReturned($snippetCode)
     {
@@ -245,6 +250,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE],
             [ProductCanonicalTagSnippetRenderer::CODE],
             [ProductListingSnippetRenderer::HTML_HEAD_META_KEY],
+            [ProductListingRobotsMetaTagSnippetRenderer::CODE],
+            [ProductDetailPageRobotsMetaTagSnippetRenderer::CODE],
         ];
     }
 
@@ -288,5 +295,11 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createProductJsonSnippetTransformation();
         $this->assertInstanceOf(ProductJsonSnippetTransformation::class, $result);
+    }
+
+    public function testReturnsSelectProductListingRobotsMetaTagContent()
+    {
+        $result = $this->frontendFactory->createSelectProductListingRobotsMetaTagContent();
+        $this->assertInstanceOf(SelectProductListingRobotsMetaTagContent::class, $result);
     }
 }

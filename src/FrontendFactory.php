@@ -18,6 +18,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationT
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SelectProductListingRobotsMetaTagContent;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
@@ -31,10 +32,12 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
@@ -199,8 +202,17 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
+            $this->getMasterFactory()->createSelectProductListingRobotsMetaTagContent(),
             $this->getMasterFactory()->createProductListingPageRequest()
         );
+    }
+
+    /**
+     * @return SelectProductListingRobotsMetaTagContent
+     */
+    public function createSelectProductListingRobotsMetaTagContent()
+    {
+        return new SelectProductListingRobotsMetaTagContent();
     }
 
     /**
@@ -382,6 +394,18 @@ class FrontendFactory implements Factory
             ProductListingSnippetRenderer::HTML_HEAD_META_KEY,
             function () {
                 return $this->getMasterFactory()->createHtmlHeadMetaKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            ProductDetailPageRobotsMetaTagSnippetRenderer::CODE,
+            function () {
+                return $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            ProductListingRobotsMetaTagSnippetRenderer::CODE,
+            function () {
+                return $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetKeyGenerator();
             }
         );
         return $registrySnippetKeyGeneratorLocator;

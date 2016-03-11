@@ -10,6 +10,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\AttributeCode;
 use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 
@@ -417,5 +418,21 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
         $snippetCode = 'translations';
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($translations));
+    }
+
+    public function testAddsTheRobotsMetaTagSnippetToHeadContainer()
+    {
+        $this->mockPageBuilder->expects($this->once())
+            ->method('addSnippetToContainer')
+            ->with('head_container', ProductListingRobotsMetaTagSnippetRenderer::CODE);
+            
+        $this->pageContentBuilder->buildPageContent(
+            $this->stubPageMetaInfoSnippetContent,
+            $this->stubContext,
+            $this->stubKeyGeneratorParams,
+            $this->stubSearchEngineResponse,
+            $this->stubProductsPerPage,
+            $this->stubSelectedSortOrderConfig
+        );
     }
 }

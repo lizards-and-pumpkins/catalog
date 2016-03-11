@@ -112,22 +112,12 @@ class HttpUrl
     }
 
     /**
-     * @param string $parameterName
-     * @return string[]
+     * @return bool
      */
-    public function getQueryParametersExceptGiven($parameterName)
+    public function hasQueryParameters()
     {
         $requestQuery = $this->url->getQuery();
-        $resultQuery = [];
-
-        foreach ($requestQuery as $parameterKey => $parameterValue) {
-            if ($parameterKey === $parameterName) {
-                continue;
-            }
-            $resultQuery[$parameterKey] = $parameterValue;
-        }
-
-        return $resultQuery;
+        return count($requestQuery->toArray()) > 0;
     }
 
     /**

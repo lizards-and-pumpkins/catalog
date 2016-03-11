@@ -89,12 +89,16 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $result);
     }
 
-    public function testAllQueryParametersAreReturnedExceptGiven()
+    public function testReturnsTrueIfThereAreQueryParameters()
     {
         $url = HttpUrl::fromString('http://example.com/?foo=bar&baz=qux');
-        $result = $url->getQueryParametersExceptGiven('foo');
+        $this->assertTrue($url->hasQueryParameters());
+    }
 
-        $this->assertSame(['baz' => 'qux'], $result);
+    public function testReturnsFalseIfThereAreQueryParameters()
+    {
+        $url = HttpUrl::fromString('http://example.com/foo/');
+        $this->assertFalse($url->hasQueryParameters());
     }
 
     /**
