@@ -225,7 +225,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         if ($productListing->hasAttribute($attribute)) {
             $attributeValue = $productListing->getAttributeValueByCode($attribute);
         }
-        $metaHtml = sprintf('<meta name="%s" content="%s" />', $metaName, $attributeValue);
+        $metaHtml = sprintf('<meta name="%s" content="%s" />', $metaName, htmlspecialchars($attributeValue));
         return $metaHtml;
     }
 }
