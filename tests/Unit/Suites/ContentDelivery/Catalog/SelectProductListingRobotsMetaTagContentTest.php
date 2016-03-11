@@ -31,7 +31,7 @@ class SelectProductListingRobotsMetaTagContentTest extends \PHPUnit_Framework_Te
         $this->assertSame('all', $this->selector->getRobotsMetaTagContentForRequest($this->stubRequest));
     }
 
-    public function testReturnsNoindexIfNoQueryParametersArePresent()
+    public function testReturnsNoindexIfQueryParametersArePresent()
     {
         $this->stubRequest->method('hasQueryParameters')->willReturn(true);
         $this->assertSame('noindex', $this->selector->getRobotsMetaTagContentForRequest($this->stubRequest));
