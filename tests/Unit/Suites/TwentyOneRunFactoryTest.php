@@ -13,6 +13,7 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
 use LizardsAndPumpkins\Image\ImageProcessor;
 use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\Log\Writer\CompositeLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
 use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
@@ -161,7 +162,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testLogMessageWriterIsReturned()
     {
-        $this->assertInstanceOf(FileLogMessageWriter::class, $this->factory->createLogMessageWriter());
+        $this->assertInstanceOf(CompositeLogMessageWriter::class, $this->factory->createLogMessageWriter());
     }
 
     public function testArrayOfSearchableAttributeCodesIsReturned()
