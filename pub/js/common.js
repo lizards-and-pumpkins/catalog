@@ -1,4 +1,7 @@
-define(['lib/domReady', 'magento_data', 'search_autosuggestion'], function (domReady, magentoData) {
+define(
+    ['lib/domReady', 'magento_data', 'lib/translate', 'search_autosuggestion'],
+    function (domReady, magentoData, translate) {
+
     var tabletWidth = 768,
         siteFullWidth = 975,
         navItemsOriginalWidth = [];
@@ -51,8 +54,17 @@ define(['lib/domReady', 'magento_data', 'search_autosuggestion'], function (domR
     }
 
     function processCartMetaInfo() {
-        document.getElementById('meta-menu-cart-num-items').innerHTML = magentoData.getCartItems().length;
-        document.getElementById('meta-menu-cart-total').innerHTML = magentoData.getCartTotal();
+        var cartMetaInfoContainer = document.getElementById('cart-meta-info');
+
+        if (null === cartMetaInfoContainer) {
+            return;
+        }
+
+        var numItemsInCart = magentoData.getCartItems().length,
+            cartTotal = magentoData.getCartTotal(),
+            numItemsPattern = 1 === numItemsInCart ? '%s Item' : '%s Items';
+
+        cartMetaInfoContainer.textContent = translate(numItemsPattern, numItemsInCart) + ' ' + cartTotal;
     }
 
     function toggleMainNavigationSubMenu(event) {

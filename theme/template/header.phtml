@@ -8,13 +8,7 @@
     <div class="header">
         <div class="header-panel">
             <a href="<?= $this->getBaseUrl() ?>checkout/onepage/"><?= $this->__('Checkout') ?></a>
-            <span class="sep"></span>
-            <a href="<?= $this->getBaseUrl() ?>checkout/cart/">
-                <strong>
-                    <?php /* TODO: Handle pural form */ ?>
-                    <span id="meta-menu-cart-num-items">0</span> <?= $this->__('Items') ?> <span id="meta-menu-cart-total">0,00 €</span>
-                </strong>
-            </a>
+            <span id="cart-meta-info"></span>
             <span class="sep"></span>
             <a href="<?= $this->getBaseUrl() ?>customer/account/"><?= $this->__('My Account') ?></a>
             <span class="sep"></span>
