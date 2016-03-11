@@ -1,6 +1,6 @@
 define(
-    ['lib/domReady', 'magento_data', 'lib/translate', 'search_autosuggestion'],
-    function (domReady, magentoData, translate) {
+    ['lib/domReady', 'magento_data', 'lib/translate', 'lib/styleSelect', 'search_autosuggestion'],
+    function (domReady, magentoData, translate, styleSelect) {
 
     var tabletWidth = 768,
         siteFullWidth = 975,
@@ -9,6 +9,8 @@ define(
     domReady(function () {
         window.addEventListener('resize', adjustToPageWidth);
         window.addEventListener('orientationchange', adjustToPageWidth);
+
+        styleSelect('.language-select');
 
         collectInitialNavigationTopItemsWidths();
         initializePhoneMenu();
