@@ -436,4 +436,25 @@ EOH;
 
         $this->assertEquals('Stub Content - Child 1Child 2 : Child 3Child 4', $page->getBody());
     }
+
+    public function testLoadsSnippetsAddedToContainerFromDataPool()
+    {
+        $rootSnippetContent = 'Stub Content - {{snippet container1}}';
+
+        $containerSnippetsInPageMetaInfo = [];
+        $this->setPageMetaInfoFixture(
+            $this->testRootSnippetCode,
+            [$this->testRootSnippetCode],
+            $containerSnippetsInPageMetaInfo
+        );
+        $allSnippetCodes = [$this->testRootSnippetCode, 'child1'];
+        $allSnippetContent = [$rootSnippetContent, 'Child 1 Content'];
+        $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
+
+        $this->pageBuilder->addSnippetToContainer('container1', 'child1');
+        
+        $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
+
+        $this->assertEquals('Stub Content - Child 1 Content', $page->getBody());
+    }
 }

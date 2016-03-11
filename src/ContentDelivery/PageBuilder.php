@@ -112,7 +112,7 @@ class PageBuilder
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
         $containerSnippetCodes = array_reduce($metaInfo->getContainerSnippets(), function ($carry, $codes) {
             return array_merge($carry, $codes);
-        }, []);
+        }, $this->getFlattenedContainerSnippetCodes());
         $snippetCodes = array_unique(array_merge(
             $metaInfo->getPageSnippetCodes(),
             [$this->rootSnippetCode],
@@ -123,6 +123,16 @@ class PageBuilder
             array_map([$this, 'tryToGetSnippetKey'], $snippetCodes)
         ));
         return $this->snippetCodeToKeyMap;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getFlattenedContainerSnippetCodes()
+    {
+        return array_reduce($this->containerSnippets, function (array $flattened, array $snippetsInContainer) {
+            return array_merge($flattened, $snippetsInContainer);
+        }, []);
     }
 
     /**

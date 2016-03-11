@@ -14,6 +14,7 @@ use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Product\Product;
 use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Renderer\Translation\Translator;
 use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\SnippetKeyGenerator;
@@ -52,7 +53,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubPageBuilder;
+    private $mockPageBuilder;
 
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -118,10 +119,10 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
         $this->stubContext = $this->getMock(Context::class);
-        $this->stubPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+        $this->mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
 
         $this->addSnippetsToPageSpy = $this->any();
-        $this->stubPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
+        $this->mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
 
         $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
 
@@ -134,7 +135,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler = new ProductDetailViewRequestHandler(
             $this->stubContext,
             $this->mockDataPoolReader,
-            $this->stubPageBuilder,
+            $this->mockPageBuilder,
             $stubTranslatorRegistry,
             $this->stubSnippetKeyGenerator
         );
@@ -194,10 +195,10 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
         ]);
-        $this->stubPageBuilder->method('buildPage')->with(
+        $this->mockPageBuilder->method('buildPage')->with(
             $this->anything(),
             $this->anything(),
-            [Product::ID => $this->testProductId]
+            $this->isType('array')
         )->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
 
         $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubRequest));
@@ -241,12 +242,27 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
         $this->mockDataPoolReader->method('getSnippet')
             ->willReturnMap([[$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]]);
-        $this->stubPageBuilder->method('buildPage')
+        $this->mockPageBuilder->method('buildPage')
             ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
 
         $this->requestHandler->process($this->stubRequest);
 
         $snippetCode = 'translations';
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($translations));
+    }
+
+    public function testAddsRobotsMetaTagToHeadContainer()
+    {
+        $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
+        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
+        ]);
+        
+        $code = ProductDetailPageRobotsMetaTagSnippetRenderer::CODE;
+        $this->mockPageBuilder->expects($this->once())->method('addSnippetToContainer')->with('head_container', $code);
+        $this->mockPageBuilder->expects($this->once())->method('buildPage')
+            ->with($this->anything(), $this->anything(), $this->arrayHasKey('robots'));
+
+        $this->requestHandler->process($this->stubRequest);
     }
 }
