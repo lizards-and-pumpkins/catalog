@@ -29,6 +29,7 @@ use LizardsAndPumpkins\Image\ImageProcessorCollection;
 use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Log\InMemoryLogger;
 use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Log\Writer\CompositeLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
 use LizardsAndPumpkins\Log\WritingLoggerDecorator;
@@ -247,7 +248,10 @@ class TwentyOneRunFactory implements Factory
      */
     public function createLogMessageWriter()
     {
-        return new FileLogMessageWriter($this->getMasterFactory()->getLogFilePathConfig());
+        $writers = [
+            new FileLogMessageWriter($this->getMasterFactory()->getLogFilePathConfig()),
+        ];
+        return new CompositeLogMessageWriter(...$writers);
     }
 
     /**

@@ -23,7 +23,7 @@ class SnippetRendererCollection
      */
     public function render($projectionData)
     {
-        return array_reduce($this->renderers, function (array $carry, SnippetRenderer $renderer) use ($projectionData) {
+        return @array_reduce($this->renderers, function (array $carry, SnippetRenderer $renderer) use ($projectionData) {
             return array_merge($carry, $renderer->render($projectionData));
         }, []);
     }

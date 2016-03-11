@@ -257,4 +257,26 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertContains("<meta name=\"description\" content=\"$metaDescription\" />", $metaSnippet->getContent());
         $this->assertContains("<meta name=\"keywords\" content=\"$metaKeywords\" />", $metaSnippet->getContent());
     }
+
+    public function testEncodesHtmlMetaTagValues()
+    {
+        $testMetaContent = 'some content requiring encoding: <"&';
+        $expectedContent = htmlspecialchars($testMetaContent);
+
+        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
+        $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('meta');
+        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-meta-key');
+
+        $this->stubProductView->method('getAllValuesOfAttribute')->willReturn([]);
+
+        $this->stubProductView->method('getFirstValueOfAttribute')->willReturn($testMetaContent);
+
+        $result = $this->renderer->render($this->stubProductView);
+
+        $metaSnippet = $this->findSnippetByKey('meta', $result);
+
+        $this->assertContains("<meta name=\"description\" content=\"$expectedContent\" />", $metaSnippet->getContent());
+        $this->assertContains("<meta name=\"keywords\" content=\"$expectedContent\" />", $metaSnippet->getContent());
+    }
 }

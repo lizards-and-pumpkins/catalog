@@ -139,10 +139,10 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     private function createProductDetailPageMetaDescriptionSnippet(ProductView $productView)
     {
         $productMetaDescription = $productView->getFirstValueOfAttribute('meta_description');
-        $description = sprintf('<meta name="description" content="%s" />', $productMetaDescription);
+        $description = sprintf('<meta name="description" content="%s" />', htmlspecialchars($productMetaDescription));
 
         $productMetaKeywords = $productView->getFirstValueOfAttribute('meta_keywords');
-        $keywords = sprintf('<meta name="keywords" content="%s" />', $productMetaKeywords);
+        $keywords = sprintf('<meta name="keywords" content="%s" />', htmlspecialchars($productMetaKeywords));
 
         $key = $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),

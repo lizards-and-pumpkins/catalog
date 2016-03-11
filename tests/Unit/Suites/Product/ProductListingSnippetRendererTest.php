@@ -266,4 +266,32 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $htmlHeadMetaKeySnippet->getContent()
         );
     }
+
+    public function testEncodesTheMetaTagValues()
+    {
+        $testMetaContent = 'some content that needs to be escaped: <"&';
+        $expectedContent = htmlspecialchars($testMetaContent);
+        
+        $htmlHeadMetaKey = 'meta_description';
+        $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey, 'dummy_canonical_key');
+
+        $stubProductListing = $this->createStubProductListing();
+        $stubProductListing->method('getUrlKey')->willReturn('listing.html');
+        $stubProductListing->method('hasAttribute')->willReturn(true);
+        $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaContent);
+        
+        $result = $this->renderer->render($stubProductListing);
+
+        $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+
+        $this->assertContains(
+            "<meta name=\"description\" content=\"$expectedContent\" />",
+            $metaDescriptionSnippet->getContent()
+        );
+
+        $this->assertContains(
+            "<meta name=\"keywords\" content=\"$expectedContent\" />",
+            $metaDescriptionSnippet->getContent()
+        );
+    }
 }
