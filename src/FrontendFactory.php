@@ -43,6 +43,7 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler;
+use LizardsAndPumpkins\RobotsMetaTag\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
@@ -382,6 +383,18 @@ class FrontendFactory implements Factory
             ProductListingSnippetRenderer::HTML_HEAD_META_KEY,
             function () {
                 return $this->getMasterFactory()->createHtmlHeadMetaKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            CommonFactory::PRODUCT_DETAIL_ROBOTS_TAG,
+            function () {
+                return $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            CommonFactory::PRODUCT_LISTING_ROBOTS_TAG,
+            function () {
+                return $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetKeyGenerator();
             }
         );
         return $registrySnippetKeyGeneratorLocator;

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Api\ApiRouter;
+use LizardsAndPumpkins\CommonFactory;
 use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices;
@@ -35,6 +36,7 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
 
 /**
@@ -208,8 +210,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider registeredSnippetCodeDataProvider
      * @param string $snippetCode
+     * @dataProvider registeredSnippetCodeDataProvider
      */
     public function testSnippetKeyGeneratorForGivenCodeIsReturned($snippetCode)
     {
@@ -245,6 +247,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE],
             [ProductCanonicalTagSnippetRenderer::CODE],
             [ProductListingSnippetRenderer::HTML_HEAD_META_KEY],
+            [CommonFactory::PRODUCT_DETAIL_ROBOTS_TAG],
+            [CommonFactory::PRODUCT_LISTING_ROBOTS_TAG],
         ];
     }
 
