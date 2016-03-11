@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
 use LizardsAndPumpkins\Snippet;
 use LizardsAndPumpkins\SnippetKeyGenerator;
 use LizardsAndPumpkins\SnippetRenderer;
@@ -23,12 +22,11 @@ class RobotsMetaTagSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductView $productView
+     * @param Context $context
      * @return Snippet[]
      */
-    public function render(ProductView $productView)
+    public function render(Context $context)
     {
-        $context = $productView->getContext();
         return array_map(function ($tagContent) use ($context) {
             return $this->createRobotsMetaTagSnippetForContent($context, $tagContent);
         }, $this->robotsMetaTags);

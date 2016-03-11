@@ -30,6 +30,7 @@ use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
@@ -247,8 +248,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE],
             [ProductCanonicalTagSnippetRenderer::CODE],
             [ProductListingSnippetRenderer::HTML_HEAD_META_KEY],
+            [ProductListingRobotsMetaTagSnippetRenderer::CODE],
             [CommonFactory::PRODUCT_DETAIL_ROBOTS_TAG],
-            [CommonFactory::PRODUCT_LISTING_ROBOTS_TAG],
         ];
     }
 

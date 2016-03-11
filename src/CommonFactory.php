@@ -44,6 +44,7 @@ use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingTemplateProjector;
 use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
@@ -109,8 +110,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     
     const PRODUCT_DETAIL_ROBOTS_TAG = 'product_detail_robots_tag';
     
-    const PRODUCT_LISTING_ROBOTS_TAG = 'product_listing_robots_tag';
-
     /**
      * @var KeyValueStore
      */
@@ -1733,7 +1732,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductListingPageRobotsMetaTagSnippetKeyGenerator()
     {
-        return $this->createRobotsMetaTagSnippetKeyGeneratorForSnippetCode(self::PRODUCT_LISTING_ROBOTS_TAG);
+        return $this->createRobotsMetaTagSnippetKeyGeneratorForSnippetCode(
+            ProductListingRobotsMetaTagSnippetRenderer::CODE
+        );
     }
 
     /**
@@ -1741,8 +1742,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductListingPageRobotsMetaTagSnippetRenderer()
     {
-        return $this->createRobotsMetaTagSnippetRenderer(
-            $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetKeyGenerator()
+        $snippetKeyGenerator = $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetKeyGenerator();
+        return new ProductListingRobotsMetaTagSnippetRenderer(
+            $this->getMasterFactory()->createRobotsMetaTagSnippetRenderer($snippetKeyGenerator),
+            $this->getMasterFactory()->createContextBuilder()
         );
     }
 
@@ -1764,7 +1767,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      * @param SnippetKeyGenerator $snippetKeyGenerator
      * @return RobotsMetaTagSnippetRenderer
      */
-    private function createRobotsMetaTagSnippetRenderer(SnippetKeyGenerator $snippetKeyGenerator)
+    public function createRobotsMetaTagSnippetRenderer(SnippetKeyGenerator $snippetKeyGenerator)
     {
         return new RobotsMetaTagSnippetRenderer($snippetKeyGenerator);
     }

@@ -25,9 +25,9 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $stubRobotsMetaTagSnippetKeyGenerator;
 
     /**
-     * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductView;
+    private $stubContext;
 
     /**
      * @param string $content
@@ -35,7 +35,7 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function findRobotsMetaTagSnippetByContent($content)
     {
-        $snippets = $this->renderer->render($this->stubProductView);
+        $snippets = $this->renderer->render($this->stubContext);
         return $this->findSnippetByKey($snippets, $this->getDummyRobotsTagKeyBasedOnContent($content));
     }
 
@@ -81,9 +81,8 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function (Context $context, array $usedDataParts) {
                 return $this->getDummyRobotsTagKeyBasedOnContent($usedDataParts['robots']);
             });
+        $this->stubContext = $this->getMock(Context::class);
         $this->renderer = new RobotsMetaTagSnippetRenderer($this->stubRobotsMetaTagSnippetKeyGenerator);
-        $this->stubProductView = $this->getMock(ProductView::class);
-        $this->stubProductView->method('getContext')->willReturn($this->getMock(Context::class));
     }
 
     public function testItIsASnippetRenderer()
@@ -93,7 +92,7 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAnArrayOfSnippets()
     {
-        $snippets = $this->renderer->render($this->stubProductView);
+        $snippets = $this->renderer->render($this->stubContext);
         
         $this->assertInternalType('array', $snippets);
         $this->assertNotEmpty($snippets);
