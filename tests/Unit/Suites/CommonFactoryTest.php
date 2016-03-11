@@ -29,6 +29,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
@@ -171,6 +172,7 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -795,7 +797,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductJsonSnippetRenderer::class],
             [ConfigurableProductJsonSnippetRenderer::class],
             [ProductCanonicalTagSnippetRenderer::class],
-            [RobotsMetaTagSnippetRenderer::class],
+            [ProductDetailPageRobotsMetaTagSnippetRenderer::class],
         ];
     }
 
@@ -850,6 +852,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testReturnsProductDetailPageRobotsMetaTagSnippetRenderer()
     {
         $result = $this->commonFactory->createProductDetailPageRobotsMetaTagSnippetRenderer();
-        $this->assertInstanceOf(RobotsMetaTagSnippetRenderer::class, $result);
+        $this->assertInstanceOf(ProductDetailPageRobotsMetaTagSnippetRenderer::class, $result);
     }
 }

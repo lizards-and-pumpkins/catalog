@@ -36,6 +36,7 @@ use LizardsAndPumpkins\Log\Logger;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
@@ -107,8 +108,6 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
 class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
     use FactoryTrait;
-    
-    const PRODUCT_DETAIL_ROBOTS_TAG = 'product_detail_robots_tag';
     
     /**
      * @var KeyValueStore
@@ -1714,7 +1713,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductDetailPageRobotsMetaTagSnippetKeyGenerator()
     {
-        return $this->createRobotsMetaTagSnippetKeyGeneratorForSnippetCode(self::PRODUCT_DETAIL_ROBOTS_TAG);
+        return $this->createRobotsMetaTagSnippetKeyGeneratorForSnippetCode(
+            ProductDetailPageRobotsMetaTagSnippetRenderer::CODE
+        );
     }
 
     /**
@@ -1722,8 +1723,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductDetailPageRobotsMetaTagSnippetRenderer()
     {
-        return $this->createRobotsMetaTagSnippetRenderer(
-            $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetKeyGenerator()
+        $snippetKeyGenerator = $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetKeyGenerator();
+        return new ProductDetailPageRobotsMetaTagSnippetRenderer(
+            $this->getMasterFactory()->createRobotsMetaTagSnippetRenderer($snippetKeyGenerator)
         );
     }
 

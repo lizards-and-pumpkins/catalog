@@ -31,6 +31,7 @@ use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Product\PriceSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
@@ -387,7 +388,7 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            CommonFactory::PRODUCT_DETAIL_ROBOTS_TAG,
+            ProductDetailPageRobotsMetaTagSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetKeyGenerator();
             }
