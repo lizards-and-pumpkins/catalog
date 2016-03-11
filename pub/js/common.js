@@ -10,7 +10,8 @@ define(
         window.addEventListener('resize', adjustToPageWidth);
         window.addEventListener('orientationchange', adjustToPageWidth);
 
-        styleSelect('.language-select');
+        styleSelect('.language-select select');
+        styleSelect('.website-select select');
 
         collectInitialNavigationTopItemsWidths();
         initializePhoneMenu();

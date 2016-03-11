@@ -62,7 +62,6 @@ textarea:focus, input:focus { outline: 0 }
 .header-panel > a { padding: 2px; color: #09486d }
 .header-panel .sep { height: 20px; margin: 0 8px; border-left: 1px solid #09486d }
 #cart-meta-info { font-weight: bold; border-right: 1px solid #09486d; padding: 3px 8px 4px 0; margin-right: 8px }
-.switcher-language { width: 44px }
 .cms_header_small { float: right; margin: 6px 14px 0 0 }
 .cms_header_small p { margin: 0 }
 
@@ -107,8 +106,10 @@ nav { clear: both; color: #ffffff }
 .footer-block-wide img { margin-bottom: 21px }
 
 /* Language and website switches */
-.header-panel .style-select .ss-selected-option { padding: 0 30px 0 6px; line-height: 18px; background-repeat: repeat; background-position: 88px -7px }
+.header-panel .style-select .ss-selected-option { padding: 0 30px 0 6px; line-height: 18px; background-repeat: repeat }
 .header-panel .style-select .ss-dropdown { top: 20px }
+.language-select .style-select .ss-selected-option { background-position: 88px -7px }
+.website-select .style-select .ss-selected-option { background-position: 102px -7px }
 .lang-de { background: url(../images/flags/de.gif) no-repeat }
 .lang-en { background: url(../images/flags/en.gif) no-repeat }
 .lang-fr { background: url(../images/flags/fr.gif) no-repeat }

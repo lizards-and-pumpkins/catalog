@@ -7,12 +7,22 @@
     <?= $this->getChildOutput('content_block_cms_header_info_banner') ?>
     <div class="header">
         <div class="header-panel">
-            <select class="language-select" onchange="location.href = this.options[this.selectedIndex].value">
-                <option class="lang-fr">Français</option>
-                <option class="lang-de" value="https://www.21run.com/ru_de/">Deutsch</option>
-                <option class="lang-en" value="https://www.21run.com/ru_en/">English</option>
-                <option class="lang-es" value="https://www.21run.com/es/">Español</option>
-            </select>
+            <div class="website-select">
+                <select onchange="location.href = this.options[this.selectedIndex].value">
+                    <option>21run.com</option>
+                    <option value="http://www.21streetwear.com/st_fr/">21streetwear.com</option>
+                    <option value="http://www.21cycles.com/cy_fr/">21cycles.com</option>
+                </select>
+            </div>
+            <span class="sep"></span>
+            <div class="language-select">
+                <select onchange="location.href = this.options[this.selectedIndex].value">
+                    <option class="lang-fr">Français</option>
+                    <option class="lang-de" value="https://www.21run.com/ru_de/">Deutsch</option>
+                    <option class="lang-en" value="https://www.21run.com/ru_en/">English</option>
+                    <option class="lang-es" value="https://www.21run.com/es/">Español</option>
+                </select>
+            </div>
             <span class="sep"></span>
             <a href="<?= $this->getBaseUrl() ?>checkout/onepage/"><?= $this->__('Checkout') ?></a>
             <span id="cart-meta-info"></span>
