@@ -48,12 +48,18 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $productListingPageRequest;
 
+    /**
+     * @var SelectProductListingRobotsMetaTagContent
+     */
+    private $selectProductListingRobotsMetaTagContent;
+
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         FacetFiltersToIncludeInResult $facetFilterRequest,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
+        SelectProductListingRobotsMetaTagContent $selectProductListingRobotsMetaTagContent,
         ProductListingPageRequest $productListingPageRequest
     ) {
         $this->context = $context;
@@ -61,6 +67,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
         $this->facetFilterRequest = $facetFilterRequest;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
+        $this->selectProductListingRobotsMetaTagContent = $selectProductListingRobotsMetaTagContent;
         $this->productListingPageRequest = $productListingPageRequest;
     }
 
@@ -97,10 +104,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $productsPerPage,
             $selectedSortOrderConfig
         );
-
+        
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
-            PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getUrlPathRelativeToWebFront(), '/')
+            PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getUrlPathRelativeToWebFront(), '/'),
+            'robots' => $this->selectProductListingRobotsMetaTagContent->getRobotsMetaTagContentForRequest($request),
         ];
 
         return $this->productListingPageContentBuilder->buildPageContent(

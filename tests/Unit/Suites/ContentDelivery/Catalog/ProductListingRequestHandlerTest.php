@@ -71,7 +71,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $testMetaInfoSnippetJson]
+            [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
         ]);
     }
 
@@ -120,6 +120,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
 
         $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
+        
+        $stubSelectRobotsMetaTagContent = $this->getMock(SelectProductListingRobotsMetaTagContent::class);
 
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
@@ -131,6 +133,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubSnippetKeyGenerator,
             $stubFacetFilterRequest,
             $stubProductListingPageContentBuilder,
+            $stubSelectRobotsMetaTagContent,
             $this->mockProductListingPageRequest
         );
     }

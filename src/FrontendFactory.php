@@ -18,6 +18,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationT
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SelectProductListingRobotsMetaTagContent;
 use LizardsAndPumpkins\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
@@ -45,7 +46,6 @@ use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler;
-use LizardsAndPumpkins\RobotsMetaTag\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
@@ -202,8 +202,17 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
+            $this->getMasterFactory()->createSelectProductListingRobotsMetaTagContent(),
             $this->getMasterFactory()->createProductListingPageRequest()
         );
+    }
+
+    /**
+     * @return SelectProductListingRobotsMetaTagContent
+     */
+    public function createSelectProductListingRobotsMetaTagContent()
+    {
+        return new SelectProductListingRobotsMetaTagContent();
     }
 
     /**

@@ -134,15 +134,11 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($queryParameterValue, $request->getQueryParameter($queryParameterName));
     }
 
-    public function testQueryParametersExceptGivenRetrievalIsDelegatedToHttpUrl()
+    public function testDelegatesToUrlToCheckIfQueryParametersArePresent()
     {
-        $queryParameterToBeExcluded = 'baz';
-        $queryParametersWithParameterExcluded = ['foo' => 'bar'];
-
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubHttpUrl->method('getQueryParametersExceptGiven')->with($queryParameterToBeExcluded)
-            ->willReturn($queryParametersWithParameterExcluded);
+        $stubHttpUrl->expects($this->once())->method('hasQueryParameters')->willReturn(true);
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -150,9 +146,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
-        $result = $request->getQueryParametersExceptGiven($queryParameterToBeExcluded);
-
-        $this->assertSame($queryParametersWithParameterExcluded, $result);
+        $this->assertTrue($request->hasQueryParameters());
     }
 
     public function testArrayOfCookiesIsReturned()

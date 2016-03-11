@@ -11,6 +11,7 @@ use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelations
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
 use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
+use LizardsAndPumpkins\ContentDelivery\Catalog\SelectProductListingRobotsMetaTagContent;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
@@ -294,5 +295,11 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->frontendFactory->createProductJsonSnippetTransformation();
         $this->assertInstanceOf(ProductJsonSnippetTransformation::class, $result);
+    }
+
+    public function testReturnsSelectProductListingRobotsMetaTagContent()
+    {
+        $result = $this->frontendFactory->createSelectProductListingRobotsMetaTagContent();
+        $this->assertInstanceOf(SelectProductListingRobotsMetaTagContent::class, $result);
     }
 }
