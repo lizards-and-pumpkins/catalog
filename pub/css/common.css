@@ -109,6 +109,7 @@ nav { clear: both; color: #ffffff }
 .header-panel .style-select .ss-selected-option { padding: 0 30px 0 6px; line-height: 18px; background-repeat: repeat }
 .header-panel .style-select .ss-dropdown { top: 20px }
 .language-select .style-select .ss-selected-option { background-position: 88px -7px }
+.language-select .style-select .ss-dropdown .ss-option { background-position: 6px 9px; padding-left: 35px }
 .website-select .style-select .ss-selected-option { background-position: 102px -7px }
 .lang-de { background: url(../images/flags/de.gif) no-repeat }
 .lang-en { background: url(../images/flags/en.gif) no-repeat }
