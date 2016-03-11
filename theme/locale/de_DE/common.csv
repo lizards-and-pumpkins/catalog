@@ -4,4 +4,5 @@
 "Logout","Abmelden"
 "Enter search keyword","Suchbegriff eingeben"
 "per %s%s %s &euro;","pro %s%s %s &euro;"
-"Items","Artikel"
+"%s Item","%s Artikel"
+"%s Items","%s Artikel"

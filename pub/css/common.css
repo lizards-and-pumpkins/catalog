@@ -61,6 +61,7 @@ textarea:focus, input:focus { outline: 0 }
 .header-panel > * { float: right; display: block }
 .header-panel > a { padding: 2px; color: #09486d }
 .header-panel .sep { height: 20px; margin: 0 8px; border-left: 1px solid #09486d }
+#cart-meta-info { font-weight: bold; border-right: 1px solid #09486d; padding: 3px 8px 4px 0; margin-right: 8px }
 .switcher-language { width: 44px }
 .cms_header_small { float: right; margin: 6px 14px 0 0 }
 .cms_header_small p { margin: 0 }

@@ -4,4 +4,5 @@
 "Logout","Déconnexion"
 "Enter search keyword","Rechercher"
 "per %s%s %s &euro;","pour %s%s %s &euro;"
-"Items","Artikel"
+"%s Item","%s Artikel"
+"%s Items","%s Artikels"
