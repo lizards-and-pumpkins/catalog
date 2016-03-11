@@ -437,7 +437,7 @@ EOH;
         $this->assertEquals('Stub Content - Child 1Child 2 : Child 3Child 4', $page->getBody());
     }
 
-    public function testLoadsSnippetsAddedToContainerFromDataPool()
+    public function testLoadsSnippetsAddedToContainerFromTheDataPool()
     {
         $rootSnippetContent = 'Stub Content - {{snippet container1}}';
 
