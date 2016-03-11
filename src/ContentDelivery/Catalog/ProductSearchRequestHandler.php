@@ -95,7 +95,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
 
         $metaInfoSnippetContent = $this->getPageMetaInfo();
-        $keyGeneratorParams = [];
+        $keyGeneratorParams = [
+            'robots' => 'noindex',
+        ];
 
         return $this->productListingPageContentBuilder->buildPageContent(
             $metaInfoSnippetContent,
