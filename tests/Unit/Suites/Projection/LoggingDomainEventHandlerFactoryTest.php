@@ -86,6 +86,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

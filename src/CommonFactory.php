@@ -60,6 +60,7 @@ use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\Product\ProductListingSnippetProjector;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
@@ -105,6 +106,10 @@ use LizardsAndPumpkins\Website\HostToWebsiteMap;
 class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
     use FactoryTrait;
+    
+    const PRODUCT_DETAIL_ROBOTS_TAG = 'product_detail_robots_tag';
+    
+    const PRODUCT_LISTING_ROBOTS_TAG = 'product_listing_robots_tag';
 
     /**
      * @var KeyValueStore
@@ -249,14 +254,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductSnippetRendererCollection()
     {
         return new SnippetRendererCollection(
-            $this->createProductSnippetRendererList()
+            $this->createProductDetailPageSnippetRendererList()
         );
     }
 
     /**
      * @return SnippetRenderer[]
      */
-    private function createProductSnippetRendererList()
+    public function createProductDetailPageSnippetRendererList()
     {
         return [
             $this->getMasterFactory()->createProductDetailViewSnippetRenderer(),
@@ -267,6 +272,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createProductCanonicalTagSnippetRenderer(),
+            $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetRenderer(),
         ];
     }
 
@@ -533,6 +539,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createProductListingTitleSnippetRenderer(),
             $this->getMasterFactory()->createProductListingDescriptionSnippetRenderer(),
+            $this->createProductListingPageRobotsMetaTagSnippetRenderer(),
         ];
     }
 
@@ -1701,5 +1708,64 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductCanonicalTagSnippetKeyGenerator(),
             $this->getMasterFactory()->createBaseUrlBuilder()
         );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductDetailPageRobotsMetaTagSnippetKeyGenerator()
+    {
+        return $this->createRobotsMetaTagSnippetKeyGeneratorForSnippetCode(self::PRODUCT_DETAIL_ROBOTS_TAG);
+    }
+
+    /**
+     * @return RobotsMetaTagSnippetRenderer
+     */
+    public function createProductDetailPageRobotsMetaTagSnippetRenderer()
+    {
+        return $this->createRobotsMetaTagSnippetRenderer(
+            $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    public function createProductListingPageRobotsMetaTagSnippetKeyGenerator()
+    {
+        return $this->createRobotsMetaTagSnippetKeyGeneratorForSnippetCode(self::PRODUCT_LISTING_ROBOTS_TAG);
+    }
+
+    /**
+     * @return RobotsMetaTagSnippetRenderer
+     */
+    public function createProductListingPageRobotsMetaTagSnippetRenderer()
+    {
+        return $this->createRobotsMetaTagSnippetRenderer(
+            $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetKeyGenerator()
+        );
+    }
+
+    /**
+     * @return SnippetKeyGenerator
+     */
+    private function createRobotsMetaTagSnippetKeyGeneratorForSnippetCode($code)
+    {
+        $usedDataParts = ['robots'];
+
+        return new GenericSnippetKeyGenerator(
+            $code,
+            $this->getMasterFactory()->getRequiredContextParts(),
+            $usedDataParts
+        );
+    }
+
+    /**
+     * @param SnippetKeyGenerator $snippetKeyGenerator
+     * @return RobotsMetaTagSnippetRenderer
+     */
+    private function createRobotsMetaTagSnippetRenderer(SnippetKeyGenerator $snippetKeyGenerator)
+    {
+        return new RobotsMetaTagSnippetRenderer($snippetKeyGenerator);
     }
 }
