@@ -50,7 +50,7 @@ require([
         window.addEventListener('resize', adjustToPageWidth);
         window.addEventListener('orientationchange', adjustToPageWidth);
 
-        handleProductImages();
+        handleMediaGallery();
         initializeZoom();
         initializeTabs();
         showAvailabilityStatus();
@@ -294,13 +294,25 @@ require([
         }
     }
 
-    function handleProductImages() {
+    function handleMediaGallery() {
         var mainImage = document.querySelector('.main-image-area img'),
-            thumbnails = document.querySelectorAll('.more-views a');
+            thumbnailsLinks = document.querySelectorAll('.more-views a');
 
-        Array.prototype.map.call(thumbnails, function (thumbnail) {
-            thumbnail.addEventListener('click', function(event) {
+        Array.prototype.map.call(thumbnailsLinks, function (link) {
+            link.addEventListener('click', function(event) {
                 event.preventDefault();
+
+                var video = document.getElementById('youtube-video');
+
+                if (link.id === 'youtube-link' && video !== null && video.style.display !== 'block') {
+                    video.style.display = 'block';
+                    return;
+                }
+
+                if (video !== null && video.style.display !== 'none') {
+                    video.style.display = 'none';
+                }
+
                 mainImage.src = this.getAttribute('data-image');
                 mainImage.parentNode.href = this.getAttribute('href');
                 initializeZoom();

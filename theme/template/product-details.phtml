@@ -12,6 +12,7 @@ $sku = $mpn ? $mpn : $this->getProductId();
 $brand = $this->getFirstValueOfProductAttribute('brand');
 $brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
 $productImageCount = $this->getProductImageCount();
+$youtubeId = $this->getFirstValueOfProductAttribute('yt_link');
 
 ?>
 <div itemscope itemtype="http://schema.org/Product">
@@ -21,12 +22,18 @@ $productImageCount = $this->getProductImageCount();
             <a href="<?= $this->getMainProductImageUrl('original') ?>" class="main-image-area">
                 <img src="<?= $this->getMainProductImageUrl('large') ?>" itemprop="image" alt="<?= $this->getMainProductImageLabel() ?>"/>
             </a>
+            <?php if ($youtubeId) : ?>
+                <iframe id="youtube-video" src="https://www.youtube.com/embed/<?= $youtubeId ?>" frameborder="0" allowfullscreen></iframe>
+            <?php endif ?>
             <ul class="more-views">
                 <?php for ($i=0; $i<$productImageCount; $i++) : ?>
                     <li>
                         <a href="<?= $this->getProductImageUrlByNumber($i, 'original') ?>" data-image="<?= $this->getProductImageUrlByNumber($i, 'large') ?>"><img src="<?= $this->getProductImageUrlByNumber($i, 'small') ?>" width="48" height="48"/></a>
                     </li>
                 <?php endfor ?>
+                <?php if ($youtubeId) : ?>
+                    <li><a href="#" id="youtube-link"><img src="<?= $this->getBaseUrl() ?>images/youtube.jpg" /></a></li>
+                <?php endif ?>
             </ul>
         </div>
         <div class="product-shop">
