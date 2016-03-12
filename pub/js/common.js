@@ -1,5 +1,5 @@
 define(
-    ['lib/domReady', 'magento_data', 'lib/translate', 'lib/styleSelect', 'search_autosuggestion'],
+    ['lib/domReady', 'magento_data', 'lib/translate', 'lib/styleselect', 'search_autosuggestion'],
     function (domReady, magentoData, translate, styleSelect) {
 
     var tabletWidth = 768,
