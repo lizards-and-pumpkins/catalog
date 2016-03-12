@@ -1,6 +1,6 @@
 define(
-    ['lib/domReady', 'magento_data', 'lib/translate', 'search_autosuggestion'],
-    function (domReady, magentoData, translate) {
+    ['lib/domReady', 'magento_data', 'lib/translate', 'lib/styleSelect', 'search_autosuggestion'],
+    function (domReady, magentoData, translate, styleSelect) {
 
     var tabletWidth = 768,
         siteFullWidth = 975,
@@ -9,6 +9,9 @@ define(
     domReady(function () {
         window.addEventListener('resize', adjustToPageWidth);
         window.addEventListener('orientationchange', adjustToPageWidth);
+
+        styleSelect('.language-select select');
+        styleSelect('.website-select select');
 
         collectInitialNavigationTopItemsWidths();
         initializePhoneMenu();
@@ -28,7 +31,7 @@ define(
             phoneMetaMenuContent = document.getElementById('phone-meta-menu-content');
 
         Array.prototype.map.call(document.querySelectorAll('#phone-meta-menu li a'), function (menuItem) {
-            if (menuItem.getAttribute('data-block') === null) {
+            if (!menuItem.hasAttribute('data-block')) {
                 return;
             }
 

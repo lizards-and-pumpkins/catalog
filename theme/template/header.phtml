@@ -7,6 +7,23 @@
     <?= $this->getChildOutput('content_block_cms_header_info_banner') ?>
     <div class="header">
         <div class="header-panel">
+            <div class="website-select">
+                <select onchange="location.href = this.options[this.selectedIndex].value">
+                    <option>21run.com</option>
+                    <option value="http://www.21streetwear.com/st_fr/">21streetwear.com</option>
+                    <option value="http://www.21cycles.com/cy_fr/">21cycles.com</option>
+                </select>
+            </div>
+            <span class="sep"></span>
+            <div class="language-select">
+                <select onchange="location.href = this.options[this.selectedIndex].value">
+                    <option class="lang-fr">Français</option>
+                    <option class="lang-de" value="https://www.21run.com/ru_de/">Deutsch</option>
+                    <option class="lang-en" value="https://www.21run.com/ru_en/">English</option>
+                    <option class="lang-es" value="https://www.21run.com/es/">Español</option>
+                </select>
+            </div>
+            <span class="sep"></span>
             <a href="<?= $this->getBaseUrl() ?>checkout/onepage/"><?= $this->__('Checkout') ?></a>
             <span id="cart-meta-info"></span>
             <span class="sep"></span>
@@ -38,6 +55,8 @@
             <li><a href="<?= $this->getBaseUrl() ?>customer/account/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-account.png" alt=""/></a></li>
             <li><a href="<?= $this->getBaseUrl() ?>checkout/cart/"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-cart.png" alt=""/></a></li>
             <li class="active"><a href="#" data-block="search"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-search.png" alt=""/></a></li>
+            <li><a href="#" data-block="lang"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-lang-deutsch.png" alt=""/></a></li>
+            <li class="last"><a href="#" data-block="store"><img src="<?= $this->getBaseUrl() ?>images/icon-phone-store-21run-com.png" alt=""/></a></li>
         </ul>
         <div id="phone-meta-menu-content" class="search">
             <form autocomplete="off" action="<?= $this->getBaseUrl() ?>catalogsearch/result/" class="search-form">
@@ -49,6 +68,15 @@
                     <div id="search-autosuggestion"></div>
                 </div>
             </form>
+            <div class="lang">
+                <a href="http://www.21run.com/ru_de/" class="lang-de">Deutsch</a>
+                <a href="http://www.21run.com/ru_en/" class="lang-en">English</a>
+                <a href="https://www.21run.com/es/" class="lang-es">Español</a>
+            </div>
+            <div class="store">
+                <a href="http://www.21streetwear.com/st_de/">21streetwear.com</a>
+                <a href="http://www.21cycles.com/cy_de/">21cycles.com</a>
+            </div>
         </div>
         <?= $this->getChildOutput('content_block_top-menu') ?>
     </div>

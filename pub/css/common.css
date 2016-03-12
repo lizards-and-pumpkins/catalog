@@ -62,7 +62,6 @@ textarea:focus, input:focus { outline: 0 }
 .header-panel > a { padding: 2px; color: #09486d }
 .header-panel .sep { height: 20px; margin: 0 8px; border-left: 1px solid #09486d }
 #cart-meta-info { font-weight: bold; border-right: 1px solid #09486d; padding: 3px 8px 4px 0; margin-right: 8px }
-.switcher-language { width: 44px }
 .cms_header_small { float: right; margin: 6px 14px 0 0 }
 .cms_header_small p { margin: 0 }
 
@@ -106,24 +105,16 @@ nav { clear: both; color: #ffffff }
 .footer-block-wide { float: right; text-align: right; width: 365px }
 .footer-block-wide img { margin-bottom: 21px }
 
-/* Header drop-down emulations */
-.drop-container { position: relative; display: inline-block }
-.drop-container a { display: block }
-.drop { display: inline-block; width: 55px!important; padding: 0 20px 0 3px; font-weight: normal; font-size: 10px; line-height: 16px; height: 16px;  background: #fff url(../images/select-lang.gif) no-repeat top right; border: 1px solid #b3b3b3; color: #000; position: relative; cursor: pointer; }
-.drop-list { position: absolute; left: 0; top: 18px; background: #fff; display: none; border: 1px solid #b3b3b3; border-top: none; overflow: hidden }
-.header-panel .drop-list a { color: #000; padding: 0 3px 1px 3px; line-height: 16px; height: 16px; width: 100% }
-#language-select .drop-list { width: 78px }
-#language-select .drop-list a { padding-left: 26px }
-.drop-list a:hover { color: #fff; background-color: #b3b3b3; font-weight: normal; }
-.lang-ru_de, .lang-st_de, .lang-cy_de { background: url(../images/flags/de.gif) no-repeat }
-.lang-ru_en, .lang-st_en, .lang-cy_en { background: url(../images/flags/en.gif) no-repeat }
-.lang-ru_fr, .lang-st_fr, .lang-cy_fr { background: url(../images/flags/fr.gif) no-repeat }
-.lang-ru_es, .lang-st_es, .lang-cy_es { background: url(../images/flags/es.png) no-repeat }
-#part .drop { width: 120px!important; padding-right: 2px; }
-#part .drop-list { width: 125px; }
-#part-links { width: 125px!important; }
-#part-links .dropdownOpt { padding: 1px 3px; }
-.dd-msie7{padding:1px 4px 1px 1px;}
+/* Language and website switches */
+.header-panel .style-select .ss-selected-option { padding: 0 30px 0 6px; line-height: 18px; background-repeat: repeat }
+.header-panel .style-select .ss-dropdown { top: 20px }
+.language-select .style-select .ss-selected-option { background-position: 88px -7px }
+.language-select .style-select .ss-dropdown .ss-option { background-position: 6px 9px; padding-left: 35px }
+.website-select .style-select .ss-selected-option { background-position: 102px -7px }
+.lang-de { background: url(../images/flags/de.gif) no-repeat }
+.lang-en { background: url(../images/flags/en.gif) no-repeat }
+.lang-fr { background: url(../images/flags/fr.gif) no-repeat }
+.lang-es { background: url(../images/flags/es.png) no-repeat }
 
 /* Info Banner */
 .info-banner { background-color: #e3e3e3 }
@@ -167,6 +158,7 @@ nav { clear: both; color: #ffffff }
 
 /* Phone */
 @media (max-width: 767px) {
+    .header-panel .style-select { display: none }
 
     /* Layout */
     .col2-left-layout .main, .col2-left-layout .main > div { display: block }
@@ -182,7 +174,7 @@ nav { clear: both; color: #ffffff }
     .nav.last { border-bottom: none }
     .nav > li { display: table-cell; float: none; text-align: center }
     #phone-meta-menu { display: table; width: 100%; clear: both }
-    #phone-meta-menu li { display: table-cell; padding-bottom: 10px }
+    #phone-meta-menu li { display: table-cell; padding-bottom: 10px; width: 20% }
     #phone-meta-menu li a { display: block; border-right: #21719f solid 1px; padding: 11px 0; text-align: center; background-color: #228bb6 }
     #phone-meta-menu li.active { background: url("../images/phone-menu-arrow.png") no-repeat bottom center }
     #phone-meta-menu li.active a { background-color: #0b4e76; border-color: #0b4e76 }
@@ -195,7 +187,7 @@ nav { clear: both; color: #ffffff }
     #phone-meta-menu-content a { margin: 8px 5px; display: inline-block }
     #phone-meta-menu-content .lang-fr, #phone-meta-menu-content .lang-en, #phone-meta-menu-content .lang-de { padding-left: 25px }
     .search-form, .search-form input { width: 100% }
-    .lang-ru_en, .lang-st_en, .lang-cy_en, .lang-ru_fr, .lang-st_fr, .lang-cy_fr, .lang-ru_de, .lang-st_de, .lang-cy_de, .lang-ru_es { padding-left: 25px }
+    .lang-en, .lang-fr, .lang-de, .lang-es { padding-left: 25px }
     #searchPanel { display: none }
 
     /* Footer blocks */

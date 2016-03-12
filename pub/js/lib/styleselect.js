@@ -138,6 +138,10 @@ define(function () {
                 cssClass += ' disabled';
             }
 
+            if (realOption.className !== '') {
+                cssClass += ' ' + realOption.className;
+            }
+
             optionsHTML += '<div class="' + cssClass + '" data-value="' + value + '">' + text + '</div>';
         });
         optionsHTML += '</div>';
