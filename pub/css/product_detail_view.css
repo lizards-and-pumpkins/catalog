@@ -17,11 +17,13 @@
 .product-shop .note { line-height: 16px; }
 
 /* Images */
-.product-img-box { display: table-cell; width: 375px; vertical-align: top; padding: 5px }
+.product-img-box { display: table-cell; width: 375px; vertical-align: top; padding: 5px; position: relative }
 .zoom-flyout { left: 370px; width: 594px; height: 393px }
 .more-views { margin-left: -5px; font-size: 0 }
 .more-views li { display: inline-block; padding: 3px 0 0 5px }
 .main-image-area > img { width: 365px }
+
+#youtube-video { display: none; width: 365px; height: 340px; position: absolute; top: 5px; left: 5px }
 
 /* Tabs */
 .product-collateral .tabs li { display: inline }
