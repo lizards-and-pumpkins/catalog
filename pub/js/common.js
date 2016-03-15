@@ -102,7 +102,7 @@ define(
 
     function toggleFooterBlockPhone() {
         if (this.parentNode.className.match(/\bexpanded\b/ig)) {
-            this.parentNode.className = this.parentNode.className.replace(/\bexpanded\b/ig, '');
+            this.parentNode.className = this.parentNode.className.replace(/\bexpanded\b/ig, ' ');
         } else {
             this.parentNode.className += ' expanded';
         }
@@ -124,7 +124,7 @@ define(
             newNav;
 
         Array.prototype.map.call(document.querySelectorAll('.nav > li'), function (item, index) {
-            item.className = item.className.replace(/\bfirst\b|\blast\b/ig, '');
+            item.className = item.className.replace(/\bfirst\b|\blast\b/ig, ' ');
             if (0 === widthSoFar) {
                 newNav = document.createElement('UL');
                 newNav.className = 'nav';

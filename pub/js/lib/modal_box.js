@@ -48,13 +48,13 @@ define(['lib/domReady', 'lib/ajax'], function (domReady, callAjax) {
 
     function processContent(content) {
         if (!content.match(/^https?:\/\//i)) {
-            popup.className = popup.className.replace(/\bloading\b/, '');
+            popup.className = popup.className.replace(/\bloading\b/, ' ');
             popup.innerHTML = content;
             return;
         }
 
         callAjax(content, function (responseText) {
-            popup.className = popup.className.replace(/\bloading\b/, '');
+            popup.className = popup.className.replace(/\bloading\b/, ' ');
             popup.innerHTML = responseText;
             centerPopup();
         });

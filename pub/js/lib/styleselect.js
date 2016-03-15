@@ -154,7 +154,7 @@ define(function () {
 
         var changeRealSelectBox = function (newValue, newLabel) {
             // Close styledSelect
-            styledSelect.className = styledSelect.className.replace(/\bopen\b/i, '');
+            styledSelect.className = styledSelect.className.replace(/\bopen\b/i, ' ');
 
             // Update styled value
             selectedOption.textContent = newLabel;
@@ -165,7 +165,7 @@ define(function () {
                 if (styleSelectOption.dataset.value === newValue) {
                     styleSelectOption.className += ' ticked';
                 } else {
-                    styleSelectOption.className = styleSelectOption.className.replace(/\bticked\b/i, '');
+                    styleSelectOption.className = styleSelectOption.className.replace(/\bticked\b/i, ' ');
                 }
             });
 
@@ -200,7 +200,7 @@ define(function () {
         var closeAllStyleSelectsExceptGiven = function (exception) {
             Array.prototype.map.call(document.querySelectorAll('.style-select'), function (styleSelectEl) {
                 if (styleSelectEl !== exception) {
-                    styleSelectEl.className = styleSelectEl.className.replace(/\bopen\b/i, '');
+                    styleSelectEl.className = styleSelectEl.className.replace(/\bopen\b/i, ' ');
                 }
             });
         };
@@ -211,7 +211,7 @@ define(function () {
                 styledSelectBox.className += ' open';
                 return;
             }
-            styledSelectBox.className = styledSelectBox.className.replace(/\bopen\b/i, '');
+            styledSelectBox.className = styledSelectBox.className.replace(/\bopen\b/i, ' ');
         };
 
         // When a styled select box is clicked

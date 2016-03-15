@@ -89,7 +89,7 @@ require(
                 colsPerRow = Math.floor(grid.clientWidth / cells[0].clientWidth);
 
             cells.map(function (cell, index) {
-                cell.className = cell.className.replace(/\blast\b/ig, '');
+                cell.className = cell.className.replace(/\blast\b/ig, ' ');
                 if (!((index + 1) % colsPerRow)) {
                     cell.className += ' ' + className;
                 }
