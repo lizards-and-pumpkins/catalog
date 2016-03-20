@@ -81,7 +81,7 @@ abstract class WebFront
     /**
      * @return HttpRequest
      */
-    final public function getRequest()
+    final protected function getRequest()
     {
         return $this->request;
     }
