@@ -28,8 +28,9 @@ class ProductUrlKeyStoreTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();

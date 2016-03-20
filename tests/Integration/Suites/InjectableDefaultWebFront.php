@@ -11,9 +11,9 @@ class InjectableDefaultWebFront extends DefaultWebFront
      */
     private $testMasterFactory;
     
-    public function __construct(HttpRequest $request, MasterFactory $testMasterFactory)
+    public function __construct(HttpRequest $request, MasterFactory $testMasterFactory, Factory $implementationFactory)
     {
-        parent::__construct($request);
+        parent::__construct($request, $implementationFactory);
         $this->testMasterFactory = $testMasterFactory;
     }
 

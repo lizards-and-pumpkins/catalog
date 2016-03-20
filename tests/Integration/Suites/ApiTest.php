@@ -20,11 +20,12 @@ class ApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         
         $commandQueue = $factory->getCommandQueue();
         $this->assertEquals(0, $commandQueue->count());
 
-        $website = new InjectableDefaultWebFront($request, $factory);
+        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());

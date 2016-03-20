@@ -13,7 +13,7 @@ class TestDefaultWebFront extends DefaultWebFront
 
     public function __construct(HttpRequest $request, MasterFactory $testMasterFactory)
     {
-        parent::__construct($request);
+        parent::__construct($request, new UnitTestFactory());
         $this->testMasterFactory = $testMasterFactory;
     }
 
