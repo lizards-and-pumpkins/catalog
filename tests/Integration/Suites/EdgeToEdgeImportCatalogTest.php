@@ -43,8 +43,9 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
@@ -150,8 +151,9 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
         $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
         
-        $website = new InjectableDefaultWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
@@ -171,8 +173,9 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
         $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
-        $website = new InjectableDefaultWebFront($request, $this->factory);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
+
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertContains('<body>', $response->getBody());
@@ -185,8 +188,11 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $requestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $url, $headers, $requestBody);
 
-        $website = new DefaultWebFront($request);
-        new IntegrationTestFactory($website->getMasterFactory());
+        $masterFactory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($masterFactory);
+
+        $website = new DefaultWebFront($request, $implementationSpecificFactory);
+
         $response = $website->runWithoutSendingResponse();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }

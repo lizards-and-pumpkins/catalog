@@ -23,9 +23,15 @@ abstract class WebFront
      */
     private $routerChain;
 
-    public function __construct(HttpRequest $request)
+    /**
+     * @var Factory
+     */
+    private $implementationSpecificFactory;
+
+    public function __construct(HttpRequest $request, Factory $implementationSpecificFactory)
     {
         $this->request = $request;
+        $this->implementationSpecificFactory = $implementationSpecificFactory;
     }
 
     /**
@@ -75,9 +81,17 @@ abstract class WebFront
     /**
      * @return HttpRequest
      */
-    final protected function getRequest()
+    final public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @return Factory
+     */
+    final public function getImplementationSpecificFactory()
+    {
+        return $this->implementationSpecificFactory;
     }
 
     private function buildFactory()

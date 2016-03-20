@@ -24,7 +24,10 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
+
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $website->runWithoutSendingResponse();
 
         $this->processQueueWhileMessagesPending(
             $this->factory->getCommandQueue(),
@@ -45,7 +48,10 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
+
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
@@ -86,7 +92,10 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $domainCommandQueue = $this->factory->getCommandQueue();
         $this->assertEquals(0, $domainCommandQueue->count());
 
-        $response = (new InjectableDefaultWebFront($request, $this->factory))->runWithoutSendingResponse();
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
+
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals('"OK"', $response->getBody());
         $this->assertEquals(1, $domainCommandQueue->count());

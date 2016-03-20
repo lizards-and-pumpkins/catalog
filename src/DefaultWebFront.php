@@ -21,10 +21,8 @@ class DefaultWebFront extends WebFront
 
     protected function registerFactories(MasterFactory $masterFactory)
     {
-        $commonFactory = new CommonFactory();
-        $implementationFactory = new TwentyOneRunFactory();
-        $masterFactory->register($commonFactory);
-        $masterFactory->register($implementationFactory);
+        $masterFactory->register(new CommonFactory());
+        $masterFactory->register($this->getImplementationSpecificFactory());
         $masterFactory->register(new UpdatingProductImportCommandFactory());
         $masterFactory->register(new UpdatingProductImageImportCommandFactory());
         $masterFactory->register(new UpdatingProductListingImportCommandFactory());
@@ -32,12 +30,9 @@ class DefaultWebFront extends WebFront
         //$this->enableDebugLogging($masterFactory, $commonFactory, $implementationFactory);
     }
 
-    private function enableDebugLogging(
-        MasterFactory $masterFactory,
-        CommonFactory $commonFactory,
-        TwentyOneRunFactory $implementationFactory
-    ) {
-        $masterFactory->register(new LoggingQueueFactory($implementationFactory));
+    private function enableDebugLogging(MasterFactory $masterFactory, CommonFactory $commonFactory)
+    {
+        $masterFactory->register(new LoggingQueueFactory($this->getImplementationSpecificFactory()));
         $masterFactory->register(new LoggingCommandHandlerFactory($commonFactory));
         $masterFactory->register(new LoggingDomainEventHandlerFactory($commonFactory));
     }

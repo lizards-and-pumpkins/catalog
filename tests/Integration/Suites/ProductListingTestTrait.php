@@ -59,8 +59,9 @@ trait ProductListingTestTrait
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->createIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();
@@ -77,8 +78,9 @@ trait ProductListingTestTrait
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->createIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory);
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->runWithoutSendingResponse();
 
         $this->factory->createCommandConsumer()->process();

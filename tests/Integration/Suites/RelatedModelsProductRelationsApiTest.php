@@ -32,9 +32,10 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory);
 
-        $website = new InjectableDefaultWebFront($request, $factory);
+        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->runWithoutSendingResponse();
 
         $this->assertEquals(json_encode(['data' => []]), $response->getBody());
@@ -54,9 +55,10 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory);
 
-        $website = new InjectableDefaultWebFront($request, $factory);
+        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->runWithoutSendingResponse();
         $matches = json_decode($response->getBody(), true)['data'];
 
