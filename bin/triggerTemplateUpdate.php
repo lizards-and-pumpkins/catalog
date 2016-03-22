@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Projection\TemplateProjectorLocator;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
@@ -82,7 +83,7 @@ class TriggerTemplateUpdate extends BaseCliCommand
 
     private function addDomainEvent()
     {
-        $templateId = $this->getArg('templateId');
+        $templateId = $this->getTemplateIdToProject();
         $projectionSourceData = '';
 
         $this->factory->getEventQueue()->add(new TemplateWasUpdatedDomainEvent($templateId, $projectionSourceData));
@@ -124,6 +125,42 @@ class TriggerTemplateUpdate extends BaseCliCommand
         while ($queue->count()) {
             $consumer->process();
         }
+    }
+
+    /**
+     * @return bool|float|int|null|string
+     */
+    private function getTemplateIdToProject()
+    {
+        $templateId = $this->getArg('templateId');
+        if (!in_array($templateId, $this->getValidTemplateIds())) {
+            $message = $this->getInvalidTemplateIdMessage($templateId);
+            throw new \InvalidArgumentException($message);
+        }
+        return $templateId;
+    }
+
+    /**
+     * @param string $templateId
+     * @return string
+     */
+    private function getInvalidTemplateIdMessage($templateId)
+    {
+        return sprintf(
+            'Invalid template ID "%s". Valid template IDs are: %s',
+            $templateId,
+            implode(', ', $this->getValidTemplateIds())
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getValidTemplateIds()
+    {
+        /** @var TemplateProjectorLocator $templateProjectorLocator */
+        $templateProjectorLocator = $this->factory->createTemplateProjectorLocator();
+        return $templateProjectorLocator->getRegisteredProjectorCodes();
     }
 }
 
