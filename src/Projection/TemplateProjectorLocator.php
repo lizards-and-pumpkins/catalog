@@ -50,4 +50,12 @@ class TemplateProjectorLocator
             );
         }
     }
+
+    /**
+     * @return string[]
+     */
+    public function getRegisteredProjectorCodes()
+    {
+        return array_keys($this->projectors);
+    }
 }

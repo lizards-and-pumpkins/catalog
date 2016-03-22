@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Projection\TemplateProjectorLocator;
 use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Queue\Queue;
 use LizardsAndPumpkins\Utils\BaseCliCommand;
@@ -67,22 +68,32 @@ class TriggerTemplateUpdate extends BaseCliCommand
                 'description' => 'Process queues',
                 'noValue'     => true,
             ],
+            'list' => [
+                'prefix'      => 'l',
+                'longPrefix'  => 'list',
+                'description' => 'List available template IDs',
+                'noValue' => true,
+            ],
             'templateId'    => [
                 'description' => 'Template ID',
-                'required'    => true,
+                'required'    => false,
             ],
         ]);
     }
 
     protected function execute(CLImate $CLImate)
     {
+        if ($this->isTemplateIdListRequested()) {
+            $this->outputTemplateIdList();
+            return;
+        }
         $this->addDomainEvent();
         $this->processQueuesIfRequested();
     }
 
     private function addDomainEvent()
     {
-        $templateId = $this->getArg('templateId');
+        $templateId = $this->getTemplateIdToProject();
         $projectionSourceData = '';
 
         $this->factory->getEventQueue()->add(new TemplateWasUpdatedDomainEvent($templateId, $projectionSourceData));
@@ -124,6 +135,56 @@ class TriggerTemplateUpdate extends BaseCliCommand
         while ($queue->count()) {
             $consumer->process();
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getTemplateIdToProject()
+    {
+        $templateId = $this->getArg('templateId');
+        if (!in_array($templateId, $this->getValidTemplateIds())) {
+            $message = $this->getInvalidTemplateIdMessage($templateId);
+            throw new \InvalidArgumentException($message);
+        }
+        return $templateId;
+    }
+
+    /**
+     * @param string $templateId
+     * @return string
+     */
+    private function getInvalidTemplateIdMessage($templateId)
+    {
+        return sprintf(
+            'Invalid template ID "%s". Valid template IDs are: %s',
+            $templateId,
+            implode(', ', $this->getValidTemplateIds())
+        );
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getValidTemplateIds()
+    {
+        /** @var TemplateProjectorLocator $templateProjectorLocator */
+        $templateProjectorLocator = $this->factory->createTemplateProjectorLocator();
+        return $templateProjectorLocator->getRegisteredProjectorCodes();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTemplateIdListRequested()
+    {
+        return (bool) $this->getArg('list');
+    }
+
+    protected function outputTemplateIdList()
+    {
+        $this->output('Available template IDs:');
+        $this->output(implode(PHP_EOL, $this->getValidTemplateIds()));
     }
 }
 

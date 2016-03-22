@@ -15,6 +15,14 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
      */
     private $locator;
 
+    /**
+     * @return Projector|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStubProjector()
+    {
+        return $this->getMock(Projector::class);
+    }
+
     protected function setUp()
     {
         $this->locator = new TemplateProjectorLocator;
@@ -79,10 +87,27 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Projector|\PHPUnit_Framework_MockObject_MockObject
+     * @param  string[] $codesToRegister
+     * @dataProvider projectorCodesToRegisterProvider
      */
-    private function getStubProjector()
+    public function testReturnsTheRegisteredProjectorCodes(... $codesToRegister)
     {
-        return $this->getMock(Projector::class);
+        array_map(function ($codeToRegister) {
+            $this->locator->register($codeToRegister, $this->getStubProjector());
+        }, $codesToRegister);
+        $this->assertSame($codesToRegister, $this->locator->getRegisteredProjectorCodes());
+    }
+
+    /**
+     * @return array[]
+     */
+    public function projectorCodesToRegisterProvider()
+    {
+        return [
+            'none' => [],
+            'single' => ['foo'],
+            'two' => ['foo', 'bar'],
+            'three' => ['foo', 'bar', 'buz'],
+        ];
     }
 }
