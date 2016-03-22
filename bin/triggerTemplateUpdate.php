@@ -68,15 +68,25 @@ class TriggerTemplateUpdate extends BaseCliCommand
                 'description' => 'Process queues',
                 'noValue'     => true,
             ],
+            'list' => [
+                'prefix'      => 'l',
+                'longPrefix'  => 'list',
+                'description' => 'List available template IDs',
+                'noValue' => true,
+            ],
             'templateId'    => [
                 'description' => 'Template ID',
-                'required'    => true,
+                'required'    => false,
             ],
         ]);
     }
 
     protected function execute(CLImate $CLImate)
     {
+        if ($this->isTemplateIdListRequested()) {
+            $this->outputTemplateIdList();
+            return;
+        }
         $this->addDomainEvent();
         $this->processQueuesIfRequested();
     }
@@ -128,7 +138,7 @@ class TriggerTemplateUpdate extends BaseCliCommand
     }
 
     /**
-     * @return bool|float|int|null|string
+     * @return string
      */
     private function getTemplateIdToProject()
     {
@@ -161,6 +171,20 @@ class TriggerTemplateUpdate extends BaseCliCommand
         /** @var TemplateProjectorLocator $templateProjectorLocator */
         $templateProjectorLocator = $this->factory->createTemplateProjectorLocator();
         return $templateProjectorLocator->getRegisteredProjectorCodes();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isTemplateIdListRequested()
+    {
+        return (bool) $this->getArg('list');
+    }
+
+    protected function outputTemplateIdList()
+    {
+        $this->output('Available template IDs:');
+        $this->output(implode(PHP_EOL, $this->getValidTemplateIds()));
     }
 }
 
