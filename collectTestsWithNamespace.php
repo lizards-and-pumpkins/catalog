@@ -20,7 +20,6 @@ foreach ($allUnitTests as $unitTestFile) {
     if (isset($classes[$classPath])) {
         $classes[$classPath]['test'] = 'tests/Unit/Suites/' . $unitTestFile;
     } else {
-
         file_put_contents(
             $errorFile,
             sprintf('No file found for "%s".', $unitTestFile) . "\n",
