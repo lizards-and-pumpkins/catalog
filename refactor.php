@@ -9,7 +9,7 @@ fputcsv($fh, ['class', 'path', 'old-namespace', 'new-namespace']);
 foreach ($classes as $line) {
     $line = trim(explode('extends', $line)[0]);
     $line = trim(explode('implements', $line)[0]);
-    if (!preg_match("#(.*):$type (.*)#", $line, $matches)) {
+    if (!preg_match('#(.*):class (.*)#', $line, $matches)) {
         continue;
     }
 
