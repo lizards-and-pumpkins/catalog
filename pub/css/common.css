@@ -158,7 +158,7 @@ nav { clear: both; color: #ffffff }
 
 /* Phone */
 @media (max-width: 767px) {
-    .header-panel .style-select { display: none }
+    .header-panel .style-select, .header-panel select { display: none }
 
     /* Layout */
     .col2-left-layout .main, .col2-left-layout .main > div { display: block }
