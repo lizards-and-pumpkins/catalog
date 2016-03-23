@@ -1,6 +1,7 @@
 <?php
-
-$classes = array_filter(explode("\n", `grep --exclude "vendor/" -r '^class ' *`));
+die('don\'t overwrite classes.csv');
+$type = 'interface';
+$classes = array_filter(explode("\n", `grep -r '^$type ' src`));
 $classMetaInformation = [];
 
 $fh = fopen('classes.csv', 'w');
@@ -8,7 +9,7 @@ fputcsv($fh, ['class', 'path', 'old-namespace', 'new-namespace']);
 foreach ($classes as $line) {
     $line = trim(explode('extends', $line)[0]);
     $line = trim(explode('implements', $line)[0]);
-    if (!preg_match('#(.*):class (.*)#', $line, $matches)) {
+    if (!preg_match("#(.*):$type (.*)#", $line, $matches)) {
         continue;
     }
 
