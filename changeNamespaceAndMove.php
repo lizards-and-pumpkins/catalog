@@ -45,6 +45,8 @@ foreach ($classes as $class) {
             break;
         }
     }
-
+    if (!is_dir($start . '/' . $newPath)) {
+        mkdir($start . '/' . $newPath, 0777, true);
+    }
     rename($oldPath, $start . '/' . $newPath . '/' . $class . '.php');
 }
