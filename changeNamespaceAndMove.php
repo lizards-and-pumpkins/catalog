@@ -5,15 +5,16 @@ $classes = file('classes.csv');
 $replaces = [];
 array_shift($classes); // remove headline
 foreach ($classes as $class) {
-    list($newNamespace, $class, $path, $oldNamespace) = str_getcsv($class, "\t");
+    list($newNamespace, $class, $oldPath, $oldNamespace) = str_getcsv($class, "\t");
     $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
     $replaces["$oldNamespace\\$class;"] = "$newNamespace\\$class;";
     $replaces["$oldNamespace\\$class\n"] = "$newNamespace\\$class\n";
 }
 
 foreach ($classes as $class) {
-    list($class, $path, $oldNamespace, $newNamespace) = str_getcsv($class);
-    $content = file_get_contents($path);
+    list($newNamespace, $class, $oldPath, $oldNamespace) = str_getcsv($class, "\t");
+    $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
+    $content = file_get_contents($oldPath);
 
     // change every absolute path to another changed class
     $content = str_replace(array_keys($replaces), array_values($replaces), $content);
@@ -21,11 +22,12 @@ foreach ($classes as $class) {
     // change namespace
     $content = str_replace("namespace $oldNamespace", "namespace $newNamespace", $content);
 
-    file_put_contents($path, $content);
+    file_put_contents($oldPath, $content);
 }
 
 foreach ($classes as $class) {
-    list($class, $oldPath, $oldNamespace, $newNamespace) = str_getcsv($class);
+    list($newNamespace, $class, $oldPath, $oldNamespace) = str_getcsv($class, "\t");
+    $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
 
     $namespaces = explode('\\', $newNamespace);
 
@@ -44,5 +46,5 @@ foreach ($classes as $class) {
         }
     }
 
-    rename($oldPath, $start . $newPath . $class . '.php');
+    rename($oldPath, $start . '/' . $newPath . '/' . $class . '.php');
 }
