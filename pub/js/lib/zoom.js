@@ -4,7 +4,7 @@ define(function () {
     var Zoom = function (element) {
         this.target = element;
 
-        if (this.isOpen === undefined) {
+        if (typeof this.isOpen === 'undefined') {
             this._init();
         }
     };
@@ -63,6 +63,10 @@ define(function () {
                 self._show(link, e);
             });
 
+            return;
+        }
+
+        if (typeof this.zoom === 'undefined') {
             return;
         }
 
