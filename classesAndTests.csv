@@ -5,7 +5,7 @@ ProductListing,AddProductListingCommand,src/Product/AddProductListingCommand.php
 ProductListing,AddProductListingCommandHandler,src/Product/AddProductListingCommandHandler.php,"LizardsAndPumpkins\Product",tests/Unit/Suites/Product/AddProductListingCommandHandlerTest.php
 RestApi,ApiRequestHandlerLocator,src/Api/ApiRequestHandlerLocator.php,"LizardsAndPumpkins\Api",tests/Unit/Suites/Api/ApiRequestHandlerLocatorTest.php
 RestApi,ApiRouter,src/Api/ApiRouter.php,"LizardsAndPumpkins\Api",tests/Unit/Suites/Api/ApiRouterTest.php
-"RestApi\Exception",ApiVersionMustBeIntException,src/Api/Exception/ApiVersionMustBeIntException.php,"LizardsAndPumpkins\Api\Exception"
+"RestApi\Exception",ApiVersionMustBeIntException,src/Api/Exception/ApiVersionMustBeIntException.php,"LizardsAndPumpkins\Api\Exception",""
 "Import\Product\Composite\Exception",AssociatedProductIsMissingRequiredAttributesException,src/Product/Composite/Exception/AssociatedProductIsMissingRequiredAttributesException.php,"LizardsAndPumpkins\Product\Composite\Exception"
 "Import\Product\Composite",AssociatedProductList,src/Product/Composite/AssociatedProductList.php,"LizardsAndPumpkins\Product\Composite",tests/Unit/Suites/Product/Composite/AssociatedProductListTest.php
 "Import\Product\Composite",AssociatedProductListBuilder,src/Projection/Catalog/Import/AssociatedProductListBuilder.php,"LizardsAndPumpkins\Projection\Catalog\Import",tests/Unit/Suites/Projection/Catalog/Import/AssociatedProductListBuilderTest.php
