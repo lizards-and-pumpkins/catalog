@@ -17,7 +17,11 @@ foreach ($classes as $class) {
     $content = file_get_contents($oldPath);
 
     // change every absolute path to another changed class
-    $content = str_replace(array_keys($replaces), array_values($replaces), $content);
+    foreach ($replaces as $pattern => $replace) {
+        $pattern = preg_quote($pattern);
+        $pattern = "#(?<!namespace )$pattern#";
+        preg_replace($pattern, $replace, $content);
+    }
 
     // change namespace
     $content = str_replace("namespace $oldNamespace", "namespace $newNamespace", $content);
