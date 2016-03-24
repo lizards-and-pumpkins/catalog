@@ -1,11 +1,13 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-$classes  = file('classes.csv');
+$classes = file('classes.csv');
 $replaces = [];
+array_shift($classes); // remove headline
 foreach ($classes as $class) {
-    list($class, $path, $oldNamespace, $newNamespace) = str_getcsv($class);
-    $replaces["$oldNamespace\\$class;"]  = "$newNamespace\\$class;";
+    list($newNamespace, $class, $path, $oldNamespace) = str_getcsv($class, "\t");
+    $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
+    $replaces["$oldNamespace\\$class;"] = "$newNamespace\\$class;";
     $replaces["$oldNamespace\\$class\n"] = "$newNamespace\\$class\n";
 }
 
@@ -29,13 +31,13 @@ foreach ($classes as $class) {
 
     // remove LizardsAndPumpkins
     array_shift($namespaces);
-    $newPath         = implode('/', $namespaces);
+    $newPath = implode('/', $namespaces);
     $pathDirectories = [
         'tests/Unit/Suites/',
         'src',
         'tests/Integration/Suites/',
     ];
-    $start           = '';
+    $start = '';
     foreach ($pathDirectories as $start) {
         if (strpos($oldPath, $start) === 0) {
             break;
