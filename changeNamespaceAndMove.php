@@ -25,6 +25,22 @@ foreach ($classes as $class) {
     file_put_contents($oldPath, $content);
 }
 
+// get _ALL_ files
+$allFiles = array_merge(
+    getAllFilesFromPath('src'),
+    getAllFilesFromPath('tests'),
+    getAllFilesFromPath('bin')
+);
+
+foreach ($allFiles as $file) {
+    $content = file_get_contents($file);
+
+    // change every absolute path to another changed class
+    $content = str_replace(array_keys($replaces), array_values($replaces), $content);
+
+    file_put_contents($file, $content);
+}
+
 foreach ($classes as $class) {
     list($newNamespace, $class, $oldPath, $oldNamespace) = str_getcsv($class, "\t");
     $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
@@ -49,4 +65,16 @@ foreach ($classes as $class) {
         mkdir($start . '/' . $newPath, 0777, true);
     }
     rename($oldPath, $start . '/' . $newPath . '/' . $class . '.php');
+}
+
+
+function getAllFilesFromPath($path)
+{
+    $directory = new RecursiveDirectoryIterator($path);
+    $iterator = new RecursiveIteratorIterator($directory);
+    $regex = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+
+    return array_map(function ($elem) {
+        return $elem[0];
+    }, iterator_to_array($regex));
 }
