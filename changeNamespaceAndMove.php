@@ -6,14 +6,23 @@ $replaces = [];
 array_shift($classes); // remove headline
 foreach ($classes as $class) {
     list($newNamespace, $class, $oldPath, $oldNamespace) = str_getcsv($class, "\t");
-    $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
+    if($newNamespace === '') {
+        $newNamespace = 'LizardsAndPumpkins';
+    } else {
+        $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
+    }
     $replaces["$oldNamespace\\$class;"] = "$newNamespace\\$class;";
     $replaces["$oldNamespace\\$class\n"] = "$newNamespace\\$class\n";
 }
 
 foreach ($classes as $class) {
     list($newNamespace, $class, $oldPath, $oldNamespace) = str_getcsv($class, "\t");
-    $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
+    if($newNamespace === '') {
+        $newNamespace = 'LizardsAndPumpkins';
+    } else {
+        $newNamespace = 'LizardsAndPumpkins\\' . $newNamespace;
+    }
+
     $content = file_get_contents($oldPath);
 
     // change every absolute path to another changed class
