@@ -76,7 +76,7 @@ function getAllFilesFromPath($path)
 {
     $directory = new RecursiveDirectoryIterator($path);
     $iterator = new RecursiveIteratorIterator($directory);
-    $regex = new RegexIterator($iterator, '/^.+\.php$/i', RecursiveRegexIterator::GET_MATCH);
+    $regex = new RegexIterator($iterator, '/^.+\.(php|phtml)$/i', RecursiveRegexIterator::GET_MATCH);
 
     return array_map(function ($elem) {
         return $elem[0];
