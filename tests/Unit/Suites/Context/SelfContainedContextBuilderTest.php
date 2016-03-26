@@ -4,7 +4,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
-use LizardsAndPumpkins\Context\Stubs\FromInputCopyingTestContextPartBuilder;
+use LizardsAndPumpkins\Context\Stub\FromInputCopyingTestContextPartBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**

@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\Stubs\StubContextSource;
+use LizardsAndPumpkins\Context\Stub\StubContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 
 /**
