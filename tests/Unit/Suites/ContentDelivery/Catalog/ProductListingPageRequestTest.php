@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\ContentDelivery\Catalog;
+namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;

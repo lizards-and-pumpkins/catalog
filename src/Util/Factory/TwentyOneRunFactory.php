@@ -275,7 +275,7 @@ class TwentyOneRunFactory implements Factory
             return $envConfigValue;
         }
 
-        return __DIR__ . '/../log/system.log';
+        return __DIR__ . '/../../../log/system.log';
     }
 
     /**

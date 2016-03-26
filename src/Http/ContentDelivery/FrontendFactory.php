@@ -160,7 +160,7 @@ class FrontendFactory implements Factory
         $catalogImportDirectory = $configReader->get('catalog_import_directory');
 
         return null === $catalogImportDirectory ?
-            __DIR__ . '/../../tests/shared-fixture' :
+            __DIR__ . '/../../../tests/shared-fixture' :
             $catalogImportDirectory;
     }
 

@@ -434,7 +434,7 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultFileLogPathIsReturned()
     {
-        $expectedPath = preg_replace('/tests\/Unit\/Suites/', 'src', __DIR__ . '/../log/system.log');
+        $expectedPath = preg_replace('/tests\/Unit\/Suites/', 'src/Util/Factory/', __DIR__ . '../../../log/system.log');
         $this->assertSame($expectedPath, $this->factory->getLogFilePathConfig());
     }
 
