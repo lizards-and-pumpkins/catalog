@@ -2,9 +2,13 @@
 
 namespace LizardsAndPumpkins\Product;
 
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+
 /**
- * @covers \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
- * @uses   \LizardsAndPumpkins\SnippetContainer
+ * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
+ * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  */
 class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {

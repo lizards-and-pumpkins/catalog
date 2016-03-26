@@ -4,19 +4,19 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage\ProductImage;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
-use LizardsAndPumpkins\Product\SimpleProduct;
-use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\InvalidSnippetContainerCodeException;
+use LizardsAndPumpkins\Import\Exception\InvalidSnippetContainerCodeException;
+use LizardsAndPumpkins\Import\SnippetContainer;
 
 /**
- * @covers \LizardsAndPumpkins\SnippetContainer
+ * @covers \LizardsAndPumpkins\Import\SnippetContainer
  */
 class SnippetContainerTest extends \PHPUnit_Framework_TestCase
 {

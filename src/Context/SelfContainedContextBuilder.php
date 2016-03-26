@@ -3,7 +3,7 @@
 
 namespace LizardsAndPumpkins\Context;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class SelfContainedContextBuilder implements ContextBuilder

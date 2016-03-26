@@ -2,177 +2,187 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextPartBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Context\Country\ContextCountry;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
-use LizardsAndPumpkins\Exception\NoMasterFactorySetException;
-use LizardsAndPumpkins\Exception\UndefinedFactoryMethodException;
-use LizardsAndPumpkins\Http\HttpRouterChain;
-use LizardsAndPumpkins\Http\ResourceNotFoundRouter;
-use LizardsAndPumpkins\Image\ImageProcessorCollection;
-use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Image\AddImageCommand;
-use LizardsAndPumpkins\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\PriceSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingBuilder;
-use LizardsAndPumpkins\Product\ProductListingDescriptionBlockRenderer;
-use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector;
-use LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector;
-use LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator;
-use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
-use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductProjector;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator;
-use LizardsAndPumpkins\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\Product\AddProductListingCommand;
-use LizardsAndPumpkins\Product\AddProductListingCommandHandler;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands;
-use LizardsAndPumpkins\Projection\ProcessTimeLoggingCommandHandlerDecorator;
-use LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator;
-use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Renderer\ThemeLocator;
-use LizardsAndPumpkins\Renderer\Translation\Translator;
-use LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
-use LizardsAndPumpkins\Utils\ImageStorage\MediaBaseUrlBuilder;
-use LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap;
-use LizardsAndPumpkins\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
+use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
+use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
+use LizardsAndPumpkins\Util\Config\ConfigReader;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
+use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
+use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\Product\ProductProjector;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
+use LizardsAndPumpkins\Import\CatalogImport;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
+use LizardsAndPumpkins\Import\Product\QueueImportCommands;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+use LizardsAndPumpkins\Translation\Translator;
+use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\CommonFactory
- * @covers \LizardsAndPumpkins\FactoryTrait
- * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\Image\AddImageCommandHandler
+ * @covers \LizardsAndPumpkins\Util\Factory\CommonFactory
+ * @covers \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
- * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Content\ContentBlockProjector
- * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
+ * @uses   \LizardsAndPumpkins\Context\Locale\ContextLocale
+ * @uses   \LizardsAndPumpkins\Context\Country\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
- * @uses   \LizardsAndPumpkins\CommandConsumer
- * @uses   \LizardsAndPumpkins\CommandHandlerLocator
- * @uses   \LizardsAndPumpkins\DomainEventConsumer
- * @uses   \LizardsAndPumpkins\DomainEventHandlerLocator
- * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\PriceSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductProjector
- * @uses   \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingTemplateProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetProjector
- * @uses   \LizardsAndPumpkins\Product\ProductListingBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
- * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
- * @uses   \LizardsAndPumpkins\Product\ProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
- * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
- * @uses   \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\SnippetRendererCollection
- * @uses   \LizardsAndPumpkins\Product\ProductInListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
- * @uses   \LizardsAndPumpkins\Image\GdResizeStrategy
- * @uses   \LizardsAndPumpkins\Image\ImageProcessor
- * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
- * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
- * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
- * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
- * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingCommandHandlerDecorator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\TemplateProjectorLocator
- * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
- * @uses   \LizardsAndPumpkins\Renderer\ThemeLocator
- * @uses   \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
- * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
- * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
- * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
- * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
- * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Messaging\Command\CommandConsumer
+ * @uses   \LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator
+ * @uses   \LizardsAndPumpkins\Messaging\Event\DomainEventConsumer
+ * @uses   \LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductProjector
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\Import\SnippetRendererCollection
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator
+ * @uses   \LizardsAndPumpkins\Translation\CsvTranslator
+ * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

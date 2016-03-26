@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Context;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
-use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 
 abstract class ContextSource
 {

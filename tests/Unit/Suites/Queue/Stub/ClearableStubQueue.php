@@ -3,8 +3,8 @@
 
 namespace LizardsAndPumpkins\Queue\Stub;
 
-use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Utils\Clearable;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class ClearableStubQueue implements Queue, Clearable
 {

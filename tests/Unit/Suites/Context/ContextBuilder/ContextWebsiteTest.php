@@ -4,12 +4,14 @@
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\Exception\UnableToDetermineContextWebsiteException;
-use LizardsAndPumpkins\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\Exception\UnableToDetermineContextWebsiteException;
+use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
- * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
+ * @covers \LizardsAndPumpkins\Context\Website\ContextWebsite
  */
 class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
 {

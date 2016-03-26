@@ -2,112 +2,115 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Api\ApiRouter;
-use LizardsAndPumpkins\CommonFactory;
-use LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations;
-use LizardsAndPumpkins\ContentDelivery\Catalog\SelectProductListingRobotsMetaTagContent;
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation;
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation;
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory;
+use LizardsAndPumpkins\RestApi\ApiRouter;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
+use LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
+use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\Http\GenericHttpRouter;
+use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpsUrl;
-use LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler;
-use LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\PriceSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingDescriptionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductListingTitleSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\Product\RobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\FrontendFactory
- * @covers \LizardsAndPumpkins\FactoryTrait
- * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\SampleMasterFactory
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
+ * @covers \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\SampleMasterFactory
  * @uses   \LizardsAndPumpkins\UnitTestFactory
- * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices
- * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
- * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
+ * @uses   \LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
- * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
+ * @uses   \LizardsAndPumpkins\Context\Locale\ContextLocale
+ * @uses   \LizardsAndPumpkins\Context\Country\ContextCountry
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Api\ApiRouter
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerLocator
- * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\ContentDelivery\PageBuilder
- * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
- * @uses   \LizardsAndPumpkins\Utils\Directory
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRouter
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\Directory
  * @uses   \LizardsAndPumpkins\Http\HttpRequest
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

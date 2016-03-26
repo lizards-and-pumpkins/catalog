@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins\Image;
 
-use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\DomainEvent;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\Image\ImageWasAddedDomainEvent
+ * @covers \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
  */
 class ImageWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

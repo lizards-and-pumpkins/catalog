@@ -2,10 +2,13 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\DomainEvent;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
  */
 class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,16 +3,19 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Log\Writer\StdOutLogMessageWriter;
-use LizardsAndPumpkins\Queue\LoggingQueueDecorator;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Logging\LoggingQueueFactory;
+use LizardsAndPumpkins\Logging\Writer\StdOutLogMessageWriter;
+use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\LoggingQueueFactory
- * @uses   \LizardsAndPumpkins\FactoryTrait
- * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\Queue\LoggingQueueDecorator
- * @uses   \LizardsAndPumpkins\CommonFactory
+ * @covers \LizardsAndPumpkins\Logging\LoggingQueueFactory
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Logging\LoggingQueueDecorator
+ * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  */
 class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase

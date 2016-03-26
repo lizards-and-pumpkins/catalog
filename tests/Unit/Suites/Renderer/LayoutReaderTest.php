@@ -2,13 +2,14 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\Renderer\Exception\LayoutFileNotReadableException;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\LayoutFileNotReadableException;
+use LizardsAndPumpkins\Import\TemplateRendering\LayoutReader;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers LizardsAndPumpkins\Renderer\LayoutReader
- * @uses LizardsAndPumpkins\Utils\XPathParser
- * @uses LizardsAndPumpkins\Renderer\Layout
+ * @covers LizardsAndPumpkins\Import\TemplateRendering\LayoutReader
+ * @uses LizardsAndPumpkins\Import\XPathParser
+ * @uses LizardsAndPumpkins\Import\TemplateRendering\Layout
  */
 class LayoutReaderTest extends \PHPUnit_Framework_TestCase
 {

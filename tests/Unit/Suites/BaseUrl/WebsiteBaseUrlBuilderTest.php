@@ -1,17 +1,19 @@
 <?php
 
 
-namespace LizardsAndPumpkins\BaseUrl;
+namespace LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 
-use LizardsAndPumpkins\BaseUrl;
-use LizardsAndPumpkins\BaseUrl\Exception\NoConfiguredBaseUrlException;
-use LizardsAndPumpkins\ConfigReader;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
+use LizardsAndPumpkins\Context\Website\Exception\NoConfiguredBaseUrlException;
+use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
 
 /**
- * @covers \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\BaseUrl\HttpBaseUrl
+ * @covers \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
 class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,11 +2,13 @@
 
 namespace LizardsAndPumpkins\SnippetKeyGeneratorLocator;
 
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 
 /**
- * @covers \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  */
 class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
 {

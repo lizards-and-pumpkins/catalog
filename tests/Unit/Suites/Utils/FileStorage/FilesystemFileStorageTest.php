@@ -2,16 +2,24 @@
 
 namespace LizardsAndPumpkins\Utils\FileStorage;
 
+use LizardsAndPumpkins\Import\FileStorage\File;
+use LizardsAndPumpkins\Import\FileStorage\FileContent;
+use LizardsAndPumpkins\Import\FileStorage\FileStorage;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri;
+use LizardsAndPumpkins\Import\FileStorage\FileToFileStorage;
+use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
+use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Utils\FileStorage\Exception\FileDoesNotExistException;
-use LizardsAndPumpkins\Utils\FileStorage\Exception\FileStorageTypeMismatchException;
+use LizardsAndPumpkins\Import\FileStorage\Exception\FileDoesNotExistException;
+use LizardsAndPumpkins\Import\FileStorage\Exception\FileStorageTypeMismatchException;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileUri
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FileInStorage
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FileContent
+ * @covers \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FileInStorage
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent
  */
 class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
 {

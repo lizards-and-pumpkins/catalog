@@ -2,9 +2,11 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy;
+
 /**
- * @covers \LizardsAndPumpkins\Image\ImageMagickResizeStrategy
- * @covers \LizardsAndPumpkins\Image\ResizeStrategyTrait
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ResizeStrategyTrait
  */
 class ImageMagickResizeStrategyTest extends AbstractResizeStrategyTest
 {

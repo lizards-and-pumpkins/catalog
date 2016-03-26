@@ -2,10 +2,14 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\DomainEventHandler;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductProjector;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler
+ * @covers \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
  */
 class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

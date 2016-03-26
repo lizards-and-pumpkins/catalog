@@ -2,12 +2,16 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\CommandHandler;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\Product\AddProductListingCommandHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
+ * @covers \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  */
 class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

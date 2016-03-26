@@ -2,13 +2,15 @@
 
 namespace LizardsAndPumpkins\Image;
 
-use LizardsAndPumpkins\Image\Exception\InvalidBinaryImageDataException;
-use LizardsAndPumpkins\Image\Exception\InvalidColorException;
-use LizardsAndPumpkins\Image\Exception\InvalidImageDimensionException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidBinaryImageDataException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidColorException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidImageDimensionException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickInscribeStrategy;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategy;
 
 /**
- * @covers \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
- * @uses   \LizardsAndPumpkins\Image\ResizeStrategyTrait
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickInscribeStrategy
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ResizeStrategyTrait
  */
 class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
 {

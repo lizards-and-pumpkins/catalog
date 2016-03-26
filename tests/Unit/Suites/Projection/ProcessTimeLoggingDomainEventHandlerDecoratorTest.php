@@ -3,13 +3,14 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\DomainEventHandler;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\LogMessage;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \LizardsAndPumpkins\Projection\DomainEventProcessedLogMessage
+ * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage
  */
 class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framework_TestCase
 {

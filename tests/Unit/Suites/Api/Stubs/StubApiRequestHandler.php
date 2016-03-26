@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Api\Stubs;
 
-use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class StubApiRequestHandler extends ApiRequestHandler

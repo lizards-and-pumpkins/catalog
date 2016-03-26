@@ -2,22 +2,26 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\UnableToFindDomainEventHandlerException;
-use LizardsAndPumpkins\Image\ImageWasAddedDomainEvent;
-use LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent;
-use LizardsAndPumpkins\Product\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
+use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\DomainEventHandlerLocator
- * @uses   \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\Product\ProductWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {

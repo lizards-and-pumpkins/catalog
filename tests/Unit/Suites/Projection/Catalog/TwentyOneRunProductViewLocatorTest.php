@@ -2,15 +2,19 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
+use LizardsAndPumpkins\Import\Product\View\TwentyOneRunConfigurableProductView;
+use LizardsAndPumpkins\Import\Product\View\TwentyOneRunProductViewLocator;
+use LizardsAndPumpkins\Import\Product\View\TwentyOneRunSimpleProductView;
+use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunConfigurableProductView
- * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunSimpleProductView
+ * @covers \LizardsAndPumpkins\Import\Product\View\TwentyOneRunProductViewLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\View\TwentyOneRunConfigurableProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\View\TwentyOneRunSimpleProductView
  */
 class TwentyOneRunProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 {

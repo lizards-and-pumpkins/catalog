@@ -2,25 +2,26 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\Context\Country\ContextCountry;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions;
+use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpResourceNotFoundResponse;
-use LizardsAndPumpkins\Log\LogMessage;
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\Price;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Price\Price;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Utils\XPathParser;
+use LizardsAndPumpkins\Import\XPathParser;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 {

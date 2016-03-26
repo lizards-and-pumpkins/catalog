@@ -3,15 +3,19 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\TemplateRendering\ProductInSearchAutosuggestionBlockRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\Snippet
+ * @covers \LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
 class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

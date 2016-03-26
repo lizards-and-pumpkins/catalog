@@ -3,11 +3,13 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
-use LizardsAndPumpkins\UrlKey;
+use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListing
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListing
  */
 class ProductListingTest extends \PHPUnit_Framework_TestCase
 {

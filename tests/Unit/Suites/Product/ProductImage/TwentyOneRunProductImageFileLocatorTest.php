@@ -3,21 +3,23 @@
 namespace LizardsAndPumpkins\Product\ProductImage;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
-use LizardsAndPumpkins\Product\ProductImage\Exception\InvalidImageFileNameException;
-use LizardsAndPumpkins\Product\ProductImage\Exception\InvalidImageVariantCodeException;
-use LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri;
-use LizardsAndPumpkins\Utils\ImageStorage\Image;
-use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Import\ImageStorage\Exception\InvalidImageFileNameException;
+use LizardsAndPumpkins\Import\ImageStorage\Exception\InvalidImageVariantCodeException;
+use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
+use LizardsAndPumpkins\Import\ImageStorage\Image;
+use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\Product\Image\TwentyOneRunProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator
- * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
- * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
+ * @covers \LizardsAndPumpkins\Import\Product\Image\TwentyOneRunProductImageFileLocator
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
  */
 class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,12 +4,14 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\AssociatedProductListBuilder
- * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
+ * @covers \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
  */
 class AssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
 {

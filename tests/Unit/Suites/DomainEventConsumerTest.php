@@ -2,14 +2,19 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\UnableToFindDomainEventHandlerException;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
+use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 /**
- * @covers \LizardsAndPumpkins\DomainEventConsumer
- * @uses   \LizardsAndPumpkins\DomainEventHandlerFailedMessage
- * @uses   \LizardsAndPumpkins\FailedToReadFromDomainEventQueueMessage
+ * @covers \LizardsAndPumpkins\Messaging\Event\DomainEventConsumer
+ * @uses   \LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage
+ * @uses   \LizardsAndPumpkins\Messaging\Event\FailedToReadFromDomainEventQueueMessage
  */
 class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 {

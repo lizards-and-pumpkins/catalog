@@ -2,13 +2,14 @@
 
 namespace LizardsAndPumpkins\Product\Tax\TaxRates;
 
-use LizardsAndPumpkins\Product\Price;
-use LizardsAndPumpkins\Product\Tax\TaxRates\Exception\InvalidTaxRateException;
-use LizardsAndPumpkins\Product\Tax\TaxService;
+use LizardsAndPumpkins\Import\Price\Price;
+use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxRateException;
+use LizardsAndPumpkins\Import\Tax\TaxService;
+use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxRate;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
- * @uses \LizardsAndPumpkins\Product\Price
+ * @covers \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxRate
+ * @uses \LizardsAndPumpkins\Import\Price\Price
  */
 class TwentyOneRunTaxRateTest extends \PHPUnit_Framework_TestCase
 {

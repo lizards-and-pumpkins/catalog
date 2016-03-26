@@ -3,20 +3,22 @@
 namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
-use LizardsAndPumpkins\Utils\ImageStorage\Image;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\Import\Product\View\TwentyOneRunSimpleProductView;
+use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
+use LizardsAndPumpkins\Import\ImageStorage\Image;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunSimpleProductView
- * @uses   \LizardsAndPumpkins\Projection\Catalog\AbstractProductView
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
+ * @covers \LizardsAndPumpkins\Import\Product\View\TwentyOneRunSimpleProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\View\AbstractProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
  */
 class TwentyOneRunSimpleProductViewTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,10 +3,13 @@
 
 namespace LizardsAndPumpkins\Log;
 
-use LizardsAndPumpkins\Log\Writer\LogMessageWriter;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessageWriter;
+use LizardsAndPumpkins\Logging\WritingLoggerDecorator;
 
 /**
- * @covers LizardsAndPumpkins\Log\WritingLoggerDecorator
+ * @covers LizardsAndPumpkins\Logging\WritingLoggerDecorator
  */
 class WritingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
 {

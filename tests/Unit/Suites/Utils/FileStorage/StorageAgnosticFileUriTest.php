@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Utils\FileStorage;
 
-use LizardsAndPumpkins\Utils\FileStorage\Exception\InvalidFileIdentifierException;
+use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileIdentifierException;
+use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri
+ * @covers \LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri
  */
 class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
 {

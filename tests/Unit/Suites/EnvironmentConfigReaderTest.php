@@ -3,11 +3,12 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\EnvironmentConfigKeyIsEmptyException;
-use LizardsAndPumpkins\Exception\EnvironmentConfigKeyIsNotAStringException;
+use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
+use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
+use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotAStringException;
 
 /**
- * @covers \LizardsAndPumpkins\EnvironmentConfigReader
+ * @covers \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  */
 class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 {

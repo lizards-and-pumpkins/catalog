@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSortOrderDirectionException;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortOrderDirectionException;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  */
 class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
 {

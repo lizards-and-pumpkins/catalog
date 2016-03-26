@@ -4,11 +4,13 @@
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\Country\ContextCountry;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 
 /**
- * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
+ * @covers \LizardsAndPumpkins\Context\Country\ContextCountry
  */
 class ContextCountryTest extends \PHPUnit_Framework_TestCase
 {

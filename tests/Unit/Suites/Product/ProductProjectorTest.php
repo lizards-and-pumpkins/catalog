@@ -5,15 +5,17 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetRendererCollection;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductProjector;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\SnippetRendererCollection;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductProjector
+ * @covers \LizardsAndPumpkins\Import\Product\ProductProjector
  */
 class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 {

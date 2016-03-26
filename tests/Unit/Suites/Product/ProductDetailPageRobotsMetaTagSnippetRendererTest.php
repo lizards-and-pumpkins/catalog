@@ -3,11 +3,13 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer
+ * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
  */
 class ProductDetailPageRobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

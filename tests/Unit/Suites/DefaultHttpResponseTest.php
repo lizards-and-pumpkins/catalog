@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Http\Exception\InvalidResponseBodyException;
+use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidResponseBodyException;
 use LizardsAndPumpkins\Http\HttpResponse;
 
 /**
- * @covers \LizardsAndPumpkins\DefaultHttpResponse
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase

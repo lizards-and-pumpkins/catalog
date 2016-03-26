@@ -3,13 +3,15 @@
 
 namespace LizardsAndPumpkins\Product\ProductImage;
 
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductImage\Exception\ProductImageListNotMutableException;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\Image\Exception\ProductImageListNotMutableException;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductImage\ProductImageList
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImage
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImage
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  */
 class ProductImageListTest extends \PHPUnit_Framework_TestCase
 {

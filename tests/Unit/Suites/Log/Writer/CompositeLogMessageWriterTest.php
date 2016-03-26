@@ -3,10 +3,12 @@
 
 namespace LizardsAndPumpkins\Log\Writer;
 
-use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessageWriter;
+use LizardsAndPumpkins\Logging\Writer\CompositeLogMessageWriter;
 
 /**
- * @covers LizardsAndPumpkins\Log\Writer\CompositeLogMessageWriter
+ * @covers LizardsAndPumpkins\Logging\Writer\CompositeLogMessageWriter
  */
 class CompositeLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {

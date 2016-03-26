@@ -2,8 +2,10 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Messaging\Command\FailedToReadFromCommandQueueMessage;
+
 /**
- * @covers \LizardsAndPumpkins\FailedToReadFromCommandQueueMessage
+ * @covers \LizardsAndPumpkins\Messaging\Command\FailedToReadFromCommandQueueMessage
  */
 class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCase
 {

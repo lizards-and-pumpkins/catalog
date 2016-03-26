@@ -2,19 +2,23 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler;
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
+use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 trait ProductListingTestTrait
 {

@@ -3,11 +3,13 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Exception\InvalidSnippetCodeException;
-use LizardsAndPumpkins\Exception\MissingSnippetKeyGenerationDataException;
+use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\InvalidSnippetCodeException;
+use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\MissingSnippetKeyGenerationDataException;
+use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\GenericSnippetKeyGenerator
+ * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
  */
 class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
 {

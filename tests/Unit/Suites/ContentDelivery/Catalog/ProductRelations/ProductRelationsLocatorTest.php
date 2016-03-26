@@ -2,12 +2,15 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\InvalidProductRelationTypeException;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\UnknownProductRelationTypeException;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode;
+use LizardsAndPumpkins\ProductRecommendations\Exception\InvalidProductRelationTypeException;
+use LizardsAndPumpkins\ProductRecommendations\Exception\UnknownProductRelationTypeException;
+use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
+ * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
  */
 class ProductRelationsLocatorTest extends \PHPUnit_Framework_TestCase
 {

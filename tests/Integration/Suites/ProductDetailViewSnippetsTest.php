@@ -2,11 +2,14 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Utils\XPathParser;
+use LizardsAndPumpkins\Import\XPathParser;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
 {

@@ -2,14 +2,19 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Content\ContentBlockSource;
-use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler;
-use LizardsAndPumpkins\Exception\UnableToFindCommandHandlerException;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
+use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
+use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\CommandHandlerLocator
- * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommand
+ * @covers \LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
  */
 class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,9 +2,11 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\CompositeProduct;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\Composite\CompositeProduct;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 
 class StubConfigurableProductView extends AbstractConfigurableProductView
 {

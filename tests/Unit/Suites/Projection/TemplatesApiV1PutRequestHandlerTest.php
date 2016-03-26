@@ -2,16 +2,18 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Messaging\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
- * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
 class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

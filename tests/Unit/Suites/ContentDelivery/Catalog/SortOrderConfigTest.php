@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
  */
 class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
 {

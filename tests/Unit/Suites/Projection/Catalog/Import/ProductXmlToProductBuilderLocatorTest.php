@@ -2,33 +2,39 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidNumberOfSkusForImportedProductException;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductTypeCodeForImportedProductException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\TaxClassAttributeMissingForImportedProductException;
+use LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder;
+use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
+use LizardsAndPumpkins\Import\Product\Exception\InvalidNumberOfSkusForImportedProductException;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeForImportedProductException;
+use LizardsAndPumpkins\Import\Product\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
+use LizardsAndPumpkins\Import\Product\Exception\TaxClassAttributeMissingForImportedProductException;
+use LizardsAndPumpkins\Import\Product\ProductBuilder;
+use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Import\Product\SimpleProductBuilder;
+use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilder
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductXmlToProductBuilder
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToAssociatedProductListBuilder
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToVariationAttributeList
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\AssociatedProductListBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductTypeCode
- * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
+ * @covers \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
+ * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToAssociatedProductListBuilder
+ * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToVariationAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductTypeCode
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
 class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
 {

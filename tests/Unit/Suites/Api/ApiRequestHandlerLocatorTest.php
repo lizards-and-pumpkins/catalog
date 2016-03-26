@@ -2,10 +2,13 @@
 
 namespace LizardsAndPumpkins\Api;
 
-use LizardsAndPumpkins\Api\Exception\ApiVersionMustBeIntException;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
+use LizardsAndPumpkins\RestApi\Exception\ApiVersionMustBeIntException;
+use LizardsAndPumpkins\RestApi\NullApiRequestHandler;
 
 /**
- * @covers LizardsAndPumpkins\Api\ApiRequestHandlerLocator
+ * @covers LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  */
 class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {

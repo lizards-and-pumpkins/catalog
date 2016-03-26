@@ -2,14 +2,17 @@
 
 namespace LizardsAndPumpkins\Product\ProductSearch;
 
-use LizardsAndPumpkins\MasterFactory;
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
+use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Product;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearch\AttributeValueCollectorLocator
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class AttributeValueCollectorLocatorTest extends \PHPUnit_Framework_TestCase
 {

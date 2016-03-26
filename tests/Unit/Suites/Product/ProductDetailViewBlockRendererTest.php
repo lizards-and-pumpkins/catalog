@@ -2,18 +2,19 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\Renderer\AbstractBlockRendererTest;
-use LizardsAndPumpkins\Renderer\BlockRenderer;
-use LizardsAndPumpkins\Renderer\BlockStructure;
-use LizardsAndPumpkins\Renderer\ThemeLocator;
-use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductDetailViewBlockRenderer
- * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
- * @uses   \LizardsAndPumpkins\Renderer\BlockStructure
- * @uses   \LizardsAndPumpkins\Renderer\Block
+ * @covers \LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockStructure
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\Block
  */
 class ProductDetailViewBlockRendererTest extends AbstractBlockRendererTest
 {

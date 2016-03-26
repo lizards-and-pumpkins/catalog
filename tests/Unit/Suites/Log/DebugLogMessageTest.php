@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins\Log;
 
+use LizardsAndPumpkins\Logging\DebugLogMessage;
+use LizardsAndPumpkins\Logging\LogMessage;
+
 /**
- * @covers \LizardsAndPumpkins\Log\DebugLogMessage
+ * @covers \LizardsAndPumpkins\Logging\DebugLogMessage
  */
 class DebugLogMessageTest extends \PHPUnit_Framework_TestCase
 {

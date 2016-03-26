@@ -2,21 +2,26 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
-use LizardsAndPumpkins\ContentDelivery\PageBuilder;
-use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductListingRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Renderer\Translation\Translator;
-use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\Translation\Translator;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
+ * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
  */
 class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 {

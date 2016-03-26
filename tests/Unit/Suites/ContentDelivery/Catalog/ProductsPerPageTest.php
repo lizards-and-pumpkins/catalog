@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidNumberOfProductsPerPageException;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\InvalidSelectedNumberOfProductsPerPageException;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
+use LizardsAndPumpkins\ProductListing\Exception\InvalidSelectedNumberOfProductsPerPageException;
 
 /**
- * @covers LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
+ * @covers LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
  */
 class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
 {

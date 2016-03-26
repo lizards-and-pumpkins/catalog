@@ -2,16 +2,17 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices;
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
  */
 class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
 {

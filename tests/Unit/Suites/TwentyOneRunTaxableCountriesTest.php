@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxableCountries;
+
 /**
- * @covers \LizardsAndPumpkins\TwentyOneRunTaxableCountries
+ * @covers \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxableCountries
  */
 class TwentyOneRunTaxableCountriesTest extends \PHPUnit_Framework_TestCase
 {

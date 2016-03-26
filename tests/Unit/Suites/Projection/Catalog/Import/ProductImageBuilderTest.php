@@ -4,19 +4,20 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage\ProductImage;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\InvalidProductImageAttributeListException;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageBuilder;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\Image\InvalidProductImageAttributeListException;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImage
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImage
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class ProductImageBuilderTest extends \PHPUnit_Framework_TestCase
 {

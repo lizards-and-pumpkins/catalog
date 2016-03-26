@@ -3,11 +3,13 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Exception\InvalidProductTypeCodeException;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeException;
+use LizardsAndPumpkins\Import\Product\ProductTypeCode;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductTypeCode
+ * @covers \LizardsAndPumpkins\Import\Product\ProductTypeCode
  */
 class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,31 +4,39 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductListing;
-use LizardsAndPumpkins\Product\ProductListingBuilder;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileDoesNotExistException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportFileNotReadableException;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Import\CatalogImport;
+use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
+use LizardsAndPumpkins\Import\Product\ProductBuilder;
+use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
+use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Import\Product\QueueImportCommands;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
+use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Utils\XPathParser;
+use LizardsAndPumpkins\Import\XPathParser;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportCallbackFailureMessage
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageImportCallbackFailureMessage
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogListingImportCallbackFailureMessage
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\AddProductListingCommand
- * @uses   \LizardsAndPumpkins\Product\UpdateProductCommand
- * @uses   \LizardsAndPumpkins\Image\AddImageCommand
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
- * @uses   \LizardsAndPumpkins\Utils\UuidGenerator
- * @uses   \LizardsAndPumpkins\DataVersion
+ * @covers \LizardsAndPumpkins\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser
+ * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
+ * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
+ * @uses   \LizardsAndPumpkins\Util\UuidGenerator
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
 {

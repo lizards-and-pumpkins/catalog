@@ -2,23 +2,28 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\BaseUrl\HttpBaseUrl;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetRenderer;
-use LizardsAndPumpkins\Snippet;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetContent
- * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetContainer
- * @uses   \LizardsAndPumpkins\BaseUrl\HttpBaseUrl
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
+ * @uses   \LizardsAndPumpkins\Import\SnippetContainer
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
 class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

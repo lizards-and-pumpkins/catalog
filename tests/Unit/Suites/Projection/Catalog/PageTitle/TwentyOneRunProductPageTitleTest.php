@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\PageTitle;
 
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle
+ * @covers \LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle
  */
 class TwentyOneRunProductPageTitleTest extends \PHPUnit_Framework_TestCase
 {

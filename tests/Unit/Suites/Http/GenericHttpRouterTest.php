@@ -2,8 +2,12 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRouter;
+
 /**
- * @covers \LizardsAndPumpkins\Http\GenericHttpRouter
+ * @covers \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase

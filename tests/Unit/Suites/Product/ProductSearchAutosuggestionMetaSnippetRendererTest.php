@@ -4,15 +4,17 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Renderer\BlockRenderer;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent
- * @uses   \LizardsAndPumpkins\Snippet
+ * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
 class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

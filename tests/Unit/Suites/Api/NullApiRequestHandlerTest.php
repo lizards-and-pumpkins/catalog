@@ -3,10 +3,12 @@
 namespace LizardsAndPumpkins\Api;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\RestApi\NullApiRequestHandler;
 
 /**
- * @covers \LizardsAndPumpkins\Api\NullApiRequestHandler
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @covers \LizardsAndPumpkins\RestApi\NullApiRequestHandler
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class NullApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

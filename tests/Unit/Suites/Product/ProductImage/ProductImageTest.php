@@ -3,14 +3,15 @@
 
 namespace LizardsAndPumpkins\Product\ProductImage;
 
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductImage\ProductImage
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImage
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class ProductImageTest extends \PHPUnit_Framework_TestCase
 {

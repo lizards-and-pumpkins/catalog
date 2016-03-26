@@ -1,15 +1,16 @@
 <?php
 
-namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
+namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
-use LizardsAndPumpkins\Product\Price;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Import\Price\Price;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices
- * @uses   \LizardsAndPumpkins\Product\Price
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
+ * @uses   \LizardsAndPumpkins\Import\Price\Price
  */
 class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
 {

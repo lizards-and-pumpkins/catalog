@@ -3,22 +3,27 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
-use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMismatchException;
-use LizardsAndPumpkins\Product\Exception\ProductTypeCodeMissingException;
-use LizardsAndPumpkins\Product\ProductImage\ProductImage;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
-use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
+use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**
- * @covers \LizardsAndPumpkins\Product\SimpleProduct
- * @covers \LizardsAndPumpkins\Product\RehydrateableProductTrait
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\DataVersion
+ * @covers \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @covers \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */

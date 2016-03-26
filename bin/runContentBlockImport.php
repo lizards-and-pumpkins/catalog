@@ -4,13 +4,19 @@
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\Content\ContentBlockId;
-use LizardsAndPumpkins\Content\ContentBlockSource;
-use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
-use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
-use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Utils\BaseCliCommand;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
+use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Logging\LoggingQueueFactory;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
+use LizardsAndPumpkins\Util\BaseCliCommand;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\TwentyOneRunFactory;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';

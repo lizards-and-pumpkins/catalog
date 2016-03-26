@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\View\IntegrationTestProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductView
+ * @covers \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductView
  */
 class IntegrationTestProductViewTest extends \PHPUnit_Framework_TestCase
 {

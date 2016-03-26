@@ -1,14 +1,16 @@
 <?php
 
 
-namespace LizardsAndPumpkins\ContentDelivery\PageBuilder;
+namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\InvalidSnippetContentException;
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
+use LizardsAndPumpkins\Import\Exception\InvalidSnippetContentException;
+use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderSnippets
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
  */
 class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
 {

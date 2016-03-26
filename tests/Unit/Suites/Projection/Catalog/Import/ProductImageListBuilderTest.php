@@ -4,21 +4,23 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage\ProductImage;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageBuilder;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageBuilder
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImage
+ * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImage
  */
 class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
 {

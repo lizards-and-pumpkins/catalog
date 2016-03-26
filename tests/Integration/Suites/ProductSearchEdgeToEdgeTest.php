@@ -2,13 +2,14 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
 {

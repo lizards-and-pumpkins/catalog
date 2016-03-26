@@ -4,7 +4,7 @@
 namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\Utils\BaseCliCommand;
+use LizardsAndPumpkins\Util\BaseCliCommand;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';

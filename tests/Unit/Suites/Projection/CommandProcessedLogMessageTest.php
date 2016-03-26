@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\CommandHandler;
-use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\CommandProcessedLogMessage
+ * @covers \LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage
  */
 class CommandProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
 {

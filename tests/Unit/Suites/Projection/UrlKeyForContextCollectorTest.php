@@ -3,17 +3,19 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\UrlKey;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Product\ProductListing;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\UrlKeyForContextCollector
- * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContextCollection
- * @uses   \LizardsAndPumpkins\Projection\UrlKeyForContext
- * @uses   \LizardsAndPumpkins\UrlKey
+ * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
+ * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection
+ * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext
+ * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
 class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
 {

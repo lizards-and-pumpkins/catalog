@@ -4,20 +4,26 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
-use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Product\ProductListingSnippetContent;
-use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductListingSnippetContent
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
+ * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
+ * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase

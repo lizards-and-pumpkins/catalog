@@ -2,14 +2,16 @@
 
 namespace LizardsAndPumpkins\Utils\ImageStorage;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\BaseUrl\HttpBaseUrl;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Utils\ImageStorage\Exception\InvalidMediaBaseUrlPathException;
+use LizardsAndPumpkins\Import\ImageStorage\Exception\InvalidMediaBaseUrlPathException;
+use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\BaseUrl\HttpBaseUrl
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
 class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 {

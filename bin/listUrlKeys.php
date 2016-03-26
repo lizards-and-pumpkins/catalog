@@ -5,7 +5,11 @@ namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Utils\BaseCliCommand;
+use LizardsAndPumpkins\Util\BaseCliCommand;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\TwentyOneRunFactory;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';

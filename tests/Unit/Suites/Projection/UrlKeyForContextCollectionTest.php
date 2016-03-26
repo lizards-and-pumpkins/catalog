@@ -3,8 +3,11 @@
 
 namespace LizardsAndPumpkins\Projection;
 
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+
 /**
- * @covers \LizardsAndPumpkins\Projection\UrlKeyForContextCollection
+ * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection
  */
 class UrlKeyForContextCollectionTest extends \PHPUnit_Framework_TestCase
 {

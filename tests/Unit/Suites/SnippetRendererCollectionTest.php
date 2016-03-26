@@ -2,8 +2,12 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\SnippetRendererCollection;
+
 /**
- * @covers \LizardsAndPumpkins\SnippetRendererCollection
+ * @covers \LizardsAndPumpkins\Import\SnippetRendererCollection
  */
 class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 {

@@ -4,15 +4,17 @@ namespace LizardsAndPumpkins\Content;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
-use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\SnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Content\ContentBlockSnippetRenderer
- * @uses   \LizardsAndPumpkins\Snippet
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
 class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

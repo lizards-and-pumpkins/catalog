@@ -4,12 +4,15 @@ namespace LizardsAndPumpkins\Utils\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Utils\FileStorage\FileContent;
-use LizardsAndPumpkins\Utils\FileStorage\StorageSpecificFileUri;
+use LizardsAndPumpkins\Import\FileStorage\FileContent;
+use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
+use LizardsAndPumpkins\Import\ImageStorage\Image;
+use LizardsAndPumpkins\Import\ImageStorage\ImageInStorage;
+use LizardsAndPumpkins\Import\ImageStorage\ImageToImageStorage;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\ImageStorage\ImageInStorage
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FileContent
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageInStorage
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class ImageInStorageTest extends \PHPUnit_Framework_TestCase

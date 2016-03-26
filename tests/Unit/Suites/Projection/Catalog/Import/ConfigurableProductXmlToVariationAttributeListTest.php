@@ -3,14 +3,15 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Utils\XPathParser;
+use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToVariationAttributeList;
+use LizardsAndPumpkins\Import\XPathParser;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToVariationAttributeList
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
+ * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToVariationAttributeList
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
  */
 class ConfigurableProductXmlToVariationAttributeListTest extends \PHPUnit_Framework_TestCase
 {

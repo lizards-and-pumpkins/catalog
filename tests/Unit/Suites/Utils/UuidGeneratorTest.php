@@ -3,8 +3,10 @@
 
 namespace LizardsAndPumpkins\Utils;
 
+use LizardsAndPumpkins\Util\UuidGenerator;
+
 /**
- * @covers \LizardsAndPumpkins\Utils\UuidGenerator
+ * @covers \LizardsAndPumpkins\Util\UuidGenerator
  */
 class UuidGeneratorTest extends \PHPUnit_Framework_TestCase
 {

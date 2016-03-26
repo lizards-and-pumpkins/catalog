@@ -2,11 +2,13 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
+use LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
+ * @covers \LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation
  */
 class PricesJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,26 +2,28 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\CommandHandlerFactory;
-use LizardsAndPumpkins\CommonFactory;
-use LizardsAndPumpkins\Content\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Factory;
-use LizardsAndPumpkins\Image\AddImageCommand;
-use LizardsAndPumpkins\Product\AddProductListingCommand;
-use LizardsAndPumpkins\Product\UpdateProductCommand;
-use LizardsAndPumpkins\SampleMasterFactory;
+use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
+use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory
- * @uses   \LizardsAndPumpkins\FactoryTrait
- * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler
- * @uses   \LizardsAndPumpkins\Projection\ProcessTimeLoggingCommandHandlerDecorator
- * @uses   \LizardsAndPumpkins\Product\UpdateProductCommandHandler
- * @uses   \LizardsAndPumpkins\Product\AddProductListingCommandHandler
- * @uses   \LizardsAndPumpkins\Image\AddImageCommandHandler
+ * @covers \LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
+ * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

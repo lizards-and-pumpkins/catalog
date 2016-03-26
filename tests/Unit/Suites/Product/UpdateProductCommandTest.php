@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Command;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Messaging\Command\Command;
 
 /**
- * @covers \LizardsAndPumpkins\Product\UpdateProductCommand
+ * @covers \LizardsAndPumpkins\Import\Product\UpdateProductCommand
  */
 class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 {

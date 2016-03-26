@@ -2,8 +2,10 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Messaging\Event\FailedToReadFromDomainEventQueueMessage;
+
 /**
- * @covers \LizardsAndPumpkins\FailedToReadFromDomainEventQueueMessage
+ * @covers \LizardsAndPumpkins\Messaging\Event\FailedToReadFromDomainEventQueueMessage
  */
 class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_TestCase
 {

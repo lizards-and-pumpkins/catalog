@@ -2,18 +2,19 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\BaseUrl\HttpBaseUrl;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductCanonicalTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\BaseUrl\HttpBaseUrl
- * @uses   \LizardsAndPumpkins\Snippet
+ * @covers \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
 class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

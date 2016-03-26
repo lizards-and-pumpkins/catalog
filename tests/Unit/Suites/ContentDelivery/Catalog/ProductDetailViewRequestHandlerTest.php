@@ -4,24 +4,25 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\KeyValue\Exception\KeyNotFoundException;
-use LizardsAndPumpkins\DefaultHttpResponse;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
+use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
-use LizardsAndPumpkins\ContentDelivery\PageBuilder;
-use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Product\ProductDetailPageRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Renderer\Translation\Translator;
-use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
-use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\Translation\Translator;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
+ * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

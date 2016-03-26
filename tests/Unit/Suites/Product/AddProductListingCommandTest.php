@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Command;
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**
- * @covers \LizardsAndPumpkins\Product\AddProductListingCommand
+ * @covers \LizardsAndPumpkins\ProductListing\AddProductListingCommand
  */
 class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 {

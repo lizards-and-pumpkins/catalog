@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Context\Stubs;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
 
 class FromInputCopyingTestContextPartBuilder implements ContextPartBuilder
 {

@@ -3,16 +3,17 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
-use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Projection\Catalog\CompositeProductView;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ConfigurableProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\Snippet
+ * @covers \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
 class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

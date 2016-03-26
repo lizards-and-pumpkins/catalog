@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Utils;
 use League\CLImate\Argument\Manager as ArgumentManager;
 use League\CLImate\CLImate;
 use League\CLImate\Util\Output as CliOutput;
-use LizardsAndPumpkins\EnvironmentConfigReader;
+use LizardsAndPumpkins\Util\BaseCliCommand;
+use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\Utils\Stub\StubCliCommand;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\BaseCliCommand
+ * @covers \LizardsAndPumpkins\Util\BaseCliCommand
  */
 class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
 {

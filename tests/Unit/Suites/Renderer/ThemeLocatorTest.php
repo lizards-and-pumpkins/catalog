@@ -2,14 +2,16 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
+use LizardsAndPumpkins\Import\TemplateRendering\Layout;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Renderer\ThemeLocator
- * @uses   \LizardsAndPumpkins\Renderer\Layout
- * @uses   \LizardsAndPumpkins\Renderer\LayoutReader
- * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\Layout
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\LayoutReader
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
 class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
 {

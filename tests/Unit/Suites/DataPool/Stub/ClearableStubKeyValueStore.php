@@ -3,8 +3,8 @@
 
 namespace LizardsAndPumpkins\DataPool\Stub;
 
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
-use LizardsAndPumpkins\Utils\Clearable;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class ClearableStubKeyValueStore implements KeyValueStore, Clearable
 {

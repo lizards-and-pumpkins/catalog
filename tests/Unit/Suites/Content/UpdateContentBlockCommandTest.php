@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\Command;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Messaging\Command\Command;
 
 /**
- * @covers \LizardsAndPumpkins\Content\UpdateContentBlockCommand
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
  */
 class UpdateContentBlockCommandTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\InvalidNumberOfDecimalPointsForPriceException;
+use LizardsAndPumpkins\Import\Price\Exception\InvalidNumberOfDecimalPointsForPriceException;
+use LizardsAndPumpkins\Import\Price\Price;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Price
+ * @covers \LizardsAndPumpkins\Import\Price\Price
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {

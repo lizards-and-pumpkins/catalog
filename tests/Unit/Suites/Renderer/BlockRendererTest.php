@@ -2,18 +2,21 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\Renderer\Exception\BlockRendererMustHaveOneRootBlockException;
-use LizardsAndPumpkins\Renderer\Exception\CanNotInstantiateBlockException;
-use LizardsAndPumpkins\Renderer\Exception\MethodNotYetAvailableException;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Import\ContentBlock\Block;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockRendererMustHaveOneRootBlockException;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\CanNotInstantiateBlockException;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\MethodNotYetAvailableException;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Renderer\Stubs\StubBlock;
 use LizardsAndPumpkins\Renderer\Stubs\StubBlockRenderer;
-use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
- * @covers \LizardsAndPumpkins\Renderer\BlockRenderer
- * @uses   \LizardsAndPumpkins\Renderer\Block
- * @uses   \LizardsAndPumpkins\Renderer\BlockStructure
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\Block
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockStructure
  */
 class BlockRendererTest extends AbstractBlockRendererTest
 {

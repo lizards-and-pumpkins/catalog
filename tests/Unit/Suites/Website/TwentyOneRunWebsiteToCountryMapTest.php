@@ -2,12 +2,14 @@
 
 namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Country\Country;
+use LizardsAndPumpkins\Context\Country\Country;
+use LizardsAndPumpkins\Context\Website\TwentyOneRunWebsiteToCountryMap;
+use LizardsAndPumpkins\Context\Website\Website;
 
 /**
- * @covers \LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap
- * @uses   \LizardsAndPumpkins\Website\Website
- * @uses   \LizardsAndPumpkins\Country\Country
+ * @covers \LizardsAndPumpkins\Context\Website\TwentyOneRunWebsiteToCountryMap
+ * @uses   \LizardsAndPumpkins\Context\Website\Website
+ * @uses   \LizardsAndPumpkins\Context\Country\Country
  */
 class TwentyOneRunWebsiteToCountryMapTest extends \PHPUnit_Framework_TestCase
 {

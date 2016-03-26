@@ -4,77 +4,79 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\HttpRouter;
-use LizardsAndPumpkins\Http\HttpRouterChain;
+use LizardsAndPumpkins\Http\Routing\HttpRouter;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\DefaultWebFront
- * @covers \LizardsAndPumpkins\WebFront
- * @uses   \LizardsAndPumpkins\FactoryTrait
- * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\FrontendFactory
- * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductDetailViewRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageContentBuilder
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService\EnrichProductJsonWithPrices
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
- * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\PricesJsonSnippetTransformation
- * @uses   \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\ProductJsonSnippetTransformation
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsLocator
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler
+ * @covers \LizardsAndPumpkins\\DefaultWebFront
+ * @covers \LizardsAndPumpkins\Http\WebFront
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
+ * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchAutosuggestionRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\UnitTestFactory
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
- * @uses   \LizardsAndPumpkins\ContentDelivery\PageBuilder
- * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport
- * @uses   \LizardsAndPumpkins\Http\GenericHttpRouter
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator
- * @uses   \LizardsAndPumpkins\Projection\TemplatesApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\CompositeSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\SnippetKeyGeneratorLocator\RegistrySnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRouter
- * @uses   \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
- * @uses   \LizardsAndPumpkins\Http\HttpRouterChain
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter
+ * @uses   \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\Routing\HttpRouterChain
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
+ * @uses   \LizardsAndPumpkins\Context\Locale\ContextLocale
+ * @uses   \LizardsAndPumpkins\Context\Country\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
- * @uses   \LizardsAndPumpkins\Api\ApiRouter
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandlerLocator
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRouter
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
- * @uses   \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
- * @uses   \LizardsAndPumpkins\Utils\Directory
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\Directory
  */
 class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
 {

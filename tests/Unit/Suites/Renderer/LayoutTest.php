@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\Renderer\Exception\RootElementOfLayoutMustBeAnArrayException;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\RootElementOfLayoutMustBeAnArrayException;
+use LizardsAndPumpkins\Import\TemplateRendering\Layout;
 
 /**
- * @covers \LizardsAndPumpkins\Renderer\Layout
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\Layout
  */
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {

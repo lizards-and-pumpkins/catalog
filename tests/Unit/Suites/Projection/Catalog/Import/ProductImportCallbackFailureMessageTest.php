@@ -3,11 +3,12 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
+use LizardsAndPumpkins\Logging\LogMessage;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportCallbackFailureMessage
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
 class ProductImportCallbackFailureMessageTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,10 +3,11 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\DomainEventProcessedLogMessage
+ * @covers \LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage
  */
 class DomainEventProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
 {

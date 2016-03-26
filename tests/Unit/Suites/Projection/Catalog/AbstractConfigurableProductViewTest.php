@@ -4,22 +4,26 @@ namespace LizardsAndPumpkins\Projection\Catalog;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Product\SimpleProduct;
-use LizardsAndPumpkins\Utils\ImageStorage\Image;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView;
+use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\ImageStorage\Image;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\AbstractConfigurableProductView
- * @uses   \LizardsAndPumpkins\Projection\Catalog\AbstractProductView
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
+ * @covers \LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\View\AbstractProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
  */
 class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
 {

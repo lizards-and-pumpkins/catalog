@@ -3,11 +3,13 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\Renderer\Exception\TemplateFileNotReadableException;
+use LizardsAndPumpkins\Import\ContentBlock\Block;
+use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\TemplateFileNotReadableException;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Renderer\Block
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {

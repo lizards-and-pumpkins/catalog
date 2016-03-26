@@ -2,16 +2,17 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\ProductSearch\TemplateRendering\ProductInSearchAutosuggestionBlockRenderer;
 use LizardsAndPumpkins\Renderer\AbstractBlockRendererTest;
-use LizardsAndPumpkins\Renderer\BlockRenderer;
-use LizardsAndPumpkins\Renderer\BlockStructure;
-use LizardsAndPumpkins\Renderer\ThemeLocator;
-use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductInSearchAutosuggestionBlockRenderer
- * @uses   \LizardsAndPumpkins\Renderer\BlockRenderer
+ * @covers \LizardsAndPumpkins\ProductSearch\TemplateRendering\ProductInSearchAutosuggestionBlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  */
 class ProductInSearchAutosuggestionBlockRendererTest extends AbstractBlockRendererTest
 {

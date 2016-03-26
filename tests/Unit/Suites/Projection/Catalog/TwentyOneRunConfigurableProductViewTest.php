@@ -2,21 +2,25 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle;
-use LizardsAndPumpkins\Utils\ImageStorage\Image;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
+use LizardsAndPumpkins\Import\Product\View\TwentyOneRunConfigurableProductView;
+use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
+use LizardsAndPumpkins\Import\ImageStorage\Image;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunConfigurableProductView
- * @uses   \LizardsAndPumpkins\Projection\Catalog\AbstractProductView
- * @uses   \LizardsAndPumpkins\Projection\Catalog\AbstractConfigurableProductView
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
+ * @covers \LizardsAndPumpkins\Import\Product\View\TwentyOneRunConfigurableProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\View\AbstractProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  */
 class TwentyOneRunConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
 {

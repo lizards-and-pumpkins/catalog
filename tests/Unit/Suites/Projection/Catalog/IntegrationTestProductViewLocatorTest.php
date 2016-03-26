@@ -2,14 +2,18 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog;
 
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
+use LizardsAndPumpkins\Import\Product\View\IntegrationTestProductViewLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductView
- * @uses   \LizardsAndPumpkins\Projection\Catalog\IntegrationTestConfigurableProductView
+ * @covers \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductViewLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductView
+ * @uses   \LizardsAndPumpkins\Import\Product\View\IntegrationTestConfigurableProductView
  */
 class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,17 +3,21 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductDetailViewSnippetRenderer
- * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\SnippetContainer
- * @uses   \LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent
+ * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
+ * @uses   \LizardsAndPumpkins\Import\SnippetContainer
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

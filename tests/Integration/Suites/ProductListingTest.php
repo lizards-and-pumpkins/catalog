@@ -9,9 +9,10 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Log\LogMessage;
-use LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 
 class ProductListingTest extends \PHPUnit_Framework_TestCase
 {

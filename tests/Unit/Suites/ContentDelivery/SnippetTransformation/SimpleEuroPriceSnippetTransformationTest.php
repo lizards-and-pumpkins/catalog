@@ -3,11 +3,13 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
+use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 
 /**
- * @covers LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SimpleEuroPriceSnippetTransformation
+ * @covers LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation
  */
 class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {

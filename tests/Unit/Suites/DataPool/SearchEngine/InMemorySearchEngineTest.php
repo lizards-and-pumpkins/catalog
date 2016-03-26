@@ -2,12 +2,13 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
@@ -34,9 +35,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilde
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  */
 class InMemorySearchEngineTest extends AbstractSearchEngineTest
 {

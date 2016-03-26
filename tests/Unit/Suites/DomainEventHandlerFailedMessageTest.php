@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage;
+
 /**
- * @covers \LizardsAndPumpkins\DomainEventHandlerFailedMessage
+ * @covers \LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage
  */
 class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 {

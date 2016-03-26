@@ -2,11 +2,13 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\Exception\InvalidTemplateProjectorCodeException;
-use LizardsAndPumpkins\Exception\UnableToLocateTemplateProjectorException;
+use LizardsAndPumpkins\Import\Projector;
+use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\InvalidTemplateProjectorCodeException;
+use LizardsAndPumpkins\Import\RootTemplate\Exception\UnableToLocateTemplateProjectorException;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\TemplateProjectorLocator
+ * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
  */
 class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
 {

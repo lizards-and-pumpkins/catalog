@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\EmptyVersionException;
-use LizardsAndPumpkins\Exception\InvalidVersionException;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
+use LizardsAndPumpkins\Context\DataVersion\Exception\InvalidVersionException;
 
 /**
- * @covers LizardsAndPumpkins\DataVersion
+ * @covers LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {

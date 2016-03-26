@@ -3,17 +3,18 @@
 namespace LizardsAndPumpkins\Product\Block;
 
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Renderer\Block;
-use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\Import\ContentBlock\Block;
+use LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Block\ProductBlock
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Renderer\Block
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\Block
  */
 class ProductBlockTest extends \PHPUnit_Framework_TestCase
 {

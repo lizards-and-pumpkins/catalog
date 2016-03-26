@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\InvalidUrlKeySourceException;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\InvalidUrlKeySourceException;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 
 /**
- * @covers \LizardsAndPumpkins\UrlKey
+ * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
 class UrlKeyTest extends \PHPUnit_Framework_TestCase
 {

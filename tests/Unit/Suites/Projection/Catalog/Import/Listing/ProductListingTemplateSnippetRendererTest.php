@@ -4,14 +4,15 @@ namespace LizardsAndPumpkins\Projection\Catalog\Import\Listing;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Product\ProductListingBlockRenderer;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\SnippetRenderer;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\Listing\ProductListingTemplateSnippetRenderer
- * @uses   \LizardsAndPumpkins\Snippet
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
 class ProductListingTemplateSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

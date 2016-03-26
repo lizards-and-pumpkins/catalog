@@ -3,7 +3,11 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Logging\LoggingQueueFactory;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\TwentyOneRunFactory;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';

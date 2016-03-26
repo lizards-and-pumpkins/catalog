@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer\Stubs;
 
-use LizardsAndPumpkins\Renderer\BlockRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 
 class StubBlockRenderer extends BlockRenderer
 {

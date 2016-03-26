@@ -2,12 +2,13 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\InvalidProductListingAttributeCodeException;
-use LizardsAndPumpkins\Product\Exception\InvalidProductListingAttributeValueException;
-use LizardsAndPumpkins\Product\Exception\ProductListingAttributeNotFoundException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeCodeException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeValueException;
+use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingAttributeList
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList
  */
 class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 {

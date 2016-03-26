@@ -3,10 +3,10 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri;
-use LizardsAndPumpkins\Utils\ImageStorage\Image;
-use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
+use LizardsAndPumpkins\Import\ImageStorage\Image;
+use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 
 class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
 {

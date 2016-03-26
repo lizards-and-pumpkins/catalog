@@ -3,14 +3,16 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetRendererCollection;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingSnippetProjector
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
  */
 class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
 {

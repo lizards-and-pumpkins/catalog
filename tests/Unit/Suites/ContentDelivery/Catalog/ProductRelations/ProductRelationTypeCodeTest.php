@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\InvalidProductRelationTypeCodeException;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode;
+use LizardsAndPumpkins\ProductRecommendations\Exception\InvalidProductRelationTypeCodeException;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
+ * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
  */
 class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
 {

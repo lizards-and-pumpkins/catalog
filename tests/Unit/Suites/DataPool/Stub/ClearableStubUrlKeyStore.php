@@ -4,7 +4,7 @@
 namespace LizardsAndPumpkins\DataPool\Stub;
 
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Utils\Clearable;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class ClearableStubUrlKeyStore implements UrlKeyStore, Clearable
 {

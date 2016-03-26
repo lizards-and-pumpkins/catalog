@@ -3,10 +3,11 @@
 
 namespace LizardsAndPumpkins\Product\Tax;
 
-use LizardsAndPumpkins\Product\Tax\Exception\InvalidTaxClassNameException;
+use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxClassNameException;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Tax\ProductTaxClass
+ * @covers \LizardsAndPumpkins\Import\Tax\ProductTaxClass
  */
 class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
 {
