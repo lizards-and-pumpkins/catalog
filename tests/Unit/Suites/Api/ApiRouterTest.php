@@ -3,11 +3,13 @@
 namespace LizardsAndPumpkins\Api;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
+use LizardsAndPumpkins\RestApi\ApiRouter;
 
 /**
- * @covers \LizardsAndPumpkins\Api\ApiRouter
- * @uses   \LizardsAndPumpkins\Http\HttpRequestHandler
+ * @covers \LizardsAndPumpkins\RestApi\ApiRouter
+ * @uses   \LizardsAndPumpkins\Http\Routing\HttpRequestHandler
  */
 class ApiRouterTest extends \PHPUnit_Framework_TestCase
 {

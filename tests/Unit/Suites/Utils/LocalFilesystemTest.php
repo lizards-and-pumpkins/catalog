@@ -2,12 +2,13 @@
 
 namespace LizardsAndPumpkins\Utils;
 
-use LizardsAndPumpkins\Utils\Exception\DirectoryDoesNotExistException;
-use LizardsAndPumpkins\Utils\Exception\DirectoryNotWritableException;
-use LizardsAndPumpkins\Utils\Exception\NotADirectoryException;
+use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryDoesNotExistException;
+use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryNotWritableException;
+use LizardsAndPumpkins\Util\FileSystem\Exception\NotADirectoryException;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */
 class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,11 +3,12 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\DomainEvent;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogWasImportedDomainEvent
+ * @covers \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
  */
 class CatalogWasImportedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,8 +3,8 @@
 
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
-use LizardsAndPumpkins\Utils\Clearable;
-use LizardsAndPumpkins\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Util\Storage\Clearable;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 
 class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlKeyStore, Clearable
 {

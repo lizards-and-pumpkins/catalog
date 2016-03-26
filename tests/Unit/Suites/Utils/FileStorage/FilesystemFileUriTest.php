@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Utils\FileStorage;
 
-use LizardsAndPumpkins\Utils\FileStorage\Exception\InvalidFileURIException;
+use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileURIException;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri;
+use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileUri
+ * @covers \LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri
  */
 class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
 {

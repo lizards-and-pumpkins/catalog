@@ -2,13 +2,14 @@
 
 namespace LizardsAndPumpkins\Image;
 
-use LizardsAndPumpkins\Command;
-use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Image\Exception\ImageFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Image\ImageFileDoesNotExistException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Image\AddImageCommand
+ * @covers \LizardsAndPumpkins\Import\Image\AddImageCommand
  */
 class AddImageCommandTest extends \PHPUnit_Framework_TestCase
 {

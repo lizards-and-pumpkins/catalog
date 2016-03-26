@@ -3,11 +3,12 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Context\TwentyOneRunContextSource;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
 
 /**
- * @covers \LizardsAndPumpkins\TwentyOneRunContextSource
+ * @covers \LizardsAndPumpkins\Context\TwentyOneRunContextSource
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  */
 class TwentyOneRunContextSourceTest extends \PHPUnit_Framework_TestCase

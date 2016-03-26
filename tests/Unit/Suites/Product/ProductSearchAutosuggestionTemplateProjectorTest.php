@@ -3,11 +3,12 @@
 namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Projection\Projector;
-use LizardsAndPumpkins\SnippetRendererCollection;
+use LizardsAndPumpkins\Import\Projector;
+use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionTemplateProjector
+ * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector
  */
 class ProductSearchAutosuggestionTemplateProjectorTest extends \PHPUnit_Framework_TestCase
 {

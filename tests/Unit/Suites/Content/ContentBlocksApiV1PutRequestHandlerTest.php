@@ -2,21 +2,23 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\Api\ApiRequestHandler;
-use LizardsAndPumpkins\Content\Exception\ContentBlockBodyIsMissingInRequestBodyException;
-use LizardsAndPumpkins\Content\Exception\ContentBlockContextIsMissingInRequestBodyException;
-use LizardsAndPumpkins\Content\Exception\InvalidContentBlockContextException;
-use LizardsAndPumpkins\Content\Exception\InvalidContentBlockUrlKey;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockBodyIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockContextIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockContextException;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Messaging\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\Content\ContentBlocksApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
- * @uses   \LizardsAndPumpkins\Content\ContentBlockId
- * @uses   \LizardsAndPumpkins\Content\ContentBlockSource
- * @uses   \LizardsAndPumpkins\Content\UpdateContentBlockCommand
- * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase

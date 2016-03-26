@@ -2,28 +2,29 @@
 
 namespace LizardsAndPumpkins\Product\Composite;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
-use LizardsAndPumpkins\Product\Composite\Exception\DuplicateAssociatedProductException;
-use LizardsAndPumpkins\Product\Composite\Exception\ProductAttributeValueCombinationNotUniqueException;
-use LizardsAndPumpkins\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
-use LizardsAndPumpkins\Product\SimpleProduct;
-use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;
+use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
+use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Composite\AssociatedProductList
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\Product\RehydrateableProductTrait
- * @uses   \LizardsAndPumpkins\Product\SimpleProduct
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\DataVersion
+ * @covers \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */

@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\UndefinedFactoryMethodException;
+use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\SampleMasterFactory
- * @covers \LizardsAndPumpkins\MasterFactoryTrait
+ * @covers \LizardsAndPumpkins\Util\Factory\SampleMasterFactory
+ * @covers \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\StubFactory
  */
 class SampleMasterFactoryTest extends \PHPUnit_Framework_TestCase

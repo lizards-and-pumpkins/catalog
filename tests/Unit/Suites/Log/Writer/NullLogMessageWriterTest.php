@@ -3,10 +3,12 @@
 
 namespace LizardsAndPumpkins\Log\Writer;
 
-use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessageWriter;
+use LizardsAndPumpkins\Logging\NullLogMessageWriter;
 
 /**
- * @covers LizardsAndPumpkins\Log\Writer\NullLogMessageWriter
+ * @covers LizardsAndPumpkins\Logging\NullLogMessageWriter
  */
 class NullLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {

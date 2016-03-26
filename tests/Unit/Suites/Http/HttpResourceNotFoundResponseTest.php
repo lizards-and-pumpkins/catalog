@@ -2,8 +2,10 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
+
 /**
- * @covers \LizardsAndPumpkins\Http\HttpResourceNotFoundResponse
+ * @covers \LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse
  */
 class HttpResourceNotFoundResponseTest extends \PHPUnit_Framework_TestCase
 {

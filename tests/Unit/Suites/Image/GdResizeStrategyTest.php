@@ -2,9 +2,11 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy;
+
 /**
- * @covers \LizardsAndPumpkins\Image\GdResizeStrategy
- * @covers \LizardsAndPumpkins\Image\ResizeStrategyTrait
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ResizeStrategyTrait
  */
 class GdResizeStrategyTest extends AbstractResizeStrategyTest
 {

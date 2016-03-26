@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\Website\Exception\InvalidWebsiteCodeException;
+use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
+use LizardsAndPumpkins\Context\Website\Website;
 
 /**
- * @covers \LizardsAndPumpkins\Website\Website
+ * @covers \LizardsAndPumpkins\Context\Website\Website
  */
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {

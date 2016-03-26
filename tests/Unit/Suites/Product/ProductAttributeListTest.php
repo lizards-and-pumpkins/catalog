@@ -3,13 +3,16 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\ConflictingContextDataForProductAttributeListException;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\Exception\ConflictingContextDataForProductAttributeListException;
+use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeNotFoundException;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
 {

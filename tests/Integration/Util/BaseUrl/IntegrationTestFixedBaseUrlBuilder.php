@@ -1,8 +1,10 @@
 <?php
 
-namespace LizardsAndPumpkins\BaseUrl;
+namespace LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 
-use LizardsAndPumpkins\BaseUrl;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
 
 class IntegrationTestFixedBaseUrlBuilder implements BaseUrlBuilder

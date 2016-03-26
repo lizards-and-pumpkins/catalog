@@ -2,13 +2,15 @@
 
 namespace LizardsAndPumpkins\Product\ProductSearch;
 
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\PriceSnippetRenderer;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
 {

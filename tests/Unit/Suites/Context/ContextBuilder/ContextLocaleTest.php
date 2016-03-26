@@ -3,10 +3,12 @@
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
- * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextLocale
+ * @covers \LizardsAndPumpkins\Context\Locale\ContextLocale
  */
 class ContextLocaleTest extends \PHPUnit_Framework_TestCase
 {

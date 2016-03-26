@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
-use LizardsAndPumpkins\Renderer\Translation\Exception\UndefinedTranslatorException;
+use LizardsAndPumpkins\Translation\Exception\UndefinedTranslatorException;
+use LizardsAndPumpkins\Translation\Translator;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
- * @covers \LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry
+ * @covers \LizardsAndPumpkins\Translation\TranslatorRegistry
  */
 class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
 {

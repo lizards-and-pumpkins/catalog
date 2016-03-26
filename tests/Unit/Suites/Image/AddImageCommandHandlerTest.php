@@ -2,13 +2,16 @@
 
 namespace LizardsAndPumpkins\Image;
 
-use LizardsAndPumpkins\CommandHandler;
-use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Messaging\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\Image\AddImageCommandHandler
- * @uses   \LizardsAndPumpkins\Image\ImageWasAddedDomainEvent
+ * @covers \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
  */
 class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

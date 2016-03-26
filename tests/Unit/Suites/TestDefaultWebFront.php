@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class TestDefaultWebFront extends DefaultWebFront
 {

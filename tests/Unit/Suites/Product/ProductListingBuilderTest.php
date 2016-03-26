@@ -5,25 +5,27 @@ namespace LizardsAndPumpkins\Product;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
-use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Product\Exception\DuplicateProductListingAttributeException;
-use LizardsAndPumpkins\Product\Exception\InvalidCriterionOperationXmlAttributeException;
-use LizardsAndPumpkins\Product\Exception\InvalidNumberOfCriteriaXmlNodesException;
-use LizardsAndPumpkins\Product\Exception\MissingCriterionAttributeNameXmlAttributeException;
-use LizardsAndPumpkins\Product\Exception\MissingProductListingAttributeNameXmlAttributeException;
-use LizardsAndPumpkins\Product\Exception\MissingTypeXmlAttributeException;
-use LizardsAndPumpkins\Product\Exception\MissingCriterionOperationXmlAttributeException;
-use LizardsAndPumpkins\Product\Exception\MissingUrlKeyXmlAttributeException;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\DuplicateProductListingAttributeException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidCriterionOperationXmlAttributeException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidNumberOfCriteriaXmlNodesException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingCriterionAttributeNameXmlAttributeException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingProductListingAttributeNameXmlAttributeException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingTypeXmlAttributeException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingCriterionOperationXmlAttributeException;
+use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingUrlKeyXmlAttributeException;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingBuilder
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\Product\ProductListing
- * @uses   \LizardsAndPumpkins\Product\ProductListingAttributeList
- * @uses   \LizardsAndPumpkins\UrlKey
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
 class ProductListingBuilderTest extends \PHPUnit_Framework_TestCase
 {

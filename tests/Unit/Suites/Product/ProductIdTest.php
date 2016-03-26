@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\InvalidProductIdException;
+use LizardsAndPumpkins\Import\Product\Exception\InvalidProductIdException;
+use LizardsAndPumpkins\Import\Product\ProductId;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductId
+ * @covers \LizardsAndPumpkins\Import\Product\ProductId
  */
 class ProductIdTest extends \PHPUnit_Framework_TestCase
 {

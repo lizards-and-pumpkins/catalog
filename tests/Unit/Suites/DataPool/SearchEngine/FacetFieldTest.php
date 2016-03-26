@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetField

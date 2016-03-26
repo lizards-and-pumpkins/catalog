@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
+use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler;
+
 /**
- * @covers \LizardsAndPumpkins\Http\ResourceNotFoundRequestHandler
+ * @covers \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler
  */
 class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

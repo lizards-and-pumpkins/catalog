@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins\Content;
 
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+
 /**
- * @covers \LizardsAndPumpkins\Content\ContentBlockSource
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  */
 class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
 {

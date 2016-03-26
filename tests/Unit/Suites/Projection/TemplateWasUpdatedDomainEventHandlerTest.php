@@ -3,10 +3,14 @@
 namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\DomainEventHandler;
+use LizardsAndPumpkins\Import\Projector;
+use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEventHandler
+ * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

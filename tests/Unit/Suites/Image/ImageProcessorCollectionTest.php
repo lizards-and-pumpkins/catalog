@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+
 /**
- * @covers \LizardsAndPumpkins\Image\ImageProcessorCollection
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
  */
 class ImageProcessorCollectionTest extends \PHPUnit_Framework_TestCase
 {

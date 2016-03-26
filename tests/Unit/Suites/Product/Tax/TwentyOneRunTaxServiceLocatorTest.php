@@ -2,15 +2,17 @@
 
 namespace LizardsAndPumpkins\Product\Tax;
 
-use LizardsAndPumpkins\Product\Tax\Exception\UnableToLocateTaxServiceException;
-use LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate;
+use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxServiceLocator;
+use LizardsAndPumpkins\Import\Tax\UnableToLocateTaxServiceException;
+use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxRate;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Tax\TwentyOneRunTaxServiceLocator
- * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\Country\Country
- * @uses   \LizardsAndPumpkins\Website\Website
- * @uses   \LizardsAndPumpkins\Product\Tax\TaxRates\TwentyOneRunTaxRate
+ * @covers \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxServiceLocator
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Context\Country\Country
+ * @uses   \LizardsAndPumpkins\Context\Website\Website
+ * @uses   \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxRate
  */
 class TwentyOneRunTaxServiceLocatorTest extends \PHPUnit_Framework_TestCase
 {

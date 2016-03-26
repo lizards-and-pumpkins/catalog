@@ -4,20 +4,25 @@ namespace LizardsAndPumpkins\Utils\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
+use LizardsAndPumpkins\Import\ImageStorage\Image;
+use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\ImageStorage\ImageToImageStorage;
+use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Utils\FileStorage\FileContent;
-use LizardsAndPumpkins\Utils\FileStorage\FileInStorage;
-use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage;
-use LizardsAndPumpkins\Utils\FileStorage\FilesystemFileUri;
-use LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri;
+use LizardsAndPumpkins\Import\FileStorage\FileContent;
+use LizardsAndPumpkins\Import\FileStorage\FileInStorage;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri;
+use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage
- * @uses   \LizardsAndPumpkins\Utils\ImageStorage\ImageInStorage
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FileInStorage
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileUri
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\StorageAgnosticFileUri
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FileContent
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageInStorage
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FileInStorage
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class FilesystemImageStorageTest extends \PHPUnit_Framework_TestCase

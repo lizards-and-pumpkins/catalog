@@ -3,10 +3,12 @@
 
 namespace LizardsAndPumpkins\Context\ContextBuilder;
 
-use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 
 /**
- * @covers \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
+ * @covers \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  */
 class ContextVersionTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,12 +2,14 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Utils\Exception\FileNotWritableException;
-use LizardsAndPumpkins\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
+use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotWritableException;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 
 /**
- * @covers \LizardsAndPumpkins\LocalFilesystemStorageWriter
- * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */
 class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
 {

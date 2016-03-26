@@ -2,13 +2,15 @@
 
 namespace LizardsAndPumpkins\Image;
 
-use LizardsAndPumpkins\FileStorageReader;
-use LizardsAndPumpkins\FileStorageWriter;
-use LizardsAndPumpkins\Image\Exception\UnableToCreateTargetDirectoryForProcessedImagesException;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\UnableToCreateTargetDirectoryForProcessedImagesException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Image\ImageProcessor
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
  */
 class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 {

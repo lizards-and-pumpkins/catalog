@@ -3,10 +3,12 @@
 
 namespace LizardsAndPumpkins\Log\Writer;
 
-use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessageWriter;
+use LizardsAndPumpkins\Logging\Writer\StdOutLogMessageWriter;
 
 /**
- * @covers LizardsAndPumpkins\Log\Writer\StdOutLogMessageWriter
+ * @covers LizardsAndPumpkins\Logging\Writer\StdOutLogMessageWriter
  */
 class StdOutLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {

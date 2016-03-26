@@ -3,7 +3,7 @@
 
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
-use LizardsAndPumpkins\Utils\Clearable;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlKeyStore, Clearable
 {

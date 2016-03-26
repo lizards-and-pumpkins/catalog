@@ -2,12 +2,17 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\CommandHandler;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use LizardsAndPumpkins\Messaging\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\Content\UpdateContentBlockCommandHandler
- * @uses   \LizardsAndPumpkins\Content\ContentBlockWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
  */
 class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {

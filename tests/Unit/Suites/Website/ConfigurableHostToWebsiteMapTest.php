@@ -3,13 +3,15 @@
 
 namespace LizardsAndPumpkins\Website;
 
-use LizardsAndPumpkins\ConfigReader;
-use LizardsAndPumpkins\Website\Exception\InvalidWebsiteMapConfigRecordException;
-use LizardsAndPumpkins\Website\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\Util\Config\ConfigReader;
+use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordException;
+use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
 
 /**
- * @covers \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
- * @uses   \LizardsAndPumpkins\Website\Website
+ * @covers \LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap
+ * @uses   \LizardsAndPumpkins\Context\Website\Website
  */
 class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 {

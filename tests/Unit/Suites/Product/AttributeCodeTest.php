@@ -3,10 +3,11 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\InvalidAttributeCodeException;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\Exception\InvalidAttributeCodeException;
 
 /**
- * @covers LizardsAndPumpkins\Product\AttributeCode
+ * @covers LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,13 +3,16 @@
 
 namespace LizardsAndPumpkins\Queue;
 
-use LizardsAndPumpkins\Log\Logger;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
+use LizardsAndPumpkins\Logging\QueueAddLogMessage;
+use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Queue\Stub\ClearableStubQueue;
-use LizardsAndPumpkins\Utils\Clearable;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 /**
- * @covers \LizardsAndPumpkins\Queue\LoggingQueueDecorator
- * @uses   \LizardsAndPumpkins\Queue\QueueAddLogMessage
+ * @covers \LizardsAndPumpkins\Logging\LoggingQueueDecorator
+ * @uses   \LizardsAndPumpkins\Logging\QueueAddLogMessage
  */
 class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
 {

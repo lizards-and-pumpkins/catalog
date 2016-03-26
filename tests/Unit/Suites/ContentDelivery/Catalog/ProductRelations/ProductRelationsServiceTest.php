@@ -2,12 +2,16 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductJsonService;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode;
+use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsService
+ * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService
  */
 class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
 {

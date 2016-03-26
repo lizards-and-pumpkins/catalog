@@ -2,13 +2,15 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Product\Exception\InvalidProductAttributeValueException;
-use LizardsAndPumpkins\Product\Exception\ProductAttributeDoesNotContainContextPartException;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\Exception\InvalidProductAttributeValueException;
+use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeDoesNotContainContextPartException;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Tax;
 
-use LizardsAndPumpkins\Product\Tax\TaxService;
-use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Import\Tax\TaxService;
+use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 
 class IntegrationTestTaxServiceLocator implements TaxServiceLocator
 {

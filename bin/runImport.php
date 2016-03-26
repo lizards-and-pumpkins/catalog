@@ -5,15 +5,21 @@ namespace LizardsAndPumpkins;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\NullProductImageImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\Projection\LoggingCommandHandlerFactory;
-use LizardsAndPumpkins\Projection\LoggingDomainEventHandlerFactory;
-use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Utils\BaseCliCommand;
+use LizardsAndPumpkins\Import\CatalogImport;
+use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
+use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
+use LizardsAndPumpkins\Logging\LoggingQueueFactory;
+use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
+use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
+use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
+use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Util\BaseCliCommand;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\TwentyOneRunFactory;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';

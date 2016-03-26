@@ -2,14 +2,16 @@
 
 namespace LizardsAndPumpkins\Renderer\Translation;
 
-use LizardsAndPumpkins\Renderer\ThemeLocator;
-use LizardsAndPumpkins\Renderer\Translation\Exception\LocaleDirectoryNotReadableException;
-use LizardsAndPumpkins\Renderer\Translation\Exception\MalformedTranslationFileException;
-use LizardsAndPumpkins\Renderer\Translation\Exception\TranslationFileNotReadableException;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+use LizardsAndPumpkins\Translation\CsvTranslator;
+use LizardsAndPumpkins\Translation\Exception\LocaleDirectoryNotReadableException;
+use LizardsAndPumpkins\Translation\Exception\MalformedTranslationFileException;
+use LizardsAndPumpkins\Translation\Exception\TranslationFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Translation\Translator;
 
 /**
- * @covers \LizardsAndPumpkins\Renderer\Translation\CsvTranslator
+ * @covers \LizardsAndPumpkins\Translation\CsvTranslator
  */
 class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 {

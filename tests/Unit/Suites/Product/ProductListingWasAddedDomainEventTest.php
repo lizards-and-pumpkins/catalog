@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\DomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingWasAddedDomainEvent
+ * @covers \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  */
 class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

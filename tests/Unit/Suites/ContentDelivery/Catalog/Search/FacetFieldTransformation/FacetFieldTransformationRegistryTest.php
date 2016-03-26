@@ -2,11 +2,13 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\Exception\UnableToFindTransformationException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\UnableToFindTransformationException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry
  */
 class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
 {

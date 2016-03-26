@@ -2,11 +2,12 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearchAutosuggestionMetaSnippetContent
- * @uses   \LizardsAndPumpkins\SnippetContainer
+ * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
+ * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  */
 class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {

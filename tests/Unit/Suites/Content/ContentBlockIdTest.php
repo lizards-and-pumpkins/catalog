@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Content;
 
-use LizardsAndPumpkins\Content\Exception\InvalidContentBlockIdException;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\Exception\InvalidContentBlockIdException;
 
 /**
- * @covers \LizardsAndPumpkins\Content\ContentBlockId
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  */
 class ContentBlockIdTest extends \PHPUnit_Framework_TestCase
 {

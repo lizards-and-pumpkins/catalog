@@ -3,13 +3,17 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Utils\XPathParser;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
+use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToAssociatedProductListBuilder;
+use LizardsAndPumpkins\Import\Product\ProductBuilder;
+use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Import\XPathParser;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductXmlToAssociatedProductListBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\AssociatedProductListBuilder
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToAssociatedProductListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
 class ConfigurableProductXmlToAssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
 {

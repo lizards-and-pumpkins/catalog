@@ -4,7 +4,7 @@
 namespace LizardsAndPumpkins\Utils\Stub;
 
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\Utils\BaseCliCommand;
+use LizardsAndPumpkins\Util\BaseCliCommand;
 
 class StubCliCommand extends BaseCliCommand
 {

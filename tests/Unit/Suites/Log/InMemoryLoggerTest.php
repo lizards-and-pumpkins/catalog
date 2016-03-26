@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins\Log;
 
+use LizardsAndPumpkins\Logging\InMemoryLogger;
+use LizardsAndPumpkins\Logging\LogMessage;
+
 /**
- * @covers \LizardsAndPumpkins\Log\InMemoryLogger
+ * @covers \LizardsAndPumpkins\Logging\InMemoryLogger
  */
 class InMemoryLoggerTest extends \PHPUnit_Framework_TestCase
 {

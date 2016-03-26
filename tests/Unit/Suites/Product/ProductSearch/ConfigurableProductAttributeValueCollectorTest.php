@@ -2,17 +2,19 @@
 
 namespace LizardsAndPumpkins\Product\ProductSearch;
 
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Product\Product;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearch\ConfigurableProductAttributeValueCollector
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
+ * @covers \LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
  */
 class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
 {

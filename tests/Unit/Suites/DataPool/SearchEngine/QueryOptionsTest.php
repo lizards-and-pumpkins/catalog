@@ -2,12 +2,13 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidRowsPerPageException;
+use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
+ * @covers \LizardsAndPumpkins\ProductSearch\QueryOptions
  */
 class QueryOptionsTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
-use LizardsAndPumpkins\Http\Exception\UnsupportedRequestMethodException;
+use LizardsAndPumpkins\Http\Routing\Exception\UnsupportedRequestMethodException;
 
 abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 {

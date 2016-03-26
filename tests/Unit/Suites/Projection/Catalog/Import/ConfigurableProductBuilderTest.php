@@ -4,16 +4,20 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\Composite\AssociatedProductList;
-use LizardsAndPumpkins\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder;
+use LizardsAndPumpkins\Import\Product\ProductBuilder;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Product\SimpleProductBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ConfigurableProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\AssociatedProductListBuilder
- * @uses   \LizardsAndPumpkins\Product\Composite\AssociatedProductList
- * @uses   \LizardsAndPumpkins\Product\Composite\ConfigurableProduct
+ * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
  */
 class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
 {

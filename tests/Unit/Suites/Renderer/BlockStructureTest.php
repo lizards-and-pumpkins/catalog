@@ -2,11 +2,13 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\Renderer\Exception\BlockDoesNotExistException;
-use LizardsAndPumpkins\Renderer\Exception\BlockIsNotAChildOfParentBlockException;
+use LizardsAndPumpkins\Import\ContentBlock\Block;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockDoesNotExistException;
+use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockIsNotAChildOfParentBlockException;
 
 /**
- * @covers \LizardsAndPumpkins\Renderer\BlockStructure
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\BlockStructure
  */
 class BlockStructureTest extends \PHPUnit_Framework_TestCase
 {

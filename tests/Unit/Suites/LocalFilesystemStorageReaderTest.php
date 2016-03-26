@@ -2,12 +2,14 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Utils\Exception\FileNotReadableException;
-use LizardsAndPumpkins\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
+use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotReadableException;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
 
 /**
- * @covers \LizardsAndPumpkins\LocalFilesystemStorageReader
- * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */
 class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
 {

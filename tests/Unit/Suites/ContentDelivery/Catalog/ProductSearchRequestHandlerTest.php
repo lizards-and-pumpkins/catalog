@@ -5,18 +5,24 @@ namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Exception\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent;
-use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductSearchRequestHandler
- * @uses   \LizardsAndPumpkins\Product\ProductSearchResultMetaSnippetContent
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\QueryOptions
+ * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent
+ * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  */
 class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase

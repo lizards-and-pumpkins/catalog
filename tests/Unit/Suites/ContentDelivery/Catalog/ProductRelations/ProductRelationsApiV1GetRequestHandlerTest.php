@@ -2,17 +2,19 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations;
 
-use LizardsAndPumpkins\Api\ApiRequestHandler;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\ProductRecommendations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationsApiV1GetRequestHandler
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelationTypeCode
- * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
  */
 class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

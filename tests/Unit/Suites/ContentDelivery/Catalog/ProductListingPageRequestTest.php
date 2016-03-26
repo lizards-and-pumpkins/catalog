@@ -2,19 +2,23 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Exception\NoSelectedSortOrderException;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductListing\Exception\NoSelectedSortOrderException;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductListingPageRequest
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 {

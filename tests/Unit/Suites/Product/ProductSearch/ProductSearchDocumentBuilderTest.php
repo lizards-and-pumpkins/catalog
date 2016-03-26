@@ -6,22 +6,25 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
-use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Product\PriceSnippetRenderer;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\Tax\TaxService;
-use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
-use LizardsAndPumpkins\TaxableCountries;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Tax\TaxService;
+use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
+use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductSearch\ProductSearchDocumentBuilder
+ * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
- * @uses   \LizardsAndPumpkins\Product\ProductSearch\DefaultAttributeValueCollector
- * @uses   \LizardsAndPumpkins\Product\Price
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
+ * @uses   \LizardsAndPumpkins\Import\Price\Price
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 {

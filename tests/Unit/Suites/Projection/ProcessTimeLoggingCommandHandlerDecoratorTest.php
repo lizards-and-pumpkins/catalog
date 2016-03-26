@@ -2,13 +2,14 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\CommandHandler;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Log\LogMessage;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\LogMessage;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\ProcessTimeLoggingCommandHandlerDecorator
- * @uses   \LizardsAndPumpkins\Projection\CommandProcessedLogMessage
+ * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage
  */
 class ProcessTimeLoggingCommandHandlerDecoratorTest extends \PHPUnit_Framework_TestCase
 {

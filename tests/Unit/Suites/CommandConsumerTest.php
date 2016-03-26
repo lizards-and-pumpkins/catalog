@@ -2,14 +2,19 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\UnableToFindCommandHandlerException;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
+use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 /**
- * @covers \LizardsAndPumpkins\CommandConsumer
- * @uses   \LizardsAndPumpkins\CommandHandlerFailedMessage
- * @uses   \LizardsAndPumpkins\FailedToReadFromCommandQueueMessage
+ * @covers \LizardsAndPumpkins\Messaging\Command\CommandConsumer
+ * @uses   \LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage
+ * @uses   \LizardsAndPumpkins\Messaging\Command\FailedToReadFromCommandQueueMessage
  */
 class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 {

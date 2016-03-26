@@ -2,10 +2,14 @@
 
 namespace LizardsAndPumpkins\Renderer;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Renderer\Translation\Translator;
-use LizardsAndPumpkins\Renderer\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+use LizardsAndPumpkins\Import\TemplateRendering\Layout;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+use LizardsAndPumpkins\Translation\Translator;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase

@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
-use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
+use LizardsAndPumpkins\Import\Image\ProductImageImportCommandFactory;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\NullProductImageImportCommandFactory
+ * @covers \LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory
  */
 class NullProductImageImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,9 +3,10 @@
 namespace LizardsAndPumpkins\ContentDelivery\Catalog;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\SelectProductListingRobotsMetaTagContent
+ * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent
  */
 class SelectProductListingRobotsMetaTagContentTest extends \PHPUnit_Framework_TestCase
 {

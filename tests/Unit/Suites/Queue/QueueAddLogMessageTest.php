@@ -3,8 +3,11 @@
 
 namespace LizardsAndPumpkins\Queue;
 
+use LizardsAndPumpkins\Logging\QueueAddLogMessage;
+use LizardsAndPumpkins\Messaging\Queue;
+
 /**
- * @covers LizardsAndPumpkins\Queue\QueueAddLogMessage
+ * @covers LizardsAndPumpkins\Logging\QueueAddLogMessage
  */
 class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
 {

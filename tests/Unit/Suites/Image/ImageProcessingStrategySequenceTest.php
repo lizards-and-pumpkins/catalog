@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategy;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
+
 /**
- * @covers \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
+ * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
  */
 class ImageProcessingStrategySequenceTest extends \PHPUnit_Framework_TestCase
 {

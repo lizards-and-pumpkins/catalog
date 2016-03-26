@@ -2,17 +2,18 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Command;
-use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Product\Product;
-use LizardsAndPumpkins\Product\ProductListing;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImageImportCommandLocator;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductImportCommandLocator;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Import\Product\QueueImportCommands;
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
+use LizardsAndPumpkins\Messaging\Queue;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\QueueImportCommands
+ * @covers \LizardsAndPumpkins\Import\Product\QueueImportCommands
  */
 class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
 {

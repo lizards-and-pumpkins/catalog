@@ -2,8 +2,12 @@
 
 namespace LizardsAndPumpkins\Image;
 
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+
 /**
- * @covers \LizardsAndPumpkins\Image\ImageWasAddedDomainEventHandler
+ * @covers \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
  */
 class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

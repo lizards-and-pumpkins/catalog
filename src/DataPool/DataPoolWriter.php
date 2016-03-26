@@ -2,15 +2,15 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Projection\UrlKeyForContext;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\Utils\Clearable;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class DataPoolWriter implements Clearable
 {

@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Exception\InvalidKeyException;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 
 /**
- * @covers \LizardsAndPumpkins\Snippet
+ * @covers \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
 class SnippetTest extends \PHPUnit_Framework_TestCase
 {

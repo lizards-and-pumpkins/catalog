@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Projection;
 
-use LizardsAndPumpkins\DomainEvent;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\TemplateWasUpdatedDomainEvent
+ * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
 class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {

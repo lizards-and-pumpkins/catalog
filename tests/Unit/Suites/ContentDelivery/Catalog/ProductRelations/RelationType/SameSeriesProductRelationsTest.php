@@ -2,22 +2,23 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\ProductRelations;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
+use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\ProductRelations\RelationType\SameSeriesProductRelations
- * @uses   \LizardsAndPumpkins\Product\ProductId
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  */
 class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
 {

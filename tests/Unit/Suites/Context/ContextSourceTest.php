@@ -2,13 +2,13 @@
 
 namespace LizardsAndPumpkins\Context;
 
-use LizardsAndPumpkins\Context\ContextBuilder\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\Stubs\StubContextSource;
-use LizardsAndPumpkins\DataVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 
 /**
  * @covers \LizardsAndPumpkins\Context\ContextSource
- * @uses   \LizardsAndPumpkins\DataVersion
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class ContextSourceTest extends \PHPUnit_Framework_TestCase
 {

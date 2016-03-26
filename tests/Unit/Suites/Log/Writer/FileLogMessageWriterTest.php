@@ -3,14 +3,16 @@
 
 namespace LizardsAndPumpkins\Log\Writer;
 
-use LizardsAndPumpkins\Log\LogMessage;
-use LizardsAndPumpkins\Log\Writer\Exception\UnableToCreateLogDirectoryException;
-use LizardsAndPumpkins\Log\Writer\Exception\UnableToCreateLogFileException;
-use LizardsAndPumpkins\Log\Writer\Exception\UnableToWriteToLogFileException;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Logging\LogMessageWriter;
+use LizardsAndPumpkins\Logging\Writer\Exception\UnableToCreateLogDirectoryException;
+use LizardsAndPumpkins\Logging\Writer\Exception\UnableToCreateLogFileException;
+use LizardsAndPumpkins\Logging\Writer\Exception\UnableToWriteToLogFileException;
+use LizardsAndPumpkins\Logging\Writer\FileLogMessageWriter;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
+ * @covers \LizardsAndPumpkins\Logging\Writer\FileLogMessageWriter
  */
 class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {

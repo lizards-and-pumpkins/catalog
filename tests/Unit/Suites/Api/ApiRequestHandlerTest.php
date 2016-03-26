@@ -3,13 +3,14 @@
 namespace LizardsAndPumpkins\Api;
 
 use LizardsAndPumpkins\Api\Stubs\StubApiRequestHandler;
-use LizardsAndPumpkins\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
 /**
- * @covers \LizardsAndPumpkins\Api\ApiRequestHandler
- * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @covers \LizardsAndPumpkins\RestApi\ApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase

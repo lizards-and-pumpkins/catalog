@@ -2,12 +2,14 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
-use LizardsAndPumpkins\Command;
-use LizardsAndPumpkins\MasterFactory;
-use LizardsAndPumpkins\Product\ProductListing;
+use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingImportCommandFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\ProductListingImportCommandLocator
+ * @covers \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
  */
 class ProductListingImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
 {

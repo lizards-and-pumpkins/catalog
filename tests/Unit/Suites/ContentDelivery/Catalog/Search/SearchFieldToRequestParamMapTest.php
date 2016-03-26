@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\Exception\InvalidSearchFieldToQueryParameterMapException;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidSearchFieldToQueryParameterMapException;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap
+ * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap
  */
 class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 {

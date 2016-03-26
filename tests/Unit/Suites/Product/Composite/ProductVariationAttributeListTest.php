@@ -3,13 +3,14 @@
 
 namespace LizardsAndPumpkins\Product\Composite;
 
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\Composite\Exception\ProductVariationAttributesEmptyException;
-use LizardsAndPumpkins\Product\Composite\Exception\ProductVariationAttributesNotUniqueException;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesEmptyException;
+use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesNotUniqueException;
+use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 
 /**
- * @covers \LizardsAndPumpkins\Product\Composite\ProductVariationAttributeList
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
 {

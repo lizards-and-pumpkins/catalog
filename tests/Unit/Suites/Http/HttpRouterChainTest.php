@@ -2,10 +2,13 @@
 
 namespace LizardsAndPumpkins\Http;
 
-use LizardsAndPumpkins\Http\Exception\UnableToRouteRequestException;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToRouteRequestException;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRouter;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 
 /**
- * @covers LizardsAndPumpkins\Http\HttpRouterChain
+ * @covers LizardsAndPumpkins\Http\Routing\HttpRouterChain
  */
 class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 {

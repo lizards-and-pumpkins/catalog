@@ -2,8 +2,11 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage;
+
 /**
- * @covers \LizardsAndPumpkins\CommandHandlerFailedMessage
+ * @covers \LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage
  */
 class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 {

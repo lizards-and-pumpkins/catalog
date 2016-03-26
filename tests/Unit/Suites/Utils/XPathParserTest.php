@@ -2,8 +2,10 @@
 
 namespace LizardsAndPumpkins\Utils;
 
+use LizardsAndPumpkins\Import\XPathParser;
+
 /**
- * @covers \LizardsAndPumpkins\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Import\XPathParser
  */
 class XPathParserTest extends \PHPUnit_Framework_TestCase
 {

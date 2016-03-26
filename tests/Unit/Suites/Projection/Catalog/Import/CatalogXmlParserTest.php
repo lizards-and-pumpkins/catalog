@@ -2,19 +2,21 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceFilePathIsNotAStringException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileDoesNotExistException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXmlFileIsNotReadableException;
-use LizardsAndPumpkins\Projection\Catalog\Import\Exception\CatalogImportSourceXMLNotAStringException;
+use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
+use LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceFilePathIsNotAStringException;
+use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileDoesNotExistException;
+use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileIsNotReadableException;
+use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXMLNotAStringException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogXmlParser
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImportCallbackFailureMessage
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageImportCallbackFailureMessage
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\CatalogListingImportCallbackFailureMessage
- * @uses   \LizardsAndPumpkins\Utils\XPathParser
+ * @covers \LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser
+ * @covers \LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage
+ * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage
+ * @covers \LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
 class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
 {

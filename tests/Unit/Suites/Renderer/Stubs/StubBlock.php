@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Renderer\Stubs;
 
-use LizardsAndPumpkins\Renderer\Block;
+use LizardsAndPumpkins\Import\ContentBlock\Block;
 
 class StubBlock extends Block
 {

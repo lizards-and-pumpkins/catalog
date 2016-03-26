@@ -2,21 +2,22 @@
 
 namespace LizardsAndPumpkins\ContentDelivery;
 
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\Exception\NonExistingSnippetException;
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\SnippetTransformation;
+use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Product\ProductDetailPageMetaInfoSnippetContent;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetKeyGeneratorLocator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder
- * @covers \LizardsAndPumpkins\ContentDelivery\PageBuilder\PageBuilderSnippets
- * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class PageBuilderTest extends \PHPUnit_Framework_TestCase

@@ -3,11 +3,12 @@
 namespace LizardsAndPumpkins\Utils;
 
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Utils\Exception\FileAlreadyExistsWithinGivenPathException;
-use LizardsAndPumpkins\Utils\Exception\InvalidDirectoryPathException;
+use LizardsAndPumpkins\Util\FileSystem\Directory;
+use LizardsAndPumpkins\Util\FileSystem\FileAlreadyExistsWithinGivenPathException;
+use LizardsAndPumpkins\Util\FileSystem\InvalidDirectoryPathException;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\Directory
+ * @covers \LizardsAndPumpkins\Util\FileSystem\Directory
  */
 class DirectoryTest extends \PHPUnit_Framework_TestCase
 {

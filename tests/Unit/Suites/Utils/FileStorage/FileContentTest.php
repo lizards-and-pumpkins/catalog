@@ -2,11 +2,13 @@
 
 namespace LizardsAndPumpkins\Utils\FileStorage;
 
-use LizardsAndPumpkins\Utils\FileStorage\Exception\InvalidFileContentTypeException;
+use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileContentTypeException;
+use LizardsAndPumpkins\Import\FileStorage\File;
+use LizardsAndPumpkins\Import\FileStorage\FileContent;
 use LizardsAndPumpkins\Utils\FileStorage\Stub\CastableToStringStub;
 
 /**
- * @covers \LizardsAndPumpkins\Utils\FileStorage\FileContent
+ * @covers \LizardsAndPumpkins\Import\FileStorage\FileContent
  */
 class FileContentTest extends \PHPUnit_Framework_TestCase
 {

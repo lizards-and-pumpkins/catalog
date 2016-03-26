@@ -2,8 +2,9 @@
 
 namespace LizardsAndPumpkins\Image;
 
-use LizardsAndPumpkins\Image\Exception\InvalidBinaryImageDataException;
-use LizardsAndPumpkins\Image\Exception\InvalidImageDimensionException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidBinaryImageDataException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidImageDimensionException;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategy;
 
 abstract class AbstractResizeStrategyTest extends \PHPUnit_Framework_TestCase
 {

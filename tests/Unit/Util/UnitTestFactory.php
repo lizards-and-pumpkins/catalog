@@ -2,28 +2,33 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Image\ImageProcessingStrategy;
-use LizardsAndPumpkins\Image\ImageProcessor;
-use LizardsAndPumpkins\Image\ImageProcessorCollection;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
-use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
-use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Website\HostToWebsiteMap;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategy;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
+use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
 class UnitTestFactory implements Factory
 {

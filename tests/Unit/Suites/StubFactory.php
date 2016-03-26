@@ -2,6 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+
 class StubFactory implements Factory
 {
     /**

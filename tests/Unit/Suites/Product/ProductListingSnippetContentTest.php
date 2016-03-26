@@ -4,13 +4,15 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
-use LizardsAndPumpkins\Product\Exception\MalformedSearchCriteriaMetaException;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\MalformedSearchCriteriaMetaException;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
 
 /**
- * @covers \LizardsAndPumpkins\Product\ProductListingSnippetContent
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
- * @uses   \LizardsAndPumpkins\SnippetContainer
+ * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  */
 class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,24 +3,27 @@
 namespace LizardsAndPumpkins\Projection\Catalog\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\ProductAttribute;
-use LizardsAndPumpkins\Product\SimpleProduct;
-use LizardsAndPumpkins\Product\ProductAttributeList;
-use LizardsAndPumpkins\Product\ProductId;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageList;
-use LizardsAndPumpkins\Product\Tax\ProductTaxClass;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
+use LizardsAndPumpkins\Import\Product\ProductAttribute;
+use LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+use LizardsAndPumpkins\Import\Product\SimpleProductBuilder;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\SimpleProductBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductAttributeListBuilder
- * @uses   \LizardsAndPumpkins\Projection\Catalog\Import\ProductImageListBuilder
- * @uses   \LizardsAndPumpkins\Product\SimpleProduct
- * @uses   \LizardsAndPumpkins\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Product\ProductAttribute
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductImage\ProductImageList
- * @uses   \LizardsAndPumpkins\Product\Price
+ * @covers \LizardsAndPumpkins\Import\Product\SimpleProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Price\Price
  */
 class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
 {

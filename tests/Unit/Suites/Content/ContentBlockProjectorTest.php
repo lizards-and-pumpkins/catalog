@@ -3,13 +3,15 @@
 namespace LizardsAndPumpkins\Content;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Projection\Projector;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetRendererCollection;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Import\Projector;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\SnippetRendererCollection;
 
 /**
- * @covers \LizardsAndPumpkins\Content\ContentBlockProjector
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector
  */
 class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
 {

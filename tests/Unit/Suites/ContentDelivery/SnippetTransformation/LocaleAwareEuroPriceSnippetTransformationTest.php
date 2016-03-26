@@ -2,13 +2,14 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\SnippetTransformation;
 
-use LizardsAndPumpkins\ContentDelivery\PageBuilder\PageSnippets;
-use LizardsAndPumpkins\ContentDelivery\SnippetTransformation\Exception\NoValidLocaleInContextException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextLocale;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\UNUSED\LocaleAwareEuroPriceSnippetTransformation;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\SnippetTransformation\LocaleAwareEuroPriceSnippetTransformation
+ * @covers \LizardsAndPumpkins\UNUSED\LocaleAwareEuroPriceSnippetTransformation
  */
 class LocaleAwareEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,10 +2,11 @@
 
 namespace LizardsAndPumpkins\Country;
 
-use LizardsAndPumpkins\Country\Exception\InvalidCountrySpecificationException;
+use LizardsAndPumpkins\Context\Country\Country;
+use LizardsAndPumpkins\Context\Country\Exception\InvalidCountrySpecificationException;
 
 /**
- * @covers \LizardsAndPumpkins\Country\Country
+ * @covers \LizardsAndPumpkins\Context\Country\Country
  */
 class CountryTest extends \PHPUnit_Framework_TestCase
 {

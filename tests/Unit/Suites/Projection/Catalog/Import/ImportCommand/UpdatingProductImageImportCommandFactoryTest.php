@@ -2,14 +2,16 @@
 
 namespace LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand;
 
-use LizardsAndPumpkins\Command;
-use LizardsAndPumpkins\DataVersion;
-use LizardsAndPumpkins\Image\AddImageCommand;
+use LizardsAndPumpkins\Import\Image\ProductImageImportCommandFactory;
+use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImageImportCommandFactory
- * @uses   \LizardsAndPumpkins\Image\AddImageCommand
+ * @covers \LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory
+ * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
  */
 class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
 {

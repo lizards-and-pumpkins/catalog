@@ -4,23 +4,25 @@ namespace LizardsAndPumpkins\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextCountry;
-use LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite;
-use LizardsAndPumpkins\Product\Tax\TaxService;
-use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
-use LizardsAndPumpkins\Projection\Catalog\ProductView;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\SnippetKeyGenerator;
-use LizardsAndPumpkins\SnippetRenderer;
-use LizardsAndPumpkins\TaxableCountries;
+use LizardsAndPumpkins\Context\Country\ContextCountry;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Tax\TaxService;
+use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductView;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 
 /**
- * @covers \LizardsAndPumpkins\Product\PriceSnippetRenderer
- * @uses   \LizardsAndPumpkins\Product\Price
- * @uses   \LizardsAndPumpkins\Product\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\Snippet
- * @uses   \LizardsAndPumpkins\Website\Website
- * @uses   \LizardsAndPumpkins\Country\Country
+ * @covers \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Price\Price
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
+ * @uses   \LizardsAndPumpkins\Context\Website\Website
+ * @uses   \LizardsAndPumpkins\Context\Country\Country
  */
 class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

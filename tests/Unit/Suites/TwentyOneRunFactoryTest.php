@@ -2,77 +2,83 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
-use LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\Filesystem\FileSearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore;
-use LizardsAndPumpkins\Image\ImageProcessor;
-use LizardsAndPumpkins\Image\ImageProcessorCollection;
-use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
-use LizardsAndPumpkins\Log\Writer\CompositeLogMessageWriter;
-use LizardsAndPumpkins\Log\Writer\FileLogMessageWriter;
-use LizardsAndPumpkins\Log\WritingLoggerDecorator;
-use LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator;
-use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
-use LizardsAndPumpkins\Product\TwentyOneRunProductListingTitleSnippetRenderer;
-use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\Logging\Writer\CompositeLogMessageWriter;
+use LizardsAndPumpkins\Logging\Writer\FileLogMessageWriter;
+use LizardsAndPumpkins\Logging\WritingLoggerDecorator;
+use LizardsAndPumpkins\Import\Product\Image\TwentyOneRunProductImageFileLocator;
+use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\ProductListing\Import\TwentyOneRunProductListingTitleSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
-use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\TwentyOneRunFactory;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 
 /**
- * @covers \LizardsAndPumpkins\TwentyOneRunFactory
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\FilterNavigationPriceRangesBuilder
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextCountry
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\ContextBuilder\ContextWebsite
+ * @covers \LizardsAndPumpkins\Util\Factory\TwentyOneRunFactory
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FilterNavigationPriceRangesBuilder
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap
+ * @uses   \LizardsAndPumpkins\Context\Country\ContextCountry
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
- * @uses   \LizardsAndPumpkins\FactoryTrait
- * @uses   \LizardsAndPumpkins\Log\InMemoryLogger
- * @uses   \LizardsAndPumpkins\Log\WritingLoggerDecorator
- * @uses   \LizardsAndPumpkins\Log\Writer\FileLogMessageWriter
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Logging\InMemoryLogger
+ * @uses   \LizardsAndPumpkins\Logging\WritingLoggerDecorator
+ * @uses   \LizardsAndPumpkins\Logging\Writer\FileLogMessageWriter
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\KeyValue\File\FileKeyValueStore
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FileSearchEngine
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Filesystem\FileSearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
- * @uses   \LizardsAndPumpkins\DataVersion
- * @uses   \LizardsAndPumpkins\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\Image\ImageMagickInscribeStrategy
- * @uses   \LizardsAndPumpkins\Image\ImageProcessor
- * @uses   \LizardsAndPumpkins\Image\ImageProcessorCollection
- * @uses   \LizardsAndPumpkins\Image\ImageProcessingStrategySequence
- * @uses   \LizardsAndPumpkins\LocalFilesystemStorageReader
- * @uses   \LizardsAndPumpkins\LocalFilesystemStorageWriter
- * @uses   \LizardsAndPumpkins\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\EnvironmentConfigReader
- * @uses   \LizardsAndPumpkins\CommonFactory
- * @uses   \LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator
- * @uses   \LizardsAndPumpkins\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Product\ProductImage\TwentyOneRunProductImageFileLocator
- * @uses   \LizardsAndPumpkins\Product\TwentyOneRunProductListingTitleSnippetRenderer
- * @uses   \LizardsAndPumpkins\Utils\ImageStorage\MediaDirectoryBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage
- * @uses   \LizardsAndPumpkins\Utils\FileStorage\FilesystemFileStorage
- * @uses   \LizardsAndPumpkins\BaseUrl\WebsiteBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\TwentyOneRunTaxableCountries
- * @uses   \LizardsAndPumpkins\Website\ConfigurableHostToWebsiteMap
- * @uses   \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\CurrencyPriceRangeTransformation
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickInscribeStrategy
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter
+ * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
+ * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
+ * @uses   \LizardsAndPumpkins\Import\Product\View\TwentyOneRunProductViewLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\TwentyOneRunProductImageFileLocator
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\TwentyOneRunProductListingTitleSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage
+ * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
+ * @uses   \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxableCountries
+ * @uses   \LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\CurrencyPriceRangeTransformation
  */
 class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
 {

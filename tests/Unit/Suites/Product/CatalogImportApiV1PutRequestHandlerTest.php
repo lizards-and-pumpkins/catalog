@@ -2,20 +2,21 @@
 
 namespace LizardsAndPumpkins\Product;
 
-use LizardsAndPumpkins\Api\ApiRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Product\Exception\CatalogImportApiDirectoryNotReadableException;
-use LizardsAndPumpkins\Product\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
+use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Product\CatalogImportApiV1PutRequestHandler
- * @uses   \LizardsAndPumpkins\Api\ApiRequestHandler
+ * @covers \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpResponse
- * @uses   \LizardsAndPumpkins\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

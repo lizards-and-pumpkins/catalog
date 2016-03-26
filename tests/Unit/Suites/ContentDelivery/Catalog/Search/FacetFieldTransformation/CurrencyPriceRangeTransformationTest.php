@@ -2,15 +2,17 @@
 
 namespace LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\Exception\InvalidTransformationInputException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\CurrencyPriceRangeTransformation;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationInputException;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
-use LizardsAndPumpkins\Product\Price;
+use LizardsAndPumpkins\Import\Price\Price;
 use SebastianBergmann\Money\Currency;
 
 /**
- * @covers \LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\CurrencyPriceRangeTransformation
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\CurrencyPriceRangeTransformation
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
- * @uses   \LizardsAndPumpkins\Product\Price
+ * @uses   \LizardsAndPumpkins\Import\Price\Price
  */
 class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
 {
