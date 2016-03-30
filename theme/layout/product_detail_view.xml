@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <snippet xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/snippet.xsd">
-    <block name="product_details_snippet" class="LizardsAndPumpkins\Renderer\Block" template="template/1column.phtml">
-        <block name="head" class="LizardsAndPumpkins\Renderer\Block" template="template/head.phtml" />
-        <block name="header" class="LizardsAndPumpkins\Renderer\Block" template="template/header.phtml">
-            <block name="ekomi" class="LizardsAndPumpkins\Renderer\Block" template="template/ekomi.phtml" />
+    <block name="product_details_snippet" class="LizardsAndPumpkins\Import\ContentBlock\Block" template="template/1column.phtml">
+        <block name="head" class="LizardsAndPumpkins\Import\ContentBlock\Block" template="template/head.phtml" />
+        <block name="header" class="LizardsAndPumpkins\Import\ContentBlock\Block" template="template/header.phtml">
+            <block name="ekomi" class="LizardsAndPumpkins\Import\ContentBlock\Block" template="template/ekomi.phtml" />
         </block>
-        <block name="content" class="LizardsAndPumpkins\Product\Block\ProductBlock" template="template/product-details.phtml">
-            <block name="all-models" class="LizardsAndPumpkins\Product\Block\ProductBlock" template="template/all-models.phtml" />
+        <block name="content" class="LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock" template="template/product-details.phtml">
+            <block name="all-models" class="LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock" template="template/all-models.phtml" />
         </block>
-        <block name="footer" class="LizardsAndPumpkins\Renderer\Block" template="template/footer.phtml" />
+        <block name="footer" class="LizardsAndPumpkins\Import\ContentBlock\Block" template="template/footer.phtml" />
     </block>
 </snippet>

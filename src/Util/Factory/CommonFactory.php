@@ -939,7 +939,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function getBasePathConfig()
     {
-        return dirname(__DIR__);
+        return realpath(__DIR__ . '/../../..');
     }
 
     /**
