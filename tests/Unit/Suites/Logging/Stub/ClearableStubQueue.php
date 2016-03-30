@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging\Stub;
 
 use LizardsAndPumpkins\Messaging\Queue;

@@ -1,4 +1,5 @@
 <?php
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;

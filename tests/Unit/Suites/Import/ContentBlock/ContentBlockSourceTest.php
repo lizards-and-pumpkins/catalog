@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  */

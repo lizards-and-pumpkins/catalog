@@ -1,10 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Image;
 
-use LizardsAndPumpkins\Import\Product\Image\ProductImage;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\Image\Exception\ProductImageListNotMutableException;
 

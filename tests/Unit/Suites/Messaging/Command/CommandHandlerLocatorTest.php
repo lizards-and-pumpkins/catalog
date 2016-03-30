@@ -5,9 +5,8 @@ namespace LizardsAndPumpkins\Messaging\Command;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
-use LizardsAndPumpkins\Messaging\Command\Command;
-use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
-use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
+
+
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;

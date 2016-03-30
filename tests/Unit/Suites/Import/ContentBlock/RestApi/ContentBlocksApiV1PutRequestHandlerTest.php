@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
-use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockBodyIsMissingInRequestBodyException;

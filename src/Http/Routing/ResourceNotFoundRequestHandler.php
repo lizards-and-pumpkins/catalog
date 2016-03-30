@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;

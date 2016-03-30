@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Http;
 
-use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;

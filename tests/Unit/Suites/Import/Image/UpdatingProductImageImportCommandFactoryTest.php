@@ -2,11 +2,9 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Import\Image\ProductImageImportCommandFactory;
-use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
+
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**

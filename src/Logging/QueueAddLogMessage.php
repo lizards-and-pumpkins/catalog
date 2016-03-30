@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Messaging\Queue;
 
 class QueueAddLogMessage implements LogMessage

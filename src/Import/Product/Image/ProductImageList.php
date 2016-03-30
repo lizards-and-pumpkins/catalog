@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\Image\Exception\ProductImageListNotMutableException;

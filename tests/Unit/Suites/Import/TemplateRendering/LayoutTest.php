@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\RootElementOfLayoutMustBeAnArrayException;
-use LizardsAndPumpkins\Import\TemplateRendering\Layout;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\Layout

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;

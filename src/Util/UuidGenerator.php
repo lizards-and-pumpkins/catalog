@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Util;
 
 use Rhumsaa\Uuid\Uuid;

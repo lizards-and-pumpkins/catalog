@@ -2,17 +2,12 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder;
-use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidNumberOfSkusForImportedProductException;
-use LizardsAndPumpkins\Import\Product\ProductAttribute;
+
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 use LizardsAndPumpkins\Import\Product\Exception\TaxClassAttributeMissingForImportedProductException;
-use LizardsAndPumpkins\Import\Product\ProductBuilder;
-use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
-use LizardsAndPumpkins\Import\Product\SimpleProductBuilder;
-use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator

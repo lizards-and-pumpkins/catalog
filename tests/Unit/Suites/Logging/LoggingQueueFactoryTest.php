@@ -1,11 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\LoggingQueueFactory;
-use LizardsAndPumpkins\Logging\Writer\StdOutLogMessageWriter;
-use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;

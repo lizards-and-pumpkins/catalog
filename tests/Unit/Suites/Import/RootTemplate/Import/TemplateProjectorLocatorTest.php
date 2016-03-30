@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
 use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
+
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\InvalidTemplateProjectorCodeException;
 use LizardsAndPumpkins\Import\RootTemplate\Exception\UnableToLocateTemplateProjectorException;
 

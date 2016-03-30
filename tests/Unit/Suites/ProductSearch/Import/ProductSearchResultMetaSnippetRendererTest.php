@@ -9,7 +9,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer

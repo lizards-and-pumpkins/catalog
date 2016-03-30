@@ -1,10 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Tax;
 
 use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxClassNameException;
-use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Tax\ProductTaxClass

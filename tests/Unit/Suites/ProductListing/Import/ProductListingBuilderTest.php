@@ -14,8 +14,7 @@ use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingProductListingAtt
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingUrlKeyXmlAttributeException;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder

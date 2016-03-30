@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+
 
 class IntegrationTestProductViewLocator implements ProductViewLocator
 {

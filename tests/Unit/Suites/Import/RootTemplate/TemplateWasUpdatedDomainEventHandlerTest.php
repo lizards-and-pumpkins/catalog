@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins\Import\RootTemplate;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
+
+
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 
 /**

@@ -3,8 +3,7 @@
 namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
+
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter

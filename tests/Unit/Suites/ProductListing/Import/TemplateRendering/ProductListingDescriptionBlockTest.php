@@ -6,7 +6,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\ContentBlock\Block;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlock;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlock

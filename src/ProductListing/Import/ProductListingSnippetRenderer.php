@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;

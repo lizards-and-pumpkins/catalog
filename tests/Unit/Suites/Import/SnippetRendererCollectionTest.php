@@ -3,8 +3,7 @@
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
-use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\Import\SnippetRendererCollection;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\SnippetRendererCollection

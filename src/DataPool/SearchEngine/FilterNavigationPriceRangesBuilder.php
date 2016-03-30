@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 use LizardsAndPumpkins\Import\Price\Price;
 
 class FilterNavigationPriceRangesBuilder

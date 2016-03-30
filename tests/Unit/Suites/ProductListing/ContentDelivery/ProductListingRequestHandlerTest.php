@@ -12,11 +12,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
+
+
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 

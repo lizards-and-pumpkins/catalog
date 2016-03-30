@@ -8,8 +8,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
+
+
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 
 /**

@@ -1,10 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Util;
 
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\Util\BaseCliCommand;
+
 
 class StubCliCommand extends BaseCliCommand
 {

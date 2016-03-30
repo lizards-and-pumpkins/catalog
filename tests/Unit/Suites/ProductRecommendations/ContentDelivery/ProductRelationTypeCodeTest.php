@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode;
 use LizardsAndPumpkins\ProductRecommendations\Exception\InvalidProductRelationTypeCodeException;
 
 /**

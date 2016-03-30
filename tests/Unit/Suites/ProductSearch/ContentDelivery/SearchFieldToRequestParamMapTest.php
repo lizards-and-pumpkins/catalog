@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSearchFieldToQueryParameterMapException;
 
 /**

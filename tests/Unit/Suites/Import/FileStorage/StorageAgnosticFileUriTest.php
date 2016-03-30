@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileIdentifierException;
-use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri

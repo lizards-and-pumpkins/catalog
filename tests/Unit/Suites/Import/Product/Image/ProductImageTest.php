@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Image;
 
-use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 

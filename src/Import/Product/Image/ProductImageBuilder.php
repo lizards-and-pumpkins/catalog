@@ -6,8 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder;
 use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\Image\ProductImage;
-use LizardsAndPumpkins\Import\Product\Image\InvalidProductImageAttributeListException;
+
 
 class ProductImageBuilder
 {

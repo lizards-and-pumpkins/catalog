@@ -1,12 +1,6 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
-
-use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\LogMessage;
-use LizardsAndPumpkins\Logging\LogMessageWriter;
-use LizardsAndPumpkins\Logging\WritingLoggerDecorator;
 
 /**
  * @covers LizardsAndPumpkins\Logging\WritingLoggerDecorator

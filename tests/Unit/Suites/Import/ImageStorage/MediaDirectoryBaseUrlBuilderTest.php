@@ -6,8 +6,7 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\ImageStorage\Exception\InvalidMediaBaseUrlPathException;
-use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
-use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder

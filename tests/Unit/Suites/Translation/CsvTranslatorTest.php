@@ -3,12 +3,12 @@
 namespace LizardsAndPumpkins\Translation;
 
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
-use LizardsAndPumpkins\Translation\CsvTranslator;
+
 use LizardsAndPumpkins\Translation\Exception\LocaleDirectoryNotReadableException;
 use LizardsAndPumpkins\Translation\Exception\MalformedTranslationFileException;
 use LizardsAndPumpkins\Translation\Exception\TranslationFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Translation\Translator;
+
 
 /**
  * @covers \LizardsAndPumpkins\Translation\CsvTranslator

@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\ContextCountry;
 use LizardsAndPumpkins\Context\Website\ContextWebsite;
-use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;

@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Messaging\Command\FailedToReadFromCommandQueueMessage;
-
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\FailedToReadFromCommandQueueMessage
  */

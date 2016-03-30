@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Image;
 
-use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
 use LizardsAndPumpkins\Logging\LogMessage;
 
 /**

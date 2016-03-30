@@ -4,9 +4,7 @@ namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\Http\Routing\HttpRouter;
+
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\GenericHttpRouter

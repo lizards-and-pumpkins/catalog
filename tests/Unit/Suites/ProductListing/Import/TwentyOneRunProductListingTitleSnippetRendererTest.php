@@ -7,9 +7,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TwentyOneRunProductListingTitleSnippetRenderer;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\TwentyOneRunProductListingTitleSnippetRenderer

@@ -1,10 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Logging\Logger;
+
 use LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage;
 
 class ProcessTimeLoggingDomainEventHandlerDecorator implements DomainEventHandler

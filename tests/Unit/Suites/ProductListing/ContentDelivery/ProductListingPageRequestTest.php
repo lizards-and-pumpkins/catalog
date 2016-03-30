@@ -4,8 +4,8 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+
+
 use LizardsAndPumpkins\ProductListing\Exception\NoSelectedSortOrderException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;

@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
  */

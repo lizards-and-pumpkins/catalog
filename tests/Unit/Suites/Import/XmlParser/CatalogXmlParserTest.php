@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\XmlParser;
 
 use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
-use LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser;
+
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileDoesNotExistException;

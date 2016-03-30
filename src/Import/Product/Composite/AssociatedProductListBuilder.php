@@ -1,10 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
+
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 
 class AssociatedProductListBuilder

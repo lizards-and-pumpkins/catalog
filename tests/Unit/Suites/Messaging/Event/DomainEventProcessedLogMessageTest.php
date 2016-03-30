@@ -1,10 +1,6 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Messaging\Event;
-
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage

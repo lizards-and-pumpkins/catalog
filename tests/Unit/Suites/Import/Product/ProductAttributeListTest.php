@@ -1,13 +1,10 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Exception\ConflictingContextDataForProductAttributeListException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeNotFoundException;
-use LizardsAndPumpkins\Import\Product\ProductAttribute;
-use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttributeList

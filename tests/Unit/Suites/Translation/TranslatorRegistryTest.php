@@ -3,8 +3,7 @@
 namespace LizardsAndPumpkins\Translation;
 
 use LizardsAndPumpkins\Translation\Exception\UndefinedTranslatorException;
-use LizardsAndPumpkins\Translation\Translator;
-use LizardsAndPumpkins\Translation\TranslatorRegistry;
+
 
 /**
  * @covers \LizardsAndPumpkins\Translation\TranslatorRegistry

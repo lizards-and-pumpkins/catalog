@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Util\Factory\CommonFactory;
+
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;

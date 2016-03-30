@@ -3,8 +3,8 @@
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
+
+
 use LizardsAndPumpkins\Import\TemplateRendering\AbstractBlockRendererTest;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;

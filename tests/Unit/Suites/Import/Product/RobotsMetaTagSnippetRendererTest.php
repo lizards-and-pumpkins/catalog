@@ -3,8 +3,8 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\View\ProductView;
+
+
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;

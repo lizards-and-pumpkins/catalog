@@ -2,10 +2,9 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Image\ImageFileDoesNotExistException;
+
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**

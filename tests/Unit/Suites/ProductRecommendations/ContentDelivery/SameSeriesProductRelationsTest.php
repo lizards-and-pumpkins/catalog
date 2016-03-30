@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;

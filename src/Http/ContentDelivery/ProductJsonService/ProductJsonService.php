@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Import\Product\Product;

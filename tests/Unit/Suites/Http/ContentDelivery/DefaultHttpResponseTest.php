@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidResponseBodyException;
 use LizardsAndPumpkins\Http\HttpResponse;
 

@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortOrderDirectionException;
 
 /**

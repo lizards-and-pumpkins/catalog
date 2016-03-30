@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Context\DataVersion;
 
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
 use LizardsAndPumpkins\Context\DataVersion\Exception\InvalidVersionException;
 

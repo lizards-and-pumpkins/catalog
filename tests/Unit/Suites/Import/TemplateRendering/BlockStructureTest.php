@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\ContentBlock\Block;
-use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockDoesNotExistException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockIsNotAChildOfParentBlockException;
 

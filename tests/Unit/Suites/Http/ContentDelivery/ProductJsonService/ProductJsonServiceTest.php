@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;

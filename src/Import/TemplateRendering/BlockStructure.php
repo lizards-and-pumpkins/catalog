@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\ContentBlock\Block;

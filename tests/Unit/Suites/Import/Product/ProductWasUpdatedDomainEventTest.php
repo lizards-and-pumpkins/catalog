@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**

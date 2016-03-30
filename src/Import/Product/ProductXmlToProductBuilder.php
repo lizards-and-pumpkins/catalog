@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\ProductTypeCode;
 use LizardsAndPumpkins\Import\XPathParser;
 
 interface ProductXmlToProductBuilder

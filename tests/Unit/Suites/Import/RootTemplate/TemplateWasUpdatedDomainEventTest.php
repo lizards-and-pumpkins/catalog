@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**

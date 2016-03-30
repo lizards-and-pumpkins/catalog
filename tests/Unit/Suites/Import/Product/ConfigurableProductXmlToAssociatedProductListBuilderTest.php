@@ -1,12 +1,10 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
-use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToAssociatedProductListBuilder;
-use LizardsAndPumpkins\Import\Product\ProductBuilder;
-use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+
+
 use LizardsAndPumpkins\Import\XPathParser;
 
 /**

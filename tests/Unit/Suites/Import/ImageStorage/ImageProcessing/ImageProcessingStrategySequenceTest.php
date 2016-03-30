@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategy;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
-
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
  */

@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\UNUSED\LocaleAwareEuroPriceSnippetTransformation;
+
 
 /**
  * @covers \LizardsAndPumpkins\UNUSED\LocaleAwareEuroPriceSnippetTransformation

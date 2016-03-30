@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector

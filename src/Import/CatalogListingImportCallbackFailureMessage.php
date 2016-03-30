@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Logging\LogMessage;

@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\InMemoryLogger;
-use LizardsAndPumpkins\Logging\LogMessage;
-
 /**
  * @covers \LizardsAndPumpkins\Logging\InMemoryLogger
  */

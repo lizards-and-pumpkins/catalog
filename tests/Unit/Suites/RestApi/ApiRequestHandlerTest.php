@@ -2,11 +2,10 @@
 
 namespace LizardsAndPumpkins\RestApi;
 
-use LizardsAndPumpkins\RestApi\StubApiRequestHandler;
 use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\ApiRequestHandler

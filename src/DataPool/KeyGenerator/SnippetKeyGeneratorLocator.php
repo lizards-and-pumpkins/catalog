@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-
 interface SnippetKeyGeneratorLocator
 {
     /**

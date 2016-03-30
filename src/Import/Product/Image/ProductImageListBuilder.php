@@ -1,11 +1,10 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+
 
 class ProductImageListBuilder
 {

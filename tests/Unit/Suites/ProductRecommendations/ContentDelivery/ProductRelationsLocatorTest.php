@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode;
 use LizardsAndPumpkins\ProductRecommendations\Exception\InvalidProductRelationTypeException;
 use LizardsAndPumpkins\ProductRecommendations\Exception\UnknownProductRelationTypeException;
 use LizardsAndPumpkins\ProductRecommendations\ProductRelations;

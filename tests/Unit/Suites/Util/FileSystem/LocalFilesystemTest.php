@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Util\FileSystem;
 use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryDoesNotExistException;
 use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryNotWritableException;
 use LizardsAndPumpkins\Util\FileSystem\Exception\NotADirectoryException;
-use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
+
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem

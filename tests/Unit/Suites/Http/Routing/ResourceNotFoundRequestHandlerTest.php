@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler;
+
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler

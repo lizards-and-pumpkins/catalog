@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;

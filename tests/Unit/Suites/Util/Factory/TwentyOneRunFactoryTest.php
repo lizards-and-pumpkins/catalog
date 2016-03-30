@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Logging\Writer\CompositeLogMessageWriter;
-use LizardsAndPumpkins\Logging\Writer\FileLogMessageWriter;
+
 use LizardsAndPumpkins\Logging\WritingLoggerDecorator;
 use LizardsAndPumpkins\Import\Product\Image\TwentyOneRunProductImageFileLocator;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
@@ -24,9 +24,8 @@ use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
-use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
-use LizardsAndPumpkins\Util\Factory\TwentyOneRunFactory;
+
+
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 

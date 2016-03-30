@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\ProductProjector;
+
+
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;

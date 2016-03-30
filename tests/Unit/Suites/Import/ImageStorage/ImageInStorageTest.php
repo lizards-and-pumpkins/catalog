@@ -6,9 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;
 use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
-use LizardsAndPumpkins\Import\ImageStorage\Image;
-use LizardsAndPumpkins\Import\ImageStorage\ImageInStorage;
-use LizardsAndPumpkins\Import\ImageStorage\ImageToImageStorage;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageInStorage

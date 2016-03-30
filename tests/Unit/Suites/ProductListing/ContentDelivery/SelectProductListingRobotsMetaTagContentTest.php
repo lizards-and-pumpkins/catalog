@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent

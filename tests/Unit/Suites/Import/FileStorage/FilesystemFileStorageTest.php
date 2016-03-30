@@ -2,14 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\FileStorage;
 
-use LizardsAndPumpkins\Import\FileStorage\File;
-use LizardsAndPumpkins\Import\FileStorage\FileContent;
-use LizardsAndPumpkins\Import\FileStorage\FileStorage;
-use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
-use LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri;
-use LizardsAndPumpkins\Import\FileStorage\FileToFileStorage;
-use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
-use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Import\FileStorage\Exception\FileDoesNotExistException;
 use LizardsAndPumpkins\Import\FileStorage\Exception\FileStorageTypeMismatchException;

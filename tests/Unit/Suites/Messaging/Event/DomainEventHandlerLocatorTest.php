@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
-use LizardsAndPumpkins\Messaging\Event\DomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;

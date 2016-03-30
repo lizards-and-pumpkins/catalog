@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Util\Config;
 
-use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotAStringException;
 

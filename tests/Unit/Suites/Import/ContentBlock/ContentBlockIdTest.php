@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\Exception\InvalidContentBlockIdException;
 
 /**

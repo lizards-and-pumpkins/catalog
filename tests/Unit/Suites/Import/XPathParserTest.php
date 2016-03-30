@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Import;
 
-use LizardsAndPumpkins\Import\XPathParser;
-
 /**
  * @covers \LizardsAndPumpkins\Import\XPathParser
  */

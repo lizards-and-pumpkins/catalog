@@ -4,8 +4,7 @@ namespace LizardsAndPumpkins\Import\Tax;
 
 use LizardsAndPumpkins\Import\Price\Price;
 use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxRateException;
-use LizardsAndPumpkins\Import\Tax\TaxService;
-use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxRate;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxRate

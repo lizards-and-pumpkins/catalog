@@ -4,11 +4,11 @@ namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Import\ContentBlock\Block;
-use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockRendererMustHaveOneRootBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\MethodNotYetAvailableException;
-use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+
 use LizardsAndPumpkins\Import\TemplateRendering\Stub\StubBlock;
 use LizardsAndPumpkins\Import\TemplateRendering\Stub\StubBlockRenderer;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;

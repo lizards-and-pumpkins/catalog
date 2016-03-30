@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Util;
 
 use League\CLImate\CLImate;

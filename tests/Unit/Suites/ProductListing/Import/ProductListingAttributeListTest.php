@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeCodeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeValueException;
 use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList

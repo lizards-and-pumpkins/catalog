@@ -3,8 +3,8 @@
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+
+
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;

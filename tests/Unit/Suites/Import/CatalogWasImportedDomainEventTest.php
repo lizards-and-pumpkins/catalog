@@ -1,10 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
+
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**

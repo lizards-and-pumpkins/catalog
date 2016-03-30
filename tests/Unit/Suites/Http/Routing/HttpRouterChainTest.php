@@ -4,9 +4,7 @@ namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToRouteRequestException;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\Http\Routing\HttpRouter;
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
+
 
 /**
  * @covers LizardsAndPumpkins\Http\Routing\HttpRouterChain

@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
-use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 

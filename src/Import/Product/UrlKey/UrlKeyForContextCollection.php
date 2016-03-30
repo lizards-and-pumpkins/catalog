@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 class UrlKeyForContextCollection implements \Countable, \IteratorAggregate

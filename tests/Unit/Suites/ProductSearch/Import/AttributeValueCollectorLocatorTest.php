@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
-use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
-use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Product;

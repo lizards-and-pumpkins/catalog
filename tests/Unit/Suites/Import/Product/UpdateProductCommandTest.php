@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Messaging\Command\Command;
 
 /**

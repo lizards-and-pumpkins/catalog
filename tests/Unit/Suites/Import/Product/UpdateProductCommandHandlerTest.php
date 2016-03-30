@@ -2,11 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Queue;
 

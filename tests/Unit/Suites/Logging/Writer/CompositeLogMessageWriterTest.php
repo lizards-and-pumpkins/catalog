@@ -1,11 +1,10 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging\Writer;
 
 use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Logging\LogMessageWriter;
-use LizardsAndPumpkins\Logging\Writer\CompositeLogMessageWriter;
+
 
 /**
  * @covers LizardsAndPumpkins\Logging\Writer\CompositeLogMessageWriter

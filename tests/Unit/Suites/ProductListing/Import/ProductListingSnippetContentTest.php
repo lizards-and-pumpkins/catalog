@@ -5,8 +5,7 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\Import\MalformedSearchCriteriaMetaException;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent

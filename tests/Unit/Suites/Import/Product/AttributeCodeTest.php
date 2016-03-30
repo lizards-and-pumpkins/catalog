@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidAttributeCodeException;
 
 /**

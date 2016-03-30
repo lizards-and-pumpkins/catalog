@@ -5,8 +5,7 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector

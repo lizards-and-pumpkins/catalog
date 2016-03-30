@@ -2,10 +2,9 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductAttributeValueException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeDoesNotContainContextPartException;
-use LizardsAndPumpkins\Import\Product\ProductAttribute;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttribute

@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;

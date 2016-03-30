@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent

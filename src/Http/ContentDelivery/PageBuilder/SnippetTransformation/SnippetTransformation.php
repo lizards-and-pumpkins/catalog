@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation;
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;

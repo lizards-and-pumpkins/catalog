@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
-use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;

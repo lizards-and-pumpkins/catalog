@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductListing\Exception\InvalidSelectedNumberOfProductsPerPageException;
 

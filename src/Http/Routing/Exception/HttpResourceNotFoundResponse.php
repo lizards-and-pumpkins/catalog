@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Http\Routing\Exception;
 
 use LizardsAndPumpkins\Http\HttpResponse;

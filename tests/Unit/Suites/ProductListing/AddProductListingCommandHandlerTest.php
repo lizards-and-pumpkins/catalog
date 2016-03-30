@@ -4,10 +4,10 @@ namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
+
+
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Image\ImageFileDoesNotExistException;
+
 
 class AddImageCommand implements Command
 {

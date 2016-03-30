@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\XmlParser;
 
 use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;

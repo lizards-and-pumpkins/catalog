@@ -4,11 +4,8 @@ namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
-use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
-use LizardsAndPumpkins\Import\Product\View\TwentyOneRunConfigurableProductView;
-use LizardsAndPumpkins\Import\Product\View\TwentyOneRunProductViewLocator;
-use LizardsAndPumpkins\Import\Product\View\TwentyOneRunSimpleProductView;
+
+
 use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
 
 /**

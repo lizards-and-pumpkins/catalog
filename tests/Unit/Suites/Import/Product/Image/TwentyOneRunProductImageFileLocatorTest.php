@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Import\ImageStorage\Exception\InvalidImageVariantCodeExce
 use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
-use LizardsAndPumpkins\Import\Product\Image\TwentyOneRunProductImageFileLocator;
+
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 
 /**

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\Country\Country;

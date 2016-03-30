@@ -3,15 +3,12 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\AttributeCode;
+
 use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
-use LizardsAndPumpkins\Import\Product\ProductAttribute;
-use LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
-use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-use LizardsAndPumpkins\Import\Product\ProductId;
+
+
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
-use LizardsAndPumpkins\Import\Product\SimpleProductBuilder;
+
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**

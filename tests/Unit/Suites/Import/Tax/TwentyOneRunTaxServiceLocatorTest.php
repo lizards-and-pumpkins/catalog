@@ -2,11 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Tax;
 
-use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
-use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxServiceLocator;
-use LizardsAndPumpkins\Import\Tax\UnableToLocateTaxServiceException;
-use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxRate;
-
 /**
  * @covers \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxServiceLocator
  * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass

@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\ProductRecommendations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;

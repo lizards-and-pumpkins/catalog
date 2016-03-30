@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\InMemory;
 
 use LizardsAndPumpkins\DataPool\AbstractSearchEngineTest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
+
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 

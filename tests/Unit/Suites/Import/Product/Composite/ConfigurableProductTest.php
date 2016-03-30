@@ -3,12 +3,10 @@
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
-use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListDomainException;
-use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+
+
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
-use LizardsAndPumpkins\Import\Product\Composite\CompositeProduct;
+
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Import\Product\Product;

@@ -4,8 +4,7 @@ namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotWritableException;
-use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
-use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
+
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter

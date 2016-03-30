@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;

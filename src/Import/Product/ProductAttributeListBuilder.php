@@ -3,10 +3,9 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\AttributeCode;
+
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeContextPartsMismatchException;
-use LizardsAndPumpkins\Import\Product\ProductAttribute;
-use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+
 
 class ProductAttributeListBuilder
 {

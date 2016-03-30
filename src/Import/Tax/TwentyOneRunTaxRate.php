@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Tax;
 
 use LizardsAndPumpkins\Import\Price\Price;
 use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxRateException;
-use LizardsAndPumpkins\Import\Tax\TaxService;
+
 
 class TwentyOneRunTaxRate implements TaxService
 {

@@ -1,11 +1,6 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
-
-use LizardsAndPumpkins\Logging\LogMessage;
-use LizardsAndPumpkins\Logging\LogMessageWriter;
-use LizardsAndPumpkins\Logging\NullLogMessageWriter;
 
 /**
  * @covers LizardsAndPumpkins\Logging\NullLogMessageWriter

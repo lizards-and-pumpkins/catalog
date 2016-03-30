@@ -3,8 +3,7 @@
 namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
-use LizardsAndPumpkins\Import\Image\ProductImageImportCommandFactory;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory

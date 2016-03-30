@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+
 
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\SampleMasterFactory

@@ -8,8 +8,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector

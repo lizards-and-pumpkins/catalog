@@ -6,9 +6,8 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
-use LizardsAndPumpkins\Import\Product\View\ProductView;
-use LizardsAndPumpkins\Import\Product\View\TwentyOneRunSimpleProductView;
+
+
 use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging\Writer;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -8,7 +7,7 @@ use LizardsAndPumpkins\Logging\LogMessageWriter;
 use LizardsAndPumpkins\Logging\Writer\Exception\UnableToCreateLogDirectoryException;
 use LizardsAndPumpkins\Logging\Writer\Exception\UnableToCreateLogFileException;
 use LizardsAndPumpkins\Logging\Writer\Exception\UnableToWriteToLogFileException;
-use LizardsAndPumpkins\Logging\Writer\FileLogMessageWriter;
+
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**

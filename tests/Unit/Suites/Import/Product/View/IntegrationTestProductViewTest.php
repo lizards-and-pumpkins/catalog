@@ -3,8 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\View\IntegrationTestProductView;
-use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductView

@@ -1,4 +1,5 @@
 <?php
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Http\HttpRequest;

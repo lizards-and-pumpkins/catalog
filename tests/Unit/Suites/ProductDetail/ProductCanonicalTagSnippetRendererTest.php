@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer

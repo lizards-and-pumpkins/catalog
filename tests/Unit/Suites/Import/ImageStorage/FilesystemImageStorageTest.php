@@ -4,11 +4,8 @@ namespace LizardsAndPumpkins\Import\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
-use LizardsAndPumpkins\Import\ImageStorage\Image;
-use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
-use LizardsAndPumpkins\Import\ImageStorage\ImageToImageStorage;
-use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
+
+
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;
 use LizardsAndPumpkins\Import\FileStorage\FileInStorage;

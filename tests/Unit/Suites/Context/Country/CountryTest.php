@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Context\Country;
 
-use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\Country\Exception\InvalidCountrySpecificationException;
 
 /**

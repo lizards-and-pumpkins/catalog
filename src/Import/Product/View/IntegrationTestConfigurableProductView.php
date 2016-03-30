@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+
 
 class IntegrationTestConfigurableProductView extends AbstractConfigurableProductView
 {

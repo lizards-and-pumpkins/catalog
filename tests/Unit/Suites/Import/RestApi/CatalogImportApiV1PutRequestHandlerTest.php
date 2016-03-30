@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
-use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;

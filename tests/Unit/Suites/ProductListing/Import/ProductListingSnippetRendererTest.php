@@ -12,10 +12,8 @@ use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNo
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
+
+
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 
 /**

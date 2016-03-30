@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\InvalidUrlKeySourceException;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey

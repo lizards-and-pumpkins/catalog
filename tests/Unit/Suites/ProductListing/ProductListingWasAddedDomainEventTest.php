@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent

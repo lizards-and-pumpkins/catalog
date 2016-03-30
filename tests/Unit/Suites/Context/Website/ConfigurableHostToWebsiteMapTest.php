@@ -1,10 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\Website;
 
-use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordException;
 use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;

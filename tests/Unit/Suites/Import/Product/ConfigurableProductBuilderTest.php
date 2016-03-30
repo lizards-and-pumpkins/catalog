@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -8,10 +7,7 @@ use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder;
-use LizardsAndPumpkins\Import\Product\ProductBuilder;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
-use LizardsAndPumpkins\Import\Product\SimpleProductBuilder;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder

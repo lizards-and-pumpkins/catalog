@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\Command;
 
 /**

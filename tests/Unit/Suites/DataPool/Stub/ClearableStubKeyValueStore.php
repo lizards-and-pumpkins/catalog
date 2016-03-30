@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\DataPool\Stub;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;

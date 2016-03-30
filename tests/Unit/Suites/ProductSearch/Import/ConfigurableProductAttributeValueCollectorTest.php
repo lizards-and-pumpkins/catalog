@@ -7,8 +7,7 @@ use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector

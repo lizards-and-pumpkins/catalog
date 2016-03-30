@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;

@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd;
 
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\AbstractResizeStrategyTest;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy

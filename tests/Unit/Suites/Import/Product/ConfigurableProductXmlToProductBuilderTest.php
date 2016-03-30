@@ -3,10 +3,8 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder;
-use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
-use LizardsAndPumpkins\Import\Product\ProductTypeCode;
-use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+
+
 use LizardsAndPumpkins\Import\XPathParser;
 
 /**

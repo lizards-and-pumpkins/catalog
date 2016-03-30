@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 
 /**

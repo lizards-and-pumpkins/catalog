@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\Block;
 use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\TemplateFileNotReadableException;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;

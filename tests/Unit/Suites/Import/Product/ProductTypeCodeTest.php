@@ -1,12 +1,10 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeException;
-use LizardsAndPumpkins\Import\Product\ProductTypeCode;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductTypeCode

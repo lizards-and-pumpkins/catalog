@@ -25,7 +25,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
-use LizardsAndPumpkins\Util\Factory\CommonFactory;
+
 use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
@@ -83,7 +83,7 @@ use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+
 
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\CommonFactory

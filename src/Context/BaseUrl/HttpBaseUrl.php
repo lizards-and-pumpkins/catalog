@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;

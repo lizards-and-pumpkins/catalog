@@ -4,9 +4,8 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Import\CatalogImport;
-use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
+
+
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
@@ -21,7 +20,7 @@ use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Import\XPathParser;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogImport

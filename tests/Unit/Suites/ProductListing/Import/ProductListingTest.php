@@ -3,10 +3,9 @@
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
+
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListing

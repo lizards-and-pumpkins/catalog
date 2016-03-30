@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\ProductTypeCode;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 use LizardsAndPumpkins\Import\XPathParser;

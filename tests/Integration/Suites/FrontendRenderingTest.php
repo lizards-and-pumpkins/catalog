@@ -23,7 +23,7 @@ use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class FrontendRenderingTest extends AbstractIntegrationTest

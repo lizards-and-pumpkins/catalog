@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Logging\LogMessage;
 
 class CommandProcessedLogMessage implements LogMessage

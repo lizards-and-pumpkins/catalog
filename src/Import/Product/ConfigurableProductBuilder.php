@@ -1,13 +1,12 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\Product;
+
 
 class ConfigurableProductBuilder implements ProductBuilder
 {

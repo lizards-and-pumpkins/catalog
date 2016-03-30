@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\QueueAddLogMessage;
 use LizardsAndPumpkins\Messaging\Queue;
 
 /**

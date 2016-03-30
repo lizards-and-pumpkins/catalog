@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
-use LizardsAndPumpkins\DataPool\SearchEngine\FilterNavigationPriceRangesBuilder;
-
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FilterNavigationPriceRangesBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange

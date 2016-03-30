@@ -1,12 +1,11 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesEmptyException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesNotUniqueException;
-use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList

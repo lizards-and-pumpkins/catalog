@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;

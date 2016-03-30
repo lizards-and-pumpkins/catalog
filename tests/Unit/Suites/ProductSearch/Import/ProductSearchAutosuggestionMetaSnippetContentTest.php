@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent

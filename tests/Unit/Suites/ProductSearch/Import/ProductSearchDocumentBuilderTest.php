@@ -13,9 +13,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
-use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
-use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder

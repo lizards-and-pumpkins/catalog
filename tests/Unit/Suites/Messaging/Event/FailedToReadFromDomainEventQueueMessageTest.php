@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
-use LizardsAndPumpkins\Messaging\Event\FailedToReadFromDomainEventQueueMessage;
-
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\FailedToReadFromDomainEventQueueMessage
  */

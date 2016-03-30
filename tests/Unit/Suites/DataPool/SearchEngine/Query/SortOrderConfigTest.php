@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 
 /**

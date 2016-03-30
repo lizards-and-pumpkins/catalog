@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**

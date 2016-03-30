@@ -1,15 +1,13 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageBuilder;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
+
+
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\Image\ProductImage;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder

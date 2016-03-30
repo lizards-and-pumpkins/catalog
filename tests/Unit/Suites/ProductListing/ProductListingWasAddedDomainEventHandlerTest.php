@@ -5,8 +5,7 @@ namespace LizardsAndPumpkins\ProductListing;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler

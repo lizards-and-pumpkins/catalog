@@ -2,9 +2,8 @@
 
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
-use LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy

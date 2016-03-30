@@ -1,10 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToVariationAttributeList;
+
 use LizardsAndPumpkins\Import\XPathParser;
 
 /**

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context;
 
 interface ContextPartBuilder

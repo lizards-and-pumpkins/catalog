@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context;
 
-use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\Stub\FromInputCopyingTestContextPartBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 

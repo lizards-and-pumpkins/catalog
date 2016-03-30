@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;

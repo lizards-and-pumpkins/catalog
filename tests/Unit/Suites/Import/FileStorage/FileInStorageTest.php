@@ -2,12 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\FileStorage;
 
-use LizardsAndPumpkins\Import\FileStorage\File;
-use LizardsAndPumpkins\Import\FileStorage\FileContent;
-use LizardsAndPumpkins\Import\FileStorage\FileInStorage;
-use LizardsAndPumpkins\Import\FileStorage\FileToFileStorage;
-use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
-
 /**
  * @covers \LizardsAndPumpkins\Import\FileStorage\FileInStorage
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent

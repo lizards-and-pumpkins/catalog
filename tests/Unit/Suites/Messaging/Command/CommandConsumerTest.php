@@ -2,10 +2,6 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Messaging\Command\Command;
-use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
-use LizardsAndPumpkins\Messaging\Command\CommandHandler;
-use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Queue;

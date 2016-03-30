@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
-use LizardsAndPumpkins\Logging\Logger;
+
 use LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage;
 
 class ProcessTimeLoggingCommandHandlerDecorator implements CommandHandler

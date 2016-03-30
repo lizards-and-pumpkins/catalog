@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Util\Config;
 
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;

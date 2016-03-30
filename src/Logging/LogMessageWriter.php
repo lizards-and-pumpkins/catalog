@@ -1,9 +1,6 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
-
-use LizardsAndPumpkins\Logging\LogMessage;
 
 interface LogMessageWriter
 {

@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
-use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Queue;

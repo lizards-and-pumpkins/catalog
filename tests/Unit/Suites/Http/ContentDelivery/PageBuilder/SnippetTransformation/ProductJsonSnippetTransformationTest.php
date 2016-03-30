@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation;
 
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;

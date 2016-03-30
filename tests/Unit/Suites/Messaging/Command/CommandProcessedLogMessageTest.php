@@ -2,9 +2,8 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Logging\LogMessage;
-use LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage;
+
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage

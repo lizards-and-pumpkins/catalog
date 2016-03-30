@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductSearch\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\ProductSearch\TemplateRendering\ProductInSearchAutosuggestionBlockRenderer;
+
 use LizardsAndPumpkins\Import\TemplateRendering\AbstractBlockRendererTest;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;

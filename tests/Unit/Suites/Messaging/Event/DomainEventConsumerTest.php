@@ -2,10 +2,6 @@
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
-use LizardsAndPumpkins\Messaging\Event\DomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Queue;

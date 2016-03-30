@@ -1,9 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Messaging\Event;
 
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Logging\LogMessage;
 
 class DomainEventProcessedLogMessage implements LogMessage

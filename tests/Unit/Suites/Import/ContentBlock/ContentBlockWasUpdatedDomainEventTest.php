@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**

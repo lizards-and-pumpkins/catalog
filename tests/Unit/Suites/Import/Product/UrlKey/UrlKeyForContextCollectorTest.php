@@ -1,14 +1,13 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
+
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
+
+
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**

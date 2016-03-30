@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Messaging\Event\Exception;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
-use LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage;
+
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage

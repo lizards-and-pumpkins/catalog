@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Tax;
 
-use LizardsAndPumpkins\Import\Tax\TaxableCountries;
-use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxableCountries;
-
 /**
  * @covers \LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxableCountries
  */

@@ -2,10 +2,8 @@
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
-use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\LogMessage;
+
 
 /**
  * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator

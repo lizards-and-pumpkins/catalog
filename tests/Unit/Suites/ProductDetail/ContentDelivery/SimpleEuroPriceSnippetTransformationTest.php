@@ -1,12 +1,11 @@
 <?php
 
-
 namespace LizardsAndPumpkins\ProductDetail\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
-use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
+
 
 /**
  * @covers LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation

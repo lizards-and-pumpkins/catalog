@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Messaging\Command\Command;
-use LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage;
-
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage
  */

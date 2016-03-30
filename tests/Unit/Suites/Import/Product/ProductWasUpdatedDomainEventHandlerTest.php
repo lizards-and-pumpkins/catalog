@@ -2,10 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\ProductProjector;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 
 /**

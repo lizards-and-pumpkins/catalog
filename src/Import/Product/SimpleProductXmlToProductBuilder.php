@@ -1,13 +1,10 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
-use LizardsAndPumpkins\Import\Product\ProductAttribute;
-use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\ProductTypeCode;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
+
+
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\TaxClassAttributeMissingForImportedProductException;

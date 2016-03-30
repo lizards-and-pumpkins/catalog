@@ -1,10 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+
 
 class ContextVersion implements ContextPartBuilder
 {

@@ -1,9 +1,6 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Util;
-
-use LizardsAndPumpkins\Util\UuidGenerator;
 
 /**
  * @covers \LizardsAndPumpkins\Util\UuidGenerator

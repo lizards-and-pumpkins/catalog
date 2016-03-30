@@ -1,12 +1,11 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\Website\Exception\UnableToDetermineContextWebsiteException;
-use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class ContextWebsite implements ContextPartBuilder

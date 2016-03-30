@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductDetail\Import\View;
 
 use LizardsAndPumpkins\Import\Product\View\ProductView;
-use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
+
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle

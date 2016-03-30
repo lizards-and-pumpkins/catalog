@@ -2,11 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Queue;
 

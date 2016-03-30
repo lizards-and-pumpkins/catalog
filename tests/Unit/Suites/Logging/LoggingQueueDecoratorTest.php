@@ -1,11 +1,7 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
-use LizardsAndPumpkins\Logging\QueueAddLogMessage;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Logging\Stub\ClearableStubQueue;
 use LizardsAndPumpkins\Util\Storage\Clearable;

@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductIdException;
-use LizardsAndPumpkins\Import\Product\ProductId;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductId

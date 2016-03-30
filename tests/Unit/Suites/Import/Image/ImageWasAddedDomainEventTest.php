@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 /**

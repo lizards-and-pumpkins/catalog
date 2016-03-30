@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+
+
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;

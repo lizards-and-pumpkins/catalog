@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
-use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+
 use LizardsAndPumpkins\ProductDetail\Import\View\TwentyOneRunProductPageTitle;
 
 class TwentyOneRunConfigurableProductView extends AbstractConfigurableProductView implements CompositeProductView

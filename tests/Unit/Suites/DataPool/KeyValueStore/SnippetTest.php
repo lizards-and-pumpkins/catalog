@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet

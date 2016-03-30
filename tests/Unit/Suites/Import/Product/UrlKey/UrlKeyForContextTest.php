@@ -1,11 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext

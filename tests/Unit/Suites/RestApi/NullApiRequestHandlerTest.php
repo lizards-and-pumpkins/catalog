@@ -3,8 +3,7 @@
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
-use LizardsAndPumpkins\RestApi\NullApiRequestHandler;
+
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\NullApiRequestHandler

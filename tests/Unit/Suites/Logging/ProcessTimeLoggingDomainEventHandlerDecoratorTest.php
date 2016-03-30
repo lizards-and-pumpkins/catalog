@@ -1,12 +1,9 @@
 <?php
 
-
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\LogMessage;
+
 
 /**
  * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator

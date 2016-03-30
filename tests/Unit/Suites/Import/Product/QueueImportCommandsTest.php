@@ -2,13 +2,12 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Product\Product;
+
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
+
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
 use LizardsAndPumpkins\Messaging\Queue;
 

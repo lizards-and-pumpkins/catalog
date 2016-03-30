@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Logging\DebugLogMessage;
-use LizardsAndPumpkins\Logging\LogMessage;
-
 /**
  * @covers \LizardsAndPumpkins\Logging\DebugLogMessage
  */

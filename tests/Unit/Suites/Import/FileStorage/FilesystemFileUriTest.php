@@ -3,8 +3,7 @@
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileURIException;
-use LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri;
-use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
+
 
 /**
  * @covers \LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri

@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\Routing\Exception;
 
-use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
-
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse
  */
