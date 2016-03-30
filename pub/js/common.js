@@ -164,7 +164,7 @@ define(
             numColumns = Math.floor(navWidth / 240),
             itemWidth = Math.floor(navWidth / numColumns);
 
-        Array.prototype.map.call(document.querySelectorAll('.nav li.level0 ul'), function (subMenu) {
+        Array.prototype.map.call(document.querySelectorAll('.nav li.parent ul'), function (subMenu) {
             var items = Array.prototype.slice.call(subMenu.querySelectorAll('li')),
                 numMenuItems = items.length,
                 additionalHeight = -40;

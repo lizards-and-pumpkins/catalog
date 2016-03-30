@@ -94,6 +94,14 @@ nav { clear: both; color: #ffffff }
 .nav .brands-button { position: absolute; bottom: 0; right: 0; margin: 0 17px 30px 0 }
 .nav .button { background: #ffffff; color: #000000; border-color: #bdc3cc }
 
+/* Advice Navigation */
+.advice-menu > li { width: 243px; height: 250px; float: left; position: relative }
+.nav .advice-menu a { font-weight: bold; white-space: normal }
+.advice-menu-button-container { position: absolute; bottom: 20px; left: 20px; text-align: left; width: 100% }
+.advice-menu button { color: #000000; background-color: #ffffff; font-size: 15px; border-radius: 2px; padding: 6px 30px 6px 10px; cursor: pointer }
+.advice-submenu-heading-container { border-bottom: 1px solid #4981a3; margin-bottom: 10px }
+.advice-menu h4 { margin: 0 }
+
 /* Footer blocks */
 .footer-block { float: left; font-size: 10px; width: 171px }
 .footer-block ul { height: 138px; overflow: hidden; margin: 0 25px 0 0 }
