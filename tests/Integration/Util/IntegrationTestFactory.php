@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
+use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy;
