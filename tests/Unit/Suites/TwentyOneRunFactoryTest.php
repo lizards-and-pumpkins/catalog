@@ -21,6 +21,7 @@ use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Product\TwentyOneRunProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Website\WebsiteToCountryMap;
 
@@ -446,5 +447,11 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->factory->createProductListingTitleSnippetRenderer();
         $this->assertInstanceOf(TwentyOneRunProductListingTitleSnippetRenderer::class, $result);
+    }
+
+    public function testThemeLocatorIsReturned()
+    {
+        $result = $this->factory->createThemeLocator();
+        $this->assertInstanceOf(ThemeLocator::class, $result);
     }
 }

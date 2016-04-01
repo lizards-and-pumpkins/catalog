@@ -42,6 +42,7 @@ use LizardsAndPumpkins\Projection\Catalog\PageTitle\TwentyOneRunProductPageTitle
 use LizardsAndPumpkins\Projection\Catalog\TwentyOneRunProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Website\TwentyOneRunWebsiteToCountryMap;
@@ -704,5 +705,13 @@ class TwentyOneRunFactory implements Factory
             $this->getMasterFactory()->createProductListingTitleSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
+    }
+
+    /**
+     * @return ThemeLocator
+     */
+    public function createThemeLocator()
+    {
+        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
     }
 }
