@@ -30,6 +30,7 @@ use LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator;
 use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
 use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Renderer\ThemeLocator;
 use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
 use LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
@@ -522,5 +523,13 @@ class IntegrationTestFactory implements Factory
         $facetFieldToQueryParameterMap = [];
         $queryParameterToFacetFieldMap = [];
         return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
+    }
+
+    /**
+     * @return ThemeLocator
+     */
+    public function createThemeLocator()
+    {
+        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
     }
 }

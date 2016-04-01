@@ -160,6 +160,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     private $memoizedFacetFieldTransformationRegistry;
 
     /**
+     * @var ThemeLocator
+     */
+    private $themeLocator;
+
+    /**
      * @param ProductWasUpdatedDomainEvent $event
      * @return ProductWasUpdatedDomainEventHandler
      */
@@ -427,7 +432,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductSearchAutosuggestionBlockRenderer()
     {
         return new ProductSearchAutosuggestionBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
@@ -498,7 +503,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingBlockRenderer()
     {
         return new ProductListingBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
@@ -629,7 +634,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductDetailViewBlockRenderer()
     {
         return new ProductDetailViewBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
@@ -751,7 +756,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductInSearchAutosuggestionBlockRenderer()
     {
         return new ProductInSearchAutosuggestionBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
@@ -912,9 +917,13 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     /**
      * @return ThemeLocator
      */
-    public function createThemeLocator()
+    public function getThemeLocator()
     {
-        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
+        if (null === $this->themeLocator) {
+            $this->themeLocator = $this->callExternalCreateMethod('ThemeLocator');
+        }
+
+        return $this->themeLocator;
     }
 
     /**
@@ -1447,7 +1456,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return function ($locale) {
             $files = ['common.csv', 'attributes.csv', 'product-listing.csv'];
-            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->getThemeLocator(), $files);
         };
     }
 
@@ -1458,7 +1467,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return function ($locale) {
             $files = ['common.csv', 'attributes.csv', 'product-details.csv'];
-            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->getThemeLocator(), $files);
         };
     }
 
@@ -1469,7 +1478,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return function ($locale) {
             $files = [];
-            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->getThemeLocator(), $files);
         };
     }
 
@@ -1480,7 +1489,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return function ($locale) {
             $files = ['product_search_autosuggestion.csv'];
-            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->createThemeLocator(), $files);
+            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->getThemeLocator(), $files);
         };
     }
 
@@ -1662,7 +1671,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingDescriptionBlockRenderer()
     {
         return new ProductListingDescriptionBlockRenderer(
-            $this->getMasterFactory()->createThemeLocator(),
+            $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder()
