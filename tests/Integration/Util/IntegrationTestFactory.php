@@ -37,6 +37,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
 use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 use LizardsAndPumpkins\Util\Factory\Factory;
@@ -531,5 +532,13 @@ class IntegrationTestFactory implements Factory
         $facetFieldToQueryParameterMap = [];
         $queryParameterToFacetFieldMap = [];
         return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
+    }
+
+    /**
+     * @return ThemeLocator
+     */
+    public function createThemeLocator()
+    {
+        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
     }
 }

@@ -24,6 +24,7 @@ use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
@@ -388,5 +389,13 @@ class UnitTestFactory implements Factory
     public function createSearchFieldToRequestParamMap()
     {
         return $this->mockObjectGenerator->getMock(SearchFieldToRequestParamMap::class, [], [], '', false);
+    }
+
+    /**
+     * @return ThemeLocator
+     */
+    public function createThemeLocator()
+    {
+        return $this->mockObjectGenerator->getMock(ThemeLocator::class, [], [], '', false);
     }
 }

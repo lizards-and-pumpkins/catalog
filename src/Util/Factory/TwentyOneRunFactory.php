@@ -49,6 +49,7 @@ use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Context\Website\TwentyOneRunWebsiteToCountryMap;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
@@ -712,5 +713,13 @@ class TwentyOneRunFactory implements Factory
             $this->getMasterFactory()->createProductListingTitleSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
         );
+    }
+
+    /**
+     * @return ThemeLocator
+     */
+    public function createThemeLocator()
+    {
+        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
     }
 }

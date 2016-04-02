@@ -23,9 +23,8 @@ use LizardsAndPumpkins\ProductListing\Import\TwentyOneRunProductListingTitleSnip
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Queue\File\FileQueue;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
-
-
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 
@@ -451,5 +450,11 @@ class TwentyOneRunFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->factory->createProductListingTitleSnippetRenderer();
         $this->assertInstanceOf(TwentyOneRunProductListingTitleSnippetRenderer::class, $result);
+    }
+
+    public function testThemeLocatorIsReturned()
+    {
+        $result = $this->factory->createThemeLocator();
+        $this->assertInstanceOf(ThemeLocator::class, $result);
     }
 }

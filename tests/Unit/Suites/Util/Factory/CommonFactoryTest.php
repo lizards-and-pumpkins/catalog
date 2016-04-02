@@ -269,12 +269,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductListingBuilder::class, $result);
     }
 
-    public function testThemeLocatorIsReturned()
-    {
-        $result = $this->commonFactory->createThemeLocator();
-        $this->assertInstanceOf(ThemeLocator::class, $result);
-    }
-
     public function testContextSourceIsReturned()
     {
         $result = $this->commonFactory->createContextSource();
