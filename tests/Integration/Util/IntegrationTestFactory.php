@@ -2,40 +2,49 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
-use LizardsAndPumpkins\ContentDelivery\Catalog\ProductsPerPage;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\SearchFieldToRequestParamMap;
-use LizardsAndPumpkins\ContentDelivery\Catalog\Search\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderDirection;
+use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy;
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
-use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Image\ImageMagickResizeStrategy;
-use LizardsAndPumpkins\Image\ImageProcessor;
-use LizardsAndPumpkins\Image\ImageProcessorCollection;
-use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
-use LizardsAndPumpkins\Log\InMemoryLogger;
-use LizardsAndPumpkins\Product\AttributeCode;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Projection\Catalog\IntegrationTestProductViewLocator;
-use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\Logging\InMemoryLogger;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Product\View\IntegrationTestProductViewLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
-use LizardsAndPumpkins\Queue\Queue;
-use LizardsAndPumpkins\Renderer\ThemeLocator;
+use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
-use LizardsAndPumpkins\Utils\ImageStorage\FilesystemImageStorage;
-use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
-use LizardsAndPumpkins\Website\HostToWebsiteMap;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
+use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 
 class IntegrationTestFactory implements Factory
 {
@@ -289,7 +298,7 @@ class IntegrationTestFactory implements Factory
         if (extension_loaded('imagick')) {
             return ImageMagickResizeStrategy::class;
         }
-        return Image\GdResizeStrategy::class;
+        return GdResizeStrategy::class;
     }
 
     /**

@@ -1,11 +1,10 @@
 <?php
 
-
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Country\Country;
-use LizardsAndPumpkins\Website\Website;
-use LizardsAndPumpkins\Website\WebsiteToCountryMap;
+use LizardsAndPumpkins\Context\Country\Country;
+use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 
 class IntegrationTestWebsiteToCountryMap implements WebsiteToCountryMap
 {

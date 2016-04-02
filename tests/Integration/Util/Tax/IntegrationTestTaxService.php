@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Tax;
 
-use LizardsAndPumpkins\Product\Price;
-use LizardsAndPumpkins\Product\Tax\TaxService;
+use LizardsAndPumpkins\Import\Price\Price;
+use LizardsAndPumpkins\Import\Tax\TaxService;
 
 class IntegrationTestTaxService implements TaxService
 {

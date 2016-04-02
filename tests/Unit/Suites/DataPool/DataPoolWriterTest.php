@@ -2,21 +2,21 @@
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubKeyValueStore;
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubSearchEngine;
 use LizardsAndPumpkins\DataPool\Stub\ClearableStubUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Projection\UrlKeyForContext;
-use LizardsAndPumpkins\Projection\UrlKeyForContextCollection;
-use LizardsAndPumpkins\Snippet;
-use LizardsAndPumpkins\Utils\Clearable;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataPoolWriter
- * @uses   \LizardsAndPumpkins\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class DataPoolWriterTest extends AbstractDataPoolTest

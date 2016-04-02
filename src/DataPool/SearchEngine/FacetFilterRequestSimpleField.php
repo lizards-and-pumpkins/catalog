@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
-use LizardsAndPumpkins\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 
 class FacetFilterRequestSimpleField implements FacetFilterRequestField
 {

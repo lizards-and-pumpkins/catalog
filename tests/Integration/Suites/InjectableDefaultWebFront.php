@@ -3,6 +3,8 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class InjectableDefaultWebFront extends DefaultWebFront
 {

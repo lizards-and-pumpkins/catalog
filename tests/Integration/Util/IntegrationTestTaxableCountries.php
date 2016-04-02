@@ -1,7 +1,8 @@
 <?php
 
-
 namespace LizardsAndPumpkins;
+
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 
 class IntegrationTestTaxableCountries implements TaxableCountries
 {

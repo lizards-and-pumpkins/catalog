@@ -2,24 +2,28 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ContentDelivery\Catalog\SortOrderConfig;
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
+
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Image\ImageProcessor;
-use LizardsAndPumpkins\Image\ImageProcessorCollection;
-use LizardsAndPumpkins\Image\ImageProcessingStrategySequence;
-use LizardsAndPumpkins\Log\InMemoryLogger;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
+use LizardsAndPumpkins\Logging\InMemoryLogger;
 use LizardsAndPumpkins\DataPool\KeyValue\InMemory\InMemoryKeyValueStore;
-use LizardsAndPumpkins\Product\ProductImage\ProductImageFileLocator;
-use LizardsAndPumpkins\Product\Tax\TaxServiceLocator;
-use LizardsAndPumpkins\Projection\Catalog\ProductViewLocator;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
+use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
+use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
+use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Queue\InMemory\InMemoryQueue;
-use LizardsAndPumpkins\Utils\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 
 class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 {

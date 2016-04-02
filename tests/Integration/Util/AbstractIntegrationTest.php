@@ -2,17 +2,22 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\DataPool\KeyValue\KeyValueStore;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Log\Logger;
-use LizardsAndPumpkins\Log\LogMessage;
-use LizardsAndPumpkins\Projection\Catalog\Import\CatalogImport;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\NullProductImageImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductImportCommandFactory;
-use LizardsAndPumpkins\Projection\Catalog\Import\ImportCommand\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\Queue\Queue;
+use LizardsAndPumpkins\Import\CatalogImport;
+use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
+use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,9 +85,9 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
                 }
                 return (string) $logMessage;
             }, $messages);
-            $fainMessageString = implode(PHP_EOL, $failMessages);
+            $failMessageString = implode(PHP_EOL, $failMessages);
 
-            $this->fail($fainMessageString);
+            $this->fail($failMessageString);
         }
     }
 

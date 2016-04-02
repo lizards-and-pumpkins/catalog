@@ -1,14 +1,13 @@
 <?php
 
-
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
-use LizardsAndPumpkins\Utils\LocalFilesystem;
+use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\UrlKeyStore\FileUrlKeyStore
  * @uses   \LizardsAndPumpkins\DataPool\UrlKeyStore\IntegrationTestUrlKeyStoreAbstract
- * @uses   \LizardsAndPumpkins\Utils\LocalFilesystem
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */
 class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
 {

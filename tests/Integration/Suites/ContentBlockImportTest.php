@@ -7,6 +7,8 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+
 class ContentBlockImportTest extends AbstractIntegrationTest
 {
     /**
@@ -192,7 +194,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString);
         $this->renderProductListingTemplate();
         $this->importCatalog();
-
+        
         $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));
         $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics'));
     }
