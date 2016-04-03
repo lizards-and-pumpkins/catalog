@@ -182,7 +182,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     /**
      * @param HttpRequest $request
      * @param int $numberOfProductsPerPage
-     * @param $currentPageNumber
+     * @param int $currentPageNumber
      * @param SortOrderConfig $selectedSortOrderConfig
      * @return SearchEngineResponse
      */
