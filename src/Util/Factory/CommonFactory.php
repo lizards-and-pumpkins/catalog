@@ -1775,6 +1775,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
+     * @param string $code
      * @return SnippetKeyGenerator
      */
     private function createRobotsMetaTagSnippetKeyGeneratorForSnippetCode($code)
