@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\UNUSED;
+namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation;
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;

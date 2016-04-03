@@ -15,7 +15,7 @@ use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLo
 use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
 use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
-use LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
@@ -63,7 +63,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
- * @uses   \LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService
  * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator
