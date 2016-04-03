@@ -42,7 +42,7 @@ use \PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
- * @uses   \LizardsAndPumpkins\Utils\LocalFileSystem
+ * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFileSystem
  */
 class FileSearchEngineTest extends AbstractSearchEngineTest
 {
