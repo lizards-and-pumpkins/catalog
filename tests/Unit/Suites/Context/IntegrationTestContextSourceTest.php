@@ -3,14 +3,13 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
-
 use LizardsAndPumpkins\Context\Website\ContextWebsite;
 
 /**
- * @covers \LizardsAndPumpkins\Context\TwentyOneRunContextSource
+ * @covers \LizardsAndPumpkins\Context\IntegrationTestContextSource
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  */
-class TwentyOneRunContextSourceTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestContextSourceTest extends \PHPUnit_Framework_TestCase
 {
     public function testExpectedContextMatrixIsReturned()
     {
@@ -28,6 +27,6 @@ class TwentyOneRunContextSourceTest extends \PHPUnit_Framework_TestCase
             ->method('createContextsFromDataSets')
             ->with($expectedContextMatrix);
 
-        (new TwentyOneRunContextSource($stubContextBuilder))->getAllAvailableContexts();
+        (new IntegrationTestContextSource($stubContextBuilder))->getAllAvailableContexts();
     }
 }

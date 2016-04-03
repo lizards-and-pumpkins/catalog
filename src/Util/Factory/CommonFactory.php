@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Util\Factory;
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Context\TwentyOneRunContextSource;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
@@ -182,6 +181,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     private $themeLocator;
 
     /**
+     * @var ContextSource
+     */
+    private $contextSource;
+
+    /**
      * @param ProductWasUpdatedDomainEvent $event
      * @return ProductWasUpdatedDomainEventHandler
      */
@@ -201,7 +205,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new TemplateWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->getContextSource(),
             $this->getMasterFactory()->createTemplateProjectorLocator()
         );
     }
@@ -264,7 +268,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createUrlKeyForContextCollector()
     {
         return new UrlKeyForContextCollector(
-            $this->createContextSource()
+            $this->getContextSource()
         );
     }
 
@@ -399,7 +403,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new ProductSearchAutosuggestionSnippetRenderer(
             $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer(),
-            $this->getMasterFactory()->createContextSource()
+            $this->getMasterFactory()->getContextSource()
         );
     }
 
@@ -411,7 +415,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new ProductSearchAutosuggestionMetaSnippetRenderer(
             $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer(),
-            $this->getMasterFactory()->createContextSource()
+            $this->getMasterFactory()->getContextSource()
         );
     }
 
@@ -496,7 +500,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new ProductListingTemplateSnippetRenderer(
             $this->getMasterFactory()->createProductListingTemplateSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer(),
-            $this->getMasterFactory()->createContextSource()
+            $this->getMasterFactory()->getContextSource()
         );
     }
 
@@ -536,7 +540,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductListingSnippetRendererCollection(),
             $this->getMasterFactory()->createUrlKeyForContextCollector(),
             $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createContextSource()
+            $this->getMasterFactory()->getContextSource()
         );
     }
 
@@ -943,12 +947,13 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->themeLocator;
     }
 
-    /**
-     * @return ContextSource
-     */
-    public function createContextSource()
+    public function getContextSource()
     {
-        return new TwentyOneRunContextSource($this->getMasterFactory()->createContextBuilder());
+        if (null === $this->contextSource) {
+            $this->contextSource = $this->callExternalCreateMethod('ContextSource');
+        }
+
+        return $this->contextSource;
     }
 
     /**
@@ -1347,7 +1352,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new ProductSearchResultMetaSnippetRenderer(
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer(),
-            $this->getMasterFactory()->createContextSource()
+            $this->getMasterFactory()->getContextSource()
         );
     }
 
@@ -1410,7 +1415,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductXmlToProductBuilderLocator(),
             $this->getMasterFactory()->createProductListingBuilder(),
             $this->getMasterFactory()->getEventQueue(),
-            $this->getMasterFactory()->createContextSource(),
+            $this->getMasterFactory()->getContextSource(),
             $this->getMasterFactory()->getLogger()
         );
     }

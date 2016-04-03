@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Context;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\Context\Website\ContextWebsite;
 
-class TwentyOneRunContextSource extends ContextSource
+class IntegrationTestContextSource extends ContextSource
 {
     /**
      * @return mixed[]
