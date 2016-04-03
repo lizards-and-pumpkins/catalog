@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformat
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
 
 /**
  * @todo remove when product listing uses ProductJsonServiceProvider
