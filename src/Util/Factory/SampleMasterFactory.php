@@ -17,7 +17,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
-use LizardsAndPumpkins\Import\Tax\TwentyOneRunTaxableCountries;
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Logging\InMemoryLogger;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
@@ -62,7 +62,7 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method SortOrderConfig getProductSearchAutosuggestionSortOrderConfig
  * @method ProductListingRequestHandler createProductListingRequestHandler
  * @method ProductSearchRequestHandler createProductSearchRequestHandler
- * @method TwentyOneRunTaxableCountries createTaxableCountries
+ * @method TaxableCountries createTaxableCountries
  * @method SearchEngine getSearchEngine
  * @method callable getProductDetailsViewTranslatorFactory
  * @method TranslatorRegistry getTranslatorRegistry
