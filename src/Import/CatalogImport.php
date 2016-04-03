@@ -16,7 +16,6 @@ use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Messaging\Queue;
 
-
 class CatalogImport
 {
     /**

@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Product;
 
-
 class IntegrationTestProductView extends AbstractProductView
 {
     /**

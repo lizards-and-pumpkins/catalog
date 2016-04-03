@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Util;
 
 use League\CLImate\CLImate;
 
-
 class StubCliCommand extends BaseCliCommand
 {
     public $methodCalls = [];

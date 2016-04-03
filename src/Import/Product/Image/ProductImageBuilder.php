@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder;
 use LizardsAndPumpkins\Import\Product\ProductId;
 
-
 class ProductImageBuilder
 {
     /**

@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\Image;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 
-
 class AddImageCommand implements Command
 {
     /**

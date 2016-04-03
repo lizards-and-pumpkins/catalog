@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Context\Context;
 
-
 class UrlKeyForContext
 {
     /**
