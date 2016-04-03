@@ -944,14 +944,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return string
-     */
-    public function getBasePathConfig()
-    {
-        return realpath(__DIR__ . '/../../..');
-    }
-
-    /**
      * @return ContextSource
      */
     public function createContextSource()

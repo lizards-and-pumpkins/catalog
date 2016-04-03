@@ -539,6 +539,6 @@ class IntegrationTestFactory implements Factory
      */
     public function createThemeLocator()
     {
-        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
+        return ThemeLocator::fromPath(__DIR__ . '/../fixture');
     }
 }
