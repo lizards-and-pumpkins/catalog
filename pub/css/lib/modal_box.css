@@ -1,4 +1,0 @@
-#modal-box-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; z-index: 7770; opacity: .7 }
-#modal-popup { background-color: #ffffff; position: fixed; z-index: 7777; overflow: auto; border: #ffffff solid 20px }
-#modal-popup.loading { background: #ffffff url('../../images/loading.gif') no-repeat center; height: 16px; width: 16px }
-#popup-close { width: 36px; height: 36px; background-image: url('../../images/icons/close.png'); position: fixed; z-index: 7780; cursor: pointer }
