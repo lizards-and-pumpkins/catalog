@@ -78,6 +78,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider priceMultiplicationDataProvider
+     * @param int $amount
+     * @param float|int $factor
+     * @param int $expected
      */
     public function testItMultipliesByTheGivenFactor($amount, $factor, $expected)
     {
