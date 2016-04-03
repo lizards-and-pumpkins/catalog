@@ -42,11 +42,7 @@ class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testAllImagesArePassedThroughImageProcessor()
     {
-        $imageFilename = 'test_image.jpg';
-        $this->mockImageWasAddedDomainEvent->method('getImageFileName')->willReturn($imageFilename);
-
         $this->mockImageProcessorCollection->expects($this->once())->method('process');
-
         $this->handler->process();
     }
 }

@@ -128,7 +128,6 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
         $imageIdentifier = sprintf('product/%s/test.jpg', $imageVariantCode);
         $stubImage = $this->getMock(Image::class);
 
-        $this->stubImageStorage->method('has')->willReturn(true);
         $this->stubImageStorage->expects($this->once())
             ->method('getFileReference')
             ->with($this->isInstanceOf(StorageAgnosticFileUri::class))
@@ -157,8 +156,6 @@ class TwentyOneRunProductImageFileLocatorTest extends \PHPUnit_Framework_TestCas
         $imageVariantCode = TwentyOneRunProductImageFileLocator::SMALL;
         $imageIdentifier = sprintf('product/%s/test.jpg', $imageVariantCode);
         $stubPlaceholderImage = $this->createStubPlaceholderImage($imageVariantCode);
-        
-        $this->stubImageStorage->method('has')->willReturn(false);
         
         $result = $this->productImageFileLocator->get($imageIdentifier, $imageVariantCode, $this->stubContext);
 

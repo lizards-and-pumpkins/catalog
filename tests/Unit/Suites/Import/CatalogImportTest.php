@@ -90,7 +90,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->getMock(ProductBuilder::class);
-        $stubProductBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
         $stubProductBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class));
 
         $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
