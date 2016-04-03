@@ -42,7 +42,7 @@ class InMemoryKeyValueStoreTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfValueIsNotSet()
     {
-        $this->setExpectedException(KeyNotFoundException::class);
+        $this->expectException(KeyNotFoundException::class);
         $this->store->get('not set key');
     }
 
