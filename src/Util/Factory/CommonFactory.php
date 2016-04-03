@@ -947,6 +947,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->themeLocator;
     }
 
+    /**
+     * @return ContextSource
+     */
     public function getContextSource()
     {
         if (null === $this->contextSource) {

@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Import\Exception\InvalidSnippetContainerCodeException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\SnippetContainer
  */

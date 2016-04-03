@@ -6,7 +6,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion

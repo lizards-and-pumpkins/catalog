@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
-
 /**
  * @covers \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse

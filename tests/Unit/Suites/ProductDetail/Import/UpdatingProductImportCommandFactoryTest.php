@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand

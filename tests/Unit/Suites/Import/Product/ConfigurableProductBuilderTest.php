@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder

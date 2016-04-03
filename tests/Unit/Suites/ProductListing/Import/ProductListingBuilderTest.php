@@ -15,7 +15,6 @@ use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingTypeXmlAttributeE
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingUrlKeyXmlAttributeException;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion

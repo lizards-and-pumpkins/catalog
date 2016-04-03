@@ -93,36 +93,57 @@ class QueryOptions
         );
     }
 
+    /**
+     * @return array|\array[]
+     */
     public function getFilterSelection()
     {
         return $this->filterSelection;
     }
 
+    /**
+     * @return Context
+     */
     public function getContext()
     {
         return $this->context;
     }
 
+    /**
+     * @return FacetFiltersToIncludeInResult
+     */
     public function getFacetFiltersToIncludeInResult()
     {
         return $this->facetFiltersToIncludeInResult;
     }
 
+    /**
+     * @return int
+     */
     public function getRowsPerPage()
     {
         return $this->rowsPerPage;
     }
 
+    /**
+     * @return int
+     */
     public function getPageNumber()
     {
         return $this->pageNumber;
     }
 
+    /**
+     * @return SortOrderConfig
+     */
     public function getSortOrderConfig()
     {
         return $this->sortOrderConfig;
     }
 
+    /**
+     * @param int $rowsPerPage
+     */
     private static function validateRowsPerPage($rowsPerPage)
     {
         if (!is_int($rowsPerPage)) {
@@ -138,6 +159,9 @@ class QueryOptions
         }
     }
 
+    /**
+     * @param int $pageNumber
+     */
     private static function validatePageNumber($pageNumber)
     {
         if (!is_int($pageNumber)) {

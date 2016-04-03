@@ -10,7 +10,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent

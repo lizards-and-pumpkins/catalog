@@ -4,8 +4,6 @@ namespace LizardsAndPumpkins\Import\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
-
-
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;
 use LizardsAndPumpkins\Import\FileStorage\FileInStorage;

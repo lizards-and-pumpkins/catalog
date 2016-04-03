@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesEmptyException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesNotUniqueException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode

@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationInputException;
-
-
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 use LizardsAndPumpkins\Import\Price\Price;
 use SebastianBergmann\Money\Currency;

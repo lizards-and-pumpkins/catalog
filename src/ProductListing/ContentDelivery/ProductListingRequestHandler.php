@@ -179,6 +179,13 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $this->getResults($request, $numberOfProductsPerPage, $lastPageNumber, $selectedSortOrderConfig);
     }
 
+    /**
+     * @param HttpRequest $request
+     * @param int $numberOfProductsPerPage
+     * @param $currentPageNumber
+     * @param SortOrderConfig $selectedSortOrderConfig
+     * @return SearchEngineResponse
+     */
     private function getResults(
         HttpRequest $request,
         $numberOfProductsPerPage,

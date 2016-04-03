@@ -9,7 +9,6 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet

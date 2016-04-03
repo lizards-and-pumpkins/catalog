@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 
-
 /**
  * @covers \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  */

@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand

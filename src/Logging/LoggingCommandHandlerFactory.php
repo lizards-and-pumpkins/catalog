@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
-
-
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Util\Factory\Factory;

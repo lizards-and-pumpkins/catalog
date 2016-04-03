@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  */

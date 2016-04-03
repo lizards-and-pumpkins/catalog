@@ -3,10 +3,7 @@
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\InvalidSnippetCodeException;
-
-
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
-
 use LizardsAndPumpkins\Import\SnippetRenderer;
 
 /**

@@ -11,7 +11,6 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet

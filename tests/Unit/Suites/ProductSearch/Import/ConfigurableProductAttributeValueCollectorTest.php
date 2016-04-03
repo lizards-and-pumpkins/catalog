@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\Product\Product;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector

@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAtt
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeValueException;
 use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList
  */

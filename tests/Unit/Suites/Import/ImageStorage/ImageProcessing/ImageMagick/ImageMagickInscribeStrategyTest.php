@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidBinaryImageDataException;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidColorException;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidImageDimensionException;
-
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategy;
 
 /**

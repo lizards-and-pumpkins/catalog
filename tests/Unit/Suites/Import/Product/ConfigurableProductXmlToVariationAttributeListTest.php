@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-
 use LizardsAndPumpkins\Import\XPathParser;
 
 /**

@@ -64,6 +64,6 @@ class StubConfigurableProductView extends AbstractConfigurableProductView
      */
     public function getProductPageTitle()
     {
-        $this->getFirstValueOfAttribute('name');
+        return $this->getFirstValueOfAttribute('name');
     }
 }

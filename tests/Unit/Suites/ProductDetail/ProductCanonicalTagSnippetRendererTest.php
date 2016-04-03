@@ -10,7 +10,6 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl

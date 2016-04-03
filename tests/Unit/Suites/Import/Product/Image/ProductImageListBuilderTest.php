@@ -3,11 +3,8 @@
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Context\Context;
-
-
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductId;
-
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder

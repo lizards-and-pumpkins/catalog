@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
 
 require_once __DIR__ . '/../Stub/StubMessage.php';
 
-
 /**
  * @covers \LizardsAndPumpkins\Queue\InMemory\InMemoryQueue
  */

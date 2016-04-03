@@ -3,10 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-
-
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
-
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Import\Product\Product;

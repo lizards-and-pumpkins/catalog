@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\UnableToFindTransformationException;
 
-
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry
  */

@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileContentTypeException;
-
-
 use LizardsAndPumpkins\Import\FileStorage\Stub\CastableToStringStub;
 
 /**

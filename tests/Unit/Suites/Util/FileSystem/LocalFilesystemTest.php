@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryDoesNotExistException;
 use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryNotWritableException;
 use LizardsAndPumpkins\Util\FileSystem\Exception\NotADirectoryException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */

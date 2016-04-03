@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Price;
 
 use LizardsAndPumpkins\Import\Price\Exception\InvalidNumberOfDecimalPointsForPriceException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Price\Price
  */

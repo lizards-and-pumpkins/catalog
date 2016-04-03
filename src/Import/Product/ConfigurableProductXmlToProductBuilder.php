@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-
 use LizardsAndPumpkins\Import\XPathParser;
 
 class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuilder

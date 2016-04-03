@@ -5,8 +5,6 @@ namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductId;
-
-
 use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
 
 /**

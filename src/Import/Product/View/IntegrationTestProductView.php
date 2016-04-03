@@ -43,6 +43,6 @@ class IntegrationTestProductView extends AbstractProductView
      */
     public function getProductPageTitle()
     {
-        $this->getFirstValueOfAttribute('name');
+        return $this->getFirstValueOfAttribute('name');
     }
 }

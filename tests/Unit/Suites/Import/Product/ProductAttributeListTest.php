@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\Import\Product\Exception\ConflictingContextDataForProductAttributeListException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeNotFoundException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute

@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Queue\InMemory;
 
-
-
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Exception\NotSerializableException;
 use LizardsAndPumpkins\Util\Storage\Clearable;
@@ -48,7 +46,7 @@ class InMemoryQueue implements Queue, Clearable
      */
     public function next()
     {
-        if (empty($this->queue)) {
+        if ([] === $this->queue) {
             throw new \UnderflowException('Trying to get next message of an empty queue');
         }
 

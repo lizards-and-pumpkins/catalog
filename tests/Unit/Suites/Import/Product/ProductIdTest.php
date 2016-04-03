@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductIdException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductId
  */

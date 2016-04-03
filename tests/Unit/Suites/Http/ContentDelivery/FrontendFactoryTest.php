@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-
 use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -42,7 +41,6 @@ use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnipp
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
-
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 

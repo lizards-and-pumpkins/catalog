@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\SnippetRendererCollection
  */

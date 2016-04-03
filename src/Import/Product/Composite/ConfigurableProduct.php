@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
-
-
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;

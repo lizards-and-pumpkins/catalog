@@ -10,12 +10,8 @@ use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-
-
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
-
-
 use LizardsAndPumpkins\Import\Product\View\Stub\StubConfigurableProductView;
 use LizardsAndPumpkins\Import\Product\View\Stub\StubProductView;
 

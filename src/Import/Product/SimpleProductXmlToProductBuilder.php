@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
-
-
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidNumberOfSkusForImportedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\TaxClassAttributeMissingForImportedProductException;

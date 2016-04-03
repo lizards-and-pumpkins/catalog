@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-
 use LizardsAndPumpkins\Import\TemplateRendering\AbstractBlockRendererTest;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;

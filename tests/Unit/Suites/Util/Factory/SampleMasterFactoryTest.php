@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\SampleMasterFactory
  * @covers \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait

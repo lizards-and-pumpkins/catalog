@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory
  */

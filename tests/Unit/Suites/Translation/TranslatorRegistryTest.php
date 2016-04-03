@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Translation;
 
 use LizardsAndPumpkins\Translation\Exception\UndefinedTranslatorException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Translation\TranslatorRegistry
  */

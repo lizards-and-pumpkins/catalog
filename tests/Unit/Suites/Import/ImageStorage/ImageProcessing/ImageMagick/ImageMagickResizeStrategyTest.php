@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick;
 
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\AbstractResizeStrategyTest;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ResizeStrategyTrait

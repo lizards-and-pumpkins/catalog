@@ -9,8 +9,6 @@ use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
-
-
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**

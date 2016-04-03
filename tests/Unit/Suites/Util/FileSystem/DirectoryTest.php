@@ -1,11 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\UNUSED;
+namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Util\FileSystem\Directory;
-use LizardsAndPumpkins\Util\FileSystem\FileAlreadyExistsWithinGivenPathException;
-use LizardsAndPumpkins\Util\FileSystem\InvalidDirectoryPathException;
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\Directory

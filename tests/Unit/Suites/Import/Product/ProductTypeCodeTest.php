@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductTypeCode
  */

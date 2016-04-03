@@ -15,7 +15,6 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
-
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler

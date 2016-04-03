@@ -5,8 +5,6 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Price\Price;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
-
-
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 class SimpleProductBuilder implements ProductBuilder

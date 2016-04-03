@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\ContentBlock\Block;
-
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 

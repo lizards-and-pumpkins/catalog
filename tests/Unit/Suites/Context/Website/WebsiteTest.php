@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Context\Website\Website
  */

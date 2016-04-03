@@ -45,7 +45,7 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     public function render($dataObject)
     {
         // todo: important! use the data version from $dataObject, whatever that is
-        return array_map(function(Context $context) use ($dataObject) {
+        return array_map(function (Context $context) use ($dataObject) {
             return $this->createSearchAutosuggestionSnippetForContext($dataObject, $context);
         }, $this->contextSource->getAllAvailableContexts());
     }

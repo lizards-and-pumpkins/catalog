@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;
 use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageInStorage
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent

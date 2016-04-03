@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\RootElementOfLayoutMustBeAnArrayException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\Layout
  */
