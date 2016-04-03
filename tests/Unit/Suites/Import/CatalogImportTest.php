@@ -4,8 +4,6 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-
-
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
@@ -13,14 +11,12 @@ use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogImport
@@ -90,7 +86,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->getMock(ProductBuilder::class);
-        $stubProductBuilder->method('getId')->willReturn(ProductId::fromString('dummy'));
         $stubProductBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class));
 
         $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
@@ -174,7 +169,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(true);
-        
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
     }
 

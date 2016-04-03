@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\ProductDetail\Import\ProductImportCommandFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
-
 class ProductImportCommandLocator
 {
     /**

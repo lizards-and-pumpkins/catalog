@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 
-
 class ConfigurableProductBuilder implements ProductBuilder
 {
     /**

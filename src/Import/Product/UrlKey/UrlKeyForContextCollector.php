@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
-
 class UrlKeyForContextCollector
 {
     const URL_KEY_TYPE_LISTING = 'listing';

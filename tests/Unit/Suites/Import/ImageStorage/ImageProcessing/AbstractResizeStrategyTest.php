@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidBinaryImageDataException;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\InvalidImageDimensionException;
 
-
 abstract class AbstractResizeStrategyTest extends \PHPUnit_Framework_TestCase
 {
     public function testImageProcessorStrategyInterfaceIsImplemented()
@@ -58,7 +57,7 @@ abstract class AbstractResizeStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidBinaryImageDataException::class);
         
-        $imageStream = file_get_contents(__DIR__ . '/../../../../../shared-fixture/blank.ico');
+        $imageStream = file_get_contents(__DIR__ . '/../../../../fixture/blank.ico');
 
         $class = $this->getResizeClassName();
         (new $class(1, 1))->processBinaryImageData($imageStream);

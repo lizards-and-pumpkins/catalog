@@ -16,7 +16,6 @@ use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Messaging\Queue;
 
-
 class CatalogImport
 {
     /**
@@ -60,14 +59,14 @@ class CatalogImport
     private $queueImportCommands;
 
     public function __construct(
-        QueueImportCommands $quueImportCommands,
+        QueueImportCommands $queueImportCommands,
         ProductXmlToProductBuilderLocator $productXmlToProductBuilder,
         ProductListingBuilder $productListingBuilder,
         Queue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
     ) {
-        $this->queueImportCommands = $quueImportCommands;
+        $this->queueImportCommands = $queueImportCommands;
         $this->productXmlToProductBuilder = $productXmlToProductBuilder;
         $this->productListingBuilder = $productListingBuilder;
         $this->eventQueue = $eventQueue;

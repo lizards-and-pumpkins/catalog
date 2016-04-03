@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
@@ -397,5 +398,13 @@ class UnitTestFactory implements Factory
     public function createThemeLocator()
     {
         return $this->mockObjectGenerator->getMock(ThemeLocator::class, [], [], '', false);
+    }
+
+    /**
+     * @return ContextSource
+     */
+    public function createContextSource()
+    {
+        return $this->mockObjectGenerator->getMock(ContextSource::class, [], [], '', false);
     }
 }

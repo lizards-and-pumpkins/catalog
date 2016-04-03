@@ -15,7 +15,6 @@ use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\Website\ContextWebsite;
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\Import\SnippetRenderer;
@@ -25,7 +24,6 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
-
 use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
@@ -76,14 +74,12 @@ use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
-
 
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\CommonFactory
@@ -267,12 +263,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductListingBuilder();
         $this->assertInstanceOf(ProductListingBuilder::class, $result);
-    }
-
-    public function testContextSourceIsReturned()
-    {
-        $result = $this->commonFactory->createContextSource();
-        $this->assertInstanceOf(ContextSource::class, $result);
     }
 
     public function testContextBuilderIsReturned()
@@ -497,6 +487,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProcessTimeLoggingCommandHandlerDecorator()
     {
+        /** @var AddImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
         $commandHandlerToDecorate = $this->commonFactory->createAddImageCommandHandler($stubCommand);
         $result = $this->commonFactory->createProcessTimeLoggingCommandHandlerDecorator($commandHandlerToDecorate);
@@ -844,7 +835,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsRobotsMetaTagSnippetRenderer()
     {
-        $result = $this->commonFactory->createRobotsMetaTagSnippetRenderer($this->getMock(SnippetKeyGenerator::class));
+        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $snippetKeyGenerator */
+        $snippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $result = $this->commonFactory->createRobotsMetaTagSnippetRenderer($snippetKeyGenerator);
         $this->assertInstanceOf(RobotsMetaTagSnippetRenderer::class, $result);
     }
 

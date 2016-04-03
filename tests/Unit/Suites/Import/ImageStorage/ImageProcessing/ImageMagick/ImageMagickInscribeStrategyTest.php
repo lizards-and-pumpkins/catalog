@@ -71,7 +71,7 @@ class ImageMagickInscribeStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidBinaryImageDataException::class);
 
-        $imageStream = file_get_contents(__DIR__ . '/../../../../../../shared-fixture/blank.ico');
+        $imageStream = file_get_contents(__DIR__ . '/../../../../../fixture/blank.ico');
 
         (new ImageMagickInscribeStrategy(1, 1, 'none'))->processBinaryImageData($imageStream);
     }

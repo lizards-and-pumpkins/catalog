@@ -3,6 +3,8 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\IntegrationTestContextSource;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy;
@@ -539,6 +541,14 @@ class IntegrationTestFactory implements Factory
      */
     public function createThemeLocator()
     {
-        return ThemeLocator::fromPath($this->getMasterFactory()->getBasePathConfig());
+        return ThemeLocator::fromPath(__DIR__ . '/../fixture');
+    }
+
+    /**
+     * @return ContextSource
+     */
+    public function createContextSource()
+    {
+        return new IntegrationTestContextSource($this->getMasterFactory()->createContextBuilder());
     }
 }

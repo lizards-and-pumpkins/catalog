@@ -26,7 +26,6 @@ class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var AddImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
-        $stubCommand->method('getImageFileName')->willReturn('foo.png');
         $stubCommand->method('getDataVersion')->willReturn($this->getMock(DataVersion::class, [], [], '', false));
 
         $this->mockDomainEventQueue = $this->getMock(Queue::class);

@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Context\Context;
 
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeContextPartsMismatchException;
 
-
 class ProductAttributeListBuilder
 {
     /**

@@ -15,7 +15,6 @@ use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
-
 class DefaultWebFront extends WebFront
 {
     /**

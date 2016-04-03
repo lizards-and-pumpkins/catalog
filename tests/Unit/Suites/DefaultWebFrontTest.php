@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\\DefaultWebFront
+ * @covers \LizardsAndPumpkins\DefaultWebFront
  * @covers \LizardsAndPumpkins\Http\WebFront
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
@@ -30,7 +30,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
- * @uses   \LizardsAndPumpkins\UNUSED\PricesJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
  * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator

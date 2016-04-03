@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
-
 class UpdatingProductImageImportCommandFactory implements ProductImageImportCommandFactory
 {
     use FactoryTrait;

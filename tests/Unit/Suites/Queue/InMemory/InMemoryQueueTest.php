@@ -31,7 +31,7 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNonSerializableDataIsPassed()
     {
-        $this->setExpectedException(NotSerializableException::class);
+        $this->expectException(NotSerializableException::class);
         $simpleXml = simplexml_load_string('<root />');
         $this->queue->add($simpleXml);
     }
@@ -76,7 +76,7 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
     
     public function testExceptionIsThrownDuringAttemptToReceiveMessageFromEmptyQueue()
     {
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->queue->next();
     }
 

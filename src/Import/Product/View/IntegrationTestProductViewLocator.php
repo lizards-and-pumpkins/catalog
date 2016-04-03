@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\Product\View;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Product;
 
-
 class IntegrationTestProductViewLocator implements ProductViewLocator
 {
     /**

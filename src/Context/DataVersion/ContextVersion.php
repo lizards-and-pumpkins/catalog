@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 
-
 class ContextVersion implements ContextPartBuilder
 {
     const CODE = 'version';
