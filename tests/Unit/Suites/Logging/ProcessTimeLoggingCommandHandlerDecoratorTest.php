@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 
-
 /**
  * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage

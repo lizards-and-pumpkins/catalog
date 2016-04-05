@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Util\FileSystem;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotReadableException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem

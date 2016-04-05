@@ -13,8 +13,6 @@ use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\Product;
-
-
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 

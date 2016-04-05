@@ -9,7 +9,6 @@ use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
  */

@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\RestApi\Exception\ApiVersionMustBeIntException;
 
-
 /**
  * @covers LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  */

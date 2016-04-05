@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class ContentBlockImportTest extends AbstractIntegrationTest

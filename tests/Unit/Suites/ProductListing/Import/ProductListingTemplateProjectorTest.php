@@ -6,7 +6,6 @@ use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
  */

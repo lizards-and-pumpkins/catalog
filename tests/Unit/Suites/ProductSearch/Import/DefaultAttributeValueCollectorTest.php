@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Product;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode

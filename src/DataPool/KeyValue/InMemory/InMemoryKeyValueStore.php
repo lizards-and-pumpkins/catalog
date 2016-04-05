@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\DataPool\KeyValue\InMemory;
 
-
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\Util\Storage\Clearable;

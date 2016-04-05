@@ -5,9 +5,7 @@ namespace LizardsAndPumpkins\Util;
 use League\CLImate\Argument\Manager as ArgumentManager;
 use League\CLImate\CLImate;
 use League\CLImate\Util\Output as CliOutput;
-
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
-
 
 /**
  * @covers \LizardsAndPumpkins\Util\BaseCliCommand

@@ -7,7 +7,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidRowsPerPageException;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\QueryOptions
  */

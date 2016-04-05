@@ -4,10 +4,8 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
-
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
 use LizardsAndPumpkins\Messaging\Queue;
 

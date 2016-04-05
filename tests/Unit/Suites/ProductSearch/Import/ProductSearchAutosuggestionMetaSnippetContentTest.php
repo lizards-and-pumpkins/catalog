@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer

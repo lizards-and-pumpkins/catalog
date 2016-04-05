@@ -90,7 +90,9 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithKeySpec()
     {
         $this->expectException(InvalidSnippetContentException::class);
-        $this->expectExceptionMessage('Invalid snippet content for the key "a-key" specified: expected string, got "NULL"');
+        $this->expectExceptionMessage(
+            'Invalid snippet content for the key "a-key" specified: expected string, got "NULL"'
+        );
         $this->pageSnippets->updateSnippetByKey('a-key', null);
     }
 

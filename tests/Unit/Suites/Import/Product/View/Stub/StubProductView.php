@@ -45,6 +45,6 @@ class StubProductView extends AbstractProductView
      */
     public function getProductPageTitle()
     {
-        $this->getFirstValueOfAttribute('name');
+        return $this->getFirstValueOfAttribute('name');
     }
 }

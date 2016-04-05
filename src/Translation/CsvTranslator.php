@@ -109,7 +109,7 @@ class CsvTranslator implements Translator
     /**
      * @return string[]
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return $this->translations;
     }

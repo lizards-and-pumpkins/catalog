@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Context\Locale;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
-
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**

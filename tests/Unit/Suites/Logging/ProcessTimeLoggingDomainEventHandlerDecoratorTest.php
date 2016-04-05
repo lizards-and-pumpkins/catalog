@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 
-
 /**
  * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage

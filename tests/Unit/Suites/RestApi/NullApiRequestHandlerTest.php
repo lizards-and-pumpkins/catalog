@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 
-
 /**
  * @covers \LizardsAndPumpkins\RestApi\NullApiRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler

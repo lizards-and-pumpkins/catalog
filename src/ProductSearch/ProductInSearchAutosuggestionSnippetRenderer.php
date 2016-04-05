@@ -47,6 +47,10 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
         ];
     }
 
+    /**
+     * @param ProductView $product
+     * @return Snippet
+     */
     private function createProductInSearchAutosuggestionSnippet(ProductView $product)
     {
         $content = $this->blockRenderer->render($product, $product->getContext());

@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
-
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 
 class AssociatedProductListBuilder

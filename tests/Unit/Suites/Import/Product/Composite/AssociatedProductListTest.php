@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
-
 use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;

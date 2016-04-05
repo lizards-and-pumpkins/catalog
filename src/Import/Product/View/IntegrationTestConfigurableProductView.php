@@ -60,6 +60,6 @@ class IntegrationTestConfigurableProductView extends AbstractConfigurableProduct
      */
     public function getProductPageTitle()
     {
-        $this->getFirstValueOfAttribute('name');
+        return $this->getFirstValueOfAttribute('name');
     }
 }

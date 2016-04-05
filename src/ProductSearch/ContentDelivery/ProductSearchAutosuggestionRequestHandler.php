@@ -50,13 +50,6 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      */
     private $sortOrderConfig;
 
-    /**
-     * @param Context $context
-     * @param DataPoolReader $dataPoolReader
-     * @param PageBuilder $pageBuilder
-     * @param SnippetKeyGeneratorLocator $keyGeneratorLocator
-     * @param SortOrderConfig $sortOrderConfig
-     */
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,

@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent
  */

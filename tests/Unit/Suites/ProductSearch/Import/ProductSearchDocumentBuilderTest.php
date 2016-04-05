@@ -14,7 +14,6 @@ use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument

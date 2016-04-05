@@ -3,10 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-
-
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeContextPartsMismatchException;
-
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder

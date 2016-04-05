@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\LogMessage;
 
-
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage
  */

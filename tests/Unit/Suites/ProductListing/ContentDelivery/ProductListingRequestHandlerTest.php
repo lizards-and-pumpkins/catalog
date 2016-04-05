@@ -12,8 +12,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-
-
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 

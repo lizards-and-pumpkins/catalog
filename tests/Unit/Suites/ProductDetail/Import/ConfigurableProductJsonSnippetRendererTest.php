@@ -10,7 +10,6 @@ use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet

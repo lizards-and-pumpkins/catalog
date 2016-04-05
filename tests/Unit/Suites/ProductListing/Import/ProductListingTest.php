@@ -3,9 +3,7 @@
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
-
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListing

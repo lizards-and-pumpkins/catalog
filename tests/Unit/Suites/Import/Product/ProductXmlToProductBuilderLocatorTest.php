@@ -3,11 +3,9 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidNumberOfSkusForImportedProductException;
-
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 use LizardsAndPumpkins\Import\Product\Exception\TaxClassAttributeMissingForImportedProductException;
-
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator

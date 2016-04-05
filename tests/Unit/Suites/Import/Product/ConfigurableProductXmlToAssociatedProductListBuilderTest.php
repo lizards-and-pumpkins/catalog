@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
-
-
 use LizardsAndPumpkins\Import\XPathParser;
 
 /**

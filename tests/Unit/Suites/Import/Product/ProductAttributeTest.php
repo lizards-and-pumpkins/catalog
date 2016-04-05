@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductAttributeValueException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeDoesNotContainContextPartException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList

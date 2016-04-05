@@ -3,11 +3,8 @@
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Import\Product\Product;
-
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-
-
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**

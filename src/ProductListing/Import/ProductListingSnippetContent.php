@@ -6,7 +6,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-
 use LizardsAndPumpkins\Import\SnippetContainer;
 
 class ProductListingSnippetContent implements PageMetaInfoSnippetContent

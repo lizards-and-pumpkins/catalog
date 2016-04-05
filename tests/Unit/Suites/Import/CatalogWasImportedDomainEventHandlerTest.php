@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-
-
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 
 /**

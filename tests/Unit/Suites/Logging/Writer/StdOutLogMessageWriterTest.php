@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Logging\Writer;
 use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Logging\LogMessageWriter;
 
-
 /**
  * @covers LizardsAndPumpkins\Logging\Writer\StdOutLogMessageWriter
  */

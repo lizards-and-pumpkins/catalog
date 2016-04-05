@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\InvalidUrlKeySourceException;
 
-
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */

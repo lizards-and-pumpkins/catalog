@@ -7,7 +7,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProces
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  */

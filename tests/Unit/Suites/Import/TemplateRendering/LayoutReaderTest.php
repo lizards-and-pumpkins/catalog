@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\LayoutFileNotReadableException;
-
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**

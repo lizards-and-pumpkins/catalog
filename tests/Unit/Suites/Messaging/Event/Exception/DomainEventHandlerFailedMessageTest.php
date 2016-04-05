@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Messaging\Event\Exception;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
-
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage
  */

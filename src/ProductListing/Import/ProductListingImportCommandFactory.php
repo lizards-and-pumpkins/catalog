@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Util\Factory\Factory;
 
-
 interface ProductListingImportCommandFactory extends Factory
 {
     /**

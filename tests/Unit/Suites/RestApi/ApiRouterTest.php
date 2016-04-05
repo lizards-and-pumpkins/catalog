@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\RestApi;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
-
 /**
  * @covers \LizardsAndPumpkins\RestApi\ApiRouter
  * @uses   \LizardsAndPumpkins\Http\Routing\HttpRequestHandler

@@ -12,8 +12,6 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-
-
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
