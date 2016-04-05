@@ -1,9 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\DataPool\KeyValue\InMemory;
+namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
-use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class InMemoryKeyValueStore implements KeyValueStore, Clearable
