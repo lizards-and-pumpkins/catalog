@@ -1,15 +1,15 @@
 <?php
 
-namespace LizardsAndPumpkins\Queue\InMemory;
+namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\NotSerializableException;
 use LizardsAndPumpkins\Queue\Stub\StubMessage;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
-require_once __DIR__ . '/../Stub/StubMessage.php';
+require_once __DIR__ . '/Stub/StubMessage.php';
 
 /**
- * @covers \LizardsAndPumpkins\Queue\InMemory\InMemoryQueue
+ * @covers \LizardsAndPumpkins\Messaging\Queue\InMemoryQueue
  */
 class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
 {

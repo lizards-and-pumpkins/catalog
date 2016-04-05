@@ -21,5 +21,12 @@ spl_autoload_register(function ($class) {
 
     if (file_exists($file)) {
         require $file;
+        return;
+    }
+
+    $integrationUtil = __DIR__ . '/../Integration/Util/' . str_replace('\\', '/', $relativeClass) . '.php';
+
+    if (file_exists($integrationUtil)) {
+        require $integrationUtil;
     }
 });

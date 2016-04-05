@@ -26,6 +26,7 @@
         verbose="false">
     <testsuite name="Lizards and Pumpkins Unit Tests">
         <directory>Suites</directory>
+        <directory>../Integration/Util/Test/Unit/Suites</directory>
     </testsuite>
     <filter>
         <whitelist>

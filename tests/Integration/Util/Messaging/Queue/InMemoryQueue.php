@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Queue\InMemory;
+namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Exception\NotSerializableException;
