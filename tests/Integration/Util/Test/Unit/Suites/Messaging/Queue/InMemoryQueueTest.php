@@ -3,10 +3,8 @@
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\NotSerializableException;
-use LizardsAndPumpkins\Queue\Stub\StubMessage;
+use LizardsAndPumpkins\Messaging\Queue\Stub\StubMessage;
 use LizardsAndPumpkins\Util\Storage\Clearable;
-
-require_once __DIR__ . '/Stub/StubMessage.php';
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Queue\InMemoryQueue

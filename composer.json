@@ -32,7 +32,15 @@
         "psr-4": {"LizardsAndPumpkins\\": "src/"}
     },
     "autoload-dev": {
-        "psr-4": {"LizardsAndPumpkins\\": "tests/Integration/Util"}
+        "psr-4": {
+            "LizardsAndPumpkins\\": [
+                "tests/Unit/Util",
+                "tests/Integration/Util",
+                "tests/Unit/Suites",
+                "tests/Integration/Util/Test/Unit/Suites",
+                "tests/Integration/Suites"
+            ]
+        }
     },
     "repositories": [
         {

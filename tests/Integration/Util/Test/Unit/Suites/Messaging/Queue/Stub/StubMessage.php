@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Queue\Stub;
+namespace LizardsAndPumpkins\Messaging\Queue\Stub;
 
 class StubMessage implements \Serializable
 {
