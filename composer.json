@@ -31,6 +31,9 @@
     "autoload": {
         "psr-4": {"LizardsAndPumpkins\\": "src/"}
     },
+    "autoload-dev": {
+        "psr-4": {"LizardsAndPumpkins\\": "tests/Integration/Util"}
+    },
     "repositories": [
         {
             "type": "composer",
