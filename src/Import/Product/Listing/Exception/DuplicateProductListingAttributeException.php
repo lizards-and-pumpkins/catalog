@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\Product\Listing\Exception;
 
-class DuplicateProductListingAttributeException extends \LogicException
+class DuplicateProductListingAttributeException extends \RuntimeException
 {
 
 }
