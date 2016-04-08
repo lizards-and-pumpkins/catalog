@@ -166,7 +166,7 @@ class PageBuilderSnippets implements PageSnippets
     private function buildPlaceholderFromCode($code)
     {
         // TODO delegate placeholder creation (and also use the delegate during import)
-        /** @see LizardsAndPumpkins\Renderer\BlockRenderer::getBlockPlaceholder() * */
+        /** @see LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer::getBlockPlaceholder() * */
 
         return sprintf(static::$placeholderTemplateString, $code);
     }

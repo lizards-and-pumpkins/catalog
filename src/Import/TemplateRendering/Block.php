@@ -1,10 +1,9 @@
 <?php
 
-namespace LizardsAndPumpkins\Import\ContentBlock;
+namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\TemplateFileNotReadableException;
-use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 
 class Block
 {
