@@ -79,14 +79,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->createFileStorageReader());
     }
 
-    public function testImageProcessingStrategySequenceIsReturned()
-    {
-        $this->assertInstanceOf(
-            ImageProcessingStrategySequence::class,
-            $this->factory->createImageProcessingStrategySequence()
-        );
-    }
-
     public function testArrayOfSearchableAttributeCodesIsReturned()
     {
         $result = $this->factory->getSearchableAttributeCodes();

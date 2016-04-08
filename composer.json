@@ -18,7 +18,6 @@
     ],
     "require": {
         "php": "^5.6.0|^7.0",
-        "ext-imagick": "*",
         "league/url": "3.1.1",
         "sebastian/money": "^1.5",
         "ramsey/uuid": "^2.8",
