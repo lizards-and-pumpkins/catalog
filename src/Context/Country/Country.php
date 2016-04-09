@@ -18,7 +18,7 @@ class Country
     {
         $this->twoCharIso3166Code = $isoString;
     }
-    
+
     /**
      * @param string|Country $isoString
      * @return Country
@@ -39,7 +39,7 @@ class Country
      */
     private static function validateType($isoString)
     {
-        if (!is_string($isoString)) {
+        if (! is_string($isoString)) {
             $message = sprintf('The country specification has to be a string, got "%s"', self::getType($isoString));
             throw new InvalidCountrySpecificationException($message);
         }

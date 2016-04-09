@@ -63,7 +63,7 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
      */
     private static function buildArrayMapFromString($configValue)
     {
-        $pairs = array_map([__CLASS__, 'splitConfigRecord'], explode(self::RECORD_SEPARATOR, $configValue));
+        $pairs = array_map([self::class, 'splitConfigRecord'], explode(self::RECORD_SEPARATOR, $configValue));
 
         return self::flatten($pairs);
     }
