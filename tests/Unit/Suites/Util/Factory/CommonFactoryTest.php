@@ -93,7 +93,6 @@ use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer

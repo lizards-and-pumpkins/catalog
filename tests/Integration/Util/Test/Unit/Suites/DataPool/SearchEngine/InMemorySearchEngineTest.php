@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine\InMemory;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\AbstractSearchEngineTest;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 
 /**
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
+ * @covers \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder

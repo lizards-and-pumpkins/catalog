@@ -1,9 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine\InMemory;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTestSearchEngineAbstract;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 

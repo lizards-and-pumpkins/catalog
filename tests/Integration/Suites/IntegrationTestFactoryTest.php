@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;

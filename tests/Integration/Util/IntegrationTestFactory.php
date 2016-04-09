@@ -20,7 +20,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
-use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
