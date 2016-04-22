@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins\Context\Website;
 
-use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordException;
 use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\Util\Config\ConfigReader;
 
 class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
 {
@@ -63,7 +63,7 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
      */
     private static function buildArrayMapFromString($configValue)
     {
-        $pairs = array_map('self::splitConfigRecord', explode(self::RECORD_SEPARATOR, $configValue));
+        $pairs = array_map([self::class, 'splitConfigRecord'], explode(self::RECORD_SEPARATOR, $configValue));
 
         return self::flatten($pairs);
     }
