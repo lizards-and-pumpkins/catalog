@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\InvalidSnippetCodeException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\MissingSnippetKeyGenerationDataException;
 use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
