@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\InvalidSnippetCodeException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
 {
@@ -41,17 +42,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
      */
     private function validateSnippetCode($snippetCode)
     {
-        if (!is_string($snippetCode)) {
-            throw new InvalidSnippetCodeException(sprintf(
-                'Expected snippet code to be a string but got "%s"',
-                (is_scalar($snippetCode) ? $snippetCode : gettype($snippetCode))
-            ));
-        }
-
-        if (trim($snippetCode) === '') {
-            throw new InvalidSnippetCodeException('Snippet code must not be empty');
-
-        }
+        SnippetCodeValidator::validate($snippetCode);
     }
 
     /**

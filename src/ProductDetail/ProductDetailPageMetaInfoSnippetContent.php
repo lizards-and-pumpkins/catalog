@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetContainer;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 {
@@ -172,12 +173,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      */
     private static function validateRootSnippetCode($rootSnippetCode)
     {
-        if (!is_string($rootSnippetCode)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The page meta info root snippet code has to be a string value, got "%s"',
-                gettype($rootSnippetCode)
-            ));
-        }
+        SnippetCodeValidator::validate($rootSnippetCode);
     }
 
     /**

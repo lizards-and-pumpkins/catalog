@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
@@ -75,7 +76,7 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidSnippetCodeException::class);
         ProductListingSnippetContent::create($this->stubSelectionCriteria, 1.0, [], []);
     }
 
@@ -273,7 +274,7 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingSnippetContent::KEY_ROOT_SNIPPET_CODE  => '',
+            ProductListingSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'root',
             ProductListingSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ]);
 

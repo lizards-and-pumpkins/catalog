@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetContainer;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class ProductListingSnippetContent implements PageMetaInfoSnippetContent
 {
@@ -156,12 +157,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      */
     private static function validateRootSnippetCode($rootSnippetCode)
     {
-        if (! is_string($rootSnippetCode)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The page meta info root snippet code has to be a string value, got "%s"',
-                gettype($rootSnippetCode)
-            ));
-        }
+        SnippetCodeValidator::validate($rootSnippetCode);
     }
 
     /**
