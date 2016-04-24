@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
+use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
@@ -44,11 +46,14 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return HttpResponse
      */
-    protected function getResponseBody(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request)
     {
-        return json_encode('OK');
+        $headers = [];
+        $body = json_encode('OK');
+
+        return DefaultHttpResponse::create($body, $headers);
     }
 
     protected function processRequest(HttpRequest $request)

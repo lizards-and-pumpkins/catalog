@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
+use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -45,11 +47,14 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return HttpResponse
      */
-    protected function getResponseBody(HttpRequest $request)
+    protected function getResponse(HttpRequest $request)
     {
-        return json_encode('OK');
+        $headers = [];
+        $body = json_encode('OK');
+
+        return DefaultHttpResponse::create($body, $headers);
     }
 
     /**
