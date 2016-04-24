@@ -52,11 +52,12 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
     {
         $headers = [];
         $body = json_encode('OK');
+        $statusCode = 202;
 
-        return DefaultHttpResponse::create($body, $headers);
+        return DefaultHttpResponse::create($body, $headers, $statusCode);
     }
 
-    protected function processRequest(HttpRequest $request)
+    final protected function processRequest(HttpRequest $request)
     {
         $requestBody = json_decode($request->getRawBody(), true);
         $this->validateRequestBody($requestBody);
@@ -83,7 +84,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
     /**
      * @param string[] $requestBody
      */
-    protected function validateRequestBody(array $requestBody)
+    private function validateRequestBody(array $requestBody)
     {
         if (!isset($requestBody['content'])) {
             throw new ContentBlockBodyIsMissingInRequestBodyException(

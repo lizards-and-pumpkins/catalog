@@ -74,8 +74,9 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
     {
         $headers = [];
         $body = json_encode('OK');
+        $statusCode = 202;
 
-        return DefaultHttpResponse::create($body, $headers);
+        return DefaultHttpResponse::create($body, $headers, $statusCode);
     }
 
     protected function processRequest(HttpRequest $request)

@@ -105,6 +105,8 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->mockCatalogImport->expects($this->once())->method('importFile')
             ->with($this->stringEndsWith('/' . $importFileName));
 
-        $this->requestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
+        
+        $this->assertSame(202, $response->getStatusCode());
     }
 }

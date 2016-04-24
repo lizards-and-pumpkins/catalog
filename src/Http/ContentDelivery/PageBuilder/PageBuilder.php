@@ -87,9 +87,11 @@ class PageBuilder
 
         $this->applySnippetTransformations();
 
-        $content = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
+        $body = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
+        $headers = [];
+        $statusCode = 200;
 
-        return DefaultHttpResponse::create($content, []);
+        return DefaultHttpResponse::create($body, $headers, $statusCode);
     }
 
     /**

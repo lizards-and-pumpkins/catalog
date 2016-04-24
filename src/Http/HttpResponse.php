@@ -10,6 +10,11 @@ interface HttpResponse
     public function getBody();
 
     /**
+     * @return int
+     */
+    public function getStatusCode();
+
+    /**
      * @return void
      */
     public function send();

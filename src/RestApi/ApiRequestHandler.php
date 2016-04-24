@@ -29,7 +29,7 @@ abstract class ApiRequestHandler implements HttpRequestHandler
             'Content-Type' => 'application/json',
         ];
 
-        return DefaultHttpResponse::create($response->getBody(), $headers);
+        return DefaultHttpResponse::create($response->getBody(), $headers, $response->getStatusCode());
     }
 
     /**

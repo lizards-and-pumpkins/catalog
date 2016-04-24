@@ -108,6 +108,8 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
             ->method('add')
             ->with($this->isInstanceOf(UpdateContentBlockCommand::class));
 
-        $this->requestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
+
+        $this->assertSame(202, $response->getStatusCode());
     }
 }
