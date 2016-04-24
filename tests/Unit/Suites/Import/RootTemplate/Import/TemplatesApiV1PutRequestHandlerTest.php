@@ -77,5 +77,6 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $response = $this->requestHandler->process($this->mockRequest);
         
         $this->assertSame(202, $response->getStatusCode());
+        $this->assertSame('', $response->getBody());
     }
 }

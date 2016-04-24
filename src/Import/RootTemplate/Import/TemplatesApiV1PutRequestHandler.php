@@ -52,7 +52,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
     protected function getResponse(HttpRequest $request)
     {
         $headers = [];
-        $body = json_encode('OK');
+        $body = '';
         $statusCode = 202;
 
         return DefaultHttpResponse::create($body, $headers, $statusCode);
