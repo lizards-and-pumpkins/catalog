@@ -41,7 +41,20 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
         $invalidStatusCode = false;
 
         $this->expectException(InvalidStatusCodeException::class);
+        $this->expectExceptionMessage('Response status code must be an integer, got boolean.');
         
+        GenericHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
+    }
+
+    public function testExceptionIsThrownIfGivenResponseStatusCodeIsOutOfRange()
+    {
+        $dummyBody = 'foo';
+        $dummyHeaders = [];
+        $invalidStatusCode = 600;
+
+        $this->expectException(InvalidStatusCodeException::class);
+        $this->expectExceptionMessage('Response status code must be [100-599], got 600.');
+
         GenericHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
     }
 

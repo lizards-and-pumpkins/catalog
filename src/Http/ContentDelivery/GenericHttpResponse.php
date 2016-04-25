@@ -88,9 +88,7 @@ class GenericHttpResponse implements HttpResponse
     private static function validateResponseBody($body)
     {
         if (! is_string($body)) {
-            throw new InvalidResponseBodyException(
-                sprintf('Expecting request body to be string, got %s.', gettype($body))
-            );
+            throw new InvalidResponseBodyException(sprintf('Response body must be a string, got %s.', gettype($body)));
         }
     }
 
@@ -101,7 +99,13 @@ class GenericHttpResponse implements HttpResponse
     {
         if (! is_int($statusCode)) {
             throw new InvalidStatusCodeException(
-                sprintf('Expecting request status code to be integer, got %s.', gettype($statusCode))
+                sprintf('Response status code must be an integer, got %s.', gettype($statusCode))
+            );
+        }
+
+        if ($statusCode < 100 || $statusCode > 599) {
+            throw new InvalidStatusCodeException(
+                sprintf('Response status code must be [100-599], got %s.', $statusCode)
             );
         }
     }
