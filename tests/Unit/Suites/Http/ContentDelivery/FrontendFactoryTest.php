@@ -2,51 +2,52 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-use LizardsAndPumpkins\RestApi\ApiRouter;
-use LizardsAndPumpkins\UnitTestFactory;
-use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
-use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpsUrl;
-use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
-use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
+use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
+use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
+use LizardsAndPumpkins\RestApi\ApiRouter;
+use LizardsAndPumpkins\UnitTestFactory;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
  * @covers \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\SampleMasterFactory
  * @uses   \LizardsAndPumpkins\UnitTestFactory

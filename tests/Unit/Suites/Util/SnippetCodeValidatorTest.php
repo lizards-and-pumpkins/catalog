@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\Unit\Suites\Util;
 
-
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
+/**
+ * @covers   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ */
 class SnippetCodeValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsStringValidation()

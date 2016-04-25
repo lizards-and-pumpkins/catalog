@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
+ * @covers \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
 {

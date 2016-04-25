@@ -4,8 +4,8 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 /**
  * @covers \LizardsAndPumpkins\DefaultWebFront
  * @covers \LizardsAndPumpkins\Http\WebFront
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory

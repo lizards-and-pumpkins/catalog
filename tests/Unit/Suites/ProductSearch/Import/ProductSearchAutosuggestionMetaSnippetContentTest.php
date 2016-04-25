@@ -6,8 +6,9 @@ use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
- * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
- * @uses   \LizardsAndPumpkins\Import\SnippetContainer
+ * @covers   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
+ * @covers   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses     \LizardsAndPumpkins\Import\SnippetContainer
  */
 class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
