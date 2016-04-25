@@ -22,15 +22,6 @@ class ImageImportTest extends AbstractIntegrationTest
         mkdir($processedImagesDir, 0700, true);
     }
 
-    protected function setUp()
-    {
-        if (!extension_loaded('imagick')) {
-            $this->markTestSkipped('The PHP extension imagick is not installed');
-        }
-
-        $this->flushProcessedImagesDir();
-    }
-
     protected function tearDown()
     {
         $this->flushProcessedImagesDir();
