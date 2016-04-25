@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\RestApi;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 
@@ -28,6 +28,6 @@ class StubApiRequestHandler extends ApiRequestHandler
         $headers = [];
         $statusCode = 200;
 
-        return DefaultHttpResponse::create(self::DUMMY_BODY_CONTENT, $headers, $statusCode);
+        return GenericHttpResponse::create(self::DUMMY_BODY_CONTENT, $headers, $statusCode);
     }
 }

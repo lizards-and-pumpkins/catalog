@@ -17,7 +17,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class PageBuilderTest extends \PHPUnit_Framework_TestCase

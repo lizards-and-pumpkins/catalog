@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidStatusCodeException
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpResponse;
 
-class DefaultHttpResponse implements HttpResponse
+class GenericHttpResponse implements HttpResponse
 {
     /**
      * @var string
@@ -40,7 +40,7 @@ class DefaultHttpResponse implements HttpResponse
      * @param string $body
      * @param string[] $headers
      * @param int $statusCode
-     * @return DefaultHttpResponse
+     * @return GenericHttpResponse
      */
     public static function create($body, array $headers, $statusCode)
     {

@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -55,7 +55,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
         $body = '';
         $statusCode = 202;
 
-        return DefaultHttpResponse::create($body, $headers, $statusCode);
+        return GenericHttpResponse::create($body, $headers, $statusCode);
     }
 
     /**

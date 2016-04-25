@@ -15,7 +15,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpResponse
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

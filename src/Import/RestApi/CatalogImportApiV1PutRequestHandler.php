@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -76,7 +76,7 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         $body = '';
         $statusCode = 202;
 
-        return DefaultHttpResponse::create($body, $headers, $statusCode);
+        return GenericHttpResponse::create($body, $headers, $statusCode);
     }
 
     protected function processRequest(HttpRequest $request)

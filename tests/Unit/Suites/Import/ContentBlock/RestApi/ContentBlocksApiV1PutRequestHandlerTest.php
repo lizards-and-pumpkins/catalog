@@ -17,7 +17,7 @@ use LizardsAndPumpkins\Messaging\Queue;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase

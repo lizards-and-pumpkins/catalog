@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  */
 class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

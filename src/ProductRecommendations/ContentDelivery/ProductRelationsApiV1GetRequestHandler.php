@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\ProductRecommendations\Exception\UnableToProcessProductRelationsRequestException;
@@ -54,7 +54,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
         $body = json_encode(['data' => $relatedProductsData]);
         $statusCode = 200;
 
-        return DefaultHttpResponse::create($body, $headers, $statusCode);
+        return GenericHttpResponse::create($body, $headers, $statusCode);
     }
 
     /**

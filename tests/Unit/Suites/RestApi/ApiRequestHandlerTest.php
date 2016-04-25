@@ -2,13 +2,13 @@
 
 namespace LizardsAndPumpkins\RestApi;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\ApiRequestHandler
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -34,10 +34,10 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpRequestHandler::class, $this->apiRequestHandler);
     }
 
-    public function testInstanceOfDefaultHttpResponseIsReturned()
+    public function testInstanceOfGenericHttpResponseIsReturned()
     {
         $result = $this->apiRequestHandler->process($this->stubRequest);
-        $this->assertInstanceOf(DefaultHttpResponse::class, $result);
+        $this->assertInstanceOf(GenericHttpResponse::class, $result);
     }
 
     public function testApiSpecificHeadersAreSet()

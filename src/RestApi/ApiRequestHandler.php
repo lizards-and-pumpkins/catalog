@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\RestApi;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
@@ -11,7 +11,7 @@ abstract class ApiRequestHandler implements HttpRequestHandler
 {
     /**
      * @param HttpRequest $request
-     * @return DefaultHttpResponse
+     * @return GenericHttpResponse
      */
     final public function process(HttpRequest $request)
     {
@@ -29,7 +29,7 @@ abstract class ApiRequestHandler implements HttpRequestHandler
             'Content-Type' => 'application/json',
         ];
 
-        return DefaultHttpResponse::create($response->getBody(), $headers, $response->getStatusCode());
+        return GenericHttpResponse::create($response->getBody(), $headers, $response->getStatusCode());
     }
 
     /**

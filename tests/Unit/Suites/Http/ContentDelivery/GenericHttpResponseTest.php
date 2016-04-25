@@ -7,10 +7,10 @@ use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidStatusCodeException
 use LizardsAndPumpkins\Http\HttpResponse;
 
 /**
- * @covers \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
-class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
+class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testHttpResponseInterfaceIsImplemented()
     {
@@ -18,7 +18,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [];
         $dummyStatusCode = 200;
 
-        $result = DefaultHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
+        $result = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
 
         $this->assertInstanceOf(HttpResponse::class, $result);
     }
@@ -31,7 +31,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(InvalidResponseBodyException::class);
         
-        DefaultHttpResponse::create($invalidBody, $dummyHeaders, $dummyStatusCode);
+        GenericHttpResponse::create($invalidBody, $dummyHeaders, $dummyStatusCode);
     }
 
     public function testExceptionIsThrownDuringAttemptToCreateResponseWithNonIntegerStatusCode()
@@ -42,7 +42,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->expectException(InvalidStatusCodeException::class);
         
-        DefaultHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
+        GenericHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
     }
 
     public function testResponseBodyIsReturned()
@@ -51,7 +51,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [];
         $dummyStatusCode = 200;
 
-        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
+        $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
         $result = $response->getBody();
 
         $this->assertEquals($dummyBody, $result);
@@ -63,7 +63,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [];
         $dummyStatusCode = 200;
 
-        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
+        $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
         $response->send();
 
         $this->expectOutputString($dummyBody);
@@ -82,7 +82,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [$customHeaderName => $customHeaderValue];
         $dummyStatusCode = 200;
 
-        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
+        $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
         $response->send();
 
         $expectedHeader = $customHeaderName . ': ' . $customHeaderValue;
@@ -97,7 +97,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [];
         $dummyStatusCode = 404;
 
-        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
+        $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
 
         $this->assertSame($dummyStatusCode, $response->getStatusCode());
     }
@@ -108,7 +108,7 @@ class DefaultHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [];
         $dummyStatusCode = 202;
 
-        $response = DefaultHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
+        $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
 
         ob_start();
         $response->send();

@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
@@ -54,7 +54,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         $body = '';
         $statusCode = 202;
 
-        return DefaultHttpResponse::create($body, $headers, $statusCode);
+        return GenericHttpResponse::create($body, $headers, $statusCode);
     }
 
     final protected function processRequest(HttpRequest $request)
