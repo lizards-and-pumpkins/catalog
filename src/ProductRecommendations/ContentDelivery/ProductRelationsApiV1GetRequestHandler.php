@@ -52,9 +52,8 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
 
         $headers = [];
         $body = json_encode(['data' => $relatedProductsData]);
-        $statusCode = 200;
 
-        return GenericHttpResponse::create($body, $headers, $statusCode);
+        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
     }
 
     /**

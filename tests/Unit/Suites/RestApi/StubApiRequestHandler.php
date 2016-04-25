@@ -26,8 +26,7 @@ class StubApiRequestHandler extends ApiRequestHandler
     protected function getResponse(HttpRequest $request)
     {
         $headers = [];
-        $statusCode = 200;
 
-        return GenericHttpResponse::create(self::DUMMY_BODY_CONTENT, $headers, $statusCode);
+        return GenericHttpResponse::create(self::DUMMY_BODY_CONTENT, $headers, HttpResponse::STATUS_OK);
     }
 }

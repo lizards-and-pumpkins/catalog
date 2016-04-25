@@ -52,9 +52,8 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
     {
         $headers = [];
         $body = '';
-        $statusCode = 202;
 
-        return GenericHttpResponse::create($body, $headers, $statusCode);
+        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
     }
 
     final protected function processRequest(HttpRequest $request)

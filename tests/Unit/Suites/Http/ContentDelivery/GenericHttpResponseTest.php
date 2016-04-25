@@ -16,7 +16,7 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $dummyBody = 'foo';
         $dummyHeaders = [];
-        $dummyStatusCode = 200;
+        $dummyStatusCode = HttpResponse::STATUS_OK;
 
         $result = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
 
@@ -27,7 +27,7 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $invalidBody = 1;
         $dummyHeaders = [];
-        $dummyStatusCode = 200;
+        $dummyStatusCode = HttpResponse::STATUS_OK;
 
         $this->expectException(InvalidResponseBodyException::class);
         
@@ -62,7 +62,7 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $dummyBody = 'foo';
         $dummyHeaders = [];
-        $dummyStatusCode = 200;
+        $dummyStatusCode = HttpResponse::STATUS_OK;
 
         $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
         $result = $response->getBody();
@@ -74,7 +74,7 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $dummyBody = 'foo';
         $dummyHeaders = [];
-        $dummyStatusCode = 200;
+        $dummyStatusCode = HttpResponse::STATUS_OK;
 
         $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
         $response->send();
@@ -93,7 +93,7 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
 
         $dummyBody = '';
         $dummyHeaders = [$customHeaderName => $customHeaderValue];
-        $dummyStatusCode = 200;
+        $dummyStatusCode = HttpResponse::STATUS_OK;
 
         $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
         $response->send();
@@ -108,7 +108,7 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $dummyBody = 'foo';
         $dummyHeaders = [];
-        $dummyStatusCode = 404;
+        $dummyStatusCode = HttpResponse::STATUS_NOT_FOUND;
 
         $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
 
@@ -119,7 +119,7 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $dummyBody = 'foo';
         $dummyHeaders = [];
-        $dummyStatusCode = 202;
+        $dummyStatusCode = HttpResponse::STATUS_ACCEPTED;
 
         $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
 

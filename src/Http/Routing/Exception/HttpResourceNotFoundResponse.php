@@ -16,7 +16,7 @@ class HttpResourceNotFoundResponse implements HttpResponse
 
     public function getStatusCode()
     {
-        return 404;
+        return HttpResponse::STATUS_NOT_FOUND;
     }
 
     public function send()

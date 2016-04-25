@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 
@@ -89,9 +90,8 @@ class PageBuilder
 
         $body = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
         $headers = [];
-        $statusCode = 200;
 
-        return GenericHttpResponse::create($body, $headers, $statusCode);
+        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
     }
 
     /**
