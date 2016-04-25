@@ -21,7 +21,8 @@ class SnippetCodeValidatorTest extends \PHPUnit_Framework_TestCase
     public function testNotEmptyValidation()
     {
         $this->expectException(InvalidSnippetCodeException::class);
+        $emptyString = '';
 
-        SnippetCodeValidator::validate('');
+        SnippetCodeValidator::validate($emptyString);
     }
 }
