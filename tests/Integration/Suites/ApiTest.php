@@ -28,7 +28,8 @@ class ApiTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->runWithoutSendingResponse();
 
-        $this->assertEquals('"OK"', $response->getBody());
+        $this->assertSame(202, $response->getStatusCode());
+        $this->assertSame('', $response->getBody());
         $this->assertGreaterThan(0, $commandQueue->count());
     }
 }
