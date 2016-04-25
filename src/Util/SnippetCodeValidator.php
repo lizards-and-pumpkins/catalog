@@ -6,6 +6,9 @@ use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 class SnippetCodeValidator
 {
+    /**
+     * @param string $snippetCode
+     */
     public static function validate($snippetCode)
     {
         if (! is_string($snippetCode)) {
