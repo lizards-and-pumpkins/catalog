@@ -48,19 +48,16 @@ class LayoutReaderTest extends \PHPUnit_Framework_TestCase
     public function testLayoutIsReturned()
     {
         $layoutFile = $this->getUniqueTempDir() . '/test_layout.xml';
-        $layoutXML = <<<EOX
-<?xml version="1.0"?>
-<snippet>
-    <block name="test_block" class="LizardsAndPumpkins\Renderer\Block" template="some/template.phtml"/>
-</snippet>
-EOX;
+        $layoutXML = '<?xml version="1.0"?><snippet><block name="foo" class="Bar\Baz" template="qux.phtml"/></snippet>';
         $this->createFixtureFile($layoutFile, $layoutXML);
 
         $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile($layoutFile);
         $topmostChildBlockLayoutArray = $snippetLayout->getNodeChildren();
+        
+        /** @var Layout $topmostChildBlockLayout */
         $topmostChildBlockLayout = array_shift($topmostChildBlockLayoutArray);
         $topmostChildBlockAttributes = $topmostChildBlockLayout->getAttributes();
 
-        $this->assertEquals('some/template.phtml', $topmostChildBlockAttributes['template']);
+        $this->assertEquals('qux.phtml', $topmostChildBlockAttributes['template']);
     }
 }
