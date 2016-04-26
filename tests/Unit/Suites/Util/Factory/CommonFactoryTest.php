@@ -145,8 +145,6 @@ use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Import\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
