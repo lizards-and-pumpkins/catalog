@@ -50,10 +50,10 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
     {
         $dummyBody = 'foo';
         $dummyHeaders = [];
-        $invalidStatusCode = 600;
+        $invalidStatusCode = 104;
 
         $this->expectException(InvalidStatusCodeException::class);
-        $this->expectExceptionMessage('Response status code must be [100-599], got 600.');
+        $this->expectExceptionMessage(sprintf('Response status code %s is not supported.', $invalidStatusCode));
 
         GenericHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
     }

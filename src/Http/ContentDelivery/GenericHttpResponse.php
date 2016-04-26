@@ -103,10 +103,22 @@ class GenericHttpResponse implements HttpResponse
             );
         }
 
-        if ($statusCode < 100 || $statusCode > 599) {
-            throw new InvalidStatusCodeException(
-                sprintf('Response status code must be [100-599], got %s.', $statusCode)
-            );
+        if (! self::isStatusCodeSupported($statusCode)) {
+            throw new InvalidStatusCodeException(sprintf('Response status code %s is not supported.', $statusCode));
         }
+    }
+
+    /**
+     * @param int $code
+     * @return bool
+     */
+    private static function isStatusCodeSupported($code)
+    {
+        return ($code >= 100 && $code <= 102) ||
+               ($code >= 200 && $code <= 208) || $code === 226 ||
+               ($code >= 300 && $code <= 308) ||
+               ($code >= 400 && $code <= 417) || ($code >= 421 && $code <= 424) || $code === 426 ||
+               ($code >= 428 && $code <= 429) || $code === 431 || $code === 451 ||
+               ($code >= 500 && $code <= 511) || ($code >= 598 && $code <= 599);
     }
 }
