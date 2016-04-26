@@ -4,15 +4,16 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,9 +73,9 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
     public function testSnippetWithValidJsonAsContentAddedToList()
     {
         $expectedSnippetContent = [
-            ProductSearchAutosuggestionMetaSnippetContent::KEY_ROOT_SNIPPET_CODE  => $this->dummyRootSnippetCode,
+            ProductSearchAutosuggestionMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
             ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
-            ProductSearchAutosuggestionMetaSnippetContent::KEY_CONTAINER_SNIPPETS => []
+            ProductSearchAutosuggestionMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 

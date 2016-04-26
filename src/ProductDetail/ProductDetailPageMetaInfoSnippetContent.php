@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetContainer;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetContent
 {
@@ -15,7 +16,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         self::KEY_PRODUCT_ID,
         self::KEY_ROOT_SNIPPET_CODE,
         self::KEY_PAGE_SNIPPET_CODES,
-        self::KEY_CONTAINER_SNIPPETS
+        self::KEY_CONTAINER_SNIPPETS,
     ];
 
     /**
@@ -62,7 +63,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     public static function create($productId, $rootSnippetCode, array $pageSnippetCodes, array $containerData)
     {
         self::validateProductId($productId);
-        self::validateRootSnippetCode($rootSnippetCode);
+        SnippetCodeValidator::validate($rootSnippetCode);
         $pageSnippetCodes = array_unique(array_merge(
             [
                 $rootSnippetCode,
@@ -119,7 +120,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     protected static function validateRequiredKeysArePresent(array $pageInfo)
     {
         foreach (self::$requiredKeys as $key) {
-            if (!array_key_exists($key, $pageInfo)) {
+            if (! array_key_exists($key, $pageInfo)) {
                 throw new \RuntimeException(sprintf('Missing key in input JSON: "%s"', $key));
             }
         }
@@ -147,10 +148,10 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     public function getInfo()
     {
         return [
-            self::KEY_PRODUCT_ID         => $this->productId,
-            self::KEY_ROOT_SNIPPET_CODE  => $this->rootSnippetCode,
+            self::KEY_PRODUCT_ID => $this->productId,
+            self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
-            self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets()
+            self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets(),
         ];
     }
 
@@ -159,23 +160,10 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      */
     private static function validateProductId($sourceId)
     {
-        if (!is_scalar($sourceId)) {
+        if (! is_scalar($sourceId)) {
             throw new \InvalidArgumentException(sprintf(
                 'The page meta info source id has to be a scalar value, got "%s"',
                 self::getNonScalarTypeRepresentation($sourceId)
-            ));
-        }
-    }
-
-    /**
-     * @param mixed $rootSnippetCode
-     */
-    private static function validateRootSnippetCode($rootSnippetCode)
-    {
-        if (!is_string($rootSnippetCode)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The page meta info root snippet code has to be a string value, got "%s"',
-                gettype($rootSnippetCode)
             ));
         }
     }

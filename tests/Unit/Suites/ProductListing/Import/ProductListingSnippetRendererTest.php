@@ -6,12 +6,12 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 
 /**
@@ -20,6 +20,7 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlo
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
@@ -116,6 +117,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubContextBuilder = $this->getMock(ContextBuilder::class);
         $stubContextBuilder->method('createContext')->willReturn($this->getMock(Context::class));
 
+        /** @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject $stubBaseUrlBuilder */
         $stubBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
         $stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString('https://example.com/'));
 
@@ -272,7 +274,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $testMetaContent = 'some content that needs to be escaped: <"&';
         $expectedContent = htmlspecialchars($testMetaContent);
-        
+
         $htmlHeadMetaKey = 'meta_description';
         $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey, 'dummy_canonical_key');
 
@@ -280,7 +282,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProductListing->method('getUrlKey')->willReturn('listing.html');
         $stubProductListing->method('hasAttribute')->willReturn(true);
         $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaContent);
-        
+
         $result = $this->renderer->render($stubProductListing);
 
         $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);

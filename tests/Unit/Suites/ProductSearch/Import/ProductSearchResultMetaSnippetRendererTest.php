@@ -4,16 +4,17 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

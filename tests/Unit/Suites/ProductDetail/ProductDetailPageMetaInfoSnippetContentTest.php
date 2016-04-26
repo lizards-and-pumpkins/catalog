@@ -4,10 +4,12 @@ namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,7 +27,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
      * @var string
      */
     private $sourceId = '123';
-    
+
     private $containers = ['additional_info' => []];
 
     protected function setUp()
@@ -49,7 +51,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
             ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID,
             ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE,
             ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES,
-            ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS
+            ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS,
         ];
         foreach ($keys as $key) {
             $this->assertTrue(
@@ -67,7 +69,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
 
     public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidSnippetCodeException::class);
         ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, [], []);
     }
 
@@ -86,7 +88,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
         $this->assertInstanceOf(ProductDetailPageMetaInfoSnippetContent::class, $pageMetaInfo);
     }
-    
+
     public function testExceptionIsThrownInCaseOfJsonErrors()
     {
         $this->expectException(\OutOfBoundsException::class);

@@ -4,23 +4,24 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
-use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
-use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Product\ProductId;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchAutosuggestionRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -153,7 +154,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(HttpResponse::class, [], [], '', false));
 
         $metaSnippetContent = [
-            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'foo',
             PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['foo'],
             PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
@@ -180,9 +181,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
-            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'foo',
             PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['foo'],
-            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->expects($this->never())->method('getSnippets');
@@ -203,9 +204,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
 
         $metaSnippetContent = [
-            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => 'foo',
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'foo',
             PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['foo'],
-            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);

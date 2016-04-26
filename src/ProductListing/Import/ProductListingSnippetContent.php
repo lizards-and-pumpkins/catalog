@@ -7,6 +7,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetContainer;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class ProductListingSnippetContent implements PageMetaInfoSnippetContent
 {
@@ -16,7 +17,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         self::KEY_CRITERIA,
         self::KEY_ROOT_SNIPPET_CODE,
         self::KEY_PAGE_SNIPPET_CODES,
-        self::KEY_CONTAINER_SNIPPETS
+        self::KEY_CONTAINER_SNIPPETS,
     ];
 
     /**
@@ -70,8 +71,8 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         array $pageSnippetCodes,
         array $containerData
     ) {
-        self::validateRootSnippetCode($rootSnippetCode);
-        if (!in_array($rootSnippetCode, $pageSnippetCodes)) {
+        SnippetCodeValidator::validate($rootSnippetCode);
+        if (! in_array($rootSnippetCode, $pageSnippetCodes)) {
             $pageSnippetCodes = array_merge([$rootSnippetCode], $pageSnippetCodes);
         }
         return new self(
@@ -119,7 +120,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     protected static function validateRequiredKeysArePresent(array $pageInfo)
     {
         foreach (self::$requiredKeys as $key) {
-            if (!array_key_exists($key, $pageInfo)) {
+            if (! array_key_exists($key, $pageInfo)) {
                 throw new \RuntimeException(sprintf('Missing key in input JSON: "%s"', $key));
             }
         }
@@ -147,21 +148,8 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
             self::KEY_CRITERIA => $this->selectionCriteria,
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
-            self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets()
+            self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets(),
         ];
-    }
-
-    /**
-     * @param string $rootSnippetCode
-     */
-    private static function validateRootSnippetCode($rootSnippetCode)
-    {
-        if (! is_string($rootSnippetCode)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The page meta info root snippet code has to be a string value, got "%s"',
-                gettype($rootSnippetCode)
-            ));
-        }
     }
 
     /**
@@ -214,11 +202,11 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      */
     private static function validateProductListingSearchCriteria(array $metaInfo)
     {
-        if (!isset($metaInfo['condition'])) {
+        if (! isset($metaInfo['condition'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
         }
 
-        if (!isset($metaInfo['criteria'])) {
+        if (! isset($metaInfo['criteria'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criteria.');
         }
 
@@ -237,19 +225,19 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      */
     private static function validateSearchCriterionMetaInfo(array $criterionArray)
     {
-        if (!isset($criterionArray['fieldName'])) {
+        if (! isset($criterionArray['fieldName'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criterion field name.');
         }
 
-        if (!isset($criterionArray['fieldValue'])) {
+        if (! isset($criterionArray['fieldValue'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criterion field value.');
         }
 
-        if (!isset($criterionArray['operation'])) {
+        if (! isset($criterionArray['operation'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criterion operation.');
         }
 
-        if (!class_exists(self::getCriterionClassNameForOperation($criterionArray['operation']))) {
+        if (! class_exists(self::getCriterionClassNameForOperation($criterionArray['operation']))) {
             throw new MalformedSearchCriteriaMetaException(
                 sprintf('Unknown criterion operation "%s"', $criterionArray['operation'])
             );
