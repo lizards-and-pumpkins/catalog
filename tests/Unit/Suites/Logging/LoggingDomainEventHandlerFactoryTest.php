@@ -2,22 +2,22 @@
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\UnitTestFactory;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
@@ -60,7 +60,6 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
@@ -82,7 +81,6 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
@@ -91,6 +89,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {

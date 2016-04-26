@@ -4,21 +4,22 @@ namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
-use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -99,7 +100,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {
                 return intval([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
-                              [$snippetCode => $snippetValue] === $invocation->parameters[1]);
+                    [$snippetCode => $snippetValue] === $invocation->parameters[1]);
             }, $this->addSnippetsToPageSpy->getInvocations())
         );
 
@@ -159,7 +160,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson],
         ]);
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
@@ -174,7 +175,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson],
         ]);
 
         $this->requestHandler->process($this->stubRequest);
@@ -190,7 +191,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson],
         ]);
         $this->mockPageBuilder->method('buildPage')->with(
             $this->anything(),
@@ -252,9 +253,9 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]
+            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson],
         ]);
-        
+
         $code = ProductDetailPageRobotsMetaTagSnippetRenderer::CODE;
         $this->mockPageBuilder->expects($this->once())->method('addSnippetToContainer')->with('head_container', $code);
         $this->mockPageBuilder->expects($this->once())->method('buildPage')

@@ -3,13 +3,13 @@
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\Import\TemplateRendering\Block;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\Import\ContentBlock\Block;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlock
- * @uses \LizardsAndPumpkins\Import\ContentBlock\Block
+ * @uses \LizardsAndPumpkins\Import\TemplateRendering\Block
  */
 class ProductListingDescriptionBlockTest extends \PHPUnit_Framework_TestCase
 {

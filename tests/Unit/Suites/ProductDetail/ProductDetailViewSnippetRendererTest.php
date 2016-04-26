@@ -3,11 +3,11 @@
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 
@@ -16,6 +16,7 @@ use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRen
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
+ * @uses \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

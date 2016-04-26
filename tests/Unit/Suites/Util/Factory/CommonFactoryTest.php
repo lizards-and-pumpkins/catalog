@@ -3,83 +3,83 @@
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\Country\ContextCountry;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
+use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
+use LizardsAndPumpkins\Import\CatalogImport;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
-use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\Country\ContextCountry;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\Context\ContextPartBuilder;
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\ProductProjector;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Import\Product\QueueImportCommands;
+use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
-use LizardsAndPumpkins\UnitTestFactory;
-use LizardsAndPumpkins\Util\Config\ConfigReader;
-use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
-use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
-use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
+use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\ProductProjector;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
-use LizardsAndPumpkins\Import\CatalogImport;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\QueueImportCommands;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
+use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Translation\Translator;
-use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
-use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
-use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\UnitTestFactory;
+use LizardsAndPumpkins\Util\Config\ConfigReader;
+use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
+use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\CommonFactory
@@ -93,7 +93,6 @@ use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
@@ -146,8 +145,6 @@ use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Import\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
@@ -180,6 +177,7 @@ use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
  * @uses   \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {

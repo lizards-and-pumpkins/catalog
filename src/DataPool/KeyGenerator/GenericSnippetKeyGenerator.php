@@ -3,8 +3,8 @@
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\InvalidSnippetCodeException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\MissingSnippetKeyGenerationDataException;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {
@@ -30,11 +30,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      */
     public function __construct($snippetCode, array $contextParts, array $usedDataParts)
     {
-        if (!is_string($snippetCode)) {
-            throw new InvalidSnippetCodeException(
-                sprintf('The snippet code has to be a string, got "%s"', gettype($snippetCode))
-            );
-        }
+        SnippetCodeValidator::validate($snippetCode);
 
         $this->snippetCode = $snippetCode;
         $this->contextParts = $contextParts;

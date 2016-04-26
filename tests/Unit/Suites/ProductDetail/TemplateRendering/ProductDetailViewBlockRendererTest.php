@@ -11,9 +11,9 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\Block
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockStructure
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\Block
  */
 class ProductDetailViewBlockRendererTest extends AbstractBlockRendererTest
 {

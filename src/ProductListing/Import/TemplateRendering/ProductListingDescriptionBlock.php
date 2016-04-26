@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
+use LizardsAndPumpkins\Import\TemplateRendering\Block;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\Import\ContentBlock\Block;
 
 class ProductListingDescriptionBlock extends Block
 {

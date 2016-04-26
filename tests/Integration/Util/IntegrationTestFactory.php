@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Context\IntegrationTestContextSource;
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Gd\GdResizeStrategy;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Messaging\Queue\InMemoryQueue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
@@ -20,13 +19,12 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
-use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageMagick\ImageMagickResizeStrategy;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
@@ -53,8 +51,6 @@ class IntegrationTestFactory implements Factory
     use FactoryTrait;
 
     const PROCESSED_IMAGES_DIR = 'lizards-and-pumpkins/processed-images';
-    const PROCESSED_IMAGE_WIDTH = 40;
-    const PROCESSED_IMAGE_HEIGHT = 20;
 
     /**
      * @var KeyValueStore
@@ -280,27 +276,7 @@ class IntegrationTestFactory implements Factory
      */
     public function createImageProcessingStrategySequence()
     {
-        $imageResizeStrategyClass = $this->locateImageResizeStrategyClass();
-        $imageResizeStrategy = new $imageResizeStrategyClass(
-            self::PROCESSED_IMAGE_WIDTH,
-            self::PROCESSED_IMAGE_HEIGHT
-        );
-
-        $strategySequence = new ImageProcessingStrategySequence();
-        $strategySequence->add($imageResizeStrategy);
-
-        return $strategySequence;
-    }
-
-    /**
-     * @return string
-     */
-    private function locateImageResizeStrategyClass()
-    {
-        if (extension_loaded('imagick')) {
-            return ImageMagickResizeStrategy::class;
-        }
-        return GdResizeStrategy::class;
+        return new ImageProcessingStrategySequence();
     }
 
     /**

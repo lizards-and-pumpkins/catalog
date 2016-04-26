@@ -2,12 +2,13 @@
 
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
-use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\InvalidSnippetCodeException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
+ * @covers \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,7 +62,6 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     {
         $stubSnippetRenderer = $this->getMock(SnippetRenderer::class);
         $this->expectException(InvalidSnippetCodeException::class);
-        $this->expectExceptionMessage('Expected snippet code to be a string');
         $this->strategy->getKeyGeneratorForSnippetCode($stubSnippetRenderer);
     }
 
@@ -72,7 +72,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed($emptySnippetCode)
     {
         $this->expectException(InvalidSnippetCodeException::class);
-        $this->expectExceptionMessage('Snippet code must not be empty');
+        $this->expectExceptionMessage('Snippet code must not be empty.');
         $this->strategy->getKeyGeneratorForSnippetCode($emptySnippetCode);
     }
 
@@ -107,7 +107,6 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
         };
 
         $this->expectException(InvalidSnippetCodeException::class);
-        $this->expectExceptionMessage('Expected snippet code to be a string');
 
         $this->strategy->register($invalidSnippetCode, $testClosure);
     }

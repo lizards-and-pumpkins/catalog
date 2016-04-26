@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
-use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\InvalidSnippetCodeException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
 {
@@ -25,7 +25,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
      */
     public function getKeyGeneratorForSnippetCode($snippetCode)
     {
-        $this->validateSnippetCode($snippetCode);
+        SnippetCodeValidator::validate($snippetCode);
 
         if (!$this->canHandle($snippetCode)) {
             throw new SnippetCodeCanNotBeProcessedException(
@@ -38,29 +38,11 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
 
     /**
      * @param string $snippetCode
-     */
-    private function validateSnippetCode($snippetCode)
-    {
-        if (!is_string($snippetCode)) {
-            throw new InvalidSnippetCodeException(sprintf(
-                'Expected snippet code to be a string but got "%s"',
-                (is_scalar($snippetCode) ? $snippetCode : gettype($snippetCode))
-            ));
-        }
-
-        if (trim($snippetCode) === '') {
-            throw new InvalidSnippetCodeException('Snippet code must not be empty');
-
-        }
-    }
-
-    /**
-     * @param string $snippetCode
      * @param \Closure $keyGeneratorFactoryClosure
      */
     public function register($snippetCode, \Closure $keyGeneratorFactoryClosure)
     {
-        $this->validateSnippetCode($snippetCode);
+        SnippetCodeValidator::validate($snippetCode);
         $this->keyGeneratorFactoryClosures[$snippetCode] = $keyGeneratorFactoryClosure;
     }
 }

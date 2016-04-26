@@ -1,13 +1,12 @@
 <?php
 
-namespace LizardsAndPumpkins\Import\ContentBlock;
+namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\TemplateFileNotReadableException;
-use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers \LizardsAndPumpkins\Import\ContentBlock\Block
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {

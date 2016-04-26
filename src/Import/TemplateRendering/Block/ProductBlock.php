@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\TemplateRendering\Block;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
-use LizardsAndPumpkins\Import\ContentBlock\Block;
+use LizardsAndPumpkins\Import\TemplateRendering\Block;
 
 class ProductBlock extends Block
 {

@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\InMemory\InMemorySearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
@@ -77,14 +77,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testLocalFilesystemStorageReaderIsReturned()
     {
         $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->createFileStorageReader());
-    }
-
-    public function testImageProcessingStrategySequenceIsReturned()
-    {
-        $this->assertInstanceOf(
-            ImageProcessingStrategySequence::class,
-            $this->factory->createImageProcessingStrategySequence()
-        );
     }
 
     public function testArrayOfSearchableAttributeCodesIsReturned()

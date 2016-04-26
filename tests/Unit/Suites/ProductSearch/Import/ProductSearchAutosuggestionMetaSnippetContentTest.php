@@ -3,10 +3,12 @@
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
- * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
- * @uses   \LizardsAndPumpkins\Import\SnippetContainer
+ * @covers   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
+ * @covers   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses     \LizardsAndPumpkins\Import\SnippetContainer
  */
 class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +40,7 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
 
     public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidSnippetCodeException::class);
         ProductSearchAutosuggestionMetaSnippetContent::create(1, [], []);
     }
 

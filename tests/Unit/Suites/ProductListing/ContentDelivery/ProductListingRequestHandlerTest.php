@@ -4,22 +4,23 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -121,7 +122,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
 
         $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
-        
+
         $stubSelectRobotsMetaTagContent = $this->getMock(SelectProductListingRobotsMetaTagContent::class);
 
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();

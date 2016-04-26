@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetContainer;
+use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetContent
 {
@@ -42,12 +43,7 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
      */
     public static function create($rootSnippetCode, array $pageSnippetCodes, array $containerData)
     {
-        if (!is_string($rootSnippetCode)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The page meta info root snippet code has to be a string value, got "%s"',
-                gettype($rootSnippetCode)
-            ));
-        }
+        SnippetCodeValidator::validate($rootSnippetCode);
 
         if (!in_array($rootSnippetCode, $pageSnippetCodes)) {
             $pageSnippetCodes = array_merge([$rootSnippetCode], $pageSnippetCodes);

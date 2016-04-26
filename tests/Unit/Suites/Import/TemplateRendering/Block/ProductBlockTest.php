@@ -6,14 +6,14 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
-use LizardsAndPumpkins\Import\ContentBlock\Block;
+use LizardsAndPumpkins\Import\TemplateRendering\Block;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\Block
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\Block
  */
 class ProductBlockTest extends \PHPUnit_Framework_TestCase
 {

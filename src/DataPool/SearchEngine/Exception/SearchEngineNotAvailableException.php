@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine\File\Exception;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\Exception;
 
 class SearchEngineNotAvailableException extends \RuntimeException
 {
