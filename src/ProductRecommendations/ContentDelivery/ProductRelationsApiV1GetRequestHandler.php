@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
 
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\ProductRecommendations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -35,18 +37,23 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return HttpResponse
      */
-    final protected function getResponseBody(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request)
     {
         if (! $this->canProcess($request)) {
             throw $this->getUnableToProcessRequestException($request);
         }
+        
         $relatedProductsData = $this->productRelationsService->getRelatedProductData(
             $this->getProductRelationTypeCode($request),
             $this->getProductId($request)
         );
-        return json_encode(['data' => $relatedProductsData]);
+
+        $headers = [];
+        $body = json_encode(['data' => $relatedProductsData]);
+
+        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
     }
 
     /**

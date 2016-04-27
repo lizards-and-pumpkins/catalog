@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
@@ -74,6 +74,9 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->with($this->isInstanceOf(TemplateWasUpdatedDomainEvent::class));
 
-        $this->requestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
+        
+        $this->assertSame(202, $response->getStatusCode());
+        $this->assertSame('', $response->getBody());
     }
 }

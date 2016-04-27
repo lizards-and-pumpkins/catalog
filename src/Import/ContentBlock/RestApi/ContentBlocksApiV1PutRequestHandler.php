@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
@@ -44,14 +46,17 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return HttpResponse
      */
-    protected function getResponseBody(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request)
     {
-        return json_encode('OK');
+        $headers = [];
+        $body = '';
+
+        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
     }
 
-    protected function processRequest(HttpRequest $request)
+    final protected function processRequest(HttpRequest $request)
     {
         $requestBody = json_decode($request->getRawBody(), true);
         $this->validateRequestBody($requestBody);
@@ -78,7 +83,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
     /**
      * @param string[] $requestBody
      */
-    protected function validateRequestBody(array $requestBody)
+    private function validateRequestBody(array $requestBody)
     {
         if (!isset($requestBody['content'])) {
             throw new ContentBlockBodyIsMissingInRequestBodyException(

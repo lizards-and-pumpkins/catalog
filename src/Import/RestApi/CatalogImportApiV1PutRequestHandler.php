@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
@@ -66,11 +68,14 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return HttpResponse
      */
-    final protected function getResponseBody(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request)
     {
-        return json_encode('OK');
+        $headers = [];
+        $body = '';
+
+        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
     }
 
     protected function processRequest(HttpRequest $request)

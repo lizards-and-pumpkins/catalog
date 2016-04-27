@@ -2,7 +2,9 @@
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpResponse;
 
 class StubApiRequestHandler extends ApiRequestHandler
 {
@@ -19,10 +21,12 @@ class StubApiRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return HttpResponse
      */
-    protected function getResponseBody(HttpRequest $request)
+    protected function getResponse(HttpRequest $request)
     {
-        return self::DUMMY_BODY_CONTENT;
+        $headers = [];
+
+        return GenericHttpResponse::create(self::DUMMY_BODY_CONTENT, $headers, HttpResponse::STATUS_OK);
     }
 }

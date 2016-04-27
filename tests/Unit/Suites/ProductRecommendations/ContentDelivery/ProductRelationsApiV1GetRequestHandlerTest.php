@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  */
 class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,6 +132,8 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
 
         $response = $this->requestHandler->process($this->stubRequest);
+        
         $this->assertSame(json_encode(['data' => $testProductData]), $response->getBody());
+        $this->assertSame(200, $response->getStatusCode());
     }
 }

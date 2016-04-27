@@ -98,7 +98,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $response = $website->runWithoutSendingResponse();
 
-        $this->assertEquals('"OK"', $response->getBody());
+        $this->assertSame('', $response->getBody());
+        $this->assertSame(202, $response->getStatusCode());
         $this->assertEquals(1, $domainCommandQueue->count());
 
         $this->factory->createCommandConsumer()->process();

@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
@@ -65,7 +65,7 @@ class ProductListingPageContentBuilder
      * @param SearchEngineResponse $searchEngineResponse
      * @param ProductsPerPage $productsPerPage
      * @param SortOrderConfig $selectedSortOrderConfig
-     * @return DefaultHttpResponse
+     * @return GenericHttpResponse
      */
     public function buildPageContent(
         PageMetaInfoSnippetContent $metaInfo,

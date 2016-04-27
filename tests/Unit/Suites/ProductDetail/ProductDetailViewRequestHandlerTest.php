@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpUrl;
@@ -197,9 +197,9 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->anything(),
             $this->anything(),
             $this->isType('array')
-        )->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
+        )->willReturn($this->getMock(GenericHttpResponse::class, [], [], '', false));
 
-        $this->assertInstanceOf(DefaultHttpResponse::class, $this->requestHandler->process($this->stubRequest));
+        $this->assertInstanceOf(GenericHttpResponse::class, $this->requestHandler->process($this->stubRequest));
     }
 
     public function testItHandlesDifferentRequestsIndependently()
@@ -241,7 +241,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippet')
             ->willReturnMap([[$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]]);
         $this->mockPageBuilder->method('buildPage')
-            ->willReturn($this->getMock(DefaultHttpResponse::class, [], [], '', false));
+            ->willReturn($this->getMock(GenericHttpResponse::class, [], [], '', false));
 
         $this->requestHandler->process($this->stubRequest);
 

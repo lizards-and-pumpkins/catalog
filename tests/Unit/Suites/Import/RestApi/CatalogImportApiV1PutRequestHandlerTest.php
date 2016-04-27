@@ -15,7 +15,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpResponse
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -105,6 +105,9 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->mockCatalogImport->expects($this->once())->method('importFile')
             ->with($this->stringEndsWith('/' . $importFileName));
 
-        $this->requestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
+        
+        $this->assertSame(202, $response->getStatusCode());
+        $this->assertSame('', $response->getBody());
     }
 }

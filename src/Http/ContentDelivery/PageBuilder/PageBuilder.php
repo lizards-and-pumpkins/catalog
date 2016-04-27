@@ -4,7 +4,8 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Http\ContentDelivery\DefaultHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 
@@ -70,7 +71,7 @@ class PageBuilder
      * @param PageMetaInfoSnippetContent $metaInfo
      * @param Context $context
      * @param mixed[] $keyGeneratorParams
-     * @return DefaultHttpResponse
+     * @return GenericHttpResponse
      */
     public function buildPage(PageMetaInfoSnippetContent $metaInfo, Context $context, array $keyGeneratorParams)
     {
@@ -87,9 +88,10 @@ class PageBuilder
 
         $this->applySnippetTransformations();
 
-        $content = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
+        $body = $this->pageSnippets->buildPageContent($this->rootSnippetCode);
+        $headers = [];
 
-        return DefaultHttpResponse::create($content, []);
+        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
     }
 
     /**
