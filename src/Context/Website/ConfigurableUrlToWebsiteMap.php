@@ -91,7 +91,7 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
     public function getWebsiteCodeByUrl($url)
     {
         foreach ($this->urlToWebsiteMap as $urlPattern => $website) {
-            if (preg_match('#' . $urlPattern . '#', $url)) {
+            if (stripos($url, $urlPattern) === 0) {
                 return $website;
             }
         }
