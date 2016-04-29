@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Util\Config\ConfigReader;
 class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 {
     const CONFIG_KEY = 'website_map';
-    const RECORD_SEPARATOR = ',';
+    const RECORD_SEPARATOR = '|';
 
     /**
      * @var string[]

@@ -77,9 +77,9 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
     public function websiteMapProvider()
     {
         return [
-            ['^http://example\.com/=foo,^https://127\.0\.0\.1=bar', 'http://example.com/', 'foo'],
-            ['^http://example\.com/=foo,^https://127\.0\.0\.1=bar', 'https://127.0.0.1', 'bar'],
-            ['^http://example\.com/=foo,^http://example\.com/=bar', 'http://example.com/', 'bar'],
+            ['^http://example\.com/=foo|^https://127\.0\.0\.1=bar', 'http://example.com/', 'foo'],
+            ['^http://example\.com/=foo|^https://127\.0\.0\.1=bar', 'https://127.0.0.1', 'bar'],
+            ['^http://example\.com/=foo|^http://example\.com/=bar', 'http://example.com/', 'bar'],
             ['^https?://example\.com/=foo', 'http://example.com/', 'foo'],
             ['^https?://example\.com/=foo', 'https://example.com/', 'foo'],
         ];
