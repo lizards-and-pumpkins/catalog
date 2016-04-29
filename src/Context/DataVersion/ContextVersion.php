@@ -20,10 +20,9 @@ class ContextVersion implements ContextPartBuilder
 
     /**
      * @param mixed[] $inputDataSet
-     * @param string[] $otherContextParts
      * @return string
      */
-    public function getValue(array $inputDataSet, array $otherContextParts)
+    public function getValue(array $inputDataSet)
     {
         return isset($inputDataSet[self::CODE]) ?
             (string) $inputDataSet[self::CODE] :

@@ -25,25 +25,17 @@ class SelfContainedContextBuilder implements ContextBuilder
         $contextDataSet = @array_reduce(
             $this->partBuilders,
             function ($carry, ContextPartBuilder $builder) use ($inputDataSet) {
-                return array_merge($carry, $this->getPart($builder, $inputDataSet, $carry));
+                $value = $builder->getValue($inputDataSet);
+
+                if (null === $value) {
+                    return $carry;
+                }
+
+                return array_merge($carry, [$builder->getCode() => $value]);
             },
             []
         );
         return SelfContainedContext::fromArray($contextDataSet);
-    }
-
-    /**
-     * @param ContextPartBuilder $partBuilder
-     * @param mixed[] $inputDataSet
-     * @param string[] $carry
-     * @return string[]
-     */
-    private function getPart(ContextPartBuilder $partBuilder, array $inputDataSet, array $carry)
-    {
-        $value = $partBuilder->getValue($inputDataSet, $carry);
-        return null === $value ?
-            [] :
-            [$partBuilder->getCode() => $value];
     }
 
     /**
