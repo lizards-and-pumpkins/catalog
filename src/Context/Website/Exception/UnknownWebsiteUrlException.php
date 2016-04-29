@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Context\Website\Exception;
 
-class UnknownWebsiteHostException extends \OutOfBoundsException
+class UnknownWebsiteUrlException extends \OutOfBoundsException
 {
 
 }

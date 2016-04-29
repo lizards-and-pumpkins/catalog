@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordException;
-use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteUrlException;
 
 /**
  * @covers \LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap
@@ -38,7 +38,7 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
     {
         $url = 'http://www.example.com/';
 
-        $this->expectException(UnknownWebsiteHostException::class);
+        $this->expectException(UnknownWebsiteUrlException::class);
         $this->expectExceptionMessage(sprintf('No website code found for url "%s"', $url));
 
         $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);

@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordException;
-use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteUrlException;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 
 class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
@@ -96,6 +96,6 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
             }
         }
 
-        throw new UnknownWebsiteHostException(sprintf('No website code found for url "%s"', $url));
+        throw new UnknownWebsiteUrlException(sprintf('No website code found for url "%s"', $url));
     }
 }
