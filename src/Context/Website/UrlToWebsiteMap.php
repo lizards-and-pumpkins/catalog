@@ -5,8 +5,8 @@ namespace LizardsAndPumpkins\Context\Website;
 interface UrlToWebsiteMap
 {
     /**
-     * @param string $host
+     * @param string $url
      * @return Website
      */
-    public function getWebsiteCodeByHost($host);
+    public function getWebsiteCodeByUrl($url);
 }

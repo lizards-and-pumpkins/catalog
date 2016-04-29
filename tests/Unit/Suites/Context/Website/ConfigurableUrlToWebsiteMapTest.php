@@ -46,15 +46,15 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(UnknownWebsiteHostException::class);
         $this->expectExceptionMessage('No website code found for host "www.example.com"');
-        $this->websiteMap->getWebsiteCodeByHost('www.example.com');
+        $this->websiteMap->getWebsiteCodeByUrl('www.example.com');
     }
 
     public function testItReturnsTheCodeIfSet()
     {
         $websiteOne = Website::fromString($this->testMap['example.com']);
         $websiteTwo = Website::fromString($this->testMap['127.0.0.1']);
-        $this->assertWebsiteEqual($websiteOne, $this->websiteMap->getWebsiteCodeByHost('example.com'));
-        $this->assertWebsiteEqual($websiteTwo, $this->websiteMap->getWebsiteCodeByHost('127.0.0.1'));
+        $this->assertWebsiteEqual($websiteOne, $this->websiteMap->getWebsiteCodeByUrl('example.com'));
+        $this->assertWebsiteEqual($websiteTwo, $this->websiteMap->getWebsiteCodeByUrl('127.0.0.1'));
     }
 
     public function testItReturnsAWebsiteMapInstance()
@@ -70,8 +70,8 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
         $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
 
-        $this->assertWebsiteEqual(Website::fromString('aaa'), $websiteMap->getWebsiteCodeByHost('example.com'));
-        $this->assertWebsiteEqual(Website::fromString('bbb'), $websiteMap->getWebsiteCodeByHost('127.0.0.1'));
+        $this->assertWebsiteEqual(Website::fromString('aaa'), $websiteMap->getWebsiteCodeByUrl('example.com'));
+        $this->assertWebsiteEqual(Website::fromString('bbb'), $websiteMap->getWebsiteCodeByUrl('127.0.0.1'));
     }
 
     public function testItThrowsAnExceptionIfAMapValueNotMatchesTheExpectedFormat()

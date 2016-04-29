@@ -7,10 +7,10 @@ use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 class IntegrationTestUrlToWebsiteMap implements UrlToWebsiteMap
 {
     /**
-     * @param string $host
+     * @param string $url
      * @return string
      */
-    public function getWebsiteCodeByHost($host)
+    public function getWebsiteCodeByUrl($url)
     {
         return 'fr';
     }

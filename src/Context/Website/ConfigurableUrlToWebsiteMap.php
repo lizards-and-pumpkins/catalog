@@ -94,14 +94,14 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
     }
 
     /**
-     * @param string $host
+     * @param string $url
      * @return Website
      */
-    public function getWebsiteCodeByHost($host)
+    public function getWebsiteCodeByUrl($url)
     {
-        if (!isset($this->urlToWebsiteMap[$host])) {
-            throw new UnknownWebsiteHostException(sprintf('No website code found for host "%s"', $host));
+        if (!isset($this->urlToWebsiteMap[$url])) {
+            throw new UnknownWebsiteHostException(sprintf('No website code found for url "%s"', $url));
         }
-        return $this->urlToWebsiteMap[$host];
+        return $this->urlToWebsiteMap[$url];
     }
 }
