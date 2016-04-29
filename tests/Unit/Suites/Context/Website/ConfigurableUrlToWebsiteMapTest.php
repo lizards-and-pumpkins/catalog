@@ -45,7 +45,7 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfAHostNameIsNotKnown()
     {
         $this->expectException(UnknownWebsiteHostException::class);
-        $this->expectExceptionMessage('No website code found for host "www.example.com"');
+        $this->expectExceptionMessage('No website code found for url "www.example.com"');
         $this->websiteMap->getWebsiteCodeByUrl('www.example.com');
     }
 
