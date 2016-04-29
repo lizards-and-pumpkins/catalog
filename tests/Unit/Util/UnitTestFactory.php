@@ -27,7 +27,7 @@ use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
@@ -279,11 +279,11 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return HostToWebsiteMap
+     * @return UrlToWebsiteMap
      */
-    public function createHostToWebsiteMap()
+    public function createUrlToWebsiteMap()
     {
-        return $this->mockObjectGenerator->getMock(HostToWebsiteMap::class);
+        return $this->mockObjectGenerator->getMock(UrlToWebsiteMap::class);
     }
 
     /**

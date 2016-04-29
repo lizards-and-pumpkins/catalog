@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 
-class IntegrationTestHostToWebsiteMap implements HostToWebsiteMap
+class IntegrationTestUrlToWebsiteMap implements UrlToWebsiteMap
 {
     /**
      * @param string $host

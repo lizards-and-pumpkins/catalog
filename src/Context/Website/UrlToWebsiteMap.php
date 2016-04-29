@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Context\Website;
 
-interface HostToWebsiteMap
+interface UrlToWebsiteMap
 {
     /**
      * @param string $host

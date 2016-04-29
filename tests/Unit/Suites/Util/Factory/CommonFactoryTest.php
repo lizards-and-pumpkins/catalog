@@ -8,9 +8,9 @@ use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\Country\ContextCountry;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\ContextWebsite;
-use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -170,7 +170,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
- * @uses   \LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap
+ * @uses   \LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
@@ -630,11 +630,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContextLocale::class, $result);
     }
 
-    public function testItReturnsAHostToWebsiteMap()
+    public function testItReturnsAUrlToWebsiteMap()
     {
-        $result = $this->commonFactory->createHostToWebsiteMap();
-        $this->assertInstanceOf(HostToWebsiteMap::class, $result);
-        $this->assertInstanceOf(ConfigurableHostToWebsiteMap::class, $result);
+        $result = $this->commonFactory->createUrlToWebsiteMap();
+        $this->assertInstanceOf(UrlToWebsiteMap::class, $result);
+        $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $result);
     }
 
     public function testItReturnsACountryContextPartBuilder()

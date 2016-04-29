@@ -7,13 +7,13 @@ use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordEx
 use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
 
 /**
- * @covers \LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap
+ * @covers \LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap
  * @uses   \LizardsAndPumpkins\Context\Website\Website
  */
-class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
+class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigurableHostToWebsiteMap
+     * @var ConfigurableUrlToWebsiteMap
      */
     private $websiteMap;
 
@@ -38,7 +38,7 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->websiteMap = ConfigurableHostToWebsiteMap::fromArray($this->testMap);
+        $this->websiteMap = ConfigurableUrlToWebsiteMap::fromArray($this->testMap);
         $this->stubConfigReader = $this->getMock(ConfigReader::class);
     }
 
@@ -59,16 +59,16 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAWebsiteMapInstance()
     {
-        $instance = ConfigurableHostToWebsiteMap::fromConfig($this->stubConfigReader);
-        $this->assertInstanceOf(ConfigurableHostToWebsiteMap::class, $instance);
+        $instance = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
+        $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $instance);
     }
 
     public function testItUsesAMapFromTheConfiguration()
     {
         $map = 'example.com=aaa|127.0.0.1=bbb';
-        $this->stubConfigReader->method('get')->with(ConfigurableHostToWebsiteMap::CONFIG_KEY)->willReturn($map);
+        $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($map);
 
-        $websiteMap = ConfigurableHostToWebsiteMap::fromConfig($this->stubConfigReader);
+        $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
 
         $this->assertWebsiteEqual(Website::fromString('aaa'), $websiteMap->getWebsiteCodeByHost('example.com'));
         $this->assertWebsiteEqual(Website::fromString('bbb'), $websiteMap->getWebsiteCodeByHost('127.0.0.1'));
@@ -81,6 +81,6 @@ class ConfigurableHostToWebsiteMapTest extends \PHPUnit_Framework_TestCase
         $map = 'test=';
         $this->stubConfigReader->method('get')->willReturn($map);
 
-        ConfigurableHostToWebsiteMap::fromConfig($this->stubConfigReader);
+        ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
     }
 }

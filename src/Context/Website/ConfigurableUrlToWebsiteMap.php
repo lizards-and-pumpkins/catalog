@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordEx
 use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 
-class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
+class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 {
     const CONFIG_KEY = 'website_map';
     const RECORD_SEPARATOR = '|';
@@ -14,36 +14,36 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
     /**
      * @var string[]
      */
-    private $hostToWebsiteMap;
+    private $urlToWebsiteMap;
 
     /**
-     * @param Website[] $hostToWebsiteMap
+     * @param Website[] $urlToWebsiteMap
      */
-    private function __construct(array $hostToWebsiteMap)
+    private function __construct(array $urlToWebsiteMap)
     {
-        $this->hostToWebsiteMap = $hostToWebsiteMap;
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     /**
-     * @param string[] $hostToWebsiteMap
-     * @return ConfigurableHostToWebsiteMap
+     * @param string[] $urlToWebsiteMap
+     * @return ConfigurableUrlToWebsiteMap
      */
-    public static function fromArray(array $hostToWebsiteMap)
+    public static function fromArray(array $urlToWebsiteMap)
     {
-        return new static(self::createWebsites($hostToWebsiteMap));
+        return new static(self::createWebsites($urlToWebsiteMap));
     }
 
     /**
      * @param ConfigReader $configReader
-     * @return ConfigurableHostToWebsiteMap
+     * @return ConfigurableUrlToWebsiteMap
      */
     public static function fromConfig(ConfigReader $configReader)
     {
-        $hostToWebsiteMap = $configReader->get(self::CONFIG_KEY) ?
+        $urlToWebsiteMap = $configReader->get(self::CONFIG_KEY) ?
             self::buildArrayMapFromString($configReader->get(self::CONFIG_KEY)) :
             [];
 
-        return new static(self::createWebsites($hostToWebsiteMap));
+        return new static(self::createWebsites($urlToWebsiteMap));
     }
 
     /**
@@ -99,9 +99,9 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
      */
     public function getWebsiteCodeByHost($host)
     {
-        if (!isset($this->hostToWebsiteMap[$host])) {
+        if (!isset($this->urlToWebsiteMap[$host])) {
             throw new UnknownWebsiteHostException(sprintf('No website code found for host "%s"', $host));
         }
-        return $this->hostToWebsiteMap[$host];
+        return $this->urlToWebsiteMap[$host];
     }
 }

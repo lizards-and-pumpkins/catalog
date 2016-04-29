@@ -18,7 +18,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
     private $contextWebsite;
 
     /**
-     * @var HostToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubWebsiteMap;
 
@@ -29,7 +29,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubWebsiteMap = $this->getMock(HostToWebsiteMap::class);
+        $this->stubWebsiteMap = $this->getMock(UrlToWebsiteMap::class);
         $this->contextWebsite = new ContextWebsite($this->stubWebsiteMap);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
