@@ -51,9 +51,10 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
             'Unable to determine context website because neither the ' .
             'website nor the request are set in the input array.'
         );
+        
         $inputDataSet = [];
-        $otherContextParts = [];
-        $this->contextWebsite->getValue($inputDataSet, $otherContextParts);
+        
+        $this->contextWebsite->getValue($inputDataSet);
     }
 
     /**
@@ -63,8 +64,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheWebsiteIfPresentInTheInput($websiteCode)
     {
         $inputDataSet = [ContextWebsite::CODE => $websiteCode];
-        $otherContextParts = [];
-        $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet));
     }
 
     /**
@@ -81,7 +81,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getHost')->willReturn('example.com');
 
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        $otherContextParts = [];
-        $this->assertSame('web', $this->contextWebsite->getValue($inputDataSet, $otherContextParts));
+        
+        $this->assertSame('web', $this->contextWebsite->getValue($inputDataSet));
     }
 }

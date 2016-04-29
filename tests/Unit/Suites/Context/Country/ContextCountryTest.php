@@ -59,30 +59,28 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsNullIfTheCountryIsNotInTheInputAndNoRequestIsPresentEither()
     {
         $inputDataSet = [];
-        $otherContextParts = [];
-        $this->assertNull($this->contextCountry->getValue($inputDataSet, $otherContextParts));
+        $this->assertNull($this->contextCountry->getValue($inputDataSet));
     }
 
     public function testItReturnsTheValueFromTheInputDataSetIfPresent()
     {
         $inputDataSet = [ContextCountry::CODE => 'fr'];
-        $otherContextParts = [];
-        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
+        
+        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet));
     }
 
     public function testItReturnsTheCountryFromTheRequestIfNotPartOfTheInputDataSet()
     {
         $this->setRequestCountry('en');
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        $otherContextParts = [];
-        $this->assertSame('en', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
+        
+        $this->assertSame('en', $this->contextCountry->getValue($inputDataSet));
     }
 
     public function testItReturnsTheDefaultCountryIfTheRequestDoesNotContainTheCountry()
     {
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        $otherContextParts = [];
-        $this->assertSame('default', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame('default', $this->contextCountry->getValue($inputDataSet));
     }
 
     public function testItPrefersTheExplicitValueIfBothSourcesArePresentInTheInputDataSet()
@@ -92,7 +90,7 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
             ContextBuilder::REQUEST => $this->stubRequest,
             ContextCountry::CODE => 'fr'
         ];
-        $otherContextParts = [];
-        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet, $otherContextParts));
+        
+        $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet));
     }
 }
