@@ -23,17 +23,18 @@ class ContextWebsite implements ContextPartBuilder
 
     /**
      * @param mixed[] $inputDataSet
-     * @param string[] $otherContextParts
      * @return string
      */
-    public function getValue(array $inputDataSet, array $otherContextParts)
+    public function getValue(array $inputDataSet)
     {
         if (isset($inputDataSet[self::CODE])) {
             return (string) $inputDataSet[self::CODE];
         }
+        
         if (isset($inputDataSet[ContextBuilder::REQUEST])) {
             return (string) $this->getWebsiteFromRequest($inputDataSet[ContextBuilder::REQUEST]);
         }
+        
         $message = 'Unable to determine context website because neither the ' .
             'website nor the request are set in the input array.';
         throw new UnableToDetermineContextWebsiteException($message);

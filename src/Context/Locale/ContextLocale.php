@@ -13,7 +13,7 @@ class ContextLocale implements ContextPartBuilder
     private $default = 'fr_FR';
 
     /*
-     * TODO: The mapping array can be moved to configuration or a factory or a dedicated
+     * TODO: The mapping array must be moved to configuration or a factory or a dedicated
      * TODO: class or the configuration once the business rules have become more stable.
      */
     private $languageToLocaleMap = [
@@ -32,17 +32,18 @@ class ContextLocale implements ContextPartBuilder
 
     /**
      * @param mixed[] $inputDataSet
-     * @param string[] $otherContextParts
      * @return string
      */
-    public function getValue(array $inputDataSet, array $otherContextParts)
+    public function getValue(array $inputDataSet)
     {
         if (isset($inputDataSet[self::CODE])) {
             return (string) $inputDataSet[self::CODE];
         }
+        
         if (isset($inputDataSet[ContextBuilder::REQUEST])) {
             return $this->getLocaleFromRequest($inputDataSet[ContextBuilder::REQUEST]);
         }
+        
         return $this->default;
     }
 
