@@ -119,12 +119,4 @@ class HttpUrl
         $requestQuery = $this->url->getQuery();
         return count($requestQuery->toArray()) > 0;
     }
-
-    /**
-     * @return string
-     */
-    public function getHost()
-    {
-        return (string) $this->url->getHost();
-    }
 }

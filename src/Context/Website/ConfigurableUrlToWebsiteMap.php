@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Util\Config\ConfigReader;
 class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 {
     const CONFIG_KEY = 'website_map';
-    const RECORD_SEPARATOR = '|';
+    const RECORD_SEPARATOR = ',';
 
     /**
      * @var string[]
@@ -22,15 +22,6 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
     private function __construct(array $urlToWebsiteMap)
     {
         $this->urlToWebsiteMap = $urlToWebsiteMap;
-    }
-
-    /**
-     * @param string[] $urlToWebsiteMap
-     * @return ConfigurableUrlToWebsiteMap
-     */
-    public static function fromArray(array $urlToWebsiteMap)
-    {
-        return new static(self::createWebsites($urlToWebsiteMap));
     }
 
     /**
@@ -52,8 +43,8 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
      */
     private static function createWebsites(array $map)
     {
-        return array_reduce(array_keys($map), function (array $carry, $host) use ($map) {
-            return array_merge($carry, [$host => Website::fromString($map[$host])]);
+        return array_reduce(array_keys($map), function (array $carry, $url) use ($map) {
+            return array_merge($carry, [$url => Website::fromString($map[$url])]);
         }, []);
     }
 
@@ -99,9 +90,12 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
      */
     public function getWebsiteCodeByUrl($url)
     {
-        if (!isset($this->urlToWebsiteMap[$url])) {
-            throw new UnknownWebsiteHostException(sprintf('No website code found for url "%s"', $url));
+        foreach ($this->urlToWebsiteMap as $urlPattern => $website) {
+            if (preg_match('#' . $urlPattern . '#', $url)) {
+                return $website;
+            }
         }
-        return $this->urlToWebsiteMap[$url];
+
+        throw new UnknownWebsiteHostException(sprintf('No website code found for url "%s"', $url));
     }
 }

@@ -78,7 +78,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheWebsiteBasedOnTheRequestIfNotExplicitlySet()
     {
         $this->stubWebsiteMap->method('getWebsiteCodeByUrl')->willReturn('web');
-        $this->stubRequest->method('getHost')->willReturn('example.com');
+        $this->stubRequest->method('getUrl')->willReturn('example.com');
 
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
         

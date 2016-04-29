@@ -207,18 +207,4 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($expectedCookieValue, $result);
     }
-
-    public function testItDelegatesToTheHttpUrlToRetrieveTheRequestHost()
-    {
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubHttpUrl->method('getHost')->willReturn('example.com');
-        
-        $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            $stubHttpUrl,
-            HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
-        );
-        $this->assertSame('example.com', $request->getHost());
-    }
 }

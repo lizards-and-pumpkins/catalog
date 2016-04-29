@@ -13,19 +13,6 @@ use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
 class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigurableUrlToWebsiteMap
-     */
-    private $websiteMap;
-
-    /**
-     * @var string[]
-     */
-    private $testMap = [
-        'example.com' => 'web1',
-        '127.0.0.1'   => 'exampleDev',
-    ];
-
-    /**
      * @var ConfigReader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubConfigReader;
@@ -38,49 +25,63 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->websiteMap = ConfigurableUrlToWebsiteMap::fromArray($this->testMap);
         $this->stubConfigReader = $this->getMock(ConfigReader::class);
     }
 
-    public function testItThrowsAnExceptionIfAHostNameIsNotKnown()
+    public function testWebsiteMapCanBeCreatedFromConfigValue()
     {
+        $result = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
+        $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $result);
+    }
+
+    public function testExceptionIsThrownIfGivenUrlMatchesNoneOfWebsites()
+    {
+        $url = 'http://www.example.com/';
+
         $this->expectException(UnknownWebsiteHostException::class);
-        $this->expectExceptionMessage('No website code found for url "www.example.com"');
-        $this->websiteMap->getWebsiteCodeByUrl('www.example.com');
-    }
-
-    public function testItReturnsTheCodeIfSet()
-    {
-        $websiteOne = Website::fromString($this->testMap['example.com']);
-        $websiteTwo = Website::fromString($this->testMap['127.0.0.1']);
-        $this->assertWebsiteEqual($websiteOne, $this->websiteMap->getWebsiteCodeByUrl('example.com'));
-        $this->assertWebsiteEqual($websiteTwo, $this->websiteMap->getWebsiteCodeByUrl('127.0.0.1'));
-    }
-
-    public function testItReturnsAWebsiteMapInstance()
-    {
-        $instance = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
-        $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $instance);
-    }
-
-    public function testItUsesAMapFromTheConfiguration()
-    {
-        $map = 'example.com=aaa|127.0.0.1=bbb';
-        $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($map);
+        $this->expectExceptionMessage(sprintf('No website code found for url "%s"', $url));
 
         $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
-
-        $this->assertWebsiteEqual(Website::fromString('aaa'), $websiteMap->getWebsiteCodeByUrl('example.com'));
-        $this->assertWebsiteEqual(Website::fromString('bbb'), $websiteMap->getWebsiteCodeByUrl('127.0.0.1'));
+        $websiteMap->getWebsiteCodeByUrl($url);
     }
 
-    public function testItThrowsAnExceptionIfAMapValueNotMatchesTheExpectedFormat()
+    public function testExceptionIsThrownIfMapConfigurationFormatIsMalformed()
     {
         $this->expectException(InvalidWebsiteMapConfigRecordException::class);
         $this->expectExceptionMessage('Unable to parse the website to code mapping record "test="');
+
         $map = 'test=';
         $this->stubConfigReader->method('get')->willReturn($map);
 
         ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
+    }
+
+    /**
+     * @dataProvider websiteMapProvider
+     * @param $testMap
+     * @param $testUrl
+     * @param $expectedWebsiteCode
+     */
+    public function testFirstMatchingWebsiteCodeIsReturned($testMap, $testUrl, $expectedWebsiteCode)
+    {
+        $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
+        $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
+        $result = $websiteMap->getWebsiteCodeByUrl($testUrl);
+
+        $this->assertWebsiteEqual(Website::fromString($expectedWebsiteCode), $result);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function websiteMapProvider()
+    {
+        return [
+            ['^http://example\.com/=foo,^https://127\.0\.0\.1=bar', 'http://example.com/', 'foo'],
+            ['^http://example\.com/=foo,^https://127\.0\.0\.1=bar', 'https://127.0.0.1', 'bar'],
+            ['^http://example\.com/=foo,^http://example\.com/=bar', 'http://example.com/', 'bar'],
+            ['^https?://example\.com/=foo', 'http://example.com/', 'foo'],
+            ['^https?://example\.com/=foo', 'https://example.com/', 'foo'],
+        ];
     }
 }

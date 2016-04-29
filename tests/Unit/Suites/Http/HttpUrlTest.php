@@ -100,29 +100,4 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         $url = HttpUrl::fromString('http://example.com/foo/');
         $this->assertFalse($url->hasQueryParameters());
     }
-
-    /**
-     * @dataProvider requestHostDataProvider
-     * @param string $host
-     * @param string $expected
-     */
-    public function testItReturnsTheRequestHost($host, $expected)
-    {
-        $url = HttpUrl::fromString('http://' . $host . '/path/to/some-page');
-        $this->assertSame($expected, $url->getHost());
-    }
-
-    /**
-     * @return array[]
-     */
-    public function requestHostDataProvider()
-    {
-        return [
-            'top' => ['example.com', 'example.com'],
-            'sub' => ['www.example.com', 'www.example.com'],
-            'special' => ['über.com', 'über.com'],
-            'punycode' => ['xn--ber-goa.com', 'über.com'],
-            'ip4' => ['127.0.0.1', '127.0.0.1']
-        ];
-    }
 }
