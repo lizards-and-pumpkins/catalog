@@ -148,7 +148,7 @@ class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
 
         $webFront = new DefaultWebFront($stubHttpRequest, new UnitTestFactory());
         $webFront->registerFactory(new UnitTestFactory());
-        $webFront->runWithoutSendingResponse();
+        $webFront->processRequest();
 
         $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());
     }

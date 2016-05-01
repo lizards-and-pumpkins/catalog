@@ -66,7 +66,7 @@ trait ProductListingTestTrait
         $implementationSpecificFactory = $this->createIntegrationTestFactory($this->factory);
 
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->runWithoutSendingResponse();
+        $website->processRequest();
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
@@ -85,7 +85,7 @@ trait ProductListingTestTrait
         $implementationSpecificFactory = $this->createIntegrationTestFactory($this->factory);
 
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->runWithoutSendingResponse();
+        $website->processRequest();
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();

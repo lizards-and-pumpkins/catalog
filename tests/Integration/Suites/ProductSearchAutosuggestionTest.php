@@ -36,7 +36,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->runWithoutSendingResponse();
+        $website->processRequest();
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
@@ -56,7 +56,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->runWithoutSendingResponse();
+        $website->processRequest();
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();

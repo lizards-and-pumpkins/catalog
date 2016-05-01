@@ -28,7 +28,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->runWithoutSendingResponse();
+        $website->processRequest();
 
         $this->processQueueWhileMessagesPending(
             $this->factory->getCommandQueue(),
@@ -52,7 +52,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->runWithoutSendingResponse();
+        $website->processRequest();
 
         $this->factory->createCommandConsumer()->process();
         $this->factory->createDomainEventConsumer()->process();
@@ -96,7 +96,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $response = $website->runWithoutSendingResponse();
+        $response = $website->processRequest();
 
         $this->assertSame('', $response->getBody());
         $this->assertSame(202, $response->getStatusCode());
