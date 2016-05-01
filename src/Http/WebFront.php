@@ -39,7 +39,7 @@ abstract class WebFront
      */
     public function run()
     {
-        $response = $this->runWithoutSendingResponse();
+        $response = $this->processRequest();
         $response->send();
         return $response;
     }
@@ -47,7 +47,7 @@ abstract class WebFront
     /**
      * @return HttpResponse
      */
-    public function runWithoutSendingResponse()
+    public function processRequest()
     {
         $this->buildFactory();
         $this->buildRouterChain();
