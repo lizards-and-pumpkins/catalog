@@ -40,9 +40,7 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromTheInputDataSets()
     {
         $inputDataSet = [];
-        $otherContextParts = [];
-
-        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet));
     }
 
     /**
@@ -53,9 +51,8 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlPathRelativeToWebFront);
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        $otherContextParts = [];
 
-        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet));
     }
 
     /**
@@ -73,9 +70,7 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent()
     {
         $inputDataSet = [ContextLocale::CODE => 'xx_XX'];
-        $otherContextParts = [];
-
-        $this->assertSame('xx_XX', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame('xx_XX', $this->contextLocale->getValue($inputDataSet));
     }
 
     /**
@@ -86,9 +81,8 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlPathRelativeToWebFront);
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        $otherContextParts = [];
 
-        $this->assertSame('en_US', $this->contextLocale->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame('en_US', $this->contextLocale->getValue($inputDataSet));
     }
 
     /**

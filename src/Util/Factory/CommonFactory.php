@@ -118,8 +118,8 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
-use LizardsAndPumpkins\Context\Website\ConfigurableHostToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 
 class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
@@ -986,7 +986,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createWebsiteContextPartBuilder()
     {
-        return new WebsiteContextPartBuilder($this->getMasterFactory()->createHostToWebsiteMap());
+        return new WebsiteContextPartBuilder($this->getMasterFactory()->createUrlToWebsiteMap());
     }
 
     /**
@@ -1006,11 +1006,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return HostToWebsiteMap
+     * @return UrlToWebsiteMap
      */
-    public function createHostToWebsiteMap()
+    public function createUrlToWebsiteMap()
     {
-        return ConfigurableHostToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
+        return ConfigurableUrlToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
     }
 
     /**

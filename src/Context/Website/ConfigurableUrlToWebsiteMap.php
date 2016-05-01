@@ -3,10 +3,10 @@
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordException;
-use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteHostException;
+use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteUrlException;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 
-class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
+class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 {
     const CONFIG_KEY = 'website_map';
     const RECORD_SEPARATOR = '|';
@@ -14,36 +14,27 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
     /**
      * @var string[]
      */
-    private $hostToWebsiteMap;
+    private $urlToWebsiteMap;
 
     /**
-     * @param Website[] $hostToWebsiteMap
+     * @param Website[] $urlToWebsiteMap
      */
-    private function __construct(array $hostToWebsiteMap)
+    private function __construct(array $urlToWebsiteMap)
     {
-        $this->hostToWebsiteMap = $hostToWebsiteMap;
-    }
-
-    /**
-     * @param string[] $hostToWebsiteMap
-     * @return ConfigurableHostToWebsiteMap
-     */
-    public static function fromArray(array $hostToWebsiteMap)
-    {
-        return new static(self::createWebsites($hostToWebsiteMap));
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     /**
      * @param ConfigReader $configReader
-     * @return ConfigurableHostToWebsiteMap
+     * @return ConfigurableUrlToWebsiteMap
      */
     public static function fromConfig(ConfigReader $configReader)
     {
-        $hostToWebsiteMap = $configReader->get(self::CONFIG_KEY) ?
+        $urlToWebsiteMap = $configReader->get(self::CONFIG_KEY) ?
             self::buildArrayMapFromString($configReader->get(self::CONFIG_KEY)) :
             [];
 
-        return new static(self::createWebsites($hostToWebsiteMap));
+        return new static(self::createWebsites($urlToWebsiteMap));
     }
 
     /**
@@ -52,8 +43,8 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
      */
     private static function createWebsites(array $map)
     {
-        return array_reduce(array_keys($map), function (array $carry, $host) use ($map) {
-            return array_merge($carry, [$host => Website::fromString($map[$host])]);
+        return array_reduce(array_keys($map), function (array $carry, $url) use ($map) {
+            return array_merge($carry, [$url => Website::fromString($map[$url])]);
         }, []);
     }
 
@@ -94,14 +85,17 @@ class ConfigurableHostToWebsiteMap implements HostToWebsiteMap
     }
 
     /**
-     * @param string $host
+     * @param string $url
      * @return Website
      */
-    public function getWebsiteCodeByHost($host)
+    public function getWebsiteCodeByUrl($url)
     {
-        if (!isset($this->hostToWebsiteMap[$host])) {
-            throw new UnknownWebsiteHostException(sprintf('No website code found for host "%s"', $host));
+        foreach ($this->urlToWebsiteMap as $urlPattern => $website) {
+            if (stripos($url, $urlPattern) === 0) {
+                return $website;
+            }
         }
-        return $this->hostToWebsiteMap[$host];
+
+        throw new UnknownWebsiteUrlException(sprintf('No website code found for url "%s"', $url));
     }
 }

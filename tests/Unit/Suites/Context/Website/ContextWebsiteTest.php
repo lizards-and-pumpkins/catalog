@@ -18,7 +18,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
     private $contextWebsite;
 
     /**
-     * @var HostToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubWebsiteMap;
 
@@ -29,7 +29,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubWebsiteMap = $this->getMock(HostToWebsiteMap::class);
+        $this->stubWebsiteMap = $this->getMock(UrlToWebsiteMap::class);
         $this->contextWebsite = new ContextWebsite($this->stubWebsiteMap);
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
@@ -51,9 +51,10 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
             'Unable to determine context website because neither the ' .
             'website nor the request are set in the input array.'
         );
+        
         $inputDataSet = [];
-        $otherContextParts = [];
-        $this->contextWebsite->getValue($inputDataSet, $otherContextParts);
+        
+        $this->contextWebsite->getValue($inputDataSet);
     }
 
     /**
@@ -63,8 +64,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheWebsiteIfPresentInTheInput($websiteCode)
     {
         $inputDataSet = [ContextWebsite::CODE => $websiteCode];
-        $otherContextParts = [];
-        $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet, $otherContextParts));
+        $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet));
     }
 
     /**
@@ -77,11 +77,11 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheWebsiteBasedOnTheRequestIfNotExplicitlySet()
     {
-        $this->stubWebsiteMap->method('getWebsiteCodeByHost')->willReturn('web');
-        $this->stubRequest->method('getHost')->willReturn('example.com');
+        $this->stubWebsiteMap->method('getWebsiteCodeByUrl')->willReturn('web');
+        $this->stubRequest->method('getUrl')->willReturn('example.com');
 
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        $otherContextParts = [];
-        $this->assertSame('web', $this->contextWebsite->getValue($inputDataSet, $otherContextParts));
+        
+        $this->assertSame('web', $this->contextWebsite->getValue($inputDataSet));
     }
 }

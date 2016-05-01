@@ -38,7 +38,7 @@ use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
 use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
-use LizardsAndPumpkins\Context\Website\HostToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
@@ -435,11 +435,11 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return HostToWebsiteMap
+     * @return UrlToWebsiteMap
      */
-    public function createHostToWebsiteMap()
+    public function createUrlToWebsiteMap()
     {
-        return new IntegrationTestHostToWebsiteMap();
+        return new IntegrationTestUrlToWebsiteMap();
     }
 
     /**

@@ -12,11 +12,11 @@ class ContextWebsite implements ContextPartBuilder
     const CODE = 'website';
     
     /**
-     * @var HostToWebsiteMap
+     * @var UrlToWebsiteMap
      */
     private $websiteMap;
 
-    public function __construct(HostToWebsiteMap $websiteMap)
+    public function __construct(UrlToWebsiteMap $websiteMap)
     {
         $this->websiteMap = $websiteMap;
     }
@@ -54,6 +54,6 @@ class ContextWebsite implements ContextPartBuilder
      */
     private function getWebsiteFromRequest(HttpRequest $request)
     {
-        return $this->websiteMap->getWebsiteCodeByHost($request->getHost());
+        return $this->websiteMap->getWebsiteCodeByUrl($request->getUrl());
     }
 }

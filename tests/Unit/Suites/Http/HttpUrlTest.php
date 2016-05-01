@@ -118,11 +118,11 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     public function requestHostDataProvider()
     {
         return [
-            'top' => ['example.com', 'example.com'],
-            'sub' => ['www.example.com', 'www.example.com'],
-            'special' => ['über.com', 'über.com'],
+            'top'      => ['example.com', 'example.com'],
+            'sub'      => ['www.example.com', 'www.example.com'],
+            'special'  => ['über.com', 'über.com'],
             'punycode' => ['xn--ber-goa.com', 'über.com'],
-            'ip4' => ['127.0.0.1', '127.0.0.1']
+            'ip4'      => ['127.0.0.1', '127.0.0.1']
         ];
     }
 }
