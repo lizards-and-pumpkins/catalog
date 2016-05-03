@@ -207,12 +207,12 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $urlKeyA = 'A.html';
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequestA */
         $stubRequestA = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubRequestA->method('getUrlPathRelativeToWebFront')->willReturn($urlKeyA);
+        $stubRequestA->method('getPathWithoutWebsitePrefix')->willReturn($urlKeyA);
 
         $urlKeyB = 'B.html';
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequestB */
         $stubRequestB = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubRequestB->method('getUrlPathRelativeToWebFront')->willReturn($urlKeyB);
+        $stubRequestB->method('getPathWithoutWebsitePrefix')->willReturn($urlKeyB);
 
         $requestAMetaInfoSnippetKey = 'A';
         $requestBMetaInfoSnippetKey = 'B';

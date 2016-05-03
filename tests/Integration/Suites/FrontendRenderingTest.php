@@ -183,7 +183,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $metaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
         $productDetailPageMetaSnippetKey = $metaSnippetKeyGenerator->getKeyForContext(
             $context,
-            [PageMetaInfoSnippetContent::URL_KEY => $this->request->getUrlPathRelativeToWebFront()]
+            [PageMetaInfoSnippetContent::URL_KEY => $this->request->getPathWithoutWebsitePrefix()]
         );
 
         $this->addSnippetsFixtureToKeyValueStorage($productDetailPageMetaSnippetKey, $context);

@@ -51,7 +51,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     private function prepareStubHttpRequest($queryString)
     {
         $urlString = ProductSearchAutosuggestionRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
@@ -94,7 +94,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchAutosuggestionUrl()
     {
         $urlString = 'foo';
-        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)
@@ -106,7 +106,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
         $urlString = ProductSearchAutosuggestionRequestHandler::SEARCH_RESULTS_SLUG;
-        $this->stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlString);
+        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn($urlString);
         $this->stubHttpRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubHttpRequest->method('getQueryParameter')
             ->with(ProductSearchAutosuggestionRequestHandler::QUERY_STRING_PARAMETER_NAME)

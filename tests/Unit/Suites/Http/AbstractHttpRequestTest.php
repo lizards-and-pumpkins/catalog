@@ -37,13 +37,13 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($stubHttpUrl, $result);
     }
 
-    public function testUrlPathRelativeToWebFrontIsReturned()
+    public function testGettingUrlPathWithoutWebsitePrefixIsDelegatedToHttpUrl()
     {
         $path = 'foo';
 
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
-        $stubHttpUrl->method('getPathRelativeToWebFront')->willReturn($path);
+        $stubHttpUrl->method('getPathWithoutWebsitePrefix')->willReturn($path);
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -51,7 +51,24 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
-        $this->assertSame($path, $httpRequest->getUrlPathRelativeToWebFront());
+        $this->assertSame($path, $httpRequest->getPathWithoutWebsitePrefix());
+    }
+
+    public function testGettingUrlPathWithWebsitePrefixIsDelegatedToHttpUrl()
+    {
+        $path = 'foo';
+
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
+        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl->method('getPathWithWebsitePrefix')->willReturn($path);
+
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            $stubHttpUrl,
+            HttpHeaders::fromArray([]),
+            HttpRequestBody::fromString('')
+        );
+        $this->assertSame($path, $httpRequest->getPathWithWebsitePrefix());
     }
 
     public function testUnsupportedRequestMethodExceptionIsThrown()

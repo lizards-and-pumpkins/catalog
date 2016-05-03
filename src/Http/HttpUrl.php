@@ -63,12 +63,26 @@ class HttpUrl
     /**
      * @return string
      */
-    public function getPathRelativeToWebFront()
+    public function getPathWithoutWebsitePrefix()
     {
         /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
-        $path->remove($this->getDirectoryPathRelativeToDocumentRoot());
+        $path->remove($this->getPathToFrontController());
 
+        return ltrim($path->getUriComponent(), '/');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathWithWebsitePrefix()
+    {
+        $pathToRemove = preg_replace('#/[^/]*$#', '', $this->getPathToFrontController());
+        
+        /** @var \League\Url\Components\Path $path */
+        $path = $this->url->getPath();
+        $path->remove($pathToRemove);
+        
         return ltrim($path->getUriComponent(), '/');
     }
 
@@ -91,7 +105,7 @@ class HttpUrl
     /**
      * @return string
      */
-    private function getDirectoryPathRelativeToDocumentRoot()
+    private function getPathToFrontController()
     {
         return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
     }

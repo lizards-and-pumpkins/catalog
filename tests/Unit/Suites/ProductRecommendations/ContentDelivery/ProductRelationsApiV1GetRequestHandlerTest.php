@@ -60,7 +60,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     public function testItCanNotProcessNonHttpGetRequestTypes($nonGetRequestMethod)
     {
         $this->stubRequest->method('getMethod')->willReturn($nonGetRequestMethod);
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
         $message = sprintf('%s request should NOT be able to be processed', $nonGetRequestMethod);
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
     }
@@ -84,7 +84,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     public function testItCanNotProcessNonMatchingGetRequests($nonMatchingRequestPath)
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($nonMatchingRequestPath);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
         $message = sprintf('GET request to "%s" should NOT be able to be processed', $nonMatchingRequestPath);
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
     }
@@ -102,7 +102,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     public function testItCanProcessMatchingGetRequests()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
         $message = sprintf('Not able to process a GET request to "%s"', $this->testMatchingRequestPath);
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest), $message);
     }
@@ -115,7 +115,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
         );
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
         $this->requestHandler->process($this->stubRequest);
     }
 
@@ -129,7 +129,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
             ->willReturn($testProductData);
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($this->testMatchingRequestPath);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
 
         $response = $this->requestHandler->process($this->stubRequest);
         

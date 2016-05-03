@@ -108,7 +108,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
-            PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getUrlPathRelativeToWebFront(), '/'),
+            PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getPathWithoutWebsitePrefix(), '/'),
             'robots' => $this->selectProductListingRobotsMetaTagContent->getRobotsMetaTagContentForRequest($request),
         ];
 
@@ -241,7 +241,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private function getMetaInfoSnippetKey(HttpRequest $request)
     {
-        $urlKey = $request->getUrlPathRelativeToWebFront();
+        $urlKey = $request->getPathWithoutWebsitePrefix();
         $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext(
             $this->context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]

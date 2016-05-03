@@ -69,11 +69,24 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';
 
         $url = HttpUrl::fromString('http://www.example.com/path/to/some-page');
-        $result = $url->getPathRelativeToWebFront();
+        $result = $url->getPathWithoutWebsitePrefix();
 
         $_SERVER['SCRIPT_NAME'] = $originalScriptName;
 
         $this->assertEquals('some-page', $result);
+    }
+
+    public function testLastTokenOfDirectoryPathIsIncludedIntoPath()
+    {
+        $originalScriptName = $_SERVER['SCRIPT_NAME'];
+        $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';
+
+        $url = HttpUrl::fromString('http://www.example.com/path/to/some-page');
+        $result = $url->getPathWithWebsitePrefix();
+
+        $_SERVER['SCRIPT_NAME'] = $originalScriptName;
+
+        $this->assertEquals('to/some-page', $result);
     }
 
     public function testEmptyStringIsReturnedIfParameterIsAbsentInRequestQuery()

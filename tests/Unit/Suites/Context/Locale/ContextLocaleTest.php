@@ -49,7 +49,7 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
      */
     public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromRequest($urlPathRelativeToWebFront)
     {
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlPathRelativeToWebFront);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($urlPathRelativeToWebFront);
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
 
         $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet));
@@ -79,7 +79,7 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
      */
     public function testItReturnsTheLocaleFromTheRequestIfNotExplicitlySpecifiedInInputArray($urlPathRelativeToWebFront)
     {
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn($urlPathRelativeToWebFront);
+        $this->stubRequest->method('getPathWithWebsitePrefix')->willReturn($urlPathRelativeToWebFront);
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
 
         $this->assertSame('en_US', $this->contextLocale->getValue($inputDataSet));
