@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Context\Country;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 
