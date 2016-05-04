@@ -41,8 +41,6 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
         $this->stubWebsiteToCountryMap = $this->getMock(WebsiteToCountryMap::class);
-        $this->stubWebsiteToCountryMap->method('getCountry')->willReturn('default');
-        $this->stubWebsiteToCountryMap->method('getDefaultCountry')->willReturn('default');
         $this->contextCountry = new ContextCountry($this->stubWebsiteToCountryMap);
     }
 
@@ -80,7 +78,11 @@ class ContextCountryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheDefaultCountryIfTheRequestDoesNotContainTheCountry()
     {
         $inputDataSet = [ContextBuilder::REQUEST => $this->stubRequest];
-        $this->assertSame('default', $this->contextCountry->getValue($inputDataSet));
+        $defaultCountryCode = 'default';
+        
+        $this->stubWebsiteToCountryMap->method('getDefaultCountry')->willReturn($defaultCountryCode);
+        
+        $this->assertSame($defaultCountryCode, $this->contextCountry->getValue($inputDataSet));
     }
 
     public function testItPrefersTheExplicitValueIfBothSourcesArePresentInTheInputDataSet()
