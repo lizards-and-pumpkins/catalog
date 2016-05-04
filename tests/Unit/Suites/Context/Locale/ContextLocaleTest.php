@@ -91,8 +91,8 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
     public function urlPathWithLocaleProvider()
     {
         return [
-            ['en/foo'],
-            ['en'],
+            ['ru_en/foo'],
+            ['ru_en'],
         ];
     }
 }
