@@ -62,15 +62,4 @@ class ContextCountry implements ContextPartBuilder
             (string) $cookieData[$this->cookieDataKey] :
             $this->websiteToCountryMap->getDefaultCountry();
     }
-
-    /**
-     * @param string[] $otherContextParts
-     * @return string
-     */
-    private function getWebsiteCode(array $otherContextParts)
-    {
-        return isset($otherContextParts[ContextWebsite::CODE]) ?
-            $otherContextParts[ContextWebsite::CODE] :
-            '';
-    }
 }
