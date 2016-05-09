@@ -140,7 +140,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl()
     {
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo');
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('foo');
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
@@ -150,7 +150,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
 
@@ -159,7 +159,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestCanNotBeProcessedIfQueryStringParameterIsNotPresent()
     {
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
 
@@ -170,7 +170,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $queryString = '';
 
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
@@ -195,7 +195,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testTrueIsReturnedIfRequestCanBeProcessed()
     {
-        $this->stubRequest->method('getUrlPathRelativeToWebFront')
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([

@@ -131,7 +131,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     private function getMetaInfoSnippetKey(HttpRequest $request)
     {
-        $urlKey = $request->getUrlPathRelativeToWebFront();
+        $urlKey = $request->getPathWithoutWebsitePrefix();
         $metaInfoSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
             $this->context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]

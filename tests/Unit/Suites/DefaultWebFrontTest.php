@@ -144,7 +144,7 @@ class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
     {
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $stubHttpRequest->method('getUrlPathRelativeToWebFront')->willReturn('foo');
+        $stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('foo');
 
         $webFront = new DefaultWebFront($stubHttpRequest, new UnitTestFactory());
         $webFront->registerFactory(new UnitTestFactory());

@@ -100,9 +100,17 @@ abstract class HttpRequest
     /**
      * @return string
      */
-    public function getUrlPathRelativeToWebFront()
+    public function getPathWithoutWebsitePrefix()
     {
-        return $this->getUrl()->getPathRelativeToWebFront();
+        return $this->getUrl()->getPathWithoutWebsitePrefix();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathWithWebsitePrefix()
+    {
+       return $this->getUrl()->getPathWithWebsitePrefix();
     }
 
     /**

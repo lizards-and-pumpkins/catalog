@@ -118,7 +118,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      */
     private function isValidSearchRequest(HttpRequest $request)
     {
-        $urlPathWithoutTrailingSlash = rtrim($request->getUrlPathRelativeToWebFront(), '/');
+        $urlPathWithoutTrailingSlash = rtrim($request->getPathWithoutWebsitePrefix(), '/');
 
         if (self::SEARCH_RESULTS_SLUG !== $urlPathWithoutTrailingSlash) {
             return false;

@@ -16,9 +16,10 @@ class ContextLocale implements ContextPartBuilder
      * TODO: The mapping array must be moved to configuration or a factory or a dedicated
      * TODO: class or the configuration once the business rules have become more stable.
      */
-    private $languageToLocaleMap = [
-        'de' => 'de_DE',
-        'en' => 'en_US',
+    private $websiteCodeToLocaleMap = [
+        'ru_de' => 'de_DE',
+        'ru_en' => 'en_US',
+        'ru_es' => 'es_ES',
         'fr' => 'fr_FR'
     ];
 
@@ -39,11 +40,11 @@ class ContextLocale implements ContextPartBuilder
         if (isset($inputDataSet[self::CODE])) {
             return (string) $inputDataSet[self::CODE];
         }
-        
+
         if (isset($inputDataSet[ContextBuilder::REQUEST])) {
             return $this->getLocaleFromRequest($inputDataSet[ContextBuilder::REQUEST]);
         }
-        
+
         return $this->default;
     }
 
@@ -53,10 +54,10 @@ class ContextLocale implements ContextPartBuilder
      */
     private function getLocaleFromRequest(HttpRequest $request)
     {
-        $language = $this->getFirstRequestPathPart($request);
+        $websiteCodeInUrl = $this->getFirstRequestPathPart($request);
 
-        if (isset($this->languageToLocaleMap[$language])) {
-            return $this->languageToLocaleMap[$language];
+        if (isset($this->websiteCodeToLocaleMap[$websiteCodeInUrl])) {
+            return $this->websiteCodeToLocaleMap[$websiteCodeInUrl];
         }
 
         return $this->default;
@@ -68,7 +69,7 @@ class ContextLocale implements ContextPartBuilder
      */
     private function getFirstRequestPathPart(HttpRequest $request)
     {
-        $pathTokens = explode('/', $request->getUrlPathRelativeToWebFront());
+        $pathTokens = explode('/', $request->getPathWithWebsitePrefix());
         return $pathTokens[0];
     }
 }

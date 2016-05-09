@@ -62,7 +62,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
      */
     private function getRequestPathParts(HttpRequest $request)
     {
-        return explode('/', trim($request->getUrlPathRelativeToWebFront(), '/'));
+        return explode('/', trim($request->getPathWithoutWebsitePrefix(), '/'));
     }
 
     /**
@@ -89,7 +89,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
      */
     private function getUnableToProcessRequestException(HttpRequest $request)
     {
-        $requestPath = $request->getUrlPathRelativeToWebFront();
+        $requestPath = $request->getPathWithoutWebsitePrefix();
         $message = sprintf('Unable to process a %s request to "%s"', $request->getMethod(), $requestPath);
         return new UnableToProcessProductRelationsRequestException($message);
     }
