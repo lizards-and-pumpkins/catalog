@@ -67,7 +67,7 @@ class HttpUrl
     {
         /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
-        $path->remove($this->getPathToFrontController());
+        $path->remove($this->getAppEntryPointPath());
 
         return ltrim($path->getUriComponent(), '/');
     }
@@ -77,7 +77,7 @@ class HttpUrl
      */
     public function getPathWithWebsitePrefix()
     {
-        $pathToRemove = preg_replace('#/[^/]*$#', '', $this->getPathToFrontController());
+        $pathToRemove = preg_replace('#/[^/]*$#', '', $this->getAppEntryPointPath());
         
         /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
@@ -105,7 +105,7 @@ class HttpUrl
     /**
      * @return string
      */
-    private function getPathToFrontController()
+    private function getAppEntryPointPath()
     {
         return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
     }
@@ -130,6 +130,7 @@ class HttpUrl
      */
     public function hasQueryParameters()
     {
+        /** @var \League\Url\Components\QueryInterface $requestQuery */
         $requestQuery = $this->url->getQuery();
         return count($requestQuery->toArray()) > 0;
     }
