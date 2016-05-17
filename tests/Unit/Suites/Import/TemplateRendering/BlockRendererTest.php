@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\Website\ContextWebsite;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockRendererMustHaveOneRootBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\MethodNotYetAvailableException;
@@ -212,5 +213,22 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
         
         $this->getBlockRenderer()->getBaseUrl();
+    }
+    
+    public function testWebsiteCodeIsReturned()
+    {
+        $testWebsiteCode = 'foo';
+        $stubContext = $this->getStubContext();
+        $stubContext->method('getValue')->with(ContextWebsite::CODE)->willReturn($testWebsiteCode);
+
+        $dataObject = [];
+        $testDir = $this->getUniqueTempDir();
+        $this->createFixtureDirectory($testDir);
+        $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
+        $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
+
+        $this->getBlockRenderer()->render($dataObject, $stubContext);
+
+        $this->assertSame($testWebsiteCode, $this->getBlockRenderer()->getWebsiteCode());
     }
 }
