@@ -59,6 +59,14 @@ class Block
     }
 
     /**
+     * @return string
+     */
+    public function getWebsiteCode()
+    {
+        return $this->blockRenderer->getWebsiteCode();
+    }
+
+    /**
      * @return mixed
      */
     final protected function getDataObject()

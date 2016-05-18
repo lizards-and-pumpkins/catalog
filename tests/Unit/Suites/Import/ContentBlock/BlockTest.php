@@ -114,6 +114,15 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     {
         $dummyBaseUrl = 'dummy base url';
         $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($dummyBaseUrl);
+        
         $this->assertSame($dummyBaseUrl, $this->block->getBaseUrl());
+    }
+
+    public function testFetchingWebsiteCodeIsDelegatedToBlockRenderer()
+    {
+        $dummyWebsiteCode = 'foo';
+        $this->mockBlockRenderer->expects($this->once())->method('getWebsiteCode')->willReturn($dummyWebsiteCode);
+        
+        $this->assertSame($dummyWebsiteCode, $this->block->getWebsiteCode());
     }
 }
