@@ -278,14 +278,6 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return UrlToWebsiteMap
-     */
-    public function createUrlToWebsiteMap()
-    {
-        return $this->mockObjectGenerator->getMock(UrlToWebsiteMap::class);
-    }
-
-    /**
      * @return TaxableCountries
      */
     public function createTaxableCountries()

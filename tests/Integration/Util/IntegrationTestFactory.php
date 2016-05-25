@@ -437,14 +437,6 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return UrlToWebsiteMap
-     */
-    public function createUrlToWebsiteMap()
-    {
-        return new IntegrationTestUrlToWebsiteMap();
-    }
-
-    /**
      * @return TaxableCountries
      */
     public function createTaxableCountries()
