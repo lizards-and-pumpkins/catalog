@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\Price;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\IntegrationTestContextWebsite;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Tax\TaxService;

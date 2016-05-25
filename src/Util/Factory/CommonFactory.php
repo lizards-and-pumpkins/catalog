@@ -20,7 +20,6 @@ use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion as VersionContextPartBuilder;
-use LizardsAndPumpkins\Context\Website\ContextWebsite as WebsiteContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -120,8 +119,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
-use LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 
 class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
@@ -196,6 +193,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      * @var ContextPartBuilder
      */
     private $countryContextPartBuilder;
+
+    /**
+     * @var ContextPartBuilder
+     */
+    private $websiteContextPartBuilder;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -978,7 +980,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new SelfContainedContextBuilder(
             $this->getMasterFactory()->createVersionContextPartBuilder(),
-            $this->getMasterFactory()->createWebsiteContextPartBuilder(),
+            $this->getMasterFactory()->getWebsiteContextPartBuilder(),
             $this->getMasterFactory()->getCountryContextPartBuilder(),
             $this->getMasterFactory()->getLocaleContextPartBuilder()
         );
@@ -994,11 +996,15 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return WebsiteContextPartBuilder
+     * @return ContextPartBuilder
      */
-    public function createWebsiteContextPartBuilder()
+    public function getWebsiteContextPartBuilder()
     {
-        return new WebsiteContextPartBuilder($this->getMasterFactory()->createUrlToWebsiteMap());
+        if (null === $this->websiteContextPartBuilder) {
+            $this->websiteContextPartBuilder = $this->callExternalCreateMethod('WebsiteContextPartBuilder');
+        }
+
+        return $this->websiteContextPartBuilder;
     }
 
     /**
@@ -1023,14 +1029,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         }
 
         return $this->countryContextPartBuilder;
-    }
-
-    /**
-     * @return UrlToWebsiteMap
-     */
-    public function createUrlToWebsiteMap()
-    {
-        return ConfigurableUrlToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
     }
 
     /**

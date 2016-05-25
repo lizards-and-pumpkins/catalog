@@ -6,9 +6,6 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -100,7 +97,6 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandConsumer
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator
@@ -166,7 +162,6 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
- * @uses   \LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
@@ -612,11 +607,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContextVersion::class, $result);
     }
 
-    public function testItReturnsAWebsiteContextPartBuilder()
+    public function testItReturnsSameInstanceOfWebsiteContextPartBuilder()
     {
-        $result = $this->commonFactory->createWebsiteContextPartBuilder();
-        $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextWebsite::class, $result);
+        $builderA = $this->commonFactory->getWebsiteContextPartBuilder();
+        $builderB = $this->commonFactory->getWebsiteContextPartBuilder();
+
+        $this->assertSame($builderA, $builderB);
+        $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
     public function testItReturnsSameInstanceOfLocaleContextPartBuilder()
@@ -626,13 +623,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($builderA, $builderB);
         $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
-    }
-
-    public function testItReturnsAUrlToWebsiteMap()
-    {
-        $result = $this->commonFactory->createUrlToWebsiteMap();
-        $this->assertInstanceOf(UrlToWebsiteMap::class, $result);
-        $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $result);
     }
 
     public function testItReturnsSameInstanceOfCountryContextPartBuilder()
