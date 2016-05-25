@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\Import\Price\Price;
@@ -55,21 +54,8 @@ class EnrichProductJsonWithPrices
      */
     private function formatPriceSnippet(Price $price, Currency $currency)
     {
-        $locale = $this->getLocaleString($this->context);
-        return (new IntlFormatter($locale))->format(new Money($price->getAmount(), $currency));
-    }
-
-    /**
-     * @param Context $context
-     * @return string
-     */
-    private function getLocaleString(Context $context)
-    {
-        $locale = $context->getValue(ContextLocale::CODE);
-        if (is_null($locale)) {
-            throw new NoValidLocaleInContextException('No locale found in context');
-        }
-        return $locale;
+        $localeString = $this->context->getValue(ContextLocale::CODE);
+        return (new IntlFormatter($localeString))->format(new Money($price->getAmount(), $currency));
     }
 
     /**

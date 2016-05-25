@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\Import\Price\Price;
@@ -48,19 +47,6 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubContext = $this->getMock(Context::class);
         $this->enrichProductJsonWithPrices = new EnrichProductJsonWithPrices($this->stubContext);
-    }
-
-    public function testExceptionIsThrownIfContextDoesNotHaveLocaleData()
-    {
-        $this->expectException(NoValidLocaleInContextException::class);
-        $this->expectExceptionMessage('No locale found in context');
-        
-        $this->stubContext->method('getValue')->willReturn(null);
-
-        $productData = [];
-        $price = 10;
-        $specialPrice = 9;
-        $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
     }
 
     public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation()
