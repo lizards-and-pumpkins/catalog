@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
@@ -406,5 +407,13 @@ class UnitTestFactory implements Factory
     public function createContextSource()
     {
         return $this->mockObjectGenerator->getMock(ContextSource::class, [], [], '', false);
+    }
+
+    /**
+     * @return ContextPartBuilder
+     */
+    public function createLocaleContextPartBuilder()
+    {
+        return $this->mockObjectGenerator->getMock(ContextPartBuilder::class);
     }
 }

@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\Country\ContextCountry;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap;
 use LizardsAndPumpkins\Context\Website\ContextWebsite;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
@@ -103,7 +102,6 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
- * @uses   \LizardsAndPumpkins\Context\Locale\ContextLocale
  * @uses   \LizardsAndPumpkins\Context\Country\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandConsumer
@@ -623,11 +621,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContextWebsite::class, $result);
     }
 
-    public function testItReturnsALocaleContextPartBuilder()
+    public function testItReturnsSameInstanceOfContextPartBuilder()
     {
-        $result = $this->commonFactory->createLocaleContextPartBuilder();
-        $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextLocale::class, $result);
+        $builderA = $this->commonFactory->getLocaleContextPartBuilder();
+        $builderB = $this->commonFactory->getLocaleContextPartBuilder();
+
+        $this->assertSame($builderA, $builderB);
+        $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
     public function testItReturnsAUrlToWebsiteMap()

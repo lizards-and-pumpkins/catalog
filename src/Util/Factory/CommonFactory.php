@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
@@ -19,7 +20,6 @@ use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\ContextCountry as CountryContextPartBuilder;
-use LizardsAndPumpkins\Context\Locale\ContextLocale as LocaleContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion as VersionContextPartBuilder;
 use LizardsAndPumpkins\Context\Website\ContextWebsite as WebsiteContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
@@ -187,6 +187,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      * @var ContextSource
      */
     private $contextSource;
+
+    /**
+     * @var ContextPartBuilder
+     */
+    private $localeContextPartBuilder;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -971,7 +976,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createVersionContextPartBuilder(),
             $this->getMasterFactory()->createWebsiteContextPartBuilder(),
             $this->getMasterFactory()->createCountryContextPartBuilder(),
-            $this->getMasterFactory()->createLocaleContextPartBuilder()
+            $this->getMasterFactory()->getLocaleContextPartBuilder()
         );
     }
 
@@ -993,11 +998,15 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return LocaleContextPartBuilder
+     * @return ContextPartBuilder
      */
-    public function createLocaleContextPartBuilder()
+    public function getLocaleContextPartBuilder()
     {
-        return new LocaleContextPartBuilder();
+        if (null === $this->localeContextPartBuilder) {
+            $this->localeContextPartBuilder = $this->callExternalCreateMethod('LocaleContextPartBuilder');
+        }
+
+        return $this->localeContextPartBuilder;
     }
 
     /**

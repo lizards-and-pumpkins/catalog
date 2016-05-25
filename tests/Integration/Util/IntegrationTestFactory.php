@@ -3,8 +3,10 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\IntegrationTestContextSource;
+use LizardsAndPumpkins\Context\Locale\IntegrationTestContextLocale;
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
@@ -526,5 +528,13 @@ class IntegrationTestFactory implements Factory
     public function createContextSource()
     {
         return new IntegrationTestContextSource($this->getMasterFactory()->createContextBuilder());
+    }
+
+    /**
+     * @return ContextPartBuilder
+     */
+    public function createLocaleContextPartBuilder()
+    {
+        return new IntegrationTestContextLocale();
     }
 }
