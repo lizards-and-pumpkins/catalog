@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\Website;
 
 class IntegrationTestContextSource extends ContextSource
 {
@@ -13,11 +13,11 @@ class IntegrationTestContextSource extends ContextSource
     protected function getContextMatrix()
     {
         return [
-            [ContextWebsite::CODE => 'ru', ContextLocale::CODE => 'de_DE'],
-            [ContextWebsite::CODE => 'ru', ContextLocale::CODE => 'en_US'],
-            [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'de_DE'],
-            [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'en_US'],
-            [ContextWebsite::CODE => 'fr', ContextLocale::CODE => 'fr_FR'],
+            [Website::CONTEXT_CODE => 'ru', ContextLocale::CODE => 'de_DE'],
+            [Website::CONTEXT_CODE => 'ru', ContextLocale::CODE => 'en_US'],
+            [Website::CONTEXT_CODE => 'cy', ContextLocale::CODE => 'de_DE'],
+            [Website::CONTEXT_CODE => 'cy', ContextLocale::CODE => 'en_US'],
+            [Website::CONTEXT_CODE => 'fr', ContextLocale::CODE => 'fr_FR'],
         ];
     }
 }

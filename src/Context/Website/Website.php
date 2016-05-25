@@ -6,6 +6,8 @@ use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
 
 class Website
 {
+    const CONTEXT_CODE = 'website';
+    
     /**
      * @var string
      */

@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\Price;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -141,7 +141,7 @@ class PriceSnippetRenderer implements SnippetRenderer
     {
         $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
         $taxServiceLocatorOptions = [
-            TaxServiceLocator::OPTION_WEBSITE => $context->getValue(ContextWebsite::CODE),
+            TaxServiceLocator::OPTION_WEBSITE => $context->getValue(Website::CONTEXT_CODE),
             TaxServiceLocator::OPTION_PRODUCT_TAX_CLASS => $product->getTaxClass(),
             TaxServiceLocator::OPTION_COUNTRY => $context->getValue(Country::CONTEXT_CODE),
         ];

@@ -9,8 +9,6 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 class ContextWebsite implements ContextPartBuilder
 {
-    const CODE = 'website';
-    
     /**
      * @var UrlToWebsiteMap
      */
@@ -27,8 +25,8 @@ class ContextWebsite implements ContextPartBuilder
      */
     public function getValue(array $inputDataSet)
     {
-        if (isset($inputDataSet[self::CODE])) {
-            return (string) $inputDataSet[self::CODE];
+        if (isset($inputDataSet[Website::CONTEXT_CODE])) {
+            return (string) $inputDataSet[Website::CONTEXT_CODE];
         }
         
         if (isset($inputDataSet[ContextBuilder::REQUEST])) {
@@ -45,7 +43,7 @@ class ContextWebsite implements ContextPartBuilder
      */
     public function getCode()
     {
-        return self::CODE;
+        return Website::CONTEXT_CODE;
     }
 
     /**

@@ -41,7 +41,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheWebsiteCode()
     {
-        $this->assertSame(ContextWebsite::CODE, $this->contextWebsite->getCode());
+        $this->assertSame(Website::CONTEXT_CODE, $this->contextWebsite->getCode());
     }
 
     public function testItThrowsAnExceptionIfTheWebsiteCanNotBeDeterminedFromTheInputArray()
@@ -63,7 +63,7 @@ class ContextWebsiteTest extends \PHPUnit_Framework_TestCase
      */
     public function testItReturnsTheWebsiteIfPresentInTheInput($websiteCode)
     {
-        $inputDataSet = [ContextWebsite::CODE => $websiteCode];
+        $inputDataSet = [Website::CONTEXT_CODE => $websiteCode];
         $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet));
     }
 

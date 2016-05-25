@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\TemplateRendering;
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockRendererMustHaveOneRootBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\MethodNotYetAvailableException;
@@ -234,7 +234,7 @@ abstract class BlockRenderer
      */
     public function getWebsiteCode()
     {
-        return $this->context->getValue(ContextWebsite::CODE);
+        return $this->context->getValue(Website::CONTEXT_CODE);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Context\Locale\ContextLocale;
@@ -28,7 +29,7 @@ class SearchEngineTest extends AbstractIntegrationTest
 
         $context = $this->factory->createContextBuilder()->createContext([
             ContextLocale::CODE  => 'en_US',
-            ContextWebsite::CODE => 'ru',
+            Website::CONTEXT_CODE => 'ru',
         ]);
         $facetFieldRequest = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))

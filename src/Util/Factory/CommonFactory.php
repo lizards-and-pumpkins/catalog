@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
@@ -832,7 +833,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     private function getPriceSnippetKeyContextPartCodes()
     {
-        return [WebsiteContextPartBuilder::CODE, Country::CONTEXT_CODE];
+        return [Website::CONTEXT_CODE, Country::CONTEXT_CODE];
     }
 
     /**
@@ -1333,7 +1334,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function getRequiredContextParts()
     {
-        return [WebsiteContextPartBuilder::CODE, LocaleContextPartBuilder::CODE, DataVersion::CONTEXT_CODE];
+        return [Website::CONTEXT_CODE, LocaleContextPartBuilder::CODE, DataVersion::CONTEXT_CODE];
     }
 
     /**
