@@ -34,7 +34,7 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheCode()
     {
-        $this->assertSame(ContextLocale::CODE, $this->contextLocale->getCode());
+        $this->assertSame(Locale::CONTEXT_CODE, $this->contextLocale->getCode());
     }
 
     public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromTheInputDataSets()
@@ -69,7 +69,7 @@ class ContextLocaleTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent()
     {
-        $inputDataSet = [ContextLocale::CODE => 'xx_XX'];
+        $inputDataSet = [Locale::CONTEXT_CODE => 'xx_XX'];
         $this->assertSame('xx_XX', $this->contextLocale->getValue($inputDataSet));
     }
 

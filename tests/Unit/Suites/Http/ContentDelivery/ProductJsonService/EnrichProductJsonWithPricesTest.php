@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 
+use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
 use LizardsAndPumpkins\Import\Price\Price;
 
 /**
@@ -55,7 +55,7 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $price = $this->getPriceAsFractionUnits('19.99');
         $specialPrice = $this->getPriceAsFractionUnits('17.99');
         
-        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
 
@@ -74,7 +74,7 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $price = '1999';
         $specialPrice = null;
         
-        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
         
@@ -87,7 +87,7 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $productData = [];
         $price = '1999';
         $specialPrice = '1799';
-        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
 

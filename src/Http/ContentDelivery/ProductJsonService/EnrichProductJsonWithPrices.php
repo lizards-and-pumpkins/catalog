@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Import\Price\Price;
 use SebastianBergmann\Money\Currency;
 use SebastianBergmann\Money\IntlFormatter;
@@ -54,7 +54,7 @@ class EnrichProductJsonWithPrices
      */
     private function formatPriceSnippet(Price $price, Currency $currency)
     {
-        $localeString = $this->context->getValue(ContextLocale::CODE);
+        $localeString = $this->context->getValue(Locale::CONTEXT_CODE);
         return (new IntlFormatter($localeString))->format(new Money($price->getAmount(), $currency));
     }
 

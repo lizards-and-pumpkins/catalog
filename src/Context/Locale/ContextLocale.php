@@ -8,8 +8,6 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 class ContextLocale implements ContextPartBuilder
 {
-    const CODE = 'locale';
-
     private $default = 'fr_FR';
 
     /*
@@ -28,7 +26,7 @@ class ContextLocale implements ContextPartBuilder
      */
     public function getCode()
     {
-        return self::CODE;
+        return Locale::CONTEXT_CODE;
     }
 
     /**
@@ -37,8 +35,8 @@ class ContextLocale implements ContextPartBuilder
      */
     public function getValue(array $inputDataSet)
     {
-        if (isset($inputDataSet[self::CODE])) {
-            return (string) $inputDataSet[self::CODE];
+        if (isset($inputDataSet[Locale::CONTEXT_CODE])) {
+            return (string) $inputDataSet[Locale::CONTEXT_CODE];
         }
 
         if (isset($inputDataSet[ContextBuilder::REQUEST])) {

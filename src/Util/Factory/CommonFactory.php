@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -1334,7 +1335,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function getRequiredContextParts()
     {
-        return [Website::CONTEXT_CODE, LocaleContextPartBuilder::CODE, DataVersion::CONTEXT_CODE];
+        return [Website::CONTEXT_CODE, Locale::CONTEXT_CODE, DataVersion::CONTEXT_CODE];
     }
 
     /**
