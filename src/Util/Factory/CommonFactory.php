@@ -1332,7 +1332,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function getRequiredContextParts()
     {
-        return [WebsiteContextPartBuilder::CODE, LocaleContextPartBuilder::CODE, VersionContextPartBuilder::CODE];
+        return [WebsiteContextPartBuilder::CODE, LocaleContextPartBuilder::CODE, DataVersion::CONTEXT_CODE];
     }
 
     /**

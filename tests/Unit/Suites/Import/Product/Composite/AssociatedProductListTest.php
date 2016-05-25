@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
@@ -136,7 +136,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
             ProductTaxClass::fromString('test'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContextBuilder::rehydrateContext([ContextVersion::CODE => '25732342'])
+            SelfContainedContextBuilder::rehydrateContext([DataVersion::CONTEXT_CODE => '25732342'])
         );
         $sourceAssociatedProductList = new AssociatedProductList($associatedProduct);
 

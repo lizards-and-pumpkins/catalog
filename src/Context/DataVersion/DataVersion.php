@@ -7,6 +7,8 @@ use LizardsAndPumpkins\Context\DataVersion\Exception\InvalidVersionException;
 
 class DataVersion
 {
+    const CONTEXT_CODE = 'version';
+    
     /**
      * @var string
      */

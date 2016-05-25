@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeNotFoundException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
@@ -179,7 +179,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
             'tax_class' => 'test tax class',
             'attributes' => [],
             'images' => [],
-            'context' => [ContextVersion::CODE => '123']
+            'context' => [DataVersion::CONTEXT_CODE => '123']
         ]);
         $this->assertInstanceOf(SimpleProduct::class, $result);
     }
