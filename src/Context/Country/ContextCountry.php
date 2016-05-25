@@ -9,8 +9,6 @@ use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 
 class ContextCountry implements ContextPartBuilder
 {
-    const CODE = 'country';
-    
     const COOKIE_NAME = 'lizardsAndPumpkinsTransport';
     
     private $cookieDataKey = 'country';
@@ -31,8 +29,8 @@ class ContextCountry implements ContextPartBuilder
      */
     public function getValue(array $inputDataSet)
     {
-        if (isset($inputDataSet[self::CODE])) {
-            return (string) $inputDataSet[self::CODE];
+        if (isset($inputDataSet[Country::CONTEXT_CODE])) {
+            return (string) $inputDataSet[Country::CONTEXT_CODE];
         }
         if (isset($inputDataSet[ContextBuilder::REQUEST])) {
             return $this->getCountryFromRequest($inputDataSet[ContextBuilder::REQUEST]);
@@ -45,7 +43,7 @@ class ContextCountry implements ContextPartBuilder
      */
     public function getCode()
     {
-        return self::CODE;
+        return Country::CONTEXT_CODE;
     }
 
     /**

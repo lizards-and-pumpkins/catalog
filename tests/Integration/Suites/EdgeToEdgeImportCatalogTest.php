@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
-use LizardsAndPumpkins\Context\Country\ContextCountry;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
@@ -104,7 +104,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
 
         foreach ($this->factory->createTaxableCountries() as $country) {
-            $contextDataSet = [ContextCountry::CODE => $country];
+            $contextDataSet = [Country::CONTEXT_CODE => $country];
             $contextWithCountry = $this->factory->createContextBuilder()->expandContext($context, $contextDataSet);
 
             $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Price;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\Country\ContextCountry;
+use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\Website\ContextWebsite;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
@@ -119,7 +119,7 @@ class PriceSnippetRenderer implements SnippetRenderer
      */
     private function getProductContextWithCountry(Product $product, $country)
     {
-        return $this->contextBuilder->expandContext($product->getContext(), [ContextCountry::CODE => $country]);
+        return $this->contextBuilder->expandContext($product->getContext(), [Country::CONTEXT_CODE => $country]);
     }
 
     /**
@@ -143,7 +143,7 @@ class PriceSnippetRenderer implements SnippetRenderer
         $taxServiceLocatorOptions = [
             TaxServiceLocator::OPTION_WEBSITE => $context->getValue(ContextWebsite::CODE),
             TaxServiceLocator::OPTION_PRODUCT_TAX_CLASS => $product->getTaxClass(),
-            TaxServiceLocator::OPTION_COUNTRY => $context->getValue(ContextCountry::CODE),
+            TaxServiceLocator::OPTION_COUNTRY => $context->getValue(Country::CONTEXT_CODE),
         ];
         
         return $this->taxServiceLocator->get($taxServiceLocatorOptions)->applyTo(Price::fromFractions($amount));

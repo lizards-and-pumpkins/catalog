@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
+use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -831,7 +832,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     private function getPriceSnippetKeyContextPartCodes()
     {
-        return [WebsiteContextPartBuilder::CODE, CountryContextPartBuilder::CODE];
+        return [WebsiteContextPartBuilder::CODE, Country::CONTEXT_CODE];
     }
 
     /**
