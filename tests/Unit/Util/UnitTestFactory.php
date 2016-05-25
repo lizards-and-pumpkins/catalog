@@ -29,7 +29,6 @@ use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
@@ -288,14 +287,6 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return WebsiteToCountryMap
-     */
-    public function createWebsiteToCountryMap()
-    {
-        return $this->mockObjectGenerator->getMock(WebsiteToCountryMap::class);
-    }
-
-    /**
      * @return TaxableCountries
      */
     public function createTaxableCountries()
@@ -413,6 +404,14 @@ class UnitTestFactory implements Factory
      * @return ContextPartBuilder
      */
     public function createLocaleContextPartBuilder()
+    {
+        return $this->mockObjectGenerator->getMock(ContextPartBuilder::class);
+    }
+
+    /**
+     * @return ContextPartBuilder
+     */
+    public function createCountryContextPartBuilder()
     {
         return $this->mockObjectGenerator->getMock(ContextPartBuilder::class);
     }

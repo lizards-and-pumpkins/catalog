@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\Country\IntegrationTestContextCountry;
 use LizardsAndPumpkins\Context\IntegrationTestContextSource;
 use LizardsAndPumpkins\Context\Locale\IntegrationTestContextLocale;
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
@@ -41,7 +42,6 @@ use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -445,14 +445,6 @@ class IntegrationTestFactory implements Factory
     }
 
     /**
-     * @return WebsiteToCountryMap
-     */
-    public function createWebsiteToCountryMap()
-    {
-        return new IntegrationTestWebsiteToCountryMap();
-    }
-
-    /**
      * @return TaxableCountries
      */
     public function createTaxableCountries()
@@ -536,5 +528,13 @@ class IntegrationTestFactory implements Factory
     public function createLocaleContextPartBuilder()
     {
         return new IntegrationTestContextLocale();
+    }
+
+    /**
+     * @return ContextPartBuilder
+     */
+    public function createCountryContextPartBuilder()
+    {
+        return new IntegrationTestContextCountry();
     }
 }

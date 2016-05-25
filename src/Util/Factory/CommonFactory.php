@@ -19,7 +19,6 @@ use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\Country\ContextCountry as CountryContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion as VersionContextPartBuilder;
 use LizardsAndPumpkins\Context\Website\ContextWebsite as WebsiteContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
@@ -192,6 +191,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      * @var ContextPartBuilder
      */
     private $localeContextPartBuilder;
+
+    /**
+     * @var ContextPartBuilder
+     */
+    private $countryContextPartBuilder;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -975,7 +979,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new SelfContainedContextBuilder(
             $this->getMasterFactory()->createVersionContextPartBuilder(),
             $this->getMasterFactory()->createWebsiteContextPartBuilder(),
-            $this->getMasterFactory()->createCountryContextPartBuilder(),
+            $this->getMasterFactory()->getCountryContextPartBuilder(),
             $this->getMasterFactory()->getLocaleContextPartBuilder()
         );
     }
@@ -1010,11 +1014,15 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return CountryContextPartBuilder
+     * @return ContextPartBuilder
      */
-    public function createCountryContextPartBuilder()
+    public function getCountryContextPartBuilder()
     {
-        return new CountryContextPartBuilder($this->getMasterFactory()->createWebsiteToCountryMap());
+        if (null === $this->countryContextPartBuilder) {
+            $this->countryContextPartBuilder = $this->callExternalCreateMethod('CountryContextPartBuilder');
+        }
+
+        return $this->countryContextPartBuilder;
     }
 
     /**
