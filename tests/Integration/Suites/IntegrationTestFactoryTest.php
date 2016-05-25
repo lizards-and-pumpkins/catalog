@@ -11,7 +11,6 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Logging\InMemoryLogger;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
