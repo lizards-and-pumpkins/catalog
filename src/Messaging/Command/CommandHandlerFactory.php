@@ -2,38 +2,15 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
-use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 interface CommandHandlerFactory
 {
-    /**
-     * @param UpdateContentBlockCommand $command
-     * @return UpdateContentBlockCommandHandler
-     */
-    public function createUpdateContentBlockCommandHandler(UpdateContentBlockCommand $command);
+    public function createUpdateContentBlockCommandHandler(Message $command): CommandHandler;
 
-    /**
-     * @param UpdateProductCommand $command
-     * @return UpdateProductCommandHandler
-     */
-    public function createUpdateProductCommandHandler(UpdateProductCommand $command);
+    public function createUpdateProductCommandHandler(Message $command): CommandHandler;
 
-    /**
-     * @param AddProductListingCommand $command
-     * @return AddProductListingCommandHandler
-     */
-    public function createAddProductListingCommandHandler(AddProductListingCommand $command);
+    public function createAddProductListingCommandHandler(Message $command): CommandHandler;
 
-    /**
-     * @param AddImageCommand $command
-     * @return AddImageCommandHandler
-     */
-    public function createAddImageCommandHandler(AddImageCommand $command);
+    public function createAddImageCommandHandler(Message $command): CommandHandler;
 }

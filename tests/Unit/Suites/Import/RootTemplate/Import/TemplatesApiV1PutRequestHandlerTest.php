@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Messaging\Queue;
@@ -17,7 +17,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDomainEventQueue;
 
@@ -33,7 +33,7 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockDomainEventQueue = $this->getMock(Queue::class);
+        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
         $this->requestHandler = new TemplatesApiV1PutRequestHandler($this->mockDomainEventQueue);
 
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
@@ -69,10 +69,12 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testTemplateWasUpdatedDomainEventIsEmitted()
     {
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
+        $this->mockRequest->method('getRawBody')->willReturn('Raw Request Body');
 
+        $expectedPayload = json_encode(['id' => 'foo', 'template' => 'Raw Request Body']);
         $this->mockDomainEventQueue->expects($this->once())
-            ->method('add')
-            ->with($this->isInstanceOf(TemplateWasUpdatedDomainEvent::class));
+            ->method('addNotVersioned')
+            ->with('template_was_updated', $expectedPayload);
 
         $response = $this->requestHandler->process($this->mockRequest);
         

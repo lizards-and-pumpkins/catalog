@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
+namespace LizardsAndPumpkins\Context\BaseUrl;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\BaseUrl\Exception\InvalidBaseUrlSourceDataException;

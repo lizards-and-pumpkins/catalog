@@ -30,12 +30,12 @@ trait ProductListingTestTrait
     /**
      * @var Queue
      */
-    private $eventQueue;
+    private $eventMessageQueue;
 
     /**
      * @var Queue
      */
-    private $commandQueue;
+    private $commandMessageQueue;
 
     /**
      * @var SearchEngine
@@ -153,8 +153,8 @@ trait ProductListingTestTrait
     private function retrieveInMemoryObjectsFromFactory(IntegrationTestFactory $factory)
     {
         $this->keyValueStore = $factory->getKeyValueStore();
-        $this->eventQueue = $factory->getEventQueue();
-        $this->commandQueue = $factory->getCommandQueue();
+        $this->eventMessageQueue = $factory->getEventMessageQueue();
+        $this->commandMessageQueue = $factory->getCommandMessageQueue();
         $this->searchEngine = $factory->getSearchEngine();
         $this->urlKeyStore = $factory->getUrlKeyStore();
     }
@@ -162,8 +162,8 @@ trait ProductListingTestTrait
     private function injectInMemoryObjectsIntoFactory(IntegrationTestFactory $factory)
     {
         $factory->setKeyValueStore($this->keyValueStore);
-        $factory->setEventQueue($this->eventQueue);
-        $factory->setCommandQueue($this->commandQueue);
+        $factory->setEventMessageQueue($this->eventMessageQueue);
+        $factory->setCommandMessageQueue($this->commandMessageQueue);
         $factory->setSearchEngine($this->searchEngine);
         $factory->setUrlKeyStore($this->urlKeyStore);
     }

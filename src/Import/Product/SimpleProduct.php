@@ -130,7 +130,7 @@ class SimpleProduct implements Product
         return [
             'product_id' => (string) $this->productId,
             'tax_class' => (string) $this->taxClass,
-            'type_code' => self::TYPE_CODE,
+            Product::TYPE_KEY => self::TYPE_CODE,
             'attributes' => $this->attributeList->jsonSerialize(),
             'images' => $this->images,
             self::CONTEXT => $this->context

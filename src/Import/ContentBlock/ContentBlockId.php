@@ -1,8 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Import\ContentBlock;
+declare(strict_types = 1);
 
-use LizardsAndPumpkins\Import\ContentBlock\Exception\InvalidContentBlockIdException;
+namespace LizardsAndPumpkins\Import\ContentBlock;
 
 class ContentBlockId
 {
@@ -19,25 +19,13 @@ class ContentBlockId
         $this->contentBlockIdString = $contentBlockIdString;
     }
 
-    /**
-     * @param string $contentBlockIdString
-     * @return ContentBlockId
-     */
-    public static function fromString($contentBlockIdString)
+    public static function fromString(string $contentBlockIdString): ContentBlockId
     {
-        if (!is_string($contentBlockIdString)) {
-            throw new InvalidContentBlockIdException(
-                sprintf('Content block ID can only be created from a string, got %s.', gettype($contentBlockIdString))
-            );
-        }
-
+        // todo: guard against empty content block id's
         return new self($contentBlockIdString);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->contentBlockIdString;
     }

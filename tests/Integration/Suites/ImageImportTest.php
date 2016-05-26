@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpsUrl;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 
 class ImageImportTest extends AbstractIntegrationTest
@@ -46,8 +45,9 @@ class ImageImportTest extends AbstractIntegrationTest
         $images = [$absoluteImagePath, $relativeImagePath];
 
         $queue = $factory->getEventQueue();
+        $dataVersion = DataVersion::fromVersionString('-1');
         foreach ($images as $imageFilePath) {
-            $queue->add(new ImageWasAddedDomainEvent($imageFilePath, DataVersion::fromVersionString('-1')));
+            $queue->addVersioned('image_was_added', json_encode(['file_path' => $imageFilePath]), $dataVersion);
         }
 
         $factory->createDomainEventConsumer()->process();

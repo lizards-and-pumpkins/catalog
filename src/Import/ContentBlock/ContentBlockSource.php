@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 class ContentBlockSource
@@ -24,32 +26,24 @@ class ContentBlockSource
      */
     private $keyGeneratorParams;
 
-    /**
-     * @param ContentBlockId $contentBlockId
-     * @param string $content
-     * @param string[] $contextData
-     * @param mixed[] $keyGeneratorParams
-     */
-    public function __construct(ContentBlockId $contentBlockId, $content, array $contextData, array $keyGeneratorParams)
-    {
+    public function __construct(
+        ContentBlockId $contentBlockId,
+        string $content,
+        array $contextData,
+        array $keyGeneratorParams
+    ) {
         $this->contentBlockId = $contentBlockId;
         $this->content = $content;
         $this->contextData = $contextData;
         $this->keyGeneratorParams = $keyGeneratorParams;
     }
 
-    /**
-     * @return ContentBlockId
-     */
-    public function getContentBlockId()
+    public function getContentBlockId(): ContentBlockId
     {
         return $this->contentBlockId;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -57,7 +51,7 @@ class ContentBlockSource
     /**
      * @return string[]
      */
-    public function getContextData()
+    public function getContextData(): array
     {
         return $this->contextData;
     }
@@ -65,8 +59,29 @@ class ContentBlockSource
     /**
      * @return mixed[]
      */
-    public function getKeyGeneratorParams()
+    public function getKeyGeneratorParams(): array
     {
         return $this->keyGeneratorParams;
+    }
+
+    public function serialize(): string
+    {
+        return json_encode([
+            'id' => (string) $this->contentBlockId,
+            'content' => $this->content,
+            'context_data' => $this->contextData,
+            'key_generator_params' => $this->keyGeneratorParams
+        ]);
+    }
+
+    public static function rehydrate(string $json): self
+    {
+        $data = json_decode($json, true);
+        return new self(
+            ContentBlockId::fromString($data['id']),
+            $data['content'],
+            $data['context_data'],
+            $data['key_generator_params']
+        );
     }
 }

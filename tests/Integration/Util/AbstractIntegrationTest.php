@@ -29,12 +29,12 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Queue
      */
-    private $eventQueue;
+    private $eventMessageQueue;
 
     /**
      * @var Queue
      */
-    private $commandQueue;
+    private $commandMessageQueue;
 
     /**
      * @var SearchEngine
@@ -117,8 +117,8 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     private function storeInMemoryObjects(IntegrationTestFactory $factory)
     {
         $this->keyValueStore = $factory->getKeyValueStore();
-        $this->eventQueue = $factory->getEventQueue();
-        $this->commandQueue = $factory->getCommandQueue();
+        $this->eventMessageQueue = $factory->getEventMessageQueue();
+        $this->commandMessageQueue = $factory->getCommandMessageQueue();
         $this->searchEngine = $factory->getSearchEngine();
         $this->urlKeyStore = $factory->getUrlKeyStore();
     }
@@ -126,8 +126,8 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory)
     {
         $factory->setKeyValueStore($this->keyValueStore);
-        $factory->setEventQueue($this->eventQueue);
-        $factory->setCommandQueue($this->commandQueue);
+        $factory->setEventMessageQueue($this->eventMessageQueue);
+        $factory->setCommandMessageQueue($this->commandMessageQueue);
         $factory->setSearchEngine($this->searchEngine);
         $factory->setUrlKeyStore($this->urlKeyStore);
     }
@@ -138,8 +138,11 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $import = $factory->createCatalogImport();
         $import->importFile(__DIR__ . '/../../shared-fixture/catalog.xml');
 
-        $this->processQueueWhileMessagesPending($factory->getCommandQueue(), $factory->createCommandConsumer());
-        $this->processQueueWhileMessagesPending($factory->getEventQueue(), $factory->createDomainEventConsumer());
+        $this->processQueueWhileMessagesPending($factory->getCommandMessageQueue(), $factory->createCommandConsumer());
+        $this->processQueueWhileMessagesPending(
+            $factory->getEventMessageQueue(),
+            $factory->createDomainEventConsumer()
+        );
     }
     
     final protected function processQueueWhileMessagesPending(Queue $queue, QueueMessageConsumer $consumer)

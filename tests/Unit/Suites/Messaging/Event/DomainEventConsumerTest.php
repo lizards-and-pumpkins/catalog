@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Messaging\Event;
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 /**
@@ -50,7 +51,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testItCallsNextIfQueueIsReady()
     {
-        $stubDomainEvent = $this->getMock(DomainEvent::class);
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
         $this->stubQueue->method('isReadyForNext')
             ->willReturnOnConsecutiveCalls(true, true, true, false);
@@ -65,7 +66,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()
     {
-        $stubDomainEvent = $this->getMock(DomainEvent::class);
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
         $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
 
@@ -86,7 +87,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testConsumerStopsIfProcessingLimitIsReached()
     {
-        $stubDomainEvent = $this->getMock(DomainEvent::class);
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
         $this->stubQueue->method('isReadyForNext')->willReturn(true);
 

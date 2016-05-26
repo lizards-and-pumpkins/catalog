@@ -11,11 +11,12 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\InMemoryUrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence;
 use LizardsAndPumpkins\Logging\InMemoryLogger;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Messaging\Queue\InMemoryQueue;
@@ -46,12 +47,12 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testInMemoryEventQueueIsReturned()
     {
-        $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventQueue());
+        $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventMessageQueue());
     }
 
     public function testInMemoryCommandQueueIsReturned()
     {
-        $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createCommandQueue());
+        $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createCommandMessageQueue());
     }
 
     public function testInMemoryLoggerIsReturned()
@@ -113,30 +114,36 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheSameEventQueueInstanceOnMultipleCalls()
     {
-        $this->assertInstanceOf(Queue::class, $this->factory->getEventQueue());
+        $this->assertInstanceOf(DomainEventQueue::class, $this->factory->getEventQueue());
         $this->assertSame($this->factory->getEventQueue(), $this->factory->getEventQueue());
+    }
+
+    public function testItReturnsTheSameEventMessageQueueInstanceOnMultipleCalls()
+    {
+        $this->assertInstanceOf(Queue::class, $this->factory->getEventMessageQueue());
+        $this->assertSame($this->factory->getEventMessageQueue(), $this->factory->getEventMessageQueue());
     }
 
     public function testItReturnsTheSetEventQueue()
     {
-        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubEventQueue */
-        $stubEventQueue = $this->getMock(Queue::class);
-        $this->factory->setEventQueue($stubEventQueue);
-        $this->assertSame($stubEventQueue, $this->factory->getEventQueue());
+        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubQueue */
+        $stubQueue = $this->getMock(Queue::class, [], [], '', false);
+        $this->factory->setEventMessageQueue($stubQueue);
+        $this->assertSame($stubQueue, $this->factory->getEventMessageQueue());
     }
 
     public function testItReturnsTheSameCommandQueueInstanceOnMultipleCalls()
     {
-        $this->assertInstanceOf(Queue::class, $this->factory->getCommandQueue());
+        $this->assertInstanceOf(CommandQueue::class, $this->factory->getCommandQueue());
         $this->assertSame($this->factory->getCommandQueue(), $this->factory->getCommandQueue());
     }
 
     public function testItReturnsTheSetCommandQueue()
     {
-        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubCommandQueue */
-        $stubCommandQueue = $this->getMock(Queue::class);
-        $this->factory->setCommandQueue($stubCommandQueue);
-        $this->assertSame($stubCommandQueue, $this->factory->getCommandQueue());
+        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubQueue */
+        $stubQueue = $this->getMock(Queue::class);
+        $this->factory->setCommandMessageQueue($stubQueue);
+        $this->assertSame($stubQueue, $this->factory->getCommandMessageQueue());
     }
 
     public function testItReturnsTheSameSearchEngineOnMultipleCalls()

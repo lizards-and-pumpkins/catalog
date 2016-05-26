@@ -73,6 +73,9 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
             count($rehydratedVariationAttributeList)
         );
         
+        /**
+         * @var AttributeCode $attribute
+         */
         foreach ($sourceVariationAttributeList as $idx => $attribute) {
             $this->assertTrue($attribute->isEqualTo($rehydratedVariationAttributeList->getAttributes()[$idx]));
         }

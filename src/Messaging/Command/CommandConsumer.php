@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 class CommandConsumer implements QueueMessageConsumer
@@ -46,7 +47,7 @@ class CommandConsumer implements QueueMessageConsumer
         }
     }
 
-    private function processCommand(Command $command)
+    private function processCommand(Message $command)
     {
         try {
             $commandHandler = $this->commandHandlerLocator->getHandlerFor($command);

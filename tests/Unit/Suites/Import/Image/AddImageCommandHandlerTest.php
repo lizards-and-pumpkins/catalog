@@ -1,19 +1,29 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins\Import\Image;
 
+use LizardsAndPumpkins\Import\Image\Exception\NoAddImageCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
- * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
 class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDomainEventQueue;
 
@@ -24,11 +34,13 @@ class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var AddImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
-        $stubCommand->method('getDataVersion')->willReturn($this->getMock(DataVersion::class, [], [], '', false));
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('add_image_command');
+        $testPayload = json_encode(['file_path' => '/test/foo.jpg', 'data_version' => 'defg']);
+        $stubCommand->method('getPayload')->willReturn($testPayload);
 
-        $this->mockDomainEventQueue = $this->getMock(Queue::class);
+        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
 
         $this->commandHandler = new AddImageCommandHandler($stubCommand, $this->mockDomainEventQueue);
     }
@@ -38,10 +50,22 @@ class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
+    public function testThrowsExceptionForInvalidCommandNames()
+    {
+        $this->expectException(NoAddImageCommandMessageException::class);
+        $this->expectExceptionMessage('Expected "add_image" command, got "foo_command"');
+
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('foo_command');
+
+        new AddImageCommandHandler($stubCommand, $this->mockDomainEventQueue);
+    }
+
     public function testImageWasAddedDomainEventIsEmitted()
     {
-        $this->mockDomainEventQueue->expects($this->once())->method('add')
-            ->with($this->isInstanceOf(ImageWasAddedDomainEvent::class));
+        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned')
+            ->with('image_was_added', $this->isType('string'), $this->anything());
 
         $this->commandHandler->process();
     }

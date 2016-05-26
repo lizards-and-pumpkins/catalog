@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -82,6 +84,11 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->stubProductListingAttributeList->method('getAttributeValueByCode')->willReturn($attributeValue);
 
         $this->assertSame($attributeValue, $this->productListing->getAttributeValueByCode($attributeCode));
+    }
 
+    public function testCanBeSerializedAndRehydrated()
+    {
+        $rehydrated = ProductListing::rehydrate($this->productListing->serialize());
+        $this->assertEquals($rehydrated, $this->productListing);
     }
 }

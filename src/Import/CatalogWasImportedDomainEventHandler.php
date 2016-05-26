@@ -2,17 +2,23 @@
 
 namespace LizardsAndPumpkins\Import;
 
+use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogWasImportedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var CatalogWasImportedDomainEvent
+     * @var Message
      */
     private $event;
     
-    public function __construct(CatalogWasImportedDomainEvent $event)
+    public function __construct(Message $event)
     {
+        if ($event->getName() !== 'catalog_was_imported_domain_event') {
+            $message = sprintf('Expected "catalog_was_imported" domain event, got "%s"', $event->getName());
+            throw new NoCatalogWasImportedDomainEventMessageException($message);
+        }
         $this->event = $event;
     }
 

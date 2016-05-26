@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;

@@ -2,10 +2,9 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
@@ -39,8 +38,9 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoHandlerIsLocated()
     {
-        /** @var Command|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Command::class);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('non_existing_foo_command');
         $this->expectException(UnableToFindCommandHandlerException::class);
         $this->locator->getHandlerFor($stubCommand);
     }
@@ -53,15 +53,11 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('createUpdateContentBlockCommandHandler')
             ->willReturn($stubHandler);
 
-        /** @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject $stubContentBlockSource */
-        $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('update_content_block_command');
 
-        /**
-         * The real object has to be used here as getHandlerFor method will call get_class against it
-         */
-        $command = new UpdateContentBlockCommand($stubContentBlockSource);
-
-        $result = $this->locator->getHandlerFor($command);
+        $result = $this->locator->getHandlerFor($stubCommand);
 
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
     }

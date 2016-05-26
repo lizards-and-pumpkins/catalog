@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
@@ -9,6 +11,8 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\InMemoryQueue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
@@ -58,14 +62,24 @@ class IntegrationTestFactory implements Factory
     private $keyValueStore;
 
     /**
-     * @var Queue
+     * @var DomainEventQueue
      */
     private $eventQueue;
 
     /**
      * @var Queue
      */
+    private $eventMessageQueue;
+
+    /**
+     * @var CommandQueue
+     */
     private $commandQueue;
+
+    /**
+     * @var Queue
+     */
+    private $commandMessageQueue;
 
     /**
      * @var SearchEngine
@@ -170,18 +184,64 @@ class IntegrationTestFactory implements Factory
         return new InMemoryKeyValueStore();
     }
 
-    /**
-     * @return InMemoryQueue
-     */
-    public function createEventQueue()
+    public function setCommandMessageQueue(Queue $commandQueue)
+    {
+        $this->commandMessageQueue = $commandQueue;
+    }
+
+    public function getCommandQueue(): CommandQueue
+    {
+        if (null === $this->commandQueue) {
+            $this->commandQueue = $this->createCommandQueue();
+        }
+        return $this->commandQueue;
+    }
+
+    public function createCommandQueue(): CommandQueue
+    {
+        return new CommandQueue($this->getCommandMessageQueue());
+    }
+
+    public function getCommandMessageQueue(): Queue
+    {
+        if (null === $this->commandMessageQueue) {
+            $this->commandMessageQueue = $this->createCommandMessageQueue();
+        }
+        return $this->commandMessageQueue;
+    }
+
+    public function createCommandMessageQueue(): Queue
     {
         return new InMemoryQueue();
     }
 
-    /**
-     * @return InMemoryQueue
-     */
-    public function createCommandQueue()
+    public function setEventMessageQueue(Queue $eventQueue)
+    {
+        $this->eventMessageQueue = $eventQueue;
+    }
+
+    public function getEventQueue(): DomainEventQueue
+    {
+        if (null === $this->eventQueue) {
+            $this->eventQueue = $this->createEventQueue();
+        }
+        return $this->eventQueue;
+    }
+
+    public function createEventQueue(): DomainEventQueue
+    {
+        return new DomainEventQueue($this->getEventMessageQueue());
+    }
+
+    public function getEventMessageQueue(): Queue
+    {
+        if (null === $this->eventMessageQueue) {
+            $this->eventMessageQueue = $this->createEventMessageQueue();
+        }
+        return $this->eventMessageQueue;
+    }
+
+    public function createEventMessageQueue(): Queue
     {
         return new InMemoryQueue();
     }
@@ -293,38 +353,6 @@ class IntegrationTestFactory implements Factory
     public function setKeyValueStore(KeyValueStore $keyValueStore)
     {
         $this->keyValueStore = $keyValueStore;
-    }
-
-    /**
-     * @return Queue
-     */
-    public function getEventQueue()
-    {
-        if (null === $this->eventQueue) {
-            $this->eventQueue = $this->createEventQueue();
-        }
-        return $this->eventQueue;
-    }
-
-    public function setEventQueue(Queue $eventQueue)
-    {
-        $this->eventQueue = $eventQueue;
-    }
-
-    /**
-     * @return Queue
-     */
-    public function getCommandQueue()
-    {
-        if (null === $this->commandQueue) {
-            $this->commandQueue = $this->createCommandQueue();
-        }
-        return $this->commandQueue;
-    }
-
-    public function setCommandQueue(Queue $commandQueue)
-    {
-        $this->commandQueue = $commandQueue;
     }
 
     /**

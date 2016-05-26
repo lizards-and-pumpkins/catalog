@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\NoValidLocaleInContextException;

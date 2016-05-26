@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins\Logging;
 
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
-use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 
 class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
 {
@@ -28,19 +24,12 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         $this->commandFactoryDelegate = $commandFactoryDelegate;
     }
     
-    /**
-     * @return CommandHandlerFactory
-     */
-    private function getCommandFactoryDelegate()
+    private function getCommandFactoryDelegate(): CommandHandlerFactory
     {
         return $this->commandFactoryDelegate;
     }
-    
-    /**
-     * @param UpdateContentBlockCommand $command
-     * @return UpdateContentBlockCommandHandler
-     */
-    public function createUpdateContentBlockCommandHandler(UpdateContentBlockCommand $command)
+
+    public function createUpdateContentBlockCommandHandler(Message $command): CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
@@ -48,11 +37,7 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         );
     }
 
-    /**
-     * @param UpdateProductCommand $command
-     * @return UpdateProductCommandHandler
-     */
-    public function createUpdateProductCommandHandler(UpdateProductCommand $command)
+    public function createUpdateProductCommandHandler(Message $command): CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
@@ -60,11 +45,7 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         );
     }
 
-    /**
-     * @param AddProductListingCommand $command
-     * @return AddProductListingCommandHandler
-     */
-    public function createAddProductListingCommandHandler(AddProductListingCommand $command)
+    public function createAddProductListingCommandHandler(Message $command): CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
@@ -72,11 +53,7 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         );
     }
 
-    /**
-     * @param AddImageCommand $command
-     * @return AddImageCommandHandler
-     */
-    public function createAddImageCommandHandler(AddImageCommand $command)
+    public function createAddImageCommandHandler(Message $command): CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(

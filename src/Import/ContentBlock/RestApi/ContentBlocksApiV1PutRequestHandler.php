@@ -7,22 +7,22 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockContextIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockContextException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Messaging\Queue;
 
 class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
-     * @var Queue
+     * @var CommandQueue
      */
     private $commandQueue;
 
-    public function __construct(Queue $commandQueue)
+    public function __construct(CommandQueue $commandQueue)
     {
         $this->commandQueue = $commandQueue;
     }
@@ -77,7 +77,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
             $keyGeneratorParams
         );
 
-        $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
+        $this->commandQueue->add('update_content_block', $contentBlockSource->serialize());
     }
 
     /**

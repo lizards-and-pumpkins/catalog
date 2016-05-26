@@ -18,16 +18,11 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilde
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
 use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
@@ -37,15 +32,12 @@ use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
 use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductProjector;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Logging\Logger;
@@ -53,14 +45,16 @@ use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
@@ -69,7 +63,6 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
@@ -202,8 +195,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('product_was_updated_domain_event');
         $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
@@ -211,8 +205,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var TemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(TemplateWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('template_was_updated_domain_event');
         $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
@@ -220,8 +215,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingWasAddedDomainEventHandlerIsReturned()
     {
-        /** @var ProductListingWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ProductListingWasAddedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('product_listing_was_added_domain_event');
         $result = $this->commonFactory->createProductListingWasAddedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
@@ -290,13 +286,26 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testDomainEventQueueIsReturned()
     {
         $result = $this->commonFactory->getEventQueue();
-        $this->assertInstanceOf(Queue::class, $result);
+        $this->assertInstanceOf(DomainEventQueue::class, $result);
     }
 
     public function testSameDomainEventQueueInstanceIsReturned()
     {
         $result1 = $this->commonFactory->getEventQueue();
         $result2 = $this->commonFactory->getEventQueue();
+        $this->assertSame($result1, $result2);
+    }
+
+    public function testDomainEventMessageQueueIsReturned()
+    {
+        $result = $this->commonFactory->getEventMessageQueue();
+        $this->assertInstanceOf(Queue::class, $result);
+    }
+
+    public function testSameDomainEventMessageQueueInstanceIsReturned()
+    {
+        $result1 = $this->commonFactory->getEventMessageQueue();
+        $result2 = $this->commonFactory->getEventMessageQueue();
         $this->assertSame($result1, $result2);
     }
 
@@ -364,8 +373,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testImageImportEventDomainHandlerIsReturned()
     {
-        /* @var ImageWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ImageWasAddedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('image_was_added_domain_event');
         $result = $this->commonFactory->createImageWasAddedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
@@ -386,13 +396,27 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCommandQueueIsReturned()
     {
         $result = $this->commonFactory->getCommandQueue();
-        $this->assertInstanceOf(Queue::class, $result);
+        $this->assertInstanceOf(CommandQueue::class, $result);
     }
 
     public function testSameCommandQueueInstanceIsReturned()
     {
         $result1 = $this->commonFactory->getCommandQueue();
         $result2 = $this->commonFactory->getCommandQueue();
+
+        $this->assertSame($result1, $result2);
+    }
+
+    public function testReturnsCommandMessageQueue()
+    {
+        $result = $this->commonFactory->getCommandMessageQueue();
+        $this->assertInstanceOf(Queue::class, $result);
+    }
+
+    public function testReturnsSameCommandMessageQueueInstance()
+    {
+        $result1 = $this->commonFactory->getCommandMessageQueue();
+        $result2 = $this->commonFactory->getCommandMessageQueue();
 
         $this->assertSame($result1, $result2);
     }
@@ -405,8 +429,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateContentBlockCommandHandlerIsReturned()
     {
-        /** @var UpdateContentBlockCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateContentBlockCommand::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('update_content_block_command');
         $result = $this->commonFactory->createUpdateContentBlockCommandHandler($stubCommand);
 
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
@@ -414,8 +439,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()
     {
-        /** @var ContentBlockWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('content_block_was_updated_domain_event');
         $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler($stubDomainEvent);
 
         $this->assertInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
@@ -423,8 +449,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateProductCommandHandlerIsReturned()
     {
-        /** @var UpdateProductCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(UpdateProductCommand::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('update_product_command');
         $result = $this->commonFactory->createUpdateProductCommandHandler($stubCommand);
 
         $this->assertInstanceOf(UpdateProductCommandHandler::class, $result);
@@ -432,8 +459,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProductListingCommandHandlerIsReturned()
     {
-        /** @var AddProductListingCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(AddProductListingCommand::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('add_product_listing_command');
         $result = $this->commonFactory->createAddProductListingCommandHandler($stubCommand);
 
         $this->assertInstanceOf(AddProductListingCommandHandler::class, $result);
@@ -441,8 +469,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testAddImageCommandHandlerIsReturned()
     {
-        /** @var AddImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('add_image_command');
         $result = $this->commonFactory->createAddImageCommandHandler($stubCommand);
 
         $this->assertInstanceOf(AddImageCommandHandler::class, $result);
@@ -476,8 +505,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProcessTimeLoggingDomainEventHandlerDecorator()
     {
-        /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('product_was_updated_domain_event');
         $eventHandlerToDecorate = $this->commonFactory->createProductWasUpdatedDomainEventHandler($stubDomainEvent);
         $result = $this->commonFactory->createProcessTimeLoggingDomainEventHandlerDecorator($eventHandlerToDecorate);
         $this->assertInstanceOf(ProcessTimeLoggingDomainEventHandlerDecorator::class, $result);
@@ -485,8 +515,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProcessTimeLoggingCommandHandlerDecorator()
     {
-        /** @var AddImageCommand|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('add_image_command');
+        
         $commandHandlerToDecorate = $this->commonFactory->createAddImageCommandHandler($stubCommand);
         $result = $this->commonFactory->createProcessTimeLoggingCommandHandlerDecorator($commandHandlerToDecorate);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $result);
@@ -543,9 +575,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsACatalogWasImportedDomainEventHandler()
     {
-        /** @var CatalogWasImportedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(CatalogWasImportedDomainEvent::class, [], [], '', false);
-        $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler($stubEvent);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('catalog_was_imported_domain_event');
+        $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler($stubDomainEvent);
         $this->assertInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
     }
 

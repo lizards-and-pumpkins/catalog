@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 
@@ -30,6 +29,17 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $loggingCommandHandlerFactory;
 
+    /**
+     * @return Message|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createStubCommand(string $name): Message
+    {
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn($name);
+        return $stubCommand;
+    }
+
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
@@ -48,28 +58,28 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedUpdateContentBlockCommandHandler()
     {
-        $stubCommand = $this->getMock(UpdateContentBlockCommand::class, [], [], '', false);
+        $stubCommand = $this->createStubCommand('update_content_block_command');
         $commandHandler = $this->loggingCommandHandlerFactory->createUpdateContentBlockCommandHandler($stubCommand);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedUpdateProductCommandHandler()
     {
-        $stubCommand = $this->getMock(UpdateProductCommand::class, [], [], '', false);
+        $stubCommand = $this->createStubCommand('update_product_command');
         $commandHandler = $this->loggingCommandHandlerFactory->createUpdateProductCommandHandler($stubCommand);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedAddProductListingCommandHandler()
     {
-        $stubCommand = $this->getMock(AddProductListingCommand::class, [], [], '', false);
+        $stubCommand = $this->createStubCommand('add_product_listing_command');
         $commandHandler = $this->loggingCommandHandlerFactory->createAddProductListingCommandHandler($stubCommand);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedAddProductImageCommandHandler()
     {
-        $stubCommand = $this->getMock(AddImageCommand::class, [], [], '', false);
+        $stubCommand = $this->createStubCommand('add_image_command');
         $commandHandler = $this->loggingCommandHandlerFactory->createAddImageCommandHandler($stubCommand);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }

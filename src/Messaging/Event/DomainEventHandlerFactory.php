@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
@@ -17,39 +18,15 @@ use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 
 interface DomainEventHandlerFactory
 {
-    /**
-     * @param ProductWasUpdatedDomainEvent $event
-     * @return ProductWasUpdatedDomainEventHandler
-     */
-    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event);
+    public function createProductWasUpdatedDomainEventHandler(Message $event): DomainEventHandler;
 
-    /**
-     * @param TemplateWasUpdatedDomainEvent $event
-     * @return TemplateWasUpdatedDomainEventHandler
-     */
-    public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event);
+    public function createTemplateWasUpdatedDomainEventHandler(Message $event): DomainEventHandler;
 
-    /**
-     * @param ImageWasAddedDomainEvent $event
-     * @return ImageWasAddedDomainEventHandler
-     */
-    public function createImageWasAddedDomainEventHandler(ImageWasAddedDomainEvent $event);
+    public function createImageWasAddedDomainEventHandler(Message $event): DomainEventHandler;
 
-    /**
-     * @param ProductListingWasAddedDomainEvent $event
-     * @return ProductListingWasAddedDomainEventHandler
-     */
-    public function createProductListingWasAddedDomainEventHandler(ProductListingWasAddedDomainEvent $event);
+    public function createProductListingWasAddedDomainEventHandler(Message $event): DomainEventHandler;
 
-    /**
-     * @param ContentBlockWasUpdatedDomainEvent $event
-     * @return ContentBlockWasUpdatedDomainEventHandler
-     */
-    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event);
+    public function createContentBlockWasUpdatedDomainEventHandler(Message $event): DomainEventHandler;
 
-    /**
-     * @param CatalogWasImportedDomainEvent $event
-     * @return CatalogWasImportedDomainEventHandler
-     */
-    public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event);
+    public function createCatalogWasImportedDomainEventHandler(Message $event): DomainEventHandler;
 }

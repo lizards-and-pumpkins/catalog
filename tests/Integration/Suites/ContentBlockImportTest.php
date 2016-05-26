@@ -31,11 +31,11 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $website->processRequest();
 
         $this->processQueueWhileMessagesPending(
-            $this->factory->getCommandQueue(),
+            $this->factory->getCommandMessageQueue(),
             $this->factory->createCommandConsumer()
         );
         $this->processQueueWhileMessagesPending(
-            $this->factory->getEventQueue(),
+            $this->factory->getEventMessageQueue(),
             $this->factory->createDomainEventConsumer()
         );
     }
@@ -90,7 +90,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        $domainCommandQueue = $this->factory->getCommandQueue();
+        $domainCommandQueue = $this->factory->getCommandMessageQueue();
         $this->assertEquals(0, $domainCommandQueue->count());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);

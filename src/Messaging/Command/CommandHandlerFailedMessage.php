@@ -3,11 +3,12 @@
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CommandHandlerFailedMessage implements LogMessage
 {
     /**
-     * @var Command
+     * @var Message
      */
     private $command;
 
@@ -16,7 +17,7 @@ class CommandHandlerFailedMessage implements LogMessage
      */
     private $exception;
 
-    public function __construct(Command $command, \Exception $exception)
+    public function __construct(Message $command, \Exception $exception)
     {
         $this->command = $command;
         $this->exception = $exception;
@@ -29,7 +30,7 @@ class CommandHandlerFailedMessage implements LogMessage
     {
         return sprintf(
             "Failure during processing %s command with following message:\n\n%s",
-            get_class($this->command),
+            $this->command->getName(),
             $this->exception->getMessage()
         );
     }

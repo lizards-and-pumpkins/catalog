@@ -1,9 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Unit\Suites\Util;
+namespace LizardsAndPumpkins\Util;
 
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
-use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 /**
  * @covers   \LizardsAndPumpkins\Util\SnippetCodeValidator

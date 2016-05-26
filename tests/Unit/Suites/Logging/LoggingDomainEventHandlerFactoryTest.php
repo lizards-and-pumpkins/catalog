@@ -2,18 +2,13 @@
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -120,48 +115,54 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedProductWasUpdatedDomainEventHandler()
     {
-        /** @var ProductWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(ProductWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubEvent->method('getName')->willReturn('product_was_updated_domain_event');
         $result = $this->factory->createProductWasUpdatedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedTemplateWasUpdatedDomainEventHandler()
     {
-        /** @var TemplateWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(TemplateWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubEvent->method('getName')->willReturn('template_was_updated_domain_event');
         $result = $this->factory->createTemplateWasUpdatedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedImageWasAddedDomainEventHandler()
     {
-        /** @var ImageWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(ImageWasAddedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubEvent->method('getName')->willReturn('image_was_added_domain_event');
         $result = $this->factory->createImageWasAddedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedProductListingWasAddedDomainEventHandler()
     {
-        /** @var ProductListingWasAddedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(ProductListingWasAddedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubEvent->method('getName')->willReturn('product_listing_was_added_domain_event');
         $result = $this->factory->createProductListingWasAddedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedContentBlockWasUpdatedDomainEventHandler()
     {
-        /** @var ContentBlockWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubEvent->method('getName')->willReturn('content_block_was_updated_domain_event');
         $result = $this->factory->createContentBlockWasUpdatedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedCatalogWasImportedDomainEventHandler()
     {
-        /** @var CatalogWasImportedDomainEvent|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(CatalogWasImportedDomainEvent::class, [], [], '', false);
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
+        $stubEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubEvent->method('getName')->willReturn('catalog_was_imported_domain_event');
         $result = $this->factory->createCatalogWasImportedDomainEventHandler($stubEvent);
         $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
     }

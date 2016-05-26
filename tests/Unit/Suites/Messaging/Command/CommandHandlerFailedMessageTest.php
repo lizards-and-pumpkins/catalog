@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
+use LizardsAndPumpkins\Messaging\Queue\Message;
+
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage
  */
@@ -24,8 +26,9 @@ class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var Command|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMockBuilder(Command::class)->setMockClassName('Command')->getMock();
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
+        $stubCommand->method('getName')->willReturn('test_command');
 
         $this->testException = new \Exception($this->exceptionMessage);
 
@@ -35,7 +38,7 @@ class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     public function testLogMessageIsReturned()
     {
         $expectation = sprintf(
-            "Failure during processing Command command with following message:\n\n%s",
+            "Failure during processing test_command command with following message:\n\n%s",
             $this->exceptionMessage
         );
 

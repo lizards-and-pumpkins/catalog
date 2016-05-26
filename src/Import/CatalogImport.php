@@ -11,10 +11,10 @@ use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser;
 use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
-use LizardsAndPumpkins\Messaging\Queue;
 
 class CatalogImport
 {
@@ -29,7 +29,7 @@ class CatalogImport
     private $productListingBuilder;
 
     /**
-     * @var Queue
+     * @var DomainEventQueue
      */
     private $eventQueue;
 
@@ -62,7 +62,7 @@ class CatalogImport
         QueueImportCommands $queueImportCommands,
         ProductXmlToProductBuilderLocator $productXmlToProductBuilder,
         ProductListingBuilder $productListingBuilder,
-        Queue $eventQueue,
+        DomainEventQueue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
     ) {
@@ -87,7 +87,7 @@ class CatalogImport
         $parser->registerListingCallback($this->createClosureForMethod('processListingXml'));
         $this->imageDirectoryPath = dirname($importFilePath) . '/product-images';
         $parser->parse();
-        $this->eventQueue->add(new CatalogWasImportedDomainEvent($this->dataVersion));
+        $this->addCatalogImportedDomainEvent();
     }
 
     /**
@@ -156,9 +156,7 @@ class CatalogImport
     private function processImagesInProductXml($productXml)
     {
         $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
-        // Suppress PHP printing warnings despite a wrapping try/catch block (what a fine PHP Bug).
-        // Note: the exception still gets raised as intended.
-        @array_map([$this, 'processProductImageXml'], $imageNodes);
+        array_map([$this, 'processProductImageXml'], $imageNodes);
     }
 
     /**
@@ -187,5 +185,12 @@ class CatalogImport
         } catch (\Exception $exception) {
             $this->logger->log(new CatalogListingImportCallbackFailureMessage($exception, $listingXml));
         }
+    }
+
+    private function addCatalogImportedDomainEvent()
+    {
+        $payload = json_encode([]);
+        $version = $this->dataVersion;
+        $this->eventQueue->addVersioned('catalog_was_imported', $payload, $version);
     }
 }
