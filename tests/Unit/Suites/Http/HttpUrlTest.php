@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Http;
 
-use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
-
 /**
  * @covers \LizardsAndPumpkins\Http\HttpUrl
  */
@@ -44,12 +42,6 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     public function testUrlIsReturned()
     {
         $this->assertEquals($this->urlString, (string) $this->url);
-    }
-
-    public function testExceptionIsThrownForNonHttpRequest()
-    {
-        $this->expectException(UnknownProtocolException::class);
-        HttpUrl::fromString('ftp://user:pass@example.com');
     }
 
     public function testExceptionIsThrownIfNotValidUrlIsPassed()
