@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServic
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpsUrl;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
@@ -126,7 +126,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
-            HttpsUrl::fromString('http://example.com/'),
+            HttpUrl::fromString('http://example.com/'),
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
