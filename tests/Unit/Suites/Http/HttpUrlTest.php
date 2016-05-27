@@ -52,11 +52,6 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         HttpUrl::fromString('ftp://user:pass@example.com');
     }
 
-    public function testProtocolIsNotEncrypted()
-    {
-        $this->assertFalse($this->url->isProtocolEncrypted());
-    }
-
     public function testExceptionIsThrownIfNotValidUrlIsPassed()
     {
         $this->expectException(\InvalidArgumentException::class);

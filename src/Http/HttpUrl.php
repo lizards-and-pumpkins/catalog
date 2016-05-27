@@ -42,14 +42,6 @@ class HttpUrl
     }
 
     /**
-     * @return bool
-     */
-    public function isProtocolEncrypted()
-    {
-        return false;
-    }
-
-    /**
      * @return string
      */
     public function getPath()
