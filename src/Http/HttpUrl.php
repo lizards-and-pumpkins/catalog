@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Http;
 
 use League\Url\UrlImmutable;
 use League\Url\AbstractUrl;
+use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
 
 class HttpUrl
 {
@@ -36,6 +37,8 @@ class HttpUrl
         } catch (\RuntimeException $e) {
             throw new \InvalidArgumentException($e->getMessage());
         }
+
+        self::validateProtocol($url);
 
         return new self($url);
     }
@@ -116,5 +119,12 @@ class HttpUrl
     public function getHost()
     {
         return (string) $this->url->getHost();
+    }
+
+    private static function validateProtocol(AbstractUrl $url)
+    {
+        if (! in_array($url->getScheme(), ['http', 'https', ''])) {
+            throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $url->getScheme()));
+        }
     }
 }
