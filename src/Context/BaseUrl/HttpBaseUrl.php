@@ -54,7 +54,7 @@ class HttpBaseUrl implements BaseUrl
             throw self::createException('Invalid empty source data for the base URL specified');
         }
         if (! preg_match('#^(?:https?:)?//#i', $baseUrlString)) {
-            throw self::createException('The base URL input string does not contain the protocol');
+            throw self::createException('The base URL input string contains an invalid protocol');
         }
         if (substr($baseUrlString, -1) !== '/') {
             throw self::createException('The base URL input string does not end with the required trailing slash');
