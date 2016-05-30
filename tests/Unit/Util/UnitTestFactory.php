@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
@@ -27,8 +28,6 @@ use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\WebsiteToCountryMap;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
@@ -279,22 +278,6 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return UrlToWebsiteMap
-     */
-    public function createUrlToWebsiteMap()
-    {
-        return $this->mockObjectGenerator->getMock(UrlToWebsiteMap::class);
-    }
-
-    /**
-     * @return WebsiteToCountryMap
-     */
-    public function createWebsiteToCountryMap()
-    {
-        return $this->mockObjectGenerator->getMock(WebsiteToCountryMap::class);
-    }
-
-    /**
      * @return TaxableCountries
      */
     public function createTaxableCountries()
@@ -406,5 +389,29 @@ class UnitTestFactory implements Factory
     public function createContextSource()
     {
         return $this->mockObjectGenerator->getMock(ContextSource::class, [], [], '', false);
+    }
+
+    /**
+     * @return ContextPartBuilder
+     */
+    public function createLocaleContextPartBuilder()
+    {
+        return $this->mockObjectGenerator->getMock(ContextPartBuilder::class);
+    }
+
+    /**
+     * @return ContextPartBuilder
+     */
+    public function createCountryContextPartBuilder()
+    {
+        return $this->mockObjectGenerator->getMock(ContextPartBuilder::class);
+    }
+
+    /**
+     * @return ContextPartBuilder
+     */
+    public function createWebsiteContextPartBuilder()
+    {
+        return $this->mockObjectGenerator->getMock(ContextPartBuilder::class);
     }
 }

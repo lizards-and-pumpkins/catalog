@@ -2,10 +2,10 @@
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\Locale\Locale;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -27,8 +27,8 @@ class SearchEngineTest extends AbstractIntegrationTest
         $this->importCatalogFixture($this->factory);
 
         $context = $this->factory->createContextBuilder()->createContext([
-            ContextLocale::CODE  => 'en_US',
-            ContextWebsite::CODE => 'ru',
+            Locale::CONTEXT_CODE => 'en_US',
+            Website::CONTEXT_CODE => 'ru',
         ]);
         $facetFieldRequest = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString('color'))

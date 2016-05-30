@@ -6,6 +6,8 @@ use LizardsAndPumpkins\Context\Country\Exception\InvalidCountrySpecificationExce
 
 class Country
 {
+    const CONTEXT_CODE = 'country';
+    
     /**
      * @var string
      */

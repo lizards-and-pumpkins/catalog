@@ -4,7 +4,11 @@ namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\Locale\Locale;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
@@ -15,10 +19,7 @@ use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\Country\ContextCountry as CountryContextPartBuilder;
-use LizardsAndPumpkins\Context\Locale\ContextLocale as LocaleContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion as VersionContextPartBuilder;
-use LizardsAndPumpkins\Context\Website\ContextWebsite as WebsiteContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -118,8 +119,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
-use LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 
 class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
@@ -184,6 +183,21 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      * @var ContextSource
      */
     private $contextSource;
+
+    /**
+     * @var ContextPartBuilder
+     */
+    private $localeContextPartBuilder;
+
+    /**
+     * @var ContextPartBuilder
+     */
+    private $countryContextPartBuilder;
+
+    /**
+     * @var ContextPartBuilder
+     */
+    private $websiteContextPartBuilder;
 
     /**
      * @param ProductWasUpdatedDomainEvent $event
@@ -831,7 +845,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     private function getPriceSnippetKeyContextPartCodes()
     {
-        return [WebsiteContextPartBuilder::CODE, CountryContextPartBuilder::CODE];
+        return [Website::CONTEXT_CODE, Country::CONTEXT_CODE];
     }
 
     /**
@@ -966,9 +980,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new SelfContainedContextBuilder(
             $this->getMasterFactory()->createVersionContextPartBuilder(),
-            $this->getMasterFactory()->createWebsiteContextPartBuilder(),
-            $this->getMasterFactory()->createCountryContextPartBuilder(),
-            $this->getMasterFactory()->createLocaleContextPartBuilder()
+            $this->getMasterFactory()->getWebsiteContextPartBuilder(),
+            $this->getMasterFactory()->getCountryContextPartBuilder(),
+            $this->getMasterFactory()->getLocaleContextPartBuilder()
         );
     }
 
@@ -982,35 +996,39 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return WebsiteContextPartBuilder
+     * @return ContextPartBuilder
      */
-    public function createWebsiteContextPartBuilder()
+    public function getWebsiteContextPartBuilder()
     {
-        return new WebsiteContextPartBuilder($this->getMasterFactory()->createUrlToWebsiteMap());
+        if (null === $this->websiteContextPartBuilder) {
+            $this->websiteContextPartBuilder = $this->callExternalCreateMethod('WebsiteContextPartBuilder');
+        }
+
+        return $this->websiteContextPartBuilder;
     }
 
     /**
-     * @return LocaleContextPartBuilder
+     * @return ContextPartBuilder
      */
-    public function createLocaleContextPartBuilder()
+    public function getLocaleContextPartBuilder()
     {
-        return new LocaleContextPartBuilder();
+        if (null === $this->localeContextPartBuilder) {
+            $this->localeContextPartBuilder = $this->callExternalCreateMethod('LocaleContextPartBuilder');
+        }
+
+        return $this->localeContextPartBuilder;
     }
 
     /**
-     * @return CountryContextPartBuilder
+     * @return ContextPartBuilder
      */
-    public function createCountryContextPartBuilder()
+    public function getCountryContextPartBuilder()
     {
-        return new CountryContextPartBuilder($this->getMasterFactory()->createWebsiteToCountryMap());
-    }
+        if (null === $this->countryContextPartBuilder) {
+            $this->countryContextPartBuilder = $this->callExternalCreateMethod('CountryContextPartBuilder');
+        }
 
-    /**
-     * @return UrlToWebsiteMap
-     */
-    public function createUrlToWebsiteMap()
-    {
-        return ConfigurableUrlToWebsiteMap::fromConfig($this->getMasterFactory()->createConfigReader());
+        return $this->countryContextPartBuilder;
     }
 
     /**
@@ -1332,7 +1350,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function getRequiredContextParts()
     {
-        return [WebsiteContextPartBuilder::CODE, LocaleContextPartBuilder::CODE, VersionContextPartBuilder::CODE];
+        return [Website::CONTEXT_CODE, Locale::CONTEXT_CODE, DataVersion::CONTEXT_CODE];
     }
 
     /**

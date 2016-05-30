@@ -4,8 +4,8 @@ namespace LizardsAndPumpkins\Import\Price;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\Country\ContextCountry;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Country\Country;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
@@ -147,8 +147,8 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $stubProduct->getContext();
         $stubContext->method('getValue')->willReturnMap([
-            [ContextWebsite::CODE, 'test website'],
-            [ContextCountry::CODE, 'XX'],
+            [Website::CONTEXT_CODE, 'test website'],
+            [Country::CONTEXT_CODE, 'XX'],
         ]);
     }
 }

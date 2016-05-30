@@ -5,12 +5,7 @@ namespace LizardsAndPumpkins\Util\Factory;
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
-use LizardsAndPumpkins\Context\Country\ContextCountry;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -102,9 +97,6 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
- * @uses   \LizardsAndPumpkins\Context\Locale\ContextLocale
- * @uses   \LizardsAndPumpkins\Context\Country\ContextCountry
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandConsumer
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator
@@ -170,7 +162,6 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
- * @uses   \LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
@@ -616,32 +607,31 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ContextVersion::class, $result);
     }
 
-    public function testItReturnsAWebsiteContextPartBuilder()
+    public function testItReturnsSameInstanceOfWebsiteContextPartBuilder()
     {
-        $result = $this->commonFactory->createWebsiteContextPartBuilder();
-        $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextWebsite::class, $result);
+        $builderA = $this->commonFactory->getWebsiteContextPartBuilder();
+        $builderB = $this->commonFactory->getWebsiteContextPartBuilder();
+
+        $this->assertSame($builderA, $builderB);
+        $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
-    public function testItReturnsALocaleContextPartBuilder()
+    public function testItReturnsSameInstanceOfLocaleContextPartBuilder()
     {
-        $result = $this->commonFactory->createLocaleContextPartBuilder();
-        $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextLocale::class, $result);
+        $builderA = $this->commonFactory->getLocaleContextPartBuilder();
+        $builderB = $this->commonFactory->getLocaleContextPartBuilder();
+
+        $this->assertSame($builderA, $builderB);
+        $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
-    public function testItReturnsAUrlToWebsiteMap()
+    public function testItReturnsSameInstanceOfCountryContextPartBuilder()
     {
-        $result = $this->commonFactory->createUrlToWebsiteMap();
-        $this->assertInstanceOf(UrlToWebsiteMap::class, $result);
-        $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $result);
-    }
+        $builderA = $this->commonFactory->getCountryContextPartBuilder();
+        $builderB = $this->commonFactory->getCountryContextPartBuilder();
 
-    public function testItReturnsACountryContextPartBuilder()
-    {
-        $result = $this->commonFactory->createCountryContextPartBuilder();
-        $this->assertInstanceOf(ContextPartBuilder::class, $result);
-        $this->assertInstanceOf(ContextCountry::class, $result);
+        $this->assertSame($builderA, $builderB);
+        $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
     public function testItReturnsAFilesystemFileStorage()

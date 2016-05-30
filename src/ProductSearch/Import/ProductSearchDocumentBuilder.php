@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
@@ -153,7 +153,7 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     {
         $context = $product->getContext();
         return [
-            TaxServiceLocator::OPTION_WEBSITE           => $context->getValue(ContextWebsite::CODE),
+            TaxServiceLocator::OPTION_WEBSITE           => $context->getValue(Website::CONTEXT_CODE),
             TaxServiceLocator::OPTION_PRODUCT_TAX_CLASS => $product->getTaxClass(),
             TaxServiceLocator::OPTION_COUNTRY           => $countryCode,
         ];

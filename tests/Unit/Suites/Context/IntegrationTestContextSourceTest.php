@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Context;
 
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Locale\Locale;
+use LizardsAndPumpkins\Context\Website\Website;
 
 /**
  * @covers \LizardsAndPumpkins\Context\IntegrationTestContextSource
@@ -14,11 +14,11 @@ class IntegrationTestContextSourceTest extends \PHPUnit_Framework_TestCase
     public function testExpectedContextMatrixIsReturned()
     {
         $expectedContextMatrix = [
-            [ContextWebsite::CODE => 'ru', ContextLocale::CODE => 'de_DE'],
-            [ContextWebsite::CODE => 'ru', ContextLocale::CODE => 'en_US'],
-            [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'de_DE'],
-            [ContextWebsite::CODE => 'cy', ContextLocale::CODE => 'en_US'],
-            [ContextWebsite::CODE => 'fr', ContextLocale::CODE => 'fr_FR'],
+            [Website::CONTEXT_CODE => 'ru', Locale::CONTEXT_CODE => 'de_DE'],
+            [Website::CONTEXT_CODE => 'ru', Locale::CONTEXT_CODE => 'en_US'],
+            [Website::CONTEXT_CODE => 'cy', Locale::CONTEXT_CODE => 'de_DE'],
+            [Website::CONTEXT_CODE => 'cy', Locale::CONTEXT_CODE => 'en_US'],
+            [Website::CONTEXT_CODE => 'fr', Locale::CONTEXT_CODE => 'fr_FR'],
         ];
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */

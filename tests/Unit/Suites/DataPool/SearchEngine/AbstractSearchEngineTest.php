@@ -2,13 +2,13 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -79,7 +79,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     private function createContextFromDataParts(array $contextDataSet)
     {
-        $contextDataSet[ContextVersion::CODE] = '-1';
+        $contextDataSet[DataVersion::CONTEXT_CODE] = '-1';
         return SelfContainedContextBuilder::rehydrateContext($contextDataSet);
     }
 
@@ -263,7 +263,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
         $this->searchEngine = $this->createSearchEngineInstance($this->stubFacetFieldTransformationRegistry);
-        $this->testContext = $this->createContextFromDataParts([ContextWebsite::CODE => 'ru']);
+        $this->testContext = $this->createContextFromDataParts([Website::CONTEXT_CODE => 'ru']);
     }
 
     public function testSearchEngineInterfaceIsImplemented()
