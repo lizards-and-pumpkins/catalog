@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpsUrl;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 
@@ -31,7 +31,7 @@ class ImageImportTest extends AbstractIntegrationTest
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
-            HttpsUrl::fromString('http://example.com/'),
+            HttpUrl::fromString('http://example.com/'),
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );
