@@ -12,10 +12,11 @@ class UpdatingProductListingImportCommandFactory implements ProductListingImport
 
     /**
      * @param ProductListing $productListing
-     * @return Command[]
+     * @return array[]
      */
     public function createProductListingImportCommands(ProductListing $productListing)
     {
-        return [new AddProductListingCommand($productListing)];
+        $payload = json_encode(['listing' => $productListing->serialize()]);
+        return [['name' => 'add_product_listing', 'payload' => $payload]];
     }
 }

@@ -2,9 +2,7 @@
 
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
-use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory
@@ -16,18 +14,6 @@ class UpdatingProductImportCommandFactoryTest extends \PHPUnit_Framework_TestCas
      * @var UpdatingProductImportCommandFactory
      */
     private $factory;
-
-    /**
-     * @param string $className
-     * @param mixed[] $array
-     */
-    private function assertContainsInstanceOf($className, array $array)
-    {
-        $found = array_reduce($array, function ($found, $value) use ($className) {
-            return $found || $value instanceof $className;
-        }, false);
-        $this->assertTrue($found, sprintf('Failed asserting that the array contains an instance of "%s"', $className));
-    }
 
     protected function setUp()
     {
@@ -42,9 +28,21 @@ class UpdatingProductImportCommandFactoryTest extends \PHPUnit_Framework_TestCas
     public function testItReturnsAnUpdateProductCommand()
     {
         $stubProduct = $this->getMock(Product::class);
+        $stubProduct->method('jsonSerialize')->willReturn([]);
+        $stubProduct->method('getId')->willReturn('dummy');
         $commands = $this->factory->createProductImportCommands($stubProduct);
+        
         $this->assertInternalType('array', $commands);
-        $this->assertContainsOnlyInstancesOf(Command::class, $commands);
-        $this->assertContainsInstanceOf(UpdateProductCommand::class, $commands);
+        
+        $expectedPayload = json_encode(['id' => 'dummy', 'product' => $stubProduct]);
+        array_map(function (array $commandData) use ($expectedPayload) {
+            if (! isset($commandData['name']) || 'update_product' !== $commandData['name']) {
+                $this->fail('"name" array record must contain the command name "update_product"');
+            }
+
+            if (! isset($commandData['payload']) || $commandData['payload'] !== $expectedPayload) {
+                $this->fail('"payload" array record must contain payload "' . compact($expectedPayload) . '"');
+            }
+        }, $commands);
     }
 }

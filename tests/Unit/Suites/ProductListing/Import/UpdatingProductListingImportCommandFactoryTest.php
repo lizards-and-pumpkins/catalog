@@ -2,9 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
-use LizardsAndPumpkins\Messaging\Command\Command;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
@@ -15,18 +12,6 @@ class UpdatingProductListingImportCommandFactoryTest extends \PHPUnit_Framework_
      * @var UpdatingProductListingImportCommandFactory
      */
     private $factory;
-
-    /**
-     * @param string $className
-     * @param mixed[] $array
-     */
-    private function assertContainsInstanceOf($className, array $array)
-    {
-        $found = array_reduce($array, function ($found, $value) use ($className) {
-            return $found || $value instanceof $className;
-        }, false);
-        $this->assertTrue($found, sprintf('Failed asserting that the array contains an instance of "%s"', $className));
-    }
 
     protected function setUp()
     {
@@ -43,7 +28,19 @@ class UpdatingProductListingImportCommandFactoryTest extends \PHPUnit_Framework_
         $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
         $commands = $this->factory->createProductListingImportCommands($stubProductListing);
         $this->assertInternalType('array', $commands);
-        $this->assertContainsOnlyInstancesOf(Command::class, $commands);
-        $this->assertContainsInstanceOf(AddProductListingCommand::class, $commands);
+        
+        $expectedPayload = [];
+        array_map(function (array $commandData) use ($expectedPayload) {
+            if (! isset($commandData['name']) || 'add_product_listing' !== $commandData['name']) {
+                $this->fail(
+                    '"name" array record must contain the command name "add_product_listing", got ' .
+                    $commandData['name']
+                );
+            }
+
+            if (! isset($commandData['payload'])) {
+                $this->fail('"payload" array record not found');
+            }
+        }, $commands);
     }
 }

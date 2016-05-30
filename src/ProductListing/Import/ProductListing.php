@@ -5,6 +5,9 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 
+/**
+ * @todo: make serializable (without using php serialize())
+ */
 class ProductListing
 {
     /**
@@ -85,5 +88,23 @@ class ProductListing
     public function getAttributeValueByCode($code)
     {
         return $this->attributeList->getAttributeValueByCode($code);
+    }
+
+    /**
+     * @todo: use json_encode for serialization
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize($this);
+    }
+
+    /**
+     * @todo: use json_decode for unserialization
+     * @return self
+     */
+    public static function rehydrate($serialized)
+    {
+        return unserialize($serialized);
     }
 }

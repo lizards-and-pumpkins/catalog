@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;

@@ -2,14 +2,13 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockContextIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockContextException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Messaging\Queue;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
@@ -23,7 +22,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockCommandQueue;
 
@@ -39,7 +38,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->mockCommandQueue = $this->getMock(Queue::class);
+        $this->mockCommandQueue = $this->getMock(CommandQueue::class, [], [], '', false);
         $this->requestHandler = new ContentBlocksApiV1PutRequestHandler($this->mockCommandQueue);
         $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
     }
@@ -106,7 +105,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $this->mockCommandQueue->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf(UpdateContentBlockCommand::class));
+            ->with('update_content_block', $this->anything());
 
         $response = $this->requestHandler->process($this->mockRequest);
 

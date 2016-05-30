@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
@@ -26,9 +27,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage
  * @uses   \LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
- * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
- * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  * @uses   \LizardsAndPumpkins\Util\UuidGenerator
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
@@ -60,7 +59,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $catalogImport;
 
     /**
-     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockEventQueue;
 
@@ -130,7 +129,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         
         $this->stubProductXmlToProductBuilder = $this->createMockProductXmlToProductBuilder();
         $this->stubProductListingBuilder = $this->createMockProductsPerPageForContextBuilder();
-        $this->mockEventQueue = $this->getMock(Queue::class);
+        $this->mockEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
         $this->contextSource = $this->getMock(ContextSource::class, [], [], '', false);
         $this->contextSource->method('getAllAvailableContextsWithVersion')->willReturn(
             [$this->getMock(Context::class)]
@@ -202,8 +201,8 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testItAddsACatalogWasImportedDomainEventToTheEventQueue()
     {
-        $this->mockEventQueue->expects($this->once())->method('add')
-            ->with($this->isInstanceOf(CatalogWasImportedDomainEvent::class));
+        $this->mockEventQueue->expects($this->once())->method('addVersioned')
+            ->with('catalog_was_imported', $this->anything(), $this->anything());
 
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
     }

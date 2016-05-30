@@ -2,15 +2,19 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Import\ContentBlock\Exception\NoContentBlockWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  */
 class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ContentBlockWasUpdatedDomainEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var Message|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDomainEvent;
 
@@ -26,7 +30,8 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->mockDomainEvent = $this->getMock(ContentBlockWasUpdatedDomainEvent::class, [], [], '', false);
+        $this->mockDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $this->mockDomainEvent->method('getName')->willReturn('content_block_was_updated_domain_event');
         $this->mockProjector = $this->getMock(ContentBlockProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new ContentBlockWasUpdatedDomainEventHandler(
@@ -40,10 +45,27 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_Te
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
     }
 
+    public function testThrowsExceptionIfEventNameDoesNotMatch()
+    {
+        $this->expectException(NoContentBlockWasUpdatedDomainEventMessageException::class);
+        $this->expectExceptionMessage('Expected "content_block_was_updated" domain event, got "foo_domain_event"');
+
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $mockDomainEvent */
+        $mockDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $mockDomainEvent->method('getName')->willReturn('foo_domain_event');
+        new ContentBlockWasUpdatedDomainEventHandler($mockDomainEvent, $this->mockProjector);
+    }
+
     public function testContentBlockProjectorIsTriggered()
     {
-        $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
-        $this->mockDomainEvent->method('getContentBlockSource')->willReturn($stubContentBlockSource);
+        $testContentBlockSource = new ContentBlockSource(
+            ContentBlockId::fromString('foo bar'),
+            'dummy content',
+            [],
+            []
+        );
+        $testPayload = json_encode(['source' => $testContentBlockSource->serialize()]);
+        $this->mockDomainEvent->method('getPayload')->willReturn($testPayload);
 
         $this->mockProjector->expects($this->once())->method('project');
 

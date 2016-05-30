@@ -22,12 +22,12 @@ class ApiTest extends AbstractIntegrationTest
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         
-        $commandQueue = $factory->getCommandQueue();
+        $commandQueue = $factory->getCommandMessageQueue();
         $this->assertEquals(0, $commandQueue->count());
 
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
-
+        
         $this->assertSame(202, $response->getStatusCode());
         $this->assertSame('', $response->getBody());
         $this->assertGreaterThan(0, $commandQueue->count());

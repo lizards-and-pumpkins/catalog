@@ -1,9 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Price\Price;
 

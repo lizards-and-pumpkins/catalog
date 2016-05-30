@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Logging\Stub\ClearableStubQueue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
 /**
@@ -26,6 +27,14 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
      * @var Logger|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockLogger;
+
+    /**
+     * @return Message
+     */
+    private function createMockMessage()
+    {
+        return $this->getMock(Message::class, [], [], '', false);
+    }
 
     protected function setUp()
     {
@@ -55,21 +64,21 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesAddCallsToTheDecoratedQueue()
     {
-        $testData = new \stdClass();
-        $this->decoratedQueue->expects($this->once())->method('add')->with($testData);
-        $this->decorator->add($testData);
+        $testMessage = $this->createMockMessage();
+        $this->decoratedQueue->expects($this->once())->method('add')->with($testMessage);
+        $this->decorator->add($testMessage);
     }
 
     public function testItDelegatesNextCallsToTheDecoratedQueue()
     {
-        $expected = new \stdClass();
+        $expected = $this->createMockMessage();
         $this->decoratedQueue->expects($this->once())->method('next')->willReturn($expected);
         $this->assertSame($expected, $this->decorator->next());
     }
 
     public function testItLoggsAddedMessages()
     {
-        $testData = new \stdClass();
+        $testData = $this->createMockMessage();
         $this->mockLogger->expects($this->once())->method('log')->with($this->isInstanceOf(QueueAddLogMessage::class));
         $this->decorator->add($testData);
     }

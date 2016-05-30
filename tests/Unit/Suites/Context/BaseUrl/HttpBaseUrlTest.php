@@ -1,10 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
+namespace LizardsAndPumpkins\Context\BaseUrl;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
-use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 
 /**
  * @covers \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl

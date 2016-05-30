@@ -13,9 +13,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -35,19 +33,20 @@ use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
 use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
@@ -72,15 +71,12 @@ use LizardsAndPumpkins\ProductSearch\Import\TemplateRendering\ProductSearchAutos
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
@@ -96,15 +92,12 @@ use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
 use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilder;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Messaging\Queue;
@@ -130,14 +123,24 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     private $keyValueStore;
 
     /**
-     * @var Queue
+     * @var DomainEventQueue
      */
     private $eventQueue;
 
     /**
      * @var Queue
      */
+    private $eventMessageQueue;
+
+    /**
+     * @var CommandQueue
+     */
     private $commandQueue;
+
+    /**
+     * @var Queue
+     */
+    private $commandMessageQueue;
 
     /**
      * @var Logger
@@ -200,10 +203,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     private $websiteContextPartBuilder;
 
     /**
-     * @param ProductWasUpdatedDomainEvent $event
-     * @return ProductWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event)
+    public function createProductWasUpdatedDomainEventHandler(Message $event)
     {
         return new ProductWasUpdatedDomainEventHandler(
             $event,
@@ -212,10 +215,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param TemplateWasUpdatedDomainEvent $event
-     * @return TemplateWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event)
+    public function createTemplateWasUpdatedDomainEventHandler(Message $event)
     {
         return new TemplateWasUpdatedDomainEventHandler(
             $event,
@@ -243,10 +246,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param ProductListingWasAddedDomainEvent $event
-     * @return ProductListingWasAddedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createProductListingWasAddedDomainEventHandler(ProductListingWasAddedDomainEvent $event)
+    public function createProductListingWasAddedDomainEventHandler(Message $event)
     {
         return new ProductListingWasAddedDomainEventHandler(
             $event,
@@ -1083,14 +1086,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createDomainEventConsumer()
     {
         return new DomainEventConsumer(
-            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->getEventMessageQueue(),
             $this->getMasterFactory()->createDomainEventHandlerLocator(),
             $this->getLogger()
         );
     }
 
     /**
-     * @return Queue
+     * @return DomainEventQueue
      */
     public function getEventQueue()
     {
@@ -1099,6 +1102,17 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         }
 
         return $this->eventQueue;
+    }
+
+    /**
+     * @return Queue
+     */
+    public function getEventMessageQueue()
+    {
+        if (null === $this->eventMessageQueue) {
+            $this->eventMessageQueue = $this->callExternalCreateMethod('EventMessageQueue');
+        }
+        return $this->eventMessageQueue;
     }
 
     /**
@@ -1190,10 +1204,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param ImageWasAddedDomainEvent $event
-     * @return ImageWasAddedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createImageWasAddedDomainEventHandler(ImageWasAddedDomainEvent $event)
+    public function createImageWasAddedDomainEventHandler(Message $event)
     {
         return new ImageWasAddedDomainEventHandler(
             $event,
@@ -1219,14 +1233,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createCommandConsumer()
     {
         return new CommandConsumer(
-            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->getCommandMessageQueue(),
             $this->getMasterFactory()->createCommandHandlerLocator(),
             $this->getLogger()
         );
     }
 
     /**
-     * @return Queue
+     * @return CommandQueue
      */
     public function getCommandQueue()
     {
@@ -1238,6 +1252,17 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
+     * @return Queue
+     */
+    public function getCommandMessageQueue()
+    {
+        if (null === $this->commandMessageQueue) {
+            $this->commandMessageQueue = $this->callExternalCreateMethod('CommandMessageQueue');
+        }
+        return $this->commandMessageQueue;
+    }
+
+    /**
      * @return CommandHandlerLocator
      */
     public function createCommandHandlerLocator()
@@ -1246,10 +1271,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param UpdateContentBlockCommand $command
-     * @return UpdateContentBlockCommandHandler
+     * @param Message $command
+     * @return CommandHandler
      */
-    public function createUpdateContentBlockCommandHandler(UpdateContentBlockCommand $command)
+    public function createUpdateContentBlockCommandHandler(Message $command)
     {
         return new UpdateContentBlockCommandHandler(
             $command,
@@ -1258,10 +1283,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param ContentBlockWasUpdatedDomainEvent $event
-     * @return ContentBlockWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event)
+    public function createContentBlockWasUpdatedDomainEventHandler(Message $event)
     {
         return new ContentBlockWasUpdatedDomainEventHandler(
             $event,
@@ -1310,10 +1335,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param UpdateProductCommand $command
-     * @return UpdateProductCommandHandler
+     * @param Message $command
+     * @return CommandHandler
      */
-    public function createUpdateProductCommandHandler(UpdateProductCommand $command)
+    public function createUpdateProductCommandHandler(Message $command)
     {
         return new UpdateProductCommandHandler(
             $command,
@@ -1322,10 +1347,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param AddProductListingCommand $command
-     * @return AddProductListingCommandHandler
+     * @param Message $command
+     * @return CommandHandler
      */
-    public function createAddProductListingCommandHandler(AddProductListingCommand $command)
+    public function createAddProductListingCommandHandler(Message $command)
     {
         return new AddProductListingCommandHandler(
             $command,
@@ -1334,10 +1359,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param AddImageCommand $command
-     * @return AddImageCommandHandler
+     * @param Message $command
+     * @return CommandHandler
      */
-    public function createAddImageCommandHandler(AddImageCommand $command)
+    public function createAddImageCommandHandler(Message $command)
     {
         return new AddImageCommandHandler(
             $command,
@@ -1537,10 +1562,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param CatalogWasImportedDomainEvent $event
-     * @return CatalogWasImportedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event)
+    public function createCatalogWasImportedDomainEventHandler(Message $event)
     {
         return new CatalogWasImportedDomainEventHandler($event);
     }

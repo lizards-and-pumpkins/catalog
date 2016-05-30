@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Messaging\Event;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 class DomainEventConsumer implements QueueMessageConsumer
@@ -47,7 +48,7 @@ class DomainEventConsumer implements QueueMessageConsumer
         }
     }
 
-    private function processDomainEvent(DomainEvent $domainEvent)
+    private function processDomainEvent(Message $domainEvent)
     {
         try {
             $domainEventHandler = $this->handlerLocator->getHandlerFor($domainEvent);

@@ -6,7 +6,9 @@ use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
@@ -41,10 +43,10 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
     }
 
     /**
-     * @param ProductWasUpdatedDomainEvent $event
-     * @return ProductWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event)
+    public function createProductWasUpdatedDomainEventHandler(Message $event)
     {
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
@@ -53,10 +55,10 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
     }
 
     /**
-     * @param TemplateWasUpdatedDomainEvent $event
-     * @return TemplateWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event)
+    public function createTemplateWasUpdatedDomainEventHandler(Message $event)
     {
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
@@ -65,10 +67,10 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
     }
 
     /**
-     * @param ImageWasAddedDomainEvent $event
-     * @return ImageWasAddedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createImageWasAddedDomainEventHandler(ImageWasAddedDomainEvent $event)
+    public function createImageWasAddedDomainEventHandler(Message $event)
     {
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
@@ -77,10 +79,10 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
     }
 
     /**
-     * @param ProductListingWasAddedDomainEvent $event
-     * @return ProductListingWasAddedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createProductListingWasAddedDomainEventHandler(ProductListingWasAddedDomainEvent $event)
+    public function createProductListingWasAddedDomainEventHandler(Message $event)
     {
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
@@ -89,10 +91,10 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
     }
 
     /**
-     * @param ContentBlockWasUpdatedDomainEvent $event
-     * @return ContentBlockWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event)
+    public function createContentBlockWasUpdatedDomainEventHandler(Message $event)
     {
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
@@ -101,10 +103,10 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
     }
 
     /**
-     * @param CatalogWasImportedDomainEvent $event
-     * @return CatalogWasImportedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event)
+    public function createCatalogWasImportedDomainEventHandler(Message $event)
     {
         $domainEventFactory = $this->getDomainEventFactoryDelegate();
         return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(

@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Messaging\Queue\Exception\NotSerializableException;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class InMemoryQueue implements Queue, Clearable
@@ -29,20 +28,13 @@ class InMemoryQueue implements Queue, Clearable
         return $this->count() > 0;
     }
 
-    /**
-     * @param mixed $data
-     */
-    public function add($data)
+    public function add(Message $message)
     {
-        try {
-            $this->queue[] = serialize($data);
-        } catch (\Exception $e) {
-            throw new NotSerializableException($e->getMessage());
-        }
+        $this->queue[] = $message->serialize();
     }
 
     /**
-     * @return mixed
+     * @return Message
      */
     public function next()
     {
@@ -52,7 +44,7 @@ class InMemoryQueue implements Queue, Clearable
 
         $data = array_shift($this->queue);
 
-        return unserialize($data);
+        return Message::rehydrate($data);
     }
 
     public function clear()

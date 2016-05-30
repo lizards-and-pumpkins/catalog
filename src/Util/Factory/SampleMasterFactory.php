@@ -20,7 +20,9 @@ use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Logging\InMemoryLogger;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
@@ -30,8 +32,10 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
 /**
  * @method DataPoolWriter createDataPoolWriter
  * @method DataPoolReader createDataPoolReader
- * @method Queue getCommandQueue
- * @method Queue getEventQueue
+ * @method CommandQueue getCommandQueue
+ * @method Queue getCommandMessageQueue
+ * @method DomainEventQueue getEventQueue
+ * @method Queue getEventMessageQueue
  * @method Context getContext
  * @method ContextSource createContextSource
  * @method ContextBuilder createContextBuilder

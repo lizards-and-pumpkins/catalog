@@ -2,30 +2,42 @@
 
 namespace LizardsAndPumpkins\ProductListing;
 
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\ProductListing\Exception\NoAddProductListingCommandMessageException;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 class AddProductListingCommandHandler implements CommandHandler
 {
     /**
-     * @var AddProductListingCommand
+     * @var Message
      */
     private $command;
 
     /**
-     * @var Queue
+     * @var DomainEventQueue
      */
-    private $domainEventQueue;
+    private $eventQueue;
 
-    public function __construct(AddProductListingCommand $command, Queue $domainEventQueue)
+    public function __construct(Message $command, DomainEventQueue $domainEventQueue)
     {
+        if ('add_product_listing_command' !== $command->getName()) {
+            $message = sprintf('Expected "add_product_listing" command, got "%s"', $command->getName());
+            throw new NoAddProductListingCommandMessageException($message);
+        }
         $this->command = $command;
-        $this->domainEventQueue = $domainEventQueue;
+        $this->eventQueue = $domainEventQueue;
     }
 
     public function process()
     {
-        $productListing = $this->command->getProductListing();
-        $this->domainEventQueue->add(new ProductListingWasAddedDomainEvent($productListing));
+        $commandPayload = json_decode($this->command->getPayload(), true);
+        $productListing = ProductListing::rehydrate($commandPayload['listing']);
+        $eventPayload = json_encode(['listing' => $productListing->serialize()]);
+        $version = DataVersion::fromVersionString($productListing->getContextData()[DataVersion::CONTEXT_CODE]);
+        $this->eventQueue->addVersioned('product_listing_was_added', $eventPayload, $version);
     }
 }

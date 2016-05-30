@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Messaging\Command;
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 /**
@@ -50,7 +51,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testItCallsNextIfQueueIsReady()
     {
-        $stubCommand = $this->getMock(Command::class);
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
         $this->stubQueue->method('next')->willReturn($stubCommand);
         $this->stubQueue->method('isReadyForNext')
             ->willReturnOnConsecutiveCalls(true, true, false);
@@ -64,7 +65,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()
     {
-        $stubCommand = $this->getMock(Command::class);
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
         $this->stubQueue->method('next')->willReturn($stubCommand);
         $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
 
@@ -85,7 +86,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testConsumerStopsIfProcessingLimitIsReached()
     {
-        $stubCommand = $this->getMock(Command::class);
+        $stubCommand = $this->getMock(Message::class, [], [], '', false);
         $this->stubQueue->method('next')->willReturn($stubCommand);
         $this->stubQueue->method('isReadyForNext')->willReturn(true);
 

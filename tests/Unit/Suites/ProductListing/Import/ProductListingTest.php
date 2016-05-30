@@ -82,6 +82,11 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->stubProductListingAttributeList->method('getAttributeValueByCode')->willReturn($attributeValue);
 
         $this->assertSame($attributeValue, $this->productListing->getAttributeValueByCode($attributeCode));
+    }
 
+    public function testCanBeSerializedAndRehydrated()
+    {
+        $rehydrated = ProductListing::rehydrate($this->productListing->serialize());
+        $this->assertEquals($rehydrated, $this->productListing);
     }
 }

@@ -8,6 +8,8 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -79,7 +81,7 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return string[]
+     * @return FacetFiltersToIncludeInResult
      */
     public function createProductListingFacetFiltersToIncludeInResult()
     {
@@ -95,17 +97,33 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return Queue
+     * @return DomainEventQueue
      */
     public function createEventQueue()
     {
-        return $this->mockObjectGenerator->getMock(Queue::class);
+        return $this->mockObjectGenerator->getMock(DomainEventQueue::class, [], [], '', false);
     }
 
     /**
      * @return Queue
      */
+    public function createEventMessageQueue()
+    {
+        return $this->mockObjectGenerator->getMock(Queue::class);
+    }
+
+    /**
+     * @return CommandQueue
+     */
     public function createCommandQueue()
+    {
+        return $this->mockObjectGenerator->getMock(CommandQueue::class, [], [], '', false);
+    }
+
+    /**
+     * @return Queue
+     */
+    public function createCommandMessageQueue()
     {
         return $this->mockObjectGenerator->getMock(Queue::class);
     }
@@ -194,7 +212,7 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return Queue
+     * @return DomainEventQueue
      */
     public function getEventQueue()
     {
@@ -205,7 +223,7 @@ class UnitTestFactory implements Factory
     }
 
     /**
-     * @return Queue
+     * @return CommandQueue
      */
     public function getCommandQueue()
     {

@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class DomainEventHandlerLocator
@@ -18,17 +19,17 @@ class DomainEventHandlerLocator
     }
 
     /**
-     * @param DomainEvent $event
+     * @param Message $event
      * @return DomainEventHandler
      */
-    public function getHandlerFor(DomainEvent $event)
+    public function getHandlerFor(Message $event)
     {
-        $eventClass = $this->getUnqualifiedDomainEventClassName($event);
-        $method = 'create' . $eventClass . 'Handler';
+        $eventHandlerClass = $this->getUnqualifiedDomainEventHandlerClassName($event);
+        $method = 'create' . $eventHandlerClass;
 
         if (!method_exists(DomainEventHandlerFactory::class, $method)) {
             throw new UnableToFindDomainEventHandlerException(
-                sprintf('Unable to find a handler for %s domain event', $eventClass)
+                sprintf('Unable to find a handler "%s" for event "%s"', $eventHandlerClass, $event->getName())
             );
         }
 
@@ -36,18 +37,21 @@ class DomainEventHandlerLocator
     }
 
     /**
-     * @param DomainEvent $event
+     * @param Message $event
      * @return string
      */
-    private function getUnqualifiedDomainEventClassName(DomainEvent $event)
+    private function getUnqualifiedDomainEventHandlerClassName(Message $event)
     {
-        $qualifiedClassName = get_class($event);
-        $lastQualifierPosition = strrpos($qualifiedClassName, '\\');
+        $camelCaseEventName = $this->snakeCaseToCamelCase($event->getName());
+        return $camelCaseEventName . 'Handler';
+    }
 
-        if (false === $lastQualifierPosition) {
-            return $qualifiedClassName;
-        }
-
-        return substr($qualifiedClassName, $lastQualifierPosition + 1);
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function snakeCaseToCamelCase($name)
+    {
+        return str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
     }
 }

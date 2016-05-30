@@ -4,11 +4,12 @@ namespace LizardsAndPumpkins\Messaging\Event\Exception;
 
 use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class DomainEventHandlerFailedMessage implements LogMessage
 {
     /**
-     * @var DomainEvent
+     * @var Message
      */
     private $domainEvent;
 
@@ -17,7 +18,7 @@ class DomainEventHandlerFailedMessage implements LogMessage
      */
     private $exception;
 
-    public function __construct(DomainEvent $domainEvent, \Exception $exception)
+    public function __construct(Message $domainEvent, \Exception $exception)
     {
         $this->domainEvent = $domainEvent;
         $this->exception = $exception;
@@ -29,8 +30,8 @@ class DomainEventHandlerFailedMessage implements LogMessage
     public function __toString()
     {
         return sprintf(
-            "Failure during processing %s domain event with following message:\n%s",
-            get_class($this->domainEvent),
+            "Failure during processing domain event \"%s\" with following message:\n%s",
+            $this->domainEvent->getName(),
             $this->exception->getMessage()
         );
     }

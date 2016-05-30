@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\Messaging;
 
+use LizardsAndPumpkins\Messaging\Queue\Message;
+
 interface Queue extends \Countable
 {
     /**
@@ -15,13 +17,13 @@ interface Queue extends \Countable
     public function isReadyForNext();
 
     /**
-     * @param mixed $data
+     * @param Message $message
      * @return void
      */
-    public function add($data);
+    public function add(Message $message);
 
     /**
-     * @return mixed
+     * @return Message
      */
     public function next();
 }

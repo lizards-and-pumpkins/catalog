@@ -5,18 +5,18 @@ namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Messaging\Queue;
 
 class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
-     * @var Queue
+     * @var DomainEventQueue
      */
     private $domainEventQueue;
 
-    public function __construct(Queue $domainEventQueue)
+    public function __construct(DomainEventQueue $domainEventQueue)
     {
         $this->domainEventQueue = $domainEventQueue;
     }
@@ -42,7 +42,8 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
     {
         $templateId = $this->extractTemplateIdFromRequest($request);
         // todo: add command which validates input data to command queue, the have the command handler create the event
-        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody()));
+        $payload = json_encode(['id' => $templateId, 'template' => $request->getRawBody()]);
+        $this->domainEventQueue->addNotVersioned('template_was_updated', $payload);
     }
 
     /**

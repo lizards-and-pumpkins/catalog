@@ -1,10 +1,7 @@
 <?php
 
-namespace LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
+namespace LizardsAndPumpkins\Context\BaseUrl;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\Context\Website\Exception\NoConfiguredBaseUrlException;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Util\Config\ConfigReader;

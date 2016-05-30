@@ -4,15 +4,15 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\Messaging\Queue;
 
 class QueueImportCommands
 {
     /**
-     * @var Queue
+     * @var CommandQueue
      */
     private $commandQueue;
 
@@ -32,7 +32,7 @@ class QueueImportCommands
     private $listingImportCommandLocator;
 
     public function __construct(
-        Queue $commandQueue,
+        CommandQueue $commandQueue,
         ProductImportCommandLocator $productImportCommandLocator,
         ProductImageImportCommandLocator $productImageImportCommandLocator,
         ProductListingImportCommandLocator $productListingImportCommandLocator
@@ -66,12 +66,12 @@ class QueueImportCommands
     }
 
     /**
-     * @param Command[] $commands
+     * @param array[] $commands
      */
     private function addCommandsToQueue(array $commands)
     {
-        @array_map(function (Command $command) {
-            $this->commandQueue->add($command);
+        array_map(function (array $command) {
+            $this->commandQueue->add($command['name'], $command['payload']);
         }, $commands);
     }
 }

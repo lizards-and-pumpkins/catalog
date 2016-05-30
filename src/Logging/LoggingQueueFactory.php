@@ -24,10 +24,10 @@ class LoggingQueueFactory implements Factory
     /**
      * @return Queue|Clearable
      */
-    public function createEventQueue()
+    public function createEventMessageQueue()
     {
         return new LoggingQueueDecorator(
-            $this->implementationFactoryDelegate->createEventQueue(),
+            $this->implementationFactoryDelegate->createEventMessageQueue(),
             $this->getMasterFactory()->getLogger()
         );
     }
@@ -35,10 +35,10 @@ class LoggingQueueFactory implements Factory
     /**
      * @return Queue|Clearable
      */
-    public function createCommandQueue()
+    public function createCommandMessageQueue()
     {
         return new LoggingQueueDecorator(
-            $this->implementationFactoryDelegate->createCommandQueue(),
+            $this->implementationFactoryDelegate->createCommandMessageQueue(),
             $this->getMasterFactory()->getLogger()
         );
     }

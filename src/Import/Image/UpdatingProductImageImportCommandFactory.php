@@ -13,10 +13,11 @@ class UpdatingProductImageImportCommandFactory implements ProductImageImportComm
     /**
      * @param string $imageFilePath
      * @param DataVersion $dataVersion
-     * @return Command[]
+     * @return array[]
      */
     public function createProductImageImportCommands($imageFilePath, DataVersion $dataVersion)
     {
-        return [new AddImageCommand($imageFilePath, $dataVersion)];
+        $payload = ['file_path' => $imageFilePath, 'data_version' => (string)$dataVersion];
+        return [['name' => 'add_image', 'payload' => json_encode($payload)]];
     }
 }

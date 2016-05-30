@@ -2,13 +2,11 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory
- * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
  */
 class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,18 +16,6 @@ class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_Te
      * @var UpdatingProductImageImportCommandFactory
      */
     private $factory;
-
-    /**
-     * @param string $className
-     * @param mixed[] $array
-     */
-    private function assertContainsInstanceOf($className, array $array)
-    {
-        $found = array_reduce($array, function ($found, $value) use ($className) {
-            return $found || $value instanceof $className;
-        }, false);
-        $this->assertTrue($found, sprintf('Failed asserting that the array contains an instance of "%s"', $className));
-    }
 
     protected function setUp()
     {
@@ -41,15 +27,27 @@ class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_Te
         $this->assertInstanceOf(ProductImageImportCommandFactory::class, $this->factory);
     }
 
-    public function testItReturnsAnAddImageCommand()
+    public function testItReturnsAddImageCommandData()
     {
         $imageFilePath = $this->getUniqueTempDir() . '/image.jpg';
         $this->createFixtureFile($imageFilePath, '');
 
+        /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
         $stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $stubDataVersion->method('__toString')->willReturn('123');
+        $expectedPayload = json_encode(['file_path' => $imageFilePath, 'data_version' => (string) $stubDataVersion]);
+            
         $commands = $this->factory->createProductImageImportCommands($imageFilePath, $stubDataVersion);
+        
         $this->assertInternalType('array', $commands);
-        $this->assertContainsOnlyInstancesOf(Command::class, $commands);
-        $this->assertContainsInstanceOf(AddImageCommand::class, $commands);
+        array_map(function (array $commandData) use ($expectedPayload) {
+            if (! isset($commandData['name']) || 'add_image' !== $commandData['name']) {
+                $this->fail('"name" array record must contain the command name "add_image"');
+            }
+            
+            if (! isset($commandData['payload']) || $commandData['payload'] !== $expectedPayload) {
+                $this->fail('"payload" array record must contain payload "' . compact('expectedPayload') . '"');
+            }
+        }, $commands);
     }
 }

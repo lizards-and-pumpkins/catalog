@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
@@ -18,38 +19,38 @@ use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 interface DomainEventHandlerFactory
 {
     /**
-     * @param ProductWasUpdatedDomainEvent $event
-     * @return ProductWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createProductWasUpdatedDomainEventHandler(ProductWasUpdatedDomainEvent $event);
+    public function createProductWasUpdatedDomainEventHandler(Message $event);
 
     /**
-     * @param TemplateWasUpdatedDomainEvent $event
-     * @return TemplateWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createTemplateWasUpdatedDomainEventHandler(TemplateWasUpdatedDomainEvent $event);
+    public function createTemplateWasUpdatedDomainEventHandler(Message $event);
 
     /**
-     * @param ImageWasAddedDomainEvent $event
-     * @return ImageWasAddedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createImageWasAddedDomainEventHandler(ImageWasAddedDomainEvent $event);
+    public function createImageWasAddedDomainEventHandler(Message $event);
 
     /**
-     * @param ProductListingWasAddedDomainEvent $event
-     * @return ProductListingWasAddedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createProductListingWasAddedDomainEventHandler(ProductListingWasAddedDomainEvent $event);
+    public function createProductListingWasAddedDomainEventHandler(Message $event);
 
     /**
-     * @param ContentBlockWasUpdatedDomainEvent $event
-     * @return ContentBlockWasUpdatedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createContentBlockWasUpdatedDomainEventHandler(ContentBlockWasUpdatedDomainEvent $event);
+    public function createContentBlockWasUpdatedDomainEventHandler(Message $event);
 
     /**
-     * @param CatalogWasImportedDomainEvent $event
-     * @return CatalogWasImportedDomainEventHandler
+     * @param Message $event
+     * @return DomainEventHandler
      */
-    public function createCatalogWasImportedDomainEventHandler(CatalogWasImportedDomainEvent $event);
+    public function createCatalogWasImportedDomainEventHandler(Message $event);
 }

@@ -2,22 +2,25 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Import\ContentBlock\Exception\NoUpdateContentBlockCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  */
 class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UpdateContentBlockCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var Message|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockCommand;
 
     /**
-     * @var Queue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDomainEventQueue;
 
@@ -28,8 +31,9 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockCommand = $this->getMock(UpdateContentBlockCommand::class, [], [], '', false);
-        $this->mockDomainEventQueue = $this->getMock(Queue::class);
+        $this->mockCommand = $this->getMock(Message::class, [], [], '', false);
+        $this->mockCommand->method('getName')->willReturn('update_content_block_command');
+        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
         $this->commandHandler = new UpdateContentBlockCommandHandler($this->mockCommand, $this->mockDomainEventQueue);
     }
 
@@ -38,18 +42,31 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
+    public function testThrowsExceptionIfCommandNameDoesNotMatch()
+    {
+        $this->expectException(NoUpdateContentBlockCommandMessageException::class);
+        $this->expectExceptionMessage('Expected "update_content_block" command, got "foo_command"');
+
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $invalidCommand */
+        $invalidCommand = $this->getMock(Message::class, [], [], '', false);
+        $invalidCommand->method('getName')->willReturn('foo_command');
+        new UpdateContentBlockCommandHandler($invalidCommand, $this->mockDomainEventQueue);
+    }
+
     public function testContentBlockWasUpdatedDomainEventIsEmitted()
     {
+        /** @var ContentBlockId|\PHPUnit_Framework_MockObject_MockObject $stubContentBlockId */
         $stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
+        $stubContentBlockId->method('__toString')->willReturn('foo bar');
 
-        $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
-        $stubContentBlockSource->method('getContentBlockId')->willReturn($stubContentBlockId);
+        $testContentBlockSource = new ContentBlockSource($stubContentBlockId, '', [], []);
 
-        $this->mockCommand->method('getContentBlockSource')->willReturn($stubContentBlockSource);
+        $this->mockCommand->method('getPayload')->willReturn($testContentBlockSource->serialize());
 
+        $expectedPayload = ['id' => (string) $stubContentBlockId, 'source' => $testContentBlockSource->serialize()];
         $this->mockDomainEventQueue->expects($this->once())
-            ->method('add')
-            ->with($this->isInstanceOf(ContentBlockWasUpdatedDomainEvent::class));
+            ->method('addNotVersioned')
+            ->with('content_block_was_updated', json_encode($expectedPayload));
 
         $this->commandHandler->process();
     }

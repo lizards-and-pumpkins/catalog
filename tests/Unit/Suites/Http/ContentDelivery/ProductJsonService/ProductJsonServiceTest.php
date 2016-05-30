@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 

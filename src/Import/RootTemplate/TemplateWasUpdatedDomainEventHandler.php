@@ -3,13 +3,15 @@
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var TemplateWasUpdatedDomainEvent
+     * @var Message
      */
     private $domainEvent;
 
@@ -24,20 +26,24 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     private $projectorLocator;
 
     public function __construct(
-        TemplateWasUpdatedDomainEvent $domainEvent,
+        Message $domainEvent,
         ContextSource $contextSource,
         TemplateProjectorLocator $projectorLocator
     ) {
+        if ($domainEvent->getName() !== 'template_was_updated_domain_event') {
+            $message = sprintf('Expected "template_was_updated" domain event, got "%s"', $domainEvent->getName());
+            throw new NoTemplateWasUpdatedDomainEventMessageException($message);
+        }
+        $this->domainEvent = $domainEvent;
         $this->projectorLocator = $projectorLocator;
         $this->contextSource = $contextSource;
-        $this->domainEvent = $domainEvent;
     }
 
     public function process()
     {
-        $projectionSourceData = $this->domainEvent->getProjectionSourceData();
+        $payload = json_decode($this->domainEvent->getPayload(), true);
         
-        $projector = $this->projectorLocator->getTemplateProjectorForCode($this->domainEvent->getTemplateId());
-        $projector->project($projectionSourceData);
+        $projector = $this->projectorLocator->getTemplateProjectorForCode($payload['id']);
+        $projector->project($payload['template']);
     }
 }

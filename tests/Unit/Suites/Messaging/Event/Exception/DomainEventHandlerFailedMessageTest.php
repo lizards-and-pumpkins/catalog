@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Messaging\Event\Exception;
 
-use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage
@@ -26,9 +26,9 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubDomainEvent = $this->getMockBuilder(DomainEvent::class)
-            ->setMockClassName('DomainEvent')
-            ->getMock();
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent->method('getName')->willReturn('test_foo_domain_event');
 
         $this->testException = new \Exception($this->exceptionMessage);
 
@@ -38,7 +38,7 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     public function testLogMessageIsReturned()
     {
         $expectation = sprintf(
-            "Failure during processing DomainEvent domain event with following message:\n%s",
+            "Failure during processing domain event \"test_foo_domain_event\" with following message:\n%s",
             $this->exceptionMessage
         );
 
