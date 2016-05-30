@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 class ContentBlockId
@@ -19,13 +17,20 @@ class ContentBlockId
         $this->contentBlockIdString = $contentBlockIdString;
     }
 
-    public static function fromString(string $contentBlockIdString): ContentBlockId
+    /**
+     * @param string $contentBlockIdString
+     * @return ContentBlockId
+     */
+    public static function fromString($contentBlockIdString)
     {
         // todo: guard against empty content block id's
         return new self($contentBlockIdString);
     }
 
-    public function __toString(): string
+    /**
+     * @return string
+     */
+    public function __toString()
     {
         return $this->contentBlockIdString;
     }

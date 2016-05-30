@@ -6,11 +6,27 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 interface CommandHandlerFactory
 {
-    public function createUpdateContentBlockCommandHandler(Message $command): CommandHandler;
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createUpdateContentBlockCommandHandler(Message $command);
 
-    public function createUpdateProductCommandHandler(Message $command): CommandHandler;
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createUpdateProductCommandHandler(Message $command);
 
-    public function createAddProductListingCommandHandler(Message $command): CommandHandler;
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createAddProductListingCommandHandler(Message $command);
 
-    public function createAddImageCommandHandler(Message $command): CommandHandler;
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createAddImageCommandHandler(Message $command);
 }

@@ -13,12 +13,18 @@ class ClearableStubQueue implements Queue, Clearable
         // Intentionally left empty
     }
 
-    public function count(): int
+    /**
+     * @return int
+     */
+    public function count()
     {
         // Intentionally left empty
     }
 
-    public function isReadyForNext(): bool
+    /**
+     * @return bool
+     */
+    public function isReadyForNext()
     {
         // Intentionally left empty
     }
@@ -28,7 +34,10 @@ class ClearableStubQueue implements Queue, Clearable
         // Intentionally left empty
     }
 
-    public function next(): Message
+    /**
+     * @return Message
+     */
+    public function next()
     {
         // Intentionally left empty
     }

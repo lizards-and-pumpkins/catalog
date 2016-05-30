@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 class ContentBlockSource
@@ -26,9 +24,15 @@ class ContentBlockSource
      */
     private $keyGeneratorParams;
 
+    /**
+     * @param ContentBlockId $contentBlockId
+     * @param string $content
+     * @param string[] $contextData
+     * @param string[] $keyGeneratorParams
+     */
     public function __construct(
         ContentBlockId $contentBlockId,
-        string $content,
+        $content,
         array $contextData,
         array $keyGeneratorParams
     ) {
@@ -38,12 +42,18 @@ class ContentBlockSource
         $this->keyGeneratorParams = $keyGeneratorParams;
     }
 
-    public function getContentBlockId(): ContentBlockId
+    /**
+     * @return ContentBlockId
+     */
+    public function getContentBlockId()
     {
         return $this->contentBlockId;
     }
 
-    public function getContent(): string
+    /**
+     * @return string
+     */
+    public function getContent()
     {
         return $this->content;
     }
@@ -51,7 +61,7 @@ class ContentBlockSource
     /**
      * @return string[]
      */
-    public function getContextData(): array
+    public function getContextData()
     {
         return $this->contextData;
     }
@@ -59,12 +69,15 @@ class ContentBlockSource
     /**
      * @return mixed[]
      */
-    public function getKeyGeneratorParams(): array
+    public function getKeyGeneratorParams()
     {
         return $this->keyGeneratorParams;
     }
 
-    public function serialize(): string
+    /**
+     * @return string
+     */
+    public function serialize()
     {
         return json_encode([
             'id' => (string) $this->contentBlockId,
@@ -74,7 +87,11 @@ class ContentBlockSource
         ]);
     }
 
-    public static function rehydrate(string $json): self
+    /**
+     * @param string $json
+     * @return ContentBlockSource
+     */
+    public static function rehydrate($json)
     {
         $data = json_decode($json, true);
         return new self(

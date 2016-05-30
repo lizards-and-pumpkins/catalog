@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException;
@@ -26,9 +24,11 @@ class MessageMetadataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param mixed $invalidValue
+     * @param string $expectedType
      * @dataProvider invalidMetadataValueTypeProvider
      */
-    public function testThrowsExceptionIfValueIsNotStringOrBoolOrIntOrDouble($invalidValue, string $expectedType)
+    public function testThrowsExceptionIfValueIsNotStringOrBoolOrIntOrDouble($invalidValue, $expectedType)
     {
         $this->expectException(InvalidMessageMetadataException::class);
         $message = 'The message metadata values may only me strings, booleans, integers or doubles,' .
@@ -37,7 +37,10 @@ class MessageMetadataTest extends \PHPUnit_Framework_TestCase
         new MessageMetadata(['bar' => $invalidValue]);
     }
 
-    public function invalidMetadataValueTypeProvider(): array
+    /**
+     * @return array[]
+     */
+    public function invalidMetadataValueTypeProvider()
     {
         return [
             'object' => [$this, get_class($this)],

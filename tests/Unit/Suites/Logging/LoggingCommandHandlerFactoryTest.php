@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
@@ -30,9 +28,10 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     private $loggingCommandHandlerFactory;
 
     /**
+     * @param string $name
      * @return Message|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createStubCommand(string $name): Message
+    protected function createStubCommand($name)
     {
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(Message::class, [], [], '', false);

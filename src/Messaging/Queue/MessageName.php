@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidQueueMessageNameException;
@@ -13,12 +11,18 @@ class MessageName
      */
     private $name;
 
-    public function __construct(string $name)
+    /**
+     * @param string $name
+     */
+    public function __construct($name)
     {
         $this->initializeName(trim($name));
     }
 
-    private function initializeName(string $name)
+    /**
+     * @param string $name
+     */
+    private function initializeName($name)
     {
         if ('' === $name) {
             throw new InvalidQueueMessageNameException('The message name must not be empty');
@@ -26,7 +30,10 @@ class MessageName
         $this->name = $name;
     }
 
-    public function __toString(): string
+    /**
+     * @return string
+     */
+    public function __toString()
     {
         return $this->name;
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -78,87 +76,135 @@ class UnitTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getSearchableAttributeCodes(): array
+    public function getSearchableAttributeCodes()
     {
         return [];
     }
 
-    public function createProductListingFacetFiltersToIncludeInResult(): FacetFiltersToIncludeInResult
+    /**
+     * @return FacetFiltersToIncludeInResult
+     */
+    public function createProductListingFacetFiltersToIncludeInResult()
     {
         return new FacetFiltersToIncludeInResult();
     }
 
-    public function createKeyValueStore(): KeyValueStore
+    /**
+     * @return KeyValueStore
+     */
+    public function createKeyValueStore()
     {
         return $this->mockObjectGenerator->getMock(KeyValueStore::class);
     }
 
-    public function createEventQueue(): DomainEventQueue
+    /**
+     * @return DomainEventQueue
+     */
+    public function createEventQueue()
     {
         return $this->mockObjectGenerator->getMock(DomainEventQueue::class, [], [], '', false);
     }
 
-    public function createEventMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function createEventMessageQueue()
     {
         return $this->mockObjectGenerator->getMock(Queue::class);
     }
 
-    public function createCommandQueue(): CommandQueue
+    /**
+     * @return CommandQueue
+     */
+    public function createCommandQueue()
     {
         return $this->mockObjectGenerator->getMock(CommandQueue::class, [], [], '', false);
     }
 
-    public function createCommandMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function createCommandMessageQueue()
     {
         return $this->mockObjectGenerator->getMock(Queue::class);
     }
 
-    public function createLogger(): Logger
+    /**
+     * @return Logger
+     */
+    public function createLogger()
     {
         return $this->mockObjectGenerator->getMock(Logger::class);
     }
 
-    public function createSearchEngine(): SearchEngine
+    /**
+     * @return SearchEngine
+     */
+    public function createSearchEngine()
     {
         return $this->mockObjectGenerator->getMock(SearchEngine::class);
     }
 
-    public function createUrlKeyStore(): UrlKeyStore
+    /**
+     * @return UrlKeyStore
+     */
+    public function createUrlKeyStore()
     {
         return $this->mockObjectGenerator->getMock(UrlKeyStore::class);
     }
 
-    public function createImageProcessorCollection(): ImageProcessorCollection
+    /**
+     * @return ImageProcessorCollection
+     */
+    public function createImageProcessorCollection()
     {
         return $this->mockObjectGenerator->getMock(ImageProcessorCollection::class);
     }
 
-    public function createImageProcessor(): ImageProcessor
+    /**
+     * @return ImageProcessor
+     */
+    public function createImageProcessor()
     {
         return $this->mockObjectGenerator->getMock(ImageProcessor::class, [], [], '', false);
     }
 
-    public function createFileStorageReader(): FileStorageReader
+    /**
+     * @return FileStorageReader
+     */
+    public function createFileStorageReader()
     {
         return $this->mockObjectGenerator->getMock(FileStorageReader::class);
     }
 
-    public function createFileStorageWriter(): FileStorageWriter
+    /**
+     * @return FileStorageWriter
+     */
+    public function createFileStorageWriter()
     {
         return $this->mockObjectGenerator->getMock(FileStorageWriter::class);
     }
 
-    public function createBaseUrlBuilder(): BaseUrlBuilder
+    /**
+     * @return BaseUrlBuilder
+     */
+    public function createBaseUrlBuilder()
     {
         return $this->mockObjectGenerator->getMock(BaseUrlBuilder::class);
     }
 
-    public function createImageProcessingStrategySequence(): ImageProcessingStrategy
+    /**
+     * @return ImageProcessingStrategy
+     */
+    public function createImageProcessingStrategySequence()
     {
         return $this->mockObjectGenerator->getMock(ImageProcessingStrategy::class);
     }
 
-    public function getKeyValueStore(): KeyValueStore
+    /**
+     * @return KeyValueStore
+     */
+    public function getKeyValueStore()
     {
         if (null === $this->keyValueStore) {
             $this->keyValueStore = $this->createKeyValueStore();
@@ -166,7 +212,10 @@ class UnitTestFactory implements Factory
         return $this->keyValueStore;
     }
 
-    public function getEventQueue(): DomainEventQueue
+    /**
+     * @return DomainEventQueue
+     */
+    public function getEventQueue()
     {
         if (null === $this->eventQueue) {
             $this->eventQueue = $this->createEventQueue();
@@ -174,7 +223,10 @@ class UnitTestFactory implements Factory
         return $this->eventQueue;
     }
 
-    public function getCommandQueue(): CommandQueue
+    /**
+     * @return CommandQueue
+     */
+    public function getCommandQueue()
     {
         if (null === $this->commandQueue) {
             $this->commandQueue = $this->createCommandQueue();
@@ -182,7 +234,10 @@ class UnitTestFactory implements Factory
         return $this->commandQueue;
     }
 
-    public function getSearchEngine(): SearchEngine
+    /**
+     * @return SearchEngine
+     */
+    public function getSearchEngine()
     {
         if (null === $this->searchEngine) {
             $this->searchEngine = $this->createSearchEngine();
@@ -190,7 +245,10 @@ class UnitTestFactory implements Factory
         return $this->searchEngine;
     }
 
-    public function getUrlKeyStore(): UrlKeyStore
+    /**
+     * @return UrlKeyStore
+     */
+    public function getUrlKeyStore()
     {
         if (null === $this->urlKeyStore) {
             $this->urlKeyStore = $this->createUrlKeyStore();
@@ -201,7 +259,7 @@ class UnitTestFactory implements Factory
     /**
      * @return SortOrderConfig[]
      */
-    public function getProductListingSortOrderConfig(): array
+    public function getProductListingSortOrderConfig()
     {
         return [$this->mockObjectGenerator->getMock(SortOrderConfig::class, [], [], '', false)];
     }
@@ -209,62 +267,95 @@ class UnitTestFactory implements Factory
     /**
      * @return SortOrderConfig[]
      */
-    public function getProductSearchSortOrderConfig(): array
+    public function getProductSearchSortOrderConfig()
     {
         return [$this->mockObjectGenerator->getMock(SortOrderConfig::class, [], [], '', false)];
     }
 
-    public function getProductSearchAutosuggestionSortOrderConfig(): SortOrderConfig
+    /**
+     * @return SortOrderConfig
+     */
+    public function getProductSearchAutosuggestionSortOrderConfig()
     {
         return $this->mockObjectGenerator->getMock(SortOrderConfig::class, [], [], '', false);
     }
 
-    public function getFileStorageBasePathConfig(): string
+    /**
+     * @return string
+     */
+    public function getFileStorageBasePathConfig()
     {
         return '';
     }
 
-    public function createFacetFieldTransformationRegistry(): FacetFieldTransformationRegistry
+    /**
+     * @return FacetFieldTransformationRegistry
+     */
+    public function createFacetFieldTransformationRegistry()
     {
         return $this->mockObjectGenerator->getMock(FacetFieldTransformationRegistry::class);
     }
 
-    public function createUrlToWebsiteMap(): UrlToWebsiteMap
+    /**
+     * @return UrlToWebsiteMap
+     */
+    public function createUrlToWebsiteMap()
     {
         return $this->mockObjectGenerator->getMock(UrlToWebsiteMap::class);
     }
 
-    public function createWebsiteToCountryMap(): WebsiteToCountryMap
+    /**
+     * @return WebsiteToCountryMap
+     */
+    public function createWebsiteToCountryMap()
     {
         return $this->mockObjectGenerator->getMock(WebsiteToCountryMap::class);
     }
 
-    public function createTaxableCountries(): TaxableCountries
+    /**
+     * @return TaxableCountries
+     */
+    public function createTaxableCountries()
     {
         return $this->mockObjectGenerator->getMock(TaxableCountries::class);
     }
 
-    public function createProductViewLocator(): ProductViewLocator
+    /**
+     * @return ProductViewLocator
+     */
+    public function createProductViewLocator()
     {
         return $this->mockObjectGenerator->getMock(ProductViewLocator::class);
     }
 
-    public function createTaxServiceLocator(): TaxServiceLocator
+    /**
+     * @return TaxServiceLocator
+     */
+    public function createTaxServiceLocator()
     {
         return $this->mockObjectGenerator->getMock(TaxServiceLocator::class);
     }
 
-    public function createGlobalProductListingCriteria(): SearchCriteria
+    /**
+     * @return SearchCriteria
+     */
+    public function createGlobalProductListingCriteria()
     {
         return $this->mockObjectGenerator->getMock(SearchCriteria::class);
     }
 
-    public function createProductImageFileLocator(): ProductImageFileLocator
+    /**
+     * @return ProductImageFileLocator
+     */
+    public function createProductImageFileLocator()
     {
         return $this->mockObjectGenerator->getMock(ProductImageFileLocator::class);
     }
 
-    public function getProductsPerPageConfig(): ProductsPerPage
+    /**
+     * @return ProductsPerPage
+     */
+    public function getProductsPerPageConfig()
     {
         return $this->mockObjectGenerator->getMock(ProductsPerPage::class, [], [], '', false);
     }
@@ -272,7 +363,7 @@ class UnitTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getAdditionalAttributesForSearchIndex(): array
+    public function getAdditionalAttributesForSearchIndex()
     {
         return [];
     }
@@ -281,7 +372,7 @@ class UnitTestFactory implements Factory
      * @param Context $context
      * @return FacetFilterRequestField[]
      */
-    public function getProductListingFacetFilterRequestFields(Context $context): array
+    public function getProductListingFacetFilterRequestFields(Context $context)
     {
         return $this->getCommonFacetFilterRequestFields();
     }
@@ -290,7 +381,7 @@ class UnitTestFactory implements Factory
      * @param Context $context
      * @return FacetFilterRequestField[]
      */
-    public function getProductSearchFacetFilterRequestFields(Context $context): array
+    public function getProductSearchFacetFilterRequestFields(Context $context)
     {
         return $this->getCommonFacetFilterRequestFields();
     }
@@ -298,7 +389,7 @@ class UnitTestFactory implements Factory
     /**
      * @return string[]
      */
-    public function getFacetFilterRequestFieldCodesForSearchDocuments(): array
+    public function getFacetFilterRequestFieldCodesForSearchDocuments()
     {
         return [];
     }
@@ -306,22 +397,31 @@ class UnitTestFactory implements Factory
     /**
      * @return FacetFilterRequestField[]
      */
-    private function getCommonFacetFilterRequestFields(): array
+    private function getCommonFacetFilterRequestFields()
     {
         return [];
     }
 
-    public function createSearchFieldToRequestParamMap(): SearchFieldToRequestParamMap
+    /**
+     * @return SearchFieldToRequestParamMap
+     */
+    public function createSearchFieldToRequestParamMap()
     {
         return $this->mockObjectGenerator->getMock(SearchFieldToRequestParamMap::class, [], [], '', false);
     }
 
-    public function createThemeLocator(): ThemeLocator
+    /**
+     * @return ThemeLocator
+     */
+    public function createThemeLocator()
     {
         return $this->mockObjectGenerator->getMock(ThemeLocator::class, [], [], '', false);
     }
 
-    public function createContextSource(): ContextSource
+    /**
+     * @return ContextSource
+     */
+    public function createContextSource()
     {
         return $this->mockObjectGenerator->getMock(ContextSource::class, [], [], '', false);
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -22,37 +20,65 @@ class DomainEventQueue
         $this->messageQueue = $messageQueue;
     }
 
-    public function addVersioned(string $name, string $payload, DataVersion $dataVersion)
+    /**
+     * @param string $name
+     * @param string $payload
+     * @param DataVersion $dataVersion
+     */
+    public function addVersioned($name, $payload, DataVersion $dataVersion)
     {
         $message = $this->buildDomainEventMessage($name, $payload, $this->buildMetadataArray($dataVersion));
         $this->messageQueue->add($message);
     }
 
-    public function addNotVersioned(string $name, string $payload)
+    /**
+     * @param string $name
+     * @param string $payload
+     */
+    public function addNotVersioned($name, $payload)
     {
         $message = $this->buildDomainEventMessage($name, $payload);
         $this->messageQueue->add($message);
     }
 
-    private function buildDomainEventMessage(string $name, string $payload, array $metadata = [])
+    /**
+     * @param string $name
+     * @param string $payload
+     * @param string[] $metadata
+     * @return Message
+     */
+    private function buildDomainEventMessage($name, $payload, array $metadata = [])
     {
         $normalizedName = $this->normalizeDomainEventName($name);
         return Message::withCurrentTime($normalizedName, $payload, $metadata);
     }
 
-    private function buildMetadataArray(DataVersion $dataVersion): array
+    /**
+     * @param DataVersion $dataVersion
+     * @return string[]
+     */
+    private function buildMetadataArray(DataVersion $dataVersion)
     {
         return ['data_version' => (string)$dataVersion];
     }
 
-    private function normalizeDomainEventName($name): string
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function normalizeDomainEventName($name)
     {
         return $this->hasSuffix($name, self::$suffix) ?
             $name :
             $name . self::$suffix;
     }
 
-    private function hasSuffix(string $name, string $suffix): bool
+    /**
+     * @param string $name
+     * @param string $suffix
+     * @return bool
+     */
+    private function hasSuffix($name, $suffix)
     {
         return substr($name, strlen($suffix) * -1) === $suffix;
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
@@ -20,7 +18,11 @@ class CommandHandlerLocator
         $this->factory = $factory;
     }
 
-    public function getHandlerFor(Message $command): CommandHandler
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function getHandlerFor(Message $command)
     {
         $commandHandlerClass = $this->getUnqualifiedCommandClassName($command);
         $method = 'create' . $commandHandlerClass;
@@ -34,13 +36,21 @@ class CommandHandlerLocator
         return $this->factory->{$method}($command);
     }
 
-    private function getUnqualifiedCommandClassName(Message $event): string
+    /**
+     * @param Message $event
+     * @return string
+     */
+    private function getUnqualifiedCommandClassName(Message $event)
     {
         $camelCaseEventName = $this->snakeCaseToCamelCase($event->getName());
         return $camelCaseEventName . 'Handler';
     }
 
-    private function snakeCaseToCamelCase(string $name): string
+    /**
+     * @param string $name
+     * @return string
+     */
+    private function snakeCaseToCamelCase($name)
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
     }

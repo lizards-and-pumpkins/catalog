@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Import\Image\Exception\NoAddImageCommandMessageException;

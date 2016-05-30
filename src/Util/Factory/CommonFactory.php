@@ -188,7 +188,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     private $contextSource;
 
-    public function createProductWasUpdatedDomainEventHandler(Message $event): DomainEventHandler
+    /**
+     * @param Message $event
+     * @return DomainEventHandler
+     */
+    public function createProductWasUpdatedDomainEventHandler(Message $event)
     {
         return new ProductWasUpdatedDomainEventHandler(
             $event,
@@ -196,7 +200,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createTemplateWasUpdatedDomainEventHandler(Message $event): DomainEventHandler
+    /**
+     * @param Message $event
+     * @return DomainEventHandler
+     */
+    public function createTemplateWasUpdatedDomainEventHandler(Message $event)
     {
         return new TemplateWasUpdatedDomainEventHandler(
             $event,
@@ -223,7 +231,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $templateProjectorLocator;
     }
 
-    public function createProductListingWasAddedDomainEventHandler(Message $event): DomainEventHandler
+    /**
+     * @param Message $event
+     * @return DomainEventHandler
+     */
+    public function createProductListingWasAddedDomainEventHandler(Message $event)
     {
         return new ProductListingWasAddedDomainEventHandler(
             $event,
@@ -1062,7 +1074,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function getEventQueue(): DomainEventQueue
+    /**
+     * @return DomainEventQueue
+     */
+    public function getEventQueue()
     {
         if (null === $this->eventQueue) {
             $this->eventQueue = $this->callExternalCreateMethod('EventQueue');
@@ -1071,7 +1086,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->eventQueue;
     }
 
-    public function getEventMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function getEventMessageQueue()
     {
         if (null === $this->eventMessageQueue) {
             $this->eventMessageQueue = $this->callExternalCreateMethod('EventMessageQueue');
@@ -1167,7 +1185,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->searchEngine;
     }
 
-    public function createImageWasAddedDomainEventHandler(Message $event): DomainEventHandler
+    /**
+     * @param Message $event
+     * @return DomainEventHandler
+     */
+    public function createImageWasAddedDomainEventHandler(Message $event)
     {
         return new ImageWasAddedDomainEventHandler(
             $event,
@@ -1211,7 +1233,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->commandQueue;
     }
 
-    public function getCommandMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function getCommandMessageQueue()
     {
         if (null === $this->commandMessageQueue) {
             $this->commandMessageQueue = $this->callExternalCreateMethod('CommandMessageQueue');
@@ -1227,7 +1252,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new CommandHandlerLocator($this->getMasterFactory());
     }
 
-    public function createUpdateContentBlockCommandHandler(Message $command): CommandHandler
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createUpdateContentBlockCommandHandler(Message $command)
     {
         return new UpdateContentBlockCommandHandler(
             $command,
@@ -1235,7 +1264,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createContentBlockWasUpdatedDomainEventHandler(Message $event): DomainEventHandler
+    /**
+     * @param Message $event
+     * @return DomainEventHandler
+     */
+    public function createContentBlockWasUpdatedDomainEventHandler(Message $event)
     {
         return new ContentBlockWasUpdatedDomainEventHandler(
             $event,
@@ -1283,7 +1316,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createUpdateProductCommandHandler(Message $command): CommandHandler
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createUpdateProductCommandHandler(Message $command)
     {
         return new UpdateProductCommandHandler(
             $command,
@@ -1291,7 +1328,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createAddProductListingCommandHandler(Message $command): CommandHandler
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createAddProductListingCommandHandler(Message $command)
     {
         return new AddProductListingCommandHandler(
             $command,
@@ -1299,7 +1340,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createAddImageCommandHandler(Message $command): CommandHandler
+    /**
+     * @param Message $command
+     * @return CommandHandler
+     */
+    public function createAddImageCommandHandler(Message $command)
     {
         return new AddImageCommandHandler(
             $command,
@@ -1498,7 +1543,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return EnvironmentConfigReader::fromGlobalState();
     }
 
-    public function createCatalogWasImportedDomainEventHandler(Message $event): DomainEventHandler
+    /**
+     * @param Message $event
+     * @return DomainEventHandler
+     */
+    public function createCatalogWasImportedDomainEventHandler(Message $event)
     {
         return new CatalogWasImportedDomainEventHandler($event);
     }

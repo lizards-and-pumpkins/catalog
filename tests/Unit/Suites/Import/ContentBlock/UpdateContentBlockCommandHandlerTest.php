@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Import\ContentBlock\Exception\NoUpdateContentBlockCommandMessageException;
@@ -49,6 +47,7 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoUpdateContentBlockCommandMessageException::class);
         $this->expectExceptionMessage('Expected "update_content_block" command, got "foo_command"');
 
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $invalidCommand */
         $invalidCommand = $this->getMock(Message::class, [], [], '', false);
         $invalidCommand->method('getName')->willReturn('foo_command');
         new UpdateContentBlockCommandHandler($invalidCommand, $this->mockDomainEventQueue);
@@ -56,6 +55,7 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testContentBlockWasUpdatedDomainEventIsEmitted()
     {
+        /** @var ContentBlockId|\PHPUnit_Framework_MockObject_MockObject $stubContentBlockId */
         $stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
         $stubContentBlockId->method('__toString')->willReturn('foo bar');
 

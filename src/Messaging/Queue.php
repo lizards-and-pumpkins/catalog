@@ -6,9 +6,15 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 interface Queue extends \Countable
 {
-    public function count(): int;
+    /**
+     * @return int
+     */
+    public function count();
 
-    public function isReadyForNext(): bool;
+    /**
+     * @return bool
+     */
+    public function isReadyForNext();
 
     /**
      * @param Message $message
@@ -16,5 +22,8 @@ interface Queue extends \Countable
      */
     public function add(Message $message);
 
-    public function next(): Message;
+    /**
+     * @return Message
+     */
+    public function next();
 }

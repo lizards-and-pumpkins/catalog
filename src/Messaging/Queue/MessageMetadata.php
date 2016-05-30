@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException;
@@ -13,12 +11,18 @@ class MessageMetadata
      */
     private $metadata;
 
+    /**
+     * @param string[] $metadata
+     */
     public function __construct(array $metadata)
     {
         $this->validateMetadataKeys($metadata);
         $this->metadata = $metadata;
     }
 
+    /**
+     * @param string[] $metadata
+     */
     private function validateMetadataKeys(array $metadata)
     {
         foreach ($metadata as $key => $value) {
@@ -27,11 +31,17 @@ class MessageMetadata
         }
     }
 
-    public function getMetadata(): array
+    /**
+     * @return string[]
+     */
+    public function getMetadata()
     {
         return $this->metadata;
     }
 
+    /**
+     * @param string|int $key
+     */
     private function validateKey($key)
     {
         if (!is_string($key)) {
@@ -42,6 +52,9 @@ class MessageMetadata
         }
     }
 
+    /**
+     * @param string|int|bool|double $value
+     */
     private function validateValue($value)
     {
         if (! is_string($value) && ! is_int($value) && ! is_bool($value) && ! is_double($value)) {
@@ -51,8 +64,12 @@ class MessageMetadata
             ));
         }
     }
-    
-    private function getType($var): string
+
+    /**
+     * @param mixed $var
+     * @return string
+     */
+    private function getType($var)
     {
         return is_object($var) ?
             get_class($var) :

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Queue;
@@ -26,12 +24,18 @@ class LoggingQueueDecorator implements Queue, Clearable
         $this->logger = $logger;
     }
 
-    public function count(): int
+    /**
+     * @return int
+     */
+    public function count()
     {
         return $this->component->count();
     }
 
-    public function isReadyForNext(): bool
+    /**
+     * @return bool
+     */
+    public function isReadyForNext()
     {
         return $this->component->isReadyForNext();
     }
@@ -42,7 +46,10 @@ class LoggingQueueDecorator implements Queue, Clearable
         $this->component->add($message);
     }
 
-    public function next(): Message
+    /**
+     * @return Message
+     */
+    public function next()
     {
         return $this->component->next();
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Queue;
@@ -30,14 +28,20 @@ class CommandQueueTest extends \PHPUnit_Framework_TestCase
      */
     private $addToQueueSpy;
 
-    private function getMessagesAddedToQueue(): array
+    /**
+     * @return Message[]
+     */
+    private function getMessagesAddedToQueue()
     {
         return array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
             return $invocation->parameters[0];
         }, $this->addToQueueSpy->getInvocations());
     }
 
-    private function getAddedMessage(): Message
+    /**
+     * @return Message
+     */
+    private function getAddedMessage()
     {
         $messages = $this->getMessagesAddedToQueue();
         if (count($messages) === 0) {
@@ -46,7 +50,10 @@ class CommandQueueTest extends \PHPUnit_Framework_TestCase
         return $messages[0];
     }
 
-    private function assertAddedMessageCount(int $expected)
+    /**
+     * @param int $expected
+     */
+    private function assertAddedMessageCount($expected)
     {
         $queueMessages = $this->getMessagesAddedToQueue();
         $message = sprintf('Expected queue message count to be %d, got %d', $expected, count($queueMessages));

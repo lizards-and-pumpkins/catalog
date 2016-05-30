@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 class Message
@@ -34,7 +32,13 @@ class Message
      */
     private $metadata;
 
-    private function __construct(string $name, string $payload, array $metadata, \DateTimeInterface $now)
+    /**
+     * @param string $name
+     * @param string $payload
+     * @param string[] $metadata
+     * @param \DateTimeInterface $now
+     */
+    private function __construct($name, $payload, array $metadata, \DateTimeInterface $now)
     {
         $this->timestamp = $now->getTimestamp();
         $this->name = (string) new MessageName($name);
@@ -42,17 +46,33 @@ class Message
         $this->metadata = (new MessageMetadata($metadata))->getMetadata();
     }
 
-    public static function withCurrentTime(string $name, string $payload, array $metadata): Message
+    /**
+     * @param string $name
+     * @param string $payload
+     * @param string[] $metadata
+     * @return Message
+     */
+    public static function withCurrentTime($name, $payload, array $metadata)
     {
         return new self($name, $payload, $metadata, new \DateTimeImmutable());
     }
 
-    public static function withGivenTime(string $name, string $payload, array $metadata, \DateTimeInterface $dateTime)
+    /**
+     * @param string $name
+     * @param string $payload
+     * @param string[] $metadata
+     * @param \DateTimeInterface $dateTime
+     * @return Message
+     */
+    public static function withGivenTime($name, $payload, array $metadata, \DateTimeInterface $dateTime)
     {
         return new self($name, $payload, $metadata, $dateTime);
     }
 
-    public function serialize(): string
+    /**
+     * @return string
+     */
+    public function serialize()
     {
         return json_encode([
             self::$nameField => $this->getName(),
@@ -62,7 +82,11 @@ class Message
         ]);
     }
 
-    public static function rehydrate(string $json): Message
+    /**
+     * @param string $json
+     * @return Message
+     */
+    public static function rehydrate($json)
     {
         $data = json_decode($json, true);
         return new Message(
@@ -73,22 +97,34 @@ class Message
         );
     }
 
-    public function getTimestamp(): int
+    /**
+     * @return int
+     */
+    public function getTimestamp()
     {
         return $this->timestamp;
     }
 
-    public function getName(): string
+    /**
+     * @return string
+     */
+    public function getName()
     {
         return $this->name;
     }
 
-    public function getPayload(): string
+    /**
+     * @return string
+     */
+    public function getPayload()
     {
         return $this->payload;
     }
 
-    public function getMetadata(): array
+    /**
+     * @return string[]
+     */
+    public function getMetadata()
     {
         return $this->metadata;
     }

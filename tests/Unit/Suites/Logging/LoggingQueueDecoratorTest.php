@@ -28,7 +28,10 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
      */
     private $mockLogger;
 
-    private function createMockMessage(): Message
+    /**
+     * @return Message
+     */
+    private function createMockMessage()
     {
         return $this->getMock(Message::class, [], [], '', false);
     }

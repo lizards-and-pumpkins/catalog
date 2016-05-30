@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
@@ -189,7 +187,10 @@ class IntegrationTestFactory implements Factory
         $this->commandMessageQueue = $commandQueue;
     }
 
-    public function getCommandQueue(): CommandQueue
+    /**
+     * @return CommandQueue
+     */
+    public function getCommandQueue()
     {
         if (null === $this->commandQueue) {
             $this->commandQueue = $this->createCommandQueue();
@@ -197,12 +198,18 @@ class IntegrationTestFactory implements Factory
         return $this->commandQueue;
     }
 
-    public function createCommandQueue(): CommandQueue
+    /**
+     * @return CommandQueue
+     */
+    public function createCommandQueue()
     {
         return new CommandQueue($this->getCommandMessageQueue());
     }
 
-    public function getCommandMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function getCommandMessageQueue()
     {
         if (null === $this->commandMessageQueue) {
             $this->commandMessageQueue = $this->createCommandMessageQueue();
@@ -210,7 +217,10 @@ class IntegrationTestFactory implements Factory
         return $this->commandMessageQueue;
     }
 
-    public function createCommandMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function createCommandMessageQueue()
     {
         return new InMemoryQueue();
     }
@@ -220,7 +230,10 @@ class IntegrationTestFactory implements Factory
         $this->eventMessageQueue = $eventQueue;
     }
 
-    public function getEventQueue(): DomainEventQueue
+    /**
+     * @return DomainEventQueue
+     */
+    public function getEventQueue()
     {
         if (null === $this->eventQueue) {
             $this->eventQueue = $this->createEventQueue();
@@ -228,12 +241,18 @@ class IntegrationTestFactory implements Factory
         return $this->eventQueue;
     }
 
-    public function createEventQueue(): DomainEventQueue
+    /**
+     * @return DomainEventQueue
+     */
+    public function createEventQueue()
     {
         return new DomainEventQueue($this->getEventMessageQueue());
     }
 
-    public function getEventMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function getEventMessageQueue()
     {
         if (null === $this->eventMessageQueue) {
             $this->eventMessageQueue = $this->createEventMessageQueue();
@@ -241,7 +260,10 @@ class IntegrationTestFactory implements Factory
         return $this->eventMessageQueue;
     }
 
-    public function createEventMessageQueue(): Queue
+    /**
+     * @return Queue
+     */
+    public function createEventMessageQueue()
     {
         return new InMemoryQueue();
     }

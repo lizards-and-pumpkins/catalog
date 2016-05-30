@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -94,16 +92,18 @@ class ProductListing
 
     /**
      * @todo: use json_encode for serialization
+     * @return string
      */
-    public function serialize(): string
+    public function serialize()
     {
         return serialize($this);
     }
 
     /**
      * @todo: use json_decode for unserialization
+     * @return self
      */
-    public static function rehydrate($serialized): self
+    public static function rehydrate($serialized)
     {
         return unserialize($serialized);
     }

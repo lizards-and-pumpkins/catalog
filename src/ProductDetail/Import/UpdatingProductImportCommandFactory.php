@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
@@ -11,7 +9,11 @@ class UpdatingProductImportCommandFactory implements ProductImportCommandFactory
 {
     use FactoryTrait;
 
-    public function createProductImportCommands(Product $product): array
+    /**
+     * @param Product $product
+     * @return array[]
+     */
+    public function createProductImportCommands(Product $product)
     {
         $payload = json_encode(['id' => (string) $product->getId(), 'product' => $product]);
         return [['name' => 'update_product', 'payload' => $payload]];

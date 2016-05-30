@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue;
@@ -14,12 +12,18 @@ class InMemoryQueue implements Queue, Clearable
      */
     private $queue = [];
 
-    public function count(): int
+    /**
+     * @return int
+     */
+    public function count()
     {
         return count($this->queue);
     }
 
-    public function isReadyForNext(): bool
+    /**
+     * @return bool
+     */
+    public function isReadyForNext()
     {
         return $this->count() > 0;
     }
@@ -29,7 +33,10 @@ class InMemoryQueue implements Queue, Clearable
         $this->queue[] = $message->serialize();
     }
 
-    public function next(): Message
+    /**
+     * @return Message
+     */
+    public function next()
     {
         if ([] === $this->queue) {
             throw new \UnderflowException('Trying to get next message of an empty queue');
