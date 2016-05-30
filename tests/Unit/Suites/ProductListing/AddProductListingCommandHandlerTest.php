@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ProductListing;
 
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
@@ -32,7 +32,7 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
          * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing
          */
         $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
-        $stubProductListing->method('getContextData')->willReturn([ContextVersion::CODE => '123']);
+        $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => '123']);
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(Message::class, [], [], '', false);

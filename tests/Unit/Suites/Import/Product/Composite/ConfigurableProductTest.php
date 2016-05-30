@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
@@ -140,7 +140,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
                 'tax_class' => 'test tax class',
                 'attributes' => [],
                 'images' => [],
-                'context' => [ContextVersion::CODE => '123']
+                'context' => [DataVersion::CONTEXT_CODE => '123']
             ],
             ConfigurableProduct::VARIATION_ATTRIBUTES => ['foo'],
             ConfigurableProduct::ASSOCIATED_PRODUCTS => [

@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -77,7 +76,7 @@ class ProductListingBuilder
                 $carry[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
             }
             return $carry;
-        }, [ContextVersion::CODE => (string) $dataVersion]);
+        }, [DataVersion::CONTEXT_CODE => (string) $dataVersion]);
     }
 
     /**

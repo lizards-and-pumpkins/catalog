@@ -2,13 +2,10 @@
 
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
 use LizardsAndPumpkins\Context\Website\Exception\NoConfiguredBaseUrlException;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
 
 /**
  * @covers \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
@@ -51,7 +48,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     private function createStubContext()
     {
         $stubContext = $this->getMock(Context::class);
-        $stubContext->method('getValue')->with(ContextWebsite::CODE)->willReturn('test_website');
+        $stubContext->method('getValue')->with(Website::CONTEXT_CODE)->willReturn('test_website');
         return $stubContext;
     }
 

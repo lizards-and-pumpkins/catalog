@@ -37,7 +37,7 @@ class AddProductListingCommandHandler implements CommandHandler
         $commandPayload = json_decode($this->command->getPayload(), true);
         $productListing = ProductListing::rehydrate($commandPayload['listing']);
         $eventPayload = json_encode(['listing' => $productListing->serialize()]);
-        $version = DataVersion::fromVersionString($productListing->getContextData()[ContextVersion::CODE]);
+        $version = DataVersion::fromVersionString($productListing->getContextData()[DataVersion::CONTEXT_CODE]);
         $this->eventQueue->addVersioned('product_listing_was_added', $eventPayload, $version);
     }
 }

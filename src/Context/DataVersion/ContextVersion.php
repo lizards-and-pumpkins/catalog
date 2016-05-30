@@ -6,8 +6,6 @@ use LizardsAndPumpkins\Context\ContextPartBuilder;
 
 class ContextVersion implements ContextPartBuilder
 {
-    const CODE = 'version';
-    
     /**
      * @var DataVersion
      */
@@ -24,8 +22,8 @@ class ContextVersion implements ContextPartBuilder
      */
     public function getValue(array $inputDataSet)
     {
-        return isset($inputDataSet[self::CODE]) ?
-            (string) $inputDataSet[self::CODE] :
+        return isset($inputDataSet[DataVersion::CONTEXT_CODE]) ?
+            (string) $inputDataSet[DataVersion::CONTEXT_CODE] :
             (string) $this->dataVersion;
     }
 
@@ -34,6 +32,6 @@ class ContextVersion implements ContextPartBuilder
      */
     public function getCode()
     {
-        return self::CODE;
+        return DataVersion::CONTEXT_CODE;
     }
 }

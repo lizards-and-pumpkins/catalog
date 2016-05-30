@@ -38,15 +38,9 @@ class HttpUrl
             throw new \InvalidArgumentException($e->getMessage());
         }
 
-        return self::createHttpUrlBasedOnSchema($url);
-    }
+        self::validateProtocol($url);
 
-    /**
-     * @return bool
-     */
-    public function isProtocolEncrypted()
-    {
-        return false;
+        return new self($url);
     }
 
     /**
@@ -84,22 +78,6 @@ class HttpUrl
         $path->remove($pathToRemove);
         
         return ltrim($path->getUriComponent(), '/');
-    }
-
-    /**
-     * @param \League\Url\AbstractUrl $url
-     * @return HttpUrl
-     */
-    private static function createHttpUrlBasedOnSchema(AbstractUrl $url)
-    {
-        switch ($url->getScheme()) {
-            case 'https':
-                return new HttpsUrl($url);
-            case 'http':
-                return new HttpUrl($url);
-            default:
-                throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $url->getScheme()));
-        }
     }
 
     /**
@@ -141,5 +119,12 @@ class HttpUrl
     public function getHost()
     {
         return (string) $this->url->getHost();
+    }
+
+    private static function validateProtocol(AbstractUrl $url)
+    {
+        if (! in_array($url->getScheme(), ['http', 'https', ''])) {
+            throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $url->getScheme()));
+        }
     }
 }

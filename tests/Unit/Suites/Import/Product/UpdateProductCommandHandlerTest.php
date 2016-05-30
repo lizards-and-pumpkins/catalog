@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
@@ -47,7 +47,7 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
     private function createStubContext()
     {
         $stubContext = $this->getMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([ContextVersion::CODE => '123']);
+        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         return $stubContext;
     }
 

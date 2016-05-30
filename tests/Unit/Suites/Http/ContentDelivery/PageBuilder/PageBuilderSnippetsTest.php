@@ -2,8 +2,6 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Import\Exception\InvalidSnippetContentException;
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;

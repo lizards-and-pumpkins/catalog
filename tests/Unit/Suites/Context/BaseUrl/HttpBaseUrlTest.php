@@ -2,9 +2,7 @@
 
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
-use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 
 /**
  * @covers \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
@@ -28,7 +26,7 @@ class HttpBaseUrlTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfTheInputStringDoesNotContainTheProtocol()
     {
         $this->expectException(InvalidBaseUrlSourceDataException::class);
-        $this->expectExceptionMessage('The base URL input string does not contain the protocol');
+        $this->expectExceptionMessage('The base URL input string contains an invalid protocol');
         HttpBaseUrl::fromString('example.com/');
     }
 

@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServic
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpsUrl;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
@@ -73,9 +73,6 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\Website\ContextWebsite
- * @uses   \LizardsAndPumpkins\Context\Locale\ContextLocale
- * @uses   \LizardsAndPumpkins\Context\Country\ContextCountry
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
@@ -126,7 +123,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
-            HttpsUrl::fromString('http://example.com/'),
+            HttpUrl::fromString('http://example.com/'),
             HttpHeaders::fromArray([]),
             HttpRequestBody::fromString('')
         );

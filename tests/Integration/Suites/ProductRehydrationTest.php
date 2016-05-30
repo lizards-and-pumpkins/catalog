@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
@@ -116,8 +116,9 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         $image = new ProductImage(new ProductAttributeList($imageFileAttribute, $imageLabelAttribute));
         $imageList = new ProductImageList($image);
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([ContextVersion::CODE => '123']);
+        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
 
         return new SimpleProduct($productId, $productTaxClass, $testProductAttributes, $imageList, $stubContext);
     }

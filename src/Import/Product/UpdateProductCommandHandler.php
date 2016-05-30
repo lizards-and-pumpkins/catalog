@@ -40,7 +40,7 @@ class UpdateProductCommandHandler implements CommandHandler
         $product = $payload['product'][Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
             ConfigurableProduct::fromArray($payload['product']) :
             SimpleProduct::fromArray($payload['product']);
-        $version = DataVersion::fromVersionString($product->getContext()->getValue(ContextVersion::CODE));
+        $version = DataVersion::fromVersionString($product->getContext()->getValue(DataVersion::CONTEXT_CODE));
         $payload = json_encode(['id' => $product->getId(), 'product' => $product]);
         $this->domainEventQueue->addVersioned('product_was_updated', $payload, $version);
     }

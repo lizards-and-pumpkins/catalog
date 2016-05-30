@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Context;
 
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\Stub\StubContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 
@@ -97,8 +96,8 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
         $this->stubContextBuilder->expects($this->once())->method('createContextsFromDataSets')
             ->willReturnCallback(function (array $dataSets) use ($testVersion) {
                 array_map(function ($dataSet) use ($testVersion) {
-                    $this->assertArrayHasKey(ContextVersion::CODE, $dataSet);
-                    $this->assertSame($dataSet[ContextVersion::CODE], (string)$testVersion);
+                    $this->assertArrayHasKey(DataVersion::CONTEXT_CODE, $dataSet);
+                    $this->assertSame($dataSet[DataVersion::CONTEXT_CODE], (string)$testVersion);
                 }, $dataSets);
             });
         $this->contextSource->getAllAvailableContextsWithVersion($testVersion);

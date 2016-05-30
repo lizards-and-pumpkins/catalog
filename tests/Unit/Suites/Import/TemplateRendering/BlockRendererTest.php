@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockRendererMustHaveOneRootBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\MethodNotYetAvailableException;
@@ -219,7 +219,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
     {
         $testWebsiteCode = 'foo';
         $stubContext = $this->getStubContext();
-        $stubContext->method('getValue')->with(ContextWebsite::CODE)->willReturn($testWebsiteCode);
+        $stubContext->method('getValue')->with(Website::CONTEXT_CODE)->willReturn($testWebsiteCode);
 
         $dataObject = [];
         $testDir = $this->getUniqueTempDir();

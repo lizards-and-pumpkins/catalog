@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -144,7 +144,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     {
         $translator = $this->translatorRegistry->getTranslator(
             ProductDetailViewSnippetRenderer::CODE,
-            $context->getValue(ContextLocale::CODE)
+            $context->getValue(Locale::CONTEXT_CODE)
         );
         $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
     }

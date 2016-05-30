@@ -3,9 +3,9 @@
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
 use LizardsAndPumpkins\Context\Website\Exception\NoConfiguredBaseUrlException;
+use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Website\ContextWebsite;
 
 class WebsiteBaseUrlBuilder implements BaseUrlBuilder
 {
@@ -49,7 +49,7 @@ class WebsiteBaseUrlBuilder implements BaseUrlBuilder
      */
     private function getWebsiteCode(Context $context)
     {
-        return $context->getValue(ContextWebsite::CODE);
+        return $context->getValue(Website::CONTEXT_CODE);
     }
 
     /**

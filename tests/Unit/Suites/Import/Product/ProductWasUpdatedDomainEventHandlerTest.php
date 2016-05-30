@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\Exception\NoProductWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
@@ -37,7 +37,7 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->getMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([ContextVersion::CODE => '123']);
+        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
 
         $product = new SimpleProduct(
             ProductId::fromString('foo'),

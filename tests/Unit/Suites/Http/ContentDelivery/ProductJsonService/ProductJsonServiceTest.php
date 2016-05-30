@@ -3,9 +3,8 @@
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Locale\ContextLocale;
+use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
@@ -76,7 +75,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
 
-        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')->willReturn($jsonSnippetKey);
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
@@ -101,7 +100,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
 
-        $this->stubContext->method('getValue')->willReturnMap([[ContextLocale::CODE, 'de_DE']]);
+        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')->willReturn($jsonSnippetKey);
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);

@@ -7,16 +7,11 @@ use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator
- * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
 class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
