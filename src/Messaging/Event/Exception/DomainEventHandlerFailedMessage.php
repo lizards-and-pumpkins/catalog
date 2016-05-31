@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Messaging\Event\Exception;
 
 use LizardsAndPumpkins\Logging\LogMessage;
-use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class DomainEventHandlerFailedMessage implements LogMessage

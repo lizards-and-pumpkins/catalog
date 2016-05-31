@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
