@@ -26,7 +26,7 @@ class Locale
     {
         if (!is_string($localeCode)) {
             throw new InvalidLocaleSpecificationException(
-                sprintf('The country specification has to be a string, got "%s".', gettype($localeCode))
+                sprintf('The locale specification has to be a string, got "%s".', gettype($localeCode))
             );
         }
         
