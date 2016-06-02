@@ -13,6 +13,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @covers \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
+ * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
  */
 class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +38,7 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(Message::class, [], [], '', false);
         $stubCommand->method('getPayload')->willReturn(json_encode(['listing' => serialize($stubProductListing)]));
-        $stubCommand->method('getName')->willReturn('add_product_listing_command');
+        $stubCommand->method('getName')->willReturn('add_product_listing');
 
         $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
 
@@ -47,18 +48,6 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
     public function testCommandHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
-    }
-
-    public function testThrowsExceptionIfCommandMessageNameDoesNotMatch()
-    {
-        $this->expectException(NoAddProductListingCommandMessageException::class);
-        $this->expectExceptionMessage('Expected "add_product_listing" command, got "foo_command"');
-
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $invalidCommand */
-        $invalidCommand = $this->getMock(Message::class, [], [], '', false);
-        $invalidCommand->method('getName')->willReturn('foo_command');
-
-        new AddProductListingCommandHandler($invalidCommand, $this->mockDomainEventQueue);
     }
 
     public function testProductListingWasAddedDomainEventIsEmitted()

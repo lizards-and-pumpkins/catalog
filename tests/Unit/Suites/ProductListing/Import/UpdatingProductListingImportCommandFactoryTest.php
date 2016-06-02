@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
@@ -25,22 +27,11 @@ class UpdatingProductListingImportCommandFactoryTest extends \PHPUnit_Framework_
 
     public function testItReturnsAnAddProductListingCommand()
     {
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
         $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
         $commands = $this->factory->createProductListingImportCommands($stubProductListing);
         $this->assertInternalType('array', $commands);
-        
-        $expectedPayload = [];
-        array_map(function (array $commandData) use ($expectedPayload) {
-            if (! isset($commandData['name']) || 'add_product_listing' !== $commandData['name']) {
-                $this->fail(
-                    '"name" array record must contain the command name "add_product_listing", got ' .
-                    $commandData['name']
-                );
-            }
-
-            if (! isset($commandData['payload'])) {
-                $this->fail('"payload" array record not found');
-            }
-        }, $commands);
+        $this->assertNotEmpty($commands);
+        $this->assertContainsOnlyInstancesOf(AddProductListingCommand::class, $commands);
     }
 }

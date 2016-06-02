@@ -42,7 +42,7 @@ class CommandHandlerLocator
      */
     private function getUnqualifiedCommandClassName(Message $event)
     {
-        $camelCaseEventName = $this->snakeCaseToCamelCase($event->getName());
+        $camelCaseEventName = $this->snakeCaseToCamelCase($event->getName() . '_command');
         return $camelCaseEventName . 'Handler';
     }
 

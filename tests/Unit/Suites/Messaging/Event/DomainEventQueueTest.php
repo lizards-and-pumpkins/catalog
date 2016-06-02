@@ -82,27 +82,7 @@ class DomainEventQueueTest extends \PHPUnit_Framework_TestCase
         $this->eventQueue->addVersioned('foo', 'bar', $this->mockDataVersion);
         $this->assertAddedMessageCount(1);
     }
-
-    public function testAddsDomainEventNameSuffixIfNotPresent()
-    {
-        $name = 'foo';
-        $payload = 'bar';
-
-        $this->eventQueue->addVersioned($name, $payload, $this->mockDataVersion);
-        $message = $this->getAddedMessage();
-        $this->assertSame($name . '_domain_event', $message->getName());
-    }
-
-    public function testDoesNotAtDomainEventNameSuffixIfPresent()
-    {
-        $name = 'foo_domain_event';
-        $payload = 'bar';
-
-        $this->eventQueue->addVersioned($name, $payload, $this->mockDataVersion);
-        $message = $this->getAddedMessage();
-        $this->assertSame($name, $message->getName());
-    }
-
+    
     public function testCreatesVersionedQueueMessage()
     {
         $name = 'foo';

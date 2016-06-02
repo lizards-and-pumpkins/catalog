@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockBodyIsMissingInRequestBodyException;
@@ -105,7 +106,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $this->mockCommandQueue->expects($this->once())
             ->method('add')
-            ->with('update_content_block', $this->anything());
+            ->with($this->isInstanceOf(UpdateContentBlockCommand::class));
 
         $response = $this->requestHandler->process($this->mockRequest);
 

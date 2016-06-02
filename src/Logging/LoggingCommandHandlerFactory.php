@@ -31,50 +31,50 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createUpdateContentBlockCommandHandler(Message $command)
+    public function createUpdateContentBlockCommandHandler(Message $message)
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateContentBlockCommandHandler($command)
+            $commandFactoryDelegate->createUpdateContentBlockCommandHandler($message)
         );
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createUpdateProductCommandHandler(Message $command)
+    public function createUpdateProductCommandHandler(Message $message)
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateProductCommandHandler($command)
+            $commandFactoryDelegate->createUpdateProductCommandHandler($message)
         );
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createAddProductListingCommandHandler(Message $command)
+    public function createAddProductListingCommandHandler(Message $message)
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createAddProductListingCommandHandler($command)
+            $commandFactoryDelegate->createAddProductListingCommandHandler($message)
         );
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createAddImageCommandHandler(Message $command)
+    public function createAddImageCommandHandler(Message $message)
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createAddImageCommandHandler($command)
+            $commandFactoryDelegate->createAddImageCommandHandler($message)
         );
     }
 }

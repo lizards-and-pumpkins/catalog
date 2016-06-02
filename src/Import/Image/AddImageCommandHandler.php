@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class AddImageCommandHandler implements CommandHandler
 {
     /**
-     * @var Message
+     * @var AddImageCommand
      */
     private $command;
 
@@ -21,21 +21,15 @@ class AddImageCommandHandler implements CommandHandler
      */
     private $domainEventQueue;
 
-    public function __construct(Message $command, DomainEventQueue $domainEventQueue)
+    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
     {
-        if ('add_image_command' !== $command->getName()) {
-            $message = sprintf('Expected "add_image" command, got "%s"', $command->getName());
-            throw new NoAddImageCommandMessageException($message);
-        }
-        $this->command = $command;
+        $this->command = AddImageCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
     }
 
     public function process()
     {
-        $commandPayload = json_decode($this->command->getPayload(), true);
-        $eventPayload = json_encode(['file_path' => $commandPayload['file_path']]);
-        $dataVersion = DataVersion::fromVersionString($commandPayload['data_version']);
-        $this->domainEventQueue->addVersioned('image_was_added', $eventPayload, $dataVersion);
+        $eventPayload = json_encode(['file_path' => $this->command->getImageFilePath()]);
+        $this->domainEventQueue->addVersioned('image_was_added', $eventPayload, $this->command->getDataVersion());
     }
 }

@@ -2,27 +2,65 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UpdateProductCommand
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  */
 class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product
      */
-    private $stubProduct;
+    private $testProduct;
 
     /**
      * @var UpdateProductCommand
      */
     private $command;
 
+    /**
+     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubContext()
+    {
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
+        $stubContext->method('getValue')->willReturnMap([
+            [DataVersion::CONTEXT_CODE, '123'],
+        ]);
+        return $stubContext;
+    }
+
     protected function setUp()
     {
-        $this->stubProduct = $this->getMock(Product::class);
-        $this->command = new UpdateProductCommand($this->stubProduct);
+        $this->testProduct = new SimpleProduct(
+            ProductId::fromString('foo'),
+            ProductTaxClass::fromString('bar'),
+            new ProductAttributeList(),
+            new ProductImageList(),
+            $this->createStubContext()
+        );
+
+        $this->command = new UpdateProductCommand($this->testProduct);
     }
 
     public function testCommandInterfaceIsImplemented()
@@ -32,6 +70,54 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testProductBuilderIsReturned()
     {
-        $this->assertSame($this->stubProduct, $this->command->getProduct());
+        $this->assertSame($this->testProduct, $this->command->getProduct());
+    }
+
+    public function testReturnsAMessageWithUpdateProductName()
+    {
+        $message = $this->command->toMessage();
+        $this->assertInstanceOf(Message::class, $message);
+        $this->assertSame(UpdateProductCommand::CODE, $message->getName());
+    }
+
+    public function testReturnsMessageWithPayload()
+    {
+        $expectedPayload = json_encode([
+            'id'      => (string)$this->testProduct->getId(),
+            'product' => $this->testProduct,
+        ]);
+        $message = $this->command->toMessage();
+        $this->assertSame($expectedPayload, $message->getPayload());
+    }
+
+    public function testReturnsMessageWithDataVersion()
+    {
+        $message = $this->command->toMessage();
+        $this->assertSame('123', (string)$message->getMetadata()['data_version']);
+    }
+
+    public function testCanBeRehydratedFromUpdateProductCommandMessage()
+    {
+        $message = $this->command->toMessage();
+        $rehydratedCommand = UpdateProductCommand::fromMessage($message);
+        $this->assertEquals($this->testProduct->getId(), $rehydratedCommand->getProduct()->getId());
+    }
+
+    public function testThrowsExceptionIfMessageNameNotMatches()
+    {
+        $this->expectException(NoUpdateProductCommandMessageException::class);
+        $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "update_product"');
+
+        $message = Message::withCurrentTime('foo', '', []);
+
+        UpdateProductCommand::fromMessage($message);
+    }
+
+    public function testReturnsTheDataVersion()
+    {
+        $expectedVersion = $this->testProduct->getContext()->getValue(DataVersion::CONTEXT_CODE);
+        $dataVersion = $this->command->getDataVersion();
+        $this->assertInstanceOf(DataVersion::class, $dataVersion);
+        $this->assertSame($expectedVersion, (string)$dataVersion);
     }
 }

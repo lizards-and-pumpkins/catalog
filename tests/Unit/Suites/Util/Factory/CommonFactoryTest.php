@@ -3,9 +3,11 @@
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -14,16 +16,23 @@ use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
 use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductProjector;
@@ -31,10 +40,13 @@ use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
@@ -50,7 +62,9 @@ use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRender
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
@@ -162,6 +176,24 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
+ * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -420,10 +452,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateContentBlockCommandHandlerIsReturned()
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('update_content_block_command');
-        $result = $this->commonFactory->createUpdateContentBlockCommandHandler($stubCommand);
+        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', [], []);
+        $sourceCommand = new UpdateContentBlockCommand($contentBlockSource);
+        $message = $sourceCommand->toMessage();
+        $result = $this->commonFactory->createUpdateContentBlockCommandHandler($message);
 
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
     }
@@ -440,30 +472,38 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateProductCommandHandlerIsReturned()
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('update_product_command');
-        $result = $this->commonFactory->createUpdateProductCommandHandler($stubCommand);
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
+        $stubContext->method('getValue')->willReturn('123');
+        $product = new SimpleProduct(
+            ProductId::fromString('foo'),
+            ProductTaxClass::fromString('bar'),
+            new ProductAttributeList(),
+            new ProductImageList(),
+            $stubContext
+        );
+        $sourceCommand = new UpdateProductCommand($product);
+        $result = $this->commonFactory->createUpdateProductCommandHandler($sourceCommand->toMessage());
 
         $this->assertInstanceOf(UpdateProductCommandHandler::class, $result);
     }
 
     public function testAddProductListingCommandHandlerIsReturned()
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('add_product_listing_command');
-        $result = $this->commonFactory->createAddProductListingCommandHandler($stubCommand);
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
+        $sourceCommand = new AddProductListingCommand($stubProductListing);
+        $result = $this->commonFactory->createAddProductListingCommandHandler($sourceCommand->toMessage());
 
         $this->assertInstanceOf(AddProductListingCommandHandler::class, $result);
     }
 
     public function testAddImageCommandHandlerIsReturned()
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('add_image_command');
-        $result = $this->commonFactory->createAddImageCommandHandler($stubCommand);
+        $sourceCommand = new AddImageCommand(__FILE__, DataVersion::fromVersionString('foo bar'));
+        $result = $this->commonFactory->createAddImageCommandHandler($sourceCommand->toMessage());
 
         $this->assertInstanceOf(AddImageCommandHandler::class, $result);
     }
@@ -506,11 +546,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProcessTimeLoggingCommandHandlerDecorator()
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('add_image_command');
+        $sourceCommand = new AddImageCommand(__FILE__, DataVersion::fromVersionString('123'));
         
-        $commandHandlerToDecorate = $this->commonFactory->createAddImageCommandHandler($stubCommand);
+        $commandHandlerToDecorate = $this->commonFactory->createAddImageCommandHandler($sourceCommand->toMessage());
         $result = $this->commonFactory->createProcessTimeLoggingCommandHandlerDecorator($commandHandlerToDecorate);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $result);
     }

@@ -21,7 +21,7 @@ class ProductListingImportCommandLocator
 
     /**
      * @param ProductListing $productListing
-     * @return array[]
+     * @return Command[]
      */
     public function getProductListingImportCommands(ProductListing $productListing)
     {

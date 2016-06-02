@@ -13,7 +13,7 @@ class NullProductImageImportCommandFactory implements ProductImageImportCommandF
     /**
      * @param string $imageFilePath
      * @param DataVersion $dataVersion
-     * @return array[]
+     * @return Command[]
      */
     public function createProductImageImportCommands($imageFilePath, DataVersion $dataVersion)
     {

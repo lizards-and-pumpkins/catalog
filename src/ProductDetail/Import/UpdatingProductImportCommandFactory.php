@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Import\Product\Product;
 
@@ -11,11 +13,10 @@ class UpdatingProductImportCommandFactory implements ProductImportCommandFactory
 
     /**
      * @param Product $product
-     * @return array[]
+     * @return Command[]
      */
     public function createProductImportCommands(Product $product)
     {
-        $payload = json_encode(['id' => (string) $product->getId(), 'product' => $product]);
-        return [['name' => 'update_product', 'payload' => $payload]];
+        return [new UpdateProductCommand($product)];
     }
 }

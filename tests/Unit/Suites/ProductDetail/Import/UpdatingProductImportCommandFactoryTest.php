@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory
@@ -27,22 +28,13 @@ class UpdatingProductImportCommandFactoryTest extends \PHPUnit_Framework_TestCas
 
     public function testItReturnsAnUpdateProductCommand()
     {
+        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
         $stubProduct = $this->getMock(Product::class);
         $stubProduct->method('jsonSerialize')->willReturn([]);
         $stubProduct->method('getId')->willReturn('dummy');
         $commands = $this->factory->createProductImportCommands($stubProduct);
         
         $this->assertInternalType('array', $commands);
-        
-        $expectedPayload = json_encode(['id' => 'dummy', 'product' => $stubProduct]);
-        array_map(function (array $commandData) use ($expectedPayload) {
-            if (! isset($commandData['name']) || 'update_product' !== $commandData['name']) {
-                $this->fail('"name" array record must contain the command name "update_product"');
-            }
-
-            if (! isset($commandData['payload']) || $commandData['payload'] !== $expectedPayload) {
-                $this->fail('"payload" array record must contain payload "' . compact($expectedPayload) . '"');
-            }
-        }, $commands);
+        $this->assertContainsOnlyInstancesOf(UpdateProductCommand::class, $commands);
     }
 }

@@ -2,8 +2,21 @@
 
 namespace LizardsAndPumpkins\Logging;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
+use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\Import\Product\SimpleProduct;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
-use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
@@ -14,11 +27,30 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
- * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
+ * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
+ * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
+ * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
+ * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,18 +58,6 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      * @var LoggingCommandHandlerFactory
      */
     private $loggingCommandHandlerFactory;
-
-    /**
-     * @param string $name
-     * @return Message|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function createStubCommand($name)
-    {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn($name);
-        return $stubCommand;
-    }
 
     protected function setUp()
     {
@@ -57,29 +77,44 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedUpdateContentBlockCommandHandler()
     {
-        $stubCommand = $this->createStubCommand('update_content_block_command');
-        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateContentBlockCommandHandler($stubCommand);
+        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('qux'), '', [], []);
+        $message = (new UpdateContentBlockCommand($contentBlockSource))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateContentBlockCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedUpdateProductCommandHandler()
     {
-        $stubCommand = $this->createStubCommand('update_product_command');
-        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateProductCommandHandler($stubCommand);
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->getMock(Context::class);
+        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
+        $stubContext->method('getValue')->willReturn('123');
+        $product = new SimpleProduct(
+            ProductId::fromString('foo'),
+            ProductTaxClass::fromString('bar'),
+            new ProductAttributeList(),
+            new ProductImageList(),
+            $stubContext
+        );
+        $message = (new UpdateProductCommand($product))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateProductCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedAddProductListingCommandHandler()
     {
-        $stubCommand = $this->createStubCommand('add_product_listing_command');
-        $commandHandler = $this->loggingCommandHandlerFactory->createAddProductListingCommandHandler($stubCommand);
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
+        $message = (new AddProductListingCommand($stubProductListing))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createAddProductListingCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedAddProductImageCommandHandler()
     {
-        $stubCommand = $this->createStubCommand('add_image_command');
-        $commandHandler = $this->loggingCommandHandlerFactory->createAddImageCommandHandler($stubCommand);
+        $message = (new AddImageCommand(__FILE__, DataVersion::fromVersionString('buz')))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createAddImageCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 }
