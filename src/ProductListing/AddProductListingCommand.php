@@ -61,8 +61,9 @@ class AddProductListingCommand implements Command
     private static function createInvalidMessageNameException($messageName)
     {
         return new NoAddProductListingCommandMessageException(sprintf(
-            'Unable to rehydrate from "%s" queue message, expected "add_product_listing"',
-            $messageName
+            'Unable to rehydrate from "%s" queue message, expected "%s"',
+            $messageName,
+            self::CODE
         ));
     }
 }

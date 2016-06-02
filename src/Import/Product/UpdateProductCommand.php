@@ -62,7 +62,7 @@ class UpdateProductCommand implements Command
      */
     private static function createInvalidMessageException($messageName)
     {
-        $message = sprintf('Unable to rehydrate from "%s" queue message, expected "update_product"', $messageName);
+        $message = sprintf('Unable to rehydrate from "%s" queue message, expected "%s"', $messageName, self::CODE);
         return new NoUpdateProductCommandMessageException($message);
     }
 

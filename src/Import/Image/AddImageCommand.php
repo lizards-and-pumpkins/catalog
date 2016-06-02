@@ -71,8 +71,9 @@ class AddImageCommand implements Command
     {
         if ($message->getName() != self::CODE) {
             throw new NoAddImageCommandMessageException(sprintf(
-                'Unable to rehydrate from "%s" queue message, expected "add_image"',
-                $message->getName()
+                'Unable to rehydrate from "%s" queue message, expected "%s"',
+                $message->getName(),
+                self::CODE
             ));
         }
         $payload = json_decode($message->getPayload(), true);

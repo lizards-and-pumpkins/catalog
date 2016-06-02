@@ -47,8 +47,9 @@ class UpdateContentBlockCommand implements Command
     {
         if ($message->getName() !== self::CODE) {
             throw new NoUpdateContentBlockCommandMessageException(sprintf(
-                'Unable to rehydrate from "%s" queue message, expected "update_content_block"',
-                $message->getName()
+                'Unable to rehydrate from "%s" queue message, expected "%s"',
+                $message->getName(),
+                self::CODE
             ));
         }
         return new self(ContentBlockSource::rehydrate($message->getPayload()));
