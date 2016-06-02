@@ -19,9 +19,9 @@ class UpdateContentBlockCommandHandler implements CommandHandler
      */
     private $domainEventQueue;
 
-    public function __construct(Message $command, DomainEventQueue $domainEventQueue)
+    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
     {
-        $this->command = UpdateContentBlockCommand::fromMessage($command);
+        $this->command = UpdateContentBlockCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
     }
 
