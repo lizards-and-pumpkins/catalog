@@ -13,7 +13,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 class AddProductListingCommandHandler implements CommandHandler
 {
     /**
-     * @var Message
+     * @var AddProductListingCommand
      */
     private $command;
 
@@ -22,20 +22,15 @@ class AddProductListingCommandHandler implements CommandHandler
      */
     private $eventQueue;
 
-    public function __construct(Message $command, DomainEventQueue $domainEventQueue)
+    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
     {
-        if ('add_product_listing_command' !== $command->getName()) {
-            $message = sprintf('Expected "add_product_listing" command, got "%s"', $command->getName());
-            throw new NoAddProductListingCommandMessageException($message);
-        }
-        $this->command = $command;
+        $this->command = AddProductListingCommand::fromMessage($message);
         $this->eventQueue = $domainEventQueue;
     }
-
+    
     public function process()
     {
-        $commandPayload = json_decode($this->command->getPayload(), true);
-        $productListing = ProductListing::rehydrate($commandPayload['listing']);
+        $productListing = $this->command->getProductListing();
         $eventPayload = json_encode(['listing' => $productListing->serialize()]);
         $version = DataVersion::fromVersionString($productListing->getContextData()[DataVersion::CONTEXT_CODE]);
         $this->eventQueue->addVersioned('product_listing_was_added', $eventPayload, $version);

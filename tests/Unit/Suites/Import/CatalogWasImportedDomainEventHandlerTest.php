@@ -9,6 +9,10 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler
+ * @uses \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
+ * @uses \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses \LizardsAndPumpkins\Messaging\Queue\MessageName
  */
 class CatalogWasImportedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

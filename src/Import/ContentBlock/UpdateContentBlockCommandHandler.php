@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class UpdateContentBlockCommandHandler implements CommandHandler
 {
     /**
-     * @var Message
+     * @var UpdateContentBlockCommand
      */
     private $command;
 
@@ -21,17 +21,13 @@ class UpdateContentBlockCommandHandler implements CommandHandler
 
     public function __construct(Message $command, DomainEventQueue $domainEventQueue)
     {
-        if ($command->getName() !== 'update_content_block_command') {
-            $message = sprintf('Expected "update_content_block" command, got "%s"', $command->getName());
-            throw new NoUpdateContentBlockCommandMessageException($message);
-        }
-        $this->command = $command;
+        $this->command = UpdateContentBlockCommand::fromMessage($command);
         $this->domainEventQueue = $domainEventQueue;
     }
 
     public function process()
     {
-        $contentBlockSource = ContentBlockSource::rehydrate($this->command->getPayload());
+        $contentBlockSource = $this->command->getContentBlockSource();
         $contentBlockId = $contentBlockSource->getContentBlockId();
 
         $payload = json_encode(['id' => (string) $contentBlockId, 'source' => $contentBlockSource->serialize()]);

@@ -23,6 +23,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
  */
 class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,14 +33,14 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockDomainEventQueue;
 
     /**
-     * @var UpdateProductCommandHandler
-     */
-    private $commandHandler;
-
-    /**
      * @var Product
      */
     private $testProduct;
+
+    /**
+     * @var UpdateProductCommandHandler
+     */
+    private $commandHandler;
 
     /**
      * @return Context|\PHPUnit_Framework_MockObject_MockObject
@@ -62,31 +63,20 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $testPayload = ['id' => $this->testProduct->getId(), 'product' => $this->testProduct];
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('update_product_command');
-        $stubCommand->method('getPayload')->willReturn(json_encode($testPayload));
+        
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+        $stubMessage = $this->getMock(Message::class, [], [], '', false);
+        $stubMessage->method('getName')->willReturn('update_product');
+        $stubMessage->method('getPayload')->willReturn(json_encode($testPayload));
 
         $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
 
-        $this->commandHandler = new UpdateProductCommandHandler($stubCommand, $this->mockDomainEventQueue);
+        $this->commandHandler = new UpdateProductCommandHandler($stubMessage, $this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
-    }
-
-    public function testThrowsExceptionIfCommandNameDoesNotMatch()
-    {
-        $this->expectException(NoUpdateProductCommandMessageException::class);
-        $this->expectExceptionMessage('Expected "update_product" command, got "bar_command"');
-
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $invalidCommand */
-        $invalidCommand = $this->getMock(Message::class, [], [], '', false);
-        $invalidCommand->method('getName')->willReturn('bar_command');
-
-        new UpdateProductCommandHandler($invalidCommand, $this->mockDomainEventQueue);
     }
 
     public function testProductWasUpdatedDomainEventIsEmitted()

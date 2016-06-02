@@ -2,10 +2,14 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Import\ContentBlock\Exception\NoUpdateContentBlockCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class UpdateContentBlockCommand implements Command
 {
+    const CODE = 'update_content_block';
+
     /**
      * @var ContentBlockSource
      */
@@ -22,5 +26,31 @@ class UpdateContentBlockCommand implements Command
     public function getContentBlockSource()
     {
         return $this->contentBlockSource;
+    }
+
+    /**
+     * @return Message
+     */
+    public function toMessage()
+    {
+        $name = self::CODE;
+        $payload = $this->contentBlockSource->serialize();
+        $metadata = [];
+        return Message::withCurrentTime($name, $payload, $metadata);
+    }
+
+    /**
+     * @param Message $message
+     * @return static
+     */
+    public static function fromMessage(Message $message)
+    {
+        if ($message->getName() !== self::CODE) {
+            throw new NoUpdateContentBlockCommandMessageException(sprintf(
+                'Unable to rehydrate from "%s" queue message, expected "update_content_block"',
+                $message->getName()
+            ));
+        }
+        return new self(ContentBlockSource::rehydrate($message->getPayload()));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
+use LizardsAndPumpkins\Messaging\Command\Command;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
 class UpdatingProductListingImportCommandFactory implements ProductListingImportCommandFactory
@@ -10,11 +12,10 @@ class UpdatingProductListingImportCommandFactory implements ProductListingImport
 
     /**
      * @param ProductListing $productListing
-     * @return array[]
+     * @return Command[]
      */
     public function createProductListingImportCommands(ProductListing $productListing)
     {
-        $payload = json_encode(['listing' => $productListing->serialize()]);
-        return [['name' => 'add_product_listing', 'payload' => $payload]];
+        return [new AddProductListingCommand($productListing)];
     }
 }

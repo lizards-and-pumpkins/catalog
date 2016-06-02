@@ -77,7 +77,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
             $keyGeneratorParams
         );
 
-        $this->commandQueue->add('update_content_block', $contentBlockSource->serialize());
+        $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
     }
 
     /**

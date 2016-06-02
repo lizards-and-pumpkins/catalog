@@ -20,7 +20,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     private $locator;
 
     /**
-     * @var CommonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $factory;
 
@@ -40,7 +40,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('non_existing_foo_command');
+        $stubCommand->method('getName')->willReturn('non_existing_foo');
         $this->expectException(UnableToFindCommandHandlerException::class);
         $this->locator->getHandlerFor($stubCommand);
     }
@@ -55,7 +55,7 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getName')->willReturn('update_content_block_command');
+        $stubCommand->method('getName')->willReturn('update_content_block');
 
         $result = $this->locator->getHandlerFor($stubCommand);
 

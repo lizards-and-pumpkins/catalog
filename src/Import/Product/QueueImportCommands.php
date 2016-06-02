@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
@@ -65,12 +66,10 @@ class QueueImportCommands
     }
 
     /**
-     * @param array[] $commands
+     * @param Command[] $commands
      */
     private function addCommandsToQueue(array $commands)
     {
-        array_map(function (array $command) {
-            $this->commandQueue->add($command['name'], $command['payload']);
-        }, $commands);
+        array_map([$this->commandQueue, 'add'], $commands);
     }
 }

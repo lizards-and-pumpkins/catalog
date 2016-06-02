@@ -71,25 +71,10 @@ class CommandQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testAddsCommandsToQueue()
     {
-        $name = 'foo';
-        $payload = 'bar';
-        $this->commandQueue->add($name, $payload);
+        /** @var Command|\PHPUnit_Framework_MockObject_MockObject $command */
+        $command = $this->getMock(Command::class);
+        $command->method('toMessage')->willReturn($this->getMock(Message::class, [], [], '', false));
+        $this->commandQueue->add($command);
         $this->assertAddedMessageCount(1);
-    }
-
-    public function testAddsSuffixToMessageNameIfNotPresent()
-    {
-        $name = 'foo';
-        $payload = 'bar';
-        $this->commandQueue->add($name, $payload);
-        $this->assertSame('foo_command', $this->getAddedMessage()->getName());
-    }
-
-    public function testDoesNotAddSuffixToMessageNameIfPresent()
-    {
-        $name = 'foo_command';
-        $payload = 'bar';
-        $this->commandQueue->add($name, $payload);
-        $this->assertSame('foo_command', $this->getAddedMessage()->getName());
     }
 }

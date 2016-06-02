@@ -7,6 +7,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory
+ * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
  */
 class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,19 +36,10 @@ class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_Te
         /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
         $stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
         $stubDataVersion->method('__toString')->willReturn('123');
-        $expectedPayload = json_encode(['file_path' => $imageFilePath, 'data_version' => (string) $stubDataVersion]);
-            
+
         $commands = $this->factory->createProductImageImportCommands($imageFilePath, $stubDataVersion);
-        
+
         $this->assertInternalType('array', $commands);
-        array_map(function (array $commandData) use ($expectedPayload) {
-            if (! isset($commandData['name']) || 'add_image' !== $commandData['name']) {
-                $this->fail('"name" array record must contain the command name "add_image"');
-            }
-            
-            if (! isset($commandData['payload']) || $commandData['payload'] !== $expectedPayload) {
-                $this->fail('"payload" array record must contain payload "' . compact('expectedPayload') . '"');
-            }
-        }, $commands);
+        $this->assertContainsOnlyInstancesOf(AddImageCommand::class, $commands);
     }
 }

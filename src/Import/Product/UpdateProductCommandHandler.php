@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class UpdateProductCommandHandler implements CommandHandler
 {
     /**
-     * @var Message
+     * @var UpdateProductCommand
      */
     private $command;
 
@@ -23,25 +23,16 @@ class UpdateProductCommandHandler implements CommandHandler
      */
     private $domainEventQueue;
 
-    public function __construct(Message $command, DomainEventQueue $domainEventQueue)
+    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
     {
-        if ($command->getName() !== 'update_product_command') {
-            $message = sprintf('Expected "update_product" command, got "%s"', $command->getName());
-            throw new NoUpdateProductCommandMessageException($message);
-        }
-        $this->command = $command;
+        $this->command = UpdateProductCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
     }
 
     public function process()
     {
-        $payload = json_decode($this->command->getPayload(), true);
-        // todo: encapsulate product serialization and rehydration
-        $product = $payload['product'][Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
-            ConfigurableProduct::fromArray($payload['product']) :
-            SimpleProduct::fromArray($payload['product']);
-        $version = DataVersion::fromVersionString($product->getContext()->getValue(DataVersion::CONTEXT_CODE));
+        $product = $this->command->getProduct();
         $payload = json_encode(['id' => $product->getId(), 'product' => $product]);
-        $this->domainEventQueue->addVersioned('product_was_updated', $payload, $version);
+        $this->domainEventQueue->addVersioned('product_was_updated', $payload, $this->command->getDataVersion());
     }
 }

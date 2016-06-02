@@ -8,8 +8,6 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class DomainEventQueue
 {
-    private static $suffix = '_domain_event';
-
     /**
      * @var Queue
      */
@@ -49,8 +47,7 @@ class DomainEventQueue
      */
     private function buildDomainEventMessage($name, $payload, array $metadata = [])
     {
-        $normalizedName = $this->normalizeDomainEventName($name);
-        return Message::withCurrentTime($normalizedName, $payload, $metadata);
+        return Message::withCurrentTime($name . '_domain_event', $payload, $metadata);
     }
 
     /**
@@ -60,26 +57,5 @@ class DomainEventQueue
     private function buildMetadataArray(DataVersion $dataVersion)
     {
         return ['data_version' => (string)$dataVersion];
-    }
-
-    /**
-     * @param string $name
-     * @return string
-     */
-    private function normalizeDomainEventName($name)
-    {
-        return $this->hasSuffix($name, self::$suffix) ?
-            $name :
-            $name . self::$suffix;
-    }
-
-    /**
-     * @param string $name
-     * @param string $suffix
-     * @return bool
-     */
-    private function hasSuffix($name, $suffix)
-    {
-        return substr($name, strlen($suffix) * -1) === $suffix;
     }
 }

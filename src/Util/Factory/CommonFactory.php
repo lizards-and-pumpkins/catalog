@@ -1271,13 +1271,13 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createUpdateContentBlockCommandHandler(Message $command)
+    public function createUpdateContentBlockCommandHandler(Message $message)
     {
         return new UpdateContentBlockCommandHandler(
-            $command,
+            $message,
             $this->getMasterFactory()->getEventQueue()
         );
     }
@@ -1335,37 +1335,37 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createUpdateProductCommandHandler(Message $command)
+    public function createUpdateProductCommandHandler(Message $message)
     {
         return new UpdateProductCommandHandler(
-            $command,
+            $message,
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createAddProductListingCommandHandler(Message $command)
+    public function createAddProductListingCommandHandler(Message $message)
     {
         return new AddProductListingCommandHandler(
-            $command,
+            $message,
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
     /**
-     * @param Message $command
+     * @param Message $message
      * @return CommandHandler
      */
-    public function createAddImageCommandHandler(Message $command)
+    public function createAddImageCommandHandler(Message $message)
     {
         return new AddImageCommandHandler(
-            $command,
+            $message,
             $this->getMasterFactory()->getEventQueue()
         );
     }
