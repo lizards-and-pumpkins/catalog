@@ -30,6 +30,6 @@ class AddImageCommandHandler implements CommandHandler
     public function process()
     {
         $event = new ImageWasAddedDomainEvent($this->command->getImageFilePath(), $this->command->getDataVersion());
-        $this->domainEventQueue->addVersioned($event, $this->command->getDataVersion());
+        $this->domainEventQueue->add($event);
     }
 }

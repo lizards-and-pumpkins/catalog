@@ -45,7 +45,7 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testContentBlockWasUpdatedDomainEventIsEmitted()
     {
-        $this->mockDomainEventQueue->expects($this->once())->method('addNotVersioned');
+        $this->mockDomainEventQueue->expects($this->once())->method('add');
 
         $this->commandHandler->process();
     }

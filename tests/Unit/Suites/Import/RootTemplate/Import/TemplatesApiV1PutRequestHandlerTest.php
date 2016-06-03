@@ -71,7 +71,7 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
         $this->mockRequest->method('getRawBody')->willReturn('Raw Request Body');
 
-        $this->mockDomainEventQueue->expects($this->once())->method('addNotVersioned');
+        $this->mockDomainEventQueue->expects($this->once())->method('add');
 
         $response = $this->requestHandler->process($this->mockRequest);
         

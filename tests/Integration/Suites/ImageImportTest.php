@@ -48,7 +48,7 @@ class ImageImportTest extends AbstractIntegrationTest
         $queue = $factory->getEventQueue();
         $dataVersion = DataVersion::fromVersionString('-1');
         foreach ($images as $imageFilePath) {
-            $queue->addVersioned(new ImageWasAddedDomainEvent($imageFilePath, $dataVersion), $dataVersion);
+            $queue->add(new ImageWasAddedDomainEvent($imageFilePath, $dataVersion));
         }
 
         $factory->createDomainEventConsumer()->process();

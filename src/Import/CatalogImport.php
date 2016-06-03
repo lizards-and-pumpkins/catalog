@@ -189,6 +189,6 @@ class CatalogImport
 
     private function addCatalogImportedDomainEvent()
     {
-        $this->eventQueue->addVersioned(new CatalogWasImportedDomainEvent($this->dataVersion), $this->dataVersion);
+        $this->eventQueue->add(new CatalogWasImportedDomainEvent($this->dataVersion));
     }
 }

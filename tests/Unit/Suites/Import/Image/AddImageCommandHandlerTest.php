@@ -63,7 +63,7 @@ class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testImageWasAddedDomainEventIsEmitted()
     {
-        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned');
+        $this->mockDomainEventQueue->expects($this->once())->method('add');
 
         $this->commandHandler->process();
     }
