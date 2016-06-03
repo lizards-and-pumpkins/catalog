@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
@@ -24,6 +23,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
  */
 class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,9 +81,7 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProductWasUpdatedDomainEventIsEmitted()
     {
-        $expectedPayload = json_encode(['id' => $this->testProduct->getId(), 'product' => $this->testProduct]);
-        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned')
-            ->with('product_was_updated', $expectedPayload, $this->anything());
+        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned');
 
         $this->commandHandler->process();
     }

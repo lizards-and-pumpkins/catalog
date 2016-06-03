@@ -3,16 +3,17 @@
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler
- * @uses \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
- * @uses \LizardsAndPumpkins\Messaging\Queue\Message
- * @uses \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
- * @uses \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
  */
 class CatalogWasImportedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,33 +30,21 @@ class CatalogWasImportedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
     /**
      * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubVersion;
+    private $testVersion;
 
     protected function setUp()
     {
-        $this->stubVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $this->testVersion = DataVersion::fromVersionString('foo');
         $this->stubEvent = $this->getMock(Message::class, [], [], '', false);
-        $this->stubEvent->method('getName')->willReturn('catalog_was_imported_domain_event');
-        $this->stubEvent->method('getPayload')->willReturn(json_encode(['data_version' => $this->stubVersion]));
-        
+        $this->stubEvent->method('getName')->willReturn('catalog_was_imported');
+        $this->stubEvent->method('getMetadata')->willReturn(['data_version' => (string)$this->testVersion]);
+
         $this->eventHandler = new CatalogWasImportedDomainEventHandler($this->stubEvent);
     }
-    
+
     public function testItIsAnDomainEventHandler()
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->eventHandler);
-    }
-
-    public function testThrowsExceptionIfDomainEventNameDoesNotMatch()
-    {
-        $this->expectException(NoCatalogWasImportedDomainEventMessageException::class);
-        $this->expectExceptionMessage('Expected "catalog_was_imported" domain event, got "foo_domain_event"');
-
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubEvent->method('getName')->willReturn('foo_domain_event');
-        
-        new CatalogWasImportedDomainEventHandler($stubEvent);
     }
 
     public function testItTriggersTheProductListingProjection()

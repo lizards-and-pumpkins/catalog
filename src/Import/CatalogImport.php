@@ -189,8 +189,6 @@ class CatalogImport
 
     private function addCatalogImportedDomainEvent()
     {
-        $payload = json_encode([]);
-        $version = $this->dataVersion;
-        $this->eventQueue->addVersioned('catalog_was_imported', $payload, $version);
+        $this->eventQueue->addVersioned(new CatalogWasImportedDomainEvent($this->dataVersion), $this->dataVersion);
     }
 }

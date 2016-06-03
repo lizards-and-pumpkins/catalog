@@ -9,17 +9,13 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class CatalogWasImportedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var Message
+     * @var CatalogWasImportedDomainEvent
      */
     private $event;
     
-    public function __construct(Message $event)
+    public function __construct(Message $message)
     {
-        if ($event->getName() !== 'catalog_was_imported_domain_event') {
-            $message = sprintf('Expected "catalog_was_imported" domain event, got "%s"', $event->getName());
-            throw new NoCatalogWasImportedDomainEventMessageException($message);
-        }
-        $this->event = $event;
+        $this->event = CatalogWasImportedDomainEvent::fromMessage($message);
     }
 
     public function process()

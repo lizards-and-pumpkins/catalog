@@ -6,7 +6,6 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\ProductListing\Exception\NoAddProductListingCommandMessageException;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**
@@ -14,6 +13,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  */
 class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -52,8 +52,7 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingWasAddedDomainEventIsEmitted()
     {
-        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned')
-            ->with('product_listing_was_added', $this->isType('string'), $this->anything());
+        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned');
 
         $this->commandHandler->process();
     }

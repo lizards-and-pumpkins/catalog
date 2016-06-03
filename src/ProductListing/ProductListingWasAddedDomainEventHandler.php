@@ -11,7 +11,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
 class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var Message
+     * @var ProductListingWasAddedDomainEvent
      */
     private $domainEvent;
 
@@ -20,21 +20,14 @@ class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
      */
     private $projector;
 
-    public function __construct(Message $domainEvent, ProductListingSnippetProjector $projector)
+    public function __construct(Message $message, ProductListingSnippetProjector $projector)
     {
-        if ($domainEvent->getName() !== 'product_listing_was_added_domain_event') {
-            $message = sprintf('Expected "product_listing_was_added" domain event, got "%s', $domainEvent->getName());
-            throw new NoProductListingWasAddedDomainEventMessage($message);
-        }
-        $this->domainEvent = $domainEvent;
+        $this->domainEvent = ProductListingWasAddedDomainEvent::fromMessage($message);
         $this->projector = $projector;
     }
 
     public function process()
     {
-        // todo: use encapsulate serialization and rehydration in ProductListing not using serialize()
-        /** @var ProductListing $productListing */
-        $productListing = unserialize(json_decode($this->domainEvent->getPayload(), true)['listing']);
-        $this->projector->project($productListing);
+        $this->projector->project($this->domainEvent->getListingCriteria());
     }
 }

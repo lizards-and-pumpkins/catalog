@@ -4,13 +4,13 @@ namespace LizardsAndPumpkins\Import\RootTemplate;
 
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,17 +25,17 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
     private $domainEventHandler;
 
     /**
-     * @param Message $domainEvent
+     * @param Message $message
      * @return TemplateWasUpdatedDomainEventHandler
      */
-    private function createDomainEventHandler(Message $domainEvent)
+    private function createDomainEventHandler(Message $message)
     {
         /** @var TemplateProjectorLocator|\PHPUnit_Framework_MockObject_MockObject $stubTemplateProjectorLocator */
         $stubTemplateProjectorLocator = $this->getMock(TemplateProjectorLocator::class, [], [], '', false);
         $stubTemplateProjectorLocator->method('getTemplateProjectorForCode')->willReturn($this->mockProjector);
 
         return new TemplateWasUpdatedDomainEventHandler(
-            $domainEvent,
+            $message,
             $this->createStubContextSource(),
             $stubTemplateProjectorLocator
         );
@@ -55,7 +55,7 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
         
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('template_was_updated_domain_event');
+        $stubDomainEvent->method('getName')->willReturn('template_was_updated');
         $stubDomainEvent->method('getPayload')->willReturn(json_encode($testPayload));
 
         $this->mockProjector = $this->getMock(Projector::class);
@@ -66,18 +66,6 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
     public function testDomainEventHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
-    }
-
-    public function testThrowsExceptionIfDomainEventNameDoesNotMatch()
-    {
-        $this->expectException(NoTemplateWasUpdatedDomainEventMessageException::class);
-        $this->expectExceptionMessage('Expected "template_was_updated" domain event, got "qux_domain_event"');
-
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('qux_domain_event');
-
-        $this->createDomainEventHandler($stubDomainEvent);
     }
 
     public function testProjectionIsTriggered()

@@ -43,7 +43,7 @@ class DomainEventHandlerLocator
     private function getUnqualifiedDomainEventHandlerClassName(Message $event)
     {
         $camelCaseEventName = $this->snakeCaseToCamelCase($event->getName());
-        return $camelCaseEventName . 'Handler';
+        return $camelCaseEventName . 'DomainEventHandler';
     }
 
     /**

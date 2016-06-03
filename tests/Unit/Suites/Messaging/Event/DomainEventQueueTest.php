@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Messaging\Event\Stub\TestDomainEvent;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
@@ -79,35 +80,28 @@ class DomainEventQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testAddsDomainEventToMessageQueue()
     {
-        $this->eventQueue->addVersioned('foo', 'bar', $this->mockDataVersion);
+        $this->eventQueue->addVersioned(new TestDomainEvent(), $this->mockDataVersion);
         $this->assertAddedMessageCount(1);
     }
     
     public function testCreatesVersionedQueueMessage()
     {
-        $name = 'foo';
-        $payload = 'bar';
-
-        $this->eventQueue->addVersioned($name, $payload, $this->mockDataVersion);
+        $this->eventQueue->addVersioned(new TestDomainEvent(), $this->mockDataVersion);
 
         $message = $this->getAddedMessage();
 
         $this->assertInstanceOf(Message::class, $message);
-        $this->assertSame($payload, $message->getPayload());
-        $this->assertSame(['data_version' => (string)($this->mockDataVersion)], $message->getMetadata());
+        $this->assertArrayHasKey(DomainEventQueue::VERSION_KEY, $message->getMetadata());
+        $this->assertSame((string)$this->mockDataVersion, $message->getMetadata()[DomainEventQueue::VERSION_KEY]);
     }
 
     public function testCreatesUnVersionedQueueMessage()
     {
-        $name = 'foo';
-        $payload = 'bar';
-
-        $this->eventQueue->addNotVersioned($name, $payload);
-
+        $this->eventQueue->addNotVersioned(new TestDomainEvent());
+        
         $message = $this->getAddedMessage();
 
         $this->assertInstanceOf(Message::class, $message);
-        $this->assertSame($payload, $message->getPayload());
-        $this->assertSame([], $message->getMetadata());
+        $this->assertArrayNotHasKey(DomainEventQueue::VERSION_KEY, $message->getMetadata());
     }
 }

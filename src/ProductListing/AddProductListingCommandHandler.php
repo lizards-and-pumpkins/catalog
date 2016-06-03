@@ -30,9 +30,7 @@ class AddProductListingCommandHandler implements CommandHandler
     
     public function process()
     {
-        $productListing = $this->command->getProductListing();
-        $eventPayload = json_encode(['listing' => $productListing->serialize()]);
-        $version = DataVersion::fromVersionString($productListing->getContextData()[DataVersion::CONTEXT_CODE]);
-        $this->eventQueue->addVersioned('product_listing_was_added', $eventPayload, $version);
+        $event = new ProductListingWasAddedDomainEvent($this->command->getProductListing());
+        $this->eventQueue->addVersioned($event, $event->getDataVersion());
     }
 }

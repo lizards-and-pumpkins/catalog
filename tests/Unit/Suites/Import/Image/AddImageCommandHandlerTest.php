@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Import\Image\Exception\NoAddImageCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
@@ -11,6 +10,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
@@ -64,8 +64,7 @@ class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testImageWasAddedDomainEventIsEmitted()
     {
-        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned')
-            ->with('image_was_added', $this->isType('string'), $this->anything());
+        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned');
 
         $this->commandHandler->process();
     }

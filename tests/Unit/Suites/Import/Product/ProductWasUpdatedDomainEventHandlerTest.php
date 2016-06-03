@@ -2,9 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Product\Exception\NoProductWasUpdatedDomainEventMessageException;
+use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
@@ -20,6 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
  */
 class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,29 +35,25 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
-
         $product = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            $stubContext
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
         );
 
         $testPayload = ['id' => 'foo', 'product' => $product];
 
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('product_was_updated_domain_event');
-        $stubDomainEvent->method('getPayload')->willReturn(json_encode($testPayload));
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+        $stubMessage = $this->getMock(Message::class, [], [], '', false);
+        $stubMessage->method('getName')->willReturn('product_was_updated');
+        $stubMessage->method('getPayload')->willReturn(json_encode($testPayload));
 
         $this->mockProductProjector = $this->getMock(ProductProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler(
-            $stubDomainEvent,
+            $stubMessage,
             $this->mockProductProjector
         );
     }
@@ -65,21 +61,6 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
     public function testDomainEventHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
-    }
-
-    public function testThrowsExceptionIfEventNameDoesNotMatch()
-    {
-        $this->expectException(NoProductWasUpdatedDomainEventMessageException::class);
-        $this->expectExceptionMessage('Expected "product_was_updated" domain event, got "bar_domain_event"');
-
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('bar_domain_event');
-
-        $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler(
-            $stubDomainEvent,
-            $this->mockProductProjector
-        );
     }
 
     public function testProductProjectionIsTriggered()
