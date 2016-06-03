@@ -32,7 +32,7 @@ class UpdateProductCommandHandler implements CommandHandler
     public function process()
     {
         $product = $this->command->getProduct();
-        $payload = json_encode(['id' => $product->getId(), 'product' => $product]);
-        $this->domainEventQueue->addVersioned('product_was_updated', $payload, $this->command->getDataVersion());
+        $event = new ProductWasUpdatedDomainEvent($product);
+        $this->domainEventQueue->addVersioned($event, $this->command->getDataVersion());
     }
 }

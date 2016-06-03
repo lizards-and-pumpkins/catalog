@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var Message
+     * @var ProductWasUpdatedDomainEvent
      */
     private $event;
 
@@ -19,25 +19,14 @@ class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
      */
     private $projector;
 
-    public function __construct(Message $event, ProductProjector $projector)
+    public function __construct(Message $message, ProductProjector $projector)
     {
-        if ($event->getName() !== 'product_was_updated_domain_event') {
-            $message = sprintf('Expected "product_was_updated" domain event, got "%s"', $event->getName());
-            throw new NoProductWasUpdatedDomainEventMessageException($message);
-        }
-        $this->event = $event;
+        $this->event = ProductWasUpdatedDomainEvent::fromMessage($message);
         $this->projector = $projector;
     }
 
     public function process()
     {
-        $payload = json_decode($this->event->getPayload(), true);
-        
-        // todo: encapsulate product serialization and rehydration
-        $product = $payload['product'][Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
-            ConfigurableProduct::fromArray($payload['product']) :
-            SimpleProduct::fromArray($payload['product']);
-        
-        $this->projector->project($product);
+        $this->projector->project($this->event->getProduct());
     }
 }

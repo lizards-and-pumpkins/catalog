@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ImageWasAddedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var Message
+     * @var ImageWasAddedDomainEvent
      */
     private $event;
 
@@ -19,19 +19,15 @@ class ImageWasAddedDomainEventHandler implements DomainEventHandler
      */
     private $imageProcessorCollection;
 
-    public function __construct(Message $event, ImageProcessorCollection $imageProcessorCollection)
+    public function __construct(Message $message, ImageProcessorCollection $imageProcessorCollection)
     {
-        if ($event->getName() !== 'image_was_added_domain_event') {
-            $message = sprintf('Expected "image_was_added" domain event, got "%s"', $event->getName());
-            throw new NoImageWasAddedDomainEventMessageException($message);
-        }
-        $this->event = $event;
+        $this->event = ImageWasAddedDomainEvent::fromMessage($message);
         $this->imageProcessorCollection = $imageProcessorCollection;
     }
 
     public function process()
     {
-        // todo: use $this->event->getMetadata()['data_version'] and use it while processing...!
-        $this->imageProcessorCollection->process(json_decode($this->event->getPayload(), true)['file_path']);
+        // todo: use $this->event->getDataVersion() and use it while processing...!
+        $this->imageProcessorCollection->process($this->event->getImageFilePath());
     }
 }

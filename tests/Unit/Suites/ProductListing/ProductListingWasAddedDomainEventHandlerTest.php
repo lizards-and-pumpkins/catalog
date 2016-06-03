@@ -5,10 +5,13 @@ namespace LizardsAndPumpkins\ProductListing;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Exception\NoProductListingWasAddedDomainEventMessage;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  */
 class ProductListingWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,31 +27,23 @@ class ProductListingWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubEvent */
-        $stubEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubEvent->method('getName')->willReturn('product_listing_was_added_domain_event');
-        $stubEvent->method('getPayload')->willReturn('');
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
+        
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+        $stubMessage = $this->getMock(Message::class, [], [], '', false);
+        $stubMessage->method('getName')->willReturn('product_listing_was_added');
+        $stubMessage->method('getPayload')->willReturn(json_encode(['listing' => $stubProductListing->serialize()]));
 
         $this->mockProjector = $this->getMock(ProductListingSnippetProjector::class, [], [], '', false);
 
-        $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler($stubEvent, $this->mockProjector);
+        $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler($stubMessage, $this->mockProjector);
     }
 
     public function testDomainHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
-    }
-
-    public function testThrowsExceptionIfDomainEventNameDoesNotMatch()
-    {
-        $this->expectException(NoProductListingWasAddedDomainEventMessage::class);
-        $this->expectExceptionMessage('Expected "product_listing_was_added" domain event, got "bar_buz_domain_event');
-        
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $invalidEvent */
-        $invalidEvent = $this->getMock(Message::class, [], [], '', false);
-        $invalidEvent->method('getName')->willReturn('bar_buz_domain_event');
-
-        new ProductListingWasAddedDomainEventHandler($invalidEvent, $this->mockProjector);
     }
 
     public function testProductListingProjectionIsTriggered()

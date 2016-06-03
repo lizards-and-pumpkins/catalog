@@ -8,6 +8,8 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class DomainEventQueue
 {
+    const VERSION_KEY = 'data_version';
+    
     /**
      * @var Queue
      */
@@ -18,44 +20,30 @@ class DomainEventQueue
         $this->messageQueue = $messageQueue;
     }
 
+    public function addVersioned(DomainEvent $event, DataVersion $dataVersion)
+    {
+        $message = $event->toMessage();
+        $versionedMessage = $this->addDataVersionToMessageMetadata($dataVersion, $message);
+        $this->messageQueue->add($versionedMessage);
+    }
+
+    public function addNotVersioned(DomainEvent $event)
+    {
+        $this->messageQueue->add($event->toMessage());
+    }
+
     /**
-     * @param string $name
-     * @param string $payload
      * @param DataVersion $dataVersion
-     */
-    public function addVersioned($name, $payload, DataVersion $dataVersion)
-    {
-        $message = $this->buildDomainEventMessage($name, $payload, $this->buildMetadataArray($dataVersion));
-        $this->messageQueue->add($message);
-    }
-
-    /**
-     * @param string $name
-     * @param string $payload
-     */
-    public function addNotVersioned($name, $payload)
-    {
-        $message = $this->buildDomainEventMessage($name, $payload);
-        $this->messageQueue->add($message);
-    }
-
-    /**
-     * @param string $name
-     * @param string $payload
-     * @param string[] $metadata
+     * @param Message $message
      * @return Message
      */
-    private function buildDomainEventMessage($name, $payload, array $metadata = [])
+    private function addDataVersionToMessageMetadata(DataVersion $dataVersion, Message $message)
     {
-        return Message::withCurrentTime($name . '_domain_event', $payload, $metadata);
-    }
-
-    /**
-     * @param DataVersion $dataVersion
-     * @return string[]
-     */
-    private function buildMetadataArray(DataVersion $dataVersion)
-    {
-        return ['data_version' => (string)$dataVersion];
+        return Message::withGivenTime(
+            $message->getName(),
+            $message->getPayload(),
+            array_merge($message->getMetadata(), [self::VERSION_KEY => (string)$dataVersion]),
+            new \DateTimeImmutable('@' . $message->getTimestamp())
+        );
     }
 }

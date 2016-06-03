@@ -8,6 +8,11 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  */
 class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,29 +28,14 @@ class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubImageWasAddedDomainEvent */
-        $stubImageWasAddedDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubImageWasAddedDomainEvent->method('getName')->willReturn('image_was_added_domain_event');
-        $stubImageWasAddedDomainEvent->method('getPayload')->willReturn('');
+        $message = Message::withCurrentTime(ImageWasAddedDomainEvent::CODE, '', ['data_version' => 'foo']);
 
         $this->mockImageProcessorCollection = $this->getMock(ImageProcessorCollection::class, [], [], '', false);
 
         $this->handler = new ImageWasAddedDomainEventHandler(
-            $stubImageWasAddedDomainEvent,
+            $message,
             $this->mockImageProcessorCollection
         );
-    }
-
-    public function testThrowsExceptionIfDomainEventNameDoesNotMatch()
-    {
-        $this->expectException(NoImageWasAddedDomainEventMessageException::class);
-        $this->expectExceptionMessage('Expected "image_was_added" domain event, got "foo_bar_domain_event"');
-        
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $invalidEvent */
-        $invalidEvent = $this->getMock(Message::class, [], [], '', false);
-        $invalidEvent->method('getName')->willReturn('foo_bar_domain_event');
-
-        new ImageWasAddedDomainEventHandler($invalidEvent, $this->mockImageProcessorCollection);
     }
 
     public function testImageDomainEventHandlerIsReturned()

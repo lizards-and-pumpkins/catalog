@@ -49,7 +49,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('product_was_updated_domain_event');
+        $stubDomainEvent->method('getName')->willReturn('product_was_updated');
 
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
@@ -63,7 +63,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('template_was_updated_domain_event');
+        $stubDomainEvent->method('getName')->willReturn('template_was_updated');
 
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
@@ -77,7 +77,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('image_was_added_domain_event');
+        $stubDomainEvent->method('getName')->willReturn('image_was_added');
         
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
@@ -91,7 +91,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
         $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('product_listing_was_added_domain_event');
+        $stubDomainEvent->method('getName')->willReturn('product_listing_was_added');
         
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 

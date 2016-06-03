@@ -2,19 +2,24 @@
 
 namespace LizardsAndPumpkins\ProductListing;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\ProductListing\Exception\NoProductListingWasAddedDomainEventMessage;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 class ProductListingWasAddedDomainEvent implements DomainEvent
 {
+    const CODE = 'product_listing_was_added';
+    
     /**
      * @var ProductListing
      */
-    private $listingCriteria;
+    private $productListing;
 
     public function __construct(ProductListing $productListing)
     {
-        $this->listingCriteria = $productListing;
+        $this->productListing = $productListing;
     }
 
     /**
@@ -22,6 +27,41 @@ class ProductListingWasAddedDomainEvent implements DomainEvent
      */
     public function getListingCriteria()
     {
-        return $this->listingCriteria;
+        return $this->productListing;
+    }
+
+    /**
+     * @return Message
+     */
+    public function toMessage()
+    {
+        // todo: use encapsulate serialization and rehydration in ProductListing not using serialize()
+        $payload = json_encode(['listing' => $this->productListing->serialize()]);
+        $version = DataVersion::fromVersionString($this->productListing->getContextData()[DataVersion::CONTEXT_CODE]);
+        return Message::withCurrentTime(self::CODE, $payload, ['data_version' => (string) $version]);
+    }
+
+    /**
+     * @param Message $message
+     * @return static
+     */
+    public static function fromMessage(Message $message)
+    {
+        if ($message->getName() !== self::CODE) {
+            throw new NoProductListingWasAddedDomainEventMessage(
+                sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName())
+            );
+        }
+        $payload = json_decode($message->getPayload(), true);
+        $productListing = ProductListing::rehydrate($payload['listing']);
+        return new self($productListing);
+    }
+
+    /**
+     * @return DataVersion
+     */
+    public function getDataVersion()
+    {
+        return DataVersion::fromVersionString($this->getListingCriteria()->getContextData()[DataVersion::CONTEXT_CODE]);
     }
 }

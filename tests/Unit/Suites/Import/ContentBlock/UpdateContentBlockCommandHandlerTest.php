@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message

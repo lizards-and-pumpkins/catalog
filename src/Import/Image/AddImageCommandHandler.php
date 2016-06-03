@@ -29,7 +29,7 @@ class AddImageCommandHandler implements CommandHandler
 
     public function process()
     {
-        $eventPayload = json_encode(['file_path' => $this->command->getImageFilePath()]);
-        $this->domainEventQueue->addVersioned('image_was_added', $eventPayload, $this->command->getDataVersion());
+        $event = new ImageWasAddedDomainEvent($this->command->getImageFilePath(), $this->command->getDataVersion());
+        $this->domainEventQueue->addVersioned($event, $this->command->getDataVersion());
     }
 }

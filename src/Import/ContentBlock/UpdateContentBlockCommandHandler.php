@@ -28,9 +28,7 @@ class UpdateContentBlockCommandHandler implements CommandHandler
     public function process()
     {
         $contentBlockSource = $this->command->getContentBlockSource();
-        $contentBlockId = $contentBlockSource->getContentBlockId();
 
-        $payload = json_encode(['id' => (string) $contentBlockId, 'source' => $contentBlockSource->serialize()]);
-        $this->domainEventQueue->addNotVersioned('content_block_was_updated', $payload);
+        $this->domainEventQueue->addNotVersioned(new ContentBlockWasUpdatedDomainEvent($contentBlockSource));
     }
 }

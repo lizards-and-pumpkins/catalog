@@ -26,24 +26,18 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     private $projectorLocator;
 
     public function __construct(
-        Message $domainEvent,
+        Message $message,
         ContextSource $contextSource,
         TemplateProjectorLocator $projectorLocator
     ) {
-        if ($domainEvent->getName() !== 'template_was_updated_domain_event') {
-            $message = sprintf('Expected "template_was_updated" domain event, got "%s"', $domainEvent->getName());
-            throw new NoTemplateWasUpdatedDomainEventMessageException($message);
-        }
-        $this->domainEvent = $domainEvent;
+        $this->domainEvent = TemplateWasUpdatedDomainEvent::fromMessage($message);
         $this->projectorLocator = $projectorLocator;
         $this->contextSource = $contextSource;
     }
 
     public function process()
     {
-        $payload = json_decode($this->domainEvent->getPayload(), true);
-        
-        $projector = $this->projectorLocator->getTemplateProjectorForCode($payload['id']);
-        $projector->project($payload['template']);
+        $projector = $this->projectorLocator->getTemplateProjectorForCode($this->domainEvent->getTemplateId());
+        $projector->project($this->domainEvent->getTemplateContent());
     }
 }

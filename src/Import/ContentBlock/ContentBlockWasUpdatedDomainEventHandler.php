@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ContentBlockWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var Message
+     * @var ContentBlockWasUpdatedDomainEvent
      */
     private $domainEvent;
 
@@ -18,20 +18,14 @@ class ContentBlockWasUpdatedDomainEventHandler implements DomainEventHandler
      */
     private $projector;
 
-    public function __construct(Message $domainEvent, ContentBlockProjector $projector)
+    public function __construct(Message $message, ContentBlockProjector $projector)
     {
-        if ($domainEvent->getName() !== 'content_block_was_updated_domain_event') {
-            $message = sprintf('Expected "content_block_was_updated" domain event, got "%s"', $domainEvent->getName());
-            throw new NoContentBlockWasUpdatedDomainEventMessageException($message);
-        }
-        $this->domainEvent = $domainEvent;
+        $this->domainEvent = ContentBlockWasUpdatedDomainEvent::fromMessage($message);
         $this->projector = $projector;
     }
 
     public function process()
     {
-        $payload = json_decode($this->domainEvent->getPayload(), true);
-        $contentBlockSource = ContentBlockSource::rehydrate($payload['source']);
-        $this->projector->project($contentBlockSource);
+        $this->projector->project($this->domainEvent->getContentBlockSource());
     }
 }
