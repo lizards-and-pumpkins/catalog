@@ -20,30 +20,8 @@ class DomainEventQueue
         $this->messageQueue = $messageQueue;
     }
 
-    public function addVersioned(DomainEvent $event, DataVersion $dataVersion)
-    {
-        $message = $event->toMessage();
-        $versionedMessage = $this->addDataVersionToMessageMetadata($dataVersion, $message);
-        $this->messageQueue->add($versionedMessage);
-    }
-
-    public function addNotVersioned(DomainEvent $event)
+    public function add(DomainEvent $event)
     {
         $this->messageQueue->add($event->toMessage());
-    }
-
-    /**
-     * @param DataVersion $dataVersion
-     * @param Message $message
-     * @return Message
-     */
-    private function addDataVersionToMessageMetadata(DataVersion $dataVersion, Message $message)
-    {
-        return Message::withGivenTime(
-            $message->getName(),
-            $message->getPayload(),
-            array_merge($message->getMetadata(), [self::VERSION_KEY => (string)$dataVersion]),
-            new \DateTimeImmutable('@' . $message->getTimestamp())
-        );
     }
 }

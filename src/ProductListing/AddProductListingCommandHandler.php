@@ -30,7 +30,6 @@ class AddProductListingCommandHandler implements CommandHandler
     
     public function process()
     {
-        $event = new ProductListingWasAddedDomainEvent($this->command->getProductListing());
-        $this->eventQueue->addVersioned($event, $event->getDataVersion());
+        $this->eventQueue->add(new ProductListingWasAddedDomainEvent($this->command->getProductListing()));
     }
 }

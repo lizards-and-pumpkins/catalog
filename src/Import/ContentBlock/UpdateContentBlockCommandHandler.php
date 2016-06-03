@@ -29,6 +29,6 @@ class UpdateContentBlockCommandHandler implements CommandHandler
     {
         $contentBlockSource = $this->command->getContentBlockSource();
 
-        $this->domainEventQueue->addNotVersioned(new ContentBlockWasUpdatedDomainEvent($contentBlockSource));
+        $this->domainEventQueue->add(new ContentBlockWasUpdatedDomainEvent($contentBlockSource));
     }
 }

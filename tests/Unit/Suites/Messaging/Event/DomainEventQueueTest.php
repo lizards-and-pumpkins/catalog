@@ -48,18 +48,6 @@ class DomainEventQueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Message
-     */
-    private function getAddedMessage()
-    {
-        $messages = $this->getMessagesAddedToQueue();
-        if (count($messages) === 0) {
-            $this->fail('No messages added to queue');
-        }
-        return $messages[0];
-    }
-
-    /**
      * @param int $expected
      */
     private function assertAddedMessageCount($expected)
@@ -81,28 +69,7 @@ class DomainEventQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testAddsDomainEventToMessageQueue()
     {
-        $this->eventQueue->addVersioned(new TestDomainEvent(), $this->mockDataVersion);
+        $this->eventQueue->add(new TestDomainEvent());
         $this->assertAddedMessageCount(1);
-    }
-    
-    public function testCreatesVersionedQueueMessage()
-    {
-        $this->eventQueue->addVersioned(new TestDomainEvent(), $this->mockDataVersion);
-
-        $message = $this->getAddedMessage();
-
-        $this->assertInstanceOf(Message::class, $message);
-        $this->assertArrayHasKey(DomainEventQueue::VERSION_KEY, $message->getMetadata());
-        $this->assertSame((string)$this->mockDataVersion, $message->getMetadata()[DomainEventQueue::VERSION_KEY]);
-    }
-
-    public function testCreatesUnVersionedQueueMessage()
-    {
-        $this->eventQueue->addNotVersioned(new TestDomainEvent());
-        
-        $message = $this->getAddedMessage();
-
-        $this->assertInstanceOf(Message::class, $message);
-        $this->assertArrayNotHasKey(DomainEventQueue::VERSION_KEY, $message->getMetadata());
     }
 }

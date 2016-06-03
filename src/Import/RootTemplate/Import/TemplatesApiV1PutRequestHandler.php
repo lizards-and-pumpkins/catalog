@@ -42,8 +42,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
     {
         $templateId = $this->extractTemplateIdFromRequest($request);
         // todo: add command which validates input data to command queue, the have the command handler create the event
-        $domainEvent = new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody());
-        $this->domainEventQueue->addNotVersioned($domainEvent);
+        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody()));
     }
 
     /**

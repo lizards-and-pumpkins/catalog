@@ -53,7 +53,7 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingWasAddedDomainEventIsEmitted()
     {
-        $this->mockDomainEventQueue->expects($this->once())->method('addVersioned');
+        $this->mockDomainEventQueue->expects($this->once())->method('add');
 
         $this->commandHandler->process();
     }

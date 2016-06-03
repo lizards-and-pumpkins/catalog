@@ -201,7 +201,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     public function testItAddsACatalogWasImportedDomainEventToTheEventQueue()
     {
-        $this->mockEventQueue->expects($this->once())->method('addVersioned')
+        $this->mockEventQueue->expects($this->once())->method('add')
             ->with($this->isInstanceOf(CatalogWasImportedDomainEvent::class));
 
         $this->catalogImport->importFile($this->sharedFixtureFilePath);
