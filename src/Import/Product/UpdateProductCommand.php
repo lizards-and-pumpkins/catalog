@@ -36,9 +36,9 @@ class UpdateProductCommand implements Command
     public function toMessage()
     {
         $name = self::CODE;
-        $payload = ['id' => (string)$this->product->getId(), 'product' => $this->product];
+        $payload = ['id' => (string)$this->product->getId(), 'product' => json_encode($this->product)];
         $metadata = ['data_version' => (string) $this->getDataVersion()];
-        return Message::withCurrentTime($name, json_encode($payload), $metadata);
+        return Message::withCurrentTime($name, $payload, $metadata);
     }
 
     /**
@@ -51,8 +51,7 @@ class UpdateProductCommand implements Command
             throw self::createInvalidMessageException($message->getName());
         }
         
-        $payload = json_decode($message->getPayload(), true);
-        $product = self::rehydrateProduct($payload['product']);
+        $product = self::rehydrateProduct(json_decode($message->getPayload()['product'], true));
         return new self($product);
     }
 

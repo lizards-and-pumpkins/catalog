@@ -34,7 +34,7 @@ class UpdateContentBlockCommand implements Command
     public function toMessage()
     {
         $name = self::CODE;
-        $payload = $this->contentBlockSource->serialize();
+        $payload = ['block' => $this->contentBlockSource->serialize()];
         $metadata = [];
         return Message::withCurrentTime($name, $payload, $metadata);
     }
@@ -52,6 +52,6 @@ class UpdateContentBlockCommand implements Command
                 self::CODE
             ));
         }
-        return new self(ContentBlockSource::rehydrate($message->getPayload()));
+        return new self(ContentBlockSource::rehydrate($message->getPayload()['block']));
     }
 }

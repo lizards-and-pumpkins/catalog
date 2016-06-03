@@ -14,6 +14,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  */
 class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
@@ -60,8 +61,7 @@ class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
     public function testReturnsMessageWithPayload()
     {
         $message = $this->domainEvent->toMessage();
-        $payload = json_decode($message->getPayload(), true);
-        $this->assertArrayHasKey('listing', $payload);
+        $this->assertArrayHasKey('listing', $message->getPayload());
     }
 
     public function testReturnsMessageWithDataVersionInMetaData()
@@ -84,7 +84,7 @@ class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoProductListingWasAddedDomainEventMessage::class);
         $this->expectExceptionMessage('Expected "product_listing_was_added" domain event, got "foo"');
 
-        ProductListingWasAddedDomainEvent::fromMessage(Message::withCurrentTime('foo', '', []));
+        ProductListingWasAddedDomainEvent::fromMessage(Message::withCurrentTime('foo', [], []));
     }
 
     public function testReturnsTheDataVersion()

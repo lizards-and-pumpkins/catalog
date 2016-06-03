@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
@@ -15,6 +14,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,12 +32,7 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $testContentBlockId = ContentBlockId::fromString('foo bar');
         $testContentBlockSource = new ContentBlockSource($testContentBlockId, '', [], []);
-
-        $testMessage = Message::withCurrentTime(
-            UpdateContentBlockCommand::CODE,
-            $testContentBlockSource->serialize(),
-            []
-        );
+        $testMessage = (new UpdateContentBlockCommand($testContentBlockSource))->toMessage();
 
         $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
         $this->commandHandler = new UpdateContentBlockCommandHandler($testMessage, $this->mockDomainEventQueue);

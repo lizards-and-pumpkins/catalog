@@ -58,7 +58,7 @@ class AddImageCommand implements Command
     public function toMessage()
     {
         $name = self::CODE;
-        $payload = json_encode(['file_path' => $this->imageFilePath, 'data_version' => (string)$this->dataVersion]);
+        $payload = ['file_path' => $this->imageFilePath, 'data_version' => (string)$this->dataVersion];
         $metadata = [];
         return Message::withCurrentTime($name, $payload, $metadata);
     }
@@ -76,7 +76,7 @@ class AddImageCommand implements Command
                 self::CODE
             ));
         }
-        $payload = json_decode($message->getPayload(), true);
+        $payload = $message->getPayload();
         return new self($payload['file_path'], DataVersion::fromVersionString($payload['data_version']));
     }
 }

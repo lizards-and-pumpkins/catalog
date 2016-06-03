@@ -6,32 +6,33 @@ namespace LizardsAndPumpkins\Messaging\Queue;
  * @covers \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class MessageTest extends \PHPUnit_Framework_TestCase
 {
     public function testReturnsTheInjectedTimestamp()
     {
         $date = '2016-05-18 06:00:00';
-        $message = Message::withGivenTime('foo name', 'bar payload', [], new \DateTimeImmutable($date));
+        $message = Message::withGivenTime('foo name', ['bar' =>  'payload'], [], new \DateTimeImmutable($date));
         $this->assertSame((new \DateTimeImmutable($date))->getTimestamp(), $message->getTimestamp());
     }
 
     public function testReturnsTheMessageName()
     {
         $name = 'foo';
-        $message = Message::withCurrentTime($name, 'baz payload', []);
+        $message = Message::withCurrentTime($name, ['baz' => 'payload'], []);
         $this->assertSame($name, $message->getName());
     }
 
     public function testValidatesTheMessageName()
     {
         $this->expectException(\InvalidArgumentException::class);
-        Message::withCurrentTime('', 'qux payload', ['metadata']);
+        Message::withCurrentTime('', ['qux' => 'payload'], ['metadata']);
     }
 
     public function testReturnsThePayload()
     {
-        $payload = 'bar';
+        $payload = ['bar' => 'baz'];
         $message = Message::withCurrentTime('foo name', $payload, []);
         $this->assertSame($payload, $message->getPayload());
     }
@@ -39,20 +40,20 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     public function testReturnsTheMetadata()
     {
         $metadata = ['data_version' => 'foo-bar'];
-        $message = Message::withCurrentTime('foo name', 'bar payload', $metadata);
+        $message = Message::withCurrentTime('foo name', ['bar' => 'payload'], $metadata);
         $this->assertSame($metadata, $message->getMetadata());
     }
 
     public function testItValidatesTheMetadata()
     {
         $this->expectException(\InvalidArgumentException::class);
-        Message::withCurrentTime('foo name', 'bar payload', ['' => $this]);
+        Message::withCurrentTime('foo name', ['bar' => 'payload'], ['' => $this]);
     }
 
     public function testCanBeInstantiatedWithoutInjectingTheCurrentDateTime()
     {
         $startTime = time();
-        $message = Message::withCurrentTime('some.name', 'some_payload', ['some' => 'metadata']);
+        $message = Message::withCurrentTime('some.name', ['some' => 'payload'], ['some' => 'metadata']);
         $this->assertInstanceOf(Message::class, $message);
         $isCurrentTime = $message->getTimestamp() === $startTime || $message->getTimestamp() === $startTime + 1;
         $this->assertTrue($isCurrentTime, 'The message was not instantiated for the current datetime');
@@ -61,13 +62,13 @@ class MessageTest extends \PHPUnit_Framework_TestCase
     public function testCanBeInstantiatedWithGivenTime()
     {
         $time = new \DateTimeImmutable('2016-05-18 06:00:00');
-        $message = Message::withGivenTime('some.name', 'some_payload', ['some' => 'metadata'], $time);
+        $message = Message::withGivenTime('some.name', ['some' => 'payload'], ['some' => 'metadata'], $time);
         $this->assertSame($time->getTimestamp(), $message->getTimestamp());
     }
 
     public function testItCanBeJsonSerializedAndRehydrated()
     {
-        $source = Message::withCurrentTime('foo', 'bar', ['baz' => 'qux']);
+        $source = Message::withCurrentTime('foo', ['bar' => 'foo'], ['baz' => 'qux']);
         $rehydrated = Message::rehydrate($source->serialize());
 
         $this->assertInstanceOf(Message::class, $rehydrated);

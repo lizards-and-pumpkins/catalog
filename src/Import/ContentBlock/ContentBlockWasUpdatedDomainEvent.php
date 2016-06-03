@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ContentBlockWasUpdatedDomainEvent implements DomainEvent
 {
     const CODE = 'content_block_was_updated';
-    
+
     /**
      * @var ContentBlockId
      */
@@ -40,7 +40,7 @@ class ContentBlockWasUpdatedDomainEvent implements DomainEvent
     public function toMessage()
     {
         $payload = ['id' => (string)$this->contentBlockId, 'source' => $this->contentBlockSource->serialize()];
-        return Message::withCurrentTime(self::CODE, json_encode($payload), []);
+        return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
     /**
@@ -54,8 +54,7 @@ class ContentBlockWasUpdatedDomainEvent implements DomainEvent
                 sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName())
             );
         }
-        
-        $payload = json_decode($message->getPayload(), true);
-        return new static(ContentBlockSource::rehydrate($payload['source']));
+
+        return new static(ContentBlockSource::rehydrate($message->getPayload()['source']));
     }
 }

@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +61,7 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsMessageWithTemplatePayload()
     {
-        $payload = json_decode($this->domainEvent->toMessage()->getPayload(), true);
+        $payload = $this->domainEvent->toMessage()->getPayload();
         $this->assertArrayHasKey('id', $payload);
         $this->assertSame($this->dummyTemplateId, $payload['id']);
         $this->assertArrayHasKey('template', $payload);
@@ -79,6 +80,6 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(NoTemplateWasUpdatedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "template_was_updated" domain event, got "foo"');
-        TemplateWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('foo', '', []));
+        TemplateWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('foo', [], []));
     }
 }

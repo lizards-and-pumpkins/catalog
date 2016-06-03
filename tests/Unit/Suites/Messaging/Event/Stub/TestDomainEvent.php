@@ -14,7 +14,7 @@ class TestDomainEvent implements DomainEvent
      */
     public function toMessage()
     {
-        return Message::withCurrentTime(self::CODE, '', []);
+        return Message::withCurrentTime(self::CODE, [], []);
     }
 
     /**

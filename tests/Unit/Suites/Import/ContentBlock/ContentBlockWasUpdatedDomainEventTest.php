@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  */
@@ -36,6 +37,7 @@ class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
         $this->stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
         $this->stubContentBlockSource->method('getContentBlockId')->willReturn($this->stubContentBlockId);
+        $this->stubContentBlockSource->method('serialize')->willReturn('');
         $this->domainEvent = new ContentBlockWasUpdatedDomainEvent($this->stubContentBlockSource);
     }
 
@@ -59,7 +61,7 @@ class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsMessagWithContentBlockPayload()
     {
-        $payload = json_decode($this->domainEvent->toMessage()->getPayload(), true);
+        $payload = $this->domainEvent->toMessage()->getPayload();
         $this->assertArrayHasKey('id', $payload);
         $this->assertArrayHasKey('source', $payload);
     }
@@ -85,6 +87,6 @@ class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(NoContentBlockWasUpdatedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "content_block_was_updated" domain event, got "foobar"');
-        ContentBlockWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('foobar', '', []));
+        ContentBlockWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('foobar', [], []));
     }
 }

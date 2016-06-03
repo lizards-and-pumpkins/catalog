@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->testMessage = Message::withCurrentTime('foo', 'bar', []);
+        $this->testMessage = Message::withCurrentTime('foo', [], []);
         $this->queue = new InMemoryQueue();
     }
 
@@ -69,8 +70,8 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheMessagesInTheRightOrder()
     {
-        $this->queue->add(Message::withCurrentTime('One', '', []));
-        $this->queue->add(Message::withCurrentTime('Two', '', []));
+        $this->queue->add(Message::withCurrentTime('One', [], []));
+        $this->queue->add(Message::withCurrentTime('Two', [], []));
 
         $this->assertEquals('One', $this->queue->next()->getName());
         $this->assertEquals('Two', $this->queue->next()->getName());
@@ -83,9 +84,9 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
 
     public function testItClearsTheQueue()
     {
-        $this->queue->add(Message::withCurrentTime('One', '', []));
-        $this->queue->add(Message::withCurrentTime('Two', '', []));
-        $this->queue->add(Message::withCurrentTime('Three', '', []));
+        $this->queue->add(Message::withCurrentTime('One', [], []));
+        $this->queue->add(Message::withCurrentTime('Two', [], []));
+        $this->queue->add(Message::withCurrentTime('Three', [], []));
         $this->assertCount(3, $this->queue);
         $this->queue->clear();
         $this->assertCount(0, $this->queue);

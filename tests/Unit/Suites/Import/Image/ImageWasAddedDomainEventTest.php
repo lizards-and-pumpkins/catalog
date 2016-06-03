@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class ImageWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,7 +65,7 @@ class ImageWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
     public function testReturnsMessageWithPayload()
     {
         $message = $this->domainEvent->toMessage();
-        $payload = json_decode($message->getPayload(), true);
+        $payload = $message->getPayload();
         $this->assertSame($this->dummyImageFilePath, $payload['file_path']);
     }
 
@@ -86,7 +87,7 @@ class ImageWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoImageWasAddedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "image_was_added" domain event, got "foo"');
         
-        $message = Message::withCurrentTime('foo', '', []);
+        $message = Message::withCurrentTime('foo', [], []);
         ImageWasAddedDomainEvent::fromMessage($message);
     }
 }

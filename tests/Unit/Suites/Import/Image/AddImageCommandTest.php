@@ -13,6 +13,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class AddImageCommandTest extends \PHPUnit_Framework_TestCase
@@ -80,7 +81,7 @@ class AddImageCommandTest extends \PHPUnit_Framework_TestCase
         $this->stubDataVersion->method('__toString')->willReturn('123');
         $expectedPayload = ['file_path' => $this->imageFilePath, 'data_version' => '123'];
         $message = $this->command->toMessage();
-        $this->assertSame(json_encode($expectedPayload), $message->getPayload());
+        $this->assertSame($expectedPayload, $message->getPayload());
     }
 
     public function testCanBeRehydratedFromMessage()
@@ -99,7 +100,7 @@ class AddImageCommandTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoAddImageCommandMessageException::class);
         $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "add_image"');
 
-        $message = Message::withCurrentTime('foo', '', []);
+        $message = Message::withCurrentTime('foo', [], []);
         AddImageCommand::fromMessage($message);
     }
 }

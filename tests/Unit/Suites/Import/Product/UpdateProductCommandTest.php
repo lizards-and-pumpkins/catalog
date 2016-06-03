@@ -21,6 +21,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
@@ -82,10 +83,10 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsMessageWithPayload()
     {
-        $expectedPayload = json_encode([
+        $expectedPayload = [
             'id'      => (string)$this->testProduct->getId(),
-            'product' => $this->testProduct,
-        ]);
+            'product' => json_encode($this->testProduct),
+        ];
         $message = $this->command->toMessage();
         $this->assertSame($expectedPayload, $message->getPayload());
     }
@@ -108,7 +109,7 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoUpdateProductCommandMessageException::class);
         $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "update_product"');
 
-        $message = Message::withCurrentTime('foo', '', []);
+        $message = Message::withCurrentTime('foo', [], []);
 
         UpdateProductCommand::fromMessage($message);
     }

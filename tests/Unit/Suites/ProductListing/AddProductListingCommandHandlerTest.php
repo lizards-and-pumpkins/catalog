@@ -5,7 +5,6 @@ namespace LizardsAndPumpkins\ProductListing;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**
@@ -14,6 +13,10 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,15 +37,13 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
          */
         $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => '123']);
+        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
 
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
-        $stubCommand = $this->getMock(Message::class, [], [], '', false);
-        $stubCommand->method('getPayload')->willReturn(json_encode(['listing' => serialize($stubProductListing)]));
-        $stubCommand->method('getName')->willReturn('add_product_listing');
+        $message = (new AddProductListingCommand($stubProductListing))->toMessage();
 
         $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
 
-        $this->commandHandler = new AddProductListingCommandHandler($stubCommand, $this->mockDomainEventQueue);
+        $this->commandHandler = new AddProductListingCommandHandler($message, $this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
