@@ -27,7 +27,7 @@ class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent = $this->createMock(Message::class);
         $stubDomainEvent->method('getName')->willReturn('test_foo_domain_event');
 
         $this->testException = new \Exception($this->exceptionMessage);

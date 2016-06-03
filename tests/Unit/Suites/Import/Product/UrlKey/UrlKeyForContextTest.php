@@ -30,7 +30,7 @@ class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->testUrlKey = UrlKey::fromString('example.html');
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext = $this->createMock(Context::class);
         $this->urlKeyForContext = new UrlKeyForContext($this->testUrlKey, $this->stubContext, $this->urlKeyType);
     }
 

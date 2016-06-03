@@ -33,13 +33,13 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function getStubProductView($dummyProductIdString)
     {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
 
         /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(ProductView::class);
+        $stubProduct = $this->createMock(ProductView::class);
         $stubProduct->method('getId')->willReturn($stubProductId);
-        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
         $stubProduct->method('jsonSerialize')->willReturn(['product_id' => $stubProductId]);
         
         return $stubProduct;
@@ -56,7 +56,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
         $this->snippetRenderer = $this->createInstanceUnderTest($this->mockSnippetKeyGenerator);
@@ -90,7 +90,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProduct = $this->getStubProductView($dummyProductId);
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGenerator */
-        $mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $mockSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
             ->with($this->anything(), [Product::ID => $stubProduct->getId()])
             ->willReturn('stub-content-key');

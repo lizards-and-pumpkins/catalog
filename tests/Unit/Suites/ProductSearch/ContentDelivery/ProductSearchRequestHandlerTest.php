@@ -52,7 +52,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     private function createStubDataPoolReader()
     {
         /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
-        $stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
+        $stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubSelectionCriteria->method('jsonSerialize')
             ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
         $pageSnippetCodes = ['child-snippet1'];
@@ -63,9 +63,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
             []
         )->getInfo());
 
-        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
 
-        $mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $mockDataPoolReader = $this->createMock(DataPoolReader::class);
         $mockDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
         $mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
@@ -79,12 +79,12 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductListingPageRequest()
     {
-        $stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
+        $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
 
-        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
 
-        $stubProductListingPageRequest = $this->getMock(ProductListingPageRequest::class, [], [], '', false);
+        $stubProductListingPageRequest = $this->createMock(ProductListingPageRequest::class);
         $stubProductListingPageRequest->method('getProductsPerPage')->willReturn($stubProductsPerPage);
         $stubProductListingPageRequest->method('getSelectedSortOrderConfig')->willReturn($stubSortOrderConfig);
         $stubProductListingPageRequest->method('getSelectedFilterValues')->willReturn([]);
@@ -98,8 +98,8 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductListingPageContentBuilder()
     {
-        $stubHttpResponse = $this->getMock(HttpResponse::class);
-        $stubPageContentBuilder = $this->getMock(ProductListingPageContentBuilder::class, [], [], '', false);
+        $stubHttpResponse = $this->createMock(HttpResponse::class);
+        $stubPageContentBuilder = $this->createMock(ProductListingPageContentBuilder::class);
         $stubPageContentBuilder->method('buildPageContent')->willReturn($stubHttpResponse);
 
         return $stubPageContentBuilder;
@@ -108,22 +108,22 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
 
         $stubDataPoolReader = $this->createStubDataPoolReader();
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
-        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
 
         /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
-        $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
+        $stubFacetFilterRequest = $this->createMock(FacetFiltersToIncludeInResult::class);
 
         $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
 
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
 
         $this->requestHandler = new ProductSearchRequestHandler(
             $stubContext,
@@ -213,7 +213,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCookieProcessingIsTriggered(HttpRequest $stubRequest)
     {
-        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
 
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
         $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
@@ -228,7 +228,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testHttpResponseIsReturned(HttpRequest $stubRequest)
     {
-        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
         $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
             ->willReturn($stubSortOrderConfig);
 
@@ -244,7 +244,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testSortOrderConfigAttributeCodesAreMappedBeforePassedToSearchEngine(HttpRequest $stubRequest)
     {
         $this->mockProductListingPageRequest->expects($this->once())->method('createSortOrderConfigForRequest')
-            ->willReturn($this->getMock(SortOrderConfig::class, [], [], '', false));
+            ->willReturn($this->createMock(SortOrderConfig::class));
 
         $this->requestHandler->process($stubRequest);
     }

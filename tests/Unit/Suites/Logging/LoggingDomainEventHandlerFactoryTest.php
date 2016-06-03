@@ -140,7 +140,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new SampleMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
-        $masterFactory->register(new UnitTestFactory());
+        $masterFactory->register(new UnitTestFactory($this));
         $this->factory = new LoggingDomainEventHandlerFactory($commonFactory);
         $masterFactory->register($this->factory);
     }
@@ -176,7 +176,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsADecoratedProductListingWasAddedDomainEventHandler()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => 'foo']);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
         $testEvent = new ProductListingWasAddedDomainEvent($stubProductListing);

@@ -23,7 +23,7 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->registry = new FacetFieldTransformationRegistry;
-        $this->stubFacetFieldTransformation = $this->getMock(FacetFieldTransformation::class);
+        $this->stubFacetFieldTransformation = $this->createMock(FacetFieldTransformation::class);
     }
 
     /**

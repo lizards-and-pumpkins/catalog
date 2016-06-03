@@ -19,7 +19,7 @@ class ProductAttributeListBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubContextWithDataSet(array $contextDataSet)
     {
-        $context = $this->getMock(Context::class);
+        $context = $this->createMock(Context::class);
         $context->method('matchesDataSet')->with($contextDataSet)->willReturn(true);
 
         return $context;

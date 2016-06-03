@@ -61,19 +61,19 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
     protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
 
-        $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+        $this->stubDataPoolReader = $this->createMock(DataPoolReader::class);
+        $this->mockPageBuilder = $this->createMock(PageBuilder::class);
 
-        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
         /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubKeyGeneratorLocator */
-        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $stubKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubSnippetKeyGenerator);
 
         /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $sortOrderConfig */
-        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $sortOrderConfig = $this->createMock(SortOrderConfig::class);
 
         $this->requestHandler = new ProductSearchAutosuggestionRequestHandler(
             $stubContext,
@@ -83,7 +83,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
             $sortOrderConfig
         );
 
-        $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubHttpRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testHttpRequestHandlerInterfaceIsImplemented()
@@ -151,7 +151,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $this->mockPageBuilder->method('buildPage')->willReturn($this->getMock(HttpResponse::class, [], [], '', false));
+        $this->mockPageBuilder->method('buildPage')->willReturn($this->createMock(HttpResponse::class));
 
         $metaSnippetContent = [
             PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'foo',
@@ -161,9 +161,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($metaSnippetContent));
         $this->stubDataPoolReader->method('getSnippets')->willReturn([]);
 
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
 
-        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
 
         $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
@@ -176,7 +176,7 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([]);
         $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
 
@@ -196,9 +196,9 @@ class ProductSearchAutosuggestionRequestHandlerTest extends \PHPUnit_Framework_T
         $queryString = 'foo';
         $this->prepareStubHttpRequest($queryString);
 
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
 
-        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
 
         $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);

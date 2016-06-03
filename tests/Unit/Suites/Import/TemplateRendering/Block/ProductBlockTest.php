@@ -36,8 +36,8 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
-        $this->stubProductView = $this->getMock(ProductView::class);
+        $this->stubBlockRenderer = $this->createMock(BlockRenderer::class);
+        $this->stubProductView = $this->createMock(ProductView::class);
 
         $this->productBlock = new ProductBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProductView);
     }
@@ -75,7 +75,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testProductIdIsReturned()
     {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
 
         $this->stubProductView->method('getId')->willReturn($stubProductId);
         $result = $this->productBlock->getProductId();
@@ -105,7 +105,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingMainImageFileNameIsDelegatedToProduct()
     {
-        $testImageUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $testImageUrl = $this->createMock(HttpUrl::class);
         $this->stubProductView->method('getMainImageUrl')->willReturn($testImageUrl);
 
         $variantCode = 'small';
@@ -122,7 +122,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingProductImageFileNameIsDelegatedToProduct()
     {
-        $testUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $testUrl = $this->createMock(HttpUrl::class);
         $variantCode = 'medium';
         $this->stubProductView->method('getImageUrlByNumber')->willReturn($testUrl);
 

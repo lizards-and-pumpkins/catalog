@@ -33,10 +33,10 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
+        $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
         $this->requestHandler = new TemplatesApiV1PutRequestHandler($this->mockDomainEventQueue);
 
-        $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testApiRequestHandlerInterfaceIsImplemented()

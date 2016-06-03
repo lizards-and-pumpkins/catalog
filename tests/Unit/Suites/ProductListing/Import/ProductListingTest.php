@@ -37,9 +37,9 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubUrlKey = $this->getMock(UrlKey::class, [], [], '', false);
-        $this->stubCriteria = $this->getMock(SearchCriteria::class);
-        $this->stubProductListingAttributeList = $this->getMock(ProductListingAttributeList::class, [], [], '', false);
+        $this->stubUrlKey = $this->createMock(UrlKey::class);
+        $this->stubCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubProductListingAttributeList = $this->createMock(ProductListingAttributeList::class);
 
         $this->productListing = new ProductListing(
             $this->stubUrlKey,

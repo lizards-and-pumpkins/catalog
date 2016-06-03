@@ -30,8 +30,8 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
-        $this->stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $this->stubFacetFieldTransformationRegistry = $this->createMock(FacetFieldTransformationRegistry::class);
+        $this->stubGlobalProductListingCriteria = $this->createMock(SearchCriteria::class);
         $this->builder = new SearchCriteriaBuilder(
             $this->stubFacetFieldTransformationRegistry,
             $this->stubGlobalProductListingCriteria
@@ -56,11 +56,11 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $rangeTo = '1';
         $parameterValue = 'whatever';
 
-        $stubFacetFieldRange = $this->getMock(FacetFilterRange::class, [], [], '', false);
+        $stubFacetFieldRange = $this->createMock(FacetFilterRange::class);
         $stubFacetFieldRange->method('from')->willReturn($rangeFrom);
         $stubFacetFieldRange->method('to')->willReturn($rangeTo);
 
-        $stubFacetFieldTransformation = $this->getMock(FacetFieldTransformation::class);
+        $stubFacetFieldTransformation = $this->createMock(FacetFieldTransformation::class);
         $stubFacetFieldTransformation->method('decode')->willReturn($stubFacetFieldRange);
 
         $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(true);

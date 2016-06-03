@@ -27,8 +27,8 @@ class ProcessTimeLoggingCommandHandlerDecoratorTest extends \PHPUnit_Framework_T
 
     protected function setUp()
     {
-        $this->mockLogger = $this->getMock(Logger::class);
-        $this->mockDecoratedCommandHandler = $this->getMock(CommandHandler::class);
+        $this->mockLogger = $this->createMock(Logger::class);
+        $this->mockDecoratedCommandHandler = $this->createMock(CommandHandler::class);
         $this->handlerDecorator = new ProcessTimeLoggingCommandHandlerDecorator(
             $this->mockDecoratedCommandHandler,
             $this->mockLogger

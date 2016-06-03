@@ -98,7 +98,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createMockPageBuilder()
     {
-        $mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+        $mockPageBuilder = $this->createMock(PageBuilder::class);
 
         $this->addSnippetsToPageSpy = $this->any();
         $mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
@@ -147,10 +147,10 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubSearchEngineResponse()
     {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubFacetFieldCollection = $this->getMock(FacetFieldCollection::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
+        $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
 
-        $stubSearchEngineResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
         $stubSearchEngineResponse->method('getFacetFieldCollection')->willReturn($this->stubFacetFieldCollection);
 
@@ -159,19 +159,19 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductJsonService = $this->getMock(ProductJsonService::class, [], [], '', false);
+        $this->stubProductJsonService = $this->createMock(ProductJsonService::class);
         $this->mockPageBuilder = $this->createMockPageBuilder();
 
         $class = SearchFieldToRequestParamMap::class;
-        $this->stubSearchFieldToRequestParamMap = $this->getMock($class, [], [], '', false);
+        $this->stubSearchFieldToRequestParamMap = $this->createMock($class);
         
-        $this->stubTranslator = $this->getMock(Translator::class);
+        $this->stubTranslator = $this->createMock(Translator::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
-        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class);
+        $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
-        $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
 
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
             $this->stubProductJsonService,
@@ -181,10 +181,10 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSortOrderConfig
         );
 
-        $this->stubPageMetaInfoSnippetContent = $this->getMock(PageMetaInfoSnippetContent::class);
-        $this->stubContext = $this->getMock(Context::class);
-        $this->stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
-        $this->stubSelectedSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->stubPageMetaInfoSnippetContent = $this->createMock(PageMetaInfoSnippetContent::class);
+        $this->stubContext = $this->createMock(Context::class);
+        $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
+        $this->stubSelectedSortOrderConfig = $this->createMock(SortOrderConfig::class);
         $this->stubSearchEngineResponse = $this->createStubSearchEngineResponse();
     }
 
@@ -310,7 +310,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $selectedSortOrderConfigRepresentation = 'selected-sort-order-config';
         $initialSortOrderConfigRepresentation = 'initial-sort-order-config';
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
 
         $this->stubSelectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
         $this->stubSelectedSortOrderConfig->method('jsonSerialize')->willReturn($selectedSortOrderConfigRepresentation);
@@ -341,9 +341,9 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $selectedSortOrderConfigRepresentation = 'selected-sort-order-config';
         $initialSortOrderConfigRepresentation = 'initial-sort-order-config';
 
-        $stubAttributeCodeA = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCodeA = $this->createMock(AttributeCode::class);
         $stubAttributeCodeA->method('__toString')->willReturn('A');
-        $stubAttributeCodeB = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCodeB = $this->createMock(AttributeCode::class);
         $stubAttributeCodeA->method('__toString')->willReturn('B');
 
         $this->stubSelectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCodeA);
@@ -372,12 +372,12 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testNewSortOrderConfigSnippetIsAddedToPageBuilder()
     {
-        $stubAttributeCodeA = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCodeA = $this->createMock(AttributeCode::class);
         $stubAttributeCodeA->method('__toString')->willReturn('A');
-        $stubAttributeCodeB = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCodeB = $this->createMock(AttributeCode::class);
         $stubAttributeCodeA->method('__toString')->willReturn('B');
 
-        $stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+        $stubSortOrderDirection = $this->createMock(SortOrderDirection::class);
         $stubSortOrderDirection->method('__toString')->willReturn(SortOrderDirection::ASC);
 
         $this->stubSelectedSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCodeA);

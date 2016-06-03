@@ -33,13 +33,13 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
      */
     private function createMockMessage()
     {
-        return $this->getMock(Message::class, [], [], '', false);
+        return $this->createMock(Message::class);
     }
 
     protected function setUp()
     {
-        $this->mockLogger = $this->getMock(Logger::class);
-        $this->decoratedQueue = $this->getMock(Queue::class);
+        $this->mockLogger = $this->createMock(Logger::class);
+        $this->decoratedQueue = $this->createMock(Queue::class);
         $this->decorator = new LoggingQueueDecorator($this->decoratedQueue, $this->mockLogger);
     }
 
@@ -90,7 +90,7 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesClearCallsToTheDecoratedQueue()
     {
-        $mockQueue = $this->getMock(ClearableStubQueue::class);
+        $mockQueue = $this->createMock(ClearableStubQueue::class);
         $mockQueue->expects($this->once())->method('clear');
         (new LoggingQueueDecorator($mockQueue, $this->mockLogger))->clear();
     }

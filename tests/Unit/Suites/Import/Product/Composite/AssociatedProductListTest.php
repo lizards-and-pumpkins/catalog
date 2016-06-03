@@ -36,7 +36,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     private function createArrayOfStubProductsWithSize($numberOfAssociatedProducts)
     {
         return array_map(function ($num) {
-            $stubProduct = $this->getMock(Product::class);
+            $stubProduct = $this->createMock(Product::class);
             $stubProduct->method('getId')->willReturn($num);
             return $stubProduct;
         }, range(1, $numberOfAssociatedProducts));
@@ -49,7 +49,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubAttribute($code, $value)
     {
-        $stubAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubAttribute = $this->createMock(ProductAttribute::class);
         $stubAttribute->method('getCode')->willReturn($code);
         $stubAttribute->method('getValue')->willReturn($value);
         return $stubAttribute;
@@ -62,7 +62,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProduct($productId, ProductAttribute ...$attributes)
     {
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
         $getAttributesValueMap = $this->createStubProductAttributeReturnValueMap(...$attributes);
         $hasAttributesValueMap = $this->createHasProductAttributeValueMap(...$attributes);
         $stubProduct->method('getAllValuesOfAttribute')->willReturnMap($getAttributesValueMap);
@@ -125,7 +125,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     public function testItImplementsTheJsonSerializableInterface()
     {
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
         $this->assertInstanceOf(\JsonSerializable::class, new AssociatedProductList($stubProduct));
     }
 
@@ -149,9 +149,9 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(DuplicateAssociatedProductException::class);
         $this->expectExceptionMessage('The product "test" is associated two times to the same composite product');
-        $stubProductOne = $this->getMock(Product::class);
+        $stubProductOne = $this->createMock(Product::class);
         $stubProductOne->method('getId')->willReturn(ProductId::fromString('test'));
-        $stubProductTwo = $this->getMock(Product::class);
+        $stubProductTwo = $this->createMock(Product::class);
         $stubProductTwo->method('getId')->willReturn(ProductId::fromString('test'));
 
         new AssociatedProductList($stubProductOne, $stubProductTwo);

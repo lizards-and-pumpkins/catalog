@@ -14,7 +14,7 @@ class UrlKeyForContextCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubUrlKeyForContext = $this->getMock(UrlKeyForContext::class, [], [], '', false);
+        $this->stubUrlKeyForContext = $this->createMock(UrlKeyForContext::class);
     }
     
     public function testItIsCountable()

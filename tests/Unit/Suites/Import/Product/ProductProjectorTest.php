@@ -59,22 +59,22 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
-        $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
-        $this->stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $this->stubSnippet = $this->createMock(Snippet::class);
+        $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
+        $this->stubSearchDocument = $this->createMock(SearchDocument::class);
 
-        $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
+        $this->mockRendererCollection = $this->createMock(SnippetRendererCollection::class);
         $this->mockRendererCollection->method('render')->willReturn([$this->stubSnippet]);
 
-        $this->stubSearchDocumentBuilder = $this->getMock(SearchDocumentBuilder::class);
+        $this->stubSearchDocumentBuilder = $this->createMock(SearchDocumentBuilder::class);
         $this->stubSearchDocumentBuilder->method('aggregate')->willReturn($this->stubSearchDocument);
 
-        $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
-        $this->stubUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class, [], [], '', false);
+        $stubUrlKeyForContextCollection = $this->createMock(UrlKeyForContextCollection::class);
+        $this->stubUrlKeyCollector = $this->createMock(UrlKeyForContextCollector::class);
         $this->stubUrlKeyCollector->method('collectProductUrlKeys')->willReturn($stubUrlKeyForContextCollection);
 
-        $stubProductView = $this->getMock(ProductView::class);
-        $this->productViewLocator = $this->getMock(ProductViewLocator::class, [], [], '', false);
+        $stubProductView = $this->createMock(ProductView::class);
+        $this->productViewLocator = $this->createMock(ProductViewLocator::class);
         $this->productViewLocator->method('createForProduct')->willReturn($stubProductView);
 
         $this->projector = new ProductProjector(
@@ -91,7 +91,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $this->productViewLocator->expects($this->once())->method('createForProduct');
 
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
 
         $this->projector->project($stubProduct);
     }
@@ -103,7 +103,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
             ->with($this->stubSearchDocument);
 
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
 
         $this->projector->project($stubProduct);
     }
@@ -111,7 +111,7 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     public function testItWritesTheUrlKeyCollectionForTheDataVersionToTheDataPool()
     {
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
 
         $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProduct);
         $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')->with($urlKeyCollection);
@@ -122,10 +122,10 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     public function testItDelegatesToTheUrlKeyCollectorToCollectAllKeys()
     {
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
 
         $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')
-            ->willReturn($this->getMock(UrlKeyForContextCollection::class, [], [], '', false));
+            ->willReturn($this->createMock(UrlKeyForContextCollection::class));
 
         $this->projector->project($stubProduct);
     }

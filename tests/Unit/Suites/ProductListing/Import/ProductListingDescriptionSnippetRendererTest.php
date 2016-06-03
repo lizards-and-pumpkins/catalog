@@ -39,8 +39,8 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
      */
     private function createStubProductListingWithAttributes(array $attributes)
     {
-        $stubSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([]);
         $stubProductListing->method('getCriteria')->willReturn($stubSearchCriteria);
 
@@ -75,14 +75,14 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
     protected function setUp()
     {
         $class = ProductListingDescriptionBlockRenderer::class;
-        $this->stubDescriptionBlockRenderer = $this->getMock($class, [], [], '', false);
+        $this->stubDescriptionBlockRenderer = $this->createMock($class);
 
-        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testSnippetKey);
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $mockContextBuilder */
-        $mockContextBuilder = $this->getMock(ContextBuilder::class);
-        $mockContext = $this->getMock(Context::class);
+        $mockContextBuilder = $this->createMock(ContextBuilder::class);
+        $mockContext = $this->createMock(Context::class);
         $mockContextBuilder->method('createContext')->willReturn($mockContext);
 
         $this->renderer = new ProductListingDescriptionSnippetRenderer(

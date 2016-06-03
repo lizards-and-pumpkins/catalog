@@ -75,12 +75,12 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubRobotsMetaTagSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubRobotsMetaTagSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubRobotsMetaTagSnippetKeyGenerator->method('getKeyForContext')
             ->willReturnCallback(function (Context $context, array $usedDataParts) {
                 return $this->getDummyRobotsTagKeyBasedOnContent($usedDataParts['robots']);
             });
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext = $this->createMock(Context::class);
         $this->renderer = new RobotsMetaTagSnippetRenderer($this->stubRobotsMetaTagSnippetKeyGenerator);
     }
 

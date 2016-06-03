@@ -57,7 +57,7 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
         
         $testCommand = new UpdateProductCommand($this->testProduct);
 
-        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
+        $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
         $this->commandHandler = new UpdateProductCommandHandler($testCommand->toMessage(), $this->mockDomainEventQueue);
     }

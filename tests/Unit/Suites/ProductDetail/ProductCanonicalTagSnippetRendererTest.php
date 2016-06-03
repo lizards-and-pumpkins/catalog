@@ -68,17 +68,17 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubCanonicalTagSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
+        $this->stubCanonicalTagSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
         $this->stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString('https://example.com/'));
         $this->renderer = new ProductCanonicalTagSnippetRenderer(
             $this->stubCanonicalTagSnippetKeyGenerator,
             $this->stubBaseUrlBuilder
         );
 
-        $this->mockProductView = $this->getMock(ProductView::class);
+        $this->mockProductView = $this->createMock(ProductView::class);
         $this->mockProductView->method('getFirstValueOfAttribute')->willReturn('test.html');
-        $this->mockProductView->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->mockProductView->method('getContext')->willReturn($this->createMock(Context::class));
     }
 
     public function testImplementsTheSnipperRendererInterface()

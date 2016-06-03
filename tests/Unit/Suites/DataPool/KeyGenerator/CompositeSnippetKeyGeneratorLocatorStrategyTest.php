@@ -27,7 +27,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
             // intentionally left empty
         };
 
-        $stubSnippetKeyGeneratorLocatorStrategy = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocatorStrategy = $this->createMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocatorStrategy->method('canHandle')->willReturnMap([
             [$this->supportedSnippetCode, true]
         ]);

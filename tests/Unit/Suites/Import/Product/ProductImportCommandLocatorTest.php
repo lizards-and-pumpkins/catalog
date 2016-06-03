@@ -31,12 +31,12 @@ class ProductImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheFactoryToCreateTheProductImportCommands()
     {
-        $stubCommand = $this->getMock(Command::class);
+        $stubCommand = $this->createMock(Command::class);
         $this->mockProductImportCommandFactory->expects($this->once())
             ->method('createProductImportCommands')
             ->willReturn([$stubCommand]);
         
-        $result = $this->locator->getProductImportCommands($this->getMock(Product::class));
+        $result = $this->locator->getProductImportCommands($this->createMock(Product::class));
         
         $this->assertSame([$stubCommand], $result);
     }

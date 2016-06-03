@@ -64,7 +64,7 @@ class FileContentTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAFileContentInstanceForFiles()
     {
         $testContent = 'file content';
-        $mockFile = $this->getMock(File::class);
+        $mockFile = $this->createMock(File::class);
         $mockFile->method('getContent')->willReturn($testContent);
         
         $fileContent = FileContent::fromFile($mockFile);

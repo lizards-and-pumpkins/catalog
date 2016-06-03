@@ -26,9 +26,9 @@ class WritingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->wrappedLogger = $this->getMock(Logger::class);
-        $this->stubLogMessage = $this->getMock(LogMessage::class);
-        $this->mockWriter = $this->getMock(LogMessageWriter::class);
+        $this->wrappedLogger = $this->createMock(Logger::class);
+        $this->stubLogMessage = $this->createMock(LogMessage::class);
+        $this->mockWriter = $this->createMock(LogMessageWriter::class);
         $this->decorator = new WritingLoggerDecorator($this->wrappedLogger, $this->mockWriter);
     }
 

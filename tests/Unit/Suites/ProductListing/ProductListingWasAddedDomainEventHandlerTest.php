@@ -32,11 +32,11 @@ class ProductListingWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_Te
     protected function setUp()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => 'foo']);
         
-        $this->mockProjector = $this->getMock(ProductListingSnippetProjector::class, [], [], '', false);
+        $this->mockProjector = $this->createMock(ProductListingSnippetProjector::class);
 
         $message = (new ProductListingWasAddedDomainEvent($stubProductListing))->toMessage();
         $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler($message, $this->mockProjector);

@@ -23,7 +23,7 @@ class NullApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->requestHandler = new NullApiRequestHandler;
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testApiRequestHandlerIsExtended()

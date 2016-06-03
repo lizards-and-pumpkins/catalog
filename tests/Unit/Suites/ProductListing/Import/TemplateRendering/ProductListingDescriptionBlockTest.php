@@ -25,7 +25,7 @@ class ProductListingDescriptionBlockTest extends \PHPUnit_Framework_TestCase
     private function createBlockInstance(array $productListingAttributes)
     {
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
-        $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        $stubBlockRenderer = $this->createMock(BlockRenderer::class);
         $productListingDescriptionBlock = new ProductListingDescriptionBlock(
             $stubBlockRenderer,
             'product_listing_description.phtml',
@@ -41,8 +41,8 @@ class ProductListingDescriptionBlockTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductListingWithAttributes(array $attributes)
     {
-        $stubSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([]);
         $stubProductListing->method('getCriteria')->willReturn($stubSearchCriteria);
 

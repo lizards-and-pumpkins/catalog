@@ -32,8 +32,8 @@ class ProductImageImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testItDelegatesToTheFactoryToCreateTheProductImageImportCommands()
     {
-        $stubCommand = $this->getMock(Command::class);
-        $stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $stubCommand = $this->createMock(Command::class);
+        $stubDataVersion = $this->createMock(DataVersion::class);
         $this->mockProductImageImportCommandFactory->expects($this->once())
             ->method('createProductImageImportCommands')
             ->willReturn([$stubCommand]);

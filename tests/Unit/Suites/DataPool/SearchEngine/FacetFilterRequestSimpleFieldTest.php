@@ -21,7 +21,7 @@ class FacetFilterRequestSimpleFieldTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $this->stubAttributeCode = $this->createMock(AttributeCode::class);
         $this->field = new FacetFilterRequestSimpleField($this->stubAttributeCode);
     }
 

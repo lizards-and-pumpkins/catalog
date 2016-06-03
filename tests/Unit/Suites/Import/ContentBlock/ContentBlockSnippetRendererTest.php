@@ -30,8 +30,8 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubContextBuilder()
     {
-        $stubContext = $this->getMock(Context::class);
-        $stubContextBuilder = $this->getMock(ContextBuilder::class, [], [], '', false);
+        $stubContext = $this->createMock(Context::class);
+        $stubContextBuilder = $this->createMock(ContextBuilder::class);
         $stubContextBuilder->method('createContext')->willReturn($stubContext);
 
         return $stubContextBuilder;
@@ -43,7 +43,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubContentBlockSource($contentBlockContent)
     {
-        $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
+        $stubContentBlockSource = $this->createMock(ContentBlockSource::class);
         $stubContentBlockSource->method('getContent')->willReturn($contentBlockContent);
         $stubContentBlockSource->method('getContextData')->willReturn([]);
         $stubContentBlockSource->method('getKeyGeneratorParams')->willReturn([]);
@@ -53,7 +53,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $this->stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $stubContextBuilder = $this->createStubContextBuilder();
 
         $this->renderer = new ContentBlockSnippetRenderer($this->stubSnippetKeyGeneratorLocator, $stubContextBuilder);
@@ -71,7 +71,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $stubContentBlockSource = $this->createStubContentBlockSource($dummyContentBlockContent);
 
-        $stubKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubKeyGenerator->method('getKeyForContext')->willReturn($stubSnippetKey);
 
         $this->stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($stubKeyGenerator);

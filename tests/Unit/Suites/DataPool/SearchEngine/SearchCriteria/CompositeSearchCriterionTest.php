@@ -26,11 +26,11 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
             $searchDocumentFieldsArray[] = $this->createStubSearchDocumentField($fieldKey, $fieldValues);
         }
 
-        $stubSearchDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
+        $stubSearchDocumentFieldsCollection = $this->createMock(SearchDocumentFieldCollection::class);
         $stubSearchDocumentFieldsCollection->method('getIterator')
             ->willReturn(new \ArrayIterator($searchDocumentFieldsArray));
 
-        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocument = $this->createMock(SearchDocument::class);
         $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldsCollection);
 
         return $stubSearchDocument;
@@ -43,7 +43,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubSearchDocumentField($fieldKey, $fieldValues)
     {
-        $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
+        $stubSearchDocumentField = $this->createMock(SearchDocumentField::class);
         $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
         $stubSearchDocumentField->method('getValues')->willReturn($fieldValues);
 

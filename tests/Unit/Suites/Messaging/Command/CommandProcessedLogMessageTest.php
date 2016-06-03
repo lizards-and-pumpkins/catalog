@@ -25,7 +25,7 @@ class CommandProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockCommandHandler = $this->getMock(CommandHandler::class);
+        $this->mockCommandHandler = $this->createMock(CommandHandler::class);
     }
 
     public function testItIsALogMessage()

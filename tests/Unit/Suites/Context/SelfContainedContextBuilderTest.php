@@ -28,7 +28,7 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createMockContextPartBuilder($code, $value)
     {
-        $stubContextPartBuilder = $this->getMock(ContextPartBuilder::class);
+        $stubContextPartBuilder = $this->createMock(ContextPartBuilder::class);
         $stubContextPartBuilder->method('getCode')->willReturn($code);
         $stubContextPartBuilder->method('getValue')->willReturn($value);
         return $stubContextPartBuilder;
@@ -71,7 +71,7 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAContextFromTheRequest()
     {
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubRequest = $this->createMock(HttpRequest::class);
         $this->stubContextPartBuilders[0]->expects($this->once())
             ->method('getValue')
             ->with($this->arrayHasKey(ContextBuilder::REQUEST));

@@ -21,7 +21,7 @@ class SelectProductListingRobotsMetaTagContentTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
         $this->selector = new SelectProductListingRobotsMetaTagContent();
     }
 

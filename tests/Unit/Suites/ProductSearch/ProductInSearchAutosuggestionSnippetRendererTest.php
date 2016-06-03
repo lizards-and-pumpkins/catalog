@@ -39,12 +39,12 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
      */
     private function getStubProductView($dummyProductIdString)
     {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
         
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
 
-        $stubProduct = $this->getMock(ProductView::class);
+        $stubProduct = $this->createMock(ProductView::class);
         $stubProduct->method('getId')->willReturn($stubProductId);
         $stubProduct->method('getContext')->willReturn($stubContext);
 
@@ -53,10 +53,10 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
 
     protected function setUp()
     {
-        $this->mockSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->mockSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->mockSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
 
-        $this->stubBlockRenderer = $this->getMock(ProductInSearchAutosuggestionBlockRenderer::class, [], [], '', false);
+        $this->stubBlockRenderer = $this->createMock(ProductInSearchAutosuggestionBlockRenderer::class);
         $this->stubBlockRenderer->method('render')->willReturn('dummy content');
 
         $this->snippetRenderer = new ProductInSearchAutosuggestionSnippetRenderer(

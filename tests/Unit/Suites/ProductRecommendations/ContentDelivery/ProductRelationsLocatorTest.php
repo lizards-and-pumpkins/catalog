@@ -39,7 +39,7 @@ class ProductRelationsLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->testRelationTypeCode = ProductRelationTypeCode::fromString('test');
         $this->productRelationLocator = new ProductRelationsLocator();
-        $this->stubProductRelationType = $this->getMock(ProductRelations::class);
+        $this->stubProductRelationType = $this->createMock(ProductRelations::class);
 
         $this->productRelationLocator->register($this->testRelationTypeCode, [$this, 'createTestProductRelation']);
     }

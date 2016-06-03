@@ -95,9 +95,9 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->stubProductJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubDataPoolReader = $this->createMock(DataPoolReader::class);
+        $this->stubProductJsonSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubContext = $this->createMock(Context::class);
 
         $this->sameSeriesProductRelations = new SameSeriesProductRelations(
             $this->stubDataPoolReader,
@@ -118,7 +118,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnEmptyArrayIfARequiredAttributeIsMissing($missingAttribute)
     {
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
 
         $productData = $this->getStubProductDataWithBrandAndGenderAndSeries('Pooma', 'Ladies', 'Example');
         unset($productData['attributes'][$missingAttribute]);
@@ -143,12 +143,12 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
     public function testItQueriesTheDataPoolForProductIdsMatchingTheBrandAndSeriesAndGender()
     {
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
 
         $productJson = json_encode($this->getStubProductDataWithBrandAndGenderAndSeries('Pooma', 'Ladies', 'Example'));
         $this->stubDataPoolReader->method('getSnippet')->willReturn($productJson);
 
-        $stubMatchingProductIds = [$this->getMock(ProductId::class, [], [], '', false)];
+        $stubMatchingProductIds = [$this->createMock(ProductId::class)];
         $this->stubDataPoolReader->expects($this->once())
             ->method('getProductIdsMatchingCriteria')
             ->willReturnCallback(function (SearchCriteria $criteria) use ($stubMatchingProductIds) {

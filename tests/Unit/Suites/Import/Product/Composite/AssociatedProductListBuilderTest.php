@@ -24,11 +24,11 @@ class AssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('getId')->willReturnCallback(function () {
             return uniqid();
         });
-        $this->stubProductBuilder = $this->getMock(ProductBuilder::class);
+        $this->stubProductBuilder = $this->createMock(ProductBuilder::class);
         $this->stubProductBuilder->method('getProductForContext')->willReturn($stubProduct);
         $this->stubProductBuilder->method('isAvailableForContext')->willReturn(true);
         
@@ -40,7 +40,7 @@ class AssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
     
     public function testItReturnsAnAssociatedProductList()
     {
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $stubContext->method('__toString')->willReturn('test');
         
         $associatedProductList = $this->builder->getAssociatedProductListForContext($stubContext);

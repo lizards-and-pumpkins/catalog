@@ -24,9 +24,9 @@ class ConfigurableProductXmlToAssociatedProductListBuilderTest extends \PHPUnit_
 
     public function testItReturnsAnAssociatedProductListBuilderInstance()
     {
-        $stubXmlToProductTypeBuilderLocator = $this->getMock(ProductXmlToProductBuilderLocator::class);
+        $stubXmlToProductTypeBuilderLocator = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $stubXmlToProductTypeBuilderLocator->method('createProductBuilderFromXml')
-            ->willReturn($this->getMock(ProductBuilder::class));
+            ->willReturn($this->createMock(ProductBuilder::class));
         $converter = new ConfigurableProductXmlToAssociatedProductListBuilder($stubXmlToProductTypeBuilderLocator);
 
         $result = $converter->createAssociatedProductListBuilder(new XPathParser($this->testXml));

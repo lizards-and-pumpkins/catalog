@@ -107,22 +107,22 @@ class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods($stubFactoryMethods)->getMock();
 
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
-        $mockRouterChain = $this->getMock(HttpRouterChain::class);
-        $mockHttpRequestHandler = $this->getMock(HttpRequestHandler::class);
-        $this->mockHttpResponse = $this->getMock(HttpResponse::class);
+        $stubHttpRequest = $this->createMock(HttpRequest::class);
+        $mockRouterChain = $this->createMock(HttpRouterChain::class);
+        $mockHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $this->mockHttpResponse = $this->createMock(HttpResponse::class);
 
         array_map(function ($methodName) use ($stubMasterFactory) {
-            $stubMasterFactory->method($methodName)->willReturn($this->getMock(HttpRouter::class));
+            $stubMasterFactory->method($methodName)->willReturn($this->createMock(HttpRouter::class));
         }, $routerFactoryMethods);
 
-        $stubMasterFactory->method('getContext')->willReturn($this->getMock(Context::class));
+        $stubMasterFactory->method('getContext')->willReturn($this->createMock(Context::class));
 
         $stubMasterFactory->method('createHttpRouterChain')->willReturn($mockRouterChain);
         $mockRouterChain->method('route')->willReturn($mockHttpRequestHandler);
         $mockHttpRequestHandler->method('process')->willReturn($this->mockHttpResponse);
 
-        $this->webFront = new TestDefaultWebFront($stubHttpRequest, $stubMasterFactory);
+        $this->webFront = new TestDefaultWebFront($stubHttpRequest, $stubMasterFactory, new UnitTestFactory($this));
     }
 
     public function testMasterFactoryIsReturned()
@@ -140,11 +140,11 @@ class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
     public function testSampleMasterFactoryIsReturned()
     {
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
-        $stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubHttpRequest = $this->createMock(HttpRequest::class);
         $stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('foo');
 
-        $webFront = new DefaultWebFront($stubHttpRequest, new UnitTestFactory());
-        $webFront->registerFactory(new UnitTestFactory());
+        $webFront = new DefaultWebFront($stubHttpRequest, new UnitTestFactory($this));
+        $webFront->registerFactory(new UnitTestFactory($this));
         $webFront->processRequest();
 
         $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());

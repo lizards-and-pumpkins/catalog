@@ -9,10 +9,10 @@ class ImageProcessorCollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testAllProcessorsOfCollectionAreProcessed()
     {
-        $processor1 = $this->getMock(ImageProcessor::class, [], [], '', false);
+        $processor1 = $this->createMock(ImageProcessor::class);
         $processor1->expects($this->once())
             ->method('process');
-        $processor2 = $this->getMock(ImageProcessor::class, [], [], '', false);
+        $processor2 = $this->createMock(ImageProcessor::class);
         $processor2->expects($this->once())
             ->method('process');
 

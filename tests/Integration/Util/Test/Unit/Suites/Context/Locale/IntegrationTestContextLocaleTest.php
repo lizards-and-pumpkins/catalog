@@ -23,7 +23,7 @@ class IntegrationTestContextLocaleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextLocale = new IntegrationTestContextLocale();
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testItIsAContextPartBuilder()

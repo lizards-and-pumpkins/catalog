@@ -63,7 +63,7 @@ class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureDirectory($logDir);
         $this->testLogFilePath = $logDir . '/dir/file.log';
         $this->writer = new FileLogMessageWriter($this->testLogFilePath);
-        $this->stubLogMessage = $this->getMock(LogMessage::class);
+        $this->stubLogMessage = $this->createMock(LogMessage::class);
         $this->stubLogMessage->method('__toString')->willReturn('test log message');
         $this->stubLogMessage->method('getContextSynopsis')->willReturn('test context synopsis');
     }

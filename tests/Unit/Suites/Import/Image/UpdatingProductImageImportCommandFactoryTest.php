@@ -34,7 +34,7 @@ class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_Te
         $this->createFixtureFile($imageFilePath, '');
 
         /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
-        $stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $stubDataVersion = $this->createMock(DataVersion::class);
         $stubDataVersion->method('__toString')->willReturn('123');
 
         $commands = $this->factory->createProductImageImportCommands($imageFilePath, $stubDataVersion);

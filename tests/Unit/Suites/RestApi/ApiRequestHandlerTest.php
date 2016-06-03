@@ -25,7 +25,7 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
         $this->apiRequestHandler = new StubApiRequestHandler;
     }
 

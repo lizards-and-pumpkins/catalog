@@ -26,8 +26,8 @@ class FacetFilterRequestRangedFieldTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-        $this->stubFacetFilterRange = $this->getMock(FacetFilterRange::class, [], [], '', false);
+        $this->stubAttributeCode = $this->createMock(AttributeCode::class);
+        $this->stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
         $this->field = new FacetFilterRequestRangedField($this->stubAttributeCode);
     }
 

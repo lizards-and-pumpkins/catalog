@@ -48,25 +48,25 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
         /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $mockImageFileLocator */
-        $mockProduct = $this->getMock(Product::class);
-        $mockProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $mockProduct = $this->createMock(Product::class);
+        $mockProduct->method('getContext')->willReturn($this->createMock(Context::class));
 
-        $stubProductAttributeList = $this->getMock(ProductAttributeList::class);
+        $stubProductAttributeList = $this->createMock(ProductAttributeList::class);
         $mockProduct->method('getAttributes')->willReturn($stubProductAttributeList);
 
-        $stubImageUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubImageUrl = $this->createMock(HttpUrl::class);
         $stubImageUrl->method('__toString')->willReturn($this->testImageUrl);
-        $mockImage = $this->getMock(Image::class);
+        $mockImage = $this->createMock(Image::class);
         $mockImage->method('getUrl')->willReturn($stubImageUrl);
-        $mockPlaceholderImage = $this->getMock(Image::class);
+        $mockPlaceholderImage = $this->createMock(Image::class);
 
-        $mockImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $mockImageFileLocator = $this->createMock(ProductImageFileLocator::class);
 
         $mockImageFileLocator->method('get')->willReturn($mockImage);
         $mockImageFileLocator->method('getPlaceholder')->willReturn($mockPlaceholderImage);
         $mockImageFileLocator->method('getVariantCodes')->willReturn(['small', 'large']);
 
-        $mockImage->method('getUrl')->willReturn($this->getMock(HttpUrl::class, [], [], '', false));
+        $mockImage->method('getUrl')->willReturn($this->createMock(HttpUrl::class));
 
         return new StubProductView($mockProduct, $mockImageFileLocator);
     }
@@ -194,7 +194,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     public function testGettingProductImagesIsDelegatedToOriginalProduct()
     {
         $variantCode = 'medium';
-        $stubProductImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $stubProductImage = $this->createMock(ProductImage::class);
         $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([$stubProductImage]));
         $result = $this->productView->getImages($variantCode);
         $this->assertInternalType('array', $result);
@@ -215,7 +215,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getImageCount')->willReturn(1);
         $this->mockProduct->expects($this->once())
             ->method('getImageByNumber')->with($testImageNumber)
-            ->willReturn($this->getMock(ProductImage::class, [], [], '', false));
+            ->willReturn($this->createMock(ProductImage::class));
         $this->productView->getImageByNumber($testImageNumber, $variantCode);
     }
 
@@ -226,7 +226,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getImageCount')->willReturn(1);
         $this->mockProduct->expects($this->once())
             ->method('getImageByNumber')->with($testImageNumber)
-            ->willReturn($this->getMock(ProductImage::class, [], [], '', false));
+            ->willReturn($this->createMock(ProductImage::class));
         $result = $this->productView->getImageUrlByNumber($testImageNumber, $variantCode);
         $this->assertInstanceOf(HttpUrl::class, $result);
     }
@@ -245,7 +245,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getImageCount')->willReturn(1);
         $this->mockProduct->expects($this->once())
             ->method('getImageByNumber')
-            ->willReturn($this->getMock(ProductImage::class, [], [], '', false));
+            ->willReturn($this->createMock(ProductImage::class));
         $result = $this->productView->getMainImageUrl($variantCode);
         $this->assertInstanceOf(HttpUrl::class, $result);
     }
@@ -325,7 +325,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     public function testItFlattensTheProductImagesInJson()
     {
         $testImageLabel = 'Test Label';
-        $mockProductImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $mockProductImage = $this->createMock(ProductImage::class);
         $mockProductImage->method('getLabel')->willReturn($testImageLabel);
         $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([$mockProductImage]));
 
@@ -351,7 +351,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsPlaceholdersIfTheProductHasNoImages()
     {
         $placeholderUrl = 'http://example.com/placeholder.jpg';
-        $stubPlaceholderUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubPlaceholderUrl = $this->createMock(HttpUrl::class);
         $stubPlaceholderUrl->method('__toString')->willReturn($placeholderUrl);
         /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
         $placeholderImage = $this->mockImageFileLocator->getPlaceholder('dummy', $this->mockProduct->getContext());
@@ -399,7 +399,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getImageCount')->willReturn(1);
 
         $variantCode = 'medium';
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
         /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
         $placeholderImage = $this->mockImageFileLocator->getPlaceholder($variantCode, $this->mockProduct->getContext());
         $placeholderImage->expects($this->once())->method('getUrl')->willReturn($stubHttpUrl);
@@ -422,7 +422,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->mockProduct->method('getImageCount')->willReturn(0);
 
         $variantCode = 'medium';
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
         /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
         $placeholderImage = $this->mockImageFileLocator->getPlaceholder($variantCode, $this->mockProduct->getContext());
         $placeholderImage->expects($this->once())->method('getUrl')->willReturn($stubHttpUrl);

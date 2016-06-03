@@ -82,16 +82,16 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductsPerPage = $this->getMock(ProductsPerPage::class, [], [], '', false);
-        $this->stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
+        $this->stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
         $class = SearchFieldToRequestParamMap::class;
-        $this->stubSearchFieldToRequestParamMap = $this->getMock($class, [], [], '', false);
+        $this->stubSearchFieldToRequestParamMap = $this->createMock($class);
         $this->pageRequest = new ProductListingPageRequest(
             $this->stubProductsPerPage,
             $this->stubSearchFieldToRequestParamMap,
             $this->stubSortOrderConfig
         );
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
     protected function tearDown()
@@ -120,7 +120,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $filterBName = 'bar';
 
         /** @var FacetFiltersToIncludeInResult|MockObject $stubFacetFilterRequest */
-        $stubFacetFilterRequest = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
+        $stubFacetFilterRequest = $this->createMock(FacetFiltersToIncludeInResult::class);
         $stubFacetFilterRequest->method('getAttributeCodeStrings')->willReturn([$filterAName, $filterBName]);
 
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
@@ -200,7 +200,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
         ]);
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('isEqualTo')->with($sortOrderAttributeName)->willReturn(true);
 
         $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
@@ -227,7 +227,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME, $sortOrderDirection],
         ]);
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('isEqualTo')->with($sortOrderAttributeName)->willReturn(true);
 
         $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
@@ -268,7 +268,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
         ]);
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('isEqualTo')
             ->willReturnCallback(function ($attributeName) use ($defaultSortOrderAttributeName) {
                 return $attributeName === $defaultSortOrderAttributeName;
@@ -300,7 +300,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
         ]);
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('isEqualTo')->with($sortOrderAttributeName)->willReturn(true);
 
         $this->stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
@@ -322,7 +322,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     public function testItMapsRequestParametersToFacetFieldNames()
     {
         /** @var FacetFiltersToIncludeInResult|MockObject $stubFacetFiltersToIncludeInResult */
-        $stubFacetFiltersToIncludeInResult = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
+        $stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
         $stubFacetFiltersToIncludeInResult->method('getAttributeCodeStrings')->willReturn(['price_with_tax']);
 
         $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')->willReturnMap([
@@ -344,13 +344,13 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $originalAttributeCodeString = 'foo';
         $mappedAttributeCodeString = 'bar';
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('__toString')->willReturn($originalAttributeCodeString);
 
-        $stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+        $stubSortOrderDirection = $this->createMock(SortOrderDirection::class);
 
         /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortOrderConfig */
-        $stubSortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
         $stubSortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
         $stubSortOrderConfig->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
 
@@ -375,7 +375,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortOrderDirection],
         ]);
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('isEqualTo')
             ->willReturnCallback(function ($attributeName) use ($defaultSortOrderAttributeName) {
                 return $attributeName === $defaultSortOrderAttributeName;
@@ -406,7 +406,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME, $sortOrderDirection],
         ]);
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('isEqualTo')
             ->willReturnCallback(function ($attributeName) use ($defaultSortOrderAttributeName) {
                 return $attributeName === $defaultSortOrderAttributeName;

@@ -34,7 +34,7 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfSnippetsIsReturned()
     {
-        $stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
+        $stubSnippet = $this->createMock(Snippet::class);
 
         $this->mockRenderer->method('render')->willReturn([$stubSnippet]);
         $this->mockRenderer2->method('render')->willReturn([$stubSnippet]);
@@ -55,7 +55,7 @@ class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testResultsOfRenderersAreMerged()
     {
-        $stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
+        $stubSnippet = $this->createMock(Snippet::class);
 
         $testProjectionSourceData = 'test-projection-source-data';
 

@@ -17,13 +17,13 @@ class SearchDocumentTest extends \PHPUnit_Framework_TestCase
     public function testSearchDocumentIsCreated()
     {
         /** @var SearchDocumentFieldCollection|\PHPUnit_Framework_MockObject_MockObject $stubDocumentFieldsCollection */
-        $stubDocumentFieldsCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
+        $stubDocumentFieldsCollection = $this->createMock(SearchDocumentFieldCollection::class);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $testContext */
-        $testContext = $this->getMock(Context::class);
+        $testContext = $this->createMock(Context::class);
 
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
 
         $searchDocument = new SearchDocument($stubDocumentFieldsCollection, $testContext, $stubProductId);
 

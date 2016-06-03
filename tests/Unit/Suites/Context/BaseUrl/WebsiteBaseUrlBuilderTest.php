@@ -36,7 +36,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubConfigReader($baseUrlString)
     {
-        $stubConfigReader = $this->getMock(ConfigReader::class);
+        $stubConfigReader = $this->createMock(ConfigReader::class);
         $configKey = WebsiteBaseUrlBuilder::CONFIG_PREFIX . 'test_website';
         $stubConfigReader->method('get')->with($configKey)->willReturn($baseUrlString);
         return $stubConfigReader;
@@ -47,7 +47,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubContext()
     {
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $stubContext->method('getValue')->with(Website::CONTEXT_CODE)->willReturn('test_website');
         return $stubContext;
     }

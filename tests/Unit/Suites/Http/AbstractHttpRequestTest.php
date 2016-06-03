@@ -24,7 +24,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     public function testUrlIsReturned()
     {
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
 
         $httpRequest = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -42,7 +42,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $path = 'foo';
 
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
         $stubHttpUrl->method('getPathWithoutWebsitePrefix')->willReturn($path);
 
         $httpRequest = HttpRequest::fromParameters(
@@ -59,7 +59,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $path = 'foo';
 
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
         $stubHttpUrl->method('getPathWithWebsitePrefix')->willReturn($path);
 
         $httpRequest = HttpRequest::fromParameters(
@@ -74,7 +74,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     public function testUnsupportedRequestMethodExceptionIsThrown()
     {
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
 
         $this->expectException(UnsupportedRequestMethodException::class);
         $this->expectExceptionMessage('Unsupported request method: "XXX"');
@@ -138,7 +138,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $queryParameterValue = 'bar';
 
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
         $stubHttpUrl->method('getQueryParameter')->with($queryParameterName)->willReturn($queryParameterValue);
 
         $request = HttpRequest::fromParameters(
@@ -154,7 +154,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     public function testDelegatesToUrlToCheckIfQueryParametersArePresent()
     {
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
         $stubHttpUrl->expects($this->once())->method('hasQueryParameters')->willReturn(true);
 
         $request = HttpRequest::fromParameters(
@@ -228,7 +228,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
     public function testItDelegatesToTheHttpUrlToRetrieveTheRequestHost()
     {
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
         $stubHttpUrl->method('getHost')->willReturn('example.com');
 
         $request = HttpRequest::fromParameters(

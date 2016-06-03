@@ -23,7 +23,7 @@ class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->mockRequestHandler = $this->getMock(HttpRequestHandler::class, [], [], '', false);
+        $this->mockRequestHandler = $this->createMock(HttpRequestHandler::class);
         $this->router = new GenericHttpRouter($this->mockRequestHandler);
     }
 
@@ -55,7 +55,7 @@ class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase
      */
     private function getStubRequest()
     {
-        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubRequest = $this->createMock(HttpRequest::class);
         $stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/'));
 
         return $stubRequest;

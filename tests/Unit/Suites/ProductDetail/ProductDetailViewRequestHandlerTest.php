@@ -115,19 +115,19 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->dummyMetaInfoSnippetJson = $this->createProductDetailPageMetaInfoContentJson();
 
-        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->stubContext = $this->getMock(Context::class);
-        $this->mockPageBuilder = $this->getMock(PageBuilder::class, [], [], '', false);
+        $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
+        $this->stubContext = $this->createMock(Context::class);
+        $this->mockPageBuilder = $this->createMock(PageBuilder::class);
 
         $this->addSnippetsToPageSpy = $this->any();
         $this->mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
 
-        $this->stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
-        $this->stubTranslator = $this->getMock(Translator::class);
+        $this->stubTranslator = $this->createMock(Translator::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
-        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class);
+        $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
         $this->requestHandler = new ProductDetailViewRequestHandler(
@@ -138,9 +138,9 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->stubSnippetKeyGenerator
         );
 
-        $stubUrl = $this->getMock(HttpUrl::class, [], [], '', false);
+        $stubUrl = $this->createMock(HttpUrl::class);
 
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
         $this->stubRequest->method('getUrl')->willReturn($stubUrl);
     }
 
@@ -197,7 +197,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $this->anything(),
             $this->anything(),
             $this->isType('array')
-        )->willReturn($this->getMock(GenericHttpResponse::class, [], [], '', false));
+        )->willReturn($this->createMock(GenericHttpResponse::class));
 
         $this->assertInstanceOf(GenericHttpResponse::class, $this->requestHandler->process($this->stubRequest));
     }
@@ -206,12 +206,12 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $urlKeyA = 'A.html';
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequestA */
-        $stubRequestA = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubRequestA = $this->createMock(HttpRequest::class);
         $stubRequestA->method('getPathWithoutWebsitePrefix')->willReturn($urlKeyA);
 
         $urlKeyB = 'B.html';
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequestB */
-        $stubRequestB = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubRequestB = $this->createMock(HttpRequest::class);
         $stubRequestB->method('getPathWithoutWebsitePrefix')->willReturn($urlKeyB);
 
         $requestAMetaInfoSnippetKey = 'A';
@@ -241,7 +241,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolReader->method('getSnippet')
             ->willReturnMap([[$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson]]);
         $this->mockPageBuilder->method('buildPage')
-            ->willReturn($this->getMock(GenericHttpResponse::class, [], [], '', false));
+            ->willReturn($this->createMock(GenericHttpResponse::class));
 
         $this->requestHandler->process($this->stubRequest);
 

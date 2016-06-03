@@ -179,10 +179,10 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
         /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
-        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions = $this->createMock(QueryOptions::class);
 
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
-        $mockCriteria = $this->getMock(SearchCriteria::class);
+        $mockCriteria = $this->createMock(SearchCriteria::class);
 
         $this->getMockSearchEngine()->expects($this->once())->method('query')->with($mockCriteria, $stubQueryOptions);
 
@@ -192,7 +192,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function testFullTextQueriesAreDelegatedToSearchEngine()
     {
         /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
-        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions = $this->createMock(QueryOptions::class);
 
         $testQueryString = 'foo';
 
@@ -212,22 +212,22 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function testItDelegatesQueriesForProductIdsToTheSearchEngine()
     {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
-        $stubCriteria = $this->getMock(SearchCriteria::class);
+        $stubCriteria = $this->createMock(SearchCriteria::class);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         
         /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
-        $stubSortBy = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortBy = $this->createMock(SortOrderConfig::class);
 
         $rowsPerPage = 1000;
         $pageNumber = 1;
         
         /** @var ProductId[]|\PHPUnit_Framework_MockObject_MockObject[] $matchingProductIds */
-        $matchingProductIds = [$this->getMock(ProductId::class, [], [], '', false)];
+        $matchingProductIds = [$this->createMock(ProductId::class)];
 
         /** @var SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject $stubSearchResponse */
-        $stubSearchResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchResponse->method('getProductIds')->willReturn($matchingProductIds);
 
         $this->getMockSearchEngine()->expects($this->once())
@@ -246,22 +246,22 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     public function testTheReturnedProductIdArrayIsNumericallyIndexed()
     {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
-        $stubCriteria = $this->getMock(SearchCriteria::class);
+        $stubCriteria = $this->createMock(SearchCriteria::class);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         
         /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
-        $stubSortBy = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $stubSortBy = $this->createMock(SortOrderConfig::class);
 
         $rowsPerPage = 1000;
         $pageNumber = 1;
         
         /** @var ProductId[]|\PHPUnit_Framework_MockObject_MockObject[] $matchingProductIds */
-        $matchingProductIds = ['non-numeric-key' => $this->getMock(ProductId::class, [], [], '', false)];
+        $matchingProductIds = ['non-numeric-key' => $this->createMock(ProductId::class)];
 
         /** @var SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject $stubSearchResponse */
-        $stubSearchResponse = $this->getMock(SearchEngineResponse::class, [], [], '', false);
+        $stubSearchResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchResponse->method('getProductIds')->willReturn($matchingProductIds);
 
         $this->getMockSearchEngine()->expects($this->once())

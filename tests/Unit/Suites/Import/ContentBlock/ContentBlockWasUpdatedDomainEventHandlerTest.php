@@ -41,7 +41,7 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_Te
             []
         );
         $this->testMessage = (new ContentBlockWasUpdatedDomainEvent($testContentBlockSource))->toMessage();
-        $this->mockProjector = $this->getMock(ContentBlockProjector::class, [], [], '', false);
+        $this->mockProjector = $this->createMock(ContentBlockProjector::class);
 
         $this->domainEventHandler = new ContentBlockWasUpdatedDomainEventHandler(
             $this->testMessage,

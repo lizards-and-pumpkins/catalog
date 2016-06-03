@@ -114,7 +114,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
     private function fakeSnippetKeyGeneratorLocator(MockObject $fakeKeyGeneratorLocator)
     {
         $fixedKeyGeneratorMockFactory = function ($snippetCode) {
-            $keyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
+            $keyGenerator = $this->createMock(SnippetKeyGenerator::class);
             $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
             return $keyGenerator;
         };
@@ -127,7 +127,7 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
         $fakeSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnCallback(
             function ($snippetCode) {
                 if ($snippetCode === $this->testRootSnippetCode) {
-                    $keyGenerator = $this->getMock(SnippetKeyGenerator::class, [], [], '', false);
+                    $keyGenerator = $this->createMock(SnippetKeyGenerator::class);
                     $keyGenerator->method('getKeyForContext')->willReturn($snippetCode);
                     return $keyGenerator;
                 }
@@ -138,14 +138,14 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext = $this->createMock(Context::class);
         $this->stubContext->method('getIdForParts')->willReturn($this->contextIdFixture);
 
-        $this->stubPageMetaInfo = $this->getMock(PageMetaInfoSnippetContent::class);
+        $this->stubPageMetaInfo = $this->createMock(PageMetaInfoSnippetContent::class);
 
-        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
+        $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
 
-        $this->stubSnippetKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $this->stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
 
         $this->pageBuilder = new PageBuilder($this->mockDataPoolReader, $this->stubSnippetKeyGeneratorLocator);
@@ -286,7 +286,7 @@ EOH;
     public function testChildSnippetsWithNoRegisteredKeyGeneratorAreIgnored()
     {
         /** @var SnippetKeyGeneratorLocator|MockObject $stubKeyGeneratorLocator */
-        $stubKeyGeneratorLocator = $this->getMock(SnippetKeyGeneratorLocator::class);
+        $stubKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubKeyGeneratorLocator);
 
         $this->pageBuilder = new PageBuilder($this->mockDataPoolReader, $stubKeyGeneratorLocator);
@@ -306,7 +306,7 @@ EOH;
     public function testTestSnippetTransformationIsNotCalledIfThereIsNoMatchingSnippet()
     {
         /** @var callable|MockObject $mockTransformation */
-        $mockTransformation = $this->getMock(SnippetTransformation::class);
+        $mockTransformation = $this->createMock(SnippetTransformation::class);
         $mockTransformation->expects($this->never())->method('__invoke');
         $this->pageBuilder->registerSnippetTransformation('non-existing-snippet-code', $mockTransformation);
 
@@ -323,7 +323,7 @@ EOH;
     public function testTestSnippetTransformationIsCalledIfThereIsAMatchingSnippet()
     {
         /** @var callable|MockObject $mockTransformation */
-        $mockTransformation = $this->getMock(SnippetTransformation::class);
+        $mockTransformation = $this->createMock(SnippetTransformation::class);
         $mockTransformation->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
             ->willReturn('Transformed Content');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformation);
@@ -341,13 +341,13 @@ EOH;
     public function testMultipleTestSnippetTransformationsForOneSnippetCanBeRegistered()
     {
         /** @var callable|MockObject $mockTransformationOne */
-        $mockTransformationOne = $this->getMock(SnippetTransformation::class);
+        $mockTransformationOne = $this->createMock(SnippetTransformation::class);
         $mockTransformationOne->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
             ->willReturn('result one');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationOne);
 
         /** @var callable|MockObject $mockTransformationTwo */
-        $mockTransformationTwo = $this->getMock(SnippetTransformation::class);
+        $mockTransformationTwo = $this->createMock(SnippetTransformation::class);
         $mockTransformationTwo->expects($this->once())->method('__invoke')->with('result one')
             ->willReturn('result two');
         $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationTwo);

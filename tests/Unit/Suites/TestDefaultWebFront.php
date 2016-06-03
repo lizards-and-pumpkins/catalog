@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class TestDefaultWebFront extends DefaultWebFront
@@ -12,9 +13,12 @@ class TestDefaultWebFront extends DefaultWebFront
      */
     private $testMasterFactory;
 
-    public function __construct(HttpRequest $request, MasterFactory $testMasterFactory)
-    {
-        parent::__construct($request, new UnitTestFactory());
+    public function __construct(
+        HttpRequest $request,
+        MasterFactory $testMasterFactory,
+        UnitTestFactory $unitTestFactory
+    ) {
+        parent::__construct($request, $unitTestFactory);
         $this->testMasterFactory = $testMasterFactory;
     }
 

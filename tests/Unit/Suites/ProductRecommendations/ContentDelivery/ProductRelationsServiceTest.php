@@ -49,14 +49,14 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockProductRelations = $this->getMock(ProductRelations::class);
-        $this->stubProductRelationsLocator = $this->getMock(ProductRelationsLocator::class);
+        $this->mockProductRelations = $this->createMock(ProductRelations::class);
+        $this->stubProductRelationsLocator = $this->createMock(ProductRelationsLocator::class);
         $this->stubProductRelationsLocator->method('locate')->willReturn($this->mockProductRelations);
-        $this->stubProductJsonService = $this->getMock(ProductJsonService::class, [], [], '', false);
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubProductJsonService = $this->createMock(ProductJsonService::class);
+        $this->stubContext = $this->createMock(Context::class);
         
-        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubProductRelationTypeCode = $this->getMock(ProductRelationTypeCode::class, [], [], '', false);
+        $this->stubProductId = $this->createMock(ProductId::class);
+        $this->stubProductRelationTypeCode = $this->createMock(ProductRelationTypeCode::class);
         
         $this->productRelationsService = new ProductRelationsService(
             $this->stubProductRelationsLocator,
@@ -78,7 +78,7 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testItFetchesTheRelatedProductJsonSnippetsFromTheProductJsonService()
     {
-        $stubRelatedProductIds = [$this->getMock(ProductId::class, [], [], '', false)];
+        $stubRelatedProductIds = [$this->createMock(ProductId::class)];
         $stubRelatedProductData = [
             ['Dummy Product Data 1'],
             ['Dummy Product Data 2'],

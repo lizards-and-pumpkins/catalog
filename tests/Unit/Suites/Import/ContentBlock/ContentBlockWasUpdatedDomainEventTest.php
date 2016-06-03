@@ -34,8 +34,8 @@ class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubContentBlockId = $this->getMock(ContentBlockId::class, [], [], '', false);
-        $this->stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
+        $this->stubContentBlockId = $this->createMock(ContentBlockId::class);
+        $this->stubContentBlockSource = $this->createMock(ContentBlockSource::class);
         $this->stubContentBlockSource->method('getContentBlockId')->willReturn($this->stubContentBlockId);
         $this->stubContentBlockSource->method('serialize')->willReturn('');
         $this->domainEvent = new ContentBlockWasUpdatedDomainEvent($this->stubContentBlockSource);

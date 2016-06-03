@@ -21,7 +21,7 @@ class DomainEventProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubDomainEventHandler = $this->getMock(DomainEventHandler::class);
+        $this->stubDomainEventHandler = $this->createMock(DomainEventHandler::class);
         $this->logMessage = new DomainEventProcessedLogMessage($this->testMessage, $this->stubDomainEventHandler);
     }
 

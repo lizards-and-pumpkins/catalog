@@ -19,9 +19,9 @@ class InMemoryLoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testItStoresTheMessagesInOrder()
     {
-        $stubLogMessage1 = $this->getMock(LogMessage::class);
-        $stubLogMessage2 = $this->getMock(LogMessage::class);
-        $stubLogMessage3 = $this->getMock(LogMessage::class);
+        $stubLogMessage1 = $this->createMock(LogMessage::class);
+        $stubLogMessage2 = $this->createMock(LogMessage::class);
+        $stubLogMessage3 = $this->createMock(LogMessage::class);
         
         $this->logger->log($stubLogMessage1);
         $this->logger->log($stubLogMessage2);
@@ -37,9 +37,9 @@ class InMemoryLoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testItOnlyKeepsA500MessagesRollingWindow()
     {
-        $stubLogMessage1 = $this->getMock(LogMessage::class);
-        $stubLogMessage2 = $this->getMock(LogMessage::class);
-        $otherLogMessage = $this->getMock(LogMessage::class);
+        $stubLogMessage1 = $this->createMock(LogMessage::class);
+        $stubLogMessage2 = $this->createMock(LogMessage::class);
+        $otherLogMessage = $this->createMock(LogMessage::class);
 
         $this->logger->log($stubLogMessage1);
         $this->logger->log($stubLogMessage2);

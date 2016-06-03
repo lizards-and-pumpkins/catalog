@@ -29,7 +29,7 @@ class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $testEvent = new ImageWasAddedDomainEvent(__FILE__, DataVersion::fromVersionString('foo'));
-        $this->mockImageProcessorCollection = $this->getMock(ImageProcessorCollection::class, [], [], '', false);
+        $this->mockImageProcessorCollection = $this->createMock(ImageProcessorCollection::class);
 
         $this->handler = new ImageWasAddedDomainEventHandler(
             $testEvent->toMessage(),

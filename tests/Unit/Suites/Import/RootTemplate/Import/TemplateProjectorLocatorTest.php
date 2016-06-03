@@ -84,6 +84,6 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
      */
     private function getStubProjector()
     {
-        return $this->getMock(Projector::class);
+        return $this->createMock(Projector::class);
     }
 }

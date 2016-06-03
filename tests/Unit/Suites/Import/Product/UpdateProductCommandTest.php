@@ -43,7 +43,7 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubContext()
     {
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubContext->method('getValue')->willReturnMap([
             [DataVersion::CONTEXT_CODE, '123'],

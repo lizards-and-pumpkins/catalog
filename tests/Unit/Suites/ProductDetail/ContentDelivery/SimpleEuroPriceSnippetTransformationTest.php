@@ -39,8 +39,8 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
     protected function setUp()
     {
         $this->transformation = new SimpleEuroPriceSnippetTransformation();
-        $this->stubContext = $this->getMock(Context::class);
-        $this->stubPageSnippets = $this->getMock(PageSnippets::class);
+        $this->stubContext = $this->createMock(Context::class);
+        $this->stubPageSnippets = $this->createMock(PageSnippets::class);
     }
 
     public function testItIsCallable()

@@ -136,7 +136,7 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
      */
     private function getStubBlock()
     {
-        return $this->getMock(Block::class, [], [], '', false);
+        return $this->createMock(Block::class);
     }
 
     /**

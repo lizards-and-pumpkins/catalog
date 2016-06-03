@@ -33,7 +33,7 @@ class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $this->stubProductListing = $this->createMock(ProductListing::class);
         $this->stubProductListing->method('serialize')->willReturn(serialize($this->stubProductListing));
         $this->stubProductListing->method('getContextData')
             ->willReturn([DataVersion::CONTEXT_CODE => $this->testDataVersion]);

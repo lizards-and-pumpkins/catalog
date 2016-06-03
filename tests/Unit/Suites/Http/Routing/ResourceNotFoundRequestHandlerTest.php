@@ -22,7 +22,7 @@ class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceOfHttpResourceNotFoundResponseIsReturned()
     {
-        $stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $stubRequest = $this->createMock(HttpRequest::class);
         $result = $this->requestHandler->process($stubRequest);
 
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $result);
@@ -30,7 +30,7 @@ class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedForEveryRequest()
     {
-        $mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $mockRequest = $this->createMock(HttpRequest::class);
         $this->assertTrue($this->requestHandler->canProcess($mockRequest));
     }
 }
