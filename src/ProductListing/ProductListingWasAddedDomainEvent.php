@@ -35,8 +35,7 @@ class ProductListingWasAddedDomainEvent implements DomainEvent
      */
     public function toMessage()
     {
-        // todo: use encapsulate serialization and rehydration in ProductListing not using serialize()
-        $payload = json_encode(['listing' => $this->productListing->serialize()]);
+        $payload = ['listing' => $this->productListing->serialize()];
         $version = DataVersion::fromVersionString($this->productListing->getContextData()[DataVersion::CONTEXT_CODE]);
         return Message::withCurrentTime(self::CODE, $payload, ['data_version' => (string) $version]);
     }
@@ -52,8 +51,7 @@ class ProductListingWasAddedDomainEvent implements DomainEvent
                 sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName())
             );
         }
-        $payload = json_decode($message->getPayload(), true);
-        $productListing = ProductListing::rehydrate($payload['listing']);
+        $productListing = ProductListing::rehydrate($message->getPayload()['listing']);
         return new self($productListing);
     }
 

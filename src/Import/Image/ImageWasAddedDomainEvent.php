@@ -52,7 +52,7 @@ class ImageWasAddedDomainEvent implements DomainEvent
      */
     public function toMessage()
     {
-        $payload = json_encode(['file_path' => $this->getImageFilePath()]);
+        $payload = ['file_path' => $this->getImageFilePath()];
         return Message::withCurrentTime(self::CODE, $payload, ['data_version' => (string) $this->getDataVersion()]);
     }
 
@@ -67,7 +67,7 @@ class ImageWasAddedDomainEvent implements DomainEvent
                 sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName())
             );
         }
-        $payload = json_decode($message->getPayload(), true);
-        return new self($payload['file_path'], DataVersion::fromVersionString($message->getMetadata()['data_version']));
+        $dataVersion = DataVersion::fromVersionString($message->getMetadata()['data_version']);
+        return new self($message->getPayload()['file_path'], $dataVersion);
     }
 }

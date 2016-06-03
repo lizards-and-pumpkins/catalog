@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {

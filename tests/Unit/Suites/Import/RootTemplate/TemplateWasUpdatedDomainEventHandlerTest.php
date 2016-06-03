@@ -11,6 +11,10 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,16 +55,11 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
 
     protected function setUp()
     {
-        $testPayload = ['id' => 'foo', 'template' => 'buz template content'];
-        
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
-        $stubDomainEvent->method('getName')->willReturn('template_was_updated');
-        $stubDomainEvent->method('getPayload')->willReturn(json_encode($testPayload));
+        $testEvent = new TemplateWasUpdatedDomainEvent('foo template id', 'bar template content');
 
         $this->mockProjector = $this->getMock(Projector::class);
 
-        $this->domainEventHandler = $this->createDomainEventHandler($stubDomainEvent);
+        $this->domainEventHandler = $this->createDomainEventHandler($testEvent->toMessage());
     }
 
     public function testDomainEventHandlerInterfaceIsImplemented()

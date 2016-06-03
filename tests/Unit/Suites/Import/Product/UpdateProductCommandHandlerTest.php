@@ -2,14 +2,13 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
@@ -24,6 +23,10 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,16 +45,6 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $commandHandler;
 
-    /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubContext()
-    {
-        $stubContext = $this->getMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
-        return $stubContext;
-    }
-
     protected function setUp()
     {
         $this->testProduct = new SimpleProduct(
@@ -59,19 +52,14 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            $this->createStubContext()
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz'])
         );
-
-        $testPayload = ['id' => $this->testProduct->getId(), 'product' => $this->testProduct];
         
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
-        $stubMessage = $this->getMock(Message::class, [], [], '', false);
-        $stubMessage->method('getName')->willReturn('update_product');
-        $stubMessage->method('getPayload')->willReturn(json_encode($testPayload));
+        $testCommand = new UpdateProductCommand($this->testProduct);
 
         $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
 
-        $this->commandHandler = new UpdateProductCommandHandler($stubMessage, $this->mockDomainEventQueue);
+        $this->commandHandler = new UpdateProductCommandHandler($testCommand->toMessage(), $this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()

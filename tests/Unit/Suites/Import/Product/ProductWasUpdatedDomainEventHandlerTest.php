@@ -7,7 +7,6 @@ use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
@@ -20,6 +19,10 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +38,7 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $product = new SimpleProduct(
+        $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
@@ -43,17 +46,11 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
             SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
         );
 
-        $testPayload = ['id' => 'foo', 'product' => $product];
-
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
-        $stubMessage = $this->getMock(Message::class, [], [], '', false);
-        $stubMessage->method('getName')->willReturn('product_was_updated');
-        $stubMessage->method('getPayload')->willReturn(json_encode($testPayload));
-
+        $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
         $this->mockProductProjector = $this->getMock(ProductProjector::class, [], [], '', false);
 
         $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler(
-            $stubMessage,
+            $testEvent->toMessage(),
             $this->mockProductProjector
         );
     }

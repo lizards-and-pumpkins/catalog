@@ -188,6 +188,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList

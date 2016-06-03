@@ -107,6 +107,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent

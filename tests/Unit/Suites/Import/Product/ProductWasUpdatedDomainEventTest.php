@@ -21,6 +21,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
@@ -74,7 +75,7 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     public function testReturnsMessageWithProductPayload()
     {
         $message = $this->domainEvent->toMessage();
-        $payload = json_decode($message->getPayload(), true);
+        $payload = $message->getPayload();
         $this->assertArrayHasKey('id', $payload);
         $this->assertArrayHasKey('product', $payload);
     }
@@ -91,7 +92,7 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(NoProductWasUpdatedDomainEventMessageException::class);
         $this->expectExceptionMessage(sprintf('Expected "product_was_updated" domain event, got "qux"'));
-        ProductWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('qux', '', []));
+        ProductWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('qux', [], []));
     }
 
     public function testReturnsDataVersion()

@@ -26,7 +26,7 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
      */
     public function __construct($templateId, $templateContent)
     {
-        // todo: validate template id and content are strings
+        // todo: validate template id and content are strings... or use PHP7 and scalar typing
         $this->templateId = $templateId;
         $this->templateContent = $templateContent;
     }
@@ -52,7 +52,7 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
      */
     public function toMessage()
     {
-        $payload = json_encode(['id' => $this->templateId, 'template' => $this->templateContent]);
+        $payload = ['id' => $this->templateId, 'template' => $this->templateContent];
         return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
@@ -66,7 +66,7 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
             $message = sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName());
             throw new NoTemplateWasUpdatedDomainEventMessageException($message);
         }
-        $payload = json_decode($message->getPayload(), true);
+        $payload = $message->getPayload();
         return new self($payload['id'], $payload['template']);
     }
 }

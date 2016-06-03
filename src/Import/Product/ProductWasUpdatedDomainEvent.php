@@ -35,7 +35,7 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
      */
     public function toMessage()
     {
-        $payload = json_encode(['id' => $this->product->getId(), 'product' => $this->product]);
+        $payload = ['id' => (string) $this->product->getId(), 'product' => json_encode($this->product)];
         return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
@@ -50,8 +50,8 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
                 sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName())
             );
         }
-        $payload = json_decode($message->getPayload(), true);
-        return new self(self::rehydrateProduct($payload['product']));
+        $productData = json_decode($message->getPayload()['product'], true);
+        return new self(self::rehydrateProduct($productData));
     }
 
     /**

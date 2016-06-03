@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,12 +28,12 @@ class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $message = Message::withCurrentTime(ImageWasAddedDomainEvent::CODE, '', ['data_version' => 'foo']);
-
+     
+        $testEvent = new ImageWasAddedDomainEvent(__FILE__, DataVersion::fromVersionString('foo'));
         $this->mockImageProcessorCollection = $this->getMock(ImageProcessorCollection::class, [], [], '', false);
 
         $this->handler = new ImageWasAddedDomainEventHandler(
-            $message,
+            $testEvent->toMessage(),
             $this->mockImageProcessorCollection
         );
     }

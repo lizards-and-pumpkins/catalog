@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class CatalogWasImportedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,6 +71,6 @@ class CatalogWasImportedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoCatalogWasImportedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "catalog_was_imported" domain event, got "buz"');
         
-        CatalogWasImportedDomainEvent::fromMessage(Message::withCurrentTime('buz', '', []));
+        CatalogWasImportedDomainEvent::fromMessage(Message::withCurrentTime('buz', [], []));
     }
 }

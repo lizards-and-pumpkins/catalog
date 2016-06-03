@@ -34,15 +34,15 @@ class Message
 
     /**
      * @param string $name
-     * @param string $payload
+     * @param string[]|int[]|float[]|bool[]|array[] $payload
      * @param string[] $metadata
      * @param \DateTimeInterface $now
      */
-    private function __construct($name, $payload, array $metadata, \DateTimeInterface $now)
+    private function __construct($name, array $payload, array $metadata, \DateTimeInterface $now)
     {
         $this->timestamp = $now->getTimestamp();
         $this->name = (string) new MessageName($name);
-        $this->payload = $payload;
+        $this->payload = (new MessagePayload($payload))->getPayload();
         $this->metadata = (new MessageMetadata($metadata))->getMetadata();
     }
 

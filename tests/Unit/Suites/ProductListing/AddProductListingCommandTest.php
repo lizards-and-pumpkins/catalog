@@ -12,6 +12,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  */
 class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
@@ -44,6 +45,7 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsMessageWithAddProductListingName()
     {
+        $this->stubProductListing->method('serialize')->willReturn(serialize($this->stubProductListing));
         $message = $this->command->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(AddProductListingCommand::CODE, $message->getName());
@@ -53,9 +55,8 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
     {
         $serializedProductListing = serialize($this->stubProductListing);
         $this->stubProductListing->method('serialize')->willReturn($serializedProductListing);
-        $expectedPayload = json_encode(['listing' => $serializedProductListing]);
         $message = $this->command->toMessage();
-        $this->assertSame($expectedPayload, $message->getPayload());
+        $this->assertSame(['listing' => $serializedProductListing], $message->getPayload());
     }
 
     public function testCanBeRehydratedFromMessage()
@@ -71,6 +72,6 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoAddProductListingCommandMessageException::class);
         $expectedMessage = 'Unable to rehydrate from "foo bar" queue message, expected "add_product_listing"';
         $this->expectExceptionMessage($expectedMessage);
-        AddProductListingCommand::fromMessage(Message::withCurrentTime('foo bar', '', []));
+        AddProductListingCommand::fromMessage(Message::withCurrentTime('foo bar', [], []));
     }
 }

@@ -35,7 +35,7 @@ class AddProductListingCommand implements Command
     public function toMessage()
     {
         $name = self::CODE;
-        $payload = json_encode(['listing' => $this->productListing->serialize()]);
+        $payload = ['listing' => $this->productListing->serialize()];
         $metadata = [];
         return Message::withCurrentTime($name, $payload, $metadata);
     }
@@ -49,8 +49,7 @@ class AddProductListingCommand implements Command
         if ($message->getName() !== self::CODE) {
             throw self::createInvalidMessageNameException($message->getName());
         }
-        $payload = json_decode($message->getPayload(), true);
-        $productListing = ProductListing::rehydrate($payload['listing']);
+        $productListing = ProductListing::rehydrate($message->getPayload()['listing']);
         return new self($productListing);
     }
 

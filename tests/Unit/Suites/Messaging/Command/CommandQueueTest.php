@@ -39,18 +39,6 @@ class CommandQueueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Message
-     */
-    private function getAddedMessage()
-    {
-        $messages = $this->getMessagesAddedToQueue();
-        if (count($messages) === 0) {
-            $this->fail('No messages added to queue');
-        }
-        return $messages[0];
-    }
-
-    /**
      * @param int $expected
      */
     private function assertAddedMessageCount($expected)
