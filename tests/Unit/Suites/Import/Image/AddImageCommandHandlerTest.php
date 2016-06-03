@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Import\Image\Exception\NoAddImageCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;

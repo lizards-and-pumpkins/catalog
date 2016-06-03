@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\Exception\NoContentBlockWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
@@ -17,11 +16,6 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  */
 class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Message|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockDomainEvent;
-
     /**
      * @var ContentBlockProjector|\PHPUnit_Framework_MockObject_MockObject
      */

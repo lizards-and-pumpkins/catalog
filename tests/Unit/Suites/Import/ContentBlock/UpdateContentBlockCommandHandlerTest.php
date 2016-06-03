@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\Import\ContentBlock\Exception\NoUpdateContentBlockCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
@@ -19,11 +18,6 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  */
 class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Message|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockMessage;
-
     /**
      * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
      */

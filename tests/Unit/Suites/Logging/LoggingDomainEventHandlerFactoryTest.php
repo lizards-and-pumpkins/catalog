@@ -22,7 +22,6 @@ use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;

@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
