@@ -35,7 +35,7 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubSelectionCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
+        $this->stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
         $this->stubSelectionCriteria->method('jsonSerialize')->willReturn([
             'condition' => CompositeSearchCriterion::AND_CONDITION,
             'criteria' => [

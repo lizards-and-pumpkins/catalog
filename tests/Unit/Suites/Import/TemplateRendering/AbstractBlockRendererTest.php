@@ -63,7 +63,7 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     final protected function getStubContext()
     {
-        return $this->getMock(Context::class, [], [], '', false);
+        return $this->createMock(Context::class);
     }
 
     /**
@@ -120,7 +120,7 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     final protected function createStubBlockLayout($className, $template, $nameInLayout = '')
     {
-        $stubBlockLayout = $this->getMock(Layout::class, [], [], '', false);
+        $stubBlockLayout = $this->createMock(Layout::class);
         $stubBlockLayout->method('getAttribute')->willReturnMap([
             ['class', $className],
             ['template', $template],
@@ -145,18 +145,18 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubLayout = $this->getMock(Layout::class, [], [], '', false);
-        $this->stubThemeLocator = $this->getMock(ThemeLocator::class, [], [], '', false);
+        $this->stubLayout = $this->createMock(Layout::class);
+        $this->stubThemeLocator = $this->createMock(ThemeLocator::class);
         $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
 
         $this->stubBlockStructure = new BlockStructure();
 
-        $this->stubTranslator = $this->getMock(Translator::class, [], [], '', false);
+        $this->stubTranslator = $this->createMock(Translator::class);
         
-        $this->mockBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
+        $this->mockBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
-        $stubTranslatorRegistry = $this->getMock(TranslatorRegistry::class);
+        $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
         $this->blockRenderer = $this->createRendererInstance(

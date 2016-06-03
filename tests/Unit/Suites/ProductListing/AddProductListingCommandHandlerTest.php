@@ -35,13 +35,13 @@ class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
         /**
          * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing
          */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
 
         $message = (new AddProductListingCommand($stubProductListing))->toMessage();
 
-        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
+        $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
         $this->commandHandler = new AddProductListingCommandHandler($message, $this->mockDomainEventQueue);
     }

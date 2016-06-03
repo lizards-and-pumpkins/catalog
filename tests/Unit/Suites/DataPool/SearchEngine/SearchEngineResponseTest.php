@@ -28,8 +28,8 @@ class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubFacetFieldCollection = $this->getMock(FacetFieldCollection::class, [], [], '', false);
+        $this->stubProductId = $this->createMock(ProductId::class);
+        $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
 
         $this->searchEngineResponse = new SearchEngineResponse(
             $this->stubFacetFieldCollection,

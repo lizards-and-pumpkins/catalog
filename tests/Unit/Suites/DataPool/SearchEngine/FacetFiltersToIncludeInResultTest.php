@@ -21,7 +21,7 @@ class FacetFiltersToIncludeInResultTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubFacetFilterRequestField = $this->getMock(FacetFilterRequestField::class);
+        $this->stubFacetFilterRequestField = $this->createMock(FacetFilterRequestField::class);
         $this->facetFilterRequest = new FacetFiltersToIncludeInResult($this->stubFacetFilterRequestField);
     }
 
@@ -34,7 +34,7 @@ class FacetFiltersToIncludeInResultTest extends \PHPUnit_Framework_TestCase
     {
         $testAttributeCodeString = 'foo';
 
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('__toString')->willReturn($testAttributeCodeString);
 
         $this->stubFacetFilterRequestField->method('getAttributeCode')->willReturn($stubAttributeCode);

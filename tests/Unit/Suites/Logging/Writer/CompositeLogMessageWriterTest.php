@@ -29,12 +29,12 @@ class CompositeLogMessageWriterTest extends \PHPUnit_Framework_TestCase
     public function testItDelegatesToLogMessagWriterComponents()
     {
         /** @var LogMessage|\PHPUnit_Framework_MockObject_MockObject $stubLogMessage */
-        $stubLogMessage = $this->getMock(LogMessage::class);
+        $stubLogMessage = $this->createMock(LogMessage::class);
         
-        $mockWriterA = $this->getMock(LogMessageWriter::class);
+        $mockWriterA = $this->createMock(LogMessageWriter::class);
         $mockWriterA->expects($this->once())->method('write')->with($stubLogMessage);
         
-        $mockWriterB = $this->getMock(LogMessageWriter::class);
+        $mockWriterB = $this->createMock(LogMessageWriter::class);
         $mockWriterB->expects($this->once())->method('write')->with($stubLogMessage);
 
         $composite = new CompositeLogMessageWriter($mockWriterA, $mockWriterB);

@@ -55,11 +55,11 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProduct(array $attributesMap)
     {
-        $stubProductId = $this->getMock(ProductId::class, [], [], '', false);
+        $stubProductId = $this->createMock(ProductId::class);
         $stubProductId->method('__toString')->willReturn('test-id');
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('getAllValuesOfAttribute')->willReturnMap($attributesMap);
-        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
         $stubProduct->method('getId')->willReturn($stubProductId);
         $stubProduct->method('hasAttribute')->willReturnCallback(function ($attributeCode) use ($attributesMap) {
             foreach ($attributesMap as $attributeMap) {
@@ -101,13 +101,13 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubTaxableCountries = $this->getMock(TaxableCountries::class);
+        $this->stubTaxableCountries = $this->createMock(TaxableCountries::class);
         $this->stubTaxableCountries->method('getCountries')->willReturn($this->dummyTaxableCountries);
-        $this->stubTaxService = $this->getMock(TaxService::class);
+        $this->stubTaxService = $this->createMock(TaxService::class);
         $this->stubTaxService->method('applyTo')->willReturn($this->dummyPriceInclTax);
-        $this->stubTaxServiceLocator = $this->getMock(TaxServiceLocator::class);
+        $this->stubTaxServiceLocator = $this->createMock(TaxServiceLocator::class);
         $this->stubTaxServiceLocator->method('get')->willReturn($this->stubTaxService);
-        $this->stubValueCollectorLocator = $this->getMock(AttributeValueCollectorLocator::class, [], [], '', false);
+        $this->stubValueCollectorLocator = $this->createMock(AttributeValueCollectorLocator::class);
         $this->stubValueCollectorLocator->method('forProduct')
             ->willReturn(new DefaultAttributeValueCollector());
     }

@@ -90,10 +90,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubSortOrderConfig($sortByFieldCode, $sortDirection)
     {
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('__toString')->willReturn($sortByFieldCode);
 
-        $sortOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $sortOrderConfig = $this->createMock(SortOrderConfig::class);
         $sortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
         $sortOrderConfig->method('getSelectedDirection')->willReturn($sortDirection);
 
@@ -161,7 +161,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubFacetFiltersToIncludeInResult()
     {
-        $stubFacetFiltersToIncludeInResult = $this->getMock(FacetFiltersToIncludeInResult::class, [], [], '', false);
+        $stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
         $stubFacetFiltersToIncludeInResult->method('getAttributeCodeStrings')->willReturn([]);
         $stubFacetFiltersToIncludeInResult->method('getFields')->willReturn([]);
 
@@ -185,7 +185,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
         $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
         $stubQueryOptions->method('getContext')->willReturn($context);
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($stubFacetFiltersToIncludeInResult);
@@ -207,7 +207,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     ) {
         $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn($selectedFilters);
         $stubQueryOptions->method('getContext')->willReturn($this->testContext);
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($facetFiltersToIncludeInResult);
@@ -227,7 +227,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
 
-        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn($selectedFilters);
         $stubQueryOptions->method('getContext')->willReturn($this->testContext);
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($stubFacetFiltersToIncludeInResult);
@@ -248,7 +248,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $facetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
         $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
-        $stubQueryOptions = $this->getMock(QueryOptions::class, [], [], '', false);
+        $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
         $stubQueryOptions->method('getContext')->willReturn($this->testContext);
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($facetFiltersToIncludeInResult);
@@ -261,7 +261,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubFacetFieldTransformationRegistry = $this->getMock(FacetFieldTransformationRegistry::class);
+        $this->stubFacetFieldTransformationRegistry = $this->createMock(FacetFieldTransformationRegistry::class);
         $this->searchEngine = $this->createSearchEngineInstance($this->stubFacetFieldTransformationRegistry);
         $this->testContext = $this->createContextFromDataParts([Website::CONTEXT_CODE => 'ru']);
     }
@@ -591,7 +591,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
         $this->searchEngine->addDocument($searchDocumentC);
 
-        $stubFacetFieldTransformation = $this->getMock(FacetFieldTransformation::class);
+        $stubFacetFieldTransformation = $this->createMock(FacetFieldTransformation::class);
         $stubFacetFieldTransformation->method('encode')->willReturnCallback(function (FacetFilterRange $range) {
             return sprintf('%s-%s', $range->from(), $range->to());
         });

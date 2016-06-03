@@ -53,7 +53,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     public function testSearchDocumentCollectionIsWrittenToDataPool()
     {
         /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocument */
-        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocument = $this->createMock(SearchDocument::class);
         $this->getMockSearchEngine()->expects($this->once())->method('addDocument')->with($stubSearchDocument);
 
         $this->dataPoolWriter->writeSearchDocument($stubSearchDocument);
@@ -66,7 +66,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
      */
     private function getMockSnippet($mockSnippetKey, $mockSnippetContent)
     {
-        $mockSnippet = $this->getMock(Snippet::class, [], [], '', false);
+        $mockSnippet = $this->createMock(Snippet::class);
         $mockSnippet->expects($this->once())->method('getKey')->willReturn($mockSnippetKey);
         $mockSnippet->expects($this->once())->method('getContent')->willReturn($mockSnippetContent);
 
@@ -81,15 +81,15 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     public function testItDelegatesClearToStorage()
     {
         /** @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject $mockSearchEngine */
-        $mockSearchEngine = $this->getMock(ClearableStubSearchEngine::class);
+        $mockSearchEngine = $this->createMock(ClearableStubSearchEngine::class);
         $mockSearchEngine->expects($this->once())->method('clear');
 
         /** @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject $mockKeyValueStore */
-        $mockKeyValueStore = $this->getMock(ClearableStubKeyValueStore::class);
+        $mockKeyValueStore = $this->createMock(ClearableStubKeyValueStore::class);
         $mockKeyValueStore->expects($this->once())->method('clear');
 
         /** @var UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject $mockUrlKeyStorage */
-        $mockUrlKeyStorage = $this->getMock(ClearableStubUrlKeyStore::class);
+        $mockUrlKeyStorage = $this->createMock(ClearableStubUrlKeyStore::class);
         $mockUrlKeyStorage->expects($this->once())->method('clear');
 
         $writer = new DataPoolWriter($mockKeyValueStore, $mockSearchEngine, $mockUrlKeyStorage);
@@ -99,18 +99,18 @@ class DataPoolWriterTest extends AbstractDataPoolTest
     public function testItDelegatesStoreUrlKeys()
     {
         /** @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject $mockSearchEngine */
-        $mockSearchEngine = $this->getMock(ClearableStubSearchEngine::class);
+        $mockSearchEngine = $this->createMock(ClearableStubSearchEngine::class);
 
         /** @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject $mockKeyValueStore */
-        $mockKeyValueStore = $this->getMock(ClearableStubKeyValueStore::class);
+        $mockKeyValueStore = $this->createMock(ClearableStubKeyValueStore::class);
 
         /** @var UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject $mockUrlKeyStorage */
-        $mockUrlKeyStorage = $this->getMock(ClearableStubUrlKeyStore::class);
+        $mockUrlKeyStorage = $this->createMock(ClearableStubUrlKeyStore::class);
         $mockUrlKeyStorage->expects($this->once())->method('addUrlKeyForVersion');
 
-        $stubUrlKeysForContextsCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
+        $stubUrlKeysForContextsCollection = $this->createMock(UrlKeyForContextCollection::class);
         $stubUrlKeysForContextsCollection->method('getUrlKeys')->willReturn(
-            [$this->getMock(UrlKeyForContext::class, [], [], '', false)]
+            [$this->createMock(UrlKeyForContext::class)]
         );
 
         $writer = new DataPoolWriter($mockKeyValueStore, $mockSearchEngine, $mockUrlKeyStorage);

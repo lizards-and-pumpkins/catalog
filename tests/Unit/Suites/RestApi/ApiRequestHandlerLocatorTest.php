@@ -27,7 +27,7 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $requestHandlerVersion = 'bar';
 
         /** @var ApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubApiRequestHandler */
-        $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
+        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
         $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
     }
 
@@ -57,7 +57,7 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $requestHandlerVersion = 1;
 
         /** @var ApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubApiRequestHandler */
-        $stubApiRequestHandler = $this->getMock(ApiRequestHandler::class);
+        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
         $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
 
         $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);

@@ -59,12 +59,12 @@ class DomainEventQueueTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockQueue = $this->getMock(Queue::class);
+        $this->mockQueue = $this->createMock(Queue::class);
         $this->addToQueueSpy = $this->any();
         $this->mockQueue->expects($this->addToQueueSpy)->method('add');
 
         $this->eventQueue = new DomainEventQueue($this->mockQueue);
-        $this->mockDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $this->mockDataVersion = $this->createMock(DataVersion::class);
     }
 
     public function testAddsDomainEventToMessageQueue()

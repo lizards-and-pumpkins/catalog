@@ -22,7 +22,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
             return [];
         }
         return array_map(function () {
-            return $this->getMock(ProductImage::class, [], [], '', false);
+            return $this->createMock(ProductImage::class);
         }, range(1, $numberOfImages));
     }
 
@@ -92,7 +92,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheImageByOffset()
     {
-        $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $stubImage = $this->createMock(ProductImage::class);
         $imageList = new ProductImageList($stubImage);
         $this->assertSame($stubImage, $imageList[0]);
     }
@@ -101,7 +101,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(ProductImageListNotMutableException::class);
         $this->expectExceptionMessage('ProductImageList instances are immutable');
-        $imageList = new ProductImageList($this->getMock(ProductImage::class, [], [], '', false));
+        $imageList = new ProductImageList($this->createMock(ProductImage::class));
         $imageList[0] = 123;
     }
 
@@ -109,7 +109,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(ProductImageListNotMutableException::class);
         $this->expectExceptionMessage('ProductImageList instances are immutable');
-        $imageList = new ProductImageList($this->getMock(ProductImage::class, [], [], '', false));
+        $imageList = new ProductImageList($this->createMock(ProductImage::class));
         unset($imageList[0]);
     }
 

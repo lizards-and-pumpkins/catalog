@@ -42,9 +42,9 @@ class ImageInStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubStorageSpecificFileUri = $this->getMock(StorageSpecificFileUri::class);
-        $this->stubImageStorage = $this->getMock(ImageToImageStorage::class);
-        $this->stubFileContent = $this->getMock(FileContent::class, [], [], '', false);
+        $this->stubStorageSpecificFileUri = $this->createMock(StorageSpecificFileUri::class);
+        $this->stubImageStorage = $this->createMock(ImageToImageStorage::class);
+        $this->stubFileContent = $this->createMock(FileContent::class);
     }
 
     public function testItImplementsTheImageInterface()
@@ -69,7 +69,7 @@ class ImageInStorageTest extends \PHPUnit_Framework_TestCase
     {
         $testUrl = 'http://example.com/media/image.svg';
         $this->stubImageStorage->method('url')->willReturn($testUrl);
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         
         $result = $this->createImageInStorage()->getUrl($stubContext);
         

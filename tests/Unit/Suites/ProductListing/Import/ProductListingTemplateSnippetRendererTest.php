@@ -23,18 +23,18 @@ class ProductListingTemplateSnippetRendererTest extends \PHPUnit_Framework_TestC
     protected function setUp()
     {
         /** @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
-        $stubBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
+        $stubBlockRenderer = $this->createMock(ProductListingBlockRenderer::class);
 
         $dummySnippetKey = 'foo';
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
-        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($dummySnippetKey);
 
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
 
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
-        $stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubContextSource = $this->createMock(ContextSource::class);
         $stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->renderer = new ProductListingTemplateSnippetRenderer(

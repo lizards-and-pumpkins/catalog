@@ -49,8 +49,8 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductListing()
     {
-        $stubSearchCriteria = $this->getMock(CompositeSearchCriterion::class, [], [], '', false);
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([]);
         $stubProductListing->method('getCriteria')->willReturn($stubSearchCriteria);
 
@@ -104,21 +104,21 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubListingBlockRenderer */
-        $stubListingBlockRenderer = $this->getMock(ProductListingBlockRenderer::class, [], [], '', false);
+        $stubListingBlockRenderer = $this->createMock(ProductListingBlockRenderer::class);
         $stubListingBlockRenderer->method('render')->willReturn('dummy content');
         $stubListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
         $stubListingBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $this->stubMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubCanonicalTagSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubHtmlHeadMetaKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubMetaSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubCanonicalTagSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubHtmlHeadMetaKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
         /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
-        $stubContextBuilder = $this->getMock(ContextBuilder::class);
-        $stubContextBuilder->method('createContext')->willReturn($this->getMock(Context::class));
+        $stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $stubContextBuilder->method('createContext')->willReturn($this->createMock(Context::class));
 
         /** @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject $stubBaseUrlBuilder */
-        $stubBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
+        $stubBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
         $stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString('https://example.com/'));
 
         $this->renderer = new ProductListingSnippetRenderer(

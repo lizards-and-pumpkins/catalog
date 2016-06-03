@@ -39,9 +39,9 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
-        $this->mockCommandQueue = $this->getMock(CommandQueue::class, [], [], '', false);
+        $this->mockCommandQueue = $this->createMock(CommandQueue::class);
         $this->requestHandler = new ContentBlocksApiV1PutRequestHandler($this->mockCommandQueue);
-        $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testApiRequestHandlerIsExtended()

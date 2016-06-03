@@ -42,10 +42,10 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
-        $this->mockProductRelationsService = $this->getMock(ProductRelationsService::class, [], [], '', false);
+        $this->mockProductRelationsService = $this->createMock(ProductRelationsService::class);
 
         $this->requestHandler = new ProductRelationsApiV1GetRequestHandler($this->mockProductRelationsService);
-        $this->stubRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testItIsAnApiRequestHandler()

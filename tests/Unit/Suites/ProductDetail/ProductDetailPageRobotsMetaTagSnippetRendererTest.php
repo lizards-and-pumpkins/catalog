@@ -24,7 +24,7 @@ class ProductDetailPageRobotsMetaTagSnippetRendererTest extends \PHPUnit_Framewo
 
     protected function setUp()
     {
-        $this->mockRobotsMetaTagRenderer = $this->getMock(RobotsMetaTagSnippetRenderer::class, [], [], '', false);
+        $this->mockRobotsMetaTagRenderer = $this->createMock(RobotsMetaTagSnippetRenderer::class);
         $this->renderer = new ProductDetailPageRobotsMetaTagSnippetRenderer($this->mockRobotsMetaTagRenderer);
     }
 
@@ -35,9 +35,9 @@ class ProductDetailPageRobotsMetaTagSnippetRendererTest extends \PHPUnit_Framewo
 
     public function testDelegatesToRobotsMetaTagSnippetRenderer()
     {
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubProductView */
-        $stubProductView = $this->getMock(ProductView::class);
+        $stubProductView = $this->createMock(ProductView::class);
         $stubProductView->method('getContext')->willReturn($stubContext);
 
         $dummyReturnValue = ['dummy'];

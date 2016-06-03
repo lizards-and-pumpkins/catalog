@@ -34,7 +34,7 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $testContentBlockSource = new ContentBlockSource($testContentBlockId, '', [], []);
         $testMessage = (new UpdateContentBlockCommand($testContentBlockSource))->toMessage();
 
-        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
+        $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
         $this->commandHandler = new UpdateContentBlockCommandHandler($testMessage, $this->mockDomainEventQueue);
     }
 

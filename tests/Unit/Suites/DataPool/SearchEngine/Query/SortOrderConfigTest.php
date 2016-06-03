@@ -26,8 +26,8 @@ class SortOrderConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
-        $this->stubSortOrderDirection = $this->getMock(SortOrderDirection::class, [], [], '', false);
+        $this->stubAttributeCode = $this->createMock(AttributeCode::class);
+        $this->stubSortOrderDirection = $this->createMock(SortOrderDirection::class);
         $this->stubSortOrderDirection->method('__toString')->willReturn($this->testDirection);
     }
 

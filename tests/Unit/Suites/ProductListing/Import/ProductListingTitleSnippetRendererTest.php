@@ -38,16 +38,16 @@ class ProductListingTitleSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListingTitleSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubProductListingTitleSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubProductListingTitleSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($this->testSnippetKey);
-        $this->stubContextBuilder = $this->getMock(ContextBuilder::class);
-        $this->stubContextBuilder->method('createContext')->willReturn($this->getMock(Context::class));
+        $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $this->stubContextBuilder->method('createContext')->willReturn($this->createMock(Context::class));
         $this->renderer = new ProductListingTitleSnippetRenderer(
             $this->stubProductListingTitleSnippetKeyGenerator,
             $this->stubContextBuilder
         );
-        $this->stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $this->stubProductListing = $this->createMock(ProductListing::class);
         $this->stubProductListing->method('getContextData')->willReturn([]);
     }
     

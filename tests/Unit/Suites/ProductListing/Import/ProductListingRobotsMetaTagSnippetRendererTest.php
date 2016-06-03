@@ -29,9 +29,9 @@ class ProductListingRobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_
 
     protected function setUp()
     {
-        $this->stubRobotsMetaTagRenderer = $this->getMock(RobotsMetaTagSnippetRenderer::class, [], [], '', false);
-        $this->stubContextBuilder = $this->getMock(ContextBuilder::class);
-        $this->stubContextBuilder->method('createContext')->willReturn($this->getMock(Context::class));
+        $this->stubRobotsMetaTagRenderer = $this->createMock(RobotsMetaTagSnippetRenderer::class);
+        $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $this->stubContextBuilder->method('createContext')->willReturn($this->createMock(Context::class));
 
         $this->renderer = new ProductListingRobotsMetaTagSnippetRenderer(
             $this->stubRobotsMetaTagRenderer,
@@ -47,7 +47,7 @@ class ProductListingRobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_
     public function testItDelegatesToTheRobotsMetaTagSnippetRenderer()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([]);
         $dummyReturnValue = ['dummy snippets'];
         $this->stubRobotsMetaTagRenderer->expects($this->once())

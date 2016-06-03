@@ -44,18 +44,18 @@ class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
      */
     private function createMockProductListing()
     {
-        return $this->getMock(ProductListing::class, [], [], '', false);
+        return $this->createMock(ProductListing::class);
     }
 
     protected function setUp()
     {
-        $this->stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
-        $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
+        $this->stubSnippet = $this->createMock(Snippet::class);
+        $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
 
-        $this->mockRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
+        $this->mockRendererCollection = $this->createMock(SnippetRendererCollection::class);
         $this->mockRendererCollection->method('render')->willReturn([$this->stubSnippet]);
         
-        $this->mockUrlKeyCollector = $this->getMock(UrlKeyForContextCollector::class, [], [], '', false);
+        $this->mockUrlKeyCollector = $this->createMock(UrlKeyForContextCollector::class);
 
         $this->projector = new ProductListingSnippetProjector(
             $this->mockRendererCollection,
@@ -73,7 +73,7 @@ class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
     public function testSnippetIsWrittenToTheDataPool()
     {
         $stubProductListing = $this->createMockProductListing();
-        $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
+        $stubUrlKeyForContextCollection = $this->createMock(UrlKeyForContextCollection::class);
         $this->mockUrlKeyCollector->method('collectListingUrlKeys')->willReturn($stubUrlKeyForContextCollection);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($this->stubSnippet);
@@ -84,7 +84,7 @@ class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
     public function testUrlKeysForListingsAreCollectedAndWrittenToTheDataPool()
     {
         $stubProductListing = $this->createMockProductListing();
-        $stubUrlKeyForContextCollection = $this->getMock(UrlKeyForContextCollection::class, [], [], '', false);
+        $stubUrlKeyForContextCollection = $this->createMock(UrlKeyForContextCollection::class);
         
         $this->mockUrlKeyCollector->expects($this->once())->method('collectListingUrlKeys')->with($stubProductListing)
             ->willReturn($stubUrlKeyForContextCollection);

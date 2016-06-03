@@ -65,7 +65,7 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new SampleMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
-        $masterFactory->register(new UnitTestFactory());
+        $masterFactory->register(new UnitTestFactory($this));
         $this->loggingCommandHandlerFactory = new LoggingCommandHandlerFactory($commonFactory);
         $masterFactory->register($this->loggingCommandHandlerFactory);
     }
@@ -87,7 +87,7 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsADecoratedUpdateProductCommandHandler()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubContext->method('getValue')->willReturn('123');
         $product = new SimpleProduct(
@@ -105,7 +105,7 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsADecoratedAddProductListingCommandHandler()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
         $message = (new AddProductListingCommand($stubProductListing))->toMessage();
         $commandHandler = $this->loggingCommandHandlerFactory->createAddProductListingCommandHandler($message);

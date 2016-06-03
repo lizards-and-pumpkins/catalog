@@ -107,7 +107,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheSetKeyValueStore()
     {
         /** @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject $stubKeyValueStore */
-        $stubKeyValueStore = $this->getMock(KeyValueStore::class);
+        $stubKeyValueStore = $this->createMock(KeyValueStore::class);
         $this->factory->setKeyValueStore($stubKeyValueStore);
         $this->assertSame($stubKeyValueStore, $this->factory->getKeyValueStore());
     }
@@ -127,7 +127,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheSetEventQueue()
     {
         /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubQueue */
-        $stubQueue = $this->getMock(Queue::class, [], [], '', false);
+        $stubQueue = $this->createMock(Queue::class);
         $this->factory->setEventMessageQueue($stubQueue);
         $this->assertSame($stubQueue, $this->factory->getEventMessageQueue());
     }
@@ -141,7 +141,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheSetCommandQueue()
     {
         /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubQueue */
-        $stubQueue = $this->getMock(Queue::class);
+        $stubQueue = $this->createMock(Queue::class);
         $this->factory->setCommandMessageQueue($stubQueue);
         $this->assertSame($stubQueue, $this->factory->getCommandMessageQueue());
     }
@@ -155,7 +155,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheSetSearchEngine()
     {
         /** @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject $stubSearchEngine */
-        $stubSearchEngine = $this->getMock(SearchEngine::class);
+        $stubSearchEngine = $this->createMock(SearchEngine::class);
         $this->factory->setSearchEngine($stubSearchEngine);
         $this->assertSame($stubSearchEngine, $this->factory->getSearchEngine());
     }
@@ -169,7 +169,7 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheSetUrlKeyStore()
     {
         /** @var UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject $stubUrlKeyStore */
-        $stubUrlKeyStore = $this->getMock(UrlKeyStore::class);
+        $stubUrlKeyStore = $this->createMock(UrlKeyStore::class);
         $this->factory->setUrlKeyStore($stubUrlKeyStore);
         $this->assertSame($stubUrlKeyStore, $this->factory->getUrlKeyStore());
     }

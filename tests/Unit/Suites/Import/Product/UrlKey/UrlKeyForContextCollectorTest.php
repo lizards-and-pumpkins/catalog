@@ -33,18 +33,18 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductWithUrlKey($urlKey)
     {
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
-        $stubProduct->method('getContext')->willReturn($this->getMock(Context::class));
+        $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
         return $stubProduct;
     }
 
     protected function setUp()
     {
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->stubContextSource = $this->createMock(ContextSource::class);
         $this->stubContextSource->method('getContextsForParts')
             ->with(array_keys($this->testContextData))
-            ->willReturn([$this->getMock(Context::class)]);
+            ->willReturn([$this->createMock(Context::class)]);
         
         $this->urlKeyCollector = new UrlKeyForContextCollector($this->stubContextSource);
     }
@@ -61,7 +61,7 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAUrlKeyCollectionForListings()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubListingCriteria */
-        $stubListingCriteria = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubListingCriteria = $this->createMock(ProductListing::class);
         $stubListingCriteria->method('getContextData')->willReturn($this->testContextData);
         $stubListingCriteria->expects($this->once())->method('getUrlKey')
             ->willReturn(UrlKey::fromString('listing.html'));

@@ -12,7 +12,7 @@ class FacetFieldTest extends \PHPUnit_Framework_TestCase
     public function testFacetFieldAttributeCodeIsReturned()
     {
         /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $facetField = new FacetField($stubAttributeCode);
 
         $this->assertSame($stubAttributeCode, $facetField->getAttributeCode());
@@ -21,10 +21,10 @@ class FacetFieldTest extends \PHPUnit_Framework_TestCase
     public function testFacetFieldValuesAreReturned()
     {
         /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
 
-        $stubFacetValueA = $this->getMock(FacetFieldValue::class, [], [], '', false);
-        $stubFacetValueB = $this->getMock(FacetFieldValue::class, [], [], '', false);
+        $stubFacetValueA = $this->createMock(FacetFieldValue::class);
+        $stubFacetValueB = $this->createMock(FacetFieldValue::class);
 
         $facetField = new FacetField($stubAttributeCode, $stubFacetValueA, $stubFacetValueB);
 

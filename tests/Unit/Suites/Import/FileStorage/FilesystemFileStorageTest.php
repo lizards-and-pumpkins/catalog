@@ -40,7 +40,7 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->testBaseDirectory = $this->getUniqueTempDir();
-        $this->mockFile = $this->getMock(File::class);
+        $this->mockFile = $this->createMock(File::class);
         $this->fileStorage = new FilesystemFileStorage($this->testBaseDirectory);
     }
 

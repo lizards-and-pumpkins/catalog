@@ -233,7 +233,7 @@ EOT;
 
     protected function setUp()
     {
-        $this->mockLogger = $this->getMock(Logger::class);
+        $this->mockLogger = $this->createMock(Logger::class);
     }
 
     /**

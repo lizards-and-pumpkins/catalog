@@ -30,7 +30,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
         $variationAttributeCodes = array_map(function ($attributeCode) {
             return AttributeCode::fromString($attributeCode);
         }, $variationAttributes);
-        $stubVariationAttributeList = $this->getMock(ProductVariationAttributeList::class, [], [], '', false);
+        $stubVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
         $stubVariationAttributeList->method('getIterator')->willReturn(new \ArrayIterator($variationAttributeCodes));
         $stubVariationAttributeList->method('getAttributes')->willReturn($variationAttributeCodes);
         return $stubVariationAttributeList;
@@ -43,7 +43,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
      */
     private function createMockProductWithAttributeValues($variationAttribute, array $values)
     {
-        $stubAssociatedProduct = $this->getMock(Product::class);
+        $stubAssociatedProduct = $this->createMock(Product::class);
         $stubAssociatedProduct->method('getAllValuesOfAttribute')->with($variationAttribute)->willReturn($values);
         return $stubAssociatedProduct;
     }
@@ -54,7 +54,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
      */
     private function createMockAssociatedProductList(Product ...$associatedProducts)
     {
-        $stubAssociatedProductList = $this->getMock(AssociatedProductList::class);
+        $stubAssociatedProductList = $this->createMock(AssociatedProductList::class);
         $stubAssociatedProductList->method('getIterator')->willReturn(new \ArrayIterator($associatedProducts));
         $stubAssociatedProductList->method('getProducts')->willReturn($associatedProducts);
         return $stubAssociatedProductList;
@@ -72,7 +72,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
 
     public function testItReturnsTheAttributeValuesForConfigurableProducts()
     {
-        $stubConfigurableProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+        $stubConfigurableProduct = $this->createMock(ConfigurableProduct::class);
         $stubConfigurableProduct->expects($this->once())
             ->method('getAllValuesOfAttribute')
             ->willReturn(['a value']);
@@ -95,7 +95,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
             $stubAssociatedProductB
         );
 
-        $stubConfigProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+        $stubConfigProduct = $this->createMock(ConfigurableProduct::class);
         $stubConfigProduct->expects($this->once())->method('getVariationAttributes')
             ->willReturn($this->createMockVariationAttributeList([$variationAttribute]));
         $stubConfigProduct->method('getAssociatedProducts')->willReturn($stubAssociatedProductList);

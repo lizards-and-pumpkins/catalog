@@ -117,7 +117,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         $imageList = new ProductImageList($image);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
 
         return new SimpleProduct($productId, $productTaxClass, $testProductAttributes, $imageList, $stubContext);

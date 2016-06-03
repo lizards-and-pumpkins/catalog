@@ -28,10 +28,10 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubApiRequestHandlerChain = $this->getMock(ApiRequestHandlerLocator::class);
+        $this->stubApiRequestHandlerChain = $this->createMock(ApiRequestHandlerLocator::class);
         $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerChain);
 
-        $this->stubHttpRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->stubHttpRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testNullIsReturnedIfUrlIsNotLedByApiPrefix()
@@ -63,7 +63,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testNullIsReturnedIfApiRequestHandlerCanNotProcessRequest()
     {
-        $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
+        $stubApiRequestHandler = $this->createMock(HttpRequestHandler::class);
         $stubApiRequestHandler->method('canProcess')->willReturn(false);
 
         $this->stubApiRequestHandlerChain->expects($this->once())
@@ -80,7 +80,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testApiRequestHandlerIsReturned()
     {
-        $stubApiRequestHandler = $this->getMock(HttpRequestHandler::class);
+        $stubApiRequestHandler = $this->createMock(HttpRequestHandler::class);
         $stubApiRequestHandler->method('canProcess')->willReturn(true);
 
         $this->stubApiRequestHandlerChain->expects($this->once())

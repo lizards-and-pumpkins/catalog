@@ -52,12 +52,12 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockDataPoolReader = $this->getMock(DataPoolReader::class, [], [], '', false);
-        $this->stubProductJsonSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubPriceSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubSpecialPriceSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubEnrichProductJsonWithPrices = $this->getMock(EnrichProductJsonWithPrices::class, [], [], '', false);
-        $this->stubContext = $this->getMock(Context::class);
+        $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
+        $this->stubProductJsonSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubPriceSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubSpecialPriceSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubEnrichProductJsonWithPrices = $this->createMock(EnrichProductJsonWithPrices::class);
+        $this->stubContext = $this->createMock(Context::class);
 
         $this->productJsonService = new ProductJsonService(
             $this->mockDataPoolReader,
@@ -89,7 +89,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
                 $specialPriceSnippetKey => '999',
             ]);
         
-        $productId = $this->getMock(ProductId::class, [], [], '', false);
+        $productId = $this->createMock(ProductId::class);
         
         $this->productJsonService->get($productId);
     }
@@ -119,7 +119,7 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
             ->with($this->dummyProductData, '9999', '8999')
             ->willReturn($expected);
 
-        $result = $this->productJsonService->get($this->getMock(ProductId::class, [], [], '', false));
+        $result = $this->productJsonService->get($this->createMock(ProductId::class));
      
         $this->assertContains($expected, $result);
     }

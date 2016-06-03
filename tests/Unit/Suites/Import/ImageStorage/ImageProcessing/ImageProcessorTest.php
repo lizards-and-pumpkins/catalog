@@ -50,11 +50,11 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureDirectory($this->targetImageDirectoryPath);
         rmdir($this->targetImageDirectoryPath);
         
-        $this->mockStrategySequence = $this->getMock(ImageProcessingStrategySequence::class, [], [], '', false);
+        $this->mockStrategySequence = $this->createMock(ImageProcessingStrategySequence::class);
 
-        $this->mockFileStorageReader = $this->getMock(FileStorageReader::class);
+        $this->mockFileStorageReader = $this->createMock(FileStorageReader::class);
 
-        $this->mockFileStorageWriter = $this->getMock(FileStorageWriter::class);
+        $this->mockFileStorageWriter = $this->createMock(FileStorageWriter::class);
 
         $this->imageProcessor = new ImageProcessor(
             $this->mockStrategySequence,

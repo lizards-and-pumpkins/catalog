@@ -47,11 +47,11 @@ class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockCommandQueue = $this->getMock(CommandQueue::class, [], [], '', false);
-        $this->stubCommand = $this->getMock(Command::class);
-        $this->mockProductCommandLocator = $this->getMock(ProductImportCommandLocator::class, [], [], '', false);
-        $this->mockImageCommandLocator = $this->getMock(ProductImageImportCommandLocator::class, [], [], '', false);
-        $this->mockListingCommandLocator = $this->getMock(ProductListingImportCommandLocator::class, [], [], '', false);
+        $this->mockCommandQueue = $this->createMock(CommandQueue::class);
+        $this->stubCommand = $this->createMock(Command::class);
+        $this->mockProductCommandLocator = $this->createMock(ProductImportCommandLocator::class);
+        $this->mockImageCommandLocator = $this->createMock(ProductImageImportCommandLocator::class);
+        $this->mockListingCommandLocator = $this->createMock(ProductListingImportCommandLocator::class);
         $this->createImportCommands = new QueueImportCommands(
             $this->mockCommandQueue,
             $this->mockProductCommandLocator,
@@ -64,7 +64,7 @@ class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockProductCommandLocator->method('getProductImportCommands')->willReturn([$this->stubCommand]);
         $this->mockCommandQueue->expects($this->once())->method('add');
-        $this->createImportCommands->forProduct($this->getMock(Product::class));
+        $this->createImportCommands->forProduct($this->createMock(Product::class));
     }
 
     public function testItAddsCreatedProductImageCommandsToTheQueue()
@@ -73,7 +73,7 @@ class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
             ->method('getProductImageImportCommands')
             ->willReturn([$this->stubCommand]);
         $this->mockCommandQueue->expects($this->once())->method('add');
-        $this->createImportCommands->forImage('foo.jpg', $this->getMock(DataVersion::class, [], [], '', false));
+        $this->createImportCommands->forImage('foo.jpg', $this->createMock(DataVersion::class));
     }
 
     public function testItAddsCreatedProductListingCommandsToTheQueue()
@@ -82,6 +82,6 @@ class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
             ->method('getProductListingImportCommands')
             ->willReturn([$this->stubCommand]);
         $this->mockCommandQueue->expects($this->once())->method('add');
-        $this->createImportCommands->forListing($this->getMock(ProductListing::class, [], [], '', false));
+        $this->createImportCommands->forListing($this->createMock(ProductListing::class));
     }
 }

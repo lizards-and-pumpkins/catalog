@@ -19,7 +19,7 @@ class ContextVersionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
-        $stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $stubDataVersion = $this->createMock(DataVersion::class);
         $stubDataVersion->method('__toString')->willReturn($this->testVersionString);
         $this->contextVersion = new ContextVersion($stubDataVersion);
     }

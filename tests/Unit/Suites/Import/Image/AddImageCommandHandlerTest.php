@@ -47,11 +47,11 @@ class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureFile($this->imageFilePath, '');
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
-        $stubMessage = $this->getMock(Message::class, [], [], '', false);
+        $stubMessage = $this->createMock(Message::class);
         $stubMessage->method('getName')->willReturn('add_image');
         $stubMessage->method('getPayload')->willReturn(['file_path' => $this->imageFilePath, 'data_version' => 'defg']);
 
-        $this->mockDomainEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
+        $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
         $this->commandHandler = new AddImageCommandHandler($stubMessage, $this->mockDomainEventQueue);
     }

@@ -27,7 +27,7 @@ class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockBaseUrlBuilder = $this->getMock(BaseUrlBuilder::class);
+        $this->mockBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
         $this->mediaBaseUrlBuilder = new MediaDirectoryBaseUrlBuilder(
             $this->mockBaseUrlBuilder,
             $this->testMediaBaseUrlPath
@@ -57,7 +57,7 @@ class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheValueFromTheBaseUrlBuilderIncludingThePathSuffix()
     {
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $this->mockBaseUrlBuilder->method('create')->with($stubContext)->willReturn(
             HttpBaseUrl::fromString('http://example.com/test/')
         );

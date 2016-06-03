@@ -37,9 +37,9 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubQueue = $this->getMock(Queue::class);
-        $this->mockLocator = $this->getMock(DomainEventHandlerLocator::class, [], [], '', false);
-        $this->mockLogger = $this->getMock(Logger::class);
+        $this->stubQueue = $this->createMock(Queue::class);
+        $this->mockLocator = $this->createMock(DomainEventHandlerLocator::class);
+        $this->mockLogger = $this->createMock(Logger::class);
 
         $this->domainEventConsumer = new DomainEventConsumer($this->stubQueue, $this->mockLocator, $this->mockLogger);
     }
@@ -51,12 +51,12 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testItCallsNextIfQueueIsReady()
     {
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent = $this->createMock(Message::class);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
         $this->stubQueue->method('isReadyForNext')
             ->willReturnOnConsecutiveCalls(true, true, true, false);
 
-        $stubEventHandler = $this->getMock(DomainEventHandler::class);
+        $stubEventHandler = $this->createMock(DomainEventHandler::class);
         $this->mockLocator->expects($this->exactly(3))
             ->method('getHandlerFor')
             ->willReturn($stubEventHandler);
@@ -66,7 +66,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testLogEntryIsWrittenIfLocatorIsNotFound()
     {
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent = $this->createMock(Message::class);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
         $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
 
@@ -87,11 +87,11 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testConsumerStopsIfProcessingLimitIsReached()
     {
-        $stubDomainEvent = $this->getMock(Message::class, [], [], '', false);
+        $stubDomainEvent = $this->createMock(Message::class);
         $this->stubQueue->method('next')->willReturn($stubDomainEvent);
         $this->stubQueue->method('isReadyForNext')->willReturn(true);
 
-        $stubEventHandler = $this->getMock(DomainEventHandler::class);
+        $stubEventHandler = $this->createMock(DomainEventHandler::class);
         $stubEventHandler->expects($this->exactly(200))->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($stubEventHandler);
 

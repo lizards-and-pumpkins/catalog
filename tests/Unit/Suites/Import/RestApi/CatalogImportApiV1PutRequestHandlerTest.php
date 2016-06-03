@@ -51,9 +51,9 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->testImportDirectoryPath = $this->getUniqueTempDir() . '/test/catalog-import-directory';
         $this->createFixtureDirectory($this->testImportDirectoryPath);
         
-        $this->mockCatalogImport = $this->getMock(CatalogImport::class, [], [], '', false);
+        $this->mockCatalogImport = $this->createMock(CatalogImport::class);
 
-        $this->logger = $this->getMock(Logger::class);
+        $this->logger = $this->createMock(Logger::class);
 
         $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
             $this->mockCatalogImport,
@@ -61,7 +61,7 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->logger
         );
 
-        $this->mockRequest = $this->getMock(HttpRequest::class, [], [], '', false);
+        $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testClassIsDerivedFromApiRequestHandler()

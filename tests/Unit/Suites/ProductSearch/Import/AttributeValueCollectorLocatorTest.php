@@ -38,14 +38,14 @@ class AttributeValueCollectorLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADefaultCollector()
     {
-        $product = $this->getMock(Product::class);
+        $product = $this->createMock(Product::class);
         $result = $this->locator->forProduct($product);
         $this->assertInstanceOf(DefaultAttributeValueCollector::class, $result);
     }
 
     public function testItReturnsAConfigurableProductAttributeValueCollectorForAConfigurableProduct()
     {
-        $configurableProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+        $configurableProduct = $this->createMock(ConfigurableProduct::class);
         $result = $this->locator->forProduct($configurableProduct);
         $this->assertInstanceOf(ConfigurableProductAttributeValueCollector::class, $result);
     }

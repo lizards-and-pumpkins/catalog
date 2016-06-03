@@ -47,7 +47,7 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
     ) {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
-        $stubGlobalProductListingCriteria = $this->getMock(SearchCriteria::class);
+        $stubGlobalProductListingCriteria = $this->createMock(SearchCriteria::class);
         $stubGlobalProductListingCriteria->method('matches')->willReturn(true);
 
         $searchCriteriaBuilder = new SearchCriteriaBuilder(

@@ -47,7 +47,7 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     public function testEncodedPriceRangeIsReturned($rangeFrom, $rangeTo, $expectation)
     {
         /** @var FacetFilterRange|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRange */
-        $stubFacetFilterRange = $this->getMock(FacetFilterRange::class, [], [], '', false);
+        $stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
         $stubFacetFilterRange->method('from')->willReturn($rangeFrom);
         $stubFacetFilterRange->method('to')->willReturn($rangeTo);
 

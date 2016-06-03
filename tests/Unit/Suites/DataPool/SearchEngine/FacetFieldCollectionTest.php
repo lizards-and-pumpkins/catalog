@@ -16,10 +16,10 @@ class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubFacetField($attributeCode, array $stubFacetFieldValueCount)
     {
-        $stubAttributeCode = $this->getMock(AttributeCode::class, [], [], '', false);
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('__toString')->willReturn($attributeCode);
 
-        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
+        $stubFacetField = $this->createMock(FacetField::class);
         $stubFacetField->method('getAttributeCode')->willReturn($stubAttributeCode);
         $stubFacetField->method('getValues')->willReturn($stubFacetFieldValueCount);
 
@@ -34,7 +34,7 @@ class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectionCountIsReturned()
     {
-        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
+        $stubFacetField = $this->createMock(FacetField::class);
         $facetFieldCollection = new FacetFieldCollection($stubFacetField);
 
         $this->assertCount(1, $facetFieldCollection);
@@ -42,7 +42,7 @@ class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectionCanBeRetrievedViaGetter()
     {
-        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
+        $stubFacetField = $this->createMock(FacetField::class);
         $facetFieldCollection = new FacetFieldCollection($stubFacetField);
 
         $result = $facetFieldCollection->getFacetFields();
@@ -59,7 +59,7 @@ class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectionCanBeRetrievedViaIterator()
     {
-        $stubFacetField = $this->getMock(FacetField::class, [], [], '', false);
+        $stubFacetField = $this->createMock(FacetField::class);
         $facetFieldCollection = new FacetFieldCollection($stubFacetField);
 
         $result = $facetFieldCollection->getIterator();
@@ -77,11 +77,11 @@ class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
     public function testArrayRepresentationOfFacetFilterCollectionIsReturned()
     {
         $attributeCodeA = 'foo';
-        $stubFacetFieldAValueCount = $this->getMock(FacetFieldValue::class, [], [], '', false);
+        $stubFacetFieldAValueCount = $this->createMock(FacetFieldValue::class);
         $stubFacetFieldA = $this->createStubFacetField($attributeCodeA, [$stubFacetFieldAValueCount]);
 
         $attributeCodeB = 'bar';
-        $stubFacetFieldBValueCount = $this->getMock(FacetFieldValue::class, [], [], '', false);
+        $stubFacetFieldBValueCount = $this->createMock(FacetFieldValue::class);
         $stubFacetFieldB = $this->createStubFacetField($attributeCodeB, [$stubFacetFieldBValueCount]);
 
         $facetFieldCollection = new FacetFieldCollection($stubFacetFieldA, $stubFacetFieldB);

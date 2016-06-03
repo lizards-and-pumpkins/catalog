@@ -68,15 +68,15 @@ class FilesystemImageStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->testMediaBaseDirectory = $this->getUniqueTempDir() . '/media/';
         $this->testFileUri = FilesystemFileUri::fromString($this->testMediaBaseDirectory . '/test/image.svg');
-        $this->mockFilesystemFileStorage = $this->getMock(FilesystemFileStorage::class, [], [], '', false);
+        $this->mockFilesystemFileStorage = $this->createMock(FilesystemFileStorage::class);
         $this->testFile = FileInStorage::create($this->testFileUri, $this->mockFilesystemFileStorage);
         $this->mockFilesystemFileStorage->method('getFileReference')->willReturn($this->testFile);
         
         $this->testMediaBaseUrl = HttpUrl::fromString('http://example.com/test/media');
-        $this->stubMediaBaseUrlBuilder = $this->getMock(MediaBaseUrlBuilder::class);
+        $this->stubMediaBaseUrlBuilder = $this->createMock(MediaBaseUrlBuilder::class);
         $this->stubMediaBaseUrlBuilder->method('create')->willReturn($this->testMediaBaseUrl);
         
-        $this->mockImage = $this->getMock(Image::class);
+        $this->mockImage = $this->createMock(Image::class);
         
         $this->imageStorage = new FilesystemImageStorage(
             $this->mockFilesystemFileStorage,
@@ -129,7 +129,7 @@ class FilesystemImageStorageTest extends \PHPUnit_Framework_TestCase
     public function testGetContentDelegatesToTheFileStorage()
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
-        $stubContent = $this->getMock(FileContent::class, [], [], '', false);
+        $stubContent = $this->createMock(FileContent::class);
         $this->mockFilesystemFileStorage->expects($this->once())
             ->method('getContent')->with($fileURI)
             ->willReturn($stubContent);
@@ -140,7 +140,7 @@ class FilesystemImageStorageTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheHttpUrlForTheImageUri()
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         
         $url = $this->imageStorage->getUrl($fileURI, $stubContext);
         
@@ -180,7 +180,7 @@ class FilesystemImageStorageTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheUrlForTheSpecifiedImage()
     {
         $this->mockImage->method('__toString')->willReturn($this->testMediaBaseDirectory . '/test/image.svg');
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         
         $url = $this->imageStorage->url($this->mockImage, $stubContext);
         

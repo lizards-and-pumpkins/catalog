@@ -45,7 +45,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->dummyUsedDataParts
         );
 
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext = $this->createMock(Context::class);
     }
 
     public function testSnippetKeyGeneratorInterfaceIsImplemented()

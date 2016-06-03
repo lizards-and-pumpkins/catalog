@@ -40,7 +40,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->testTemplateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
-        $this->mockBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        $this->mockBlockRenderer = $this->createMock(BlockRenderer::class);
 
         $this->block = new Block(
             $this->mockBlockRenderer,

@@ -24,10 +24,10 @@ class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject $stubSnippetRendererCollection */
-        $stubSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
+        $stubSnippetRendererCollection = $this->createMock(SnippetRendererCollection::class);
         $stubSnippetRendererCollection->method('render')->willReturn([]);
 
-        $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
+        $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
 
         $this->projector = new ProductListingTemplateProjector(
             $stubSnippetRendererCollection,

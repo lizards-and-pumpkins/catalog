@@ -42,7 +42,7 @@ class AddImageCommandTest extends \PHPUnit_Framework_TestCase
         $this->createFixtureDirectory($fixtureDirectoryPath);
         $this->createFixtureFile($this->imageFilePath, '');
 
-        $this->stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $this->stubDataVersion = $this->createMock(DataVersion::class);
         $this->command = new AddImageCommand($this->imageFilePath, $this->stubDataVersion);
     }
 

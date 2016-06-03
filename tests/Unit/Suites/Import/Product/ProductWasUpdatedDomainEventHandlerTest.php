@@ -47,7 +47,7 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
         );
 
         $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
-        $this->mockProductProjector = $this->getMock(ProductProjector::class, [], [], '', false);
+        $this->mockProductProjector = $this->createMock(ProductProjector::class);
 
         $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler(
             $testEvent->toMessage(),

@@ -29,7 +29,7 @@ class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $this->stubProductListing = $this->createMock(ProductListing::class);
         $this->command = new AddProductListingCommand($this->stubProductListing);
     }
 

@@ -50,7 +50,7 @@ class CommandQueueTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockQueue = $this->getMock(Queue::class);
+        $this->mockQueue = $this->createMock(Queue::class);
         $this->addToQueueSpy = $this->any();
         $this->mockQueue->expects($this->addToQueueSpy)->method('add');
 
@@ -60,8 +60,8 @@ class CommandQueueTest extends \PHPUnit_Framework_TestCase
     public function testAddsCommandsToQueue()
     {
         /** @var Command|\PHPUnit_Framework_MockObject_MockObject $command */
-        $command = $this->getMock(Command::class);
-        $command->method('toMessage')->willReturn($this->getMock(Message::class, [], [], '', false));
+        $command = $this->createMock(Command::class);
+        $command->method('toMessage')->willReturn($this->createMock(Message::class));
         $this->commandQueue->add($command);
         $this->assertAddedMessageCount(1);
     }

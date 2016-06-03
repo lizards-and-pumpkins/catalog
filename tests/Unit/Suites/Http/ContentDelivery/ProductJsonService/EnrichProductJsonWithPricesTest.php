@@ -44,7 +44,7 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubContext = $this->createMock(Context::class);
         $this->enrichProductJsonWithPrices = new EnrichProductJsonWithPrices($this->stubContext);
     }
 

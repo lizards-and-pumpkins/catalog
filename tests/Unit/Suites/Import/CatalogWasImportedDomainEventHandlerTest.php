@@ -36,7 +36,7 @@ class CatalogWasImportedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
     protected function setUp()
     {
         $this->testVersion = DataVersion::fromVersionString('foo');
-        $this->stubEvent = $this->getMock(Message::class, [], [], '', false);
+        $this->stubEvent = $this->createMock(Message::class);
         $this->stubEvent->method('getName')->willReturn('catalog_was_imported');
         $this->stubEvent->method('getMetadata')->willReturn(['data_version' => (string)$this->testVersion]);
 

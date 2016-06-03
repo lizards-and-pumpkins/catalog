@@ -27,7 +27,7 @@ class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubThemeLocator = $this->getMock(ThemeLocator::class, [], [], '', false);
+        $this->stubThemeLocator = $this->createMock(ThemeLocator::class);
     }
 
     public function testTranslatorInterfaceIsImplemented()

@@ -55,7 +55,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductDetailViewBlockRenderer()
     {
-        $blockRenderer = $this->getMock(ProductDetailViewBlockRenderer::class, [], [], '', false);
+        $blockRenderer = $this->createMock(ProductDetailViewBlockRenderer::class);
         $blockRenderer->method('render')->willReturn('dummy content');
         $blockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
         $blockRenderer->method('getNestedSnippetCodes')->willReturn([]);
@@ -121,10 +121,10 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $blockRenderer = $this->createStubProductDetailViewBlockRenderer();
-        $this->stubProductDetailViewSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductTitleSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductDetailPageMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
-        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $this->stubProductDetailViewSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubProductTitleSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubProductDetailPageMetaSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
         $this->renderer = new ProductDetailViewSnippetRenderer(
             $blockRenderer,
@@ -134,8 +134,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             $this->stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator
         );
 
-        $this->stubProductView = $this->getMock(ProductView::class);
-        $this->stubProductView->method('getContext')->willReturn($this->getMock(Context::class));
+        $this->stubProductView = $this->createMock(ProductView::class);
+        $this->stubProductView->method('getContext')->willReturn($this->createMock(Context::class));
     }
 
     public function testSnippetRendererInterfaceIsImplemented()

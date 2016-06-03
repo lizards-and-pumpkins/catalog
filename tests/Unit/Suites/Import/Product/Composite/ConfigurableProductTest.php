@@ -63,10 +63,10 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSimpleProduct = $this->getMock(SimpleProduct::class, [], [], '', false);
-        $this->mockVariationAttributeList = $this->getMock(ProductVariationAttributeList::class, [], [], '', false);
+        $this->mockSimpleProduct = $this->createMock(SimpleProduct::class);
+        $this->mockVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
         $this->mockVariationAttributeList->method('getAttributes')->willReturn(['attribute_1', 'attribute_2']);
-        $this->mockAssociatedProductList = $this->getMock(AssociatedProductList::class);
+        $this->mockAssociatedProductList = $this->createMock(AssociatedProductList::class);
         $this->configurableProduct = $this->createConfigurableProductInstance();
     }
 
@@ -115,7 +115,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheSimpleProductToGetAllAttributes()
     {
-        $dummyAttributeList = $this->getMock(ProductAttributeList::class);
+        $dummyAttributeList = $this->createMock(ProductAttributeList::class);
         $this->mockSimpleProduct->method('getAttributes')->willReturn($dummyAttributeList);
         $this->assertSame($dummyAttributeList, $this->configurableProduct->getAttributes());
     }

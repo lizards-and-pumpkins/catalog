@@ -25,8 +25,8 @@ class FileInStorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockFileStorage = $this->getMock(FileToFileStorage::class);
-        $this->inStorageFileUri = $this->getMock(StorageSpecificFileUri::class);
+        $this->mockFileStorage = $this->createMock(FileToFileStorage::class);
+        $this->inStorageFileUri = $this->createMock(StorageSpecificFileUri::class);
         $this->inStorageFileUri->method('__toString')->willReturn('test');
         $this->fileInStorage = FileInStorage::create($this->inStorageFileUri, $this->mockFileStorage);
     }

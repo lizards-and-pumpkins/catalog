@@ -214,7 +214,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $masterFactory = new SampleMasterFactory();
-        $masterFactory->register(new UnitTestFactory());
+        $masterFactory->register(new UnitTestFactory($this));
         $this->commonFactory = new CommonFactory();
         $masterFactory->register($this->commonFactory);
     }
@@ -251,7 +251,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductListingWasAddedDomainEventHandlerIsReturned()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => 'foo']);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
         $testEvent = new ProductListingWasAddedDomainEvent($stubProductListing);
@@ -489,7 +489,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testUpdateProductCommandHandlerIsReturned()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubContext->method('getValue')->willReturn('123');
         $product = new SimpleProduct(
@@ -508,7 +508,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testAddProductListingCommandHandlerIsReturned()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
         $sourceCommand = new AddProductListingCommand($stubProductListing);
         $result = $this->commonFactory->createAddProductListingCommandHandler($sourceCommand->toMessage());
@@ -907,7 +907,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testReturnsRobotsMetaTagSnippetRenderer()
     {
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $snippetKeyGenerator */
-        $snippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $snippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $result = $this->commonFactory->createRobotsMetaTagSnippetRenderer($snippetKeyGenerator);
         $this->assertInstanceOf(RobotsMetaTagSnippetRenderer::class, $result);
     }

@@ -34,7 +34,7 @@ class ConfigurableProductXmlToProductBuilderTest extends \PHPUnit_Framework_Test
     protected function setUp()
     {
         $stubProductXmlToProductBuilderLocatorProxy = function () {
-            return $this->getMock(ProductXmlToProductBuilderLocator::class);
+            return $this->createMock(ProductXmlToProductBuilderLocator::class);
         };
         $this->configurableProductXmlToProductBuilder = new ConfigurableProductXmlToProductBuilder(
             $stubProductXmlToProductBuilderLocatorProxy

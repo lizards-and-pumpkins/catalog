@@ -29,7 +29,7 @@ class UpdateContentBlockCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
+        $this->stubContentBlockSource = $this->createMock(ContentBlockSource::class);
         $this->stubContentBlockSource->method('serialize')->willReturn(json_encode('foo'));
         $this->command = new UpdateContentBlockCommand($this->stubContentBlockSource);
     }

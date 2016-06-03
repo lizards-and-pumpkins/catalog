@@ -46,11 +46,11 @@ class ProductJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $class = EnrichProductJsonWithPrices::class;
-        $this->mockEnrichesProductJsonWithPrices = $this->getMock($class, [], [], '', false);
+        $this->mockEnrichesProductJsonWithPrices = $this->createMock($class);
         $this->transformation = new ProductJsonSnippetTransformation($this->mockEnrichesProductJsonWithPrices);
 
-        $this->stubPageSnippets = $this->getMock(PageSnippets::class);
-        $this->stubContext = $this->getMock(Context::class);
+        $this->stubPageSnippets = $this->createMock(PageSnippets::class);
+        $this->stubContext = $this->createMock(Context::class);
     }
     
     public function testItIsASnippetTransformation()

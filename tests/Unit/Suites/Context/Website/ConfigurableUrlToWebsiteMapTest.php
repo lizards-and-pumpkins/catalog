@@ -25,7 +25,7 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubConfigReader = $this->getMock(ConfigReader::class);
+        $this->stubConfigReader = $this->createMock(ConfigReader::class);
     }
 
     public function testWebsiteMapCanBeCreatedFromConfigValue()

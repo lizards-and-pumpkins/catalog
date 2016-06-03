@@ -19,7 +19,7 @@ class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $stubProductImageFileLocator = $this->createMock(ProductImageFileLocator::class);
         $this->locator = new IntegrationTestProductViewLocator($stubProductImageFileLocator);
     }
 
@@ -31,7 +31,7 @@ class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
     public function testProductViewIsReturned()
     {
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
 
         $result = $this->locator->createForProduct($stubProduct);
 
@@ -41,7 +41,7 @@ class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAConfigurableProductViewForConfigurableProducts()
     {
         /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->getMock(ConfigurableProduct::class, [], [], '', false);
+        $stubProduct = $this->createMock(ConfigurableProduct::class);
 
         $result = $this->locator->createForProduct($stubProduct);
 

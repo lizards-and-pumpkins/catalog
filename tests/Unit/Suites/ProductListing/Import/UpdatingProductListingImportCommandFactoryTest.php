@@ -28,7 +28,7 @@ class UpdatingProductListingImportCommandFactoryTest extends \PHPUnit_Framework_
     public function testItReturnsAnAddProductListingCommand()
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $stubProductListing = $this->createMock(ProductListing::class);
         $commands = $this->factory->createProductListingImportCommands($stubProductListing);
         $this->assertInternalType('array', $commands);
         $this->assertNotEmpty($commands);

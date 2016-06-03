@@ -40,11 +40,9 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubContext = $this->getMock(Context::class);
-        $this->stubFacetFiltersToIncludeInResult = $this->getMockWithoutInvokingTheOriginalConstructor(
-            FacetFiltersToIncludeInResult::class
-        );
-        $this->stubSearchOrderConfig = $this->getMock(SortOrderConfig::class, [], [], '', false);
+        $this->stubContext = $this->createMock(Context::class);
+        $this->stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
+        $this->stubSearchOrderConfig = $this->createMock(SortOrderConfig::class);
 
         $this->queryOptions = QueryOptions::create(
             $this->testFilterSelection,

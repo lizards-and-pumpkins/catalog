@@ -29,7 +29,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
      */
     private function addStubAttributeWithCodeAndValue($attributeCode, $attributeValue)
     {
-        $stubAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubAttribute = $this->createMock(ProductAttribute::class);
         $stubAttribute->method('getValue')->willReturn($attributeValue);
         $this->stubAttributeList->method('hasAttribute')->with($attributeCode)->willReturn(true);
         $this->stubAttributeList->method('getAttributesWithCode')->with($attributeCode)
@@ -38,7 +38,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubAttributeList = $this->getMock(ProductAttributeList::class);
+        $this->stubAttributeList = $this->createMock(ProductAttributeList::class);
         $this->productImage = new ProductImage($this->stubAttributeList);
     }
 

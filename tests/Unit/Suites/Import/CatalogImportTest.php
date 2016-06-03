@@ -84,10 +84,10 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private function createMockProductXmlToProductBuilder()
     {
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
-        $stubProductBuilder = $this->getMock(ProductBuilder::class);
-        $stubProductBuilder->method('getProductForContext')->willReturn($this->getMock(Product::class));
+        $stubProductBuilder = $this->createMock(ProductBuilder::class);
+        $stubProductBuilder->method('getProductForContext')->willReturn($this->createMock(Product::class));
 
-        $productXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
+        $productXmlToProductBuilder = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
         return $productXmlToProductBuilder;
     }
@@ -97,10 +97,10 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
      */
     private function createMockProductsPerPageForContextBuilder()
     {
-        $productListing = $this->getMock(ProductListing::class, [], [], '', false);
+        $productListing = $this->createMock(ProductListing::class);
         $productListing->method('getUrlKey')->willReturn('dummy-url-key');
 
-        $productsPerPageForContextBuilder = $this->getMock(ProductListingBuilder::class, [], [], '', false);
+        $productsPerPageForContextBuilder = $this->createMock(ProductListingBuilder::class);
         $productsPerPageForContextBuilder->method('createProductListingFromXml')->willReturn($productListing);
 
         return $productsPerPageForContextBuilder;
@@ -115,7 +115,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $stubProductBuilder->method('isAvailableForContext')->willReturn($isAvailableInContext);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
 
         $stubProductBuilder->getProductForContext($stubContext);
     }
@@ -125,16 +125,16 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->testDirectoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($this->testDirectoryPath);
         
-        $this->mockQueueImportCommands = $this->getMock(QueueImportCommands::class, [], [], '', false);
+        $this->mockQueueImportCommands = $this->createMock(QueueImportCommands::class);
         
         $this->stubProductXmlToProductBuilder = $this->createMockProductXmlToProductBuilder();
         $this->stubProductListingBuilder = $this->createMockProductsPerPageForContextBuilder();
-        $this->mockEventQueue = $this->getMock(DomainEventQueue::class, [], [], '', false);
-        $this->contextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $this->mockEventQueue = $this->createMock(DomainEventQueue::class);
+        $this->contextSource = $this->createMock(ContextSource::class);
         $this->contextSource->method('getAllAvailableContextsWithVersion')->willReturn(
-            [$this->getMock(Context::class)]
+            [$this->createMock(Context::class)]
         );
-        $this->mockLogger = $this->getMock(Logger::class);
+        $this->mockLogger = $this->createMock(Logger::class);
 
         $this->catalogImport = new CatalogImport(
             $this->mockQueueImportCommands,
@@ -227,13 +227,13 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf(ProductImportCallbackFailureMessage::class));
         
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
-        $stubProductBuilder = $this->getMock(ProductBuilder::class);
+        $stubProductBuilder = $this->createMock(ProductBuilder::class);
         $stubProductBuilder->method('isAvailableForContext')->willReturn(true);
         $stubProductBuilder->method('getProductForContext')->willThrowException(
             new \Exception('dummy exception')
         );
 
-        $stubProductXmlToProductBuilder = $this->getMock(ProductXmlToProductBuilderLocator::class, [], [], '', false);
+        $stubProductXmlToProductBuilder = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $stubProductXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
 
         $this->catalogImport = new CatalogImport(

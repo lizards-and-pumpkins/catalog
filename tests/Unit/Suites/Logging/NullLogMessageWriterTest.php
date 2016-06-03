@@ -25,7 +25,7 @@ class NullLogMessageWriterTest extends \PHPUnit_Framework_TestCase
     public function testItTakesALogMessage()
     {
         /** @var LogMessage|\PHPUnit_Framework_MockObject_MockObject $mockLogMessage */
-        $mockLogMessage = $this->getMock(LogMessage::class);
+        $mockLogMessage = $this->createMock(LogMessage::class);
         $mockLogMessage->expects($this->never())->method('__toString');
         $this->writer->write($mockLogMessage);
     }

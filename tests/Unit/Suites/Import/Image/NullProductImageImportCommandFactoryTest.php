@@ -26,7 +26,7 @@ class NullProductImageImportCommandFactoryTest extends \PHPUnit_Framework_TestCa
 
     public function testItReturnsNoCommands()
     {
-        $stubDataVersion = $this->getMock(DataVersion::class, [], [], '', false);
+        $stubDataVersion = $this->createMock(DataVersion::class);
         $this->assertSame([], $this->factory->createProductImageImportCommands('image.jpg', $stubDataVersion));
     }
 }

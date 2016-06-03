@@ -20,7 +20,7 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubSearchDocumentField($fieldKey, array $fieldValues)
     {
-        $stubSearchDocumentField = $this->getMock(SearchDocumentField::class, [], [], '', false);
+        $stubSearchDocumentField = $this->createMock(SearchDocumentField::class);
         $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
         $stubSearchDocumentField->method('getValues')->willReturn($fieldValues);
 
@@ -33,11 +33,11 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubSearchDocumentWithGivenFields(array $stubSearchDocumentFields)
     {
-        $stubSearchDocumentFieldCollection = $this->getMock(SearchDocumentFieldCollection::class, [], [], '', false);
+        $stubSearchDocumentFieldCollection = $this->createMock(SearchDocumentFieldCollection::class);
         $stubSearchDocumentFieldCollection->method('getIterator')
             ->willReturn(new \ArrayIterator($stubSearchDocumentFields));
 
-        $stubSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $stubSearchDocument = $this->createMock(SearchDocument::class);
         $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldCollection);
 
         return $stubSearchDocument;

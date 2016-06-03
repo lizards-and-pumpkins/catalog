@@ -24,10 +24,10 @@ class ImageProcessingStrategySequenceTest extends \PHPUnit_Framework_TestCase
 
     public function testAllStrategiesOfSequenceAreExecuted()
     {
-        $mockStrategy1 = $this->getMock(ImageProcessingStrategy::class);
+        $mockStrategy1 = $this->createMock(ImageProcessingStrategy::class);
         $mockStrategy1->expects($this->once())
             ->method('processBinaryImageData');
-        $mockStrategy2 = $this->getMock(ImageProcessingStrategy::class);
+        $mockStrategy2 = $this->createMock(ImageProcessingStrategy::class);
         $mockStrategy2->expects($this->once())
             ->method('processBinaryImageData');
 

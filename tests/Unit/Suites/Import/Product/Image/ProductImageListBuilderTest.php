@@ -91,7 +91,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAProductImageListInstance()
     {
         $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId, []);
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $productImageList = $productImageListBuilder->getImageListForContext($stubContext);
         $this->assertInstanceOf(ProductImageList::class, $productImageList);
     }
@@ -103,7 +103,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             $this->getImageAttributeArray('test2.jpg', 'The label B')
         ];
         $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId, $productImageListArray);
-        $imageList = $productImageListBuilder->getImageListForContext($this->getMock(Context::class));
+        $imageList = $productImageListBuilder->getImageListForContext($this->createMock(Context::class));
         $this->assertCount(2, $imageList);
     }
 }

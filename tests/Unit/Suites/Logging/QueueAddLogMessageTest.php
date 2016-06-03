@@ -16,7 +16,7 @@ class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubQueue = $this->getMock(Queue::class);
+        $this->stubQueue = $this->createMock(Queue::class);
     }
     public function testItUsesTheClassNameForTheStringRepresentationForObjects()
     {

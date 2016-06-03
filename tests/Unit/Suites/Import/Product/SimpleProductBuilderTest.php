@@ -57,18 +57,18 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->mockProductAttributeListBuilder = $this->getMock(ProductAttributeListBuilder::class);
-        $this->mockProductImageListBuilder = $this->getMock(ProductImageListBuilder::class);
+        $this->stubProductId = $this->createMock(ProductId::class);
+        $this->mockProductAttributeListBuilder = $this->createMock(ProductAttributeListBuilder::class);
+        $this->mockProductImageListBuilder = $this->createMock(ProductImageListBuilder::class);
 
-        $this->mockAttributeList = $this->getMock(ProductAttributeList::class);
+        $this->mockAttributeList = $this->createMock(ProductAttributeList::class);
         $this->mockProductAttributeListBuilder->method('getAttributeListForContext')
             ->willReturn($this->mockAttributeList);
 
         $this->mockProductImageListBuilder->method('getImageListForContext')
-            ->willReturn($this->getMock(ProductImageList::class));
+            ->willReturn($this->createMock(ProductImageList::class));
 
-        $stubTaxClass = $this->getMock(ProductTaxClass::class, [], [], '', false);
+        $stubTaxClass = $this->createMock(ProductTaxClass::class);
         
         $this->productBuilder = new SimpleProductBuilder(
             $this->stubProductId,
@@ -81,7 +81,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductForContextIsReturned()
     {
         $this->mockAttributeList->method('getAllAttributes')->willReturn([]);
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $result = $this->productBuilder->getProductForContext($stubContext);
 
         $this->assertInstanceOf(SimpleProduct::class, $result);
@@ -105,7 +105,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
             ['special_price', [$sourceSpecialPriceAttribute]],
         ]);
 
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $product = $this->productBuilder->getProductForContext($stubContext);
 
         array_map(function ($priceAttributeCode) use ($product) {
@@ -117,7 +117,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductIsAvailableForContextIfAttributesCanBeCollected()
     {
         $this->mockAttributeList->method('count')->willReturn(2);
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         
         $this->assertTrue($this->productBuilder->isAvailableForContext($stubContext));
     }
@@ -125,7 +125,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductIsNotAvailableForContextIfNoAttributesCanBeCollected()
     {
         $this->mockAttributeList->method('count')->willReturn(0);
-        $stubContext = $this->getMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         
         $this->assertFalse($this->productBuilder->isAvailableForContext($stubContext));
     }

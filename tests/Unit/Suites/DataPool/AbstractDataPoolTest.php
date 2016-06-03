@@ -27,9 +27,9 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockKeyValueStore = $this->getMock(KeyValueStore::class);
-        $this->mockSearchEngine = $this->getMock(SearchEngine::class);
-        $this->mockUrlKeyStore = $this->getMock(UrlKeyStore::class);
+        $this->mockKeyValueStore = $this->createMock(KeyValueStore::class);
+        $this->mockSearchEngine = $this->createMock(SearchEngine::class);
+        $this->mockUrlKeyStore = $this->createMock(UrlKeyStore::class);
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected function getStubProductId()
     {
-        return $this->getMock(ProductId::class, [], [], '', false);
+        return $this->createMock(ProductId::class);
     }
 
     protected function addSetMethodToStubKeyValueStore()

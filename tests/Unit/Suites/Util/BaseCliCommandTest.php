@@ -74,7 +74,7 @@ class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
         $this->climate = new CLImate();
 
         $this->writeOutputSpy = $this->any();
-        $mockOutput = $this->getMock(CliOutput::class);
+        $mockOutput = $this->createMock(CliOutput::class);
         $mockOutput->expects($this->writeOutputSpy)->method('write');
         $this->climate->output = $mockOutput;
 

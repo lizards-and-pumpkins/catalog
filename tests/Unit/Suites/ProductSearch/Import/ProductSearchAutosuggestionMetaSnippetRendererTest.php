@@ -40,16 +40,16 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
     protected function setUp()
     {
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
-        $stubSnippetKeyGenerator = $this->getMock(SnippetKeyGenerator::class);
+        $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummySnippetKey);
 
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
-        $stubBlockRenderer = $this->getMock(BlockRenderer::class, [], [], '', false);
+        $stubBlockRenderer = $this->createMock(BlockRenderer::class);
         $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->dummyRootSnippetCode);
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
-        $stubContext = $this->getMock(Context::class);
-        $this->stubContextSource = $this->getMock(ContextSource::class, [], [], '', false);
+        $stubContext = $this->createMock(Context::class);
+        $this->stubContextSource = $this->createMock(ContextSource::class);
         $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
         $this->renderer = new ProductSearchAutosuggestionMetaSnippetRenderer(

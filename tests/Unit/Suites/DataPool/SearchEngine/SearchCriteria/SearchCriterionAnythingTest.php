@@ -16,7 +16,7 @@ class SearchCriterionAnythingTest extends \PHPUnit_Framework_TestCase
 
     public function testItMatchesAnySearchDocument()
     {
-        $mockSearchDocument = $this->getMock(SearchDocument::class, [], [], '', false);
+        $mockSearchDocument = $this->createMock(SearchDocument::class);
         $this->assertTrue(SearchCriterionAnything::create()->matches($mockSearchDocument));
     }
 

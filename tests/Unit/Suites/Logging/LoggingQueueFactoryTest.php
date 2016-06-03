@@ -25,7 +25,7 @@ class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        $implementationFactory = new UnitTestFactory();
+        $implementationFactory = new UnitTestFactory($this);
         
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());

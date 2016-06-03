@@ -24,7 +24,7 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockProduct = $this->getMock(Product::class);
+        $this->mockProduct = $this->createMock(Product::class);
         $this->attributeValueCollector = new DefaultAttributeValueCollector();
     }
 

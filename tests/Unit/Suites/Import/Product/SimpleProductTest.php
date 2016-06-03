@@ -56,11 +56,11 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->stubProductId = $this->getMock(ProductId::class, [], [], '', false);
-        $this->stubTaxClass = $this->getMock(ProductTaxClass::class, [], [], '', false);
-        $this->stubProductAttributeList = $this->getMock(ProductAttributeList::class);
-        $this->stubContext = $this->getMock(Context::class);
-        $this->stubProductImages = $this->getMock(ProductImageList::class);
+        $this->stubProductId = $this->createMock(ProductId::class);
+        $this->stubTaxClass = $this->createMock(ProductTaxClass::class);
+        $this->stubProductAttributeList = $this->createMock(ProductAttributeList::class);
+        $this->stubContext = $this->createMock(Context::class);
+        $this->stubProductImages = $this->createMock(ProductImageList::class);
         $this->product = new SimpleProduct(
             $this->stubProductId,
             $this->stubTaxClass,
@@ -90,7 +90,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
         $dummyAttributeCode = 'foo';
         $dummyAttributeValue = 'bar';
 
-        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttribute = $this->createMock(ProductAttribute::class);
         $stubProductAttribute->method('getValue')->willReturn($dummyAttributeValue);
 
         $this->stubProductAttributeList->method('hasAttribute')
@@ -108,11 +108,11 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
         $dummyAttributeCode = 'foo';
 
         $dummyAttributeAValue = 'bar';
-        $stubProductAttributeA = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttributeA = $this->createMock(ProductAttribute::class);
         $stubProductAttributeA->method('getValue')->willReturn($dummyAttributeAValue);
 
         $dummyAttributeBValue = 'baz';
-        $stubProductAttributeB = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttributeB = $this->createMock(ProductAttribute::class);
         $stubProductAttributeB->method('getValue')->willReturn($dummyAttributeBValue);
 
         $this->stubProductAttributeList->method('hasAttribute')
@@ -130,7 +130,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayContainingOneEmptyStringIsReturnedIfAttributeIsNotFound()
     {
-        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttribute = $this->createMock(ProductAttribute::class);
         $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
 
         $this->stubProductAttributeList->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
@@ -142,7 +142,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyStringIsReturnedIfAttributeIsNotFound()
     {
-        $stubProductAttribute = $this->getMock(ProductAttribute::class, [], [], '', false);
+        $stubProductAttribute = $this->createMock(ProductAttribute::class);
         $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
 
         $this->stubProductAttributeList->method('getAttributesWithCode')->willReturn([$stubProductAttribute]);
@@ -247,14 +247,14 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheSpecifiedImage()
     {
-        $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $stubImage = $this->createMock(ProductImage::class);
         $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
         $this->assertSame($stubImage, $this->product->getImageByNumber(0));
     }
 
     public function testItReturnsTheGivenProductImageFile()
     {
-        $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $stubImage = $this->createMock(ProductImage::class);
         $stubImage->method('getFileName')->willReturn('test.jpg');
         $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
         $this->assertSame('test.jpg', $this->product->getImageFileNameByNumber(0));
@@ -263,7 +263,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheGivenProductImageLabel()
     {
-        $stubImage = $this->getMock(ProductImage::class, [], [], '', false);
+        $stubImage = $this->createMock(ProductImage::class);
         $stubImage->method('getLabel')->willReturn('Foo bar buz');
         $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
         $this->assertSame('Foo bar buz', $this->product->getImageLabelByNumber(0));

@@ -27,8 +27,8 @@ class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framewo
 
     protected function setUp()
     {
-        $this->mockDecoratedEventHandler = $this->getMock(DomainEventHandler::class);
-        $this->mockLogger = $this->getMock(Logger::class);
+        $this->mockDecoratedEventHandler = $this->createMock(DomainEventHandler::class);
+        $this->mockLogger = $this->createMock(Logger::class);
         $this->decorator = new ProcessTimeLoggingDomainEventHandlerDecorator(
             $this->mockDecoratedEventHandler,
             $this->mockLogger

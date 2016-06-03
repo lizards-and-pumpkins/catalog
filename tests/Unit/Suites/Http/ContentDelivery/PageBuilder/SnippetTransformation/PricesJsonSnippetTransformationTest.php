@@ -43,9 +43,9 @@ class PricesJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubPageSnippets = $this->getMock(PageSnippets::class);
-        $this->stubContext = $this->getMock(Context::class);
-        $this->stubPriceSnippetTransformation = $this->getMock(SnippetTransformation::class);
+        $this->stubPageSnippets = $this->createMock(PageSnippets::class);
+        $this->stubContext = $this->createMock(Context::class);
+        $this->stubPriceSnippetTransformation = $this->createMock(SnippetTransformation::class);
         $this->pricesJsonSnippetTransformation = new PricesJsonSnippetTransformation(
             $this->stubPriceSnippetTransformation
         );

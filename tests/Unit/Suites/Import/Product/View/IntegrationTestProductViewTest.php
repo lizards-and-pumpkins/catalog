@@ -21,8 +21,8 @@ class IntegrationTestProductViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockProduct = $this->getMock(Product::class);
-        $stubProductImageFileLocator = $this->getMock(ProductImageFileLocator::class);
+        $this->mockProduct = $this->createMock(Product::class);
+        $stubProductImageFileLocator = $this->createMock(ProductImageFileLocator::class);
         $this->productView = new IntegrationTestProductView($this->mockProduct, $stubProductImageFileLocator);
     }
 

@@ -30,8 +30,8 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSnippetRendererCollection = $this->getMock(SnippetRendererCollection::class, [], [], '', false);
-        $this->mockDataPoolWriter = $this->getMock(DataPoolWriter::class, [], [], '', false);
+        $this->mockSnippetRendererCollection = $this->createMock(SnippetRendererCollection::class);
+        $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
 
         $this->projector = new ContentBlockProjector($this->mockSnippetRendererCollection, $this->mockDataPoolWriter);
     }
@@ -52,12 +52,12 @@ class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testSnippetIsWrittenIntoDataPool()
     {
-        $stubSnippet = $this->getMock(Snippet::class, [], [], '', false);
+        $stubSnippet = $this->createMock(Snippet::class);
 
         $this->mockSnippetRendererCollection->method('render')->willReturn([$stubSnippet]);
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippet);
 
-        $stubContentBlockSource = $this->getMock(ContentBlockSource::class, [], [], '', false);
+        $stubContentBlockSource = $this->createMock(ContentBlockSource::class);
 
         $this->projector->project($stubContentBlockSource);
     }
