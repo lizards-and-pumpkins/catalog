@@ -143,7 +143,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $key = $keyGenerator->getKeyForContext($context, []);
         $html = $dataPoolReader->getSnippet($key);
 
-        $expectation = '<li class="no-thumbnail">';
+        $expectation = '<ul id="product-search-autosuggestion">';
 
         $this->assertContains($expectation, $html);
     }
@@ -169,7 +169,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $page = $productSearchAutosuggestionRequestHandler->process($request);
         $body = $page->getBody();
 
-        $this->assertStringStartsWith('<ul>', $body);
+        $this->assertStringStartsWith('<ul ', $body);
 
         $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
