@@ -553,7 +553,7 @@ class IntegrationTestFactory implements Factory
      */
     public function createThemeLocator()
     {
-        return ThemeLocator::fromPath(__DIR__ . '/../fixture');
+        return new ThemeLocator(__DIR__ . '/../fixture');
     }
 
     /**

@@ -2,31 +2,20 @@
 
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
-use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
-
 class ThemeLocator
 {
     /**
      * @var string
      */
-    private $relativePathToThemeDirectory;
+    private $themeDirectoryPath;
 
     /**
-     * @param string $relativePathToThemeDirectory
+     * @param string $themeDirectoryPath
      */
-    private function __construct($relativePathToThemeDirectory)
+    public function __construct($themeDirectoryPath)
     {
-        $this->relativePathToThemeDirectory = $relativePathToThemeDirectory;
-    }
-
-    /**
-     * @param string $basePath
-     * @return ThemeLocator
-     */
-    public static function fromPath($basePath)
-    {
-        $themeDirectoryRelativePath = (new LocalFilesystem())->getRelativePath(getcwd(), $basePath . '/theme');
-        return new self($themeDirectoryRelativePath);
+        // TODO: Validate
+        $this->themeDirectoryPath = $themeDirectoryPath . '/theme';
     }
 
     /**
@@ -34,7 +23,7 @@ class ThemeLocator
      */
     public function getThemeDirectory()
     {
-        return $this->relativePathToThemeDirectory;
+        return $this->themeDirectoryPath;
     }
 
     /**
@@ -43,7 +32,7 @@ class ThemeLocator
      */
     public function getLayoutForHandle($layoutHandle)
     {
-        $layoutFile = $this->relativePathToThemeDirectory . '/layout/' . $layoutHandle. '.xml';
+        $layoutFile = $this->themeDirectoryPath . '/layout/' . $layoutHandle . '.xml';
         return (new LayoutReader())->loadLayoutFromXmlFile($layoutFile);
     }
 }
