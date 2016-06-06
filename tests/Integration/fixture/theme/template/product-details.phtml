@@ -2,177 +2,18 @@
 /**
  * @var \LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock $this
  */
+
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 
 ?>
-<?php
+<h1><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
+<p><?= $this->getProductId() ?></p>
 
-$mpn = $this->getFirstValueOfProductAttribute('mpn');
-$sku = $mpn ? $mpn : $this->getProductId();
-$brand = $this->getFirstValueOfProductAttribute('brand');
-$brandLogo = strtolower(preg_replace('/\W/', '_', trim($brand))) . '.png';
-$productImageCount = $this->getProductImageCount();
-$youtubeId = $this->getFirstValueOfProductAttribute('yt_link');
+<script type="text/javascript">
 
-?>
-<div itemscope itemtype="http://schema.org/Product">
-    <div class="product-essential">
-        <div id="phoneTitlePlaceholder"></div>
-        <div class="product-img-box">
-            <a href="<?= $this->getMainProductImageUrl('original') ?>" class="main-image-area">
-                <img src="<?= $this->getMainProductImageUrl('large') ?>" itemprop="image" alt="<?= $this->getMainProductImageLabel() ?>"/>
-            </a>
-            <?php if ($youtubeId) : ?>
-                <iframe id="youtube-video" src="https://www.youtube.com/embed/<?= $youtubeId ?>" frameborder="0" allowfullscreen></iframe>
-            <?php endif ?>
-            <ul class="more-views">
-                <?php for ($i=0; $i<$productImageCount; $i++) : ?>
-                    <li>
-                        <a href="<?= $this->getProductImageUrlByNumber($i, 'original') ?>" data-image="<?= $this->getProductImageUrlByNumber($i, 'large') ?>"><img src="<?= $this->getProductImageUrlByNumber($i, 'small') ?>" width="48" height="48"/></a>
-                    </li>
-                <?php endfor ?>
-                <?php if ($youtubeId) : ?>
-                    <li><a href="#" id="youtube-link"><img src="<?= $this->getBaseUrl() ?>images/youtube.jpg" /></a></li>
-                <?php endif ?>
-            </ul>
-        </div>
-        <div class="product-shop">
-            <div class="top">
-                <div class="product-title">
-                    <img src="<?= $this->getBaseUrl() ?>media/logos/<?= $brandLogo ?>" width="95" id="brandLogo"/>
-                    <h1 itemprop="name"><?= $this->getFirstValueOfProductAttribute('name') ?></h1>
-                    <p class="similarProducts">
-                        <?= $this->__('More by') ?> <a href="<?= $this->getBaseUrl() ?>shop.html?brand=<?= $brand ?>" itemprop="brand"><?= $brand ?></a>
-                    </p>
-                </div>
-                <div class="articleInformations">
-                    <p class="articleNumber"><?= $this->__('SKU') ?>: <?= $sku ?></p>
-                    <meta itemprop="sku" content="<?= $sku ?>"/>
-                    <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
-                </div>
-            </div>
+    var product = <?= $this->getChildOutput('product_json') ?>,
+        variation_attributes = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE) ?>,
+        associated_products = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE) ?>,
+        translations = {{snippet translations}};
 
-            <div class="product-main-info">
-                <script>
-
-                    var stockQty = '<?= $this->getProductStockQuantity() ?>',
-                        baseUrl = '<?= $this->getBaseUrl() ?>',
-                        basePricePattern = '<?= sprintf($this->__('per %s%s %s &euro;'), '%s', '%s','%s') ?>';
-
-                </script>
-                <div class="price-information">
-                    <div id="old-price"></div>
-                    <div id="regular-price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer"></div>
-                    <div class="tax-information">
-                        <?= $this->__('incl. VAT, plus &euro; 1.99 insurance and handling plus delivery charge') ?>
-                    </div>
-                </div>
-                <div class="main-information">
-                    <?php if ($gender = $this->getImplodedValuesOfProductAttribute('gender', ', ')) : ?>
-                        <p><strong><?= $this->__('gender') ?>:</strong> <?= $gender ?></p>
-                    <?php endif ?>
-
-                    <?php if (($style = $this->getImplodedValuesOfProductAttribute('style', ', '))) : ?>
-                        <p><strong><?= $this->__('style') ?>:</strong> <?= $style ?></p>
-                    <?php endif ?>
-
-                    <p>
-                        <strong><?= $this->__('Availability') ?>: </strong>
-                        <span class="in-stock"><?= $this->__('In Stock') ?></span>
-                        <span class="out-of-stock"><?= $this->__('Out Of Stock') ?></span>
-                        <a href="<?= $this->getBaseUrl()?>common/index/index/?identifier=versandinfo" class="info"><?= $this->__('Shipping Info'); ?></a>
-                    </p>
-                </div>
-            </div>
-
-            <div class="product-controls">
-                <input type="hidden" name="product" value="<?= $this->getProductId() ?>"/>
-                <div class="selects"></div>
-                <button disabled="disabled"><?= $this->__('Add to Cart') ?></button>
-            </div>
-
-            <div class="social-media-icons">
-                <a class="fb" href="https://www.facebook.com/sharer/sharer.php?u=<?= $this->getProductUrl() ?>" target="_blank"></a>
-                <a class="google" href="https://plus.google.com/share?url=<?= $this->getProductUrl() ?>" target="_blank"></a>
-                <a class="twitter" href="https://twitter.com/intent/tweet?url=<?= $this->getProductUrl() ?>" target="_blank"></a>
-                <a class="pinterest" href="https://www.pinterest.com/pin/create/button/?url=<?= $this->getProductUrl() ?>&media=<?= $this->getMainProductImageUrl('large') ?>&description=<?= $this->getFirstValueOfProductAttribute('name') ?>" target="_blank"></a>
-            </div>
-        </div>
-    </div>
-
-    <?= $this->getChildOutput('all-models') ?>
-
-    <div class="product-collateral">
-        <ul class="tabs">
-            <li><a href="#description"><?= $this->__('Description') ?></a></li>
-            <li><a href="#additional-information"><?= $this->__('Additional information') ?></a></li>
-        </ul>
-        <div id="description" class="tab-content" itemprop="description">
-            <?= $this->getFirstValueOfProductAttribute('description') ?>
-        </div>
-        <div id="additional-information" class="tab-content">
-            <div><?= $this->__('Additional information') ?></div>
-            <table>
-                <colgroup><col width="25%"><col></colgroup>
-                <tbody>
-                <tr>
-                    <th><?= $this->__('SKU') ?></th>
-                    <td><?= $this->getProductId() ?></td>
-                </tr>
-                <?php if ($mpn) : ?>
-                <tr>
-                    <th><?= $this->__('mpn') ?></th>
-                    <td><?= $mpn ?></td>
-                </tr>
-                <?php endif ?>
-                <tr>
-                    <th><?= $this->__('Price') ?></th>
-                    <td id="price-in-additional-information"></td>
-                </tr>
-                <tr>
-                    <th><?= $this->__('brand') ?></th>
-                    <td><?= $this->getFirstValueOfProductAttribute('brand') ?></td>
-                </tr>
-                <?php if ($gender) : ?>
-                <tr>
-                    <th><?= $this->__('gender') ?></th>
-                    <td><?= $gender ?></td>
-                </tr>
-                <?php endif ?>
-                <?php if ($productGroup = $this->getFirstValueOfProductAttribute('product_group')) : ?>
-                <tr>
-                    <th><?= $this->__('product_group') ?></th>
-                    <td><?= $productGroup ?></td>
-                </tr>
-                <?php endif ?>
-                <?php if ($series = $this->getFirstValueOfProductAttribute('series')) : ?>
-                <tr>
-                    <th><?= $this->__('series') ?></th>
-                    <td><?= $series ?></td>
-                </tr>
-                <?php endif ?>
-                <?php if ($style) : ?>
-                <tr>
-                    <th><?= $this->__('style') ?></th>
-                    <td><?= $style ?></td>
-                </tr>
-                <?php endif ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="recently-viewed-products">
-        <div class="heading"><?= $this->__('Your Recently Viewed') ?></div>
-        <div class="swipe-container"></div>
-    </div>
-
-    <script type="text/javascript">
-
-        var product = <?= $this->getChildOutput('product_json') ?>,
-            variation_attributes = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE) ?>,
-            associated_products = <?= $this->getChildOutput(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE) ?>,
-            translations = {{snippet translations}};
-
-    </script>
-</div>
+</script>

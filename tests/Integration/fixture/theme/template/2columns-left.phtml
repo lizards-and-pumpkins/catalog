@@ -9,21 +9,7 @@
     <?= $this->getChildOutput('head') ?>
 </head>
 <body>
-<div class="wrapper 2columns-left">
-    <div class="page">
-        <?= $this->getChildOutput('header') ?>
-        <div class="main-container col2-left-layout">
-            <div class="main">
-                <div class="col-left">
-                    <?= $this->getChildOutput('left') ?>
-                </div>
-                <div class="col-main">
-                    <?= $this->getChildOutput('content') ?>
-                </div>
-            </div>
-        </div>
-        <?= $this->getChildOutput('footer') ?>
-    </div>
-</div>
+    <?= $this->getChildOutput('left') ?>
+    <?= $this->getChildOutput('content') ?>
 </body>
 </html>
