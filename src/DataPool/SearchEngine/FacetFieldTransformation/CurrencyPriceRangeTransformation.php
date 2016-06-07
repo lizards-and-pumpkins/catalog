@@ -12,7 +12,7 @@ use SebastianBergmann\Money\Money;
 class CurrencyPriceRangeTransformation implements FacetFieldTransformation
 {
     /**
-     * @var string
+     * @var callable
      */
     private $localeFactory;
 
@@ -33,9 +33,19 @@ class CurrencyPriceRangeTransformation implements FacetFieldTransformation
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $input
+     * @return string
      */
-    public function encode(FacetFilterRange $range)
+    public function encode($input)
+    {
+        return $this->getFormattedPriceRangeString($input);
+    }
+
+    /**
+     * @param FacetFilterRange $range
+     * @return string
+     */
+    private function getFormattedPriceRangeString(FacetFilterRange $range)
     {
         return sprintf('%s - %s', $this->priceIntToString($range->from()), $this->priceIntToString($range->to()));
     }
