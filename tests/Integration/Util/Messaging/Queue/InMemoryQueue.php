@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Messaging\Queue;
 
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
@@ -23,7 +24,7 @@ class InMemoryQueue implements Queue, Clearable
     /**
      * @return bool
      */
-    public function isReadyForNext()
+    private function isReadyForNext()
     {
         return $this->count() > 0;
     }
@@ -36,7 +37,7 @@ class InMemoryQueue implements Queue, Clearable
     /**
      * @return Message
      */
-    public function next()
+    private function next()
     {
         if ([] === $this->queue) {
             throw new \UnderflowException('Trying to get next message of an empty queue');
@@ -50,5 +51,16 @@ class InMemoryQueue implements Queue, Clearable
     public function clear()
     {
         $this->queue = [];
+    }
+
+    /**
+     * @param MessageReceiver $messageReceiver
+     * @param int $numberOfMessagesBeforeReturn
+     */
+    public function consume(MessageReceiver $messageReceiver, $numberOfMessagesBeforeReturn)
+    {
+        while ($this->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
+            $messageReceiver->receive($this->next());
+        }
     }
 }

@@ -4,11 +4,12 @@ namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage;
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
-class DomainEventConsumer implements QueueMessageConsumer
+class DomainEventConsumer implements QueueMessageConsumer, MessageReceiver
 {
     private $maxNumberOfMessagesToProcess = 200;
 
@@ -36,25 +37,21 @@ class DomainEventConsumer implements QueueMessageConsumer
 
     public function process()
     {
-        $numberOfMessagesBeforeReturn = $this->maxNumberOfMessagesToProcess;
-
-        while ($this->queue->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
-            try {
-                $domainEvent = $this->queue->next();
-                $this->processDomainEvent($domainEvent);
-            } catch (\Exception $e) {
-                $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
-            }
+        try {
+            $messageReceiver = $this;
+            $this->queue->consume($messageReceiver, $this->maxNumberOfMessagesToProcess);
+        } catch (\Exception $e) {
+            $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
         }
     }
 
-    private function processDomainEvent(Message $domainEvent)
+    public function receive(Message $message)
     {
         try {
-            $domainEventHandler = $this->handlerLocator->getHandlerFor($domainEvent);
+            $domainEventHandler = $this->handlerLocator->getHandlerFor($message);
             $domainEventHandler->process();
         } catch (\Exception $e) {
-            $this->logger->log(new DomainEventHandlerFailedMessage($domainEvent, $e));
+            $this->logger->log(new DomainEventHandlerFailedMessage($message, $e));
         }
     }
 }

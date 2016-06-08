@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Logging\Stub;
 
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Storage\Clearable;
@@ -13,18 +14,7 @@ class ClearableStubQueue implements Queue, Clearable
         // Intentionally left empty
     }
 
-    /**
-     * @return int
-     */
     public function count()
-    {
-        // Intentionally left empty
-    }
-
-    /**
-     * @return bool
-     */
-    public function isReadyForNext()
     {
         // Intentionally left empty
     }
@@ -35,9 +25,10 @@ class ClearableStubQueue implements Queue, Clearable
     }
 
     /**
-     * @return Message
+     * @param MessageReceiver $messageReceiver
+     * @param int $maxNumberOfMessagesToConsume
      */
-    public function next()
+    public function consume(MessageReceiver $messageReceiver, $maxNumberOfMessagesToConsume)
     {
         // Intentionally left empty
     }

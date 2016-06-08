@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
@@ -49,50 +50,49 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(QueueMessageConsumer::class, $this->commandConsumer);
     }
 
-    public function testItCallsNextIfQueueIsReady()
+    public function testConsumesMessagesFromQueue()
     {
-        $stubCommand = $this->createMock(Message::class);
-        $this->stubQueue->method('next')->willReturn($stubCommand);
-        $this->stubQueue->method('isReadyForNext')
-            ->willReturnOnConsecutiveCalls(true, true, false);
-
-        $mockCommandHandler = $this->createMock(CommandHandler::class);
-        $this->mockLocator->expects($this->exactly(2))->method('getHandlerFor')
-            ->willReturn($mockCommandHandler);
-
-        $this->commandConsumer->process();
-    }
-
-    public function testLogEntryIsWrittenIfLocatorIsNotFound()
-    {
-        $stubCommand = $this->createMock(Message::class);
-        $this->stubQueue->method('next')->willReturn($stubCommand);
-        $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
-
-        $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindCommandHandlerException);
-        $this->mockLogger->expects($this->once())->method('log');
+        $this->stubQueue->expects($this->once())->method('consume')->with($this->commandConsumer);
 
         $this->commandConsumer->process();
     }
 
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
-        $this->stubQueue->expects($this->once())->method('next')->willThrowException(new \UnderflowException);
-        $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
+        $this->stubQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
         $this->mockLogger->expects($this->once())->method('log');
 
         $this->commandConsumer->process();
     }
 
-    public function testConsumerStopsIfProcessingLimitIsReached()
+    public function testDelegatesProcessingToLocatedCommandHandler()
     {
-        $stubCommand = $this->createMock(Message::class);
-        $this->stubQueue->method('next')->willReturn($stubCommand);
-        $this->stubQueue->method('isReadyForNext')->willReturn(true);
+        $mockCommandHandler = $this->createMock(\LizardsAndPumpkins\Messaging\Command\CommandHandler::class);
+        $mockCommandHandler->expects($this->once())->method('process');
+        $this->mockLocator->method('getHandlerFor')->willReturn($mockCommandHandler);
 
-        $stubCommandHandler = $this->createMock(CommandHandler::class);
-        $stubCommandHandler->expects($this->exactly(200))->method('process');
-        $this->mockLocator->method('getHandlerFor')->willReturn($stubCommandHandler);
+        $this->stubQueue->method('consume')
+            ->willReturnCallback(function (MessageReceiver $messageReceiver) {
+                /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+                $stubMessage = $this->createMock(Message::class);
+                $messageReceiver->receive($stubMessage);
+            });
+        
+        $this->commandConsumer->process();
+    }
+
+    public function testLogsExceptionIfCommandHandlerIsNotFound()
+    {
+        $this->mockLogger->expects($this->once())->method('log');
+
+        $this->stubQueue->method('consume')
+            ->willReturnCallback(function (MessageReceiver $messageReceiver) {
+                /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+                $stubMessage = $this->createMock(Message::class);
+                $messageReceiver->receive($stubMessage);
+            });
+
+        $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindCommandHandlerException);
 
         $this->commandConsumer->process();
     }

@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Logging;
 
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Storage\Clearable;
@@ -32,26 +33,10 @@ class LoggingQueueDecorator implements Queue, Clearable
         return $this->component->count();
     }
 
-    /**
-     * @return bool
-     */
-    public function isReadyForNext()
-    {
-        return $this->component->isReadyForNext();
-    }
-
     public function add(Message $message)
     {
         $this->logger->log(new QueueAddLogMessage($message->getName(), $this->component));
         $this->component->add($message);
-    }
-
-    /**
-     * @return Message
-     */
-    public function next()
-    {
-        return $this->component->next();
     }
 
     public function clear()
@@ -59,5 +44,14 @@ class LoggingQueueDecorator implements Queue, Clearable
         if ($this->component instanceof Clearable) {
             $this->component->clear();
         }
+    }
+
+    /**
+     * @param MessageReceiver $messageReceiver
+     * @param int $maxNumberOfMessagesToConsume
+     */
+    public function consume(MessageReceiver $messageReceiver, $maxNumberOfMessagesToConsume)
+    {
+        $this->component->consume($messageReceiver, $maxNumberOfMessagesToConsume);
     }
 }

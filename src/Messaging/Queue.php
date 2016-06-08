@@ -12,18 +12,14 @@ interface Queue extends \Countable
     public function count();
 
     /**
-     * @return bool
-     */
-    public function isReadyForNext();
-
-    /**
      * @param Message $message
      * @return void
      */
     public function add(Message $message);
 
     /**
-     * @return Message
+     * @param MessageReceiver $messageReceiver
+     * @param int $maxNumberOfMessagesToConsume
      */
-    public function next();
+    public function consume(MessageReceiver $messageReceiver, $maxNumberOfMessagesToConsume);
 }

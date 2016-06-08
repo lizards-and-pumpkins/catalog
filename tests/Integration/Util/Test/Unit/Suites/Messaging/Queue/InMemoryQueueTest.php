@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Messaging\Queue;
 
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
 /**
@@ -20,6 +21,11 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
     private $queue;
 
     /**
+     * @var MessageReceiver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockMessageReceiver;
+
+    /**
      * @var Message
      */
     private $testMessage;
@@ -27,62 +33,56 @@ class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->testMessage = Message::withCurrentTime('foo', [], []);
+        $this->mockMessageReceiver = $this->createMock(MessageReceiver::class);
         $this->queue = new InMemoryQueue();
     }
 
-    public function testQueueIsInitiallyEmpty()
+    public function testIsInitiallyEmpty()
     {
         $this->assertCount(0, $this->queue);
     }
 
-    public function testItIsNotReadyForNextWhenTheQueueIsEmpty()
-    {
-        $this->assertFalse($this->queue->isReadyForNext());
-    }
-
-    public function testItIsReadyForNextWhenTheQueueIsNotEmpty()
+    public function testCallsMessageReceiverWithMessage()
     {
         $this->queue->add($this->testMessage);
-        $this->assertTrue($this->queue->isReadyForNext());
+        $this->mockMessageReceiver->expects($this->once())->method('receive')->with($this->testMessage);
+        $this->queue->consume($this->mockMessageReceiver, $numberOfMessagesBeforeReturn = 1);
     }
 
-    public function testNextMessageIsReturned()
+    public function testRemovesConsumedMessageFromQueue()
     {
         $this->queue->add($this->testMessage);
-        $result = $this->queue->next();
-
-        $this->assertEquals($this->testMessage, $result);
-    }
-
-    public function testReturnedMessageIsRemovedFromQuue()
-    {
-        $this->queue->add($this->testMessage);
-        $this->queue->next();
+        $this->queue->consume($this->mockMessageReceiver, $numberOfMessagesBeforeReturn = 1);
 
         $this->assertCount(0, $this->queue);
     }
 
-    public function testExceptionIsThrownDuringAttemptToReceiveMessageFromEmptyQueue()
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->queue->next();
-    }
-
-    public function testItReturnsTheMessagesInTheRightOrder()
+    public function testReturnsTheMessagesInTheRightOrder()
     {
         $this->queue->add(Message::withCurrentTime('One', [], []));
         $this->queue->add(Message::withCurrentTime('Two', [], []));
 
-        $this->assertEquals('One', $this->queue->next()->getName());
-        $this->assertEquals('Two', $this->queue->next()->getName());
+        $this->mockMessageReceiver->expects($this->exactly(2))->method('receive')->withConsecutive(
+            [
+                $this->callback(function (Message $message) {
+                    return $message->getName() === 'One';
+                }),
+            ],
+            [
+                $this->callback(function (Message $message) {
+                    return $message->getName() === 'Two';
+                })
+            ]
+        );
+        $this->queue->consume($this->mockMessageReceiver, $numberOfMessagesBeforeReturn = 2);
     }
 
-    public function testItIsClearable()
+    public function testIsClearable()
     {
         $this->assertInstanceOf(Clearable::class, $this->queue);
     }
 
-    public function testItClearsTheQueue()
+    public function testClearsTheQueue()
     {
         $this->queue->add(Message::withCurrentTime('One', [], []));
         $this->queue->add(Message::withCurrentTime('Two', [], []));
