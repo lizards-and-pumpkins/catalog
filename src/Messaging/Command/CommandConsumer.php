@@ -3,11 +3,12 @@
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
-class CommandConsumer implements QueueMessageConsumer
+class CommandConsumer implements QueueMessageConsumer, MessageReceiver
 {
     private $maxNumberOfMessagesToProcess = 200;
 
@@ -35,25 +36,21 @@ class CommandConsumer implements QueueMessageConsumer
 
     public function process()
     {
-        $numberOfMessagesBeforeReturn = $this->maxNumberOfMessagesToProcess;
-
-        while ($this->commandQueue->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
-            try {
-                $domainEvent = $this->commandQueue->next();
-                $this->processCommand($domainEvent);
-            } catch (\Exception $e) {
-                $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
-            }
+        try {
+            $messageReceiver = $this;
+            $this->commandQueue->consume($messageReceiver, $this->maxNumberOfMessagesToProcess);
+        } catch (\Exception $e) {
+            $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
         }
     }
 
-    private function processCommand(Message $command)
+    public function receive(Message $message)
     {
         try {
-            $commandHandler = $this->commandHandlerLocator->getHandlerFor($command);
+            $commandHandler = $this->commandHandlerLocator->getHandlerFor($message);
             $commandHandler->process();
         } catch (\Exception $e) {
-            $this->logger->log(new CommandHandlerFailedMessage($command, $e));
+            $this->logger->log(new CommandHandlerFailedMessage($message, $e));
         }
     }
 }

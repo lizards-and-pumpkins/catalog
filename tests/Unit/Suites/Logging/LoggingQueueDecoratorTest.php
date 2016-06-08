@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Logging;
 
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Logging\Stub\ClearableStubQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
@@ -55,13 +56,6 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, $this->decorator->count());
     }
 
-    public function testItDelegatesTheIsReadyForNextCallToTheDecoratedQueue()
-    {
-        $expected = true;
-        $this->decoratedQueue->expects($this->once())->method('isReadyForNext')->willReturn($expected);
-        $this->assertSame($expected, $this->decorator->isReadyForNext());
-    }
-
     public function testItDelegatesAddCallsToTheDecoratedQueue()
     {
         $testMessage = $this->createMockMessage();
@@ -69,11 +63,14 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->decorator->add($testMessage);
     }
 
-    public function testItDelegatesNextCallsToTheDecoratedQueue()
+    public function testItDelegatesConsumeCallsToTheDecoratedQueue()
     {
-        $expected = $this->createMockMessage();
-        $this->decoratedQueue->expects($this->once())->method('next')->willReturn($expected);
-        $this->assertSame($expected, $this->decorator->next());
+        /** @var MessageReceiver|\PHPUnit_Framework_MockObject_MockObject $stubMessageReceiver */
+        $stubMessageReceiver = $this->createMock(MessageReceiver::class);
+        $maxNumberOfMessagesToConsume = 1;
+        $this->decoratedQueue->expects($this->once())->method('consume')
+            ->with($stubMessageReceiver, $maxNumberOfMessagesToConsume);
+        $this->decorator->consume($stubMessageReceiver, $maxNumberOfMessagesToConsume);
     }
 
     public function testItLoggsAddedMessages()
@@ -90,6 +87,7 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesClearCallsToTheDecoratedQueue()
     {
+        /** @var ClearableStubQueue|\PHPUnit_Framework_MockObject_MockObject $mockQueue */
         $mockQueue = $this->createMock(ClearableStubQueue::class);
         $mockQueue->expects($this->once())->method('clear');
         (new LoggingQueueDecorator($mockQueue, $this->mockLogger))->clear();

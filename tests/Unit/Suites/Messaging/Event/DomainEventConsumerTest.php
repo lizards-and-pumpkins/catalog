@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
@@ -49,51 +50,49 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(QueueMessageConsumer::class, $this->domainEventConsumer);
     }
 
-    public function testItCallsNextIfQueueIsReady()
+    public function testConsumesMessagesFromQueue()
     {
-        $stubDomainEvent = $this->createMock(Message::class);
-        $this->stubQueue->method('next')->willReturn($stubDomainEvent);
-        $this->stubQueue->method('isReadyForNext')
-            ->willReturnOnConsecutiveCalls(true, true, true, false);
-
-        $stubEventHandler = $this->createMock(DomainEventHandler::class);
-        $this->mockLocator->expects($this->exactly(3))
-            ->method('getHandlerFor')
-            ->willReturn($stubEventHandler);
-
-        $this->domainEventConsumer->process();
-    }
-
-    public function testLogEntryIsWrittenIfLocatorIsNotFound()
-    {
-        $stubDomainEvent = $this->createMock(Message::class);
-        $this->stubQueue->method('next')->willReturn($stubDomainEvent);
-        $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
-
-        $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindDomainEventHandlerException);
-        $this->mockLogger->expects($this->once())->method('log');
+        $this->stubQueue->expects($this->once())->method('consume')->with($this->domainEventConsumer);
 
         $this->domainEventConsumer->process();
     }
 
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
-        $this->stubQueue->method('next')->willThrowException(new \UnderflowException);
-        $this->stubQueue->method('isReadyForNext')->willReturnOnConsecutiveCalls(true, false);
+        $this->stubQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
         $this->mockLogger->expects($this->once())->method('log');
 
         $this->domainEventConsumer->process();
     }
 
-    public function testConsumerStopsIfProcessingLimitIsReached()
+    public function testDelegatesProcessingToLocatedEventHandler()
     {
-        $stubDomainEvent = $this->createMock(Message::class);
-        $this->stubQueue->method('next')->willReturn($stubDomainEvent);
-        $this->stubQueue->method('isReadyForNext')->willReturn(true);
+        $mockEventHandler = $this->createMock(DomainEventHandler::class);
+        $mockEventHandler->expects($this->once())->method('process');
+        $this->mockLocator->method('getHandlerFor')->willReturn($mockEventHandler);
 
-        $stubEventHandler = $this->createMock(DomainEventHandler::class);
-        $stubEventHandler->expects($this->exactly(200))->method('process');
-        $this->mockLocator->method('getHandlerFor')->willReturn($stubEventHandler);
+        $this->stubQueue->method('consume')
+            ->willReturnCallback(function (MessageReceiver $messageReceiver) {
+                /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+                $stubMessage = $this->createMock(Message::class);
+                $messageReceiver->receive($stubMessage);
+            });
+
+        $this->domainEventConsumer->process();
+    }
+
+    public function testLogsExceptionIfEventHandlerIsNotFound()
+    {
+        $this->mockLogger->expects($this->once())->method('log');
+
+        $this->stubQueue->method('consume')
+            ->willReturnCallback(function (MessageReceiver $messageReceiver) {
+                /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+                $stubMessage = $this->createMock(Message::class);
+                $messageReceiver->receive($stubMessage);
+            });
+
+        $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindDomainEventHandlerException());
 
         $this->domainEventConsumer->process();
     }

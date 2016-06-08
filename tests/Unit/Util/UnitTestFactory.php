@@ -63,11 +63,6 @@ class UnitTestFactory implements Factory
     private $urlKeyStore;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Generator
-     */
-    private $mockObjectGenerator;
-
-    /**
      * @var \PHPUnit_Framework_TestCase
      */
     private $testCase;

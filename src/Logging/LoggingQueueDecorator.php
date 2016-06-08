@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Logging;
 
+use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Storage\Clearable;
@@ -11,16 +12,16 @@ class LoggingQueueDecorator implements Queue, Clearable
     /**
      * @var Queue
      */
-    private $component;
+    private $decoratedQueue;
 
     /**
      * @var Logger
      */
     private $logger;
 
-    public function __construct(Queue $component, Logger $logger)
+    public function __construct(Queue $queueToDecorate, Logger $logger)
     {
-        $this->component = $component;
+        $this->decoratedQueue = $queueToDecorate;
         $this->logger = $logger;
     }
 
@@ -29,35 +30,28 @@ class LoggingQueueDecorator implements Queue, Clearable
      */
     public function count()
     {
-        return $this->component->count();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isReadyForNext()
-    {
-        return $this->component->isReadyForNext();
+        return $this->decoratedQueue->count();
     }
 
     public function add(Message $message)
     {
-        $this->logger->log(new QueueAddLogMessage($message->getName(), $this->component));
-        $this->component->add($message);
-    }
-
-    /**
-     * @return Message
-     */
-    public function next()
-    {
-        return $this->component->next();
+        $this->logger->log(new QueueAddLogMessage($message->getName(), $this->decoratedQueue));
+        $this->decoratedQueue->add($message);
     }
 
     public function clear()
     {
-        if ($this->component instanceof Clearable) {
-            $this->component->clear();
+        if ($this->decoratedQueue instanceof Clearable) {
+            $this->decoratedQueue->clear();
         }
+    }
+
+    /**
+     * @param MessageReceiver $messageReceiver
+     * @param int $maxNumberOfMessagesToConsume
+     */
+    public function consume(MessageReceiver $messageReceiver, $maxNumberOfMessagesToConsume)
+    {
+        $this->decoratedQueue->consume($messageReceiver, $maxNumberOfMessagesToConsume);
     }
 }
