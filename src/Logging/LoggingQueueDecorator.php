@@ -12,16 +12,16 @@ class LoggingQueueDecorator implements Queue, Clearable
     /**
      * @var Queue
      */
-    private $component;
+    private $decoratedQueue;
 
     /**
      * @var Logger
      */
     private $logger;
 
-    public function __construct(Queue $component, Logger $logger)
+    public function __construct(Queue $queueToDecorate, Logger $logger)
     {
-        $this->component = $component;
+        $this->decoratedQueue = $queueToDecorate;
         $this->logger = $logger;
     }
 
@@ -30,19 +30,19 @@ class LoggingQueueDecorator implements Queue, Clearable
      */
     public function count()
     {
-        return $this->component->count();
+        return $this->decoratedQueue->count();
     }
 
     public function add(Message $message)
     {
-        $this->logger->log(new QueueAddLogMessage($message->getName(), $this->component));
-        $this->component->add($message);
+        $this->logger->log(new QueueAddLogMessage($message->getName(), $this->decoratedQueue));
+        $this->decoratedQueue->add($message);
     }
 
     public function clear()
     {
-        if ($this->component instanceof Clearable) {
-            $this->component->clear();
+        if ($this->decoratedQueue instanceof Clearable) {
+            $this->decoratedQueue->clear();
         }
     }
 
@@ -52,6 +52,6 @@ class LoggingQueueDecorator implements Queue, Clearable
      */
     public function consume(MessageReceiver $messageReceiver, $maxNumberOfMessagesToConsume)
     {
-        $this->component->consume($messageReceiver, $maxNumberOfMessagesToConsume);
+        $this->decoratedQueue->consume($messageReceiver, $maxNumberOfMessagesToConsume);
     }
 }

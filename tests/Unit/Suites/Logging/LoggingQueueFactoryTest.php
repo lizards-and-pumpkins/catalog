@@ -38,13 +38,13 @@ class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->factory->createEventMessageQueue();
         $this->assertInstanceOf(LoggingQueueDecorator::class, $result);
-        $this->assertAttributeInstanceOf(Queue::class, 'component', $result);
+        $this->assertAttributeInstanceOf(Queue::class, 'decoratedQueue', $result);
     }
 
     public function testItReturnsADecoratedCommandQueue()
     {
         $result = $this->factory->createCommandMessageQueue();
         $this->assertInstanceOf(LoggingQueueDecorator::class, $result);
-        $this->assertAttributeInstanceOf(Queue::class, 'component', $result);
+        $this->assertAttributeInstanceOf(Queue::class, 'decoratedQueue', $result);
     }
 }
