@@ -39,7 +39,7 @@ class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
     
     public function testPathToThemeDirectoryIsReturned()
     {
-        $this->assertEquals(sys_get_temp_dir() . '/theme', $this->locator->getThemeDirectory());
+        $this->assertEquals(realpath(sys_get_temp_dir()) . '/theme', $this->locator->getThemeDirectory());
     }
 
     public function testLayoutObjectIsReturnedForGivenHandle()
