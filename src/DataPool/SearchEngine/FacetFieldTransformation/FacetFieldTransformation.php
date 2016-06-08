@@ -7,14 +7,14 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 interface FacetFieldTransformation
 {
     /**
-     * @param FacetFilterRange $range
+     * @param FacetFilterRange|string $input
      * @return string
      */
-    public function encode(FacetFilterRange $range);
+    public function encode($input);
 
     /**
      * @param string $input
-     * @return FacetFilterRange
+     * @return mixed
      */
     public function decode($input);
 }
