@@ -2,10 +2,12 @@
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
+
 interface FacetFieldTransformation
 {
     /**
-     * @param mixed $input
+     * @param FacetFilterRange|string $input
      * @return string
      */
     public function encode($input);

@@ -33,7 +33,7 @@ class CurrencyPriceRangeTransformation implements FacetFieldTransformation
     }
 
     /**
-     * @param mixed $input
+     * @param FacetFilterRange|string $input
      * @return string
      */
     public function encode($input)
