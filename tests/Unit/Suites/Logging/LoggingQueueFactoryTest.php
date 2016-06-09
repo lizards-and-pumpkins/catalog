@@ -2,6 +2,7 @@
 
 namespace LizardsAndPumpkins\Logging;
 
+use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -32,6 +33,11 @@ class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register($implementationFactory);
         $this->factory = new LoggingQueueFactory($implementationFactory);
         $masterFactory->register($this->factory);
+    }
+
+    public function testImplementsMessageQueueFactory()
+    {
+        $this->assertInstanceOf(MessageQueueFactory::class, $this->factory);
     }
 
     public function testItReturnsADecoratedEventQueue()
