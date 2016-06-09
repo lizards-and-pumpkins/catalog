@@ -11,6 +11,7 @@ abstract class HttpRequest
     const METHOD_POST = 'POST';
     const METHOD_PUT = 'PUT';
     const METHOD_DELETE = 'DELETE';
+    const METHOD_HEAD = 'HEAD';
 
     /**
      * @var HttpUrl
@@ -65,6 +66,7 @@ abstract class HttpRequest
     {
         switch (strtoupper($requestMethod)) {
             case self::METHOD_GET:
+            case self::METHOD_HEAD:
                 return new HttpGetRequest($url, $headers, $body);
             case self::METHOD_POST:
                 return new HttpPostRequest($url, $headers, $body);
