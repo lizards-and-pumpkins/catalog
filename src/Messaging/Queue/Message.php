@@ -48,23 +48,23 @@ class Message
 
     /**
      * @param string $name
-     * @param string $payload
+     * @param mixed[] $payload
      * @param string[] $metadata
      * @return Message
      */
-    public static function withCurrentTime($name, $payload, array $metadata)
+    public static function withCurrentTime($name, array $payload, array $metadata)
     {
         return new self($name, $payload, $metadata, new \DateTimeImmutable());
     }
 
     /**
      * @param string $name
-     * @param string $payload
+     * @param mixed[] $payload
      * @param string[] $metadata
      * @param \DateTimeInterface $dateTime
      * @return Message
      */
-    public static function withGivenTime($name, $payload, array $metadata, \DateTimeInterface $dateTime)
+    public static function withGivenTime($name, array $payload, array $metadata, \DateTimeInterface $dateTime)
     {
         return new self($name, $payload, $metadata, $dateTime);
     }
