@@ -39,9 +39,9 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     private function validateAllAttributesHaveCompatibleContextData(ProductAttribute ...$attributes)
     {
         array_reduce($attributes, function (array $attributeListContextParts, ProductAttribute $attribute) {
-            array_map(function ($contextPart) use ($attribute, $attributeListContextParts) {
+            every($attribute->getContextParts(), function ($contextPart) use ($attribute, $attributeListContextParts) {
                 $this->validateContextPartIsValidInAttributeList($attribute, $contextPart, $attributeListContextParts);
-            }, $attribute->getContextParts());
+            });
 
             return array_merge($attributeListContextParts, $attribute->getContextDataSet());
         }, []);

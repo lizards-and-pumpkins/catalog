@@ -70,6 +70,6 @@ class QueueImportCommands
      */
     private function addCommandsToQueue(array $commands)
     {
-        array_map([$this->commandQueue, 'add'], $commands);
+        every($commands, [$this->commandQueue, 'add']);
     }
 }

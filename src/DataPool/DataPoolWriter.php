@@ -23,7 +23,7 @@ class DataPoolWriter implements Clearable
      * @var SearchEngine
      */
     private $searchEngine;
-    
+
     /**
      * @var UrlKeyStore
      */
@@ -38,7 +38,9 @@ class DataPoolWriter implements Clearable
 
     public function writeSnippets(Snippet ...$snippets)
     {
-        array_map([$this, 'writeSnippet'], $snippets);
+        every($snippets, function ($snippet) {
+            $this->writeSnippet($snippet);
+        });
     }
 
     private function writeSnippet(Snippet $snippet)
@@ -71,9 +73,9 @@ class DataPoolWriter implements Clearable
     public function writeUrlKeyCollection(UrlKeyForContextCollection $urlKeysForContextsCollection)
     {
         @array_map(function (UrlKeyForContext $urlKeyForContext) {
-            $version = (string) $urlKeyForContext->getContextValue(DataVersion::CONTEXT_CODE);
-            $urlKey = (string) $urlKeyForContext->getUrlKey();
-            $context = (string) $urlKeyForContext;
+            $version = (string)$urlKeyForContext->getContextValue(DataVersion::CONTEXT_CODE);
+            $urlKey = (string)$urlKeyForContext->getUrlKey();
+            $context = (string)$urlKeyForContext;
             $urlKeyType = $urlKeyForContext->getType();
             $this->urlKeyStorage->addUrlKeyForVersion($version, $urlKey, $context, $urlKeyType);
         }, $urlKeysForContextsCollection->getUrlKeys());

@@ -169,9 +169,9 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
      */
     private function validateAllProductsHaveTheAttributes(...$attributeCodes)
     {
-        array_map(function (Product $product) use ($attributeCodes) {
+        every($this->products, function (Product $product) use ($attributeCodes) {
             $this->validateProductHasAttributes($product, $attributeCodes);
-        }, $this->products);
+        });
     }
 
     /**
@@ -180,9 +180,9 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
      */
     private function validateProductHasAttributes(Product $product, array $attributeCodes)
     {
-        array_map(function ($attributeCode) use ($product) {
+        every($attributeCodes, function ($attributeCode) use ($product) {
             $this->validateProductHasAttribute($product, $attributeCode);
-        }, $attributeCodes);
+        });
     }
 
     /**

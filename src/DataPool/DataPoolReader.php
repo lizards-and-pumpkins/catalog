@@ -25,7 +25,7 @@ class DataPoolReader
      * @var string
      */
     private $currentDataVersionDefault = '-1';
-    
+
     /**
      * @var KeyValueStore
      */
@@ -35,7 +35,7 @@ class DataPoolReader
      * @var SearchEngine
      */
     private $searchEngine;
-    
+
     /**
      * @var UrlKeyStore
      */
@@ -55,7 +55,7 @@ class DataPoolReader
     public function hasSnippet($key)
     {
         $this->validateKey($key);
-        
+
         return $this->keyValueStore->has($key);
     }
 
@@ -90,7 +90,9 @@ class DataPoolReader
      */
     public function getSnippets(array $keys)
     {
-        array_map([$this, 'validateKey'], $keys);
+        every($keys, function ($key) {
+            $this->validateKey($key);
+        });
         return $this->keyValueStore->multiGet($keys);
     }
 
@@ -148,7 +150,7 @@ class DataPoolReader
      */
     public function getCurrentDataVersion()
     {
-        if (! $this->keyValueStore->has($this->currentDataVersionKey)) {
+        if (!$this->keyValueStore->has($this->currentDataVersionKey)) {
             return $this->currentDataVersionDefault;
         }
         return $this->keyValueStore->get($this->currentDataVersionKey);

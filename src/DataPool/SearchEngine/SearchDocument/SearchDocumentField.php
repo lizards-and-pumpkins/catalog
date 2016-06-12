@@ -35,7 +35,7 @@ class SearchDocumentField
     public static function fromKeyAndValues($key, array $values)
     {
         self::validateKey($key);
-        array_map([self::class, 'validateValue'], $values);
+        every($values, [self::class, 'validateValue']);
 
         return new self((string) $key, $values);
     }

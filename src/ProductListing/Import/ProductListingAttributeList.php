@@ -27,8 +27,10 @@ class ProductListingAttributeList
      */
     public static function fromArray(array $attributes)
     {
-        array_map([self::class, 'validateAttributeCode'], array_keys($attributes));
-        array_map([self::class, 'validateAttributeValue'], $attributes);
+        every($attributes, function ($value, $code) {
+            self::validateAttributeCode($code);
+            self::validateAttributeValue($value);
+        });
 
         return new self($attributes);
     }

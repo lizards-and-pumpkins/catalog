@@ -32,9 +32,9 @@ class ProductAttributeListBuilder
 
     private static function validateAttributesMayBeCombinedIntoList(ProductAttribute ...$attributes)
     {
-        array_map(function (array $attributesByCode) {
+        every(self::getAttributesGroupedByCode($attributes), function (array $attributesByCode) {
             self::validateAttributesHaveSameContextParts(...$attributesByCode);
-        }, self::getAttributesGroupedByCode($attributes));
+        });
     }
 
     /**
@@ -51,12 +51,12 @@ class ProductAttributeListBuilder
 
     private static function validateAttributesHaveSameContextParts(ProductAttribute $first, ProductAttribute ...$others)
     {
-        array_map(function (ProductAttribute $attributeToCompare) use ($first) {
+        every($others, function (ProductAttribute $attributeToCompare) use ($first) {
             if (!$first->hasSameContextPartsAs($attributeToCompare)) {
                 $message = self::getAttributeContextPartsMismatchExceptionMessage($first);
                 throw new ProductAttributeContextPartsMismatchException($message);
             }
-        }, $others);
+        });
     }
 
     /**

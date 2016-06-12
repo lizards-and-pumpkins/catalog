@@ -19,8 +19,8 @@ class CompositeLogMessageWriter implements LogMessageWriter
 
     public function write(LogMessage $logMessage)
     {
-        array_map(function (LogMessageWriter $writer) use ($logMessage) {
+        every($this->writers, function (LogMessageWriter $writer) use ($logMessage) {
             $writer->write($logMessage);
-        }, $this->writers);
+        });
     }
 }
