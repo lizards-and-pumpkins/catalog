@@ -101,7 +101,7 @@ class DataPoolReader
      */
     private function validateKey($key)
     {
-        if (!is_string($key)) {
+        if (! is_string($key)) {
             throw new InvalidKeyValueStoreKeyException('The key is not of type string.');
         }
         if ('' === $key) {
@@ -115,7 +115,7 @@ class DataPoolReader
      */
     private function validateJson($key, $json)
     {
-        if (!is_string($json)) {
+        if (! is_string($json)) {
             throw new \RuntimeException(
                 sprintf(
                     'Expected the value for key "%s" to be a string containing JSON but found "%s".',
@@ -138,7 +138,7 @@ class DataPoolReader
         if ($result === false) {
             $result = [];
         }
-        if (!is_array($result) || json_last_error() !== JSON_ERROR_NONE) {
+        if (! is_array($result) || json_last_error() !== JSON_ERROR_NONE) {
             throw new \RuntimeException(sprintf('List for key "%s" is no valid JSON.', $key));
         }
 
@@ -150,7 +150,7 @@ class DataPoolReader
      */
     public function getCurrentDataVersion()
     {
-        if (!$this->keyValueStore->has($this->currentDataVersionKey)) {
+        if (! $this->keyValueStore->has($this->currentDataVersionKey)) {
             return $this->currentDataVersionDefault;
         }
         return $this->keyValueStore->get($this->currentDataVersionKey);

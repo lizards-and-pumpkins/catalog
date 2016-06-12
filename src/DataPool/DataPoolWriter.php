@@ -73,9 +73,9 @@ class DataPoolWriter implements Clearable
     public function writeUrlKeyCollection(UrlKeyForContextCollection $urlKeysForContextsCollection)
     {
         @array_map(function (UrlKeyForContext $urlKeyForContext) {
-            $version = (string)$urlKeyForContext->getContextValue(DataVersion::CONTEXT_CODE);
-            $urlKey = (string)$urlKeyForContext->getUrlKey();
-            $context = (string)$urlKeyForContext;
+            $version = (string) $urlKeyForContext->getContextValue(DataVersion::CONTEXT_CODE);
+            $urlKey = (string) $urlKeyForContext->getUrlKey();
+            $context = (string) $urlKeyForContext;
             $urlKeyType = $urlKeyForContext->getType();
             $this->urlKeyStorage->addUrlKeyForVersion($version, $urlKey, $context, $urlKeyType);
         }, $urlKeysForContextsCollection->getUrlKeys());
