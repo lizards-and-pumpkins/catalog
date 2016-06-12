@@ -7,6 +7,6 @@
 function every($items, callable $f)
 {
     foreach ($items as $index => $item) {
-        call_user_func($f, $item, $index);
+        $f($item, $index);
     }
 }
