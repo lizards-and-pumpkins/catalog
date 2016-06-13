@@ -10,3 +10,14 @@ function every($items, callable $f)
         $f($item, $index);
     }
 }
+
+/**
+ * @param mixed $var
+ * @return string
+ */
+function typeof($var)
+{
+    return is_object($var) ?
+        get_class($var) :
+        gettype($var);
+}
