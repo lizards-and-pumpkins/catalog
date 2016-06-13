@@ -28,7 +28,8 @@
         "lizards-and-pumpkins/coding-standards": "dev-master"
     },
     "autoload": {
-        "psr-4": {"LizardsAndPumpkins\\": "src/"}
+        "psr-4": {"LizardsAndPumpkins\\": "src/"},
+        "files" : ["src/Util/functions.php"]
     },
     "autoload-dev": {
         "psr-4": {

@@ -140,15 +140,15 @@ class CatalogImport
     public function addProductsAndProductImagesToQueue($productXml)
     {
         $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
-        array_map(function (Context $context) use ($productBuilder, $productXml) {
+        $contexts = $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion);
+        every($contexts, function (Context $context) use ($productBuilder, $productXml) {
             if ($productBuilder->isAvailableForContext($context)) {
                 $product = $productBuilder->getProductForContext($context);
                 $this->queueImportCommands->forProduct($product);
                 $this->processImagesInProductXml($productXml);
             }
-        }, $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion));
+        });
     }
-
 
     /**
      * @param string $productXml
@@ -156,7 +156,9 @@ class CatalogImport
     private function processImagesInProductXml($productXml)
     {
         $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
-        array_map([$this, 'processProductImageXml'], $imageNodes);
+        every($imageNodes, function ($productImageXml) {
+            $this->processProductImageXml($productImageXml);
+        });
     }
 
     /**

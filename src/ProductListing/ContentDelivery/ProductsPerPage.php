@@ -65,13 +65,13 @@ class ProductsPerPage implements \JsonSerializable
             throw new InvalidNumberOfProductsPerPageException('No numbers of products per page specified.');
         }
 
-        array_map(function ($numberOfProductsPerPage) {
+        every($numbersOfProductsPerPage, function ($numberOfProductsPerPage) {
             if (!is_int($numberOfProductsPerPage)) {
                 throw new InvalidNumberOfProductsPerPageException(
                     sprintf('Number of products per page must be integer, got "%s".', gettype($numberOfProductsPerPage))
                 );
             }
-        }, $numbersOfProductsPerPage);
+        });
     }
 
     /**

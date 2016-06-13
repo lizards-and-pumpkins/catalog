@@ -140,10 +140,10 @@ abstract class BaseCliCommand
      */
     private function applyEnvironmentConfigSettings($environmentConfigSettingsString)
     {
-        array_map(function ($setting) {
+        every(explode(',', $environmentConfigSettingsString), function ($setting) {
             list($key, $value) = $this->parseSetting($setting);
             $_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . strtoupper($key)] = trim($value);
-        }, explode(',', $environmentConfigSettingsString));
+        });
     }
 
     /**

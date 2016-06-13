@@ -53,10 +53,10 @@ class SearchFieldToRequestParamMap
      */
     private function validateArrayMap(array $map, $nameInExceptions)
     {
-        array_map(function ($key, $value) use ($nameInExceptions) {
+        every($map, function ($value, $key) use ($nameInExceptions) {
             $this->validateArrayKey($key, $nameInExceptions);
             $this->validateArrayValue($value, $nameInExceptions);
-        }, array_keys($map), $map);
+        });
     }
 
     /**

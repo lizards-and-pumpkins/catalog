@@ -213,9 +213,9 @@ class PageBuilder
 
     private function applySnippetTransformations()
     {
-        array_map(function ($snippetCode) {
+        every($this->getCodesOfSnippetsWithTransformations(), function ($snippetCode) {
             $this->applyTransformationToSnippetByCode($snippetCode);
-        }, $this->getCodesOfSnippetsWithTransformations());
+        });
     }
 
     /**

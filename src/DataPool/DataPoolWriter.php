@@ -23,7 +23,7 @@ class DataPoolWriter implements Clearable
      * @var SearchEngine
      */
     private $searchEngine;
-    
+
     /**
      * @var UrlKeyStore
      */
@@ -38,7 +38,9 @@ class DataPoolWriter implements Clearable
 
     public function writeSnippets(Snippet ...$snippets)
     {
-        array_map([$this, 'writeSnippet'], $snippets);
+        every($snippets, function ($snippet) {
+            $this->writeSnippet($snippet);
+        });
     }
 
     private function writeSnippet(Snippet $snippet)
