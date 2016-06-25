@@ -42,6 +42,11 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
     private $stubProductJsonSnippetKeyGenerator;
 
     /**
+     * @var string[]
+     */
+    private $dummySerializedGlobalProductListingCriteria = ['foo'];
+
+    /**
      * @param array[] $criteria
      * @param string $field
      * @param string $condition
@@ -60,17 +65,9 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array[] $criteria
      */
-    private function failIfStockAvailabilityConditionIsNotFound($criteria)
+    private function failIfGlobalProductListingCriteriaIsNotFound($criteria)
     {
-        $expectedCriterion = [
-            'condition' => CompositeSearchCriterion::OR_CONDITION,
-            'criteria' => [
-                ['fieldName' => 'stock_qty', 'fieldValue' => 0, 'operation' => 'GreaterThan'],
-                ['fieldName' => 'backorders', 'fieldValue' => 'true', 'operation' => 'Equal']
-            ]
-        ];
-
-        if (!in_array($expectedCriterion, $criteria)) {
+        if (!in_array($this->dummySerializedGlobalProductListingCriteria, $criteria)) {
             $this->fail('Stock availability condition is not found in criteria.');
         }
     }
@@ -99,10 +96,15 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
         $this->stubProductJsonSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubContext = $this->createMock(Context::class);
 
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
+        $stubGlobalProductListingCriteria = $this->createMock(CompositeSearchCriterion::class);
+        $stubGlobalProductListingCriteria->method('jsonSerialize')->willReturn(['foo']);
+
         $this->sameSeriesProductRelations = new SameSeriesProductRelations(
             $this->stubDataPoolReader,
             $this->stubProductJsonSnippetKeyGenerator,
-            $this->stubContext
+            $this->stubContext,
+            $stubGlobalProductListingCriteria
         );
     }
 
@@ -156,7 +158,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
                 $this->failIfNotContainsCondition($json['criteria'], 'brand', 'Equal', 'Pooma');
                 $this->failIfNotContainsCondition($json['criteria'], 'gender', 'Equal', 'Ladies');
                 $this->failIfNotContainsCondition($json['criteria'], 'series', 'Equal', 'Example');
-                $this->failIfStockAvailabilityConditionIsNotFound($json['criteria']);
+                $this->failIfGlobalProductListingCriteriaIsNotFound($json['criteria']);
                 return $stubMatchingProductIds;
             });
 

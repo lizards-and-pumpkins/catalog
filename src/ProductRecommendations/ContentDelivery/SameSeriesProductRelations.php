@@ -10,7 +10,6 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Product;
@@ -34,14 +33,21 @@ class SameSeriesProductRelations implements ProductRelations
      */
     private $context;
 
+    /**
+     * @var SearchCriteria
+     */
+    private $globalProductListingCriteria;
+
     public function __construct(
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $productJsonSnippetKeyGenerator,
-        Context $context
+        Context $context,
+        SearchCriteria $globalProductListingCriteria
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->productJsonSnippetKeyGenerator = $productJsonSnippetKeyGenerator;
         $this->context = $context;
+        $this->globalProductListingCriteria = $globalProductListingCriteria;
     }
 
     /**
@@ -101,10 +107,7 @@ class SameSeriesProductRelations implements ProductRelations
             $this->getGenderCriteria($productData),
             $this->getSeriesCriteria($productData),
             SearchCriterionNotEqual::create('product_id', $productData['product_id']),
-            CompositeSearchCriterion::createOr(
-                SearchCriterionGreaterThan::create('stock_qty', 0),
-                SearchCriterionEqual::create('backorders', 'true')
-            )
+            $this->globalProductListingCriteria
         );
     }
 
