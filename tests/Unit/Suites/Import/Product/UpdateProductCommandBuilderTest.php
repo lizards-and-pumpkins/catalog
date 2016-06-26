@@ -27,19 +27,6 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 class UpdateProductCommandBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var UpdateProductCommandBuilder
-     */
-    private $commandBuilder;
-
-    protected function setUp()
-    {
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $productAvailability */
-        $productAvailability = $this->createMock(ProductAvailability::class);
-
-        $this->commandBuilder = new UpdateProductCommandBuilder($productAvailability);
-    }
-
-    /**
      * @return Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubContext()
