@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
 
 class HttpBaseUrl implements BaseUrl

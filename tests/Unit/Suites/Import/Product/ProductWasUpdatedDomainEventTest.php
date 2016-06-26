@@ -4,6 +4,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
+use LizardsAndPumpkins\Import\Product\Exception\NoProductWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
@@ -84,5 +85,38 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $dataVersion = $this->domainEvent->getDataVersion();
         $this->assertInstanceOf(DataVersion::class, $dataVersion);
         $this->assertSame($this->testDataVersionString, (string) $dataVersion);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToRehydrateProductFromWrongMessageType()
+    {
+        $this->expectException(NoProductWasUpdatedDomainEventMessageException::class);
+        $this->expectExceptionMessage(sprintf('Expected "product_was_updated" domain event, got "qux"'));
+
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+        $testMessage = Message::withCurrentTime('qux', [], []);
+
+        ProductWasUpdatedDomainEvent::rehydrateProduct($testMessage, $stubAvailability);
+    }
+
+    public function testDomainEventCanBeRehydratedFromUpdateProductCommandMessage()
+    {
+        $testProduct = new SimpleProduct(
+            ProductId::fromString('foo'),
+            ProductTaxClass::fromString('bar'),
+            new ProductAttributeList(),
+            new ProductImageList(),
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
+        );
+
+        $testDomainEvent = new ProductWasUpdatedDomainEvent($testProduct);
+        $testMessage = $testDomainEvent->toMessage();
+
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+
+        $result = ProductWasUpdatedDomainEvent::rehydrateProduct($testMessage, $stubAvailability);;
+
+        $this->assertSame((string) $testProduct->getId(), (string) $result->getId());
     }
 }

@@ -2,23 +2,11 @@
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
 
 class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFactory
 {

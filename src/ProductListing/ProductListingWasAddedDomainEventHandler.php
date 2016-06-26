@@ -4,8 +4,6 @@ namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\ProductListing\Exception\NoProductListingWasAddedDomainEventMessage;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
 
 class ProductListingWasAddedDomainEventHandler implements DomainEventHandler

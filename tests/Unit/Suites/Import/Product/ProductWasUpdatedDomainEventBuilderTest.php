@@ -4,10 +4,8 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
-use LizardsAndPumpkins\Import\Product\Exception\NoProductWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventBuilder
@@ -27,19 +25,8 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  */
 class ProductWasUpdatedDomainEventBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ProductWasUpdatedDomainEventBuilder
-     */
-    private $domainEventBuilder;
 
-    protected function setUp()
-    {
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
-        $stubProductAvailability = $this->createMock(ProductAvailability::class);
-        $this->domainEventBuilder = new ProductWasUpdatedDomainEventBuilder($stubProductAvailability);
-    }
-
-    public function testCanBeRehydratedFromMessage()
+    public function testProductWasUpdatedDomainEventIsReturned()
     {
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
@@ -48,21 +35,15 @@ class ProductWasUpdatedDomainEventBuilderTest extends \PHPUnit_Framework_TestCas
             new ProductImageList(),
             SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
         );
-        $domainEvent = new ProductWasUpdatedDomainEvent($testProduct);
 
+        $testDomainEvent = new ProductWasUpdatedDomainEvent($testProduct);
+        $testMessage = $testDomainEvent->toMessage();
 
-        $message = $domainEvent->toMessage();
-        $rehydratedEvent = $this->domainEventBuilder->fromMessage($message);
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
 
-        $this->assertInstanceOf(ProductWasUpdatedDomainEvent::class, $rehydratedEvent);
-        $this->assertSame((string) $testProduct->getId(), (string) $rehydratedEvent->getProduct()->getId());
-    }
+        $result = (new ProductWasUpdatedDomainEventBuilder($stubAvailability))->fromMessage($testMessage);
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode()
-    {
-        $this->expectException(NoProductWasUpdatedDomainEventMessageException::class);
-        $this->expectExceptionMessage(sprintf('Expected "product_was_updated" domain event, got "qux"'));
-        
-        $this->domainEventBuilder->fromMessage(Message::withCurrentTime('qux', [], []));
+        $this->assertInstanceOf(ProductWasUpdatedDomainEvent::class, $result);
     }
 }

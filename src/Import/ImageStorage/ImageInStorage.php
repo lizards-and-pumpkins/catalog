@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import\ImageStorage;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;

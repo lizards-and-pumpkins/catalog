@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
@@ -26,19 +26,6 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
  */
 class UpdateProductCommandBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubContext()
-    {
-        $stubContext = $this->createMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
-        $stubContext->method('getValue')->willReturnMap([
-            [DataVersion::CONTEXT_CODE, '123'],
-        ]);
-        return $stubContext;
-    }
-
     public function testUpdateProductCommandIsReturned()
     {
         $testProduct = new SimpleProduct(
@@ -46,7 +33,7 @@ class UpdateProductCommandBuilderTest extends \PHPUnit_Framework_TestCase
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            $this->createStubContext()
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
         );
 
         $testCommand = new UpdateProductCommand($testProduct);
