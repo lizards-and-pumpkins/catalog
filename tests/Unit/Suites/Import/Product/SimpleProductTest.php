@@ -25,7 +25,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 class SimpleProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Product
+     * @var ProductDTO
      */
     private $product;
 
@@ -174,12 +174,12 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
     public function testItCanBeCreatedFromAnArray()
     {
         $result = SimpleProduct::fromArray([
-            Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
-            'product_id' => 'test',
-            'tax_class' => 'test tax class',
-            'attributes' => [],
-            'images' => [],
-            'context' => [DataVersion::CONTEXT_CODE => '123']
+            ProductDTO::TYPE_KEY => SimpleProduct::TYPE_CODE,
+            'product_id'         => 'test',
+            'tax_class'          => 'test tax class',
+            'attributes'         => [],
+            'images'             => [],
+            'context'            => [DataVersion::CONTEXT_CODE => '123']
         ]);
         $this->assertInstanceOf(SimpleProduct::class, $result);
     }
@@ -193,7 +193,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
             'context' => []
         ];
         $this->expectException(ProductTypeCodeMissingException::class);
-        $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY));
+        $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', ProductDTO::TYPE_KEY));
         SimpleProduct::fromArray($allFieldsExceptTypeCode);
     }
 
@@ -209,11 +209,11 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
             sprintf('Expected the product type code string "simple", got "%s"', $typeCodeString)
         );
         SimpleProduct::fromArray([
-            Product::TYPE_KEY => $invalidTypeCode,
-            'product_id' => '',
-            'attributes' => [],
-            'images' => [],
-            'context' => []
+            ProductDTO::TYPE_KEY => $invalidTypeCode,
+            'product_id'         => '',
+            'attributes'         => [],
+            'images'             => [],
+            'context'            => []
         ]);
     }
 

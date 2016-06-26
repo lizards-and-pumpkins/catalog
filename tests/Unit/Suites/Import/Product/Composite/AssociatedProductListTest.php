@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -31,12 +31,12 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param int $numberOfAssociatedProducts
-     * @return Product[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return ProductDTO[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
     private function createArrayOfStubProductsWithSize($numberOfAssociatedProducts)
     {
         return array_map(function ($num) {
-            $stubProduct = $this->createMock(Product::class);
+            $stubProduct = $this->createMock(ProductDTO::class);
             $stubProduct->method('getId')->willReturn($num);
             return $stubProduct;
         }, range(1, $numberOfAssociatedProducts));
@@ -58,11 +58,11 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $productId
      * @param ProductAttribute[] $attributes
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductDTO|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProduct($productId, ProductAttribute ...$attributes)
     {
-        $stubProduct = $this->createMock(Product::class);
+        $stubProduct = $this->createMock(ProductDTO::class);
         $getAttributesValueMap = $this->createStubProductAttributeReturnValueMap(...$attributes);
         $hasAttributesValueMap = $this->createHasProductAttributeValueMap(...$attributes);
         $stubProduct->method('getAllValuesOfAttribute')->willReturnMap($getAttributesValueMap);
@@ -125,7 +125,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     public function testItImplementsTheJsonSerializableInterface()
     {
-        $stubProduct = $this->createMock(Product::class);
+        $stubProduct = $this->createMock(ProductDTO::class);
         $this->assertInstanceOf(\JsonSerializable::class, new AssociatedProductList($stubProduct));
     }
 
@@ -149,9 +149,9 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(DuplicateAssociatedProductException::class);
         $this->expectExceptionMessage('The product "test" is associated two times to the same composite product');
-        $stubProductOne = $this->createMock(Product::class);
+        $stubProductOne = $this->createMock(ProductDTO::class);
         $stubProductOne->method('getId')->willReturn(ProductId::fromString('test'));
-        $stubProductTwo = $this->createMock(Product::class);
+        $stubProductTwo = $this->createMock(ProductDTO::class);
         $stubProductTwo->method('getId')->willReturn(ProductId::fromString('test'));
 
         new AssociatedProductList($stubProductOne, $stubProductTwo);

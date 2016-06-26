@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -92,7 +92,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
-            [Product::ID => $productView->getId()]
+            [ProductDTO::ID => $productView->getId()]
         );
         $content = $this->productDetailViewBlockRenderer->render($productView, $productView->getContext());
 
@@ -107,7 +107,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         $key = $this->productTitleSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
-            [Product::ID => $productView->getId()]
+            [ProductDTO::ID => $productView->getId()]
         );
         $content = $productView->getProductPageTitle();
 
@@ -148,7 +148,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
         $key = $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
-            [Product::ID => $productView->getId()]
+            [ProductDTO::ID => $productView->getId()]
         );
 
         return Snippet::create($key, $description . $keywords);
@@ -174,8 +174,8 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     private function getAllProductUrlKeys(ProductView $productView)
     {
         return array_merge(
-            [$productView->getFirstValueOfAttribute(Product::URL_KEY)],
-            $productView->getAllValuesOfAttribute(Product::NON_CANONICAL_URL_KEY)
+            [$productView->getFirstValueOfAttribute(ProductDTO::URL_KEY)],
+            $productView->getAllValuesOfAttribute(ProductDTO::NON_CANONICAL_URL_KEY)
         );
     }
 }

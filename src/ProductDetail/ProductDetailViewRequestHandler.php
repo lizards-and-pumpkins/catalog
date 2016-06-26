@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
@@ -88,8 +88,8 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         }
 
         $keyGeneratorParams = [
-            Product::ID => $this->pageMetaInfo->getProductId(),
-            'robots' => 'all'
+            ProductDTO::ID => $this->pageMetaInfo->getProductId(),
+            'robots'       => 'all'
         ];
 
         $this->addRobotsMetaTagToHeadContainer();

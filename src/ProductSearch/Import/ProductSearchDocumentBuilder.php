@@ -9,7 +9,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilde
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\Price;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 
@@ -54,12 +54,12 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $projectionSourceData
+     * @param ProductDTO $projectionSourceData
      * @return SearchDocument
      */
     public function aggregate($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof Product)) {
+        if (!($projectionSourceData instanceof ProductDTO)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a Product instance.');
         }
 
@@ -67,10 +67,10 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return SearchDocument
      */
-    private function createSearchDocument(Product $product)
+    private function createSearchDocument(ProductDTO $product)
     {
         $fieldsCollection = $this->createSearchDocumentFieldsCollection($product);
 
@@ -78,10 +78,10 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return SearchDocumentFieldCollection
      */
-    private function createSearchDocumentFieldsCollection(Product $product)
+    private function createSearchDocumentFieldsCollection(ProductDTO $product)
     {
         $attributesMap = $this->createFieldsForIndexAttributes($product);
 
@@ -93,10 +93,10 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return array[]
      */
-    private function createFieldsForIndexAttributes(Product $product)
+    private function createFieldsForIndexAttributes(ProductDTO $product)
     {
         return array_reduce($this->indexAttributeCodes, function ($carry, $attributeCode) use ($product) {
             $codeAndValues = [$attributeCode => $this->getAttributeValuesForSearchDocument($product, $attributeCode)];
@@ -105,21 +105,21 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string $attributeCode
      * @return array[]
      */
-    private function getAttributeValuesForSearchDocument(Product $product, $attributeCode)
+    private function getAttributeValuesForSearchDocument(ProductDTO $product, $attributeCode)
     {
         $collector = $this->valueCollectorLocator->forProduct($product);
         return $collector->getValues($product, AttributeCode::fromString($attributeCode));
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return array[]
      */
-    private function createFieldsForPriceInclTax(Product $product)
+    private function createFieldsForPriceInclTax(ProductDTO $product)
     {
         if (! $product->hasAttribute('price')) {
             return [];
@@ -133,11 +133,11 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string $countryCode
      * @return Price
      */
-    private function getPriceIncludingTaxForCountry(Product $product, $countryCode)
+    private function getPriceIncludingTaxForCountry(ProductDTO $product, $countryCode)
     {
         $amount = (int) $this->getAttributeValuesForSearchDocument($product, 'price')[0];
         $options = $this->createTaxServiceLocatorOptions($product, $countryCode);
@@ -145,11 +145,11 @@ class ProductSearchDocumentBuilder implements SearchDocumentBuilder
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string $countryCode
      * @return string[]
      */
-    private function createTaxServiceLocatorOptions(Product $product, $countryCode)
+    private function createTaxServiceLocatorOptions(ProductDTO $product, $countryCode)
     {
         $context = $product->getContext();
         return [

@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -46,7 +46,7 @@ class ProductCanonicalTagSnippetRenderer implements SnippetRenderer
      */
     private function createSnippetContent(ProductView $productView)
     {
-        $urlKey = $productView->getFirstValueOfAttribute(Product::URL_KEY);
+        $urlKey = $productView->getFirstValueOfAttribute(ProductDTO::URL_KEY);
         $baseUrl = $this->baseUrlBuilder->create($productView->getContext());
         return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
     }
@@ -59,7 +59,7 @@ class ProductCanonicalTagSnippetRenderer implements SnippetRenderer
     {
         return $this->canonicalTagSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
-            [Product::ID => $productView->getId()]
+            [ProductDTO::ID => $productView->getId()]
         );
     }
 }

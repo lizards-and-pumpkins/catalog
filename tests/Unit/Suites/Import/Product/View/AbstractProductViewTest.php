@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\Product\View;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
@@ -32,7 +32,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     private $productView;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProduct;
 
@@ -46,9 +46,9 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
      */
     private function createProductViewInstance()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
+        /** @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
         /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $mockImageFileLocator */
-        $mockProduct = $this->createMock(Product::class);
+        $mockProduct = $this->createMock(ProductDTO::class);
         $mockProduct->method('getContext')->willReturn($this->createMock(Context::class));
 
         $stubProductAttributeList = $this->createMock(ProductAttributeList::class);

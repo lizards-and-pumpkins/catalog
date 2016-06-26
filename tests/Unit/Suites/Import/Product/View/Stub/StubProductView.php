@@ -2,14 +2,14 @@
 
 namespace LizardsAndPumpkins\Import\Product\View\Stub;
 
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\View\AbstractProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 
 class StubProductView extends AbstractProductView
 {
     /**
-     * @var Product
+     * @var ProductDTO
      */
     private $product;
 
@@ -18,14 +18,14 @@ class StubProductView extends AbstractProductView
      */
     public $imageFileLocator;
 
-    public function __construct(Product $product, ProductImageFileLocator $imageFileLocator)
+    public function __construct(ProductDTO $product, ProductImageFileLocator $imageFileLocator)
     {
         $this->product = $product;
         $this->imageFileLocator = $imageFileLocator;
     }
 
     /**
-     * @return Product
+     * @return ProductDTO
      */
     public function getOriginalProduct()
     {

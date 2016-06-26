@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
@@ -85,7 +85,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     {
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->createMock(ProductBuilder::class);
-        $stubProductBuilder->method('getProductForContext')->willReturn($this->createMock(Product::class));
+        $stubProductBuilder->method('getProductForContext')->willReturn($this->createMock(ProductDTO::class));
 
         $productXmlToProductBuilder = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $productXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);

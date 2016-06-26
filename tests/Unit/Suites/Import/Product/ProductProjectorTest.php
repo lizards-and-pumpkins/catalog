@@ -90,8 +90,8 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->productViewLocator->expects($this->once())->method('createForProduct');
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->createMock(Product::class);
+        /** @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->createMock(ProductDTO::class);
 
         $this->projector->project($stubProduct);
     }
@@ -102,16 +102,16 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
         $this->mockDataPoolWriter->expects($this->once())->method('writeSearchDocument')
             ->with($this->stubSearchDocument);
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->createMock(Product::class);
+        /** @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->createMock(ProductDTO::class);
 
         $this->projector->project($stubProduct);
     }
 
     public function testItWritesTheUrlKeyCollectionForTheDataVersionToTheDataPool()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->createMock(Product::class);
+        /** @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->createMock(ProductDTO::class);
 
         $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProduct);
         $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')->with($urlKeyCollection);
@@ -121,8 +121,8 @@ class ProductProjectorTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheUrlKeyCollectorToCollectAllKeys()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->createMock(Product::class);
+        /** @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->createMock(ProductDTO::class);
 
         $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')
             ->willReturn($this->createMock(UrlKeyForContextCollection::class));

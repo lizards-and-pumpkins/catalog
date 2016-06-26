@@ -2,9 +2,9 @@
 
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
-interface CompositeProduct extends Product
+interface CompositeProductDTO extends ProductDTO
 {
     /**
      * @return ProductVariationAttributeList

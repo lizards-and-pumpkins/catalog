@@ -13,12 +13,12 @@ trait RehydrateableProductTrait
      */
     protected static function validateTypeCodeInSourceArray($expectedType, array $sourceArray)
     {
-        if (! isset($sourceArray[Product::TYPE_KEY])) {
-            $message = sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY);
+        if (! isset($sourceArray[ProductDTO::TYPE_KEY])) {
+            $message = sprintf('The array key "%s" is missing from source array', ProductDTO::TYPE_KEY);
             throw new ProductTypeCodeMissingException($message);
         }
-        if ($expectedType !== $sourceArray[Product::TYPE_KEY]) {
-            $variableType = self::getVariableAsString($sourceArray[Product::TYPE_KEY]);
+        if ($expectedType !== $sourceArray[ProductDTO::TYPE_KEY]) {
+            $variableType = self::getVariableAsString($sourceArray[ProductDTO::TYPE_KEY]);
             $message = sprintf('Expected the product type code string "%s", got "%s"', $expectedType, $variableType);
             throw new ProductTypeCodeMismatchException($message);
         }

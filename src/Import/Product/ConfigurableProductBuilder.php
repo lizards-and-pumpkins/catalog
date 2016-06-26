@@ -73,7 +73,7 @@ class ConfigurableProductBuilder implements ProductBuilder
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return bool
      */
     private function hasAllVariationAttributes($product)

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 class AttributeValueCollectorLocator
 {
@@ -19,10 +19,10 @@ class AttributeValueCollectorLocator
     }
     
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return DefaultAttributeValueCollector
      */
-    public function forProduct(Product $product)
+    public function forProduct(ProductDTO $product)
     {
         return $product instanceof ConfigurableProduct ?
             $this->factory->createConfigurableProductAttributeValueCollector() :

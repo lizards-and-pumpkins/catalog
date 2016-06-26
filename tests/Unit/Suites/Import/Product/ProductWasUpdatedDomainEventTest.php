@@ -31,7 +31,7 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     private $testDataVersionString = '123';
 
     /**
-     * @var Product
+     * @var ProductDTO
      */
     private $testProduct;
 

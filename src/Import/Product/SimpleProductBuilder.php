@@ -53,7 +53,7 @@ class SimpleProductBuilder implements ProductBuilder
 
     /**
      * @param Context $context
-     * @return Product
+     * @return ProductDTO
      */
     public function getProductForContext(Context $context)
     {

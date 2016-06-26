@@ -2,12 +2,12 @@
 
 namespace LizardsAndPumpkins\Import\Product\View;
 
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 class IntegrationTestProductView extends AbstractProductView
 {
     /**
-     * @var Product
+     * @var ProductDTO
      */
     private $product;
 
@@ -16,14 +16,14 @@ class IntegrationTestProductView extends AbstractProductView
      */
     private $productImageFileLocator;
 
-    public function __construct(Product $product, ProductImageFileLocator $productImageFileLocator)
+    public function __construct(ProductDTO $product, ProductImageFileLocator $productImageFileLocator)
     {
         $this->product = $product;
         $this->productImageFileLocator = $productImageFileLocator;
     }
 
     /**
-     * @return Product
+     * @return ProductDTO
      */
     public function getOriginalProduct()
     {

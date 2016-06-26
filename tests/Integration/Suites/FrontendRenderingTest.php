@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
@@ -79,7 +79,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::CODE,
             $this->factory->getRequiredContextParts(),
-            [Product::ID]
+            [ProductDTO::ID]
         );
         $this->snippetKeyGeneratorLocator->register($rootSnippetCode, function () use ($rootSnippetKeyGenerator) {
             return $rootSnippetKeyGenerator;
@@ -100,7 +100,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     private function getSnippetKey($code, Context $context)
     {
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($code);
-        return $keyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
+        return $keyGenerator->getKeyForContext($context, [ProductDTO::ID => $this->testProductId]);
     }
 
     /**

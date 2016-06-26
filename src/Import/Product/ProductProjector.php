@@ -37,30 +37,38 @@ class ProductProjector implements Projector
      */
     private $productViewLocator;
 
+    /**
+     * @var ProductDomainModelBuilder
+     */
+    private $productDomainModelBuilder;
+
     public function __construct(
         ProductViewLocator $productViewLocator,
         SnippetRendererCollection $rendererCollection,
         SearchDocumentBuilder $searchDocumentBuilder,
         UrlKeyForContextCollector $urlKeyCollector,
-        DataPoolWriter $dataPoolWriter
+        DataPoolWriter $dataPoolWriter,
+        ProductDomainModelBuilder $productDomainModelBuilder
     ) {
         $this->productViewLocator = $productViewLocator;
         $this->rendererCollection = $rendererCollection;
         $this->searchDocumentBuilder = $searchDocumentBuilder;
         $this->urlKeyCollector = $urlKeyCollector;
         $this->dataPoolWriter = $dataPoolWriter;
+        $this->productDomainModelBuilder = $productDomainModelBuilder;
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $productDTO
      */
-    public function project($product)
+    public function project($productDTO)
     {
-        $productView = $this->productViewLocator->createForProduct($product);
+        $productView = $this->productViewLocator->createForProduct($productDTO);
+        $productDomainModel = $this->productDomainModelBuilder->create($productDTO);
 
         $this->projectProductView($productView);
-        $this->aggregateSearchDocument($product);
-        $this->storeProductUrlKeys($product);
+        $this->aggregateSearchDocument($productDomainModel);
+        $this->storeProductUrlKeys($productDomainModel);
     }
 
     private function projectProductView(ProductView $product)
@@ -69,13 +77,13 @@ class ProductProjector implements Projector
         $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 
-    private function aggregateSearchDocument(Product $product)
+    private function aggregateSearchDocument(ProductDTO $product)
     {
         $searchDocument = $this->searchDocumentBuilder->aggregate($product);
         $this->dataPoolWriter->writeSearchDocument($searchDocument);
     }
 
-    private function storeProductUrlKeys(Product $product)
+    private function storeProductUrlKeys(ProductDTO $product)
     {
         $urlKeysForContextsCollection = $this->urlKeyCollector->collectProductUrlKeys($product);
         $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);

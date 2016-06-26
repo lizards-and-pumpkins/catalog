@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\TemplateRendering\Block;
 
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\TemplateRendering\Block;
@@ -35,7 +35,7 @@ class ProductBlock extends Block
      */
     public function getProductUrl()
     {
-        return $this->getBaseUrl() . $this->getFirstValueOfProductAttribute(Product::URL_KEY);
+        return $this->getBaseUrl() . $this->getFirstValueOfProductAttribute(ProductDTO::URL_KEY);
     }
 
     /**

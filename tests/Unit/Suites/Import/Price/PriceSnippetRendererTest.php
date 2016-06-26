@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\Website\Website;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -62,7 +62,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubProductView()
     {
-        $stubProduct = $this->createMock(Product::class);
+        $stubProduct = $this->createMock(ProductDTO::class);
         $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
 
         $stubProductView = $this->createMock(ProductView::class);
@@ -121,7 +121,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $dummyPriceSnippetKey = 'bar';
         $dummyPriceAttributeValue = 1;
 
-        $stubProduct = $this->createMock(Product::class);
+        $stubProduct = $this->createMock(ProductDTO::class);
         $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
         $stubProduct->method('hasAttribute')->with($this->testPriceAttributeCode)->willReturn(true);
         $stubProduct->method('getFirstValueOfAttribute')->with($this->testPriceAttributeCode)
@@ -140,7 +140,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct
+     * @param ProductDTO|\PHPUnit_Framework_MockObject_MockObject $stubProduct
      */
     private function stubContextWebsiteAndCountry($stubProduct)
     {

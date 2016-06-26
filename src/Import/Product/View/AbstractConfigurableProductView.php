@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 abstract class AbstractConfigurableProductView extends AbstractProductView implements CompositeProductView
 {
@@ -43,7 +43,7 @@ abstract class AbstractConfigurableProductView extends AbstractProductView imple
      */
     public function getAssociatedProducts()
     {
-        return array_map(function (Product $product) {
+        return array_map(function (ProductDTO $product) {
             return $this->getProductViewLocator()->createForProduct($product);
         }, iterator_to_array($this->getOriginalProduct()->getAssociatedProducts()));
     }

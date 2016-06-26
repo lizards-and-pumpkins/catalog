@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 
 /**
@@ -24,7 +24,7 @@ class AssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $stubProduct = $this->createMock(Product::class);
+        $stubProduct = $this->createMock(ProductDTO::class);
         $stubProduct->method('getId')->willReturnCallback(function () {
             return uniqid();
         });

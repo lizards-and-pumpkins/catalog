@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
@@ -93,7 +93,7 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
         $stubProduct = $this->getStubProductView($dummyProductId);
 
         $this->mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
-            ->with($this->anything(), [Product::ID => $stubProduct->getId()])
+            ->with($this->anything(), [ProductDTO::ID => $stubProduct->getId()])
             ->willReturn('stub-content-key');
 
         $this->snippetRenderer->render($stubProduct);

@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent;
@@ -230,7 +230,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         );
 
         return array_map(function (ProductId $productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
+            return $keyGenerator->getKeyForContext($this->context, [ProductDTO::ID => $productId]);
         }, $productIds);
     }
 }

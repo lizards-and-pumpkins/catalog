@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
@@ -117,7 +117,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
         $snippetKeyGenerator = $this->factory->createProductInSearchAutosuggestionSnippetKeyGenerator();
 
-        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
+        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, [ProductDTO::ID => $productId]);
         $snippet = $dataPoolReader->getSnippet($snippetKey);
 
         $this->assertContains($productName, $snippet);

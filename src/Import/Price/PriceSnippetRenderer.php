@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\Website\Website;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -76,10 +76,10 @@ class PriceSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return Snippet[]
      */
-    private function getPriceSnippets(Product $product)
+    private function getPriceSnippets(ProductDTO $product)
     {
         if (!$product->hasAttribute($this->priceAttributeCode)) {
             return [];
@@ -89,10 +89,10 @@ class PriceSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return Snippet[]
      */
-    private function createPriceSnippetForEachCountry(Product $product)
+    private function createPriceSnippetForEachCountry(ProductDTO $product)
     {
         return @array_map(function ($country) use ($product) {
             return $this->createPriceSnippetForCountry($product, $country);
@@ -100,11 +100,11 @@ class PriceSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string $country
      * @return Snippet
      */
-    private function createPriceSnippetForCountry(Product $product, $country)
+    private function createPriceSnippetForCountry(ProductDTO $product, $country)
     {
         $context = $this->getProductContextWithCountry($product, $country);
         $key = $this->getSnippetKeyForCountry($product, $context);
@@ -113,31 +113,31 @@ class PriceSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string $country
      * @return Context
      */
-    private function getProductContextWithCountry(Product $product, $country)
+    private function getProductContextWithCountry(ProductDTO $product, $country)
     {
         return $this->contextBuilder->expandContext($product->getContext(), [Country::CONTEXT_CODE => $country]);
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param Context $context
      * @return string
      */
-    private function getSnippetKeyForCountry(Product $product, Context $context)
+    private function getSnippetKeyForCountry(ProductDTO $product, Context $context)
     {
-        return $this->snippetKeyGenerator->getKeyForContext($context, [Product::ID => $product->getId()]);
+        return $this->snippetKeyGenerator->getKeyForContext($context, [ProductDTO::ID => $product->getId()]);
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param Context $context
      * @return Price
      */
-    private function getPriceIncludingTax(Product $product, Context $context)
+    private function getPriceIncludingTax(ProductDTO $product, Context $context)
     {
         $amount = $product->getFirstValueOfAttribute($this->priceAttributeCode);
         $taxServiceLocatorOptions = [

@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 class UrlKeyForContextCollector
@@ -23,12 +23,12 @@ class UrlKeyForContextCollector
     }
     
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return UrlKeyForContextCollection
      */
-    public function collectProductUrlKeys(Product $product)
+    public function collectProductUrlKeys(ProductDTO $product)
     {
-        $urlKey = UrlKey::fromString($product->getFirstValueOfAttribute(Product::URL_KEY));
+        $urlKey = UrlKey::fromString($product->getFirstValueOfAttribute(ProductDTO::URL_KEY));
         $urlKeyForContext = new UrlKeyForContext($urlKey, $product->getContext(), self::URL_KEY_TYPE_PRODUCT);
         return new UrlKeyForContextCollection($urlKeyForContext);
     }

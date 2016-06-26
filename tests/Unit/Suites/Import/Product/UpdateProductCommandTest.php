@@ -29,7 +29,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Product
+     * @var ProductDTO
      */
     private $testProduct;
 

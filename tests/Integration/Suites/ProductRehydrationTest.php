@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -19,7 +19,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 {
-    private function assertBasicProductPropertyEqual(Product $sourceProduct, Product $rehydratedProduct)
+    private function assertBasicProductPropertyEqual(ProductDTO $sourceProduct, ProductDTO $rehydratedProduct)
     {
         $this->assertEquals($sourceProduct->getId(), $rehydratedProduct->getId());
         $this->assertSame(
@@ -46,7 +46,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    private function assertProductEquals(Product $sourceProduct, Product $rehydratedProduct)
+    private function assertProductEquals(ProductDTO $sourceProduct, ProductDTO $rehydratedProduct)
     {
         if ($sourceProduct instanceof SimpleProduct) {
             $this->assertSimpleProductEquals($sourceProduct, $rehydratedProduct);
@@ -136,10 +136,10 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $idString
-     * @param Product[] $childProducts
+     * @param ProductDTO[] $childProducts
      * @return ConfigurableProduct
      */
-    private function createConfigurableProductWithIdAndAssociatedProducts($idString, Product ...$childProducts)
+    private function createConfigurableProductWithIdAndAssociatedProducts($idString, ProductDTO ...$childProducts)
     {
         $simpleProduct = $this->createSimpleProductWithId($idString);
 

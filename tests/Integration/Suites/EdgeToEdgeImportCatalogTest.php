@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
 use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\Price;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -76,7 +76,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
         $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
-            [Product::ID => $productId]
+            [ProductDTO::ID => $productId]
         );
         $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
 
@@ -94,7 +94,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInListingSnippetRenderer::CODE
         );
-        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
+        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, [ProductDTO::ID => $productId]);
         $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
 
         $this->assertContains(
@@ -110,7 +110,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
             $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext(
                 $contextWithCountry,
-                [Product::ID => $productId]
+                [ProductDTO::ID => $productId]
             );
             $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
             $this->assertEquals($expectedProductPrice, $priceSnippetContents);
@@ -213,13 +213,13 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $validProductId = ProductId::fromString('288193NEU');
         $validProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
-            [Product::ID => $validProductId]
+            [ProductDTO::ID => $validProductId]
         );
 
         $invalidProductId = ProductId::fromString('T4H2N-4701');
         $invalidProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
-            [Product::ID => $invalidProductId]
+            [ProductDTO::ID => $invalidProductId]
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();

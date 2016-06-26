@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
@@ -38,7 +38,7 @@ class AttributeValueCollectorLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADefaultCollector()
     {
-        $product = $this->createMock(Product::class);
+        $product = $this->createMock(ProductDTO::class);
         $result = $this->locator->forProduct($product);
         $this->assertInstanceOf(DefaultAttributeValueCollector::class, $result);
     }

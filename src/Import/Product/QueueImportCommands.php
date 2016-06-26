@@ -43,7 +43,7 @@ class QueueImportCommands
         $this->listingImportCommandLocator = $productListingImportCommandLocator;
     }
 
-    public function forProduct(Product $product)
+    public function forProduct(ProductDTO $product)
     {
         $commands = $this->productImportCommandLocator->getProductImportCommands($product);
         $this->addCommandsToQueue($commands);

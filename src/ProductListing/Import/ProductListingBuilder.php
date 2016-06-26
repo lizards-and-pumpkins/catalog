@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingProductListingAtt
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingUrlKeyXmlAttributeException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Import\XPathParser;
 
@@ -72,7 +72,7 @@ class ProductListingBuilder
     private function getFormattedContextData(array $xmlNodeAttributes, DataVersion $dataVersion)
     {
         return array_reduce($xmlNodeAttributes, function (array $carry, array $xmlAttribute) {
-            if (Product::URL_KEY !== $xmlAttribute['nodeName']) {
+            if (ProductDTO::URL_KEY !== $xmlAttribute['nodeName']) {
                 $carry[$xmlAttribute['nodeName']] = $xmlAttribute['value'];
             }
             return $carry;

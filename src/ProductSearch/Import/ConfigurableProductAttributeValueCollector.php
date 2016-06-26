@@ -4,16 +4,16 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCollector
 {
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    public function getValues(Product $product, AttributeCode $attributeCode)
+    public function getValues(ProductDTO $product, AttributeCode $attributeCode)
     {
         /** @var ConfigurableProduct $product */
         return $this->isConfigurableProduct($product) && $this->isVariationAttribute($product, $attributeCode) ?
@@ -37,10 +37,10 @@ class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCo
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return bool
      */
-    private function isConfigurableProduct(Product $product)
+    private function isConfigurableProduct(ProductDTO $product)
     {
         return $product instanceof ConfigurableProduct;
     }
@@ -54,7 +54,7 @@ class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCo
     {
         return array_reduce(
             $product->getAssociatedProducts()->getProducts(),
-            function (array $carry, Product $associatedProduct) use ($attributeCode) {
+            function (array $carry, ProductDTO $associatedProduct) use ($attributeCode) {
                 return array_merge($carry, $this->getValues($associatedProduct, $attributeCode));
             },
             []

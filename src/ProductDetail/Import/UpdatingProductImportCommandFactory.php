@@ -5,17 +5,17 @@ namespace LizardsAndPumpkins\ProductDetail\Import;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 class UpdatingProductImportCommandFactory implements ProductImportCommandFactory
 {
     use FactoryTrait;
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return Command[]
      */
-    public function createProductImportCommands(Product $product)
+    public function createProductImportCommands(ProductDTO $product)
     {
         return [new UpdateProductCommand($product)];
     }

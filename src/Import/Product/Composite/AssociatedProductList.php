@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\Product\Composite;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \Countable
 {
@@ -13,19 +13,19 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     const PRODUCTS = 'products';
 
     /**
-     * @var Product[]
+     * @var ProductDTO[]
      */
     private $products;
 
-    public function __construct(Product ...$products)
+    public function __construct(ProductDTO ...$products)
     {
         $this->validateAssociatedProducts(...$products);
         $this->products = $products;
     }
 
-    private function validateAssociatedProducts(Product ...$products)
+    private function validateAssociatedProducts(ProductDTO ...$products)
     {
-        array_reduce($products, function (array $idStrings, Product $product) {
+        array_reduce($products, function (array $idStrings, ProductDTO $product) {
             $productIdString = (string) $product->getId();
             if (in_array($productIdString, $idStrings)) {
                 throw $this->createDuplicateAssociatedProductException($productIdString);
@@ -56,7 +56,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
 
     /**
      * @param array[] $sourceArray
-     * @return Product[]
+     * @return ProductDTO[]
      */
     private static function createAssociatedProductsFromArray(array $sourceArray)
     {
@@ -70,7 +70,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     /**
      * @param string $class
      * @param mixed[] $productSourceArray
-     * @return Product
+     * @return ProductDTO
      */
     private static function createAssociatedProductFromArray($class, array $productSourceArray)
     {
@@ -78,7 +78,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     }
 
     /**
-     * @return Product[]
+     * @return ProductDTO[]
      */
     public function jsonSerialize()
     {
@@ -93,13 +93,13 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
      */
     private function getAssociatedProductClassNames()
     {
-        return array_map(function (Product $product) {
+        return array_map(function (ProductDTO $product) {
             return get_class($product);
         }, $this->products);
     }
     
     /**
-     * @return Product[]
+     * @return ProductDTO[]
      */
     public function getProducts()
     {
@@ -120,7 +120,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     public function validateUniqueValueCombinationForEachProductAttribute(...$attributeCodes)
     {
         $this->validateAllProductsHaveTheAttributes(...$attributeCodes);
-        array_reduce($this->products, function ($carry, Product $product) use ($attributeCodes) {
+        array_reduce($this->products, function ($carry, ProductDTO $product) use ($attributeCodes) {
             $attributeValuesForProduct = $this->getAttributeValuesForProduct($product, $attributeCodes);
             $otherProductId = array_search($attributeValuesForProduct, $carry);
             if (false !== $otherProductId) {
@@ -135,11 +135,11 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string[] $attributeCodes
      * @return array[]
      */
-    private function getAttributeValuesForProduct(Product $product, array $attributeCodes)
+    private function getAttributeValuesForProduct(ProductDTO $product, array $attributeCodes)
     {
         return array_reduce($attributeCodes, function ($carry, $attributeCode) use ($product) {
             $allValuesOfAttribute = $product->getAllValuesOfAttribute($attributeCode);
@@ -169,16 +169,16 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
      */
     private function validateAllProductsHaveTheAttributes(...$attributeCodes)
     {
-        every($this->products, function (Product $product) use ($attributeCodes) {
+        every($this->products, function (ProductDTO $product) use ($attributeCodes) {
             $this->validateProductHasAttributes($product, $attributeCodes);
         });
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string[] $attributeCodes
      */
-    private function validateProductHasAttributes(Product $product, array $attributeCodes)
+    private function validateProductHasAttributes(ProductDTO $product, array $attributeCodes)
     {
         every($attributeCodes, function ($attributeCode) use ($product) {
             $this->validateProductHasAttribute($product, $attributeCode);
@@ -186,10 +186,10 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param string $attributeCode
      */
-    private function validateProductHasAttribute(Product $product, $attributeCode)
+    private function validateProductHasAttribute(ProductDTO $product, $attributeCode)
     {
         if (!$product->hasAttribute($attributeCode)) {
             $message = sprintf(

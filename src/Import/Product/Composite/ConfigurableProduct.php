@@ -3,7 +3,8 @@
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDomainModel;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
@@ -13,10 +14,9 @@ use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
-class ConfigurableProduct implements CompositeProduct
+class ConfigurableProduct implements CompositeProductDTO, ProductDomainModel
 {
     use RehydrateableProductTrait;
-    
     const SIMPLE_PRODUCT = 'simple_product';
     const TYPE_CODE = 'configurable';
     const VARIATION_ATTRIBUTES = 'variation_attributes';
@@ -31,7 +31,7 @@ class ConfigurableProduct implements CompositeProduct
      * @var ProductVariationAttributeList
      */
     private $variationAttributes;
-    
+
     /**
      * @var AssociatedProductList
      */
@@ -83,7 +83,7 @@ class ConfigurableProduct implements CompositeProduct
     public function jsonSerialize()
     {
         return [
-            Product::TYPE_KEY          => self::TYPE_CODE,
+            ProductDTO::TYPE_KEY       => self::TYPE_CODE,
             self::SIMPLE_PRODUCT       => $this->simpleProductDelegate->jsonSerialize(),
             self::VARIATION_ATTRIBUTES => $this->variationAttributes->jsonSerialize(),
             self::ASSOCIATED_PRODUCTS  => $this->associatedProducts->jsonSerialize(),
@@ -222,5 +222,16 @@ class ConfigurableProduct implements CompositeProduct
     public function getTaxClass()
     {
         return $this->simpleProductDelegate->getTaxClass();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        $products = $this->getAssociatedProducts()->getProducts();
+        return array_reduce($products, function ($isAvailable, ProductDomainModel $product) {
+            return $isAvailable || $product->isAvailable();
+        });
     }
 }

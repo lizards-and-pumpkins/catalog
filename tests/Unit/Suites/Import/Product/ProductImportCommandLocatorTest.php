@@ -36,7 +36,7 @@ class ProductImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('createProductImportCommands')
             ->willReturn([$stubCommand]);
         
-        $result = $this->locator->getProductImportCommands($this->createMock(Product::class));
+        $result = $this->locator->getProductImportCommands($this->createMock(ProductDTO::class));
         
         $this->assertSame([$stubCommand], $result);
     }

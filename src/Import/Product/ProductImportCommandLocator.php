@@ -19,10 +19,10 @@ class ProductImportCommandLocator
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return Command[]
      */
-    public function getProductImportCommands(Product $product)
+    public function getProductImportCommands(ProductDTO $product)
     {
         return $this->factory->createProductImportCommands($product);
     }

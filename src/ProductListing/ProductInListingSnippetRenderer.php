@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -44,7 +44,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
      */
     private function getProductInListingSnippet(ProductView $product)
     {
-        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [ProductDTO::ID => $product->getId()]);
         $content = json_encode($product);
         return Snippet::create($key, $content);
     }

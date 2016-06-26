@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
-interface Product extends \JsonSerializable
+interface ProductDTO extends \JsonSerializable
 {
     const URL_KEY = 'url_key';
     const ID = 'product_id';

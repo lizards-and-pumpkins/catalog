@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
-class SimpleProduct implements Product
+class SimpleProduct implements ProductDomainModel
 {
     use RehydrateableProductTrait;
     
@@ -40,18 +40,25 @@ class SimpleProduct implements Product
      */
     private $taxClass;
 
+    /**
+     * @var DetermineProductAvailability
+     */
+    private $determineProductAvailability;
+
     public function __construct(
         ProductId $productId,
         ProductTaxClass $taxClass,
         ProductAttributeList $attributeList,
         ProductImageList $images,
-        Context $context
+        Context $context,
+        DetermineProductAvailability $determineProductAvailability
     ) {
         $this->productId = $productId;
         $this->taxClass = $taxClass;
         $this->attributeList = $attributeList;
         $this->context = $context;
         $this->images = $images;
+        $this->determineProductAvailability = $determineProductAvailability;
     }
 
     /**
@@ -128,12 +135,12 @@ class SimpleProduct implements Product
     public function jsonSerialize()
     {
         return [
-            'product_id' => (string) $this->productId,
-            'tax_class' => (string) $this->taxClass,
-            Product::TYPE_KEY => self::TYPE_CODE,
-            'attributes' => $this->attributeList->jsonSerialize(),
-            'images' => $this->images,
-            self::CONTEXT => $this->context
+            'product_id'         => (string) $this->productId,
+            'tax_class'          => (string) $this->taxClass,
+            ProductDTO::TYPE_KEY => self::TYPE_CODE,
+            'attributes'         => $this->attributeList->jsonSerialize(),
+            'images'             => $this->images,
+            self::CONTEXT        => $this->context
         ];
     }
 
@@ -210,5 +217,13 @@ class SimpleProduct implements Product
     public function getTaxClass()
     {
         return $this->taxClass;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAvailable()
+    {
+        return $this->determineProductAvailability->forProduct($this);
     }
 }

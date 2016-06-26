@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 class DefaultAttributeValueCollector implements AttributeValueCollector
 {
@@ -25,11 +25,11 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
     }
     
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    public function getValues(Product $product, AttributeCode $attributeCode)
+    public function getValues(ProductDTO $product, AttributeCode $attributeCode)
     {
         $values = $this->useSpecialPriceInsteadOfPrice($product, $attributeCode) ?
             $this->getAttributeValuesFromProduct($product, $this->specialPriceAttribute) :
@@ -55,30 +55,30 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param AttributeCode $attributeCode
      * @return bool
      */
-    private function useSpecialPriceInsteadOfPrice(Product $product, AttributeCode $attributeCode)
+    private function useSpecialPriceInsteadOfPrice(ProductDTO $product, AttributeCode $attributeCode)
     {
         return $attributeCode->isEqualTo($this->priceAttribute) && $this->hasSpecialPrice($product);
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return bool
      */
-    private function hasSpecialPrice(Product $product)
+    private function hasSpecialPrice(ProductDTO $product)
     {
         return $product->hasAttribute((string) $this->specialPriceAttribute);
     }
 
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    protected function getAttributeValuesFromProduct(Product $product, AttributeCode $attributeCode)
+    protected function getAttributeValuesFromProduct(ProductDTO $product, AttributeCode $attributeCode)
     {
         return $product->getAllValuesOfAttribute((string) $attributeCode);
     }

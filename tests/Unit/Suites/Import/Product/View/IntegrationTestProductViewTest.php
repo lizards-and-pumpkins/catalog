@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\Product\View;
 
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductView
@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Import\Product\Product;
 class IntegrationTestProductViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProduct;
 
@@ -21,7 +21,7 @@ class IntegrationTestProductViewTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockProduct = $this->createMock(Product::class);
+        $this->mockProduct = $this->createMock(ProductDTO::class);
         $stubProductImageFileLocator = $this->createMock(ProductImageFileLocator::class);
         $this->productView = new IntegrationTestProductView($this->mockProduct, $stubProductImageFileLocator);
     }

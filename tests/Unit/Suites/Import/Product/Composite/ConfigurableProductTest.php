@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
@@ -72,12 +72,12 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItImplementsTheProductInterface()
     {
-        $this->assertInstanceOf(Product::class, $this->configurableProduct);
+        $this->assertInstanceOf(ProductDTO::class, $this->configurableProduct);
     }
 
     public function testCompositeProductInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(CompositeProduct::class, $this->configurableProduct);
+        $this->assertInstanceOf(CompositeProductDTO::class, $this->configurableProduct);
     }
 
     public function testItDelegatesToTheSimpleProductToFetchTheId()
@@ -126,24 +126,24 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $this->mockAssociatedProductList->expects($this->once())->method('jsonSerialize')->willReturn([]);
         $this->mockVariationAttributeList->expects($this->once())->method('jsonSerialize')->willReturn([]);
         $result = $this->configurableProduct->jsonSerialize();
-        $this->assertArrayHasKey(Product::TYPE_KEY, $result);
-        $this->assertSame(ConfigurableProduct::TYPE_CODE, $result[Product::TYPE_KEY]);
+        $this->assertArrayHasKey(ProductDTO::TYPE_KEY, $result);
+        $this->assertSame(ConfigurableProduct::TYPE_CODE, $result[ProductDTO::TYPE_KEY]);
     }
 
     public function testItCanBeCreatedFromAnArray()
     {
         $result = ConfigurableProduct::fromArray([
-            Product::TYPE_KEY => ConfigurableProduct::TYPE_CODE,
-            ConfigurableProduct::SIMPLE_PRODUCT => [
-                Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
-                'product_id' => 'test',
-                'tax_class' => 'test tax class',
-                'attributes' => [],
-                'images' => [],
-                'context' => [DataVersion::CONTEXT_CODE => '123']
+            ProductDTO::TYPE_KEY                      => ConfigurableProduct::TYPE_CODE,
+            ConfigurableProduct::SIMPLE_PRODUCT       => [
+                ProductDTO::TYPE_KEY => SimpleProduct::TYPE_CODE,
+                'product_id'         => 'test',
+                'tax_class'          => 'test tax class',
+                'attributes'         => [],
+                'images'             => [],
+                'context'            => [DataVersion::CONTEXT_CODE => '123']
             ],
             ConfigurableProduct::VARIATION_ATTRIBUTES => ['foo'],
-            ConfigurableProduct::ASSOCIATED_PRODUCTS => [
+            ConfigurableProduct::ASSOCIATED_PRODUCTS  => [
                 'product_php_classes' => [],
                 'products' => []
             ]
@@ -159,7 +159,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             ConfigurableProduct::ASSOCIATED_PRODUCTS => []
         ];
         $this->expectException(ProductTypeCodeMissingException::class);
-        $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY));
+        $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', ProductDTO::TYPE_KEY));
         ConfigurableProduct::fromArray($allFieldsExceptTypeCode);
     }
 
@@ -175,10 +175,10 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             sprintf('Expected the product type code string "configurable", got "%s"', $typeCodeString)
         );
         ConfigurableProduct::fromArray([
-            Product::TYPE_KEY => $invalidTypeCode,
-            ConfigurableProduct::SIMPLE_PRODUCT => [],
+            ProductDTO::TYPE_KEY                      => $invalidTypeCode,
+            ConfigurableProduct::SIMPLE_PRODUCT       => [],
             ConfigurableProduct::VARIATION_ATTRIBUTES => [],
-            ConfigurableProduct::ASSOCIATED_PRODUCTS => []
+            ConfigurableProduct::ASSOCIATED_PRODUCTS  => []
         ]);
     }
 

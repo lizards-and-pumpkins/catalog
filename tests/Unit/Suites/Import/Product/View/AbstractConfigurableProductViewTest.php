@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
@@ -64,7 +64,7 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
 
         /** @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject $fakeProductViewLocator */
         $fakeProductViewLocator = $this->createMock(ProductViewLocator::class);
-        $fakeProductViewLocator->method('createForProduct')->willReturnCallback(function (Product $product) {
+        $fakeProductViewLocator->method('createForProduct')->willReturnCallback(function (ProductDTO $product) {
             $stubProductView = $product instanceof ConfigurableProduct ?
                 $this->createMock(ProductView::class) :
                 $this->createMock(CompositeProductView::class);

@@ -13,17 +13,17 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
     const CODE = 'product_was_updated';
     
     /**
-     * @var Product
+     * @var ProductDTO
      */
     private $product;
 
-    public function __construct(Product $product)
+    public function __construct(ProductDTO $product)
     {
         $this->product = $product;
     }
 
     /**
-     * @return Product
+     * @return ProductDTO
      */
     public function getProduct()
     {
@@ -61,7 +61,7 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
     private static function rehydrateProduct(array $productData)
     {
         // todo: encapsulate product serialization and rehydration
-        $product = $productData[Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
+        $product = $productData[ProductDTO::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
             ConfigurableProduct::fromArray($productData) :
             SimpleProduct::fromArray($productData);
         return $product;

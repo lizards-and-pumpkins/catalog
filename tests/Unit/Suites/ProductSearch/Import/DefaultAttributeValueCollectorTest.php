@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
@@ -18,13 +18,13 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
     private $attributeValueCollector;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProduct;
 
     protected function setUp()
     {
-        $this->mockProduct = $this->createMock(Product::class);
+        $this->mockProduct = $this->createMock(ProductDTO::class);
         $this->attributeValueCollector = new DefaultAttributeValueCollector();
     }
 

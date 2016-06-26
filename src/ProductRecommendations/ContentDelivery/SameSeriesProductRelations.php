@@ -13,7 +13,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
@@ -50,7 +50,7 @@ class SameSeriesProductRelations implements ProductRelations
      */
     public function getById(ProductId $productId)
     {
-        $key = $this->productJsonSnippetKeyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
+        $key = $this->productJsonSnippetKeyGenerator->getKeyForContext($this->context, [ProductDTO::ID => $productId]);
         $productData = json_decode($this->dataPoolReader->getSnippet($key), true);
 
         return $this->hasRequiredAttributes($productData) ?

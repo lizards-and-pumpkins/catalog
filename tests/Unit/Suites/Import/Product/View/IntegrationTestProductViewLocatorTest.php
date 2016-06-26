@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductViewLocator
@@ -30,8 +30,8 @@ class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testProductViewIsReturned()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->createMock(Product::class);
+        /** @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->createMock(ProductDTO::class);
 
         $result = $this->locator->createForProduct($stubProduct);
 

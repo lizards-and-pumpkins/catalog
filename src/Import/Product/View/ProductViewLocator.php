@@ -2,13 +2,13 @@
 
 namespace LizardsAndPumpkins\Import\Product\View;
 
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 interface ProductViewLocator
 {
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @return ProductView
      */
-    public function createForProduct(Product $product);
+    public function createForProduct(ProductDTO $product);
 }

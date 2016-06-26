@@ -36,7 +36,7 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
     private $mockDomainEventQueue;
 
     /**
-     * @var Product
+     * @var ProductDTO
      */
     private $testProduct;
 

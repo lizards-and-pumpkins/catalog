@@ -51,7 +51,7 @@ use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
@@ -332,7 +332,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductJsonSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductJsonSnippetRenderer::CODE,
@@ -684,7 +684,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductDetailViewSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             'product_detail_view_content',
@@ -698,7 +698,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductTitleSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::TITLE_KEY_CODE,
@@ -779,7 +779,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductInListingSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductInListingSnippetRenderer::CODE,
@@ -806,7 +806,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductInSearchAutosuggestionSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductInSearchAutosuggestionSnippetRenderer::CODE,
@@ -820,7 +820,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createPriceSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             PriceSnippetRenderer::PRICE,
@@ -834,7 +834,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createSpecialPriceSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             PriceSnippetRenderer::SPECIAL_PRICE,
@@ -1743,7 +1743,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductDetailPageMetaDescriptionSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE,
@@ -1757,7 +1757,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createProductCanonicalTagSnippetKeyGenerator()
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [ProductDTO::ID];
 
         return new GenericSnippetKeyGenerator(
             ProductCanonicalTagSnippetRenderer::CODE,

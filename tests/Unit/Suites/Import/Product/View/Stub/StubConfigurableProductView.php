@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\Product\View\Stub;
 
-use LizardsAndPumpkins\Import\Product\Composite\CompositeProduct;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\Composite\CompositeProductDTO;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 class StubConfigurableProductView extends AbstractConfigurableProductView
 {
     /**
-     * @var CompositeProduct
+     * @var CompositeProductDTO
      */
     private $compositeProduct;
 
@@ -26,7 +26,7 @@ class StubConfigurableProductView extends AbstractConfigurableProductView
     private $productViewLocator;
 
     public function __construct(
-        CompositeProduct $product,
+        CompositeProductDTO $product,
         ProductImageFileLocator $imageFileLocator,
         ProductViewLocator $productViewLocator
     ) {
@@ -44,7 +44,7 @@ class StubConfigurableProductView extends AbstractConfigurableProductView
     }
 
     /**
-     * @return Product
+     * @return ProductDTO
      */
     public function getOriginalProduct()
     {

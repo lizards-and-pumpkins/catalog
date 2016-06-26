@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
@@ -183,7 +183,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
 
-        $this->stubProductView->method('getAllValuesOfAttribute')->with(Product::NON_CANONICAL_URL_KEY)->willReturn([]);
+        $this->stubProductView->method('getAllValuesOfAttribute')->with(ProductDTO::NON_CANONICAL_URL_KEY)->willReturn([]);
 
         $result = $this->renderer->render($this->stubProductView);
 
@@ -202,10 +202,10 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
             ->willReturnOnConsecutiveCalls(...$expectedMetaInfoSnippetKeys);
 
         $this->stubProductView->method('getAllValuesOfAttribute')->willReturnMap([
-            [Product::NON_CANONICAL_URL_KEY, ['non-canonical1', 'non-canonical2']],
+            [ProductDTO::NON_CANONICAL_URL_KEY, ['non-canonical1', 'non-canonical2']],
         ]);
         $this->stubProductView->method('getFirstValueOfAttribute')->willReturnMap([
-            [Product::URL_KEY, 'canonical'],
+            [ProductDTO::URL_KEY, 'canonical'],
         ]);
 
         $result = $this->renderer->render($this->stubProductView);

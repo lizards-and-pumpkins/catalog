@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector
@@ -43,16 +43,16 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
      */
     private function createMockProductWithAttributeValues($variationAttribute, array $values)
     {
-        $stubAssociatedProduct = $this->createMock(Product::class);
+        $stubAssociatedProduct = $this->createMock(ProductDTO::class);
         $stubAssociatedProduct->method('getAllValuesOfAttribute')->with($variationAttribute)->willReturn($values);
         return $stubAssociatedProduct;
     }
 
     /**
-     * @param Product[] $associatedProducts
+     * @param ProductDTO[] $associatedProducts
      * @return AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockAssociatedProductList(Product ...$associatedProducts)
+    private function createMockAssociatedProductList(ProductDTO ...$associatedProducts)
     {
         $stubAssociatedProductList = $this->createMock(AssociatedProductList::class);
         $stubAssociatedProductList->method('getIterator')->willReturn(new \ArrayIterator($associatedProducts));

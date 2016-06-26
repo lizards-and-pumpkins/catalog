@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
@@ -104,7 +104,7 @@ class ProductJsonService
     private function getSnippetKeys(array $productIds, SnippetKeyGenerator $keyGenerator)
     {
         return array_map(function (ProductId $productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
+            return $keyGenerator->getKeyForContext($this->context, [ProductDTO::ID => $productId]);
         }, $productIds);
     }
 

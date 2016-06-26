@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Import\ImageStorage\Image;
 interface ProductView extends \JsonSerializable
 {
     /**
-     * @return Product
+     * @return ProductDTO
      */
     public function getOriginalProduct();
     

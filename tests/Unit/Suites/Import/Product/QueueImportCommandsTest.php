@@ -64,7 +64,7 @@ class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockProductCommandLocator->method('getProductImportCommands')->willReturn([$this->stubCommand]);
         $this->mockCommandQueue->expects($this->once())->method('add');
-        $this->createImportCommands->forProduct($this->createMock(Product::class));
+        $this->createImportCommands->forProduct($this->createMock(ProductDTO::class));
     }
 
     public function testItAddsCreatedProductImageCommandsToTheQueue()

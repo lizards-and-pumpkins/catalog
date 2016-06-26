@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilde
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
@@ -51,13 +51,13 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array[] $attributesMap
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductDTO|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProduct(array $attributesMap)
     {
         $stubProductId = $this->createMock(ProductId::class);
         $stubProductId->method('__toString')->willReturn('test-id');
-        $stubProduct = $this->createMock(Product::class);
+        $stubProduct = $this->createMock(ProductDTO::class);
         $stubProduct->method('getAllValuesOfAttribute')->willReturnMap($attributesMap);
         $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
         $stubProduct->method('getId')->willReturn($stubProductId);

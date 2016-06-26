@@ -3,14 +3,14 @@
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 
 interface AttributeValueCollector
 {
     /**
-     * @param Product $product
+     * @param ProductDTO $product
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    public function getValues(Product $product, AttributeCode $attributeCode);
+    public function getValues(ProductDTO $product, AttributeCode $attributeCode);
 }

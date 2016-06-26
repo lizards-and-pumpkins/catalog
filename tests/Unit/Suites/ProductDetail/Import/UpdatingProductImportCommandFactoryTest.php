@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 
 /**
@@ -28,8 +28,8 @@ class UpdatingProductImportCommandFactoryTest extends \PHPUnit_Framework_TestCas
 
     public function testItReturnsAnUpdateProductCommand()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
-        $stubProduct = $this->createMock(Product::class);
+        /** @var ProductDTO|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        $stubProduct = $this->createMock(ProductDTO::class);
         $stubProduct->method('jsonSerialize')->willReturn([]);
         $stubProduct->method('getId')->willReturn('dummy');
         $commands = $this->factory->createProductImportCommands($stubProduct);

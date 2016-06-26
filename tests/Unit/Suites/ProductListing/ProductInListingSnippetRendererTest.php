@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
@@ -92,7 +92,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $mockSnippetKeyGenerator */
         $mockSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $mockSnippetKeyGenerator->expects($this->once())->method('getKeyForContext')
-            ->with($this->anything(), [Product::ID => $stubProduct->getId()])
+            ->with($this->anything(), [ProductDTO::ID => $stubProduct->getId()])
             ->willReturn('stub-content-key');
 
         $snippetRenderer = $this->createInstanceUnderTest($mockSnippetKeyGenerator);

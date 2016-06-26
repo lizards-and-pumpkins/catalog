@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -54,7 +54,7 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
     private function createProductInSearchAutosuggestionSnippet(ProductView $product)
     {
         $content = $this->blockRenderer->render($product, $product->getContext());
-        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
+        $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [ProductDTO::ID => $product->getId()]);
 
         return Snippet::create($key, $content);
     }

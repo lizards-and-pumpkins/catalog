@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Import\TemplateRendering\Block;
 
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductDTO;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\TemplateRendering\Block;
@@ -89,7 +89,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
         $testBaseUrl = '/lizards-and-pumpkins/';
 
         $this->stubBlockRenderer->method('getBaseUrl')->willReturn($testBaseUrl);
-        $this->stubProductView->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
+        $this->stubProductView->method('getFirstValueOfAttribute')->with(ProductDTO::URL_KEY)->willReturn($urlKey);
         $result = $this->productBlock->getProductUrl();
 
         $this->assertEquals($testBaseUrl . $urlKey, $result);
