@@ -8,7 +8,7 @@ class InStockOrBackordarableProductAvailability implements ProductAvailability
      * @param Product $product
      * @return bool
      */
-    function isProductSalable(Product $product)
+    public function isProductSalable(Product $product)
     {
         return $this->isAvailableForBackorders($product) || $this->hasPositiveStockQty($product);
     }

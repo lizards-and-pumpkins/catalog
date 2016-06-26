@@ -8,5 +8,5 @@ interface ProductAvailability
      * @param Product $product
      * @return bool
      */
-    function isProductSalable(Product $product);
+    public function isProductSalable(Product $product);
 }
