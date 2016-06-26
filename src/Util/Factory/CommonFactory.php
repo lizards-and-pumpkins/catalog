@@ -224,7 +224,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return UpdateProductCommandBuilder
+     * @return ProductWasUpdatedDomainEventBuilder
      */
     public function createProductWasUpdatedDomainEventBuilder()
     {
