@@ -54,7 +54,7 @@ class UpdateProductCommandBuilderTest extends \PHPUnit_Framework_TestCase
         return $stubContext;
     }
 
-    public function testCanBeRehydratedFromUpdateProductCommandMessage()
+    public function testUpdateProductCommandIsReturned()
     {
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
@@ -64,18 +64,14 @@ class UpdateProductCommandBuilderTest extends \PHPUnit_Framework_TestCase
             $this->createStubContext()
         );
 
-        $command = new UpdateProductCommand($testProduct);
+        $testCommand = new UpdateProductCommand($testProduct);
+        $testMessage = $testCommand->toMessage();
 
-        $message = $command->toMessage();
-        $rehydratedCommand = $this->commandBuilder->fromMessage($message);
-        $this->assertEquals($testProduct->getId(), $rehydratedCommand->getProduct()->getId());
-    }
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
 
-    public function testThrowsExceptionIfMessageNameNotMatches()
-    {
-        $this->expectException(NoUpdateProductCommandMessageException::class);
-        $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "update_product"');
+        $result = (new UpdateProductCommandBuilder($stubAvailability))->fromMessage($testMessage);
 
-        $this->commandBuilder->fromMessage(Message::withCurrentTime('foo', [], []));
+        $this->assertInstanceOf(UpdateProductCommand::class, $result);
     }
 }

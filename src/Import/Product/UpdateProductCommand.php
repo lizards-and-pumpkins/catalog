@@ -3,6 +3,8 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
@@ -54,5 +56,39 @@ class UpdateProductCommand implements Command
     public function getDataVersion()
     {
         return DataVersion::fromVersionString($this->product->getContext()->getValue(DataVersion::CONTEXT_CODE));
+    }
+
+    /**
+     * @param Message $message
+     * @param ProductAvailability $productAvailability
+     * @return ConfigurableProduct|SimpleProduct
+     */
+    public static function rehydrateProduct(Message $message, ProductAvailability $productAvailability)
+    {
+        // TODO: encapsulate product serialization and rehydration
+
+        self::validateMessageType($message);
+
+        $productData = json_decode($message->getPayload()['product'], true);
+
+        if ($productData[Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE) {
+            return ConfigurableProduct::fromArray($productData, $productAvailability);
+        }
+
+        return SimpleProduct::fromArray($productData);
+    }
+
+    /**
+     * @param Message $message
+     */
+    private static function validateMessageType(Message $message)
+    {
+        if ($message->getName() !== 'update_product') {
+            throw new NoUpdateProductCommandMessageException(sprintf(
+                'Unable to rehydrate from "%s" queue message, expected "%s"',
+                $message->getName(),
+                UpdateProductCommand::CODE
+            ));
+        }
     }
 }
