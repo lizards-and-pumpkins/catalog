@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
-use LizardsAndPumpkins\Import\Product\Exception\NoProductWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
@@ -78,21 +77,6 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $payload = $message->getPayload();
         $this->assertArrayHasKey('id', $payload);
         $this->assertArrayHasKey('product', $payload);
-    }
-
-    public function testCanBeRehydratedFromMessage()
-    {
-        $message = $this->domainEvent->toMessage();
-        $rehydratedEvent = ProductWasUpdatedDomainEvent::fromMessage($message);
-        $this->assertInstanceOf(ProductWasUpdatedDomainEvent::class, $rehydratedEvent);
-        $this->assertSame((string) $this->testProduct->getId(), (string) $rehydratedEvent->getProduct()->getId());
-    }
-
-    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode()
-    {
-        $this->expectException(NoProductWasUpdatedDomainEventMessageException::class);
-        $this->expectExceptionMessage(sprintf('Expected "product_was_updated" domain event, got "qux"'));
-        ProductWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('qux', [], []));
     }
 
     public function testReturnsDataVersion()

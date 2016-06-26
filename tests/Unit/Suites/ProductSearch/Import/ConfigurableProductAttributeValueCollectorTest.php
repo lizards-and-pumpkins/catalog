@@ -72,6 +72,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
 
     public function testItReturnsTheAttributeValuesForConfigurableProducts()
     {
+        /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $stubConfigurableProduct */
         $stubConfigurableProduct = $this->createMock(ConfigurableProduct::class);
         $stubConfigurableProduct->expects($this->once())
             ->method('getAllValuesOfAttribute')
@@ -85,22 +86,25 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
 
     public function testItCollectsTheAttributeValuesOfAssociatedProductsForVariationAttributes()
     {
-        $variationAttribute = 'test';
+        $variationAttributeCode = 'test';
 
-        $stubAssociatedProductA = $this->createMockProductWithAttributeValues($variationAttribute, ['value A']);
-        $stubAssociatedProductB = $this->createMockProductWithAttributeValues($variationAttribute, ['value B']);
+        $stubAssociatedProductA = $this->createMockProductWithAttributeValues($variationAttributeCode, ['value A']);
+        $stubAssociatedProductB = $this->createMockProductWithAttributeValues($variationAttributeCode, ['value B']);
 
         $stubAssociatedProductList = $this->createMockAssociatedProductList(
             $stubAssociatedProductA,
             $stubAssociatedProductB
         );
 
-        $stubConfigProduct = $this->createMock(ConfigurableProduct::class);
-        $stubConfigProduct->expects($this->once())->method('getVariationAttributes')
-            ->willReturn($this->createMockVariationAttributeList([$variationAttribute]));
-        $stubConfigProduct->method('getAssociatedProducts')->willReturn($stubAssociatedProductList);
+        /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $stubConfigurableProduct */
+        $stubConfigurableProduct = $this->createMock(ConfigurableProduct::class);
+        $stubConfigurableProduct->expects($this->once())->method('getVariationAttributes')
+            ->willReturn($this->createMockVariationAttributeList([$variationAttributeCode]));
+        $stubConfigurableProduct->method('getSalableAssociatedProducts')->willReturn($stubAssociatedProductList);
 
-        $result = $this->valueCollector->getValues($stubConfigProduct, AttributeCode::fromString($variationAttribute));
+        $attributeCode = AttributeCode::fromString($variationAttributeCode);
+        
+        $result = $this->valueCollector->getValues($stubConfigurableProduct, $attributeCode);
         $this->assertSame(['value A', 'value B'], $result);
     }
 }

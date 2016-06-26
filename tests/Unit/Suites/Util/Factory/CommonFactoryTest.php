@@ -130,6 +130,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer
@@ -140,6 +141,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer

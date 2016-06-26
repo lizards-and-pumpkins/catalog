@@ -19,17 +19,22 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SimpleProductBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockSimpleProductBuilder;
+    private $stubSimpleProductBuilder;
 
     /**
      * @var ProductVariationAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockVariationAttributeList;
+    private $stubVariationAttributeList;
 
     /**
      * @var AssociatedProductListBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockAssociatedProductListBuilder;
+    private $stubAssociatedProductListBuilder;
+
+    /**
+     * @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductAvailability;
 
     /**
      * @var ConfigurableProductBuilder
@@ -38,24 +43,26 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockSimpleProductBuilder = $this->createMock(SimpleProductBuilder::class);
-        $this->mockSimpleProductBuilder->method('getProductForContext')->willReturn(
+        $this->stubSimpleProductBuilder = $this->createMock(SimpleProductBuilder::class);
+        $this->stubSimpleProductBuilder->method('getProductForContext')->willReturn(
             $this->createMock(SimpleProduct::class)
         );
 
-        $this->mockVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
-        $this->mockVariationAttributeList->method('getAttributes')->willReturn(['test']);
+        $this->stubVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
+        $this->stubVariationAttributeList->method('getAttributes')->willReturn(['test']);
 
-        $this->mockAssociatedProductListBuilder = $this->createMock(AssociatedProductListBuilder::class);
-        $this->mockAssociatedProductListBuilder->method('getAssociatedProductListForContext')->willReturn(
+        $this->stubAssociatedProductListBuilder = $this->createMock(AssociatedProductListBuilder::class);
+        $this->stubAssociatedProductListBuilder->method('getAssociatedProductListForContext')->willReturn(
             $this->createMock(AssociatedProductList::class)
         );
-
-
+        
+        $this->stubProductAvailability = $this->createMock(ProductAvailability::class);
+        
         $this->configurableProductBuilder = new ConfigurableProductBuilder(
-            $this->mockSimpleProductBuilder,
-            $this->mockVariationAttributeList,
-            $this->mockAssociatedProductListBuilder
+            $this->stubSimpleProductBuilder,
+            $this->stubVariationAttributeList,
+            $this->stubAssociatedProductListBuilder,
+            $this->stubProductAvailability
         );
     }
 
@@ -66,6 +73,7 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAConfigurableProductInstanceForTheGivenContext()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         
         $result = $this->configurableProductBuilder->getProductForContext($stubContext);
@@ -75,24 +83,27 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductIsNotAvailableIfTheSimpleProductBuilderReturnsFalse()
     {
-        $this->mockSimpleProductBuilder->method('isAvailableForContext')->willReturn(false);
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
+        
+        $this->stubSimpleProductBuilder->method('isAvailableForContext')->willReturn(false);
 
         $this->assertFalse($this->configurableProductBuilder->isAvailableForContext($stubContext));
     }
 
     public function testProductIsNotAvailableIfAssociatedProductsMissVariationAttributes()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         
-        $this->mockSimpleProductBuilder->method('isAvailableForContext')->willReturn(true);
+        $this->stubSimpleProductBuilder->method('isAvailableForContext')->willReturn(true);
 
         /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
-        $mockProduct = $this->mockSimpleProductBuilder->getProductForContext($stubContext);
+        $mockProduct = $this->stubSimpleProductBuilder->getProductForContext($stubContext);
         $mockProduct->method('hasAttribute')->willReturn(false);
 
         /** @var AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject $mockProductList */
-        $mockProductList = $this->mockAssociatedProductListBuilder->getAssociatedProductListForContext($stubContext);
+        $mockProductList = $this->stubAssociatedProductListBuilder->getAssociatedProductListForContext($stubContext);
         $mockProductList->method('getProducts')->willReturn([$mockProduct]);
 
         $this->assertFalse($this->configurableProductBuilder->isAvailableForContext($stubContext));
@@ -100,16 +111,17 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductIsAvailableIfAssociatedProductsHaveAllVariationAttributes()
     {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         
-        $this->mockSimpleProductBuilder->method('isAvailableForContext')->willReturn(true);
+        $this->stubSimpleProductBuilder->method('isAvailableForContext')->willReturn(true);
 
         /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
-        $mockProduct = $this->mockSimpleProductBuilder->getProductForContext($stubContext);
+        $mockProduct = $this->stubSimpleProductBuilder->getProductForContext($stubContext);
         $mockProduct->method('hasAttribute')->willReturn(true);
 
         /** @var AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject $mockProductList */
-        $mockProductList = $this->mockAssociatedProductListBuilder->getAssociatedProductListForContext($stubContext);
+        $mockProductList = $this->stubAssociatedProductListBuilder->getAssociatedProductListForContext($stubContext);
         $mockProductList->method('getProducts')->willReturn([$mockProduct]);
 
         $this->assertTrue($this->configurableProductBuilder->isAvailableForContext($stubContext));

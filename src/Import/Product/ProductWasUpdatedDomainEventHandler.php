@@ -2,31 +2,39 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Exception\NoProductWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ProductWasUpdatedDomainEvent
+     * @var Message
      */
-    private $event;
+    private $message;
 
     /**
      * @var ProductProjector
      */
     private $projector;
 
-    public function __construct(Message $message, ProductProjector $projector)
-    {
-        $this->event = ProductWasUpdatedDomainEvent::fromMessage($message);
+    /**
+     * @var ProductWasUpdatedDomainEventBuilder
+     */
+    private $domainEventBuilder;
+
+    public function __construct(
+        Message $message,
+        ProductProjector $projector,
+        ProductWasUpdatedDomainEventBuilder $domainEventBuilder
+    ) {
+        $this->message = $message;
         $this->projector = $projector;
+        $this->domainEventBuilder = $domainEventBuilder;
     }
 
     public function process()
     {
-        $this->projector->project($this->event->getProduct());
+        $product = $this->domainEventBuilder->fromMessage($this->message)->getProduct();
+        $this->projector->project($product);
     }
 }

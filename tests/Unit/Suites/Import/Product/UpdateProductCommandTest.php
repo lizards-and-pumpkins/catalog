@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\Command;
@@ -95,23 +94,6 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
     {
         $message = $this->command->toMessage();
         $this->assertSame('123', (string)$message->getMetadata()['data_version']);
-    }
-
-    public function testCanBeRehydratedFromUpdateProductCommandMessage()
-    {
-        $message = $this->command->toMessage();
-        $rehydratedCommand = UpdateProductCommand::fromMessage($message);
-        $this->assertEquals($this->testProduct->getId(), $rehydratedCommand->getProduct()->getId());
-    }
-
-    public function testThrowsExceptionIfMessageNameNotMatches()
-    {
-        $this->expectException(NoUpdateProductCommandMessageException::class);
-        $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "update_product"');
-
-        $message = Message::withCurrentTime('foo', [], []);
-
-        UpdateProductCommand::fromMessage($message);
     }
 
     public function testReturnsTheDataVersion()

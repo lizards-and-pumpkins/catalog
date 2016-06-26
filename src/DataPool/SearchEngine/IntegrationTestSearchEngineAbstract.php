@@ -382,6 +382,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      */
     private function createSimpleFacetFieldFromAttributeValues(array $attributeValues)
     {
+        // TODO: Apply transformation
+        
         $attributeValues = $this->sortAttributeValuesAlphabetically($attributeValues);
 
         return array_map(function ($valueCounts) {

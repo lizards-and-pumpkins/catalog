@@ -6,6 +6,7 @@ use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedPro
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
 use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 
 class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \Countable
 {
@@ -46,35 +47,43 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
 
     /**
      * @param array[] $sourceArray
+     * @param ProductAvailability $productAvailability
      * @return AssociatedProductList
      */
-    public static function fromArray(array $sourceArray)
+    public static function fromArray(array $sourceArray, ProductAvailability $productAvailability)
     {
-        $associatedProducts = self::createAssociatedProductsFromArray($sourceArray);
+        $associatedProducts = self::createAssociatedProductsFromArray($sourceArray, $productAvailability);
         return new self(...$associatedProducts);
     }
 
     /**
      * @param array[] $sourceArray
-     * @return Product[]
+     * @param ProductAvailability $productAvailability
+     * @return \LizardsAndPumpkins\Import\Product\Product[]
      */
-    private static function createAssociatedProductsFromArray(array $sourceArray)
-    {
-        return array_map(function ($idx) use ($sourceArray) {
+    private static function createAssociatedProductsFromArray(
+        array $sourceArray,
+        ProductAvailability $productAvailability
+    ) {
+        return array_map(function ($idx) use ($sourceArray, $productAvailability) {
             $class = $sourceArray[self::PHP_CLASSES][$idx];
             $productSourceArray = $sourceArray[self::PRODUCTS][$idx];
-            return self::createAssociatedProductFromArray($class, $productSourceArray);
+            return self::createAssociatedProductFromArray($class, $productSourceArray, $productAvailability);
         }, array_keys($sourceArray[self::PRODUCTS]));
     }
 
     /**
      * @param string $class
      * @param mixed[] $productSourceArray
+     * @param ProductAvailability $productAvailability
      * @return Product
      */
-    private static function createAssociatedProductFromArray($class, array $productSourceArray)
-    {
-        return forward_static_call([$class, 'fromArray'], $productSourceArray);
+    private static function createAssociatedProductFromArray(
+        $class,
+        array $productSourceArray,
+        ProductAvailability $productAvailability
+    ) {
+        return forward_static_call([$class, 'fromArray'], $productSourceArray, $productAvailability);
     }
 
     /**

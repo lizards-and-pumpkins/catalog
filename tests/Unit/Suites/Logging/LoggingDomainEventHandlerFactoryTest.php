@@ -71,6 +71,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory

@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use LizardsAndPumpkins\Import\Product\InStockOrBackordarableProductAvailability;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
@@ -145,7 +146,9 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 
         $variationAttributes = new ProductVariationAttributeList(AttributeCode::fromString('foo'));
         $associatedProducts = new AssociatedProductList(...$childProducts);
-        return new ConfigurableProduct($simpleProduct, $variationAttributes, $associatedProducts);
+        $productAvailability = new InStockOrBackordarableProductAvailability();
+
+        return new ConfigurableProduct($simpleProduct, $variationAttributes, $associatedProducts, $productAvailability);
     }
 
     public function testASimpleProductCanBeJsonSerializedAndRehydrated()
@@ -171,7 +174,9 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
             $this->createSimpleProductWithId('root_simple3')
         );
         $json = json_encode($sourceConfigurableProduct);
-        $rehydratedConfigurableProduct = ConfigurableProduct::fromArray(json_decode($json, true));
+        $productAvailability = new InStockOrBackordarableProductAvailability();
+
+        $rehydratedConfigurableProduct = ConfigurableProduct::fromArray(json_decode($json, true), $productAvailability);
 
         $this->assertConfigurableProductEquals($sourceConfigurableProduct, $rehydratedConfigurableProduct);
     }

@@ -59,7 +59,15 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
-        $this->commandHandler = new UpdateProductCommandHandler($testCommand->toMessage(), $this->mockDomainEventQueue);
+        /** @var UpdateProductCommandBuilder|\PHPUnit_Framework_MockObject_MockObject $stubCommandBuilder */
+        $stubCommandBuilder = $this->createMock(UpdateProductCommandBuilder::class);
+        $stubCommandBuilder->method('fromMessage')->willReturn($testCommand);
+
+        $this->commandHandler = new UpdateProductCommandHandler(
+            $testCommand->toMessage(),
+            $this->mockDomainEventQueue,
+            $stubCommandBuilder
+        );
     }
 
     public function testCommandHandlerInterfaceIsImplemented()

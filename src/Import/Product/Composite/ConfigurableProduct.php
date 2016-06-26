@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Import\Product\Composite;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
@@ -37,15 +38,22 @@ class ConfigurableProduct implements CompositeProduct
      */
     private $associatedProducts;
 
+    /**
+     * @var ProductAvailability
+     */
+    private $productAvailability;
+
     public function __construct(
         SimpleProduct $simpleProduct,
         ProductVariationAttributeList $variationAttributes,
-        AssociatedProductList $associatedProducts
+        AssociatedProductList $associatedProducts,
+        ProductAvailability $productAvailability
     ) {
         $this->validate($simpleProduct, $variationAttributes, $associatedProducts);
         $this->simpleProductDelegate = $simpleProduct;
         $this->variationAttributes = $variationAttributes;
         $this->associatedProducts = $associatedProducts;
+        $this->productAvailability = $productAvailability;
     }
 
     private function validate(
@@ -65,15 +73,17 @@ class ConfigurableProduct implements CompositeProduct
 
     /**
      * @param mixed[] $sourceArray
+     * @param ProductAvailability $productAvailability
      * @return ConfigurableProduct
      */
-    public static function fromArray(array $sourceArray)
+    public static function fromArray(array $sourceArray, ProductAvailability $productAvailability)
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
             SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT]),
             ProductVariationAttributeList::fromArray($sourceArray[self::VARIATION_ATTRIBUTES]),
-            AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS])
+            AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS], $productAvailability),
+            $productAvailability
         );
     }
 
@@ -222,5 +232,17 @@ class ConfigurableProduct implements CompositeProduct
     public function getTaxClass()
     {
         return $this->simpleProductDelegate->getTaxClass();
+    }
+
+    /**
+     * @return AssociatedProductList
+     */
+    public function getSalableAssociatedProducts()
+    {
+        $products = array_values(array_filter($this->associatedProducts->getProducts(), function(Product $product) {
+            return $this->productAvailability->isProductSalable($product);
+        }));
+
+        return new AssociatedProductList(...$products);
     }
 }

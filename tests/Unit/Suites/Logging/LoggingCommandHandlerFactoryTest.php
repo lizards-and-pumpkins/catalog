@@ -31,6 +31,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId

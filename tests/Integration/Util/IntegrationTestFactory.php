@@ -14,6 +14,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
+use LizardsAndPumpkins\Import\Product\InStockOrBackordarableProductAvailability;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
@@ -522,6 +523,14 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
             SearchCriterionGreaterThan::create('stock_qty', 0),
             SearchCriterionEqual::create('backorders', 'true')
         );
+    }
+
+    /**
+     * @return InStockOrBackordarableProductAvailability
+     */
+    public function createProductAvailability()
+    {
+        return new InStockOrBackordarableProductAvailability();
     }
 
     /**

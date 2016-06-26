@@ -7,6 +7,7 @@ use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
@@ -444,5 +445,10 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     public function createWebsiteContextPartBuilder()
     {
         return $this->createMock(ContextPartBuilder::class);
+    }
+
+    public function createProductAvailability()
+    {
+        return $this->createMock(ProductAvailability::class);
     }
 }

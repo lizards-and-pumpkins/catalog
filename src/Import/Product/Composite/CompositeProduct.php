@@ -15,4 +15,9 @@ interface CompositeProduct extends Product
      * @return AssociatedProductList
      */
     public function getAssociatedProducts();
+
+    /**
+     * @return AssociatedProductList
+     */
+    public function getSalableAssociatedProducts();
 }

@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMis
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
@@ -140,8 +141,15 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         );
         $sourceAssociatedProductList = new AssociatedProductList($associatedProduct);
 
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $json = json_encode($sourceAssociatedProductList);
-        $rehydratedAssociatedProductList = AssociatedProductList::fromArray(json_decode($json, true));
+        $rehydratedAssociatedProductList = AssociatedProductList::fromArray(
+            json_decode($json, true),
+            $stubProductAvailability
+        );
+        
         $this->assertInstanceOf(AssociatedProductList::class, $rehydratedAssociatedProductList);
     }
 

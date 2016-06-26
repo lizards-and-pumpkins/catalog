@@ -3,8 +3,6 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
@@ -47,35 +45,7 @@ class UpdateProductCommand implements Command
      */
     public static function fromMessage(Message $message)
     {
-        if ($message->getName() !== 'update_product') {
-            throw self::createInvalidMessageException($message->getName());
-        }
-        
-        $product = self::rehydrateProduct(json_decode($message->getPayload()['product'], true));
-        return new self($product);
-    }
-
-    /**
-     * @param string $messageName
-     * @return NoUpdateProductCommandMessageException
-     */
-    private static function createInvalidMessageException($messageName)
-    {
-        $message = sprintf('Unable to rehydrate from "%s" queue message, expected "%s"', $messageName, self::CODE);
-        return new NoUpdateProductCommandMessageException($message);
-    }
-
-    /**
-     * @param mixed[] $productData
-     * @return ConfigurableProduct|SimpleProduct
-     */
-    private static function rehydrateProduct(array $productData)
-    {
-        // todo: encapsulate product serialization and rehydration
-        $product = $productData[Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
-            ConfigurableProduct::fromArray($productData) :
-            SimpleProduct::fromArray($productData);
-        return $product;
+        // TODO: Remove from interface
     }
 
     /**
