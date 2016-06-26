@@ -59,7 +59,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     /**
      * @param array[] $sourceArray
      * @param ProductAvailability $productAvailability
-     * @return \LizardsAndPumpkins\Import\Product\Product[]
+     * @return Product[]
      */
     private static function createAssociatedProductsFromArray(
         array $sourceArray,
