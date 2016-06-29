@@ -3,18 +3,18 @@
 namespace LizardsAndPumpkins\Import\Product;
 
 /**
- * @covers \LizardsAndPumpkins\Import\Product\InStockOrBackordarableProductAvailability
+ * @covers \LizardsAndPumpkins\Import\Product\InStockOrBackorderableProductAvailability
  */
-class InStockOrBackordarableProductAvailabilityTest extends \PHPUnit_Framework_TestCase
+class InStockOrBackorderableProductAvailabilityTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var InStockOrBackordarableProductAvailability
+     * @var InStockOrBackorderableProductAvailability
      */
     private $inStockOrBackordarableProductAvailability;
 
     protected function setUp()
     {
-        $this->inStockOrBackordarableProductAvailability = new InStockOrBackordarableProductAvailability();
+        $this->inStockOrBackordarableProductAvailability = new InStockOrBackorderableProductAvailability();
     }
 
     public function testProductAvailabilityInterfaceIsImplemented()

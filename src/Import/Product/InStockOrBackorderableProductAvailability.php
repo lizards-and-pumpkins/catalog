@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-class InStockOrBackordarableProductAvailability implements ProductAvailability
+class InStockOrBackorderableProductAvailability implements ProductAvailability
 {
     /**
      * @param Product $product

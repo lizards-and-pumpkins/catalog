@@ -14,7 +14,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
-use LizardsAndPumpkins\Import\Product\InStockOrBackordarableProductAvailability;
+use LizardsAndPumpkins\Import\Product\InStockOrBackorderableProductAvailability;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
@@ -526,11 +526,11 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     }
 
     /**
-     * @return InStockOrBackordarableProductAvailability
+     * @return InStockOrBackorderableProductAvailability
      */
     public function createProductAvailability()
     {
-        return new InStockOrBackordarableProductAvailability();
+        return new InStockOrBackorderableProductAvailability();
     }
 
     /**

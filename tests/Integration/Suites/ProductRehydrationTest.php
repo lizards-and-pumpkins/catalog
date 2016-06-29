@@ -8,11 +8,10 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
-use LizardsAndPumpkins\Import\Product\InStockOrBackordarableProductAvailability;
+use LizardsAndPumpkins\Import\Product\InStockOrBackorderableProductAvailability;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
@@ -121,9 +120,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
-
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
-        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+        $productAvailability = new InStockOrBackorderableProductAvailability();
 
         return new SimpleProduct(
             $productId,
@@ -131,7 +128,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
             $testProductAttributes,
             $imageList,
             $stubContext,
-            $stubProductAvailability
+            $productAvailability
         );
     }
 
@@ -157,18 +154,18 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 
         $variationAttributes = new ProductVariationAttributeList(AttributeCode::fromString('foo'));
         $associatedProducts = new AssociatedProductList(...$childProducts);
-        $productAvailability = new InStockOrBackordarableProductAvailability();
+        $productAvailability = new InStockOrBackorderableProductAvailability();
 
         return new ConfigurableProduct($simpleProduct, $variationAttributes, $associatedProducts, $productAvailability);
     }
 
     public function testASimpleProductCanBeJsonSerializedAndRehydrated()
     {
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
-        $stubProductAvailability = $this->createMock(ProductAvailability::class);
         $sourceSimpleProduct = $this->createSimpleProductWithId('test');
         $json = json_encode($sourceSimpleProduct);
-        $rehydratedSimpleProduct = SimpleProduct::fromArray(json_decode($json, true), $stubProductAvailability);
+        $productAvailability = new InStockOrBackorderableProductAvailability();
+
+        $rehydratedSimpleProduct = SimpleProduct::fromArray(json_decode($json, true), $productAvailability);
 
         $this->assertSimpleProductEquals($sourceSimpleProduct, $rehydratedSimpleProduct);
     }
@@ -187,7 +184,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
             $this->createSimpleProductWithId('root_simple3')
         );
         $json = json_encode($sourceConfigurableProduct);
-        $productAvailability = new InStockOrBackordarableProductAvailability();
+        $productAvailability = new InStockOrBackorderableProductAvailability();
 
         $rehydratedConfigurableProduct = ConfigurableProduct::fromArray(json_decode($json, true), $productAvailability);
 
