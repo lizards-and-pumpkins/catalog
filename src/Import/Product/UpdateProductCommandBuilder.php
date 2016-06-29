@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
-class UpdateProductCommandBuilder
+class UpdateProductCommandBuilder implements CommandBuilder
 {
     /**
      * @var ProductAvailability

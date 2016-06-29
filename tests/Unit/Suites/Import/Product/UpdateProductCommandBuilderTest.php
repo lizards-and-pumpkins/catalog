@@ -26,24 +26,42 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
  */
 class UpdateProductCommandBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var UpdateProductCommandBuilder
+     */
+    private $commandBuilder;
+
+    /**
+     * @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubAvailability;
+
+    protected function setUp()
+    {
+        $this->stubAvailability = $this->createMock(ProductAvailability::class);
+        $this->commandBuilder = new UpdateProductCommandBuilder($this->stubAvailability);
+    }
+
+    public function testCommandBuilderInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(CommandBuilder::class, $this->commandBuilder);
+    }
+
     public function testUpdateProductCommandIsReturned()
     {
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
-        $stubAvailability = $this->createMock(ProductAvailability::class);
-
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
             SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
-            $stubAvailability
+            $this->stubAvailability
         );
 
         $testCommand = new UpdateProductCommand($testProduct);
         $testMessage = $testCommand->toMessage();
 
-        $result = (new UpdateProductCommandBuilder($stubAvailability))->fromMessage($testMessage);
+        $result = $this->commandBuilder->fromMessage($testMessage);
 
         $this->assertInstanceOf(UpdateProductCommand::class, $result);
     }
