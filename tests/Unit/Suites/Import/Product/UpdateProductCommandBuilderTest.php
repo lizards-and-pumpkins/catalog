@@ -28,19 +28,20 @@ class UpdateProductCommandBuilderTest extends \PHPUnit_Framework_TestCase
 {
     public function testUpdateProductCommandIsReturned()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
+            $stubAvailability
         );
 
         $testCommand = new UpdateProductCommand($testProduct);
         $testMessage = $testCommand->toMessage();
-
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
-        $stubAvailability = $this->createMock(ProductAvailability::class);
 
         $result = (new UpdateProductCommandBuilder($stubAvailability))->fromMessage($testMessage);
 

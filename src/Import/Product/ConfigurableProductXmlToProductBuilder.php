@@ -55,7 +55,7 @@ class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuild
      */
     private function createSimpleProductBuilder(XPathParser $parser)
     {
-        $converter = new SimpleProductXmlToProductBuilder();
+        $converter = new SimpleProductXmlToProductBuilder($this->productAvailability);
         return $converter->createProductBuilder($parser);
     }
 

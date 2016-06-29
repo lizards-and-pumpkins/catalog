@@ -302,26 +302,26 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $this->mockSimpleProduct->method('getTaxClass')->willReturn('test');
         $this->assertSame('test', $this->configurableProduct->getTaxClass());
     }
-
-    public function testAssociatedProductsListContainingJustSalableProductsIsReturned()
+    
+    public function testFalseIsReturnedIfNoneOfAssociatedProductsIsSalable()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubSalableProduct */
-        $stubSalableProduct = $this->createMock(Product::class);
+        $stubProduct = $this->createMock(Product::class);
+        $stubProduct->method('isSalable')->willReturn(false);
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubNotSalableProduct */
-        $stubNotSalableProduct = $this->createMock(Product::class);
+        $this->mockAssociatedProductList->method('getProducts')->willReturn([$stubProduct]);
+        
+        $this->assertFalse($this->configurableProduct->isSalable());
+    }
+    public function testTrueIsReturnedIfAnyOfAssociatedProductsIsSalable()
+    {
+        $stubProductA = $this->createMock(Product::class);
+        $stubProductA->method('isSalable')->willReturn(false);
 
-        $this->mockAssociatedProductList->method('getProducts')
-            ->willReturn([$stubSalableProduct, $stubNotSalableProduct]);
+        $stubProductB = $this->createMock(Product::class);
+        $stubProductB->method('isSalable')->willReturn(true);
 
-        $this->stubProductAvailability->method('isProductSalable')->willReturnMap([
-            [$stubNotSalableProduct, true],
-            [$stubNotSalableProduct, false],
-        ]);
+        $this->mockAssociatedProductList->method('getProducts')->willReturn([$stubProductA, $stubProductB]);
 
-        $expectedAssociatedProductsList = new AssociatedProductList($stubSalableProduct);
-        $result = $this->configurableProduct->getSalableAssociatedProducts();
-
-        $this->assertEquals($expectedAssociatedProductsList, $result);
+        $this->assertTrue($this->configurableProduct->isSalable());
     }
 }

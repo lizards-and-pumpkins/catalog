@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\Product\InStockOrBackordarableProductAvailability;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
@@ -121,7 +122,17 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
 
-        return new SimpleProduct($productId, $productTaxClass, $testProductAttributes, $imageList, $stubContext);
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
+        return new SimpleProduct(
+            $productId,
+            $productTaxClass,
+            $testProductAttributes,
+            $imageList,
+            $stubContext,
+            $stubProductAvailability
+        );
     }
 
     /**
@@ -153,9 +164,11 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 
     public function testASimpleProductCanBeJsonSerializedAndRehydrated()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
         $sourceSimpleProduct = $this->createSimpleProductWithId('test');
         $json = json_encode($sourceSimpleProduct);
-        $rehydratedSimpleProduct = SimpleProduct::fromArray(json_decode($json, true));
+        $rehydratedSimpleProduct = SimpleProduct::fromArray(json_decode($json, true), $stubProductAvailability);
 
         $this->assertSimpleProductEquals($sourceSimpleProduct, $rehydratedSimpleProduct);
     }

@@ -139,7 +139,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         $stubProductAvailability = $this->createMock(ProductAvailability::class);
 
         return new ProductXmlToProductBuilderLocator(
-            new SimpleProductXmlToProductBuilder(),
+            new SimpleProductXmlToProductBuilder($stubProductAvailability),
             new ConfigurableProductXmlToProductBuilder(
                 $productXmlToProductBuilderLocatorProxy,
                 $stubProductAvailability

@@ -73,7 +73,7 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
             return ConfigurableProduct::fromArray($productData, $productAvailability);
         }
 
-        return SimpleProduct::fromArray($productData);
+        return SimpleProduct::fromArray($productData, $productAvailability);
     }
 
     /**

@@ -38,12 +38,16 @@ class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCas
 
     protected function setUp()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
+            $stubAvailability
         );
 
         $testEvent = new ProductWasUpdatedDomainEvent($testProduct);

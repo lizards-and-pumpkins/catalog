@@ -75,7 +75,7 @@ class UpdateProductCommand implements Command
             return ConfigurableProduct::fromArray($productData, $productAvailability);
         }
 
-        return SimpleProduct::fromArray($productData);
+        return SimpleProduct::fromArray($productData, $productAvailability);
     }
 
     /**

@@ -948,7 +948,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createSimpleProductXmlToProductBuilder()
     {
-        return new SimpleProductXmlToProductBuilder();
+        return new SimpleProductXmlToProductBuilder(
+            $this->getMasterFactory()->getProductAvailability()
+        );
     }
 
     /**

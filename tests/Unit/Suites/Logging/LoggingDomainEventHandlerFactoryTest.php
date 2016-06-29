@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
@@ -148,13 +149,18 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedProductWasUpdatedDomainEventHandler()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz'])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz']),
+            $stubProductAvailability
         );
+        
         $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
         $result = $this->factory->createProductWasUpdatedDomainEventHandler($testEvent->toMessage());
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);

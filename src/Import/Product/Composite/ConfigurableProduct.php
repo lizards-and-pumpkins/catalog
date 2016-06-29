@@ -38,22 +38,15 @@ class ConfigurableProduct implements CompositeProduct
      */
     private $associatedProducts;
 
-    /**
-     * @var ProductAvailability
-     */
-    private $productAvailability;
-
     public function __construct(
         SimpleProduct $simpleProduct,
         ProductVariationAttributeList $variationAttributes,
-        AssociatedProductList $associatedProducts,
-        ProductAvailability $productAvailability
+        AssociatedProductList $associatedProducts
     ) {
         $this->validate($simpleProduct, $variationAttributes, $associatedProducts);
         $this->simpleProductDelegate = $simpleProduct;
         $this->variationAttributes = $variationAttributes;
         $this->associatedProducts = $associatedProducts;
-        $this->productAvailability = $productAvailability;
     }
 
     private function validate(
@@ -80,10 +73,9 @@ class ConfigurableProduct implements CompositeProduct
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
-            SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT]),
+            SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT], $productAvailability),
             ProductVariationAttributeList::fromArray($sourceArray[self::VARIATION_ATTRIBUTES]),
-            AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS], $productAvailability),
-            $productAvailability
+            AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS], $productAvailability)
         );
     }
 
@@ -235,14 +227,17 @@ class ConfigurableProduct implements CompositeProduct
     }
 
     /**
-     * @return AssociatedProductList
+     * @return bool
      */
-    public function getSalableAssociatedProducts()
+    public function isSalable()
     {
-        $products = array_values(array_filter($this->associatedProducts->getProducts(), function(Product $product) {
-            return $this->productAvailability->isProductSalable($product);
-        }));
+        foreach ($this->associatedProducts->getProducts() as $product) {
+            /** @var Product $product */
+            if ($product->isSalable()) {
+                return true;
+            }
+        }
 
-        return new AssociatedProductList(...$products);
+        return false;
     }
 }

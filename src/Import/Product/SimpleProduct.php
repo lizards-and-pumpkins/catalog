@@ -40,25 +40,33 @@ class SimpleProduct implements Product
      */
     private $taxClass;
 
+    /**
+     * @var ProductAvailability
+     */
+    private $productAvailability;
+
     public function __construct(
         ProductId $productId,
         ProductTaxClass $taxClass,
         ProductAttributeList $attributeList,
         ProductImageList $images,
-        Context $context
+        Context $context,
+        ProductAvailability $productAvailability
     ) {
         $this->productId = $productId;
         $this->taxClass = $taxClass;
         $this->attributeList = $attributeList;
         $this->context = $context;
         $this->images = $images;
+        $this->productAvailability = $productAvailability;
     }
 
     /**
      * @param mixed[] $sourceArray
+     * @param ProductAvailability $productAvailability
      * @return SimpleProduct
      */
-    public static function fromArray(array $sourceArray)
+    public static function fromArray(array $sourceArray, ProductAvailability $productAvailability)
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
@@ -66,7 +74,8 @@ class SimpleProduct implements Product
             ProductTaxClass::fromString($sourceArray['tax_class']),
             ProductAttributeList::fromArray($sourceArray['attributes']),
             ProductImageList::fromArray($sourceArray['images']),
-            SelfContainedContextBuilder::rehydrateContext($sourceArray[self::CONTEXT])
+            SelfContainedContextBuilder::rehydrateContext($sourceArray[self::CONTEXT]),
+            $productAvailability
         );
     }
 
@@ -210,5 +219,13 @@ class SimpleProduct implements Product
     public function getTaxClass()
     {
         return $this->taxClass;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSalable()
+    {
+        return $this->productAvailability->isProductSalable($this);
     }
 }

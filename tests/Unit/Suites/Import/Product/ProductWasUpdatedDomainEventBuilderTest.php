@@ -28,19 +28,20 @@ class ProductWasUpdatedDomainEventBuilderTest extends \PHPUnit_Framework_TestCas
 
     public function testProductWasUpdatedDomainEventIsReturned()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
+            $stubAvailability
         );
 
         $testDomainEvent = new ProductWasUpdatedDomainEvent($testProduct);
         $testMessage = $testDomainEvent->toMessage();
-
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
-        $stubAvailability = $this->createMock(ProductAvailability::class);
 
         $result = (new ProductWasUpdatedDomainEventBuilder($stubAvailability))->fromMessage($testMessage);
 

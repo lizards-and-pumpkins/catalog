@@ -42,14 +42,16 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+
         $this->testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([
-                DataVersion::CONTEXT_CODE => $this->testDataVersionString
-            ])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => $this->testDataVersionString]),
+            $stubAvailability
         );
         $this->domainEvent = new ProductWasUpdatedDomainEvent($this->testProduct);
     }
@@ -101,12 +103,16 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainEventCanBeRehydratedFromUpdateProductCommandMessage()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123'])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
+            $stubAvailability
         );
 
         $testDomainEvent = new ProductWasUpdatedDomainEvent($testProduct);

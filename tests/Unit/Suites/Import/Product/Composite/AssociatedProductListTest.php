@@ -132,17 +132,18 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     public function testItCanBeSerializedAndRehydrated()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $associatedProduct = new SimpleProduct(
             ProductId::fromString('test'),
             ProductTaxClass::fromString('test'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContextBuilder::rehydrateContext([DataVersion::CONTEXT_CODE => '25732342'])
+            SelfContainedContextBuilder::rehydrateContext([DataVersion::CONTEXT_CODE => '25732342']),
+            $stubProductAvailability
         );
         $sourceAssociatedProductList = new AssociatedProductList($associatedProduct);
-
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
-        $stubProductAvailability = $this->createMock(ProductAvailability::class);
 
         $json = json_encode($sourceAssociatedProductList);
         $rehydratedAssociatedProductList = AssociatedProductList::fromArray(

@@ -68,19 +68,26 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
         $this->mockProductImageListBuilder->method('getImageListForContext')
             ->willReturn($this->createMock(ProductImageList::class));
 
+        /** @var ProductTaxClass $stubTaxClass */
         $stubTaxClass = $this->createMock(ProductTaxClass::class);
-        
+
+        /** @var ProductAvailability $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $this->productBuilder = new SimpleProductBuilder(
             $this->stubProductId,
             $stubTaxClass,
             $this->mockProductAttributeListBuilder,
-            $this->mockProductImageListBuilder
+            $this->mockProductImageListBuilder,
+            $stubProductAvailability
         );
     }
 
     public function testProductForContextIsReturned()
     {
         $this->mockAttributeList->method('getAllAttributes')->willReturn([]);
+
+        /** @var Context $stubContext */
         $stubContext = $this->createMock(Context::class);
         $result = $this->productBuilder->getProductForContext($stubContext);
 
@@ -105,6 +112,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
             ['special_price', [$sourceSpecialPriceAttribute]],
         ]);
 
+        /** @var Context $stubContext */
         $stubContext = $this->createMock(Context::class);
         $product = $this->productBuilder->getProductForContext($stubContext);
 
@@ -117,6 +125,8 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductIsAvailableForContextIfAttributesCanBeCollected()
     {
         $this->mockAttributeList->method('count')->willReturn(2);
+
+        /** @var Context $stubContext */
         $stubContext = $this->createMock(Context::class);
         
         $this->assertTrue($this->productBuilder->isAvailableForContext($stubContext));
@@ -125,6 +135,8 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testProductIsNotAvailableForContextIfNoAttributesCanBeCollected()
     {
         $this->mockAttributeList->method('count')->willReturn(0);
+
+        /** @var Context $stubContext */
         $stubContext = $this->createMock(Context::class);
         
         $this->assertFalse($this->productBuilder->isAvailableForContext($stubContext));
