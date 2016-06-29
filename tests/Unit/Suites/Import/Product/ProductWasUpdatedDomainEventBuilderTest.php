@@ -25,25 +25,42 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
  */
 class ProductWasUpdatedDomainEventBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubAvailability;
+
+    /**
+     * @var ProductWasUpdatedDomainEventBuilder
+     */
+    private $domainEventBuilder;
+
+    protected function setUp()
+    {
+        $this->stubAvailability = $this->createMock(ProductAvailability::class);
+        $this->domainEventBuilder = new ProductWasUpdatedDomainEventBuilder($this->stubAvailability);
+    }
+
+    public function testDomainEventBuilderInterfaceIsImplemented()
+    {
+        $this->assertInstanceOf(DomainEventBuilder::class, $this->domainEventBuilder);
+    }
 
     public function testProductWasUpdatedDomainEventIsReturned()
     {
-        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
-        $stubAvailability = $this->createMock(ProductAvailability::class);
-
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
             SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
-            $stubAvailability
+            $this->stubAvailability
         );
 
         $testDomainEvent = new ProductWasUpdatedDomainEvent($testProduct);
         $testMessage = $testDomainEvent->toMessage();
 
-        $result = (new ProductWasUpdatedDomainEventBuilder($stubAvailability))->fromMessage($testMessage);
+        $result = $this->domainEventBuilder->fromMessage($testMessage);
 
         $this->assertInstanceOf(ProductWasUpdatedDomainEvent::class, $result);
     }

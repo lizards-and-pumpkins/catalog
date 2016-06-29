@@ -4,7 +4,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
-class ProductWasUpdatedDomainEventBuilder
+class ProductWasUpdatedDomainEventBuilder implements DomainEventBuilder
 {
     /**
      * @var ProductAvailability
