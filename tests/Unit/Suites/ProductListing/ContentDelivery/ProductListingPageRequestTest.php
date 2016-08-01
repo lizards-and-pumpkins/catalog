@@ -134,6 +134,24 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedFilterValues, $result);
     }
 
+    public function testDoubleCommaInFilterValueIsTreatedAsCommaAndNotValueDelimiter()
+    {
+        $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')->willReturnArgument(0);
+
+        $filterName = 'foo';
+
+        /** @var FacetFiltersToIncludeInResult|MockObject $stubFacetFilterRequest */
+        $stubFacetFilterRequest = $this->createMock(FacetFiltersToIncludeInResult::class);
+        $stubFacetFilterRequest->method('getAttributeCodeStrings')->willReturn([$filterName]);
+
+        $this->stubRequest->method('getQueryParameter')->with($filterName)->willReturn('baz,q,,ux');
+
+        $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $stubFacetFilterRequest);
+        $expectedFilterValues = ['foo' => ['baz', 'q,ux']];
+
+        $this->assertSame($expectedFilterValues, $result);
+    }
+
     public function testInitialProductsPerPageConfigurationIsReturned()
     {
         $this->assertSame($this->stubProductsPerPage, $this->pageRequest->getProductsPerPage($this->stubRequest));
