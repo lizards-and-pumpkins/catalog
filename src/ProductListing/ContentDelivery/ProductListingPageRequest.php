@@ -227,17 +227,14 @@ class ProductListingPageRequest
      */
     private function getFilterValues(HttpRequest $request, $queryParameterName)
     {
-        $commaPlaceholder = 'COMMA-PLACEHOLDER';
-
         $valuesString = $request->getQueryParameter($queryParameterName);
-        $patchedValuesString = preg_replace('/,,/', $commaPlaceholder, $valuesString);
 
-        return array_reduce(explode(',', $patchedValuesString), function(array $carry, $value) use ($commaPlaceholder) {
+        return array_reduce(preg_split('/(?<!,),(?!,)/', $valuesString), function(array $carry, $value) {
             if ('' === $value) {
                 return $carry;
             }
 
-            return array_merge($carry, [preg_replace('/' . $commaPlaceholder . '/', ',', $value)]);
+            return array_merge($carry, [preg_replace('/,,/', ',', $value)]);
         }, []);
     }
 }
