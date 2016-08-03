@@ -1,24 +1,25 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductDetail;
+namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\View\ProductView;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 /**
- * @covers \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
+ * @covers \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ProductCanonicalTagSnippetRenderer
+     * @var ProductListingCanonicalTagSnippetRenderer
      */
     private $renderer;
 
@@ -31,11 +32,6 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
      * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubBaseUrlBuilder;
-
-    /**
-     * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockProductView;
 
     /**
      * @param string $expectedSnippetKey
@@ -70,36 +66,51 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubCanonicalTagSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
-        $this->stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString('https://example.com/'));
-        $this->renderer = new ProductCanonicalTagSnippetRenderer(
-            $this->stubCanonicalTagSnippetKeyGenerator,
-            $this->stubBaseUrlBuilder
-        );
 
-        $this->mockProductView = $this->createMock(ProductView::class);
-        $this->mockProductView->method('getFirstValueOfAttribute')->willReturn('test.html');
-        $this->mockProductView->method('getContext')->willReturn($this->createMock(Context::class));
+        $stubContext = $this->createMock(Context::class);
+
+        /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
+        $stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $stubContextBuilder->method('createContext')->willReturn($stubContext);
+
+        $this->renderer = new ProductListingCanonicalTagSnippetRenderer(
+            $this->stubCanonicalTagSnippetKeyGenerator,
+            $this->stubBaseUrlBuilder,
+            $stubContextBuilder
+        );
     }
 
-    public function testImplementsTheSnippetRendererInterface()
+    public function testSnippetRendererInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testReturnsACanonicalTagSnippet()
+    public function testProductListingCanonicalTagSnippetIsReturned()
     {
-        $snippetKey = 'canonical_tag';
-        $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn($snippetKey);
+        $testUrlKey = 'test.html';
+        $testSnippetKey = 'canonical_tag';
+        $testBaseUrl = 'https://example.com/';
 
-        $result = $this->renderer->render($this->mockProductView);
+        $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
+
+        $this->stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString($testBaseUrl));
+
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        $stubProductListing = $this->createMock(ProductListing::class);
+        $stubProductListing->method('getContextData')->willReturn([]);
+        $stubProductListing->method('getUrlKey')->willReturn($testUrlKey);
+
+        $result = $this->renderer->render($stubProductListing);
 
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
         $this->assertContainsOnlyInstancesOf(Snippet::class, $result);
-        $this->assertContainsSnippetWithKey($snippetKey, $result);
+        $this->assertContainsSnippetWithKey($testSnippetKey, $result);
 
-        $snippet = $this->findSnippetByKey($snippetKey, $result);
+        $snippet = $this->findSnippetByKey($testSnippetKey, $result);
 
-        $this->assertSame('<link rel="canonical" href="https://example.com/test.html" />', $snippet->getContent());
+        $expectedSnippetContent = sprintf('<link rel="canonical" href="%s%s" />', $testBaseUrl, $testUrlKey);
+
+        $this->assertSame($expectedSnippetContent, $snippet->getContent());
     }
 }
