@@ -50,6 +50,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer

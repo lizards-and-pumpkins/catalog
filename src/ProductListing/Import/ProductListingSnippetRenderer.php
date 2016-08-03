@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
@@ -35,31 +34,17 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     /**
      * @var SnippetKeyGenerator
      */
-    private $canonicalTagSnippetKeyGenerator;
-
-    /**
-     * @var BaseUrlBuilder
-     */
-    private $baseUrlBuilder;
-
-    /**
-     * @var SnippetKeyGenerator
-     */
     private $htmlHeadMetaKeyGenerator;
 
     public function __construct(
         ProductListingBlockRenderer $blockRenderer,
         SnippetKeyGenerator $metaSnippetKeyGenerator,
         ContextBuilder $contextBuilder,
-        SnippetKeyGenerator $canonicalTagSnippetKeyGenerator,
-        BaseUrlBuilder $baseUrlBuilder,
         SnippetKeyGenerator $htmlHeadMetaKeyGenerator
     ) {
         $this->blockRenderer = $blockRenderer;
         $this->metaSnippetKeyGenerator = $metaSnippetKeyGenerator;
         $this->contextBuilder = $contextBuilder;
-        $this->canonicalTagSnippetKeyGenerator = $canonicalTagSnippetKeyGenerator;
-        $this->baseUrlBuilder = $baseUrlBuilder;
         $this->htmlHeadMetaKeyGenerator = $htmlHeadMetaKeyGenerator;
     }
 
@@ -71,7 +56,6 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     {
         return [
             $this->createPageMetaSnippet($productListing),
-            $this->createListingCanonicalTagSnippet($productListing),
             $this->createHtmlHeadMetaSnippet($productListing),
         ];
     }
@@ -141,41 +125,6 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     {
         $contextData = $productListing->getContextData();
         return $this->contextBuilder->createContext($contextData);
-    }
-
-    /**
-     * @param ProductListing $productListing
-     * @return Snippet
-     */
-    private function createListingCanonicalTagSnippet(ProductListing $productListing)
-    {
-        $key = $this->getProductListingCanonicalTagSnippetKey($productListing);
-        $content = $this->createProductListingCanonicalTag($productListing);
-        return Snippet::create($key, $content);
-    }
-
-    /**
-     * @param ProductListing $productListing
-     * @return string
-     */
-    private function getProductListingCanonicalTagSnippetKey(ProductListing $productListing)
-    {
-        $productListingUrlKey = $productListing->getUrlKey();
-        return $this->canonicalTagSnippetKeyGenerator->getKeyForContext(
-            $this->getContextFromProductListingData($productListing),
-            [PageMetaInfoSnippetContent::URL_KEY => $productListingUrlKey]
-        );
-    }
-
-    /**
-     * @param ProductListing $productListing
-     * @return string
-     */
-    private function createProductListingCanonicalTag(ProductListing $productListing)
-    {
-        $baseUrl = $this->baseUrlBuilder->create($this->getContextFromProductListingData($productListing));
-        $urlKey = $productListing->getUrlKey();
-        return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
     }
 
     /**
