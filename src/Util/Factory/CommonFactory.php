@@ -40,6 +40,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
@@ -580,7 +581,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createProductListingTitleSnippetRenderer(),
             $this->getMasterFactory()->createProductListingDescriptionSnippetRenderer(),
-            $this->createProductListingPageRobotsMetaTagSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingCanonicalTagSnippetRenderer(),
         ];
     }
 
@@ -618,8 +620,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder(),
-            $this->getMasterFactory()->createProductListingCanonicalTagSnippetKeyGenerator(),
-            $this->getMasterFactory()->createBaseUrlBuilder(),
             $this->getMasterFactory()->createHtmlHeadMetaKeyGenerator()
         );
     }
@@ -1788,7 +1788,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return RobotsMetaTagSnippetRenderer
+     * @return ProductDetailPageRobotsMetaTagSnippetRenderer
      */
     public function createProductDetailPageRobotsMetaTagSnippetRenderer()
     {
@@ -1809,7 +1809,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     }
 
     /**
-     * @return RobotsMetaTagSnippetRenderer
+     * @return ProductListingRobotsMetaTagSnippetRenderer
      */
     public function createProductListingPageRobotsMetaTagSnippetRenderer()
     {
@@ -1842,5 +1842,17 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createRobotsMetaTagSnippetRenderer(SnippetKeyGenerator $snippetKeyGenerator)
     {
         return new RobotsMetaTagSnippetRenderer($snippetKeyGenerator);
+    }
+
+    /**
+     * @return ProductListingCanonicalTagSnippetRenderer
+     */
+    public function createProductListingCanonicalTagSnippetRenderer()
+    {
+        return new ProductListingCanonicalTagSnippetRenderer(
+            $this->getMasterFactory()->createProductListingCanonicalTagSnippetKeyGenerator(),
+            $this->getMasterFactory()->createBaseUrlBuilder(),
+            $this->getMasterFactory()->createContextBuilder()
+        );
     }
 }
