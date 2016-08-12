@@ -28,11 +28,11 @@ class DefaultWebFront extends WebFront
     protected function registerFactories(MasterFactory $masterFactory)
     {
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register($this->getImplementationSpecificFactory());
         $masterFactory->register(new UpdatingProductImportCommandFactory());
         $masterFactory->register(new UpdatingProductImageImportCommandFactory());
         $masterFactory->register(new UpdatingProductListingImportCommandFactory());
         $masterFactory->register(new FrontendFactory($this->getRequest()));
+        $masterFactory->register($this->getImplementationSpecificFactory());
         //$this->enableDebugLogging($masterFactory, $commonFactory, $implementationFactory);
     }
 
