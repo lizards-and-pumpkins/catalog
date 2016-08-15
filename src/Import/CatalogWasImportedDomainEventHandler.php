@@ -2,7 +2,6 @@
 
 namespace LizardsAndPumpkins\Import;
 
-use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 

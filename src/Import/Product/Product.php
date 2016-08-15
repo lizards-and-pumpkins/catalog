@@ -89,4 +89,9 @@ interface Product extends \JsonSerializable
      * @return ProductTaxClass
      */
     public function getTaxClass();
+
+    /**
+     * @return bool
+     */
+    public function isSalable();
 }

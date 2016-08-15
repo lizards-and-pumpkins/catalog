@@ -36,6 +36,7 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
@@ -130,6 +131,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer
@@ -140,6 +142,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer
@@ -196,6 +199,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
  * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
@@ -228,13 +232,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testProductWasUpdatedDomainEventHandlerIsReturned()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz'])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz']),
+            $stubProductAvailability
         );
+
         $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
         $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($testEvent->toMessage());
 
@@ -493,13 +502,19 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubContext->method('getValue')->willReturn('123');
+
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $product = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            $stubContext
+            $stubContext,
+            $stubProductAvailability
         );
+
         $sourceCommand = new UpdateProductCommand($product);
         $result = $this->commonFactory->createUpdateProductCommandHandler($sourceCommand->toMessage());
 

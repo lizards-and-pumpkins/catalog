@@ -14,9 +14,17 @@ class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuild
      */
     private $productXmlToProductBuilderLocatorProxy;
 
-    public function __construct(callable $productXmlToProductBuilderLocatorProxy)
-    {
+    /**
+     * @var ProductAvailability
+     */
+    private $productAvailability;
+
+    public function __construct(
+        callable $productXmlToProductBuilderLocatorProxy,
+        ProductAvailability $productAvailability
+    ) {
         $this->productXmlToProductBuilderLocatorProxy = $productXmlToProductBuilderLocatorProxy;
+        $this->productAvailability = $productAvailability;
     }
     
     /**
@@ -36,7 +44,8 @@ class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuild
         return new ConfigurableProductBuilder(
             $this->createSimpleProductBuilder($parser),
             $this->createVariationAttributeList($parser),
-            $this->createAssociatedProductListBuilder($parser)
+            $this->createAssociatedProductListBuilder($parser),
+            $this->productAvailability
         );
     }
 
@@ -46,7 +55,7 @@ class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuild
      */
     private function createSimpleProductBuilder(XPathParser $parser)
     {
-        $converter = new SimpleProductXmlToProductBuilder();
+        $converter = new SimpleProductXmlToProductBuilder($this->productAvailability);
         return $converter->createProductBuilder($parser);
     }
 

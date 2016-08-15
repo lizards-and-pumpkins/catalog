@@ -24,14 +24,21 @@ class ConfigurableProductBuilder implements ProductBuilder
      */
     private $associatedProductListBuilder;
 
+    /**
+     * @var ProductAvailability
+     */
+    private $productAvailability;
+
     public function __construct(
         SimpleProductBuilder $simpleProductBuilder,
         ProductVariationAttributeList $variationAttributeList,
-        AssociatedProductListBuilder $associatedProductListBuilder
+        AssociatedProductListBuilder $associatedProductListBuilder,
+        ProductAvailability $productAvailability
     ) {
         $this->simpleProductBuilder = $simpleProductBuilder;
         $this->variationAttributeList = $variationAttributeList;
         $this->associatedProductListBuilder = $associatedProductListBuilder;
+        $this->productAvailability = $productAvailability;
     }
 
     /**
@@ -40,9 +47,16 @@ class ConfigurableProductBuilder implements ProductBuilder
      */
     public function getProductForContext(Context $context)
     {
+        /** @var SimpleProduct $simpleProduct */
         $simpleProduct = $this->simpleProductBuilder->getProductForContext($context);
         $associatedProductList = $this->associatedProductListBuilder->getAssociatedProductListForContext($context);
-        return new ConfigurableProduct($simpleProduct, $this->variationAttributeList, $associatedProductList);
+
+        return new ConfigurableProduct(
+            $simpleProduct,
+            $this->variationAttributeList,
+            $associatedProductList,
+            $this->productAvailability
+        );
     }
 
     /**

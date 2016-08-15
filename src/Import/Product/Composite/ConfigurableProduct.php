@@ -5,6 +5,7 @@ namespace LizardsAndPumpkins\Import\Product\Composite;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
@@ -65,15 +66,16 @@ class ConfigurableProduct implements CompositeProduct
 
     /**
      * @param mixed[] $sourceArray
+     * @param ProductAvailability $productAvailability
      * @return ConfigurableProduct
      */
-    public static function fromArray(array $sourceArray)
+    public static function fromArray(array $sourceArray, ProductAvailability $productAvailability)
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
-            SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT]),
+            SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT], $productAvailability),
             ProductVariationAttributeList::fromArray($sourceArray[self::VARIATION_ATTRIBUTES]),
-            AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS])
+            AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS], $productAvailability)
         );
     }
 
@@ -222,5 +224,20 @@ class ConfigurableProduct implements CompositeProduct
     public function getTaxClass()
     {
         return $this->simpleProductDelegate->getTaxClass();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSalable()
+    {
+        foreach ($this->associatedProducts->getProducts() as $product) {
+            /** @var Product $product */
+            if ($product->isSalable()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

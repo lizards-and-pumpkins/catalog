@@ -36,8 +36,13 @@ class ConfigurableProductXmlToProductBuilderTest extends \PHPUnit_Framework_Test
         $stubProductXmlToProductBuilderLocatorProxy = function () {
             return $this->createMock(ProductXmlToProductBuilderLocator::class);
         };
+        
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+        
         $this->configurableProductXmlToProductBuilder = new ConfigurableProductXmlToProductBuilder(
-            $stubProductXmlToProductBuilderLocatorProxy
+            $stubProductXmlToProductBuilderLocatorProxy,
+            $stubProductAvailability
         );
     }
 
@@ -50,12 +55,13 @@ class ConfigurableProductXmlToProductBuilderTest extends \PHPUnit_Framework_Test
 
     public function testItReturnsAConfigurableProductBuilderInstance()
     {
-        $xml = '
+        $xml = <<<EOX
 <product type="configurable" sku="test" tax_class="test">
     <variations>
         <attribute>test</attribute>
     </variations>
-</product>';
+</product>
+EOX;
         $testXPathParser = new XPathParser($xml);
         $builder = $this->configurableProductXmlToProductBuilder->createProductBuilder($testXPathParser);
         $this->assertInstanceOf(ConfigurableProductBuilder::class, $builder);

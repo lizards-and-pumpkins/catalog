@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
 use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;

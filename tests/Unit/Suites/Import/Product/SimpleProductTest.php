@@ -54,6 +54,11 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
      */
     private $stubTaxClass;
 
+    /**
+     * @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductAvailability;
+
     public function setUp()
     {
         $this->stubProductId = $this->createMock(ProductId::class);
@@ -61,12 +66,15 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
         $this->stubProductAttributeList = $this->createMock(ProductAttributeList::class);
         $this->stubContext = $this->createMock(Context::class);
         $this->stubProductImages = $this->createMock(ProductImageList::class);
+        $this->stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $this->product = new SimpleProduct(
             $this->stubProductId,
             $this->stubTaxClass,
             $this->stubProductAttributeList,
             $this->stubProductImages,
-            $this->stubContext
+            $this->stubContext,
+            $this->stubProductAvailability
         );
     }
 
@@ -180,7 +188,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
             'attributes' => [],
             'images' => [],
             'context' => [DataVersion::CONTEXT_CODE => '123']
-        ]);
+        ], $this->stubProductAvailability);
         $this->assertInstanceOf(SimpleProduct::class, $result);
     }
 
@@ -194,7 +202,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
         ];
         $this->expectException(ProductTypeCodeMissingException::class);
         $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY));
-        SimpleProduct::fromArray($allFieldsExceptTypeCode);
+        SimpleProduct::fromArray($allFieldsExceptTypeCode, $this->stubProductAvailability);
     }
 
     /**
@@ -214,7 +222,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
             'attributes' => [],
             'images' => [],
             'context' => []
-        ]);
+        ], $this->stubProductAvailability);
     }
 
     /**
@@ -285,5 +293,17 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheAttributeList()
     {
         $this->assertInstanceOf(ProductAttributeList::class, $this->product->getAttributes());
+    }
+    
+    public function testFalseIsReturnedIfProductIsNotSalable()
+    {
+        $this->stubProductAvailability->method('isProductSalable')->with($this->product)->willReturn(false);
+        $this->assertFalse($this->product->isSalable());
+    }
+
+    public function testTrueIsReturnedIfProductIsSalable()
+    {
+        $this->stubProductAvailability->method('isProductSalable')->with($this->product)->willReturn(true);
+        $this->assertTrue($this->product->isSalable());
     }
 }

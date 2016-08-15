@@ -27,6 +27,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilde
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventBuilder;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommandBuilder;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
@@ -204,6 +207,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     private $websiteContextPartBuilder;
 
     /**
+     * @var ProductAvailability
+     */
+    private $memoizedProductAvailability;
+
+    /**
      * @param Message $event
      * @return DomainEventHandler
      */
@@ -211,7 +219,18 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new ProductWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->createProductProjector()
+            $this->getMasterFactory()->createProductProjector(),
+            $this->getMasterFactory()->createProductWasUpdatedDomainEventBuilder()
+        );
+    }
+
+    /**
+     * @return ProductWasUpdatedDomainEventBuilder
+     */
+    public function createProductWasUpdatedDomainEventBuilder()
+    {
+        return new ProductWasUpdatedDomainEventBuilder(
+            $this->getMasterFactory()->getProductAvailability()
         );
     }
 
@@ -929,7 +948,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createSimpleProductXmlToProductBuilder()
     {
-        return new SimpleProductXmlToProductBuilder();
+        return new SimpleProductXmlToProductBuilder(
+            $this->getMasterFactory()->getProductAvailability()
+        );
     }
 
     /**
@@ -937,9 +958,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     public function createConfigurableProductXmlToProductBuilder()
     {
-        $productTypeBuilderFactoryProxy = $this->getMasterFactory()
-            ->createProductXmlToProductBuilderLocatorProxyFactoryMethod();
-        return new ConfigurableProductXmlToProductBuilder($productTypeBuilderFactoryProxy);
+        return new ConfigurableProductXmlToProductBuilder(
+            $this->getMasterFactory()->createProductXmlToProductBuilderLocatorProxyFactoryMethod(),
+            $this->getMasterFactory()->getProductAvailability()
+        );
     }
 
     /**
@@ -1342,7 +1364,18 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new UpdateProductCommandHandler(
             $message,
-            $this->getMasterFactory()->getEventQueue()
+            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->createUpdateProductCommandBuilder()
+        );
+    }
+
+    /**
+     * @return UpdateProductCommandBuilder
+     */
+    public function createUpdateProductCommandBuilder()
+    {
+        return new UpdateProductCommandBuilder(
+            $this->getMasterFactory()->getProductAvailability()
         );
     }
 
@@ -1842,6 +1875,18 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createRobotsMetaTagSnippetRenderer(SnippetKeyGenerator $snippetKeyGenerator)
     {
         return new RobotsMetaTagSnippetRenderer($snippetKeyGenerator);
+    }
+
+    /**
+     * @return FacetFieldTransformationRegistry
+     */
+    public function getProductAvailability()
+    {
+        if (null === $this->memoizedProductAvailability) {
+            $this->memoizedProductAvailability = $this->callExternalCreateMethod('ProductAvailability');
+        }
+
+        return $this->memoizedProductAvailability;
     }
 
     /**

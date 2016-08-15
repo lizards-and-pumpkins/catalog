@@ -45,26 +45,7 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
      */
     public static function fromMessage(Message $message)
     {
-        if ($message->getName() !== self::CODE) {
-            throw new NoProductWasUpdatedDomainEventMessageException(
-                sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName())
-            );
-        }
-        $productData = json_decode($message->getPayload()['product'], true);
-        return new self(self::rehydrateProduct($productData));
-    }
-
-    /**
-     * @param mixed[] $productData
-     * @return ConfigurableProduct|SimpleProduct
-     */
-    private static function rehydrateProduct(array $productData)
-    {
-        // todo: encapsulate product serialization and rehydration
-        $product = $productData[Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
-            ConfigurableProduct::fromArray($productData) :
-            SimpleProduct::fromArray($productData);
-        return $product;
+        // TODO: Remove from interface
     }
 
     /**
@@ -73,5 +54,37 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
     public function getDataVersion()
     {
         return DataVersion::fromVersionString($this->product->getContext()->getValue(DataVersion::CONTEXT_CODE));
+    }
+
+    /**
+     * @param Message $message
+     * @param ProductAvailability $productAvailability
+     * @return ConfigurableProduct|SimpleProduct
+     */
+    public static function rehydrateProduct(Message $message, ProductAvailability $productAvailability)
+    {
+        // todo: encapsulate product serialization and rehydration
+
+        self::validateMessageType($message);
+
+        $productData = json_decode($message->getPayload()['product'], true);
+
+        if ($productData[Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE) {
+            return ConfigurableProduct::fromArray($productData, $productAvailability);
+        }
+
+        return SimpleProduct::fromArray($productData, $productAvailability);
+    }
+
+    /**
+     * @param Message $message
+     */
+    private static function validateMessageType(Message $message)
+    {
+        if ($message->getName() !== ProductWasUpdatedDomainEvent::CODE) {
+            throw new NoProductWasUpdatedDomainEventMessageException(
+                sprintf('Expected "%s" domain event, got "%s"', ProductWasUpdatedDomainEvent::CODE, $message->getName())
+            );
+        }
     }
 }

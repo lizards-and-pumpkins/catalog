@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductAvailability;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
@@ -50,6 +51,11 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     private $mockAssociatedProductList;
 
     /**
+     * @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubProductAvailability;
+
+    /**
      * @return ConfigurableProduct
      */
     private function createConfigurableProductInstance()
@@ -57,7 +63,8 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         return new ConfigurableProduct(
             $this->mockSimpleProduct,
             $this->mockVariationAttributeList,
-            $this->mockAssociatedProductList
+            $this->mockAssociatedProductList,
+            $this->stubProductAvailability
         );
     }
 
@@ -67,6 +74,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $this->mockVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
         $this->mockVariationAttributeList->method('getAttributes')->willReturn(['attribute_1', 'attribute_2']);
         $this->mockAssociatedProductList = $this->createMock(AssociatedProductList::class);
+        $this->stubProductAvailability = $this->createMock(ProductAvailability::class);
         $this->configurableProduct = $this->createConfigurableProductInstance();
     }
 
@@ -147,7 +155,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
                 'product_php_classes' => [],
                 'products' => []
             ]
-        ]);
+        ], $this->stubProductAvailability);
         $this->assertInstanceOf(ConfigurableProduct::class, $result);
     }
 
@@ -160,7 +168,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         ];
         $this->expectException(ProductTypeCodeMissingException::class);
         $this->expectExceptionMessage(sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY));
-        ConfigurableProduct::fromArray($allFieldsExceptTypeCode);
+        ConfigurableProduct::fromArray($allFieldsExceptTypeCode, $this->stubProductAvailability);
     }
 
     /**
@@ -179,7 +187,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
             ConfigurableProduct::SIMPLE_PRODUCT => [],
             ConfigurableProduct::VARIATION_ATTRIBUTES => [],
             ConfigurableProduct::ASSOCIATED_PRODUCTS => []
-        ]);
+        ], $this->stubProductAvailability);
     }
 
     /**
@@ -293,5 +301,27 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockSimpleProduct->method('getTaxClass')->willReturn('test');
         $this->assertSame('test', $this->configurableProduct->getTaxClass());
+    }
+    
+    public function testFalseIsReturnedIfNoneOfAssociatedProductsIsSalable()
+    {
+        $stubProduct = $this->createMock(Product::class);
+        $stubProduct->method('isSalable')->willReturn(false);
+
+        $this->mockAssociatedProductList->method('getProducts')->willReturn([$stubProduct]);
+        
+        $this->assertFalse($this->configurableProduct->isSalable());
+    }
+    public function testTrueIsReturnedIfAnyOfAssociatedProductsIsSalable()
+    {
+        $stubProductA = $this->createMock(Product::class);
+        $stubProductA->method('isSalable')->willReturn(false);
+
+        $stubProductB = $this->createMock(Product::class);
+        $stubProductB->method('isSalable')->willReturn(true);
+
+        $this->mockAssociatedProductList->method('getProducts')->willReturn([$stubProductA, $stubProductB]);
+
+        $this->assertTrue($this->configurableProduct->isSalable());
     }
 }

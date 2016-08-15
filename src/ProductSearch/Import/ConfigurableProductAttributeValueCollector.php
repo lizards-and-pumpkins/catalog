@@ -52,12 +52,13 @@ class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCo
      */
     private function getValuesFromAssociatedProducts(ConfigurableProduct $product, AttributeCode $attributeCode)
     {
-        return array_reduce(
-            $product->getAssociatedProducts()->getProducts(),
-            function (array $carry, Product $associatedProduct) use ($attributeCode) {
-                return array_merge($carry, $this->getValues($associatedProduct, $attributeCode));
-            },
-            []
-        );
+        $products = $product->getAssociatedProducts()->getProducts();
+        
+        return array_reduce($products, function (array $carry, Product $associatedProduct) use ($attributeCode) {
+            if (!$associatedProduct->isSalable()) {
+                return $carry;
+            }
+            return array_merge($carry, $this->getValues($associatedProduct, $attributeCode));
+        }, []);
     }
 }

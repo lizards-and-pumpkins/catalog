@@ -10,8 +10,11 @@ use LizardsAndPumpkins\Context\IntegrationTestContextSource;
 use LizardsAndPumpkins\Context\Locale\IntegrationTestContextLocale;
 use LizardsAndPumpkins\Context\Website\IntegrationTestContextWebsite;
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
+use LizardsAndPumpkins\Import\Product\InStockOrBackorderableProductAvailability;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
@@ -516,7 +519,18 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
      */
     public function createGlobalProductListingCriteria()
     {
-        return SearchCriterionGreaterThan::create('stock_qty', 0);
+        return CompositeSearchCriterion::createOr(
+            SearchCriterionGreaterThan::create('stock_qty', 0),
+            SearchCriterionEqual::create('backorders', 'true')
+        );
+    }
+
+    /**
+     * @return InStockOrBackorderableProductAvailability
+     */
+    public function createProductAvailability()
+    {
+        return new InStockOrBackorderableProductAvailability();
     }
 
     /**

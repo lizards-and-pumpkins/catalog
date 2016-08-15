@@ -29,16 +29,23 @@ class SimpleProductBuilder implements ProductBuilder
      */
     private $taxClass;
 
+    /**
+     * @var ProductAvailability
+     */
+    private $productAvailability;
+
     public function __construct(
         ProductId $id,
         ProductTaxClass $taxClass,
         ProductAttributeListBuilder $attributeListBuilder,
-        ProductImageListBuilder $imageListBuilder
+        ProductImageListBuilder $imageListBuilder,
+        ProductAvailability $productAvailability
     ) {
         $this->id = $id;
         $this->attributeListBuilder = $attributeListBuilder;
         $this->imageListBuilder = $imageListBuilder;
         $this->taxClass = $taxClass;
+        $this->productAvailability = $productAvailability;
     }
 
     /**
@@ -60,7 +67,15 @@ class SimpleProductBuilder implements ProductBuilder
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
         $attributesWithProperTypes = $this->ensureAttributeTypes($sourceAttributeList);
         $images = $this->imageListBuilder->getImageListForContext($context);
-        return new SimpleProduct($this->id, $this->taxClass, $attributesWithProperTypes, $images, $context);
+        
+        return new SimpleProduct(
+            $this->id,
+            $this->taxClass,
+            $attributesWithProperTypes,
+            $images,
+            $context,
+            $this->productAvailability
+        );
     }
 
     /**

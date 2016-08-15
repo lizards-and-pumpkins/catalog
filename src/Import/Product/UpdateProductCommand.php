@@ -47,35 +47,7 @@ class UpdateProductCommand implements Command
      */
     public static function fromMessage(Message $message)
     {
-        if ($message->getName() !== 'update_product') {
-            throw self::createInvalidMessageException($message->getName());
-        }
-        
-        $product = self::rehydrateProduct(json_decode($message->getPayload()['product'], true));
-        return new self($product);
-    }
-
-    /**
-     * @param string $messageName
-     * @return NoUpdateProductCommandMessageException
-     */
-    private static function createInvalidMessageException($messageName)
-    {
-        $message = sprintf('Unable to rehydrate from "%s" queue message, expected "%s"', $messageName, self::CODE);
-        return new NoUpdateProductCommandMessageException($message);
-    }
-
-    /**
-     * @param mixed[] $productData
-     * @return ConfigurableProduct|SimpleProduct
-     */
-    private static function rehydrateProduct(array $productData)
-    {
-        // todo: encapsulate product serialization and rehydration
-        $product = $productData[Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE ?
-            ConfigurableProduct::fromArray($productData) :
-            SimpleProduct::fromArray($productData);
-        return $product;
+        // TODO: Remove from interface
     }
 
     /**
@@ -84,5 +56,39 @@ class UpdateProductCommand implements Command
     public function getDataVersion()
     {
         return DataVersion::fromVersionString($this->product->getContext()->getValue(DataVersion::CONTEXT_CODE));
+    }
+
+    /**
+     * @param Message $message
+     * @param ProductAvailability $productAvailability
+     * @return ConfigurableProduct|SimpleProduct
+     */
+    public static function rehydrateProduct(Message $message, ProductAvailability $productAvailability)
+    {
+        // TODO: encapsulate product serialization and rehydration
+
+        self::validateMessageType($message);
+
+        $productData = json_decode($message->getPayload()['product'], true);
+
+        if ($productData[Product::TYPE_KEY] === ConfigurableProduct::TYPE_CODE) {
+            return ConfigurableProduct::fromArray($productData, $productAvailability);
+        }
+
+        return SimpleProduct::fromArray($productData, $productAvailability);
+    }
+
+    /**
+     * @param Message $message
+     */
+    private static function validateMessageType(Message $message)
+    {
+        if ($message->getName() !== 'update_product') {
+            throw new NoUpdateProductCommandMessageException(sprintf(
+                'Unable to rehydrate from "%s" queue message, expected "%s"',
+                $message->getName(),
+                UpdateProductCommand::CODE
+            ));
+        }
     }
 }

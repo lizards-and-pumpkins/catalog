@@ -3,7 +3,6 @@
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CommandQueue
 {

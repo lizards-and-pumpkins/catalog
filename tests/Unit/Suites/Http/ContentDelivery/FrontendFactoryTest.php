@@ -107,6 +107,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
  * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {

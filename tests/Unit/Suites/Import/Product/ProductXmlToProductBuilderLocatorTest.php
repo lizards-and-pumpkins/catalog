@@ -134,9 +134,16 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         $productXmlToProductBuilderLocatorProxy = function () {
             return $this->createProductXmlToProductBuilderLocatorInstance();
         };
+
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         return new ProductXmlToProductBuilderLocator(
-            new SimpleProductXmlToProductBuilder(),
-            new ConfigurableProductXmlToProductBuilder($productXmlToProductBuilderLocatorProxy)
+            new SimpleProductXmlToProductBuilder($stubProductAvailability),
+            new ConfigurableProductXmlToProductBuilder(
+                $productXmlToProductBuilderLocatorProxy,
+                $stubProductAvailability
+            )
         );
     }
 

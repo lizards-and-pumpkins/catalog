@@ -11,6 +11,16 @@ use LizardsAndPumpkins\Import\XPathParser;
 class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
 {
     /**
+     * @var ProductAvailability
+     */
+    private $productAvailability;
+
+    public function __construct(ProductAvailability $productAvailability)
+    {
+        $this->productAvailability = $productAvailability;
+    }
+
+    /**
      * @return ProductTypeCode
      */
     public function getSupportedProductTypeCode()
@@ -28,7 +38,13 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
         $taxClass = ProductTaxClass::fromString($this->getTaxClassFromXml($parser));
         $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
         $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
-        return new SimpleProductBuilder($productId, $taxClass, $attributeListBuilder, $imageListBuilder);
+        return new SimpleProductBuilder(
+            $productId,
+            $taxClass,
+            $attributeListBuilder,
+            $imageListBuilder,
+            $this->productAvailability
+        );
     }
 
     /**

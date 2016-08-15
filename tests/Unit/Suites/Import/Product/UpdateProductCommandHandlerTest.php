@@ -47,19 +47,31 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+        
         $this->testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz'])
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz']),
+            $stubProductAvailability
         );
         
         $testCommand = new UpdateProductCommand($this->testProduct);
 
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
-        $this->commandHandler = new UpdateProductCommandHandler($testCommand->toMessage(), $this->mockDomainEventQueue);
+        /** @var UpdateProductCommandBuilder|\PHPUnit_Framework_MockObject_MockObject $stubCommandBuilder */
+        $stubCommandBuilder = $this->createMock(UpdateProductCommandBuilder::class);
+        $stubCommandBuilder->method('fromMessage')->willReturn($testCommand);
+
+        $this->commandHandler = new UpdateProductCommandHandler(
+            $testCommand->toMessage(),
+            $this->mockDomainEventQueue,
+            $stubCommandBuilder
+        );
     }
 
     public function testCommandHandlerInterfaceIsImplemented()

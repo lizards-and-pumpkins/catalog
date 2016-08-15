@@ -2,8 +2,8 @@
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
@@ -38,27 +38,18 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
-    /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubContext()
-    {
-        $stubContext = $this->createMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
-        $stubContext->method('getValue')->willReturnMap([
-            [DataVersion::CONTEXT_CODE, '123'],
-        ]);
-        return $stubContext;
-    }
-
     protected function setUp()
     {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubProductAvailability */
+        $stubProductAvailability = $this->createMock(ProductAvailability::class);
+
         $this->testProduct = new SimpleProduct(
             ProductId::fromString('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            $this->createStubContext()
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
+            $stubProductAvailability
         );
 
         $this->command = new UpdateProductCommand($this->testProduct);
@@ -97,28 +88,45 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('123', (string)$message->getMetadata()['data_version']);
     }
 
-    public function testCanBeRehydratedFromUpdateProductCommandMessage()
-    {
-        $message = $this->command->toMessage();
-        $rehydratedCommand = UpdateProductCommand::fromMessage($message);
-        $this->assertEquals($this->testProduct->getId(), $rehydratedCommand->getProduct()->getId());
-    }
-
-    public function testThrowsExceptionIfMessageNameNotMatches()
-    {
-        $this->expectException(NoUpdateProductCommandMessageException::class);
-        $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "update_product"');
-
-        $message = Message::withCurrentTime('foo', [], []);
-
-        UpdateProductCommand::fromMessage($message);
-    }
-
     public function testReturnsTheDataVersion()
     {
         $expectedVersion = $this->testProduct->getContext()->getValue(DataVersion::CONTEXT_CODE);
         $dataVersion = $this->command->getDataVersion();
         $this->assertInstanceOf(DataVersion::class, $dataVersion);
         $this->assertSame($expectedVersion, (string)$dataVersion);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToRehydrateProductFromWrongMessageType()
+    {
+        $this->expectException(NoUpdateProductCommandMessageException::class);
+        $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "update_product"');
+
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+        $testMessage = Message::withCurrentTime('foo', [], []);
+
+        UpdateProductCommand::rehydrateProduct($testMessage, $stubAvailability);
+    }
+
+    public function testCommandCanBeRehydratedFromUpdateProductCommandMessage()
+    {
+        /** @var ProductAvailability|\PHPUnit_Framework_MockObject_MockObject $stubAvailability */
+        $stubAvailability = $this->createMock(ProductAvailability::class);
+
+        $testProduct = new SimpleProduct(
+            ProductId::fromString('foo'),
+            ProductTaxClass::fromString('bar'),
+            new ProductAttributeList(),
+            new ProductImageList(),
+            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => '123']),
+            $stubAvailability
+        );
+
+        $testCommand = new UpdateProductCommand($testProduct);
+        $testMessage = $testCommand->toMessage();
+
+        $result = UpdateProductCommand::rehydrateProduct($testMessage, $stubAvailability);
+        
+        $this->assertEquals($testProduct->getId(), $result->getId());
     }
 }

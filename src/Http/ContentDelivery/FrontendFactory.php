@@ -564,7 +564,8 @@ class FrontendFactory implements Factory
         return new SameSeriesProductRelations(
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createContext()
+            $this->getMasterFactory()->createContext(),
+            $this->getMasterFactory()->createGlobalProductListingCriteria()
         );
     }
 
