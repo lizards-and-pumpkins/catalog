@@ -67,7 +67,7 @@ class ProductListingPageRequest
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         return array_reduce($facetFilterAttributeCodeStrings, function (array $carry, $filterName) use ($request) {
             $queryParameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($filterName);
-            $carry[$filterName] = $this->getFilterValues($request, $queryParameterName);
+            $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($queryParameterName)));
             return $carry;
         }, []);
     }
@@ -218,23 +218,5 @@ class ProductListingPageRequest
         }
 
         return false;
-    }
-
-    /**
-     * @param HttpRequest $request
-     * @param string $queryParameterName
-     * @return string[]
-     */
-    private function getFilterValues(HttpRequest $request, $queryParameterName)
-    {
-        $valuesString = $request->getQueryParameter($queryParameterName);
-
-        return array_reduce(preg_split('/(?<!,),(?!,)/', $valuesString), function(array $carry, $value) {
-            if ('' === $value) {
-                return $carry;
-            }
-
-            return array_merge($carry, [preg_replace('/,,/', ',', $value)]);
-        }, []);
     }
 }
