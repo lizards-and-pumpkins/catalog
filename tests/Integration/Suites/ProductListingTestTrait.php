@@ -16,6 +16,7 @@ use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
@@ -115,8 +116,9 @@ trait ProductListingTestTrait
      */
     private function createIntegrationTestMasterFactoryForRequest(HttpRequest $request)
     {
-        $masterFactory = new SampleMasterFactory;
-        $masterFactory->register(new CommonFactory);
+        $masterFactory = new SampleMasterFactory();
+        $masterFactory->register(new CommonFactory());
+        $masterFactory->register(new RestApiFactory());
         $masterFactory->register($this->createIntegrationTestFactory($masterFactory));
         $masterFactory->register(new FrontendFactory($request));
         $masterFactory->register(new UpdatingProductImportCommandFactory());
