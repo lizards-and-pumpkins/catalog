@@ -1,12 +1,12 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations; // TODO: Rename namespace into ProductRelations
+namespace LizardsAndPumpkins\ProductRelations;
 
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;

@@ -1,10 +1,10 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
+namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\Exception\InvalidProductRelationTypeException;
-use LizardsAndPumpkins\ProductRecommendations\Exception\UnknownProductRelationTypeException;
-use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
+use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeException;
+use LizardsAndPumpkins\ProductRelations\Exception\UnknownProductRelationTypeException;
+use LizardsAndPumpkins\ProductRelations\ProductRelations;
 
 class ProductRelationsLocator
 {

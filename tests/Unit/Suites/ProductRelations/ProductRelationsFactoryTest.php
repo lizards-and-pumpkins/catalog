@@ -1,13 +1,13 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations;
+namespace LizardsAndPumpkins\ProductRelations;
 
 use LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
@@ -18,7 +18,7 @@ use LizardsAndPumpkins\Util\Factory\RegistersDelegateFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
- * @covers \LizardsAndPumpkins\ProductRecommendations\ProductRelationsFactory
+ * @covers \LizardsAndPumpkins\ProductRelations\ProductRelationsFactory
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
@@ -28,11 +28,11 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelations
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory

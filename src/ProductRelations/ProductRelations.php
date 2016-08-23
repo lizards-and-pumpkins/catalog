@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations;
+namespace LizardsAndPumpkins\ProductRelations;
 
 use LizardsAndPumpkins\Import\Product\ProductId;
 

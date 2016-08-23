@@ -1,14 +1,14 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
+namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
+use LizardsAndPumpkins\ProductRelations\ProductRelations;
 
 /**
- * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService
+ * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService
  */
 class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
 {

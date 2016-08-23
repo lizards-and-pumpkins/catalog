@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\ProductRecommendations\ProductRelationsFactory;
+use LizardsAndPumpkins\ProductRelations\ProductRelationsFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
