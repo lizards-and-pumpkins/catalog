@@ -8,10 +8,12 @@ use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsAp
 use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
 use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
+use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\RegistersDelegateFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
@@ -92,5 +94,22 @@ class ProductRelationsFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->factory->createSameSeriesProductRelations();
         $this->assertInstanceOf(SameSeriesProductRelations::class, $result);
+    }
+
+    public function testProductRelationsApiEndpointIsRegistered()
+    {
+        $endpointKey = 'get_products';
+        $apiVersion = 1;
+
+        $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
+        $mockApiRequestHandlerLocator->expects($this->once())->method('register')
+            ->with($endpointKey, $apiVersion, $this->isInstanceOf(ProductRelationsApiV1GetRequestHandler::class));
+
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
+            ['register', 'getApiRequestHandlerLocator']
+        )->getMock();
+        $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
+
+        $this->factory->registerDelegateFactories($stubMasterFactory);
     }
 }
