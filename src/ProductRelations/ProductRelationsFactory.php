@@ -11,9 +11,9 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\RegistersDelegateFactory;
+use LizardsAndPumpkins\Util\Factory\CallbackFactory;
 
-class ProductRelationsFactory implements Factory, RegistersDelegateFactory
+class ProductRelationsFactory implements Factory, CallbackFactory
 {
     use FactoryTrait;
 
@@ -64,7 +64,7 @@ class ProductRelationsFactory implements Factory, RegistersDelegateFactory
         );
     }
 
-    public function registerDelegateFactories(MasterFactory $masterFactory)
+    public function factoryRegistrationCallback(MasterFactory $masterFactory)
     {
         $apiVersion = 1;
 

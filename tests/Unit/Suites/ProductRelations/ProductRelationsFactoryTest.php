@@ -14,7 +14,7 @@ use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\RegistersDelegateFactory;
+use LizardsAndPumpkins\Util\Factory\CallbackFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
@@ -67,9 +67,9 @@ class ProductRelationsFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testRegistersDelegateFactoryInterfaceIsImplemented()
+    public function testCallbackFactoryInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(RegistersDelegateFactory::class, $this->factory);
+        $this->assertInstanceOf(CallbackFactory::class, $this->factory);
     }
 
     public function testItCreatesProductRelationsApiV1GetRequestHandler()
@@ -110,6 +110,6 @@ class ProductRelationsFactoryTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
 
-        $this->factory->registerDelegateFactories($stubMasterFactory);
+        $this->factory->factoryRegistrationCallback($stubMasterFactory);
     }
 }

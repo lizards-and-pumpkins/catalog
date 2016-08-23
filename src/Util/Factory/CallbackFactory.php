@@ -2,11 +2,11 @@
 
 namespace LizardsAndPumpkins\Util\Factory;
 
-interface RegistersDelegateFactory
+interface CallbackFactory
 {
     /**
      * @param MasterFactory $masterFactory
      * @return void
      */
-    public function registerDelegateFactories(MasterFactory $masterFactory);
+    public function factoryRegistrationCallback(MasterFactory $masterFactory);
 }

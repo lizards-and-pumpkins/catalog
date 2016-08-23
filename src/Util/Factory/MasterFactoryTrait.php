@@ -29,8 +29,8 @@ trait MasterFactoryTrait
 
         $factory->setMasterFactory($this);
         
-        if ($factory instanceof RegistersDelegateFactory) {
-            $factory->registerDelegateFactories($this);
+        if ($factory instanceof CallbackFactory) {
+            $factory->factoryRegistrationCallback($this);
         }
     }
 
