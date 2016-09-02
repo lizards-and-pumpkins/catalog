@@ -14,7 +14,7 @@ use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\CallbackFactory;
+use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
@@ -67,9 +67,9 @@ class ProductRelationsFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testCallbackFactoryInterfaceIsImplemented()
+    public function testFactoryWithCallbackInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(CallbackFactory::class, $this->factory);
+        $this->assertInstanceOf(FactoryWithCallback::class, $this->factory);
     }
 
     public function testItCreatesProductRelationsApiV1GetRequestHandler()

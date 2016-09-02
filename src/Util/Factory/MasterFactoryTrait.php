@@ -29,7 +29,7 @@ trait MasterFactoryTrait
 
         $factory->setMasterFactory($this);
         
-        if ($factory instanceof CallbackFactory) {
+        if ($factory instanceof FactoryWithCallback) {
             $factory->factoryRegistrationCallback($this);
         }
     }

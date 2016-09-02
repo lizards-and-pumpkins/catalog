@@ -10,10 +10,10 @@ use LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelatio
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\CallbackFactory;
 
-class ProductRelationsFactory implements Factory, CallbackFactory
+class ProductRelationsFactory implements Factory, FactoryWithCallback
 {
     use FactoryTrait;
 

@@ -2,7 +2,7 @@
 
 namespace LizardsAndPumpkins\Util\Factory;
 
-interface CallbackFactory
+interface FactoryWithCallback
 {
     /**
      * @param MasterFactory $masterFactory
