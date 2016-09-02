@@ -15,6 +15,8 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
+use LizardsAndPumpkins\ProductRelations\ProductRelationsFactory;
+use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
@@ -54,6 +56,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $factory->register(new FrontendFactory($request));
+        $factory->register(new ProductRelationsFactory());
         return $factory;
     }
     
@@ -64,6 +67,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
+        $factory->register(new RestApiFactory());
         $factory->register(new UpdatingProductImportCommandFactory());
         $factory->register(new NullProductImageImportCommandFactory());
         $factory->register(new UpdatingProductListingImportCommandFactory());

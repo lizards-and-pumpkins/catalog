@@ -1,14 +1,14 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
+namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\Exception\InvalidProductRelationTypeException;
-use LizardsAndPumpkins\ProductRecommendations\Exception\UnknownProductRelationTypeException;
-use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
+use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeException;
+use LizardsAndPumpkins\ProductRelations\Exception\UnknownProductRelationTypeException;
+use LizardsAndPumpkins\ProductRelations\ProductRelations;
 
 /**
- * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
+ * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
  */
 class ProductRelationsLocatorTest extends \PHPUnit_Framework_TestCase
 {

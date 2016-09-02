@@ -217,7 +217,7 @@ EOT;
      */
     private function createMockCallbackExpectingXml($expectedXml, $expectedCallCount, $callbackIdentifier)
     {
-        $mockCallback = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
+        $mockCallback = $this->getMockBuilder(\stdClass::class)->setMethods(['__invoke'])->getMock();
         $expected = new \DOMDocument();
         $expected->loadXML($expectedXml);
         $mockCallback->expects($this->exactly($expectedCallCount))->method('__invoke')->willReturnCallback(
@@ -356,7 +356,7 @@ EOT;
         $instance = CatalogXmlParser::fromXml($xml, $this->mockLogger);
 
         /** @var callable|\PHPUnit_Framework_MockObject_MockObject $listingCallback */
-        $listingCallback = $this->getMockBuilder(Callback::class)->setMethods(['__invoke'])->getMock();
+        $listingCallback = $this->getMockBuilder(\stdClass::class)->setMethods(['__invoke'])->getMock();
         $listingCallback->expects($this->once())->method('__invoke')->willThrowException(new \Exception('Test dummy'));
 
         $instance->registerListingCallback($listingCallback);

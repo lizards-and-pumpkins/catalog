@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
+namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;

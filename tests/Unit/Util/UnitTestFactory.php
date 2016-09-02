@@ -31,6 +31,7 @@ use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
@@ -444,5 +445,13 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     public function createWebsiteContextPartBuilder()
     {
         return $this->createMock(ContextPartBuilder::class);
+    }
+
+    /**
+     * @return ApiRouter
+     */
+    public function createApiRouter()
+    {
+        return $this->createMock(ApiRouter::class);
     }
 }

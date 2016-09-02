@@ -2,20 +2,12 @@
 
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
-use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\RestApi\ApiRouter;
-use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchAutosuggestionRequestHandler;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
@@ -28,7 +20,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
-use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
@@ -45,12 +36,10 @@ use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnipp
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
@@ -72,97 +61,6 @@ class FrontendFactory implements Factory
      * @var SnippetKeyGeneratorLocator
      */
     private $snippetKeyGeneratorLocator;
-
-    /**
-     * @return ApiRouter
-     */
-    public function createApiRouter()
-    {
-        $requestHandlerLocator = new ApiRequestHandlerLocator();
-        $this->registerApiRequestHandlers($requestHandlerLocator);
-
-        return new ApiRouter($requestHandlerLocator);
-    }
-
-    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
-    {
-        $this->registerApiV1RequestHandlers($requestHandlerLocator);
-    }
-
-    private function registerApiV1RequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
-    {
-        $version = 1;
-
-        $requestHandlerLocator->register(
-            'put_catalog_import',
-            $version,
-            $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
-        );
-
-        $requestHandlerLocator->register(
-            'put_content_blocks',
-            $version,
-            $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
-        );
-
-        $requestHandlerLocator->register(
-            'put_templates',
-            $version,
-            $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
-        );
-
-        $requestHandlerLocator->register(
-            'get_products',
-            $version,
-            $this->getMasterFactory()->createProductRelationsApiV1GetRequestHandler()
-        );
-    }
-
-    /**
-     * @return CatalogImportApiV1PutRequestHandler
-     */
-    public function createCatalogImportApiV1PutRequestHandler()
-    {
-        return CatalogImportApiV1PutRequestHandler::create(
-            $this->getMasterFactory()->createCatalogImport(),
-            $this->getCatalogImportDirectoryConfig(),
-            $this->getMasterFactory()->getLogger()
-        );
-    }
-
-    /**
-     * @return ContentBlocksApiV1PutRequestHandler
-     */
-    public function createContentBlocksApiV1PutRequestHandler()
-    {
-        return new ContentBlocksApiV1PutRequestHandler(
-            $this->getMasterFactory()->getCommandQueue()
-        );
-    }
-
-    /**
-     * @return TemplatesApiV1PutRequestHandler
-     */
-    public function createTemplatesApiV1PutRequestHandler()
-    {
-        return new TemplatesApiV1PutRequestHandler(
-            $this->getMasterFactory()->getEventQueue()
-        );
-    }
-
-    /**
-     * @return string
-     */
-    private function getCatalogImportDirectoryConfig()
-    {
-        /** @var ConfigReader $configReader */
-        $configReader = $this->getMasterFactory()->createConfigReader();
-        $catalogImportDirectory = $configReader->get('catalog_import_directory');
-
-        return null === $catalogImportDirectory ?
-            __DIR__ . '/../../../tests/shared-fixture' :
-            $catalogImportDirectory;
-    }
 
     /**
      * @return HttpRouter
@@ -542,53 +440,6 @@ class FrontendFactory implements Factory
     public function createProductJsonSnippetTransformation()
     {
         return new ProductJsonSnippetTransformation($this->getMasterFactory()->createEnrichProductJsonWithPrices());
-    }
-
-    /**
-     * @return ProductRelationsService
-     */
-    public function createProductRelationsService()
-    {
-        return new ProductRelationsService(
-            $this->getMasterFactory()->createProductRelationsLocator(),
-            $this->getMasterFactory()->createProductJsonService(),
-            $this->getMasterFactory()->createContext()
-        );
-    }
-
-    /**
-     * @return SameSeriesProductRelations
-     */
-    public function createSameSeriesProductRelations()
-    {
-        return new SameSeriesProductRelations(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createContext()
-        );
-    }
-
-    /**
-     * @return ProductRelationsLocator
-     */
-    public function createProductRelationsLocator()
-    {
-        $productRelationsLocator = new ProductRelationsLocator();
-        $productRelationsLocator->register(
-            ProductRelationTypeCode::fromString('related-models'),
-            [$this->getMasterFactory(), 'createSameSeriesProductRelations']
-        );
-        return $productRelationsLocator;
-    }
-
-    /**
-     * @return ProductRelationsApiV1GetRequestHandler
-     */
-    public function createProductRelationsApiV1GetRequestHandler()
-    {
-        return new ProductRelationsApiV1GetRequestHandler(
-            $this->getMasterFactory()->createProductRelationsService()
-        );
     }
 
     /**

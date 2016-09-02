@@ -15,10 +15,8 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
-use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
@@ -31,15 +29,10 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
@@ -64,20 +57,13 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsService
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsLocator
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations
- * @uses   \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
@@ -90,8 +76,6 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
- * @uses   \LizardsAndPumpkins\RestApi\ApiRouter
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
@@ -130,24 +114,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->frontendFactory = new FrontendFactory($request);
         $masterFactory->register($this->frontendFactory);
-    }
-
-    public function testCatalogImportApiRequestHandlerIsReturned()
-    {
-        $result = $this->frontendFactory->createCatalogImportApiV1PutRequestHandler();
-        $this->assertInstanceOf(CatalogImportApiV1PutRequestHandler::class, $result);
-    }
-
-    public function testContentBlocksApiRequestHandlerIsReturned()
-    {
-        $result = $this->frontendFactory->createContentBlocksApiV1PutRequestHandler();
-        $this->assertInstanceOf(ContentBlocksApiV1PutRequestHandler::class, $result);
-    }
-
-    public function testApiRouterIsReturned()
-    {
-        $result = $this->frontendFactory->createApiRouter();
-        $this->assertInstanceOf(ApiRouter::class, $result);
     }
 
     public function testProductDetailViewRouterIsReturned()
@@ -252,30 +218,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingRobotsMetaTagSnippetRenderer::CODE],
             [ProductDetailPageRobotsMetaTagSnippetRenderer::CODE],
         ];
-    }
-
-    public function testItReturnsAProductRelationsService()
-    {
-        $result = $this->frontendFactory->createProductRelationsService();
-        $this->assertInstanceOf(ProductRelationsService::class, $result);
-    }
-
-    public function testItReturnsAProductRelationsLocator()
-    {
-        $result = $this->frontendFactory->createProductRelationsLocator();
-        $this->assertInstanceOf(ProductRelationsLocator::class, $result);
-    }
-
-    public function testItCreatesProductRelationsApiV1GetRequestHandler()
-    {
-        $result = $this->frontendFactory->createProductRelationsApiV1GetRequestHandler();
-        $this->assertInstanceOf(ProductRelationsApiV1GetRequestHandler::class, $result);
-    }
-
-    public function testItReturnsSameSeriesProductRelations()
-    {
-        $result = $this->frontendFactory->createSameSeriesProductRelations();
-        $this->assertInstanceOf(SameSeriesProductRelations::class, $result);
     }
 
     public function testItReturnsAProductJsonService()

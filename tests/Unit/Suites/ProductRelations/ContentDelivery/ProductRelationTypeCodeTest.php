@@ -1,11 +1,11 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
+namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\Exception\InvalidProductRelationTypeCodeException;
+use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeCodeException;
 
 /**
- * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\ProductRelationTypeCode
+ * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
  */
 class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
 {

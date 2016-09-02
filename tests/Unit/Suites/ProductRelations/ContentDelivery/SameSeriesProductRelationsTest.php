@@ -1,8 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations\ContentDelivery;
+namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
-use LizardsAndPumpkins\ProductRecommendations\ProductRelations;
+use LizardsAndPumpkins\ProductRelations\ProductRelations;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 /**
- * @covers \LizardsAndPumpkins\ProductRecommendations\ContentDelivery\SameSeriesProductRelations
+ * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelations
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion

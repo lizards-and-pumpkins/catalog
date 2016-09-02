@@ -1,6 +1,6 @@
 <?php
 
-namespace LizardsAndPumpkins\ProductRecommendations\Exception;
+namespace LizardsAndPumpkins\ProductRelations\Exception;
 
 class UnknownProductRelationTypeException extends \OutOfBoundsException
 {
