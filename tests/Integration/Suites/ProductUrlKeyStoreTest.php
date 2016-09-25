@@ -15,10 +15,7 @@ class ProductUrlKeyStoreTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    /**
-     * @param string $importFileName
-     */
-    private function importCatalog($importFileName)
+    private function importCatalog(string $importFileName)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([

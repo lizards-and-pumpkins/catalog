@@ -12,7 +12,7 @@ class IntegrationTestContextWebsite implements ContextPartBuilder
      * @param mixed[] $inputDataSet
      * @return string
      */
-    public function getValue(array $inputDataSet)
+    public function getValue(array $inputDataSet) : string
     {
         if (isset($inputDataSet[Website::CONTEXT_CODE])) {
             return (string) $inputDataSet[Website::CONTEXT_CODE];
@@ -21,10 +21,7 @@ class IntegrationTestContextWebsite implements ContextPartBuilder
         return $this->defaultWebsiteCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode() : string
     {
         return Website::CONTEXT_CODE;
     }

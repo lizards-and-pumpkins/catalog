@@ -28,19 +28,14 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
      */
     private $facetFieldTransformationRegistry;
 
-    /**
-     * @param string[] $searchableFields
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
-     */
     public function __construct(
-        array $searchableFields,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        FacetFieldTransformationRegistry $facetFieldTransformationRegistry
+        FacetFieldTransformationRegistry $facetFieldTransformationRegistry,
+        string ...$searchableFields
     ) {
-        $this->searchableFields = $searchableFields;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
+        $this->searchableFields = $searchableFields;
     }
 
     public function addDocument(SearchDocument $searchDocument)
@@ -51,7 +46,7 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     /**
      * @return SearchDocument[]
      */
-    final protected function getSearchDocuments()
+    final protected function getSearchDocuments() : array
     {
         return $this->index;
     }
@@ -61,18 +56,12 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
         $this->index = [];
     }
 
-    /**
-     * @return SearchCriteriaBuilder
-     */
-    final protected function getSearchCriteriaBuilder()
+    final protected function getSearchCriteriaBuilder() : SearchCriteriaBuilder
     {
         return $this->searchCriteriaBuilder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    final protected function getFacetFieldTransformationRegistry()
+    final protected function getFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry
     {
         return $this->facetFieldTransformationRegistry;
     }
@@ -80,7 +69,7 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     /**
      * @return string[]
      */
-    final protected function getSearchableFields()
+    final protected function getSearchableFields() : array
     {
         return $this->searchableFields;
     }

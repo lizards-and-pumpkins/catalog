@@ -62,10 +62,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
         $this->factory->createDomainEventConsumer()->process();
     }
 
-    /**
-     * @return ProductSearchAutosuggestionRequestHandler
-     */
-    private function getProductSearchAutosuggestionRequestHandler()
+    private function getProductSearchAutosuggestionRequestHandler() : ProductSearchAutosuggestionRequestHandler
     {
         $dataPoolReader = $this->factory->createDataPoolReader();
         $pageBuilder = new PageBuilder(

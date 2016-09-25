@@ -40,12 +40,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilde
  */
 class InMemorySearchEngineTest extends AbstractSearchEngineTest
 {
-    /**
-     * {@inheritdoc}
-     */
     final protected function createSearchEngineInstance(
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
-    ) {
+    ) : SearchEngine {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
         $stubGlobalProductListingCriteria = $this->createMock(SearchCriteria::class);
         $stubGlobalProductListingCriteria->method('matches')->willReturn(true);
@@ -58,9 +55,9 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
         $testSearchableFields = ['baz'];
 
         return new InMemorySearchEngine(
-            $testSearchableFields,
             $searchCriteriaBuilder,
-            $facetFieldTransformationRegistry
+            $facetFieldTransformationRegistry,
+            ...$testSearchableFields
         );
     }
 }

@@ -11,7 +11,7 @@ class IntegrationTestTaxServiceLocator implements TaxServiceLocator
      * @param mixed[] $options
      * @return TaxService
      */
-    public function get(array $options)
+    public function get(array $options) : TaxService
     {
         return new IntegrationTestTaxService();
     }

@@ -7,11 +7,7 @@ use LizardsAndPumpkins\Import\Tax\TaxService;
 
 class IntegrationTestTaxService implements TaxService
 {
-    /**
-     * @param Price $price
-     * @return Price
-     */
-    public function applyTo(Price $price)
+    public function applyTo(Price $price) : Price
     {
         return $price;
     }

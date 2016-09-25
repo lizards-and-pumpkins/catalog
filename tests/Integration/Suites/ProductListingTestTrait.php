@@ -102,19 +102,12 @@ trait ProductListingTestTrait
         );
     }
 
-    /**
-     * @return ProductListingRequestHandler
-     */
-    private function createProductListingRequestHandler()
+    private function createProductListingRequestHandler() : ProductListingRequestHandler
     {
         return $this->factory->createProductListingRequestHandler();
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return SampleMasterFactory
-     */
-    private function createIntegrationTestMasterFactoryForRequest(HttpRequest $request)
+    private function createIntegrationTestMasterFactoryForRequest(HttpRequest $request) : SampleMasterFactory
     {
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
@@ -128,11 +121,7 @@ trait ProductListingTestTrait
         return $masterFactory;
     }
 
-    /**
-     * @param MasterFactory $masterFactory
-     * @return IntegrationTestFactory
-     */
-    private function createIntegrationTestFactory(MasterFactory $masterFactory)
+    private function createIntegrationTestFactory(MasterFactory $masterFactory) : IntegrationTestFactory
     {
         $factory = new IntegrationTestFactory($masterFactory);
         $factory->setMasterFactory($masterFactory);
@@ -144,10 +133,7 @@ trait ProductListingTestTrait
         return $factory;
     }
 
-    /**
-     * @return bool
-     */
-    private function isFirstInstantiationOfFactory()
+    private function isFirstInstantiationOfFactory() : bool
     {
         return null === $this->keyValueStore;
     }

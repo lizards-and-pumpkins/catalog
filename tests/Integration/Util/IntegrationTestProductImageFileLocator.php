@@ -26,7 +26,7 @@ class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
      * @param Context $context
      * @return Image
      */
-    public function get($imageFileName, $imageVariantCode, Context $context)
+    public function get($imageFileName, $imageVariantCode, Context $context) : Image // TODO: Type hints
     {
         $identifierString = sprintf('product/%s/%s', $imageVariantCode, $imageFileName);
         return $this->imageStorage->getFileReference(StorageAgnosticFileUri::fromString($identifierString));
@@ -37,7 +37,7 @@ class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
      * @param Context $context
      * @return Image
      */
-    public function getPlaceholder($imageVariantCode, Context $context)
+    public function getPlaceholder($imageVariantCode, Context $context) : Image // TODO: Type hints
     {
         $identifierString = sprintf('product/placeholder/%s.jpg', $imageVariantCode);
         return $this->imageStorage->getFileReference(StorageAgnosticFileUri::fromString($identifierString));
@@ -46,7 +46,7 @@ class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
     /**
      * @return string[]
      */
-    public function getVariantCodes()
+    public function getVariantCodes() : array
     {
         return [
             'small',

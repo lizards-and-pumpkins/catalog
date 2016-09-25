@@ -68,10 +68,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         ProductVariationAttributeList $sourceVariationAttributeList,
         ProductVariationAttributeList $rehydratedVariationAttributeList
     ) {
-        $this->assertSame(
-            count($sourceVariationAttributeList),
-            count($rehydratedVariationAttributeList)
-        );
+        $this->assertSame(count($sourceVariationAttributeList), count($rehydratedVariationAttributeList));
         
         /**
          * @var AttributeCode $attribute
@@ -97,11 +94,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         }, array_keys($sourceAssociatedProductList->getProducts()));
     }
 
-    /**
-     * @param string $productIdString
-     * @return SimpleProduct
-     */
-    private function createSimpleProductWithId($productIdString)
+    private function createSimpleProductWithId(string $productIdString) : SimpleProduct
     {
         $productId = ProductId::fromString($productIdString);
         
@@ -123,24 +116,16 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
         return new SimpleProduct($productId, $productTaxClass, $testProductAttributes, $imageList, $stubContext);
     }
 
-    /**
-     * @param string $code
-     * @param string $value
-     * @return ProductAttribute
-     */
-    private function createProductAttribute($code, $value)
+    private function createProductAttribute(string $code, string $value) : ProductAttribute
     {
         $contextData = [];
         return new ProductAttribute(AttributeCode::fromString($code), $value, $contextData);
     }
 
-    /**
-     * @param string $idString
-     * @param Product[] $childProducts
-     * @return ConfigurableProduct
-     */
-    private function createConfigurableProductWithIdAndAssociatedProducts($idString, Product ...$childProducts)
-    {
+    private function createConfigurableProductWithIdAndAssociatedProducts(
+        string $idString,
+        Product ...$childProducts
+    ) : ConfigurableProduct {
         $simpleProduct = $this->createSimpleProductWithId($idString);
 
         $variationAttributes = new ProductVariationAttributeList(AttributeCode::fromString('foo'));

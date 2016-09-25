@@ -19,15 +19,12 @@ class InjectableDefaultWebFront extends DefaultWebFront
         $this->testMasterFactory = $testMasterFactory;
     }
 
-    /**
-     * @return MasterFactory
-     */
-    protected function createMasterFactory()
+    final protected function createMasterFactory() : MasterFactory
     {
         return $this->testMasterFactory;
     }
 
-    protected function registerFactories(MasterFactory $masterFactory)
+    final protected function registerFactories(MasterFactory $masterFactory)
     {
         // The injected testing master factory already should have all factories set
     }

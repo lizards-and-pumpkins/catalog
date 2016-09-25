@@ -58,11 +58,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->factory->createDomainEventConsumer()->process();
     }
 
-    /**
-     * @param string $urlKey
-     * @return string
-     */
-    private function getProductListingPageHtmlByUrlKey($urlKey)
+    private function getProductListingPageHtmlByUrlKey(string $urlKey) : string
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -77,11 +73,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         return $page->getBody();
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $httpRequestBodyString
-     */
-    private function importContentBlockViaApi($snippetCode, $httpRequestBodyString)
+    private function importContentBlockViaApi(string $snippetCode, string $httpRequestBodyString)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/' . $snippetCode);
         $httpHeaders = HttpHeaders::fromArray([
@@ -114,7 +106,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
      * @param mixed[] $keyGeneratorParameters
      * @return string
      */
-    private function getContentBlockSnippetContent($snippetCode, array $keyGeneratorParameters)
+    private function getContentBlockSnippetContent(string $snippetCode, array $keyGeneratorParameters) : string
     {
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];

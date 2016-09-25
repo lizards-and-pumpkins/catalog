@@ -13,7 +13,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
      * @param string $expectedProductId
      * @param array[] $productsData
      */
-    private function assertContainsProductData($expectedProductId, array $productsData)
+    private function assertContainsProductData(string $expectedProductId, array $productsData)
     {
         $found = array_reduce($productsData, function ($found, array $productData) use ($expectedProductId) {
             return $found || $productData['product_id'] === (string) $expectedProductId;

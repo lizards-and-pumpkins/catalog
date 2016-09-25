@@ -39,10 +39,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
-    /**
-     * @return ProductSearchRequestHandler
-     */
-    private function getProductSearchRequestHandler()
+    private function getProductSearchRequestHandler() : ProductSearchRequestHandler
     {
         return $this->factory->createProductSearchRequestHandler();
     }
@@ -77,10 +74,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->assertContains($expectedRootSnippetCode, $metaInfoSnippet['page_snippet_codes']);
     }
 
-    /**
-     * @return HttpResponse
-     */
-    public function testProductListingPageHtmlIsReturned()
+    public function testProductListingPageHtmlIsReturned() : HttpResponse
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 

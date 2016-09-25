@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
 class InMemoryKeyValueStore implements KeyValueStore, Clearable
 {
     /**
-     * @var array
+     * @var mixed[]
      */
     private $store = [];
 
@@ -16,7 +16,7 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @return mixed
      */
-    public function get($key)
+    public function get($key) // TODO: Add type hint once interface is modified
     {
         if (!isset($this->store[$key])) {
             throw new KeyNotFoundException(sprintf('Key not found "%s"', $key));
@@ -27,9 +27,8 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
     /**
      * @param string $key
      * @param mixed $value
-     * @return void
      */
-    public function set($key, $value)
+    public function set($key, $value) // TODO: Add type hint once interface is modified
     {
         $this->store[$key] = $value;
     }
@@ -38,7 +37,7 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has($key) : bool // TODO: Add type hint once interface is modified
     {
         return array_key_exists($key, $this->store);
     }
@@ -47,7 +46,7 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string[] $keys
      * @return mixed[]
      */
-    public function multiGet(array $keys)
+    public function multiGet(array $keys) // TODO: Convert to variadic once interface is modified
     {
         $foundValues = [];
 
@@ -62,7 +61,6 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
 
     /**
      * @param mixed[] $items
-     * @return null
      */
     public function multiSet(array $items)
     {
