@@ -27,29 +27,19 @@ class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $writeOutputSpy;
 
-    /**
-     * @param string $environmentConfigString
-     */
-    private function setEnvironmentConfigArgumentString($environmentConfigString)
+    private function setEnvironmentConfigArgumentString(string $environmentConfigString)
     {
         $this->setArgumentValue('environmentConfig', $environmentConfigString);
     }
 
-    /**
-     * @param string $argumentName
-     * @param string $value
-     */
-    private function setArgumentValue($argumentName, $value)
+    private function setArgumentValue(string $argumentName, string $value)
     {
         /** @var ArgumentManager|\PHPUnit_Framework_MockObject_MockObject $arguments */
         $arguments = $this->climate->arguments;
         $arguments->method('get')->willReturnMap([[$argumentName, $value]]);
     }
 
-    /**
-     * @param string $expectedString
-     */
-    private function assertStringWasOutput($expectedString)
+    private function assertStringWasOutput(string $expectedString)
     {
         $callCountWithMatchingStringParam = array_sum(array_map(function ($invocation) use ($expectedString) {
             return intval($this->checkStringMatchesIgnoreCtrlChars($invocation->parameters[0], $expectedString));
@@ -59,12 +49,7 @@ class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($callCountWithMatchingStringParam > 0, $message);
     }
 
-    /**
-     * @param string $haystack
-     * @param string $needle
-     * @return bool
-     */
-    private function checkStringMatchesIgnoreCtrlChars($haystack, $needle)
+    private function checkStringMatchesIgnoreCtrlChars(string $haystack, string $needle) : bool
     {
         return false !== strpos($haystack, $needle);
     }

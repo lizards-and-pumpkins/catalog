@@ -44,20 +44,16 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     private $searchEngine;
 
-    /**
-     * @param FacetFieldTransformationRegistry $facetFieldTransformationRegistry
-     * @return SearchEngine
-     */
     abstract protected function createSearchEngineInstance(
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
-    );
+    ) : SearchEngine;
 
     /**
      * @param string[] $fields
      * @param ProductId $productId
      * @return SearchDocument
      */
-    private function createSearchDocument(array $fields, ProductId $productId)
+    private function createSearchDocument(array $fields, ProductId $productId) : SearchDocument
     {
         return $this->createSearchDocumentWithContext($fields, $productId, $this->testContext);
     }
@@ -68,8 +64,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param Context $context
      * @return SearchDocument
      */
-    private function createSearchDocumentWithContext(array $fields, ProductId $productId, Context $context)
-    {
+    private function createSearchDocumentWithContext(
+        array $fields,
+        ProductId $productId,
+        Context $context
+    ) : SearchDocument {
         return new SearchDocument(SearchDocumentFieldCollection::fromArray($fields), $context, $productId);
     }
 
@@ -77,18 +76,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param string[] $contextDataSet
      * @return Context
      */
-    private function createContextFromDataParts(array $contextDataSet)
+    private function createContextFromDataParts(array $contextDataSet) : Context
     {
         $contextDataSet[DataVersion::CONTEXT_CODE] = '-1';
         return SelfContainedContextBuilder::rehydrateContext($contextDataSet);
     }
 
-    /**
-     * @param string $sortByFieldCode
-     * @param string $sortDirection
-     * @return SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSortOrderConfig($sortByFieldCode, $sortDirection)
+    private function createStubSortOrderConfig(string $sortByFieldCode, string $sortDirection) : SortOrderConfig
     {
         $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('__toString')->willReturn($sortByFieldCode);
@@ -100,15 +94,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return $sortOrderConfig;
     }
 
-    /**
-     * @param FacetFieldCollection $facetFieldCollection
-     * @param string $code
-     * @param string $value
-     */
     private function assertFacetFieldCollectionContainsFieldWithCodeAndValue(
         FacetFieldCollection $facetFieldCollection,
-        $code,
-        $value
+        string $code,
+        string $value
     ) {
         foreach ($facetFieldCollection as $facetField) {
             /** @var FacetField $facetField */
@@ -125,11 +114,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    /**
-     * @param FacetField $field
-     * @param string $expectedValue
-     */
-    private function assertFacetFieldHasValue(FacetField $field, $expectedValue)
+    private function assertFacetFieldHasValue(FacetField $field, string $expectedValue)
     {
         foreach ($field->getValues() as $value) {
             if ($value->jsonSerialize()['value'] === $expectedValue) {
@@ -145,7 +130,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param ProductId[] $expectedOrder
      * @param ProductId[] $actualArray
      */
-    private function assertOrder(array $expectedOrder, $actualArray)
+    private function assertOrder(array $expectedOrder, array $actualArray)
     {
         $keys = array_map(function ($value) use ($actualArray) {
             return array_search($value, $actualArray);
@@ -156,10 +141,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($keys, $sortedKeys, 'Failed asserting elements order');
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubFacetFiltersToIncludeInResult()
+    private function createStubFacetFiltersToIncludeInResult() : FacetFiltersToIncludeInResult
     {
         $stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
         $stubFacetFiltersToIncludeInResult->method('getAttributeCodeStrings')->willReturn([]);
@@ -168,19 +150,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return $stubFacetFiltersToIncludeInResult;
     }
 
-    /**
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubQueryOptions()
+    private function createStubQueryOptions() : QueryOptions
     {
         return $this->createStubQueryOptionsWithGivenContext($this->testContext);
     }
 
-    /**
-     * @param Context $context
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubQueryOptionsWithGivenContext(Context $context)
+    private function createStubQueryOptionsWithGivenContext(Context $context) : QueryOptions
     {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
         $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
@@ -204,7 +179,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createStubQueryOptionsWithGivenFacetFilters(
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         array $selectedFilters
-    ) {
+    ) : QueryOptions {
         $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
@@ -223,8 +198,10 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      * @param array[] $selectedFilters
      * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubQueryOptionsWithGivenSortOrder(SortOrderConfig $sortOrderConfig, array $selectedFilters)
-    {
+    private function createStubQueryOptionsWithGivenSortOrder(
+        SortOrderConfig $sortOrderConfig,
+        array $selectedFilters
+    ) : QueryOptions {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
@@ -238,12 +215,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return $stubQueryOptions;
     }
 
-    /**
-     * @param int $rowsPerPage
-     * @param int $pageNumber
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubQueryOptionsWithGivenPagination($rowsPerPage, $pageNumber)
+    private function createStubQueryOptionsWithGivenPagination(int $rowsPerPage, int $pageNumber) : QueryOptions
     {
         $facetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
         $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
@@ -364,7 +336,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider searchCriteriaProvider
-     * @param SearchCriteria $searchCriteria
      */
     public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria(SearchCriteria $searchCriteria)
     {
@@ -387,7 +358,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function searchCriteriaProvider()
+    public function searchCriteriaProvider() : array
     {
         return [
             [SearchCriterionEqual::create('foo', 'bar')],
@@ -403,7 +374,6 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider searchRangeCriteriaProvider
-     * @param SearchCriteria $searchCriteria
      */
     public function testCollectionContainsOnlySearchDocumentsMatchingRangeCriteria(SearchCriteria $searchCriteria)
     {
@@ -426,7 +396,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function searchRangeCriteriaProvider()
+    public function searchRangeCriteriaProvider() : array
     {
         return [
             [SearchCriterionLessThan::create('price', 20)],

@@ -23,7 +23,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyVersionProvider()
+    public function emptyVersionProvider() : array
     {
         return [
             [''],
@@ -44,7 +44,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed[]
      */
-    public function invalidVersionProvider()
+    public function invalidVersionProvider() : array
     {
         return [
             [1],

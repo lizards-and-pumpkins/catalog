@@ -13,7 +13,6 @@ use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 use LizardsAndPumpkins\Import\Product\View\Stub\StubConfigurableProductView;
-use LizardsAndPumpkins\Import\Product\View\Stub\StubProductView;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView
@@ -36,10 +35,7 @@ class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
 
     private $dummyAssociatedProductViewData = ['dummy product view data'];
 
-    /**
-     * @return StubProductView
-     */
-    private function createConfigurableProductViewInstance()
+    private function createConfigurableProductViewInstance() : StubConfigurableProductView
     {
         /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
         $mockProduct = $this->createMock(ConfigurableProduct::class);

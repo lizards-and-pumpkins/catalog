@@ -49,10 +49,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
      */
     private $mockAssociatedProductList;
 
-    /**
-     * @return ConfigurableProduct
-     */
-    private function createConfigurableProductInstance()
+    private function createConfigurableProductInstance() : ConfigurableProduct
     {
         return new ConfigurableProduct(
             $this->mockSimpleProduct,
@@ -168,8 +165,10 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
      * @param string $typeCodeString
      * @dataProvider invalidProductTypeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch($invalidTypeCode, $typeCodeString)
-    {
+    public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch(
+        $invalidTypeCode,
+        string $typeCodeString
+    ) {
         $this->expectException(ProductTypeCodeMismatchException::class);
         $this->expectExceptionMessage(
             sprintf('Expected the product type code string "configurable", got "%s"', $typeCodeString)
@@ -185,7 +184,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidProductTypeCodeProvider()
+    public function invalidProductTypeCodeProvider() : array
     {
         return [
             ['c0nf1gur4b13', 'c0nf1gur4b13'],
@@ -263,7 +262,6 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param AssociatedProductListDomainException $exception
      * @dataProvider associatedProductListValidationFailureExceptionProvider
      */
     public function testItThrowsAnExceptionIfAnAssociatedProductIsMissingVariationAttributes(
@@ -281,7 +279,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function associatedProductListValidationFailureExceptionProvider()
+    public function associatedProductListValidationFailureExceptionProvider() : array
     {
         return [
             [new AssociatedProductIsMissingRequiredAttributesException()],

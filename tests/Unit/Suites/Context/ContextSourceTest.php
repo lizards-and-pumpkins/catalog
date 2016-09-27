@@ -68,7 +68,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed[]
      */
-    public function extractPartsProvider()
+    public function extractPartsProvider() : array
     {
         return [
             [

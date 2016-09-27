@@ -49,7 +49,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
     private function assertFirstProductAttributeInAListValueEquals(
         $expected,
         ProductBuilder $productBuilder,
-        $attributeCode
+        string $attributeCode
     ) {
         $attributes = $this->getAttributesWithCodeFromInstance($productBuilder, $attributeCode);
         $this->assertNotEmpty($attributes);
@@ -61,7 +61,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
      * @param string $attributeCode
      * @return ProductAttribute[]
      */
-    private function getAttributesWithCodeFromInstance(ProductBuilder $productBuilder, $attributeCode)
+    private function getAttributesWithCodeFromInstance(ProductBuilder $productBuilder, string $attributeCode) : array
     {
         $attributes = $this->getAttributesArrayFromInstance($productBuilder);
         return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($attributeCode) {
@@ -73,7 +73,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
      * @param ProductBuilder $productBuilder
      * @return ProductAttribute[]
      */
-    private function getAttributesArrayFromInstance(ProductBuilder $productBuilder)
+    private function getAttributesArrayFromInstance(ProductBuilder $productBuilder) : array
     {
         $attributeListBuilder = $this->getPrivatePropertyValue($productBuilder, 'attributeListBuilder');
         return $this->getPrivatePropertyValue($attributeListBuilder, 'attributes');
@@ -84,17 +84,14 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
      * @param string $propertyName
      * @return mixed
      */
-    private function getPrivatePropertyValue($object, $propertyName)
+    private function getPrivatePropertyValue($object, string $propertyName)
     {
         $property = new \ReflectionProperty($object, $propertyName);
         $property->setAccessible(true);
         return $property->getValue($object);
     }
 
-    /**
-     * @return string
-     */
-    private function getSimpleProductXml()
+    private function getSimpleProductXml() : string
     {
         $xpath = new \DOMXPath($this->domDocument);
         $xpath->registerNamespace('lp', 'http://lizardsandpumpkins.com');
@@ -102,10 +99,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         return $this->domDocument->saveXML($firstSimpleProduct);
     }
 
-    /**
-     * @return string
-     */
-    private function getConfigurableProductXml()
+    private function getConfigurableProductXml() : string
     {
         $xpath = new \DOMXPath($this->domDocument);
         $xpath->registerNamespace('lp', 'http://lizardsandpumpkins.com');
@@ -113,11 +107,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         return $this->domDocument->saveXML($firstConfigurableProduct);
     }
 
-    /**
-     * @param string $productXml
-     * @return string
-     */
-    private function getSpecialPriceFromProductXml($productXml)
+    private function getSpecialPriceFromProductXml(string $productXml) : string
     {
         $domDocument = new \DOMDocument();
         $domDocument->loadXML($productXml);
@@ -126,10 +116,7 @@ class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
         return $domXPath->query('//attributes/attribute[@name="special_price"]')->item(0)->nodeValue;
     }
     
-    /**
-     * @return ProductXmlToProductBuilderLocator
-     */
-    private function createProductXmlToProductBuilderLocatorInstance()
+    private function createProductXmlToProductBuilderLocatorInstance() : ProductXmlToProductBuilderLocator
     {
         $productXmlToProductBuilderLocatorProxy = function () {
             return $this->createProductXmlToProductBuilderLocatorInstance();

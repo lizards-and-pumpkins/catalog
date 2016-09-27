@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Logging;
 
 /**
- * @covers LizardsAndPumpkins\Logging\WritingLoggerDecorator
+ * @covers \LizardsAndPumpkins\Logging\WritingLoggerDecorator
  */
 class WritingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
 {

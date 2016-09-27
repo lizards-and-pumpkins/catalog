@@ -126,11 +126,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $factory;
 
-    /**
-     * @param string $expectedClassName
-     * @param DomainEventHandler $actual
-     */
-    private function assertDecoratedDomainEventHandlerInstanceOf($expectedClassName, DomainEventHandler $actual)
+    private function assertDecoratedDomainEventHandlerInstanceOf(string $expectedClassName, DomainEventHandler $actual)
     {
         $this->assertInstanceOf(ProcessTimeLoggingDomainEventHandlerDecorator::class, $actual);
         $this->assertAttributeInstanceOf($expectedClassName, 'component', $actual);

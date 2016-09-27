@@ -43,12 +43,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $amount
-     * @param int $numDecimalPoints
-     * @param int $expected
      * @dataProvider fractionConversionDataProvider
      */
-    public function testItRoundsTheAmountToGivenFractions($amount, $numDecimalPoints, $expected)
+    public function testItRoundsTheAmountToGivenFractions(int $amount, int $numDecimalPoints, int $expected)
     {
         $price = Price::fromFractionsWithDecimalPlaces($amount, 6);
         $roundedPrice = $price->round($numDecimalPoints);
@@ -58,7 +55,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function fractionConversionDataProvider()
+    public function fractionConversionDataProvider() : array
     {
         // amount, fractions, expected
         return [
@@ -81,7 +78,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @param float|int $factor
      * @param int $expected
      */
-    public function testItMultipliesByTheGivenFactor($amount, $factor, $expected)
+    public function testItMultipliesByTheGivenFactor(int $amount, $factor, int $expected)
     {
         $price = Price::fromFractions($amount);
         $result = $price->multiplyBy($factor);
@@ -91,7 +88,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function priceMultiplicationDataProvider()
+    public function priceMultiplicationDataProvider() : array
     {
         // amount, factor, expected
         return [

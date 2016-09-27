@@ -66,7 +66,7 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidTypeSnippetCodeProvider()
+    public function invalidTypeSnippetCodeProvider() : array
     {
         return [
             [12],

@@ -23,8 +23,8 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
     private $enrichProductJsonWithPrices;
 
     /**
-     * @param string $attributeCode
-     * @param string $expectedValue
+     * @param mixed $attributeCode
+     * @param mixed $expectedValue
      * @param string[] $attributeData
      */
     private function assertProductJsonDataHas($attributeCode, $expectedValue, array $attributeData)
@@ -33,11 +33,7 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedValue, $attributeData[$attributeCode]);
     }
 
-    /**
-     * @param string $amount
-     * @return int
-     */
-    private function getPriceAsFractionUnits($amount)
+    private function getPriceAsFractionUnits(string $amount) : int
     {
         return Price::fromDecimalValue($amount)->getAmount();
     }

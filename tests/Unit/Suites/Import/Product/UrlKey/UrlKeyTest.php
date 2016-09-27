@@ -25,10 +25,8 @@ class UrlKeyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider urlKeySourceProvider
-     * @param string $urlKeySource
-     * @param string $expectedUrlKey
      */
-    public function testDisallowedCharactersAreReplacedWithUnderscores($urlKeySource, $expectedUrlKey)
+    public function testDisallowedCharactersAreReplacedWithUnderscores(string $urlKeySource, string $expectedUrlKey)
     {
         $urlKey = UrlKey::fromString($urlKeySource);
         $this->assertEquals($expectedUrlKey, (string) $urlKey);
@@ -37,7 +35,7 @@ class UrlKeyTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function urlKeySourceProvider()
+    public function urlKeySourceProvider() : array
     {
         return [
             ['foo', 'foo'],

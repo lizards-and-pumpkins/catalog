@@ -13,7 +13,7 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      * @param string[] $data
      * @return SelfContainedContext
      */
-    private function createContext(array $data)
+    private function createContext(array $data) : SelfContainedContext
     {
         return SelfContainedContext::fromArray($data);
     }
@@ -122,8 +122,10 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      * @param string[] $matchingDataSet
      * @dataProvider matchingDataSetProvider
      */
-    public function testItMatchesDataSetsWhereAllSharedPartsHaveTheSameValue($contextDataSet, $matchingDataSet)
-    {
+    public function testItMatchesDataSetsWhereAllSharedPartsHaveTheSameValue(
+        array $contextDataSet,
+        array $matchingDataSet
+    ) {
         $this->assertTrue($this->createContext($contextDataSet)->matchesDataSet($matchingDataSet));
     }
 
@@ -146,15 +148,16 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      * @param string[] $contextDataSet
      * @param string[] $nonMatchingSet
      */
-    public function testItDoesNotMatchADataSetWhereTheValueOfACommonPartIsDifferent($contextDataSet, $nonMatchingSet)
-    {
+    public function testItDoesNotMatchADataSetWhereTheValueOfACommonPartIsDifferent(
+        array $contextDataSet, array $nonMatchingSet
+    ) {
         $this->assertFalse($this->createContext($contextDataSet)->matchesDataSet($nonMatchingSet));
     }
 
     /**
      * @return array[]
      */
-    public function nonMatchingDataSetProvider()
+    public function nonMatchingDataSetProvider() : array
     {
         return [
             [['key1' => 'value1'], ['key1' => 'XXX']],

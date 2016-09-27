@@ -59,7 +59,7 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidTransformationCodeDataProvider()
+    public function invalidTransformationCodeDataProvider() : array
     {
         return [
             [''],

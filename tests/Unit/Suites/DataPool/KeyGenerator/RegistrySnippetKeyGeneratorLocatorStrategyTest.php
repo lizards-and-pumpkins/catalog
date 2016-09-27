@@ -67,9 +67,8 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
 
     /**
      * @dataProvider emptySnippetCodeDataProvider
-     * @param string $emptySnippetCode
      */
-    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed($emptySnippetCode)
+    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed(string $emptySnippetCode)
     {
         $this->expectException(InvalidSnippetCodeException::class);
         $this->expectExceptionMessage('Snippet code must not be empty.');
@@ -79,7 +78,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     /**
      * @return array[]
      */
-    public function emptySnippetCodeDataProvider()
+    public function emptySnippetCodeDataProvider() : array
     {
         return [
             [''],

@@ -18,10 +18,7 @@ class StubCliCommand extends BaseCliCommand
         $this->setCLImate($climate);
     }
 
-    /**
-     * @return CLImate
-     */
-    public function publicTestGetCLImate()
+    public function publicTestGetCLImate() : CLImate
     {
         return $this->getCLImate();
     }
@@ -30,33 +27,30 @@ class StubCliCommand extends BaseCliCommand
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate)
+    final protected function getCommandLineArgumentsArray(CLImate $climate) : array
     {
         $this->methodCalls[] = __FUNCTION__;
         return parent::getCommandLineArgumentsArray($climate);
     }
 
-    protected function beforeExecute(CLImate $climate)
+    final protected function beforeExecute(CLImate $climate)
     {
         $this->methodCalls[] = __FUNCTION__;
         parent::beforeExecute($climate);
     }
 
-    protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate)
     {
         $this->methodCalls[] = __FUNCTION__;
     }
 
-    protected function afterExecute(CLImate $climate)
+    final protected function afterExecute(CLImate $climate)
     {
         $this->methodCalls[] = __FUNCTION__;
         parent::afterExecute($climate);
     }
 
-    /**
-     * @param string $string
-     */
-    public function publicTestOutput($string)
+    public function publicTestOutput(string $string)
     {
         parent::output($string);
     }

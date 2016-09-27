@@ -67,7 +67,7 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @param string $field
      * @return mixed
      */
-    private function getPrivateFieldValue($object, $field)
+    private function getPrivateFieldValue($object, string $field)
     {
         $property = new \ReflectionProperty($object, $field);
         $property->setAccessible(true);

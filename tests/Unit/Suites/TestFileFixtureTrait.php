@@ -19,12 +19,7 @@ trait TestFileFixtureTrait
      */
     private $uniqueId;
 
-    /**
-     * @param string $filePath
-     * @param string $content
-     * @param int $mode
-     */
-    public function createFixtureFile($filePath, $content, $mode = 0600)
+    public function createFixtureFile(string $filePath, string $content, int $mode = 0600)
     {
         $realFile = $this->___getAbsolutePath($filePath);
         $this->___createMissingDirectories($realFile);
@@ -32,28 +27,19 @@ trait TestFileFixtureTrait
         $this->fixtureFiles[] = $realFile;
     }
 
-    /**
-     * @param string $realFile
-     */
-    public function addFileToCleanupAfterTest($realFile)
+    public function addFileToCleanupAfterTest(string $realFile)
     {
         $this->fixtureFiles[] = $realFile;
     }
 
-    /**
-     * @param string $directoryPath
-     */
-    public function createFixtureDirectory($directoryPath)
+    public function createFixtureDirectory(string $directoryPath)
     {
         $absolutePath = $this->___getAbsolutePath($directoryPath);
         $directories = explode('/', ltrim($absolutePath, '/'));
         $this->___createMissingDirectoriesRecursively($directories);
     }
 
-    /**
-     * @return string
-     */
-    public function getUniqueTempDir()
+    public function getUniqueTempDir() : string
     {
         return sys_get_temp_dir() . '/lizards-and-pumpkins/test/' . $this->___getUniqueId();
     }
@@ -64,14 +50,10 @@ trait TestFileFixtureTrait
     protected function ___cleanupFilesystemFixtures()
     {
         $this->___cleanUpFixtureFiles();
-        $this->___cleanUpFixtureDirsRecursively(array_reverse($this->fixtureDirs));
+        $this->___cleanUpFixtureDirsRecursively(...array_reverse($this->fixtureDirs));
     }
 
-    /**
-     * @param string $path
-     * @return string
-     */
-    private function ___getAbsolutePath($path)
+    private function ___getAbsolutePath(string $path) : string
     {
         if ('/' === substr($path, 0, 1)) {
             return $path;
@@ -80,10 +62,7 @@ trait TestFileFixtureTrait
         return getcwd() . '/' . $path;
     }
 
-    /**
-     * @param string $realFile
-     */
-    private function ___createMissingDirectories($realFile)
+    private function ___createMissingDirectories(string $realFile)
     {
         $dirs = explode('/', ltrim(dirname($realFile), '/'));
         $this->___createMissingDirectoriesRecursively($dirs);
@@ -93,7 +72,7 @@ trait TestFileFixtureTrait
      * @param string[] $dirs
      * @param string $base
      */
-    private function ___createMissingDirectoriesRecursively(array $dirs, $base = '')
+    private function ___createMissingDirectoriesRecursively(array $dirs, string $base = '')
     {
         if (0 == count($dirs)) {
             return;
@@ -106,10 +85,7 @@ trait TestFileFixtureTrait
         $this->___createMissingDirectoriesRecursively(array_slice($dirs, 1), $dir);
     }
 
-    /**
-     * @param string $dir
-     */
-    private function ___createDirectoryIfNotExists($dir)
+    private function ___createDirectoryIfNotExists(string $dir)
     {
         if (!file_exists($dir)) {
             mkdir($dir);
@@ -117,10 +93,7 @@ trait TestFileFixtureTrait
         }
     }
 
-    /**
-     * @param string $dir
-     */
-    private function ___validateIsDir($dir)
+    private function ___validateIsDir(string $dir)
     {
         if (!file_exists($dir)) {
             throw new \RuntimeException(sprintf('Unable to create directory "%s"', $dir));
@@ -130,22 +103,14 @@ trait TestFileFixtureTrait
         }
     }
 
-    /**
-     * @param string $file
-     */
-    private function ___validateFileWasCreated($file)
+    private function ___validateFileWasCreated(string $file)
     {
         if (!file_exists($file)) {
             throw new \RuntimeException('Unable to create fixture file "%s"', $file);
         }
     }
 
-    /**
-     * @param string $content
-     * @param string $file
-     * @param int $mode
-     */
-    private function ___createFile($content, $file, $mode = 0500)
+    private function ___createFile(string $content, string $file, int $mode = 0500)
     {
         $this->___validateFileDoesNotExist($file);
         file_put_contents($file, $content);
@@ -153,10 +118,7 @@ trait TestFileFixtureTrait
         $this->___validateFileWasCreated($file);
     }
 
-    /**
-     * @param string $file
-     */
-    private function ___validateFileDoesNotExist($file)
+    private function ___validateFileDoesNotExist(string $file)
     {
         if (file_exists($file)) {
             throw new \RuntimeException(sprintf('Fixture file already exists: "%s"', $file));
@@ -175,10 +137,7 @@ trait TestFileFixtureTrait
         }, $this->fixtureFiles);
     }
 
-    /**
-     * @param string[] $dirs
-     */
-    private function ___cleanUpFixtureDirsRecursively(array $dirs)
+    private function ___cleanUpFixtureDirsRecursively(string ...$dirs)
     {
         if (0 == count($dirs)) {
             return;
@@ -186,13 +145,10 @@ trait TestFileFixtureTrait
         if (is_dir($dirs[0])) {
             rmdir($dirs[0]);
         }
-        $this->___cleanUpFixtureDirsRecursively(array_slice($dirs, 1));
+        $this->___cleanUpFixtureDirsRecursively(...array_slice($dirs, 1));
     }
 
-    /**
-     * @return string
-     */
-    private function ___getUniqueId()
+    private function ___getUniqueId() : string
     {
         if (is_null($this->uniqueId)) {
             $this->uniqueId = uniqid();

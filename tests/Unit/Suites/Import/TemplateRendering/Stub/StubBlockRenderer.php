@@ -8,10 +8,7 @@ class StubBlockRenderer extends BlockRenderer
 {
     const LAYOUT_HANDLE = 'test-handle';
     
-    /**
-     * @return string
-     */
-    final public function getLayoutHandle()
+    final public function getLayoutHandle() : string
     {
         return self::LAYOUT_HANDLE;
     }

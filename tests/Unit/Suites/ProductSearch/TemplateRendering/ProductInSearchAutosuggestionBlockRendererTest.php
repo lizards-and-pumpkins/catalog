@@ -15,19 +15,12 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  */
 class ProductInSearchAutosuggestionBlockRendererTest extends AbstractBlockRendererTest
 {
-    /**
-     * @param ThemeLocator $stubThemeLocator
-     * @param BlockStructure $stubBlockStructure
-     * @param TranslatorRegistry $stubTranslatorRegistry
-     * @param BaseUrlBuilder $baseUrlBuilder
-     * @return BlockRenderer
-     */
     protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
         BaseUrlBuilder $baseUrlBuilder
-    ) {
+    ) : BlockRenderer {
         return new ProductInSearchAutosuggestionBlockRenderer(
             $stubThemeLocator,
             $stubBlockStructure,

@@ -50,10 +50,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator;
 
-    /**
-     * @return ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProductDetailViewBlockRenderer()
+    private function createStubProductDetailViewBlockRenderer() : ProductDetailViewBlockRenderer
     {
         $blockRenderer = $this->createMock(ProductDetailViewBlockRenderer::class);
         $blockRenderer->method('render')->willReturn('dummy content');
@@ -63,11 +60,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         return $blockRenderer;
     }
 
-    /**
-     * @param string $expectedKey
-     * @param Snippet[] $snippets
-     */
-    private function assertContainsSnippetWithGivenKey($expectedKey, Snippet ...$snippets)
+    private function assertContainsSnippetWithGivenKey(string $expectedKey, Snippet ...$snippets)
     {
         foreach ($snippets as $snippet) {
             if ($snippet->getKey() === $expectedKey) {
@@ -79,12 +72,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->fail(sprintf('Failed asserting snippet list contains snippet with "%s" key.', $expectedKey));
     }
 
-    /**
-     * @param string $snippetKey
-     * @param Snippet[] $result
-     * @return Snippet
-     */
-    private function findSnippetByKey($snippetKey, array $result)
+    private function findSnippetByKey(string $snippetKey, Snippet ...$result) : Snippet
     {
         return array_reduce($result, function ($found, Snippet $snippet) use ($snippetKey) {
             if ($found) {
@@ -96,13 +84,11 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         });
     }
 
-    /**
-     * @param Snippet $metaSnippet
-     * @param string $containerCode
-     * @param string $expectedSnippetCode
-     */
-    private function assertContainerContainsSnippet(Snippet $metaSnippet, $containerCode, $expectedSnippetCode)
-    {
+    private function assertContainerContainsSnippet(
+        Snippet $metaSnippet,
+        string $containerCode,
+        string $expectedSnippetCode
+    ) {
         $pageData = json_decode($metaSnippet->getContent(), true);
 
         $this->assertArrayHasKey(
@@ -187,7 +173,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->renderer->render($this->stubProductView);
 
-        $metaSnippet = $this->findSnippetByKey($testMetaSnippetKey, $result);
+        $metaSnippet = $this->findSnippetByKey($testMetaSnippetKey, ...$result);
         $this->assertContainerContainsSnippet($metaSnippet, 'title', ProductDetailViewSnippetRenderer::TITLE_KEY_CODE);
         $this->assertContainerContainsSnippet($metaSnippet, 'head_container', ProductCanonicalTagSnippetRenderer::CODE);
     }
@@ -227,7 +213,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->renderer->render($this->stubProductView);
 
-        $metaSnippet = $this->findSnippetByKey($metaKey, $result);
+        $metaSnippet = $this->findSnippetByKey($metaKey, ...$result);
 
         $this->assertContains('<meta name="description" content="" />', $metaSnippet->getContent());
         $this->assertContains('<meta name="keywords" content="" />', $metaSnippet->getContent());
@@ -255,7 +241,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->renderer->render($this->stubProductView);
 
-        $metaSnippet = $this->findSnippetByKey($metaKey, $result);
+        $metaSnippet = $this->findSnippetByKey($metaKey, ...$result);
 
         $this->assertContains("<meta name=\"description\" content=\"$metaDescription\" />", $metaSnippet->getContent());
         $this->assertContains("<meta name=\"keywords\" content=\"$metaKeywords\" />", $metaSnippet->getContent());
@@ -277,7 +263,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->renderer->render($this->stubProductView);
 
-        $metaSnippet = $this->findSnippetByKey('meta', $result);
+        $metaSnippet = $this->findSnippetByKey('meta', ...$result);
 
         $this->assertContains("<meta name=\"description\" content=\"$expectedContent\" />", $metaSnippet->getContent());
         $this->assertContains("<meta name=\"keywords\" content=\"$expectedContent\" />", $metaSnippet->getContent());

@@ -53,7 +53,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      * @param string $keyValueStorageReturn
      * @param string[] $expectedContent
      */
-    public function testSnippetIsReturned($keyValueStorageReturn, array $expectedContent)
+    public function testSnippetIsReturned(string $keyValueStorageReturn, array $expectedContent)
     {
         $this->addGetMethodToStubKeyValueStore($keyValueStorageReturn);
         $this->assertEquals($expectedContent, $this->dataPoolReader->getChildSnippetKeys('some_key'));
@@ -62,7 +62,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     /**
      * @return array[]
      */
-    public function snippetsProvider()
+    public function snippetsProvider() : array
     {
         return [
             [json_encode(false), []],
@@ -86,7 +86,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     /**
      * @return array[]
      */
-    public function brokenJsonProvider()
+    public function brokenJsonProvider() : array
     {
         return [
             [new \stdClass()],
@@ -120,7 +120,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
     /**
      * @return array[]
      */
-    public function invalidKeyProvider()
+    public function invalidKeyProvider() : array
     {
         return [
             [new \stdClass()],

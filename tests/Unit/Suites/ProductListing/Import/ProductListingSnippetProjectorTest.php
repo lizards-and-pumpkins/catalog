@@ -39,10 +39,7 @@ class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
      */
     private $projector;
 
-    /**
-     * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockProductListing()
+    private function createMockProductListing() : ProductListing
     {
         return $this->createMock(ProductListing::class);
     }

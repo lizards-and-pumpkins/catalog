@@ -50,10 +50,7 @@ class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->mockRequestHandler, $this->router->route($stubRequest));
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubRequest()
+    private function getStubRequest() : HttpRequest
     {
         $stubRequest = $this->createMock(HttpRequest::class);
         $stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/'));

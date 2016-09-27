@@ -54,10 +54,9 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @param string $nonGetRequestMethod
      * @dataProvider nonGetRequestMethodProvider
      */
-    public function testItCanNotProcessNonHttpGetRequestTypes($nonGetRequestMethod)
+    public function testItCanNotProcessNonHttpGetRequestTypes(string $nonGetRequestMethod)
     {
         $this->stubRequest->method('getMethod')->willReturn($nonGetRequestMethod);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
@@ -68,7 +67,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     /**
      * @return array[]
      */
-    public function nonGetRequestMethodProvider()
+    public function nonGetRequestMethodProvider() : array
     {
         return [
             [HttpRequest::METHOD_POST],
@@ -78,10 +77,9 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @param string $nonMatchingRequestPath
      * @dataProvider nonMatchingRequestPathProvider
      */
-    public function testItCanNotProcessNonMatchingGetRequests($nonMatchingRequestPath)
+    public function testItCanNotProcessNonMatchingGetRequests(string $nonMatchingRequestPath)
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
@@ -92,7 +90,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     /**
      * @return array[]
      */
-    public function nonMatchingRequestPathProvider()
+    public function nonMatchingRequestPathProvider() : array
     {
         return array_map(function ($path) {
             return [$path];

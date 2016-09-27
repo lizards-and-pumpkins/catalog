@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidAttributeCodeException;
 
 /**
- * @covers LizardsAndPumpkins\Import\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidAttributeCodeTypeProvider()
+    public function invalidAttributeCodeTypeProvider() : array
     {
         return [
             'integer' => [222],
@@ -49,10 +49,9 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $shortAttributeCode
      * @dataProvider tooShortAttributeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong($shortAttributeCode)
+    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong(string $shortAttributeCode)
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage(
@@ -64,7 +63,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function tooShortAttributeCodeProvider()
+    public function tooShortAttributeCodeProvider() : array
     {
         return [
             [''],
@@ -74,10 +73,9 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $attributeCode
      * @dataProvider attributeCodeWithInvalidFirstCharacterProvider
      */
-    public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ($attributeCode)
+    public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ(string $attributeCode)
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage('The first letter of the attribute code has to be a character from a-z, got ');
@@ -87,7 +85,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function attributeCodeWithInvalidFirstCharacterProvider()
+    public function attributeCodeWithInvalidFirstCharacterProvider() : array
     {
         return [
             ['Aaaaa'],

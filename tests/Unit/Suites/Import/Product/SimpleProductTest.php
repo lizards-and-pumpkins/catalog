@@ -220,7 +220,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidProductTypeCodeProvider()
+    public function invalidProductTypeCodeProvider() : array
     {
         return [
             ['z1mp3l', 'z1mp3l'],

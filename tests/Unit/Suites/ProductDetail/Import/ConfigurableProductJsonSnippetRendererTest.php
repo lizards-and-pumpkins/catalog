@@ -31,12 +31,7 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
      */
     private $stubCompositeProductView;
 
-    /**
-     * @param string $snippetKey
-     * @param Snippet[] $snippets
-     * @return Snippet
-     */
-    private function getSnippetWithKey($snippetKey, Snippet ...$snippets)
+    private function getSnippetWithKey(string $snippetKey, Snippet ...$snippets) : Snippet
     {
         foreach ($snippets as $snippet) {
             if ($snippet->getKey() === $snippetKey) {
@@ -47,11 +42,7 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->fail(sprintf('No snippet with key "%s" found in snippet list', $snippetKey));
     }
 
-    /**
-     * @param string $expected
-     * @param Snippet $snippet
-     */
-    private function assertSnippetContent($expected, Snippet $snippet)
+    private function assertSnippetContent(string $expected, Snippet $snippet)
     {
         $this->assertSame($expected, $snippet->getContent());
     }

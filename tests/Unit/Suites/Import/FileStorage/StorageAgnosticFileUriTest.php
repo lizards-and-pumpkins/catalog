@@ -15,7 +15,7 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedType
      * @dataProvider invalidFileIdentifierProvider
      */
-    public function testItThrowsAnExceptionIfTheFileIdentifierIsInvalid($invalidIdentifier, $expectedType)
+    public function testItThrowsAnExceptionIfTheFileIdentifierIsInvalid($invalidIdentifier, string $expectedType)
     {
         $this->expectException(InvalidFileIdentifierException::class);
         $this->expectExceptionMessage(sprintf('The file identifier has to be a string, got "%s"', $expectedType));
@@ -25,7 +25,7 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidFileIdentifierProvider()
+    public function invalidFileIdentifierProvider() : array
     {
         return [
             [123, 'integer'],
@@ -34,10 +34,9 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $emptyIdentifier
      * @dataProvider emptyFileIdentifierProvider
      */
-    public function testItThrowsAnExceptionIfTheFileIdentifierStringIsEmpty($emptyIdentifier)
+    public function testItThrowsAnExceptionIfTheFileIdentifierStringIsEmpty(string $emptyIdentifier)
     {
         $this->expectException(InvalidFileIdentifierException::class);
         $this->expectExceptionMessage('The file identifier must not be empty');
@@ -47,7 +46,7 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyFileIdentifierProvider()
+    public function emptyFileIdentifierProvider() : array
     {
         return [
             [''],
@@ -65,10 +64,9 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $identifierString
      * @dataProvider fileIdentifierStringProvider
      */
-    public function testItReturnsTheFileIdentifierAsAString($identifierString)
+    public function testItReturnsTheFileIdentifierAsAString(string $identifierString)
     {
         $this->assertEquals($identifierString, StorageAgnosticFileUri::fromString($identifierString));
     }
@@ -76,7 +74,7 @@ class StorageAgnosticFileUriTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function fileIdentifierStringProvider()
+    public function fileIdentifierStringProvider() : array
     {
         return [
             ['test1'],

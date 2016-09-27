@@ -125,10 +125,9 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $methodWithFileArgument
      * @dataProvider methodWithFileArgumentProvider
      */
-    public function testItThrowsAnExceptionIfTheFileStorageTypeDoesNotMatch($methodWithFileArgument)
+    public function testItThrowsAnExceptionIfTheFileStorageTypeDoesNotMatch(string $methodWithFileArgument)
     {
         $this->expectException(FileStorageTypeMismatchException::class);
         $this->expectExceptionMessage(
@@ -145,7 +144,7 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function methodWithFileArgumentProvider()
+    public function methodWithFileArgumentProvider() : array
     {
         return [
             'isPresent' => ['isPresent'],

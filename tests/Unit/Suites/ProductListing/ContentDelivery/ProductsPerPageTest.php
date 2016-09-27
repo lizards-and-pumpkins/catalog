@@ -6,7 +6,7 @@ use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageEx
 use LizardsAndPumpkins\ProductListing\Exception\InvalidSelectedNumberOfProductsPerPageException;
 
 /**
- * @covers LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
+ * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
  */
 class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,7 +47,7 @@ class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidNumbersOfProductsPerPageDataProvider()
+    public function invalidNumbersOfProductsPerPageDataProvider() : array
     {
         return [
             [[]],

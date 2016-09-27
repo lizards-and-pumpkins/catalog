@@ -131,19 +131,12 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($stubChildBlock, $this->blockStructure->getChildBlock($parentName, $childName));
     }
 
-    /**
-     * @return Block|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubBlock()
+    private function getStubBlock() : \PHPUnit_Framework_MockObject_MockObject
     {
         return $this->createMock(Block::class);
     }
 
-    /**
-     * @param string $blockName
-     * @return Block|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubBlockWithName($blockName)
+    private function getStubBlockWithName(string $blockName) : \PHPUnit_Framework_MockObject_MockObject
     {
         $stubBlock = $this->getStubBlock();
         $stubBlock->method('getBlockName')
@@ -151,11 +144,7 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
         return $stubBlock;
     }
 
-    /**
-     * @param string $parentName
-     * @param string $childName
-     */
-    private function assertParentHasChild($parentName, $childName)
+    private function assertParentHasChild(string $parentName, string $childName)
     {
         $property = new \ReflectionProperty($this->blockStructure, 'blockChildren');
         $property->setAccessible(true);

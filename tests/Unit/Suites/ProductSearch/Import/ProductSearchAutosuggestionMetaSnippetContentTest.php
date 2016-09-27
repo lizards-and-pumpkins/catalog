@@ -92,9 +92,8 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
-     * @param string $missingKey
      */
-    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData($missingKey)
+    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData(string $missingKey)
     {
         $pageMetaInfo = $this->metaSnippetContent->getInfo();
         unset($pageMetaInfo[$missingKey]);
@@ -108,7 +107,7 @@ class ProductSearchAutosuggestionMetaSnippetContentTest extends \PHPUnit_Framewo
     /**
      * @return array[]
      */
-    public function pageInfoArrayKeyProvider()
+    public function pageInfoArrayKeyProvider() : array
     {
         return [
             [ProductSearchAutosuggestionMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],

@@ -35,7 +35,7 @@ class ClearableStubKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has($key) : bool
     {
         // Intentionally left empty
     }

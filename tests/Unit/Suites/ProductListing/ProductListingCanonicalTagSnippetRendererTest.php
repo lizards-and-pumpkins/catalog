@@ -33,11 +33,7 @@ class ProductListingCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_T
      */
     private $stubBaseUrlBuilder;
 
-    /**
-     * @param string $expectedSnippetKey
-     * @param Snippet[] $result
-     */
-    private function assertContainsSnippetWithKey($expectedSnippetKey, array $result)
+    private function assertContainsSnippetWithKey(string $expectedSnippetKey, Snippet ...$result)
     {
         $found = array_reduce($result, function ($found, Snippet $snippet) use ($expectedSnippetKey) {
             return $found || $snippet->getKey() === $expectedSnippetKey;
@@ -50,7 +46,7 @@ class ProductListingCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_T
      * @param Snippet[] $result
      * @return Snippet|null
      */
-    private function findSnippetByKey($snippetKey, array $result)
+    private function findSnippetByKey(string $snippetKey, Snippet ...$result)
     {
         return array_reduce($result, function ($carry, Snippet $snippet) use ($snippetKey) {
             if (isset($carry)) {
@@ -105,9 +101,9 @@ class ProductListingCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_T
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
         $this->assertContainsOnlyInstancesOf(Snippet::class, $result);
-        $this->assertContainsSnippetWithKey($testSnippetKey, $result);
+        $this->assertContainsSnippetWithKey($testSnippetKey, ...$result);
 
-        $snippet = $this->findSnippetByKey($testSnippetKey, $result);
+        $snippet = $this->findSnippetByKey($testSnippetKey, ...$result);
 
         $expectedSnippetContent = sprintf('<link rel="canonical" href="%s%s" />', $testBaseUrl, $testUrlKey);
 

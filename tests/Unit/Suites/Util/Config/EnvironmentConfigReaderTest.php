@@ -49,10 +49,9 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $emptyConfigKey
      * @dataProvider emptyConfigKeyProvider
      */
-    public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsEmpty($emptyConfigKey)
+    public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsEmpty(string $emptyConfigKey)
     {
         $this->expectException(EnvironmentConfigKeyIsEmptyException::class);
         $this->expectExceptionMessage('The given environment configuration key is empty.');
@@ -62,7 +61,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyConfigKeyProvider()
+    public function emptyConfigKeyProvider() : array
     {
         return [
             [''],

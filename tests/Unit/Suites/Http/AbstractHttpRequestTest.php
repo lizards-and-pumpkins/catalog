@@ -9,10 +9,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 {
     private $testRequestHost = 'example.com';
 
-    /**
-     * @param bool $isSecure
-     */
-    private function setUpGlobalState($isSecure = false)
+    private function setUpGlobalState(bool $isSecure = false)
     {
         $_SERVER['REQUEST_METHOD'] = HttpRequest::METHOD_GET;
         $_SERVER['HTTPS'] = $isSecure;

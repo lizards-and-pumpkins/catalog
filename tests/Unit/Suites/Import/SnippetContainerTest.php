@@ -14,7 +14,7 @@ class SnippetContainerTest extends \PHPUnit_Framework_TestCase
      * @param string[] $containedSnippetCodes
      * @return SnippetContainer
      */
-    private function createInstance($code, $containedSnippetCodes)
+    private function createInstance(string $code, array $containedSnippetCodes) : SnippetContainer
     {
         return new SnippetContainer($code, $containedSnippetCodes);
     }

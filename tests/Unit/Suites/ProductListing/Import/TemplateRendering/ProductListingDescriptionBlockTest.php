@@ -22,7 +22,7 @@ class ProductListingDescriptionBlockTest extends \PHPUnit_Framework_TestCase
      * @param string[] $productListingAttributes
      * @return ProductListingDescriptionBlock
      */
-    private function createBlockInstance(array $productListingAttributes)
+    private function createBlockInstance(array $productListingAttributes) : ProductListingDescriptionBlock
     {
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->createMock(BlockRenderer::class);
@@ -39,7 +39,7 @@ class ProductListingDescriptionBlockTest extends \PHPUnit_Framework_TestCase
      * @param string[] $attributes
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingWithAttributes(array $attributes)
+    private function createStubProductListingWithAttributes(array $attributes) : ProductListing
     {
         $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubProductListing = $this->createMock(ProductListing::class);

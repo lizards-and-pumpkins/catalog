@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\RestApi;
 use LizardsAndPumpkins\RestApi\Exception\ApiVersionMustBeIntException;
 
 /**
- * @covers LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @covers \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  */
 class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {

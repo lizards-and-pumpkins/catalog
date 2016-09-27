@@ -28,7 +28,7 @@ class MessageMetadataTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedType
      * @dataProvider invalidMetadataValueTypeProvider
      */
-    public function testThrowsExceptionIfValueIsNotStringOrBoolOrIntOrDouble($invalidValue, $expectedType)
+    public function testThrowsExceptionIfValueIsNotStringOrBoolOrIntOrDouble($invalidValue, string $expectedType)
     {
         $this->expectException(InvalidMessageMetadataException::class);
         $message = 'The message metadata values may only me strings, booleans, integers or doubles,' .
@@ -40,7 +40,7 @@ class MessageMetadataTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidMetadataValueTypeProvider()
+    public function invalidMetadataValueTypeProvider() : array
     {
         return [
             'object' => [$this, get_class($this)],

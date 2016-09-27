@@ -22,9 +22,9 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
-    public function invalidKeyProvider()
+    public function invalidKeyProvider() : array
     {
         return [
             [null],
@@ -39,10 +39,9 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $validKey
      * @dataProvider validKeyProvider
      */
-    public function testSnippetIsCreatedIfValidKeyIsProvided($validKey)
+    public function testSnippetIsCreatedIfValidKeyIsProvided(string $validKey)
     {
         $content = 'doesn\'t matter';
         $result = Snippet::create($validKey, $content);
@@ -52,7 +51,7 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     /**
      * @return string[]
      */
-    public function validKeyProvider()
+    public function validKeyProvider() : array
     {
         return [
             ['abcdef'],

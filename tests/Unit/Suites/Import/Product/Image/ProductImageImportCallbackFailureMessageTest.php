@@ -5,7 +5,7 @@ namespace LizardsAndPumpkins\Import\Product\Image;
 use LizardsAndPumpkins\Logging\LogMessage;
 
 /**
- * @covers LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage
+ * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage
  */
 class ProductImageImportCallbackFailureMessageTest extends \PHPUnit_Framework_TestCase
 {

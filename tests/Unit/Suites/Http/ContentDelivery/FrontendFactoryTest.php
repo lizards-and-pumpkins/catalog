@@ -178,10 +178,9 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $snippetCode
      * @dataProvider registeredSnippetCodeDataProvider
      */
-    public function testSnippetKeyGeneratorForGivenCodeIsReturned($snippetCode)
+    public function testSnippetKeyGeneratorForGivenCodeIsReturned(string $snippetCode)
     {
         $snippetKeyGeneratorLocator = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
@@ -192,7 +191,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function registeredSnippetCodeDataProvider()
+    public function registeredSnippetCodeDataProvider() : array
     {
         return [
             [ProductDetailViewSnippetRenderer::CODE],

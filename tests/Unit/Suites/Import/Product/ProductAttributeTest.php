@@ -21,7 +21,6 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfAttributeHasDifferentCode()
     {
-
         $attribute = new ProductAttribute('foo', 'value', []);
 
         $this->assertFalse($attribute->isCodeEqualTo('bar'));

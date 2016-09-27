@@ -16,7 +16,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
      * @param int $numberOfImages
      * @return ProductImage[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
-    private function createArrayOfStubImagesWithSize($numberOfImages)
+    private function createArrayOfStubImagesWithSize(int $numberOfImages) : array
     {
         if (0 === $numberOfImages) {
             return [];
@@ -32,10 +32,9 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $numberOfImages
      * @dataProvider numberOfImagesProvider
      */
-    public function testItReturnsTheCorrectNumberOfImages($numberOfImages)
+    public function testItReturnsTheCorrectNumberOfImages(int $numberOfImages)
     {
         $stubImages = $this->createArrayOfStubImagesWithSize($numberOfImages);
         $imageList = new ProductImageList(...$stubImages);
@@ -45,7 +44,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function numberOfImagesProvider()
+    public function numberOfImagesProvider() : array
     {
         return [[0], [1], [2], [3]];
     }

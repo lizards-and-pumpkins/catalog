@@ -6,7 +6,7 @@ use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
 use LizardsAndPumpkins\Http\Exception\InvalidHttpHeadersException;
 
 /**
- * @covers LizardsAndPumpkins\Http\HttpHeaders
+ * @covers \LizardsAndPumpkins\Http\HttpHeaders
  */
 class HttpHeadersTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,7 +75,7 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function getMalformedHeadersSources()
+    public function getMalformedHeadersSources() : array
     {
         return [
             [['foo' => 1]],

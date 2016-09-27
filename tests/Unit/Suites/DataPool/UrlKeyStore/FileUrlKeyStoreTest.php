@@ -16,20 +16,14 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
      */
     private $temporaryStoragePath;
 
-    /**
-     * @return FileUrlKeyStore
-     */
-    protected function createUrlKeyStoreInstance()
+    final protected function createUrlKeyStoreInstance() : FileUrlKeyStore
     {
         $this->temporaryStoragePath = $this->prepareTemporaryStorage();
 
         return new FileUrlKeyStore($this->temporaryStoragePath);
     }
 
-    /**
-     * @return string
-     */
-    private function prepareTemporaryStorage()
+    private function prepareTemporaryStorage() : string
     {
         $temporaryStoragePath = sys_get_temp_dir() . '/lizards-and-pumpkins-test-url-key-storage';
 

@@ -40,17 +40,14 @@ class DomainEventQueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Message[]
      */
-    private function getMessagesAddedToQueue()
+    private function getMessagesAddedToQueue() : array
     {
         return array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
             return $invocation->parameters[0];
         }, $this->addToQueueSpy->getInvocations());
     }
 
-    /**
-     * @param int $expected
-     */
-    private function assertAddedMessageCount($expected)
+    private function assertAddedMessageCount(int $expected)
     {
         $queueMessages = $this->getMessagesAddedToQueue();
         $message = sprintf('Expected queue message count to be %d, got %d', $expected, count($queueMessages));

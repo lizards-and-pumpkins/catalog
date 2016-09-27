@@ -34,7 +34,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed[]
      */
-    public function invalidKeyProvider()
+    public function invalidKeyProvider() : array
     {
         return [
             [''],

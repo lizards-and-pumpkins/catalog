@@ -89,10 +89,9 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param  string[] $codesToRegister
      * @dataProvider projectorCodesToRegisterProvider
      */
-    public function testReturnsTheRegisteredProjectorCodes(... $codesToRegister)
+    public function testReturnsTheRegisteredProjectorCodes(string ...$codesToRegister)
     {
         array_map(function ($codeToRegister) {
             $this->locator->register($codeToRegister, $this->getStubProjector());
@@ -103,7 +102,7 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function projectorCodesToRegisterProvider()
+    public function projectorCodesToRegisterProvider() : array
     {
         return [
             'none' => [],

@@ -87,9 +87,8 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
-     * @param string $missingKey
      */
-    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData($missingKey)
+    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData(string $missingKey)
     {
         $pageMetaInfo = $this->metaSnippetContent->getInfo();
         unset($pageMetaInfo[$missingKey]);
@@ -103,7 +102,7 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
     /**
      * @return array[]
      */
-    public function pageInfoArrayKeyProvider()
+    public function pageInfoArrayKeyProvider() : array
     {
         return [
             [ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],

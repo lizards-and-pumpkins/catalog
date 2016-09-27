@@ -27,11 +27,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $snippetRenderer;
 
-    /**
-     * @param string $dummyProductIdString
-     * @return ProductView|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubProductView($dummyProductIdString)
+    private function getStubProductView(string $dummyProductIdString) : ProductView
     {
         $stubProductId = $this->createMock(ProductId::class);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);
@@ -45,11 +41,7 @@ class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         return $stubProduct;
     }
 
-    /**
-     * @param SnippetKeyGenerator $snippetKeyGenerator
-     * @return ProductInListingSnippetRenderer
-     */
-    private function createInstanceUnderTest($snippetKeyGenerator)
+    private function createInstanceUnderTest(SnippetKeyGenerator $snippetKeyGenerator) : ProductInListingSnippetRenderer
     {
         return new ProductInListingSnippetRenderer($snippetKeyGenerator);
     }

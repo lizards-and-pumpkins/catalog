@@ -17,10 +17,9 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $emptyWebsiteCode
      * @dataProvider emptyWebsiteCodeDataProvider
      */
-    public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty($emptyWebsiteCode)
+    public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty(string $emptyWebsiteCode)
     {
         $this->expectException(InvalidWebsiteCodeException::class);
         $this->expectExceptionMessage('The website code may not be empty');
@@ -30,7 +29,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyWebsiteCodeDataProvider()
+    public function emptyWebsiteCodeDataProvider() : array
     {
         return [
             [''],
@@ -44,10 +43,9 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $websiteCode
      * @dataProvider websiteCodeDataProvider
      */
-    public function testItReturnsTheWebsiteCodeAsAString($websiteCode)
+    public function testItReturnsTheWebsiteCodeAsAString(string $websiteCode)
     {
         $this->assertSame($websiteCode, (string) Website::fromString($websiteCode));
     }
@@ -55,7 +53,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function websiteCodeDataProvider()
+    public function websiteCodeDataProvider() : array
     {
         return [
             ['abc'],

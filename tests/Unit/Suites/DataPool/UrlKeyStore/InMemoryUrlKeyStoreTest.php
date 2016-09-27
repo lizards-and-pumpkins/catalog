@@ -8,10 +8,7 @@ namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
  */
 class InMemoryUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
 {
-    /**
-     * @return UrlKeyStore
-     */
-    protected function createUrlKeyStoreInstance()
+    final protected function createUrlKeyStoreInstance() : UrlKeyStore
     {
         return new InMemoryUrlKeyStore();
     }

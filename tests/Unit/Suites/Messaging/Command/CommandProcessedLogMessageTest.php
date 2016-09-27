@@ -14,11 +14,7 @@ class CommandProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
      */
     private $mockCommandHandler;
 
-    /**
-     * @param string $message
-     * @return CommandProcessedLogMessage
-     */
-    private function createMessageInstance($message)
+    private function createMessageInstance(string $message) : CommandProcessedLogMessage
     {
         return new CommandProcessedLogMessage($message, $this->mockCommandHandler);
     }

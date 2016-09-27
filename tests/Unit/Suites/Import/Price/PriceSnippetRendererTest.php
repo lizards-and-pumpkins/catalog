@@ -57,10 +57,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $testPriceAttributeCode = 'foo';
 
-    /**
-     * @return ProductView|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProductView()
+    private function createStubProductView() : \PHPUnit_Framework_MockObject_MockObject
     {
         $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));

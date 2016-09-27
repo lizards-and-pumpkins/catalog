@@ -25,7 +25,7 @@ class StubContextSource extends ContextSource
     /**
      * @return array[]
      */
-    protected function getContextMatrix()
+    protected function getContextMatrix() : array
     {
         return $this->testContextMatrix;
     }

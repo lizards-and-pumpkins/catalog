@@ -137,7 +137,7 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function nonIntegerProvider()
+    public function nonIntegerProvider() : array
     {
         return [
             [1.1],

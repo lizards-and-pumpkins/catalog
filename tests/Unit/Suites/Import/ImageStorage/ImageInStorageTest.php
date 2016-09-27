@@ -29,10 +29,7 @@ class ImageInStorageTest extends \PHPUnit_Framework_TestCase
      */
     private $stubFileContent;
 
-    /**
-     * @return ImageInStorage
-     */
-    private function createImageInStorage()
+    private function createImageInStorage() : ImageInStorage
     {
         return ImageInStorage::create(
             $this->stubStorageSpecificFileUri,

@@ -37,10 +37,9 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $typeString
      * @dataProvider validProductTypeStringProvider
      */
-    public function testItReturnsTheTypeStringWhenCastToString($typeString)
+    public function testItReturnsTheTypeStringWhenCastToString(string $typeString)
     {
         $this->assertSame($typeString, (string) ProductTypeCode::fromString($typeString));
     }
@@ -48,7 +47,7 @@ class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function validProductTypeStringProvider()
+    public function validProductTypeStringProvider() : array
     {
         return [[SimpleProduct::TYPE_CODE], [ConfigurableProduct::TYPE_CODE], ['test']];
     }

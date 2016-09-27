@@ -78,10 +78,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $addSnippetsToPageSpy;
 
-    /**
-     * @return string
-     */
-    private function createProductDetailPageMetaInfoContentJson()
+    private function createProductDetailPageMetaInfoContentJson() : string
     {
         return json_encode(ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
@@ -91,11 +88,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->getInfo());
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $snippetValue
-     */
-    private function assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $snippetValue)
+    private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {

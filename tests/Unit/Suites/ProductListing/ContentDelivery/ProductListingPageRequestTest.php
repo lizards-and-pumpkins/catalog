@@ -55,7 +55,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
      * @param mixed $value
      * @param int $ttl
      */
-    private function assertCookieHasBeenSet($name, $value, $ttl)
+    private function assertCookieHasBeenSet(string $name, $value, int $ttl)
     {
         $this->assertContains([$name, $value, time() + $ttl], self::$setCookieValues);
     }
@@ -65,7 +65,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
      * @param mixed $value
      * @param int $ttl
      */
-    private function assertCookieHasNotBeenSet($name, $value, $ttl)
+    private function assertCookieHasNotBeenSet(string $name, $value, int $ttl)
     {
         $this->assertNotContains([$name, $value, time() + $ttl], self::$setCookieValues);
     }
@@ -75,7 +75,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
      * @param mixed $value
      * @param int $expire
      */
-    public static function trackSetCookieCalls($name, $value, $expire)
+    public static function trackSetCookieCalls(string $name, $value, int $expire)
     {
         self::$setCookieValues[] = [$name, $value, $expire];
     }
@@ -426,15 +426,12 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
  * @param mixed $value
  * @param int $expire
  */
-function setcookie($name, $value, $expire)
+function setcookie(string $name, $value, int $expire)
 {
     ProductListingPageRequestTest::trackSetCookieCalls($name, $value, $expire);
 }
 
-/**
- * @return int
- */
-function time()
+function time() : int
 {
     return 0;
 }

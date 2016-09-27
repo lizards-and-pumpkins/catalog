@@ -9,19 +9,12 @@ class TestDomainEvent implements DomainEvent
 {
     const CODE = 'test-event';
     
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         return Message::withCurrentTime(self::CODE, [], []);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : self
     {
         return new self();
     }

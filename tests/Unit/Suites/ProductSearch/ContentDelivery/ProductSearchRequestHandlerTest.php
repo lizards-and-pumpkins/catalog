@@ -46,10 +46,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $stubRequest;
 
-    /**
-     * @return DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubDataPoolReader()
+    private function createStubDataPoolReader() : DataPoolReader
     {
         /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
         $stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
@@ -74,10 +71,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         return $mockDataPoolReader;
     }
 
-    /**
-     * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProductListingPageRequest()
+    private function createStubProductListingPageRequest() : ProductListingPageRequest
     {
         $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
@@ -93,10 +87,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         return $stubProductListingPageRequest;
     }
 
-    /**
-     * @return ProductListingPageContentBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProductListingPageContentBuilder()
+    private function createStubProductListingPageContentBuilder() : ProductListingPageContentBuilder
     {
         $stubHttpResponse = $this->createMock(HttpResponse::class);
         $stubPageContentBuilder = $this->createMock(ProductListingPageContentBuilder::class);
@@ -135,10 +126,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
-     */
-    public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl()
+    public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl() : HttpRequest
     {
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('foo');
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
@@ -182,7 +170,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl
-     * @param HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest
      */
     public function testExceptionIsThrownDuringAttemptToProcessInvalidRequest(HttpRequest $stubHttpRequest)
     {
@@ -190,10 +177,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->requestHandler->process($stubHttpRequest);
     }
 
-    /**
-     * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
-     */
-    public function testTrueIsReturnedIfRequestCanBeProcessed()
+    public function testTrueIsReturnedIfRequestCanBeProcessed() : HttpRequest
     {
         $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
@@ -209,7 +193,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testTrueIsReturnedIfRequestCanBeProcessed
-     * @param HttpRequest $stubRequest
      */
     public function testCookieProcessingIsTriggered(HttpRequest $stubRequest)
     {
@@ -224,7 +207,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testTrueIsReturnedIfRequestCanBeProcessed
-     * @param HttpRequest $stubRequest
      */
     public function testHttpResponseIsReturned(HttpRequest $stubRequest)
     {
@@ -239,7 +221,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testTrueIsReturnedIfRequestCanBeProcessed
-     * @param HttpRequest $stubRequest
      */
     public function testSortOrderConfigAttributeCodesAreMappedBeforePassedToSearchEngine(HttpRequest $stubRequest)
     {

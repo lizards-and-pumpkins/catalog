@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
 
 /**
- * @covers LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation
+ * @covers \LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation
  */
 class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
      * @param string $expected
      * @param int|string|null $input
      */
-    private function assertIsTransformedTo($expected, $input)
+    private function assertIsTransformedTo(string $expected, $input)
     {
         $transformation = $this->transformation;
         $this->assertSame($expected, $transformation($input, $this->stubContext, $this->stubPageSnippets));
@@ -76,7 +76,7 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
      * @param string $expected
      * @param int|string $input
      */
-    public function testItReturnsInputNumbersAsEuro($expected, $input)
+    public function testItReturnsInputNumbersAsEuro(string $expected, $input)
     {
         $this->assertIsTransformedTo($expected, $input);
     }
@@ -84,7 +84,7 @@ class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCa
     /**
      * @return array[]
      */
-    public function numbersOnlyInputDataProvider()
+    public function numbersOnlyInputDataProvider() : array
     {
         return [
             ['1,00 €', 100],

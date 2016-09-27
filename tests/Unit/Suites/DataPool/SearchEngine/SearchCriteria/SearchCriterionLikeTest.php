@@ -8,10 +8,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
  */
 class SearchCriterionLikeTest extends AbstractSearchCriterionTest
 {
-    /**
-     * @return string
-     */
-    final protected function getOperationName()
+    final protected function getOperationName() : string
     {
         return 'Like';
     }
@@ -19,7 +16,7 @@ class SearchCriterionLikeTest extends AbstractSearchCriterionTest
     /**
      * @return array[]
      */
-    final public function getNonMatchingValues()
+    final public function getNonMatchingValues() : array
     {
         return [
             [['foo'], 'bar'],
@@ -29,7 +26,7 @@ class SearchCriterionLikeTest extends AbstractSearchCriterionTest
     /**
      * @return array[]
      */
-    final public function getMatchingValues()
+    final public function getMatchingValues() : array
     {
         return[
             [['food'], 'foo'],

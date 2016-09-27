@@ -32,82 +32,56 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
         $this->mockUrlKeyStore = $this->createMock(UrlKeyStore::class);
     }
 
-    /**
-     * @return UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockUrlKeyStore()
+    final protected function getMockUrlKeyStore() : UrlKeyStore
     {
         return $this->mockUrlKeyStore;
     }
 
-    /**
-     * @return SearchEngine|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockSearchEngine()
+    final protected function getMockSearchEngine() : SearchEngine
     {
         return $this->mockSearchEngine;
     }
 
-    /**
-     * @return KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockKeyValueStore()
+    final protected function getMockKeyValueStore() : KeyValueStore
     {
         return $this->mockKeyValueStore;
     }
 
-    /**
-     * @return ProductId|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getStubProductId()
+    final protected function getStubProductId() : ProductId
     {
         return $this->createMock(ProductId::class);
     }
 
-    protected function addSetMethodToStubKeyValueStore()
+    final protected function addSetMethodToStubKeyValueStore()
     {
-        $this->mockKeyValueStore->expects($this->once())
-            ->method('set');
+        $this->mockKeyValueStore->expects($this->once())->method('set');
     }
 
     /**
-     * @param string $returnValue
+     * @param mixed $returnValue
      */
-    protected function addGetMethodToStubKeyValueStore($returnValue)
+    final protected function addGetMethodToStubKeyValueStore($returnValue)
     {
-        $this->mockKeyValueStore->expects($this->once())
-            ->method('get')
-            ->willReturn($returnValue);
+        $this->mockKeyValueStore->expects($this->once())->method('get')->willReturn($returnValue);
     }
 
     /**
      * @param string[] $returnValue
      */
-    protected function addMultiGetMethodToStubKeyValueStore($returnValue)
+    final protected function addMultiGetMethodToStubKeyValueStore(array $returnValue)
     {
-        $this->mockKeyValueStore->expects($this->once())
-            ->method('multiGet')
-            ->willReturn($returnValue);
+        $this->mockKeyValueStore->expects($this->once())->method('multiGet')->willReturn($returnValue);
     }
 
-    /**
-     * @param boolean $returnResult
-     */
-    protected function addHasMethodToStubKeyValueStore($returnResult)
+    final protected function addHasMethodToStubKeyValueStore(bool $returnResult)
     {
         $this->mockKeyValueStore->expects($this->once())
             ->method('has')
             ->willReturn($returnResult);
     }
 
-    /**
-     * @return HttpUrl
-     */
-    protected function getDummyUrl()
+    final protected function getDummyUrl() : HttpUrl
     {
-        $urlString = 'http://example.com/path';
-        $url = HttpUrl::fromString($urlString);
-
-        return $url;
+        return HttpUrl::fromString('http://example.com/path');
     }
 }

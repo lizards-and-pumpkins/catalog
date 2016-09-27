@@ -28,11 +28,7 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
      */
     private $domainEventHandler;
 
-    /**
-     * @param Message $message
-     * @return TemplateWasUpdatedDomainEventHandler
-     */
-    private function createDomainEventHandler(Message $message)
+    private function createDomainEventHandler(Message $message) : TemplateWasUpdatedDomainEventHandler
     {
         /** @var TemplateProjectorLocator|\PHPUnit_Framework_MockObject_MockObject $stubTemplateProjectorLocator */
         $stubTemplateProjectorLocator = $this->createMock(TemplateProjectorLocator::class);
@@ -45,10 +41,7 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
         );
     }
 
-    /**
-     * @return ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubContextSource()
+    private function createStubContextSource() : ContextSource
     {
         return $this->createMock(ContextSource::class);
     }

@@ -28,7 +28,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
      * @param ProductImageListBuilder $productImageListBuilder
      * @return ProductImageBuilder[]
      */
-    private function getImageBuilderArrayFromInstance(ProductImageListBuilder $productImageListBuilder)
+    private function getImageBuilderArrayFromInstance(ProductImageListBuilder $productImageListBuilder) : array
     {
         return $this->getPropertyFromInstance($productImageListBuilder, 'imageBuilders');
     }
@@ -38,7 +38,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $attributeCode
      * @return mixed
      */
-    private function getPropertyFromInstance(ProductImageListBuilder $productImageListBuilder, $attributeCode)
+    private function getPropertyFromInstance(ProductImageListBuilder $productImageListBuilder, string $attributeCode)
     {
         $property = new \ReflectionProperty($productImageListBuilder, $attributeCode);
         $property->setAccessible(true);
@@ -50,7 +50,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $label
      * @return array[]
      */
-    private function getImageAttributeArray($fileName, $label)
+    private function getImageAttributeArray(string $fileName, string $label) : array
     {
         return [
             [

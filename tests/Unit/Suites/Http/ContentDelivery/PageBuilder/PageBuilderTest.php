@@ -68,8 +68,8 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string[] $containerSnippets
      */
     private function setDataPoolFixture(
-        $rootSnippetCode,
-        $rootSnippetContent,
+        string $rootSnippetCode,
+        string $rootSnippetContent,
         array $childSnippetMap,
         array $containerSnippets = []
     ) {
@@ -84,8 +84,11 @@ class PageBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string[] $allSnippetCodes
      * @param string[] $containerSnippets
      */
-    private function setPageMetaInfoFixture($rootSnippetCode, array $allSnippetCodes, array $containerSnippets = [])
-    {
+    private function setPageMetaInfoFixture(
+        string $rootSnippetCode,
+        array $allSnippetCodes,
+        array $containerSnippets = []
+    ) {
         $pageMetaInfo = [
             ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE  => $rootSnippetCode,
             ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => $allSnippetCodes,

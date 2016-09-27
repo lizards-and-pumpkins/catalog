@@ -16,7 +16,6 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
@@ -78,10 +77,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
      */
     private $contextSource;
 
-    /**
-     * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockProductXmlToProductBuilder()
+    private function createMockProductXmlToProductBuilder() : ProductXmlToProductBuilderLocator
     {
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->createMock(ProductBuilder::class);
@@ -92,10 +88,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         return $productXmlToProductBuilder;
     }
 
-    /**
-     * @return ProductListingBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockProductsPerPageForContextBuilder()
+    private function createMockProductsPerPageForContextBuilder() : ProductListingBuilder
     {
         $productListing = $this->createMock(ProductListing::class);
         $productListing->method('getUrlKey')->willReturn('dummy-url-key');
@@ -106,10 +99,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         return $productsPerPageForContextBuilder;
     }
 
-    /**
-     * @param bool $isAvailableInContext
-     */
-    private function setProductIsAvailableForContextFixture($isAvailableInContext)
+    private function setProductIsAvailableForContextFixture(bool $isAvailableInContext)
     {
         $stubProductBuilder = $this->stubProductXmlToProductBuilder->createProductBuilderFromXml('');
         $stubProductBuilder->method('isAvailableForContext')->willReturn($isAvailableInContext);

@@ -33,7 +33,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      * @param int $numberOfAssociatedProducts
      * @return Product[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
-    private function createArrayOfStubProductsWithSize($numberOfAssociatedProducts)
+    private function createArrayOfStubProductsWithSize(int $numberOfAssociatedProducts) : array
     {
         return array_map(function ($num) {
             $stubProduct = $this->createMock(Product::class);
@@ -42,12 +42,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         }, range(1, $numberOfAssociatedProducts));
     }
 
-    /**
-     * @param string $code
-     * @param string $value
-     * @return ProductAttribute|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubAttribute($code, $value)
+    private function createStubAttribute(string $code, string $value) : ProductAttribute
     {
         $stubAttribute = $this->createMock(ProductAttribute::class);
         $stubAttribute->method('getCode')->willReturn($code);
@@ -55,12 +50,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         return $stubAttribute;
     }
 
-    /**
-     * @param string $productId
-     * @param ProductAttribute[] $attributes
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProduct($productId, ProductAttribute ...$attributes)
+    private function createStubProduct(string $productId, ProductAttribute ...$attributes) : Product
     {
         $stubProduct = $this->createMock(Product::class);
         $getAttributesValueMap = $this->createStubProductAttributeReturnValueMap(...$attributes);
@@ -75,7 +65,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      * @param ProductAttribute[] $attributes
      * @return array[]
      */
-    private function createStubProductAttributeReturnValueMap(ProductAttribute ...$attributes)
+    private function createStubProductAttributeReturnValueMap(ProductAttribute ...$attributes) : array
     {
         return array_map(function (ProductAttribute $attribute) {
             return [$attribute->getCode(), [$attribute->getValue()]];
@@ -86,7 +76,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
      * @param ProductAttribute[] $attributes
      * @return array[]
      */
-    private function createHasProductAttributeValueMap(ProductAttribute ...$attributes)
+    private function createHasProductAttributeValueMap(ProductAttribute ...$attributes) : array
     {
         return array_map(function (ProductAttribute $attribute) {
             return [$attribute->getCode(), true];
@@ -106,10 +96,9 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $numberOfAssociatedProducts
      * @dataProvider numberOfAssociatedProductsProvider
      */
-    public function testItIsCountable($numberOfAssociatedProducts)
+    public function testItIsCountable(int $numberOfAssociatedProducts)
     {
         $stubProducts = $this->createArrayOfStubProductsWithSize($numberOfAssociatedProducts);
         $this->assertCount($numberOfAssociatedProducts, new AssociatedProductList(...$stubProducts));
@@ -118,7 +107,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function numberOfAssociatedProductsProvider()
+    public function numberOfAssociatedProductsProvider() : array
     {
         return [[1], [2]];
     }

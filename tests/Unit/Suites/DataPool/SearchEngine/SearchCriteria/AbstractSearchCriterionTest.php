@@ -27,15 +27,12 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
         return $stubSearchDocumentField;
     }
 
-    /**
-     * @param SearchDocumentField[] $stubSearchDocumentFields
-     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSearchDocumentWithGivenFields(array $stubSearchDocumentFields)
-    {
+    private function createStubSearchDocumentWithGivenField(
+        SearchDocumentField $stubSearchDocumentFields
+    ) : SearchDocument {
         $stubSearchDocumentFieldCollection = $this->createMock(SearchDocumentFieldCollection::class);
         $stubSearchDocumentFieldCollection->method('getIterator')
-            ->willReturn(new \ArrayIterator($stubSearchDocumentFields));
+            ->willReturn(new \ArrayIterator([$stubSearchDocumentFields]));
 
         $stubSearchDocument = $this->createMock(SearchDocument::class);
         $stubSearchDocument->method('getFieldsCollection')->willReturn($stubSearchDocumentFieldCollection);
@@ -48,7 +45,7 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
      * @param string $fieldValue
      * @return SearchCriterion
      */
-    private function createInstanceOfClassUnderTest($fieldName, $fieldValue)
+    private function createInstanceOfClassUnderTest($fieldName, $fieldValue) : SearchCriterion
     {
         $className = SearchCriterion::class . $this->getOperationName();
 
@@ -61,10 +58,7 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
         return call_user_func([$className, 'create'], $fieldName, $fieldValue);
     }
 
-    /**
-     * @return string
-     */
-    abstract protected function getOperationName();
+    abstract protected function getOperationName() : string;
 
     public function testSearchCriteriaInterfaceIsImplemented()
     {
@@ -112,7 +106,7 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
         $criterion = $this->createInstanceOfClassUnderTest($fieldName, $fieldValues[0]);
 
         $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', $fieldValues);
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenField($stubSearchDocumentField);
 
         $this->assertFalse($criterion->matches($stubSearchDocument));
     }
@@ -124,14 +118,14 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
      */
     public function testFalseIsReturnIfGivenSearchDocumentFieldValueIsNotMatchingCriterionValueOnOperation(
         array $searchDocumentFieldValues,
-        $criterionFieldValue
+        string $criterionFieldValue
     ) {
         $fieldName = 'foo';
 
         $criterion = $this->createInstanceOfClassUnderTest($fieldName, $criterionFieldValue);
 
         $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValues);
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenField($stubSearchDocumentField);
 
         $this->assertFalse($criterion->matches($stubSearchDocument));
     }
@@ -139,23 +133,23 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    abstract public function getNonMatchingValues();
+    abstract public function getNonMatchingValues() : array;
 
     /**
      * @dataProvider getMatchingValues
-     * @param string $searchDocumentFieldValue
+     * @param string[] $searchDocumentFieldValues
      * @param string $criterionFieldValue
      */
     public function testTrueIsReturnIfGivenSearchDocumentFieldValueMatchesCriterionValueOnOperation(
-        $searchDocumentFieldValue,
-        $criterionFieldValue
+        array $searchDocumentFieldValues,
+        string $criterionFieldValue
     ) {
         $fieldName = 'foo';
 
         $criterion = $this->createInstanceOfClassUnderTest($fieldName, $criterionFieldValue);
 
-        $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValue);
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([$stubSearchDocumentField]);
+        $stubSearchDocumentField = $this->createStubSearchDocumentField($fieldName, $searchDocumentFieldValues);
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenField($stubSearchDocumentField);
 
         $this->assertTrue($criterion->matches($stubSearchDocument));
     }
@@ -163,5 +157,5 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    abstract public function getMatchingValues();
+    abstract public function getMatchingValues() : array;
 }

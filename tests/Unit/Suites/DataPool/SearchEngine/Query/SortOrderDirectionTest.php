@@ -35,7 +35,7 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidSortOrderDirectionProvider()
+    public function invalidSortOrderDirectionProvider() : array
     {
         return [
             ['foo'],
@@ -59,7 +59,7 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function validSortOrderDirectionProvider()
+    public function validSortOrderDirectionProvider() : array
     {
         return [
             ['asc'],

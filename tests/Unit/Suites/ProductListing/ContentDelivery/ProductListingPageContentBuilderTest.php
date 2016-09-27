@@ -93,10 +93,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $stubSearchFieldToRequestParamMap;
 
-    /**
-     * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockPageBuilder()
+    private function createMockPageBuilder() : PageBuilder
     {
         $mockPageBuilder = $this->createMock(PageBuilder::class);
 
@@ -106,10 +103,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         return $mockPageBuilder;
     }
 
-    /**
-     * @param string $snippetCode
-     */
-    private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode)
+    private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder(string $snippetCode)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function ($invocation) use ($snippetCode) {
             return intval([$snippetCode => $snippetCode] === $invocation->parameters[0]);
@@ -122,11 +116,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $snippetValue
-     */
-    private function assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $snippetValue)
+    private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {
@@ -142,10 +132,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    /**
-     * @return SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubSearchEngineResponse()
+    private function createStubSearchEngineResponse() : SearchEngineResponse
     {
         $stubProductId = $this->createMock(ProductId::class);
         $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);

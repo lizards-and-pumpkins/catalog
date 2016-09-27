@@ -18,7 +18,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
      * @param string[] $searchDocumentFieldsData
      * @return SearchDocument
      */
-    private function createStubSearchDocumentWithGivenFields(array $searchDocumentFieldsData)
+    private function createStubSearchDocumentWithGivenFields(array $searchDocumentFieldsData) : SearchDocument
     {
         $searchDocumentFieldsArray = [];
 
@@ -38,10 +38,10 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $fieldKey
-     * @param string $fieldValues
-     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     * @param string[] $fieldValues
+     * @return SearchDocumentField
      */
-    private function createStubSearchDocumentField($fieldKey, $fieldValues)
+    private function createStubSearchDocumentField(string $fieldKey, array $fieldValues) : SearchDocumentField
     {
         $stubSearchDocumentField = $this->createMock(SearchDocumentField::class);
         $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);
@@ -130,9 +130,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider criteriaConditionProvider
-     * @param string $condition
      */
-    public function testCriteriaWithArbitraryConditionIsCreated($condition)
+    public function testCriteriaWithArbitraryConditionIsCreated(string $condition)
     {
         $result = CompositeSearchCriterion::create($condition);
         $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
@@ -141,7 +140,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function criteriaConditionProvider()
+    public function criteriaConditionProvider() : array
     {
         return [
             [CompositeSearchCriterion::AND_CONDITION],

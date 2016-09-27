@@ -4,10 +4,7 @@ namespace LizardsAndPumpkins\Import\FileStorage\Stub;
 
 class CastableToStringStub
 {
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return 'stub string content';
     }

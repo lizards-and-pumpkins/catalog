@@ -8,10 +8,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
  */
 class SearchCriterionGreaterOrEqualThanTest extends AbstractSearchCriterionTest
 {
-    /**
-     * @return string
-     */
-    final protected function getOperationName()
+    final protected function getOperationName() : string
     {
         return 'GreaterOrEqualThan';
     }
@@ -19,7 +16,7 @@ class SearchCriterionGreaterOrEqualThanTest extends AbstractSearchCriterionTest
     /**
      * @return array[]
      */
-    final public function getNonMatchingValues()
+    final public function getNonMatchingValues() : array
     {
         return [
             [['1'], '2'],
@@ -29,7 +26,7 @@ class SearchCriterionGreaterOrEqualThanTest extends AbstractSearchCriterionTest
     /**
      * @return array[]
      */
-    final public function getMatchingValues()
+    final public function getMatchingValues() : array
     {
         return[
             [['2'], '1'],

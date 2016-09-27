@@ -17,19 +17,12 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  */
 class ProductDetailViewBlockRendererTest extends AbstractBlockRendererTest
 {
-    /**
-     * @param ThemeLocator $stubThemeLocator
-     * @param BlockStructure $stubBlockStructure
-     * @param TranslatorRegistry $stubTranslatorRegistry
-     * @param BaseUrlBuilder $stubBaseUrlBuilder
-     * @return BlockRenderer
-     */
     protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
         BaseUrlBuilder $stubBaseUrlBuilder
-    ) {
+    ) : BlockRenderer {
         return new ProductDetailViewBlockRenderer(
             $stubThemeLocator,
             $stubBlockStructure,

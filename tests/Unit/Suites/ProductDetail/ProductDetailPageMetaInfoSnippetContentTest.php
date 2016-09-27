@@ -97,9 +97,8 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
-     * @param string $key
      */
-    public function testExceptionIsThrownIfRequiredKeyIsMissing($key)
+    public function testExceptionIsThrownIfRequiredKeyIsMissing(string $key)
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Missing key in input JSON');
@@ -111,7 +110,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
     /**
      * @return array[]
      */
-    public function pageInfoArrayKeyProvider()
+    public function pageInfoArrayKeyProvider() : array
     {
         return [
             [ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID],

@@ -53,7 +53,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      * @param array[] $attributesMap
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProduct(array $attributesMap)
+    private function createStubProduct(array $attributesMap) : Product
     {
         $stubProductId = $this->createMock(ProductId::class);
         $stubProductId->method('__toString')->willReturn('test-id');
@@ -79,17 +79,16 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $attributeCode
      * @param mixed[] $attributeValues
      */
-    private function assertDocumentContainsField(SearchDocument $document, $attributeCode, array $attributeValues)
-    {
+    private function assertDocumentContainsField(
+        SearchDocument $document,
+        string $attributeCode,
+        array $attributeValues
+    ) {
         $searchDocumentField = SearchDocumentField::fromKeyAndValues($attributeCode, $attributeValues);
         $this->assertContains($searchDocumentField, $document->getFieldsCollection()->getFields(), '', false, false);
     }
 
-    /**
-     * @param string[] $searchableAttributes
-     * @return ProductSearchDocumentBuilder
-     */
-    private function createInstance(array $searchableAttributes)
+    private function createInstance(string ...$searchableAttributes) : ProductSearchDocumentBuilder
     {
         return new ProductSearchDocumentBuilder(
             $searchableAttributes,
@@ -114,13 +113,13 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchDocumentBuilderInterfaceIsImplemented()
     {
-        $this->assertInstanceOf(SearchDocumentBuilder::class, $this->createInstance([]));
+        $this->assertInstanceOf(SearchDocumentBuilder::class, $this->createInstance());
     }
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
         $this->expectException(InvalidProjectionSourceDataTypeException::class);
-        $this->createInstance([])->aggregate('invalid-projection-source-data');
+        $this->createInstance()->aggregate('invalid-projection-source-data');
     }
 
     public function testSearchDocumentContainingIndexedAttributeIsReturned()
@@ -131,7 +130,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $attributesMap = [[$searchableAttribute, $attributeValues]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = $this->createInstance([$searchableAttribute]);
+        $searchDocumentBuilder = $this->createInstance($searchableAttribute);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocument::class, $result);
@@ -146,7 +145,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $attributesMap = [[$priceAttributeCode, $priceValues]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = $this->createInstance([$priceAttributeCode]);
+        $searchDocumentBuilder = $this->createInstance($priceAttributeCode);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocument::class, $result);
@@ -164,7 +163,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $attributesMap = [[$priceAttributeCode, $priceValues], [$specialPriceAttributeCode, $specialPriceValues]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = $this->createInstance([$priceAttributeCode]);
+        $searchDocumentBuilder = $this->createInstance($priceAttributeCode);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocument::class, $result);
@@ -179,7 +178,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $attributesMap = [[$searchableAttribute, $attributeValues]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = $this->createInstance([$searchableAttribute]);
+        $searchDocumentBuilder = $this->createInstance($searchableAttribute);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         $this->assertInstanceOf(SearchDocument::class, $result);
@@ -194,7 +193,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $attributesMap = [[$priceField, $priceExcludingTax]];
         $stubProduct = $this->createStubProduct($attributesMap);
 
-        $searchDocumentBuilder = $this->createInstance([$priceField]);
+        $searchDocumentBuilder = $this->createInstance($priceField);
         $result = $searchDocumentBuilder->aggregate($stubProduct);
 
         foreach ($this->dummyTaxableCountries as $countryCode) {

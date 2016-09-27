@@ -41,10 +41,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
      */
     private $mockImageFileLocator;
 
-    /**
-     * @return StubProductView
-     */
-    private function createProductViewInstance()
+    private function createProductViewInstance() : StubProductView
     {
         /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
         /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $mockImageFileLocator */
@@ -110,9 +107,8 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider priceAttributeCodeProvider
-     * @param string $priceAttributeCode
      */
-    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString($priceAttributeCode)
+    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString(string $priceAttributeCode)
     {
         $testAttributeValue = 1000;
 
@@ -127,7 +123,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function priceAttributeCodeProvider()
+    public function priceAttributeCodeProvider() : array
     {
         return [
             ['price'],

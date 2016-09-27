@@ -45,12 +45,7 @@ class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $mockProductImageListBuilder;
 
-    /**
-     * @param string $code
-     * @param string $value
-     * @return ProductAttribute
-     */
-    private function createProductAttribute($code, $value)
+    private function createProductAttribute(string $code, string $value) : ProductAttribute
     {
         return new ProductAttribute(AttributeCode::fromString($code), $value, []);
     }

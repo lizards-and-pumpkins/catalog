@@ -808,10 +808,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $expected
      * @dataProvider productListSnippetRenderersProvider
      */
-    public function testContainsProductListingPageSnippetRenderersinSnippetRendererList($expected)
+    public function testContainsProductListingPageSnippetRenderersInSnippetRendererList(string $expected)
     {
         $found = array_reduce(
             $this->commonFactory->createProductListingSnippetRendererList(),
@@ -826,7 +825,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function productListSnippetRenderersProvider()
+    public function productListSnippetRenderersProvider() : array
     {
         return [
             [ProductListingDescriptionSnippetRenderer::class],
@@ -837,10 +836,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $expected
      * @dataProvider productSnippetRenderersProvider
      */
-    public function testContainsProductSnippetRenderersinSnippetRendererList($expected)
+    public function testContainsProductSnippetRenderersInSnippetRendererList(string $expected)
     {
         $found = array_reduce(
             $this->commonFactory->createProductDetailPageSnippetRendererList(),
@@ -855,7 +853,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function productSnippetRenderersProvider()
+    public function productSnippetRenderersProvider() : array
     {
         return [
             [ProductDetailViewSnippetRenderer::class],

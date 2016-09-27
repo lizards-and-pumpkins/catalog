@@ -37,11 +37,7 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $mockProductView;
 
-    /**
-     * @param string $expectedSnippetKey
-     * @param Snippet[] $result
-     */
-    private function assertContainsSnippetWithKey($expectedSnippetKey, array $result)
+    private function assertContainsSnippetWithKey(string $expectedSnippetKey, Snippet ...$result)
     {
         $found = array_reduce($result, function ($found, Snippet $snippet) use ($expectedSnippetKey) {
             return $found || $snippet->getKey() === $expectedSnippetKey;
@@ -96,7 +92,7 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
         $this->assertContainsOnlyInstancesOf(Snippet::class, $result);
-        $this->assertContainsSnippetWithKey($snippetKey, $result);
+        $this->assertContainsSnippetWithKey($snippetKey, ...$result);
 
         $snippet = $this->findSnippetByKey($snippetKey, $result);
 

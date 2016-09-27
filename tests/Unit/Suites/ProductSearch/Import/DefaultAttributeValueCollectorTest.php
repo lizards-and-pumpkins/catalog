@@ -63,7 +63,7 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidAttributeValueProvider()
+    public function invalidAttributeValueProvider() : array
     {
         return [
             ['non-scalar' => ['x', 'y']],

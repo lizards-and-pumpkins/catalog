@@ -16,7 +16,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
      * @param string[] $attributeCodeStrings
      * @return AttributeCode[]
      */
-    private function createAttributeCodeListFromStrings(array $attributeCodeStrings)
+    private function createAttributeCodeListFromStrings(array $attributeCodeStrings) : array
     {
         return array_map(function ($code) {
             return AttributeCode::fromString($code);
@@ -82,7 +82,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
      * @param int $expectedCount
      * @dataProvider attributeCodeStringCountProvider
      */
-    public function testItCountsTheNumberOfAttributesInTheList(array $attributeCodeStrings, $expectedCount)
+    public function testItCountsTheNumberOfAttributesInTheList(array $attributeCodeStrings, int $expectedCount)
     {
         $attributeCodes = $this->createAttributeCodeListFromStrings($attributeCodeStrings);
         $this->assertCount($expectedCount, new ProductVariationAttributeList(...$attributeCodes));
@@ -91,7 +91,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function attributeCodeStringCountProvider()
+    public function attributeCodeStringCountProvider() : array
     {
         return [
             [['test'], 1],

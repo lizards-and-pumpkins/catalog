@@ -9,10 +9,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
-    /**
-     * @return string
-     */
-    public function testFileIsCreated()
+    public function testFileIsCreated() : string
     {
         $file = $this->getTestFilePath();
         $this->assertFileNotExists($file);
@@ -24,17 +21,13 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testFileIsCreated
-     * @param string $file
      */
-    public function testCreatedFileIsRemoved($file)
+    public function testCreatedFileIsRemoved(string $file)
     {
         $this->assertFileNotExists($file);
     }
 
-    /**
-     * @return string
-     */
-    public function testFixtureDirectoryIsCreated()
+    public function testFixtureDirectoryIsCreated() : string
     {
         $directoryPath = $this->getTestDirectoryPath();
         $this->assertFileNotExists($directoryPath);
@@ -47,17 +40,13 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testFixtureDirectoryIsCreated
-     * @param string $directoryPath
      */
-    public function testFixtureDirectoryIsRemoved($directoryPath)
+    public function testFixtureDirectoryIsRemoved(string $directoryPath)
     {
         $this->assertFileNotExists($directoryPath);
     }
 
-    /**
-     * @return string
-     */
-    public function testNonExistentDirectoriesAreCreated()
+    public function testNonExistentDirectoriesAreCreated() : string
     {
         $dir = sys_get_temp_dir() . '/non-existent-dir-' . uniqid();
         $file = $dir . '/test.file';
@@ -71,9 +60,8 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testNonExistentDirectoriesAreCreated
-     * @param string $dir
      */
-    public function testCreatedDirectoryIsRemoved($dir)
+    public function testCreatedDirectoryIsRemoved(string $dir)
     {
         $this->assertFalse(file_exists($dir));
         $this->assertTrue(file_exists(sys_get_temp_dir()));
@@ -103,10 +91,7 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertFileMode($file, 0666);
     }
 
-    /**
-     * @return string
-     */
-    public function testNonWritableFileIsCreated()
+    public function testNonWritableFileIsCreated() : string
     {
         $file = $this->getTestFilePath();
         $this->createFixtureFile($file, '', 0000);
@@ -117,9 +102,8 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testNonWritableFileIsCreated
-     * @param string $file
      */
-    public function testNonWritableFieIsRemoved($file)
+    public function testNonWritableFieIsRemoved(string $file)
     {
         $this->assertFileNotExists($file);
     }
@@ -147,28 +131,17 @@ class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($dir1, $dir2);
     }
 
-    /**
-     * @return string
-     */
-    private function getTestFilePath()
+    private function getTestFilePath() : string
     {
         return sys_get_temp_dir() . '/' . uniqid() . '.test';
     }
 
-    /**
-     * @return string
-     */
-    private function getTestDirectoryPath()
+    private function getTestDirectoryPath() : string
     {
         return sys_get_temp_dir() . '/' . uniqid() . '.test';
     }
 
-    /**
-     * @param string $file
-     * @param string $expected
-     * @param string $message
-     */
-    private function assertFileMode($file, $expected, $message = '')
+    private function assertFileMode(string $file, int $expected, string $message = '')
     {
         $expectedAsString = is_string($expected) ?
             $expected :

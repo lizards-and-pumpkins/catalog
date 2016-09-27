@@ -21,7 +21,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    private function getReceivedCallbackArguments()
+    private function getReceivedCallbackArguments() : array
     {
         return self::$callbackArguments;
     }
@@ -84,7 +84,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
      * @param string $expected
      * @dataProvider typeofDataProvider
      */
-    public function testTypeofReturnsExpectedStringRepresentationOfType($value, $expected)
+    public function testTypeofReturnsExpectedStringRepresentationOfType($value, string $expected)
     {
         $this->assertSame($expected, typeof($value));
     }
@@ -92,7 +92,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function typeofDataProvider()
+    public function typeofDataProvider() : array
     {
         return [
             ['', 'string'],

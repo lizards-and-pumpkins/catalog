@@ -37,7 +37,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
      * @param string[] $attributes
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingWithAttributes(array $attributes)
+    private function createStubProductListingWithAttributes(array $attributes) : ProductListing
     {
         $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubProductListing = $this->createMock(ProductListing::class);
@@ -57,12 +57,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
         return $stubProductListing;
     }
 
-    /**
-     * @param string $snippetKey
-     * @param Snippet[] $snippets
-     * @return Snippet
-     */
-    public function findSnippetByKey($snippetKey, array $snippets)
+    public function findSnippetByKey(string $snippetKey, Snippet ...$snippets) : Snippet
     {
         foreach ($snippets as $snippet) {
             if ($snippet->getKey() === $snippetKey) {
@@ -112,7 +107,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
         $productListing = $this->createStubProductListingWithAttributes(['description' => 'Test']);
         $this->stubDescriptionBlockRenderer->method('render')->willReturn('Test');
         $result = $this->renderer->render($productListing);
-        $descriptionSnippet = $this->findSnippetByKey($this->testSnippetKey, $result);
+        $descriptionSnippet = $this->findSnippetByKey($this->testSnippetKey, ...$result);
 
         $this->assertSame('Test', $descriptionSnippet->getContent());
     }

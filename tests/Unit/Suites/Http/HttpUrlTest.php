@@ -111,10 +111,8 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider requestHostDataProvider
-     * @param string $host
-     * @param string $expected
      */
-    public function testItReturnsTheRequestHost($host, $expected)
+    public function testItReturnsTheRequestHost(string $host, string $expected)
     {
         $url = HttpUrl::fromString('http://' . $host . '/path/to/some-page');
         $this->assertSame($expected, $url->getHost());
@@ -123,7 +121,7 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function requestHostDataProvider()
+    public function requestHostDataProvider() : array
     {
         return [
             'top'      => ['example.com', 'example.com'],

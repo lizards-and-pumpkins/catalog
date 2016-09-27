@@ -14,11 +14,7 @@ class StubFactory implements Factory
         $this->masterFactory = $masterFactory;
     }
 
-    /**
-     * @param string $parameter
-     * @return string
-     */
-    public function createSomething($parameter)
+    public function createSomething(string $parameter) : string
     {
         return $parameter;
     }

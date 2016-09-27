@@ -26,7 +26,7 @@ class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string|null $value
      * @return ContextPartBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockContextPartBuilder($code, $value)
+    private function createMockContextPartBuilder(string $code, $value) : ContextPartBuilder
     {
         $stubContextPartBuilder = $this->createMock(ContextPartBuilder::class);
         $stubContextPartBuilder->method('getCode')->willReturn($code);

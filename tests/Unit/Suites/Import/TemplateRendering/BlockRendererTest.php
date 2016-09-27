@@ -18,19 +18,12 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  */
 class BlockRendererTest extends AbstractBlockRendererTest
 {
-    /**
-     * @param ThemeLocator $stubThemeLocator
-     * @param BlockStructure $stubBlockStructure
-     * @param TranslatorRegistry $stubTranslatorRegistry
-     * @param BaseUrlBuilder $baseUrlBuilder
-     * @return StubBlockRenderer
-     */
-    protected function createRendererInstance(
+    final protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
         BaseUrlBuilder $baseUrlBuilder
-    ) {
+    ) : BlockRenderer {
         return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry, $baseUrlBuilder);
     }
 
