@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Import\Projector;
@@ -30,24 +32,10 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new TemplateProjectorLocator;
     }
 
-    public function testExceptionIsThrownIfNonStringCodeIsPassed()
-    {
-        $this->expectException(InvalidTemplateProjectorCodeException::class);
-        $this->locator->getTemplateProjectorForCode(1);
-    }
-
     public function testExceptionIsThrownIfProjectorCanNotBeLocated()
     {
         $this->expectException(UnableToLocateTemplateProjectorException::class);
         $this->locator->getTemplateProjectorForCode('foo');
-    }
-
-    public function testExceptionIsThrownDuringAttemptToRegisterProjectorWithNonStringCode()
-    {
-        $invalidTemplateCode = 1;
-        $this->expectException(InvalidTemplateProjectorCodeException::class);
-
-        $this->locator->register($invalidTemplateCode, $this->getStubProjector());
     }
 
     public function testProjectorForTemplateCodesIsReturned()

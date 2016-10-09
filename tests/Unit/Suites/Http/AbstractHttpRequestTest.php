@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
@@ -27,7 +29,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $result = $httpRequest->getUrl();
 
@@ -46,7 +48,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $this->assertSame($path, $httpRequest->getPathWithoutWebsitePrefix());
     }
@@ -63,7 +65,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $this->assertSame($path, $httpRequest->getPathWithWebsitePrefix());
     }
@@ -76,7 +78,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->expectException(UnsupportedRequestMethodException::class);
         $this->expectExceptionMessage('Unsupported request method: "XXX"');
 
-        HttpRequest::fromParameters('XXX', $stubHttpUrl, HttpHeaders::fromArray([]), HttpRequestBody::fromString(''));
+        HttpRequest::fromParameters('XXX', $stubHttpUrl, HttpHeaders::fromArray([]), new HttpRequestBody(''));
     }
 
     public function testHttpIsRequestReturnedFromGlobalState()
@@ -123,7 +125,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->assertNull($result->getQueryParameter('foo'));
@@ -142,7 +144,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->assertEquals($queryParameterValue, $request->getQueryParameter($queryParameterName));
@@ -158,7 +160,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $this->assertTrue($request->hasQueryParameters());
     }
@@ -232,7 +234,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $this->assertSame('example.com', $request->getHost());
     }

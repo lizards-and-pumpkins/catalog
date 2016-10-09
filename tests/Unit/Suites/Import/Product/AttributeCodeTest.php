@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidAttributeCodeException;
@@ -18,34 +20,6 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheInjectedCodeWhenCastToString()
     {
         $this->assertSame('test_code', (string) AttributeCode::fromString('test_code'));
-    }
-
-    /**
-     * @dataProvider invalidAttributeCodeTypeProvider
-     * @param string $invalidAttributeCode
-     */
-    public function testItThrowsAnExceptionIfTheCodeIsNotAString($invalidAttributeCode)
-    {
-        $type = is_object($invalidAttributeCode) ?
-            get_class($invalidAttributeCode) :
-            gettype($invalidAttributeCode);
-        $this->expectException(InvalidAttributeCodeException::class);
-        $this->expectExceptionMessage(sprintf('The attribute code has to be a string, got "%s"', $type));
-        AttributeCode::fromString($invalidAttributeCode);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function invalidAttributeCodeTypeProvider() : array
-    {
-        return [
-            'integer' => [222],
-            'null' => [null],
-            'array' => [['foo']],
-            'object' => [new \stdClass],
-            'float' => [2.2]
-        ];
     }
 
     /**

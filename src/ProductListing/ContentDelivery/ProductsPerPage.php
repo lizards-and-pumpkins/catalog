@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
@@ -21,7 +23,7 @@ class ProductsPerPage implements \JsonSerializable
      * @param int[] $numbersOfProductsPerPage
      * @param int $selectedNumberOfProductsPerPage
      */
-    private function __construct(array $numbersOfProductsPerPage, $selectedNumberOfProductsPerPage)
+    private function __construct(array $numbersOfProductsPerPage, int $selectedNumberOfProductsPerPage)
     {
         $this->numbersOfProductsPerPage = $numbersOfProductsPerPage;
         $this->selectedNumberOfProductsPerPage = $selectedNumberOfProductsPerPage;
@@ -32,8 +34,10 @@ class ProductsPerPage implements \JsonSerializable
      * @param int $selectedNumberOfProductsPerPage
      * @return ProductsPerPage
      */
-    public static function create(array $numbersOfProductsPerPage, $selectedNumberOfProductsPerPage)
-    {
+    public static function create(
+        array $numbersOfProductsPerPage,
+        int $selectedNumberOfProductsPerPage
+    ) : ProductsPerPage {
         self::validateNumbersOfProductsPerPage($numbersOfProductsPerPage);
         self::validateSelectedNumberOfProductsPerPage($numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
 
@@ -43,15 +47,12 @@ class ProductsPerPage implements \JsonSerializable
     /**
      * @return int[]
      */
-    public function getNumbersOfProductsPerPage()
+    public function getNumbersOfProductsPerPage() : array
     {
         return $this->numbersOfProductsPerPage;
     }
 
-    /**
-     * @return int
-     */
-    public function getSelectedNumberOfProductsPerPage()
+    public function getSelectedNumberOfProductsPerPage() : int
     {
         return $this->selectedNumberOfProductsPerPage;
     }
@@ -76,19 +77,12 @@ class ProductsPerPage implements \JsonSerializable
 
     /**
      * @param mixed[] $numbersOfProductsPerPage
-     * @param mixed $selectedNumberOfProductsPerPage
+     * @param int $selectedNumberOfProductsPerPage
      */
     private static function validateSelectedNumberOfProductsPerPage(
         array $numbersOfProductsPerPage,
-        $selectedNumberOfProductsPerPage
+        int $selectedNumberOfProductsPerPage
     ) {
-        if (!is_int($selectedNumberOfProductsPerPage)) {
-            throw new InvalidSelectedNumberOfProductsPerPageException(sprintf(
-                'Selected number of products per page must be integer, got "%s".',
-                gettype($selectedNumberOfProductsPerPage)
-            ));
-        }
-
         if (!in_array($selectedNumberOfProductsPerPage, $numbersOfProductsPerPage)) {
             throw new InvalidSelectedNumberOfProductsPerPageException(
                 'Selected number of products per page is not from the list of available numbers of products per page.'
@@ -99,7 +93,7 @@ class ProductsPerPage implements \JsonSerializable
     /**
      * @return array[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return array_map(function ($numberOfProductsPerPage) {
             return [

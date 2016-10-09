@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -46,29 +48,22 @@ class QueueImportCommands
     public function forProduct(Product $product)
     {
         $commands = $this->productImportCommandLocator->getProductImportCommands($product);
-        $this->addCommandsToQueue($commands);
+        $this->addCommandsToQueue(...$commands);
     }
 
-    /**
-     * @param string $imageFilePath
-     * @param DataVersion $dataVersion
-     */
-    public function forImage($imageFilePath, DataVersion $dataVersion)
+    public function forImage(string $imageFilePath, DataVersion $dataVersion)
     {
         $commands = $this->imageImportCommandLocator->getProductImageImportCommands($imageFilePath, $dataVersion);
-        $this->addCommandsToQueue($commands);
+        $this->addCommandsToQueue(...$commands);
     }
 
     public function forListing(ProductListing $listingCriteria)
     {
         $commands = $this->listingImportCommandLocator->getProductListingImportCommands($listingCriteria);
-        $this->addCommandsToQueue($commands);
+        $this->addCommandsToQueue(...$commands);
     }
 
-    /**
-     * @param Command[] $commands
-     */
-    private function addCommandsToQueue(array $commands)
+    private function addCommandsToQueue(Command ...$commands)
     {
         every($commands, [$this->commandQueue, 'add']);
     }

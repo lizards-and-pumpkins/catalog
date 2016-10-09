@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 use LizardsAndPumpkins\Import\Product\View\Stub\StubProductView;
@@ -82,7 +86,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
 
     public function testGettingProductIdIsDelegatedToOriginalProduct()
     {
-        $this->mockProduct->expects($this->once())->method('getId');
+        $this->mockProduct->expects($this->once())->method('getId')->willReturn(new ProductId('foo'));
         $this->productView->getId();
     }
 
@@ -190,8 +194,14 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     public function testGettingProductImagesIsDelegatedToOriginalProduct()
     {
         $variantCode = 'medium';
+
         $stubProductImage = $this->createMock(ProductImage::class);
-        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([$stubProductImage]));
+
+        $stubProductImageList = $this->createMock(ProductImageList::class);
+        $stubProductImageList->method('getIterator')->willReturn(new \ArrayIterator([$stubProductImage]));
+
+        $this->mockProduct->method('getImages')->willReturn($stubProductImageList);
+
         $result = $this->productView->getImages($variantCode);
         $this->assertInternalType('array', $result);
         $this->assertContainsOnlyInstancesOf(Image::class, $result);
@@ -321,9 +331,14 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
     public function testItFlattensTheProductImagesInJson()
     {
         $testImageLabel = 'Test Label';
-        $mockProductImage = $this->createMock(ProductImage::class);
-        $mockProductImage->method('getLabel')->willReturn($testImageLabel);
-        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([$mockProductImage]));
+
+        $stubProductImage = $this->createMock(ProductImage::class);
+        $stubProductImage->method('getLabel')->willReturn($testImageLabel);
+
+        $stubProductImageList = $this->createMock(ProductImageList::class);
+        $stubProductImageList->method('getIterator')->willReturn(new \ArrayIterator([$stubProductImage]));
+
+        $this->mockProduct->method('getImages')->willReturn($stubProductImageList);
 
         $productJsonData = [
             'product_id' => 'test',
@@ -353,7 +368,9 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $placeholderImage = $this->mockImageFileLocator->getPlaceholder('dummy', $this->mockProduct->getContext());
         $placeholderImage->method('getUrl')->willReturn($stubPlaceholderUrl);
 
-        $this->mockProduct->method('getImages')->willReturn(new \ArrayIterator([]));
+        $stubProductImageList = $this->createMock(ProductImageList::class);
+
+        $this->mockProduct->method('getImages')->willReturn($stubProductImageList);
         $productJsonData = [
             'product_id' => 'test',
             'images'     => ['original product image data'],

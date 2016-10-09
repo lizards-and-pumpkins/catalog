@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
@@ -54,13 +56,6 @@ class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
             [['1']],
             [[1, '1']]
         ];
-    }
-
-    public function testExceptionIsThrownIfSelectedNumberOfProductsIsNotInteger()
-    {
-        $invalidSelectedNumberOfProductsPerPage = '1';
-        $this->expectException(InvalidSelectedNumberOfProductsPerPageException::class);
-        ProductsPerPage::create($this->numbersOfProductsPerPage, $invalidSelectedNumberOfProductsPerPage);
     }
 
     public function testExceptionIsThrownIfSelectedNumberOfProductsPerPageIsAbsentInTheList()

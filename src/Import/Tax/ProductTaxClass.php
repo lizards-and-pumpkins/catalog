@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Tax;
 
 use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxClassNameException;
@@ -11,56 +13,32 @@ class ProductTaxClass
      */
     private $name;
 
-    /**
-     * @param string $name
-     */
-    private function __construct($name)
+    private function __construct(string $name)
     {
         $this->validateName($name);
         $this->name = $name;
     }
 
     /**
-     * @param string $name
+     * @param ProductTaxClass|string $name
      * @return ProductTaxClass
      */
-    public static function fromString($name)
+    public static function fromString($name) : ProductTaxClass
     {
         return $name instanceof self ?
             $name :
             new self($name);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    private function validateName($name)
+    private function validateName(string $name)
     {
-        if (! is_string($name)) {
-            $message = sprintf('The tax class name has to be a string, got "%s"', $this->getVariableType($name));
-            throw new InvalidTaxClassNameException($message);
-        }
         if ('' === trim($name)) {
             throw new InvalidTaxClassNameException('The tax class name can not be empty');
         }
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getVariableType($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
     }
 }

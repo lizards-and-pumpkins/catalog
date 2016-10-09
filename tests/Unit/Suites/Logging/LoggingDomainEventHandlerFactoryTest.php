@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -145,11 +147,11 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsADecoratedProductWasUpdatedDomainEventHandler()
     {
         $testProduct = new SimpleProduct(
-            ProductId::fromString('foo'),
+            new ProductId('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz'])
+            new SelfContainedContext([DataVersion::CONTEXT_CODE => 'buz'])
         );
         $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
         $result = $this->factory->createProductWasUpdatedDomainEventHandler($testEvent->toMessage());

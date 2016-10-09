@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -22,28 +24,18 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
         $this->product = $product;
     }
 
-    /**
-     * @return Product
-     */
-    public function getProduct()
+    public function getProduct() : Product
     {
         return $this->product;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $payload = ['id' => (string) $this->product->getId(), 'product' => json_encode($this->product)];
         return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : ProductWasUpdatedDomainEvent
     {
         if ($message->getName() !== self::CODE) {
             throw new NoProductWasUpdatedDomainEventMessageException(
@@ -67,10 +59,7 @@ class ProductWasUpdatedDomainEvent implements DomainEvent
         return $product;
     }
 
-    /**
-     * @return DataVersion
-     */
-    public function getDataVersion()
+    public function getDataVersion() : DataVersion
     {
         return DataVersion::fromVersionString($this->product->getContext()->getValue(DataVersion::CONTEXT_CODE));
     }

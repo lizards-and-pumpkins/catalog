@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -46,15 +48,16 @@ class ProductListingDescriptionBlockTest extends \PHPUnit_Framework_TestCase
         $stubProductListing->method('getContextData')->willReturn([]);
         $stubProductListing->method('getCriteria')->willReturn($stubSearchCriteria);
 
-        $getAttributeValueMap = $hasAttributeValueMap = [];
+        $getAttributeValueMap = [];
         foreach ($attributes as $attributeCode => $attributeValue) {
             $getAttributeValueMap[] = [$attributeCode, $attributeValue];
-            $hasAttributeValueMap[] = [$attributeCode, true];
         }
-        $hasAttributeValueMap[] = [$this->anything(), false];
 
         $stubProductListing->method('getAttributeValueByCode')->willReturnMap($getAttributeValueMap);
-        $stubProductListing->method('hasAttribute')->willReturnMap($hasAttributeValueMap);
+
+        $stubProductListing->method('hasAttribute')->willReturnCallback(function ($attributeCode) use ($attributes) {
+            return array_key_exists($attributeCode, $attributes);
+        });
 
         return $stubProductListing;
     }

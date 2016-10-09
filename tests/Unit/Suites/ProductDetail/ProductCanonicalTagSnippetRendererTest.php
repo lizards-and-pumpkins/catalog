@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -66,7 +68,7 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubCanonicalTagSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
-        $this->stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString('https://example.com/'));
+        $this->stubBaseUrlBuilder->method('create')->willReturn(new HttpBaseUrl('https://example.com/'));
         $this->renderer = new ProductCanonicalTagSnippetRenderer(
             $this->stubCanonicalTagSnippetKeyGenerator,
             $this->stubBaseUrlBuilder

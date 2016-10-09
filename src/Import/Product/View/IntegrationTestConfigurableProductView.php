@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
+use LizardsAndPumpkins\Import\Product\Product;
 
 class IntegrationTestConfigurableProductView extends AbstractConfigurableProductView
 {
@@ -31,34 +34,22 @@ class IntegrationTestConfigurableProductView extends AbstractConfigurableProduct
         $this->productImageFileLocator = $productImageFileLocator;
     }
     
-    /**
-     * @return ConfigurableProduct
-     */
-    public function getOriginalProduct()
+    public function getOriginalProduct() : Product
     {
         return $this->configurableProduct;
     }
 
-    /**
-     * @return ProductViewLocator
-     */
-    final protected function getProductViewLocator()
+    final protected function getProductViewLocator() : ProductViewLocator
     {
         return $this->productViewLocator;
     }
 
-    /**
-     * @return ProductImageFileLocator
-     */
-    final protected function getProductImageFileLocator()
+    final protected function getProductImageFileLocator() : ProductImageFileLocator
     {
         return $this->productImageFileLocator;
     }
 
-    /**
-     * @return string
-     */
-    public function getProductPageTitle()
+    public function getProductPageTitle() : string
     {
         return $this->getFirstValueOfAttribute('name');
     }

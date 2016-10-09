@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Import\Product\Product;
 
 interface CompositeProduct extends Product
 {
-    /**
-     * @return ProductVariationAttributeList
-     */
-    public function getVariationAttributes();
+    public function getVariationAttributes() : ProductVariationAttributeList;
 
-    /**
-     * @return AssociatedProductList
-     */
-    public function getAssociatedProducts();
+    public function getAssociatedProducts() : AssociatedProductList;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -21,11 +23,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
         $this->productRelationsService = $productRelationsService;
     }
     
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    public function canProcess(HttpRequest $request) : bool
     {
         if ($request->getMethod() !== HttpRequest::METHOD_GET) {
             return false;
@@ -35,11 +33,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
         return count($parts) > 4 && 'products' === $parts[1] && 'relations' === $parts[3];
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    final protected function getResponse(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request) : HttpResponse
     {
         if (! $this->canProcess($request)) {
             throw $this->getUnableToProcessRequestException($request);
@@ -60,35 +54,24 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
      * @param HttpRequest $request
      * @return string[]
      */
-    private function getRequestPathParts(HttpRequest $request)
+    private function getRequestPathParts(HttpRequest $request) : array
     {
         return explode('/', trim($request->getPathWithoutWebsitePrefix(), '/'));
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return ProductId
-     */
-    private function getProductId(HttpRequest $request)
+    private function getProductId(HttpRequest $request) : ProductId
     {
-        return ProductId::fromString($this->getRequestPathParts($request)[2]);
+        return new ProductId($this->getRequestPathParts($request)[2]);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return ProductRelationTypeCode
-     */
-    private function getProductRelationTypeCode(HttpRequest $request)
+    private function getProductRelationTypeCode(HttpRequest $request) : ProductRelationTypeCode
     {
         return ProductRelationTypeCode::fromString($this->getRequestPathParts($request)[4]);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return UnableToProcessProductRelationsRequestException
-     */
-    private function getUnableToProcessRequestException(HttpRequest $request)
-    {
+    private function getUnableToProcessRequestException(
+        HttpRequest $request
+    ) : UnableToProcessProductRelationsRequestException {
         $requestPath = $request->getPathWithoutWebsitePrefix();
         $message = sprintf('Unable to process a %s request to "%s"', $request->getMethod(), $requestPath);
         return new UnableToProcessProductRelationsRequestException($message);

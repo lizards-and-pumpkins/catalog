@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 class WritingLoggerDecorator implements Logger
@@ -29,7 +31,7 @@ class WritingLoggerDecorator implements Logger
     /**
      * @return LogMessage[]
      */
-    public function getMessages()
+    public function getMessages() : array
     {
         return $this->component->getMessages();
     }

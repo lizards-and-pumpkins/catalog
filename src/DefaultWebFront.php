@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory;
@@ -18,10 +20,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class DefaultWebFront extends WebFront
 {
-    /**
-     * @return MasterFactory
-     */
-    protected function createMasterFactory()
+    protected function createMasterFactory() : MasterFactory
     {
         return new SampleMasterFactory();
     }

@@ -1,13 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
-use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\ContextDataIsNotAStringException;
-use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionToWriteIsEmptyStringException;
-use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyIsNotAStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyToWriteIsEmptyStringException;
-use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyTypeIsNotAStringException;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
 abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework_TestCase
@@ -37,32 +35,11 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
         $this->assertInstanceOf(Clearable::class, $this->urlKeyStore);
     }
 
-    public function testItThrowsAnExceptionIfTheUrkKeyToAddIsNotAString()
-    {
-        $this->expectException(UrlKeyIsNotAStringException::class);
-        $this->expectExceptionMessage('URL keys have to be strings for storage in the UrlKeyStore, got ');
-        $this->urlKeyStore->addUrlKeyForVersion('1.0', 123, 'dummy-context-string', 'type-string');
-    }
-
-    public function testItThrowsAnExceptionIfAVersionToAddIsNotAString()
-    {
-        $this->expectException(DataVersionIsNotAStringException::class);
-        $this->expectExceptionMessage('The data version has to be string for use with the UrlKeyStore, got ');
-        $this->urlKeyStore->addUrlKeyForVersion(123, 'test.html', 'dummy-context-string', 'type-string');
-    }
-
     public function testItThrowsAnExceptionIfTheUrlKeyIsEmpty()
     {
         $this->expectException(UrlKeyToWriteIsEmptyStringException::class);
         $this->expectExceptionMessage('Invalid URL key: url key strings have to be one or more characters long');
         $this->urlKeyStore->addUrlKeyForVersion('1.0', '', 'dummy-context-string', 'type-string');
-    }
-
-    public function testItThrowsAnExceptionIfADataVersionToGetUrlKeysForIsNotAString()
-    {
-        $this->expectException(DataVersionIsNotAStringException::class);
-        $this->expectExceptionMessage('The data version has to be string for use with the UrlKeyStore, got ');
-        $this->urlKeyStore->getForDataVersion(555);
     }
 
     public function testItThrowsAnExceptionIfADataVersionToWriteIsAnEmptyString()
@@ -77,20 +54,6 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
         $this->expectException(DataVersionToWriteIsEmptyStringException::class);
         $this->expectExceptionMessage('Invalid data version: version strings have to be one or more characters long');
         $this->urlKeyStore->getForDataVersion('');
-    }
-
-    public function testItThrowsAnExceptionIfTheContextIsNotAString()
-    {
-        $this->expectException(ContextDataIsNotAStringException::class);
-        $this->expectExceptionMessage('The context data has to be string for use with the UrlKeyStore, got ');
-        $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', [], 'type-string');
-    }
-
-    public function testItThrowsAnExceptionIfTheUrlKeyTypeIsNotAString()
-    {
-        $this->expectException(UrlKeyTypeIsNotAStringException::class);
-        $this->expectExceptionMessage('The url key type has to be string, got ');
-        $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', '', 42);
     }
 
     public function testItReturnsUrlKeysForAGivenVersion()

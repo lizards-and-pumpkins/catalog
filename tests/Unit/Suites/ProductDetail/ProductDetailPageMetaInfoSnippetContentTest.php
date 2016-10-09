@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
@@ -59,18 +60,6 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
                 sprintf('The expected key "%s" is not set on the page meta info array', $key)
             );
         }
-    }
-
-    public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], []);
-    }
-
-    public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
-    {
-        $this->expectException(InvalidSnippetCodeException::class);
-        ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, [], []);
     }
 
     public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -22,7 +24,7 @@ class ProductUrlKeyStoreTest extends AbstractIntegrationTest
             'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
         ]);
         $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);

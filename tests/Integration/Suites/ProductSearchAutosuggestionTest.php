@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchAutosuggestionRequestHandler;
@@ -29,7 +31,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
         ]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -49,7 +51,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
         ]);
         $httpRequestBodyString = '[]';
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -105,7 +107,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
     {
         $this->importCatalog();
 
-        $productId = ProductId::fromString('118235-251');
+        $productId = new ProductId('118235-251');
         $productName = 'LED Arm-Signallampe';
 
         $contextSource = $this->factory->createContextSource();
@@ -154,7 +156,7 @@ class ProductSearchAutosuggestionTest extends AbstractIntegrationTest
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/catalogsearch/suggest/?q=adi'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);

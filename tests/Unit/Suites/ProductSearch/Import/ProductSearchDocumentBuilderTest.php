@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -7,7 +9,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\Import\Price\Price;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Tax\TaxService;
@@ -61,15 +65,16 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $stubProduct->method('getAllValuesOfAttribute')->willReturnMap($attributesMap);
         $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
         $stubProduct->method('getId')->willReturn($stubProductId);
-        $stubProduct->method('hasAttribute')->willReturnCallback(function ($attributeCode) use ($attributesMap) {
-            foreach ($attributesMap as $attributeMap) {
-                if ($attributeMap[0] === $attributeCode) {
-                    return true;
+        $stubProduct->method('hasAttribute')
+            ->willReturnCallback(function (AttributeCode $attributeCode) use ($attributesMap) {
+                foreach ($attributesMap as $attributeMap) {
+                    if ($attributeCode->isEqualTo($attributeMap[0])) {
+                        return true;
+                    }
                 }
-            }
 
-            return false;
-        });
+                return false;
+            });
 
         return $stubProduct;
     }
@@ -103,7 +108,7 @@ class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubTaxableCountries = $this->createMock(TaxableCountries::class);
         $this->stubTaxableCountries->method('getCountries')->willReturn($this->dummyTaxableCountries);
         $this->stubTaxService = $this->createMock(TaxService::class);
-        $this->stubTaxService->method('applyTo')->willReturn($this->dummyPriceInclTax);
+        $this->stubTaxService->method('applyTo')->willReturn(Price::fromFractions($this->dummyPriceInclTax));
         $this->stubTaxServiceLocator = $this->createMock(TaxServiceLocator::class);
         $this->stubTaxServiceLocator->method('get')->willReturn($this->stubTaxService);
         $this->stubValueCollectorLocator = $this->createMock(AttributeValueCollectorLocator::class);

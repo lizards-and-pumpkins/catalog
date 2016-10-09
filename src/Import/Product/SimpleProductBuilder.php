@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -41,21 +43,13 @@ class SimpleProductBuilder implements ProductBuilder
         $this->taxClass = $taxClass;
     }
 
-    /**
-     * @param Context $context
-     * @return bool
-     */
-    public function isAvailableForContext(Context $context)
+    public function isAvailableForContext(Context $context) : bool
     {
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
         return count($sourceAttributeList) > 0;
     }
 
-    /**
-     * @param Context $context
-     * @return Product
-     */
-    public function getProductForContext(Context $context)
+    public function getProductForContext(Context $context) : Product
     {
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
         $attributesWithProperTypes = $this->ensureAttributeTypes($sourceAttributeList);
@@ -63,22 +57,13 @@ class SimpleProductBuilder implements ProductBuilder
         return new SimpleProduct($this->id, $this->taxClass, $attributesWithProperTypes, $images, $context);
     }
 
-    /**
-     * @param ProductAttributeList $sourceAttributeList
-     * @return ProductAttributeList
-     */
-    private function ensureAttributeTypes(ProductAttributeList $sourceAttributeList)
+    private function ensureAttributeTypes(ProductAttributeList $sourceAttributeList) : ProductAttributeList
     {
         $attributes = array_map([$this, 'ensureAttributeType'], $sourceAttributeList->getAllAttributes());
         return new ProductAttributeList(...$attributes);
     }
 
-
-    /**
-     * @param ProductAttribute $attribute
-     * @return ProductAttribute
-     */
-    private function ensureAttributeType(ProductAttribute $attribute)
+    private function ensureAttributeType(ProductAttribute $attribute) : ProductAttribute
     {
         if ($attribute->isCodeEqualTo('price') || $attribute->isCodeEqualTo('special_price')) {
             return $this->ensurePriceAttributeTypeInt($attribute);
@@ -86,11 +71,7 @@ class SimpleProductBuilder implements ProductBuilder
         return $attribute;
     }
 
-    /**
-     * @param ProductAttribute $attribute
-     * @return ProductAttribute
-     */
-    private function ensurePriceAttributeTypeInt(ProductAttribute $attribute)
+    private function ensurePriceAttributeTypeInt(ProductAttribute $attribute) : ProductAttribute
     {
         if (is_int($attribute->getValue())) {
             return $attribute;

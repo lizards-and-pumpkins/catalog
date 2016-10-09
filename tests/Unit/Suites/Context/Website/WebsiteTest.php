@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
@@ -9,13 +11,6 @@ use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
  */
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
-    public function testItThrowsAnExceptionIfTheInputIsNotAString()
-    {
-        $this->expectException(InvalidWebsiteCodeException::class);
-        $this->expectExceptionMessage('The website code must be a string, got "');
-        Website::fromString(123);
-    }
-
     /**
      * @dataProvider emptyWebsiteCodeDataProvider
      */

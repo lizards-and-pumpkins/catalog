@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
@@ -123,7 +125,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
         $sourceProductImageList = new ProductImageList($productImage);
         
         $json = json_encode($sourceProductImageList);
-        $rehydratedProductImageList = ProductImageList::fromArray(json_decode($json, true));
+        $rehydratedProductImageList = ProductImageList::fromArray(...json_decode($json, true));
         
         $this->assertSame(count($sourceProductImageList), count($rehydratedProductImageList));
     }

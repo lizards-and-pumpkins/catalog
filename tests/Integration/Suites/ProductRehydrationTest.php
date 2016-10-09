@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
@@ -96,7 +98,7 @@ class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
 
     private function createSimpleProductWithId(string $productIdString) : SimpleProduct
     {
-        $productId = ProductId::fromString($productIdString);
+        $productId = new ProductId($productIdString);
         
         $productTaxClass = ProductTaxClass::fromString('test');
         

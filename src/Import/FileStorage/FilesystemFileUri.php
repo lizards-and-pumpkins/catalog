@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileURIException;
@@ -20,10 +22,10 @@ class FilesystemFileUri implements StorageSpecificFileUri
     }
 
     /**
-     * @param string $filesystemPath
+     * @param string|FilesystemFileUri $filesystemPath
      * @return FilesystemFileUri
      */
-    public static function fromString($filesystemPath)
+    public static function fromString($filesystemPath) : FilesystemFileUri
     {
         if ($filesystemPath instanceof self) {
             return $filesystemPath;
@@ -43,17 +45,14 @@ class FilesystemFileUri implements StorageSpecificFileUri
      * @param mixed $variable
      * @return string
      */
-    private static function getVariableType($variable)
+    private static function getVariableType($variable) : string
     {
         return is_object($variable) ?
             get_class($variable) :
             gettype($variable);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->filesystemFilePath;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidSearchDocumentFieldKeyException;
@@ -21,7 +23,7 @@ class SearchDocumentField
      * @param string $key
      * @param string[] $values
      */
-    private function __construct($key, array $values)
+    private function __construct(string $key, array $values)
     {
         $this->key = $key;
         $this->values = $values;
@@ -32,7 +34,7 @@ class SearchDocumentField
      * @param string[] $values
      * @return SearchDocumentField
      */
-    public static function fromKeyAndValues($key, array $values)
+    public static function fromKeyAndValues(string $key, array $values) : SearchDocumentField
     {
         self::validateKey($key);
         every($values, [self::class, 'validateValue']);
@@ -41,7 +43,7 @@ class SearchDocumentField
     }
 
     /**
-     * @param string $value
+     * @param string|int|float|bool $value
      */
     public static function validateValue($value)
     {
@@ -55,19 +57,14 @@ class SearchDocumentField
     /**
      * @param mixed $key
      */
-    private static function validateKey($key)
+    private static function validateKey(string $key)
     {
-        if (!is_string($key) || !strlen($key) || !ctype_alpha($key{0})) {
-            throw new InvalidSearchDocumentFieldKeyException(
-                'Search document field key must be a string led by a letter'
-            );
+        if (!strlen($key) || !ctype_alpha($key{0})) {
+            throw new InvalidSearchDocumentFieldKeyException('Search document field key must be led by a letter.');
         }
     }
 
-    /**
-     * @return string
-     */
-    public function getKey()
+    public function getKey() : string
     {
         return $this->key;
     }
@@ -75,7 +72,7 @@ class SearchDocumentField
     /**
      * @return string[]
      */
-    public function getValues()
+    public function getValues() : array
     {
         return $this->values;
     }

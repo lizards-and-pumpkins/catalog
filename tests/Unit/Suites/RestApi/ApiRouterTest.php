@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\ApiRouter
@@ -19,7 +20,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ApiRequestHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubApiRequestHandlerChain;
+    private $stubApiRequestHandlerLocator;
 
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -28,8 +29,8 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubApiRequestHandlerChain = $this->createMock(ApiRequestHandlerLocator::class);
-        $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerChain);
+        $this->stubApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
+        $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerLocator);
 
         $this->stubHttpRequest = $this->createMock(HttpRequest::class);
     }
@@ -63,10 +64,10 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testNullIsReturnedIfApiRequestHandlerCanNotProcessRequest()
     {
-        $stubApiRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
         $stubApiRequestHandler->method('canProcess')->willReturn(false);
 
-        $this->stubApiRequestHandlerChain->expects($this->once())
+        $this->stubApiRequestHandlerLocator->expects($this->once())
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
@@ -80,10 +81,10 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testApiRequestHandlerIsReturned()
     {
-        $stubApiRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
         $stubApiRequestHandler->method('canProcess')->willReturn(true);
 
-        $this->stubApiRequestHandlerChain->expects($this->once())
+        $this->stubApiRequestHandlerLocator->expects($this->once())
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
@@ -92,6 +93,6 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
-        $this->assertInstanceOf(HttpRequestHandler::class, $result);
+        $this->assertInstanceOf(ApiRequestHandler::class, $result);
     }
 }

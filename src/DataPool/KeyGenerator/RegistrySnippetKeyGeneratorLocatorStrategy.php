@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
@@ -12,18 +14,12 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
      */
     private $keyGeneratorFactoryClosures = [];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function canHandle($snippetCode)
+    public function canHandle(string $snippetCode) : bool
     {
         return array_key_exists($snippetCode, $this->keyGeneratorFactoryClosures);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getKeyGeneratorForSnippetCode($snippetCode)
+    public function getKeyGeneratorForSnippetCode(string $snippetCode) : SnippetKeyGenerator
     {
         SnippetCodeValidator::validate($snippetCode);
 
@@ -36,11 +32,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
         return call_user_func($this->keyGeneratorFactoryClosures[$snippetCode]);
     }
 
-    /**
-     * @param string $snippetCode
-     * @param \Closure $keyGeneratorFactoryClosure
-     */
-    public function register($snippetCode, \Closure $keyGeneratorFactoryClosure)
+    public function register(string $snippetCode, \Closure $keyGeneratorFactoryClosure)
     {
         SnippetCodeValidator::validate($snippetCode);
         $this->keyGeneratorFactoryClosures[$snippetCode] = $keyGeneratorFactoryClosure;

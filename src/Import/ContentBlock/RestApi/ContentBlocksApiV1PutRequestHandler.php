@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -27,11 +29,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         $this->commandQueue = $commandQueue;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    public function canProcess(HttpRequest $request) : bool
     {
         if (HttpRequest::METHOD_PUT !== $request->getMethod()) {
             return false;
@@ -44,11 +42,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         return true;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    final protected function getResponse(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request) : HttpResponse
     {
         $headers = [];
         $body = '';
@@ -116,7 +110,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
      */
     private function extractContentBlockIdFromUrl(HttpRequest $request)
     {
-        preg_match('#/content_blocks/([^/]+)#i', $request->getUrl(), $urlTokens);
+        preg_match('#/content_blocks/([^/]+)#i', (string) $request->getUrl(), $urlTokens);
 
         if (count($urlTokens) < 2) {
             return null;

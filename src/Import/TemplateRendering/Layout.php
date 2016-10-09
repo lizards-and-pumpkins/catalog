@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\RootElementOfLayoutMustBeAnArrayException;
@@ -30,7 +32,7 @@ class Layout
      * @param mixed[] $layoutArray
      * @return Layout
      */
-    public static function fromArray(array $layoutArray)
+    public static function fromArray(array $layoutArray) : Layout
     {
         $rootElement = self::getRootElement($layoutArray);
         $layoutArray = array_merge(['attributes' => [], 'value' => ''], $rootElement);
@@ -41,7 +43,7 @@ class Layout
     /**
      * @return string[]
      */
-    public function getAttributes()
+    public function getAttributes() : array
     {
         return $this->nodeAttributes;
     }
@@ -50,7 +52,7 @@ class Layout
      * @param string $attributeCode
      * @return null|string
      */
-    public function getAttribute($attributeCode)
+    public function getAttribute(string $attributeCode)
     {
         if (!array_key_exists($attributeCode, $this->nodeAttributes)) {
             return null;
@@ -70,7 +72,7 @@ class Layout
     /**
      * @return bool
      */
-    public function hasChildren()
+    public function hasChildren() : bool
     {
         return is_array($this->nodeChildren);
     }
@@ -79,7 +81,7 @@ class Layout
      * @param mixed[] $layout
      * @return array[]
      */
-    private static function getRootElement(array $layout)
+    private static function getRootElement(array $layout) : array
     {
         $rootElement = array_shift($layout);
 
@@ -114,7 +116,7 @@ class Layout
      * @param string|array[] $layout
      * @return bool
      */
-    private static function hasChildNodes($layout)
+    private static function hasChildNodes($layout) : bool
     {
         return is_array($layout);
     }

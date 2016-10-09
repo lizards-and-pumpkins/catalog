@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
@@ -8,20 +10,14 @@ use LizardsAndPumpkins\Import\Product\Product;
 
 abstract class AbstractConfigurableProductView extends AbstractProductView implements CompositeProductView
 {
-    /**
-     * @return ConfigurableProduct
-     */
-    abstract public function getOriginalProduct();
+    abstract public function getOriginalProduct() : Product;
+
+    abstract protected function getProductViewLocator() : ProductViewLocator;
 
     /**
-     * @return ProductViewLocator
+     * @return mixed[]
      */
-    abstract protected function getProductViewLocator();
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         $original = parent::jsonSerialize();
 
@@ -39,19 +35,16 @@ abstract class AbstractConfigurableProductView extends AbstractProductView imple
     }
 
     /**
-     * {@inheritdoc}
+     * ProductView[]
      */
-    public function getAssociatedProducts()
+    public function getAssociatedProducts() : array
     {
         return array_map(function (Product $product) {
             return $this->getProductViewLocator()->createForProduct($product);
         }, iterator_to_array($this->getOriginalProduct()->getAssociatedProducts()));
     }
 
-    /**
-     * @return ProductVariationAttributeList
-     */
-    public function getVariationAttributes()
+    public function getVariationAttributes() : ProductVariationAttributeList
     {
         return $this->getOriginalProduct()->getVariationAttributes();
     }

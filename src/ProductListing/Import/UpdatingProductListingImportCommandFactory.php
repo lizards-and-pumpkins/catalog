@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
@@ -14,7 +16,7 @@ class UpdatingProductListingImportCommandFactory implements ProductListingImport
      * @param ProductListing $productListing
      * @return Command[]
      */
-    public function createProductListingImportCommands(ProductListing $productListing)
+    public function createProductListingImportCommands(ProductListing $productListing) : array
     {
         return [new AddProductListingCommand($productListing)];
     }

@@ -1,20 +1,14 @@
 <?php
 
-namespace LizardsAndPumpkins\Import\Product\UrlKey;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\InvalidUrlKeySourceException;
+namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
 class UrlKeyTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExceptionIsThrownDuringAttemptToCreateUrlKeyFromNonString()
-    {
-        $this->expectException(InvalidUrlKeySourceException::class);
-        UrlKey::fromString(1);
-    }
-
     public function testUrlKeyCanBeCastedToString()
     {
         $dummyKey = 'foo';

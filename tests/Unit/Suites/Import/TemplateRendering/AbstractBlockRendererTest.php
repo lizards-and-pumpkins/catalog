@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -52,6 +54,9 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
         return $this->blockRenderer;
     }
 
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|Context
+     */
     final protected function getStubContext() : \PHPUnit_Framework_MockObject_MockObject
     {
         return $this->createMock(Context::class);

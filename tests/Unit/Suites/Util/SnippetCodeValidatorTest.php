@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util;
 
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
@@ -9,19 +11,9 @@ use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
  */
 class SnippetCodeValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIsStringValidation()
+    public function testExceptionIsThrownIfSnippetCodeIsAnEmptyString()
     {
         $this->expectException(InvalidSnippetCodeException::class);
-        $noString = 0;
-
-        SnippetCodeValidator::validate($noString);
-    }
-
-    public function testNotEmptyValidation()
-    {
-        $this->expectException(InvalidSnippetCodeException::class);
-        $emptyString = '';
-
-        SnippetCodeValidator::validate($emptyString);
+        SnippetCodeValidator::validate('');
     }
 }

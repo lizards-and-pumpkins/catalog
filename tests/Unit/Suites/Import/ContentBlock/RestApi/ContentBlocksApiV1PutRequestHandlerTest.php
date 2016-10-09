@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -58,14 +61,20 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     public function testRequestCanNotBeProcessedIfUrlDoesNotContainContentBlockId()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks');
+
+        $url = HttpUrl::fromString('http://example.com/api/content_blocks');
+        $this->mockRequest->method('getUrl')->willReturn($url);
+
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
     public function testRequestCanBeProcessedIfValid()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks/foo');
+
+        $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo');
+        $this->mockRequest->method('getUrl')->willReturn($url);
+
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
@@ -102,7 +111,9 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux']];
         $this->mockRequest->method('getRawBody')->willReturn(json_encode($requestBody));
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/content_blocks/foo');
+
+        $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo');
+        $this->mockRequest->method('getUrl')->willReturn($url);
 
         $this->mockCommandQueue->expects($this->once())
             ->method('add')

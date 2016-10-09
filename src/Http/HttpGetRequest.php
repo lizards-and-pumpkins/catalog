@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 class HttpGetRequest extends HttpRequest
 {
-    /**
-     * @return string
-     */
-    final public function getMethod()
+    final public function getMethod() : string
     {
         return self::METHOD_GET;
     }

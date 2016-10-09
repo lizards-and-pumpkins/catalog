@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
@@ -28,9 +30,8 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidTransformationCodeDataProvider
-     * @param mixed $invalidCode
      */
-    public function testExceptionIsThrownDuringAttemptToRegisterTransformationWithInvalidCode($invalidCode)
+    public function testExceptionIsThrownDuringAttemptToRegisterTransformationWithInvalidCode(string $invalidCode)
     {
         $this->expectException(InvalidTransformationCodeException::class);
         $this->registry->register($invalidCode, $this->stubFacetFieldTransformation);
@@ -38,9 +39,8 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidTransformationCodeDataProvider
-     * @param mixed $invalidCode
      */
-    public function testExceptionIsThrownDuringAttemptToRetrieveTransformationByInvalidCode($invalidCode)
+    public function testExceptionIsThrownDuringAttemptToRetrieveTransformationByInvalidCode(string $invalidCode)
     {
         $this->expectException(InvalidTransformationCodeException::class);
         $this->registry->getTransformationByCode($invalidCode);
@@ -48,10 +48,10 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidTransformationCodeDataProvider
-     * @param mixed $invalidCode
      */
-    public function testExceptionIsThrownDuringAttemptToCheckIfTransformationForInvalidCodeIsRegistered($invalidCode)
-    {
+    public function testExceptionIsThrownDuringAttemptToCheckIfTransformationForInvalidCodeIsRegistered(
+        string $invalidCode
+    ) {
         $this->expectException(InvalidTransformationCodeException::class);
         $this->registry->hasTransformationForCode($invalidCode);
     }
@@ -64,8 +64,6 @@ class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
         return [
             [''],
             [' '],
-            [null],
-            [['foo']]
         ];
     }
 

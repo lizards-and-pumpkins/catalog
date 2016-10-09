@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\MessageReceiver;
@@ -44,11 +46,7 @@ class InMemoryQueue implements Queue, Clearable
         $this->queue = [];
     }
 
-    /**
-     * @param MessageReceiver $messageReceiver
-     * @param int $numberOfMessagesBeforeReturn
-     */
-    public function consume(MessageReceiver $messageReceiver, $numberOfMessagesBeforeReturn) // TODO: Type hint
+    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesBeforeReturn)
     {
         while ($this->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
             $messageReceiver->receive($this->next());

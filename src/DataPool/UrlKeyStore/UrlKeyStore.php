@@ -1,20 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
 interface UrlKeyStore
 {
-    /**
-     * @param string $dataVersionString
-     * @param string $urlKeyString
-     * @param string $contextDataString
-     * @param string $urlKeyTypeString
-     */
-    public function addUrlKeyForVersion($dataVersionString, $urlKeyString, $contextDataString, $urlKeyTypeString);
+    public function addUrlKeyForVersion(
+        string $dataVersionString,
+        string $urlKeyString,
+        string $contextDataString,
+        string $urlKeyTypeString
+    );
 
     /**
      * @param string $dataVersionString
-     * @return array[]
+     * @return string[]
      */
-    public function getForDataVersion($dataVersionString);
+    public function getForDataVersion(string $dataVersionString) : array;
 }

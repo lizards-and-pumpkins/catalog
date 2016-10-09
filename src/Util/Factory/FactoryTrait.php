@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
@@ -16,10 +18,7 @@ trait FactoryTrait
         $this->masterFactory = $masterFactory;
     }
 
-    /**
-     * @return MasterFactory
-     */
-    protected function getMasterFactory()
+    final protected function getMasterFactory() : MasterFactory
     {
         if ($this->masterFactory === null) {
             throw new NoMasterFactorySetException('No master factory set');

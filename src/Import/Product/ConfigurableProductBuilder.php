@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -34,22 +36,14 @@ class ConfigurableProductBuilder implements ProductBuilder
         $this->associatedProductListBuilder = $associatedProductListBuilder;
     }
 
-    /**
-     * @param Context $context
-     * @return ConfigurableProduct
-     */
-    public function getProductForContext(Context $context)
+    public function getProductForContext(Context $context) : Product
     {
         $simpleProduct = $this->simpleProductBuilder->getProductForContext($context);
         $associatedProductList = $this->associatedProductListBuilder->getAssociatedProductListForContext($context);
         return new ConfigurableProduct($simpleProduct, $this->variationAttributeList, $associatedProductList);
     }
 
-    /**
-     * @param Context $context
-     * @return bool
-     */
-    public function isAvailableForContext(Context $context)
+    public function isAvailableForContext(Context $context) : bool
     {
         if (! $this->simpleProductBuilder->isAvailableForContext($context)) {
             return false;
@@ -57,11 +51,7 @@ class ConfigurableProductBuilder implements ProductBuilder
         return $this->hasProductAllVariationAttributesForContext($context);
     }
 
-    /**
-     * @param Context $context
-     * @return bool
-     */
-    private function hasProductAllVariationAttributesForContext(Context $context)
+    private function hasProductAllVariationAttributesForContext(Context $context) : bool
     {
         $associatedProductList = $this->associatedProductListBuilder->getAssociatedProductListForContext($context);
         foreach ($associatedProductList->getProducts() as $product) {
@@ -72,11 +62,7 @@ class ConfigurableProductBuilder implements ProductBuilder
         return true;
     }
 
-    /**
-     * @param Product $product
-     * @return bool
-     */
-    private function hasAllVariationAttributes($product)
+    private function hasAllVariationAttributes(Product $product) : bool
     {
         $requiredAttributes = $this->variationAttributeList->getAttributes();
         foreach ($requiredAttributes as $attributeCode) {

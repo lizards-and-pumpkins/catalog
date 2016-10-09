@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 interface KeyValueStore
@@ -9,25 +11,21 @@ interface KeyValueStore
      * @param mixed $value
      * @return void
      */
-    public function set($key, $value);
+    public function set(string $key, $value);
 
     /**
      * @param string $key
      * @return mixed
      */
-    public function get($key);
+    public function get(string $key);
 
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function has($key);
+    public function has(string $key) : bool;
 
     /**
      * @param string[] $keys
      * @return mixed[]
      */
-    public function multiGet(array $keys);
+    public function multiGet(string ...$keys) : array;
 
     /**
      * @param mixed[] $items

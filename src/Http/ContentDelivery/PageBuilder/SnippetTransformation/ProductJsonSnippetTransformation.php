@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
@@ -20,12 +22,12 @@ class ProductJsonSnippetTransformation implements SnippetTransformation
     }
 
     /**
-     * @param string $input
+     * @param mixed $input
      * @param Context $context
      * @param PageSnippets $pageSnippets
      * @return string
      */
-    public function __invoke($input, Context $context, PageSnippets $pageSnippets)
+    public function __invoke($input, Context $context, PageSnippets $pageSnippets) : string
     {
         $price = $pageSnippets->getSnippetByCode(PriceSnippetRenderer::PRICE);
         $specialPrice = $this->getSpecialPrice($pageSnippets);
@@ -36,7 +38,7 @@ class ProductJsonSnippetTransformation implements SnippetTransformation
 
     /**
      * @param PageSnippets $pageSnippets
-     * @return string
+     * @return string|null
      */
     private function getSpecialPrice(PageSnippets $pageSnippets)
     {

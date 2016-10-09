@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util;
 
 use League\CLImate\Argument\Manager as ArgumentManager;
@@ -32,7 +34,11 @@ class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
         $this->setArgumentValue('environmentConfig', $environmentConfigString);
     }
 
-    private function setArgumentValue(string $argumentName, string $value)
+    /**
+     * @param string $argumentName
+     * @param mixed $value
+     */
+    private function setArgumentValue(string $argumentName, $value)
     {
         /** @var ArgumentManager|\PHPUnit_Framework_MockObject_MockObject $arguments */
         $arguments = $this->climate->arguments;

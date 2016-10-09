@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -22,7 +24,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
         ]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
@@ -46,7 +48,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
         ]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
@@ -64,7 +66,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/' . $urlKey),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
@@ -79,7 +81,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json'
         ]);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $domainCommandQueue = $this->factory->getCommandMessageQueue();
@@ -128,7 +130,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
     }

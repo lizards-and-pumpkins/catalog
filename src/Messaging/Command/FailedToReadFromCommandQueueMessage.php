@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -16,10 +18,7 @@ class FailedToReadFromCommandQueueMessage implements LogMessage
         $this->exception = $exception;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf(
             "Failed to read from command queue message with following exception:\n\n%s",
@@ -30,15 +29,12 @@ class FailedToReadFromCommandQueueMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return ['exception' => $this->exception];
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis() : string
     {
         return sprintf('File: %s:%d', $this->exception->getFile(), $this->exception->getLine());
     }

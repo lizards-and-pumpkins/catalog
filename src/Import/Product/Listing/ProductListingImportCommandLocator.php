@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Listing;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
@@ -23,7 +25,7 @@ class ProductListingImportCommandLocator
      * @param ProductListing $productListing
      * @return Command[]
      */
-    public function getProductListingImportCommands(ProductListing $productListing)
+    public function getProductListingImportCommands(ProductListing $productListing) : array
     {
         return $this->factory->createProductListingImportCommands($productListing);
     }

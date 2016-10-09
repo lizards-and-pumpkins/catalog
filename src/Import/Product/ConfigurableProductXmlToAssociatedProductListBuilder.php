@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
@@ -17,11 +19,7 @@ class ConfigurableProductXmlToAssociatedProductListBuilder
         $this->productXmlToProductBuilderLocator = $productXmlToProductBuilderLocator;
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return AssociatedProductListBuilder
-     */
-    public function createAssociatedProductListBuilder(XPathParser $parser)
+    public function createAssociatedProductListBuilder(XPathParser $parser) : AssociatedProductListBuilder
     {
         $productBuilders = array_map(function ($associatedProductXml) {
             return $this->productXmlToProductBuilderLocator->createProductBuilderFromXml($associatedProductXml);

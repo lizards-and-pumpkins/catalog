@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
-use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidResponseBodyException;
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidStatusCodeException;
 use LizardsAndPumpkins\Http\HttpResponse;
 
@@ -21,29 +22,6 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
         $result = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
 
         $this->assertInstanceOf(HttpResponse::class, $result);
-    }
-
-    public function testExceptionIsThrownDuringAttemptToCreateResponseWithNonStringBody()
-    {
-        $invalidBody = 1;
-        $dummyHeaders = [];
-        $dummyStatusCode = HttpResponse::STATUS_OK;
-
-        $this->expectException(InvalidResponseBodyException::class);
-        
-        GenericHttpResponse::create($invalidBody, $dummyHeaders, $dummyStatusCode);
-    }
-
-    public function testExceptionIsThrownDuringAttemptToCreateResponseWithNonIntegerStatusCode()
-    {
-        $dummyBody = 'foo';
-        $dummyHeaders = [];
-        $invalidStatusCode = false;
-
-        $this->expectException(InvalidStatusCodeException::class);
-        $this->expectExceptionMessage('Response status code must be an integer, got boolean.');
-        
-        GenericHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
     }
 
     public function testExceptionIsThrownIfGivenResponseStatusCodeIsOutOfRange()

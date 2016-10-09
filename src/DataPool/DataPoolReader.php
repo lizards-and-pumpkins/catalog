@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
@@ -48,11 +50,7 @@ class DataPoolReader
         $this->urlKeyStore = $urlKeyStore;
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function hasSnippet($key)
+    public function hasSnippet(string $key) : bool
     {
         $this->validateKey($key);
 
@@ -61,9 +59,9 @@ class DataPoolReader
 
     /**
      * @param string $key
-     * @return string
+     * @return mixed
      */
-    public function getSnippet($key)
+    public function getSnippet(string $key)
     {
         $this->validateKey($key);
 
@@ -74,11 +72,10 @@ class DataPoolReader
      * @param string $key
      * @return string[]
      */
-    public function getChildSnippetKeys($key)
+    public function getChildSnippetKeys(string $key) : array
     {
         $this->validateKey($key);
         $json = $this->keyValueStore->get($key);
-        $this->validateJson($key, $json);
         $list = $this->decodeJsonArray($key, $json);
 
         return $list;
@@ -88,22 +85,16 @@ class DataPoolReader
      * @param string[] $keys
      * @return string[]
      */
-    public function getSnippets(array $keys)
+    public function getSnippets(array $keys) : array
     {
         every($keys, function ($key) {
             $this->validateKey($key);
         });
-        return $this->keyValueStore->multiGet($keys);
+        return $this->keyValueStore->multiGet(...$keys);
     }
 
-    /**
-     * @param string $key
-     */
-    private function validateKey($key)
+    private function validateKey(string $key)
     {
-        if (! is_string($key)) {
-            throw new InvalidKeyValueStoreKeyException('The key is not of type string.');
-        }
         if ('' === $key) {
             throw new InvalidKeyValueStoreKeyException('The Key/Value storage key "" is invalid');
         }
@@ -112,26 +103,9 @@ class DataPoolReader
     /**
      * @param string $key
      * @param string $json
-     */
-    private function validateJson($key, $json)
-    {
-        if (! is_string($json)) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Expected the value for key "%s" to be a string containing JSON but found "%s".',
-                    $key,
-                    gettype($json)
-                )
-            );
-        }
-    }
-
-    /**
-     * @param string $key
-     * @param string $json
      * @return string[]
      */
-    private function decodeJsonArray($key, $json)
+    private function decodeJsonArray(string $key, string $json) : array
     {
         $result = json_decode($json, true);
 
@@ -145,10 +119,7 @@ class DataPoolReader
         return $result;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrentDataVersion()
+    public function getCurrentDataVersion() : string
     {
         if (! $this->keyValueStore->has($this->currentDataVersionKey)) {
             return $this->currentDataVersionDefault;
@@ -156,13 +127,10 @@ class DataPoolReader
         return $this->keyValueStore->get($this->currentDataVersionKey);
     }
 
-    /**
-     * @param SearchCriteria $criteria
-     * @param QueryOptions $queryOptions
-     * @return SearchEngineResponse
-     */
-    public function getSearchResultsMatchingCriteria(SearchCriteria $criteria, QueryOptions $queryOptions)
-    {
+    public function getSearchResultsMatchingCriteria(
+        SearchCriteria $criteria,
+        QueryOptions $queryOptions
+    ) : SearchEngineResponse {
         return $this->searchEngine->query($criteria, $queryOptions);
     }
 
@@ -170,7 +138,7 @@ class DataPoolReader
      * @param string $dataVersionString
      * @return string[]
      */
-    public function getUrlKeysForVersion($dataVersionString)
+    public function getUrlKeysForVersion(string $dataVersionString) : array
     {
         return $this->urlKeyStore->getForDataVersion($dataVersionString);
     }
@@ -187,9 +155,9 @@ class DataPoolReader
         SearchCriteria $criteria,
         Context $context,
         SortOrderConfig $sortOrderConfig,
-        $rowsPerPage,
-        $pageNumber
-    ) {
+        int $rowsPerPage,
+        int $pageNumber
+    ) : array {
         $emptyFilterSelection = [];
         $includeNoFacetFiltersInResult = new FacetFiltersToIncludeInResult();
 
@@ -207,13 +175,10 @@ class DataPoolReader
         return array_values($searchResult->getProductIds());
     }
 
-    /**
-     * @param string $queryString
-     * @param QueryOptions $queryOptions
-     * @return SearchEngineResponse
-     */
-    public function getSearchResultsMatchingString($queryString, QueryOptions $queryOptions)
-    {
+    public function getSearchResultsMatchingString(
+        string $queryString,
+        QueryOptions $queryOptions
+    ) : SearchEngineResponse {
         return $this->searchEngine->queryFullText($queryString, $queryOptions);
     }
 }

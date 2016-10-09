@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionNameException;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionValueTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
@@ -55,7 +55,7 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        return call_user_func([$className, 'create'], $fieldName, $fieldValue);
+        return new $className($fieldName, $fieldValue);
     }
 
     abstract protected function getOperationName() : string;
@@ -68,18 +68,6 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
     public function testJsonSerializableInterfaceIsImplemented()
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->createInstanceOfClassUnderTest('foo', 'bar'));
-    }
-
-    public function testExceptionIsThrownIfFieldNameIsNotValid()
-    {
-        $this->expectException(InvalidCriterionNameException::class);
-        $this->createInstanceOfClassUnderTest(1, 'bar');
-    }
-
-    public function testExceptionIsThrownIfFieldValueIsNotValid()
-    {
-        $this->expectException(InvalidCriterionValueTypeException::class);
-        $this->createInstanceOfClassUnderTest('foo', []);
     }
 
     public function testArrayRepresentationOfCriterionIsReturned()

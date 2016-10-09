@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
@@ -15,7 +17,7 @@ class UpdatingProductImportCommandFactory implements ProductImportCommandFactory
      * @param Product $product
      * @return Command[]
      */
-    public function createProductImportCommands(Product $product)
+    public function createProductImportCommands(Product $product) : array
     {
         return [new UpdateProductCommand($product)];
     }

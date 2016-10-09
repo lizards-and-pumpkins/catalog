@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidSearchDocumentFieldKeyException;
@@ -42,13 +44,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
             ['.foo'],
             ['1'],
             ['-'],
-            [111],
             ['1foo'],
-            [null],
-            [[]],
-            [new \stdClass()],
-            [true],
-            [false],
         ];
     }
 

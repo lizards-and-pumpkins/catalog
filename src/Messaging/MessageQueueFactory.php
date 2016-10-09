@@ -1,16 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging;
 
 interface MessageQueueFactory
 {
-    /**
-     * @return Queue
-     */
-    public function createEventMessageQueue();
+    public function createEventMessageQueue() : Queue;
 
-    /**
-     * @return Queue
-     */
-    public function createCommandMessageQueue();
+    public function createCommandMessageQueue() : Queue;
 }

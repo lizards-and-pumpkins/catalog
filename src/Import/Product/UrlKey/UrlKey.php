@@ -1,51 +1,31 @@
 <?php
 
-namespace LizardsAndPumpkins\Import\Product\UrlKey;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\InvalidUrlKeySourceException;
+namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 class UrlKey
 {
     private $urlKey;
 
-    /**
-     * @param string $urlKey
-     */
-    private function __construct($urlKey)
+    private function __construct(string $urlKey)
     {
         $this->urlKey = $urlKey;
     }
 
-    /**
-     * @param string $urlKey
-     * @return UrlKey
-     */
-    public static function fromString($urlKey)
+    public static function fromString(string $urlKey) : UrlKey
     {
-        if (!is_string($urlKey)) {
-            throw new InvalidUrlKeySourceException(
-                sprintf('URL key can be only created from string, got %s.', gettype($urlKey))
-            );
-        }
-
         $normalizedUrlKey = self::normalizeUrlKey($urlKey);
 
         return new self($normalizedUrlKey);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return (string) $this->urlKey;
     }
 
-    /**
-     * @param string $urlKey
-     * @return string
-     */
-    private static function normalizeUrlKey($urlKey)
+    private static function normalizeUrlKey(string $urlKey) : string
     {
         return preg_replace('/[^a-z0-9$\-_.+!*\'(),\/]/i', '_', $urlKey);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
@@ -25,7 +27,7 @@ class ProductDetailPageRobotsMetaTagSnippetRenderer implements SnippetRenderer
      * @param ProductView $productView
      * @return Snippet[]
      */
-    public function render(ProductView $productView)
+    public function render(ProductView $productView) : array
     {
         return $this->robotsMetaTagRenderer->render($productView->getContext());
     }

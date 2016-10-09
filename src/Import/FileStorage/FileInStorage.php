@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 class FileInStorage implements File
@@ -19,7 +21,7 @@ class FileInStorage implements File
      */
     private $fileContent;
 
-    protected function __construct(
+    private function __construct(
         StorageSpecificFileUri $fileURI,
         FileToFileStorage $fileStorage,
         FileContent $fileContent = null
@@ -29,58 +31,35 @@ class FileInStorage implements File
         $this->fileContent = $fileContent;
     }
 
-    /**
-     * @param StorageSpecificFileUri $fileURI
-     * @param FileToFileStorage $fileStorage
-     * @return FileInStorage
-     */
-    public static function create(StorageSpecificFileUri $fileURI, FileToFileStorage $fileStorage)
+    public static function create(StorageSpecificFileUri $fileURI, FileToFileStorage $fileStorage) : FileInStorage
     {
         return new self($fileURI, $fileStorage, null);
     }
 
-    /**
-     * @param StorageSpecificFileUri $fileURI
-     * @param FileToFileStorage $fileStorage
-     * @param FileContent $fileContent
-     * @return FileInStorage
-     */
     public static function createWithContent(
         StorageSpecificFileUri $fileURI,
         FileToFileStorage $fileStorage,
         FileContent $fileContent
-    ) {
+    ) : FileInStorage {
         return new self($fileURI, $fileStorage, $fileContent);
     }
 
-    /**
-     * @return bool
-     */
-    public function exists()
+    public function exists() : bool
     {
         return $this->fileStorage->isPresent($this);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return (string) $this->fileURI;
     }
 
-    /**
-     * @return StorageSpecificFileUri
-     */
-    public function getInStorageUri()
+    public function getInStorageUri() : StorageSpecificFileUri
     {
         return $this->fileURI;
     }
 
-    /**
-     * @return FileContent
-     */
-    public function getContent()
+    public function getContent() : FileContent
     {
         return is_null($this->fileContent) ?
             FileContent::fromString($this->fileStorage->read($this)) :

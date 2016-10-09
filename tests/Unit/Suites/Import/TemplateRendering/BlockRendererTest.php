@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -39,15 +41,6 @@ class BlockRendererTest extends AbstractBlockRendererTest
     {
         $this->getStubLayout()->method('getNodeChildren')->willReturn([['test-dummy-1'], ['test-dummy-2']]);
         $this->expectException(BlockRendererMustHaveOneRootBlockException::class);
-
-        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
-    }
-
-    public function testExceptionIsThrownIfNoBlockClassIsSpecified()
-    {
-        $this->addStubRootBlock(null, 'dummy-template');
-        $this->expectException(CanNotInstantiateBlockException::class);
-        $this->expectExceptionMessage('Block class is not specified.');
 
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }

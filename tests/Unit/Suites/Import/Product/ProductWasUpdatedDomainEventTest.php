@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -43,13 +45,11 @@ class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->testProduct = new SimpleProduct(
-            ProductId::fromString('foo'),
+            new ProductId('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([
-                DataVersion::CONTEXT_CODE => $this->testDataVersionString
-            ])
+            new SelfContainedContext([DataVersion::CONTEXT_CODE => $this->testDataVersionString])
         );
         $this->domainEvent = new ProductWasUpdatedDomainEvent($this->testProduct);
     }

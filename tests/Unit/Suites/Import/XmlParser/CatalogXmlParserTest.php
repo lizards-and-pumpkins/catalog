@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\XmlParser;
 
 use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileIsNotReadableException;
-use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXMLNotAStringException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
@@ -190,48 +190,6 @@ EOT;
     protected function setUp()
     {
         $this->mockLogger = $this->createMock(Logger::class);
-    }
-
-    /**
-     * @param int|object|null $invalidSourceFilePath
-     * @param string $expectedType
-     * @dataProvider invalidSourceFilePathDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheFromFileConstructorInputIsNotAString(
-        $invalidSourceFilePath,
-        string $expectedType
-    ) {
-        $this->expectException(CatalogImportSourceFilePathIsNotAStringException::class);
-        $this->expectExceptionMessage(
-            sprintf('Expected the catalog XML import file path to be a string, got "%s"', $expectedType)
-        );
-        CatalogXmlParser::fromFilePath($invalidSourceFilePath, $this->mockLogger);
-    }
-
-    /**
-     * @param int|object|null $noXmlStringInput
-     * @param string $expectedType
-     * @dataProvider invalidSourceFilePathDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheFromXmlConstructorInputIsNotAString(
-        $noXmlStringInput,
-        string $expectedType
-    ) {
-        $this->expectException(CatalogImportSourceXMLNotAStringException::class);
-        $this->expectExceptionMessage(sprintf('Expected the catalog XML to be a string, got "%s"', $expectedType));
-        CatalogXmlParser::fromXml($noXmlStringInput, $this->mockLogger);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function invalidSourceFilePathDataProvider() : array
-    {
-        return [
-            [null, 'NULL'],
-            [42, 'integer'],
-            [new \stdClass(), 'stdClass'],
-        ];
     }
 
     public function testItThrowsAnExceptionIfTheInputFileDoesNotExist()

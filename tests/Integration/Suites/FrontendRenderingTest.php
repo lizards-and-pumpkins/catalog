@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -27,7 +29,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {
-    private $testProductId = 333;
+    private $testProductId = '333';
 
     /**
      * @var SampleMasterFactory
@@ -124,7 +126,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             HttpRequest::METHOD_GET,
             $url,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
     }
 

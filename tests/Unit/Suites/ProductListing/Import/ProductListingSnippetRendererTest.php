@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -8,6 +10,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
@@ -139,7 +142,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey);
 
         $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getUrlKey')->willReturn('listing.html');
+        $stubProductListing->method('getUrlKey')->willReturn(UrlKey::fromString('listing.html'));
         $stubProductListing->method('hasAttribute')->willReturn(true);
         $stubProductListing->method('getAttributeValueByCode')->willReturnMap(
             [
@@ -242,7 +245,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey);
 
         $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getUrlKey')->willReturn('listing.html');
+        $stubProductListing->method('getUrlKey')->willReturn(UrlKey::fromString('listing.html'));
         $stubProductListing->method('hasAttribute')->willReturn(true);
         $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaContent);
 

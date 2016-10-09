@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -8,6 +10,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
@@ -83,13 +86,13 @@ class ProductListingCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_T
 
     public function testProductListingCanonicalTagSnippetIsReturned()
     {
-        $testUrlKey = 'test.html';
+        $testUrlKey = UrlKey::fromString('test.html');
         $testSnippetKey = 'canonical_tag';
         $testBaseUrl = 'https://example.com/';
 
         $this->stubCanonicalTagSnippetKeyGenerator->method('getKeyForContext')->willReturn($testSnippetKey);
 
-        $this->stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString($testBaseUrl));
+        $this->stubBaseUrlBuilder->method('create')->willReturn(new HttpBaseUrl($testBaseUrl));
 
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
         $stubProductListing = $this->createMock(ProductListing::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
@@ -19,19 +21,12 @@ class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuild
         $this->productXmlToProductBuilderLocatorProxy = $productXmlToProductBuilderLocatorProxy;
     }
     
-    /**
-     * @return ProductTypeCode
-     */
-    public function getSupportedProductTypeCode()
+    public function getSupportedProductTypeCode() : ProductTypeCode
     {
         return ProductTypeCode::fromString(ConfigurableProduct::TYPE_CODE);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return ConfigurableProductBuilder
-     */
-    public function createProductBuilder(XPathParser $parser)
+    public function createProductBuilder(XPathParser $parser) : ProductBuilder
     {
         return new ConfigurableProductBuilder(
             $this->createSimpleProductBuilder($parser),
@@ -40,31 +35,19 @@ class ConfigurableProductXmlToProductBuilder implements ProductXmlToProductBuild
         );
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return SimpleProductBuilder
-     */
-    private function createSimpleProductBuilder(XPathParser $parser)
+    private function createSimpleProductBuilder(XPathParser $parser) : SimpleProductBuilder
     {
         $converter = new SimpleProductXmlToProductBuilder();
         return $converter->createProductBuilder($parser);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return ProductVariationAttributeList
-     */
-    private function createVariationAttributeList(XPathParser $parser)
+    private function createVariationAttributeList(XPathParser $parser) : ProductVariationAttributeList
     {
         $converter = new ConfigurableProductXmlToVariationAttributeList();
         return $converter->createVariationAttributeList($parser);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return AssociatedProductListBuilder
-     */
-    private function createAssociatedProductListBuilder(XPathParser $parser)
+    private function createAssociatedProductListBuilder(XPathParser $parser) : AssociatedProductListBuilder
     {
         $productXmlToProductBuilderLocator = call_user_func($this->productXmlToProductBuilderLocatorProxy);
         $converter = new ConfigurableProductXmlToAssociatedProductListBuilder($productXmlToProductBuilderLocator);

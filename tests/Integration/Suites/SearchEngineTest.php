@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
@@ -54,7 +56,7 @@ class SearchEngineTest extends AbstractIntegrationTest
             $sortOrderConfig
         );
 
-        $searchEngineResponse = $searchEngine->query(SearchCriterionAnything::create(), $queryOptions);
+        $searchEngineResponse = $searchEngine->query(new SearchCriterionAnything(), $queryOptions);
 
         $this->assertContains('M29540', $searchEngineResponse->getProductIds());
     }

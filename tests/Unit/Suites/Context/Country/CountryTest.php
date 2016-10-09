@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Country;
 
 use LizardsAndPumpkins\Context\Country\Exception\InvalidCountrySpecificationException;
@@ -12,28 +14,6 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     public function testReturnsACountryInstance()
     {
         $this->assertInstanceOf(Country::class, Country::from2CharIso3166('de'));
-    }
-
-    /**
-     * @param mixed $nonString
-     * @dataProvider nonStringDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheInputIsNotAString($nonString)
-    {
-        $this->expectException(InvalidCountrySpecificationException::class);
-        $this->expectExceptionMessage('The country specification has to be a string, got "');
-        Country::from2CharIso3166($nonString);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function nonStringDataProvider() : array
-    {
-        return [
-            [null],
-            [0],
-        ];
     }
 
     /**

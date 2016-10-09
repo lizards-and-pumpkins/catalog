@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
@@ -18,11 +20,7 @@ class DomainEventHandlerLocator
         $this->factory = $factory;
     }
 
-    /**
-     * @param Message $event
-     * @return DomainEventHandler
-     */
-    public function getHandlerFor(Message $event)
+    public function getHandlerFor(Message $event) : DomainEventHandler
     {
         $eventHandlerClass = $this->getUnqualifiedDomainEventHandlerClassName($event);
         $method = 'create' . $eventHandlerClass;
@@ -36,21 +34,13 @@ class DomainEventHandlerLocator
         return $this->factory->{$method}($event);
     }
 
-    /**
-     * @param Message $event
-     * @return string
-     */
-    private function getUnqualifiedDomainEventHandlerClassName(Message $event)
+    private function getUnqualifiedDomainEventHandlerClassName(Message $event) : string
     {
         $camelCaseEventName = $this->snakeCaseToCamelCase($event->getName());
         return $camelCaseEventName . 'DomainEventHandler';
     }
 
-    /**
-     * @param string $name
-     * @return string
-     */
-    private function snakeCaseToCamelCase($name)
+    private function snakeCaseToCamelCase(string $name) : string
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
     }

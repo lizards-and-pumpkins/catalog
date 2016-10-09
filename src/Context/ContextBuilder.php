@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -8,34 +10,30 @@ interface ContextBuilder
 {
     const REQUEST = 'request';
     
-    /**
-     * @param HttpRequest $request
-     * @return Context
-     */
-    public function createFromRequest(HttpRequest $request);
+    public function createFromRequest(HttpRequest $request) : Context;
 
     /**
      * @param array[] $contextDataSets
      * @return Context[]
      */
-    public function createContextsFromDataSets(array $contextDataSets);
+    public function createContextsFromDataSets(array $contextDataSets) : array;
 
     /**
      * @param mixed[] $inputDataSet
      * @return Context
      */
-    public function createContext(array $inputDataSet);
+    public function createContext(array $inputDataSet) : Context;
 
     /**
      * @param string[] $dataSet
      * @return Context
      */
-    public static function rehydrateContext(array $dataSet);
+    public static function rehydrateContext(array $dataSet) : Context;
 
     /**
      * @param Context $context
      * @param string[] $additionDataSet
      * @return Context
      */
-    public function expandContext(Context $context, array $additionDataSet);
+    public function expandContext(Context $context, array $additionDataSet) : Context;
 }

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\Exception\FileAlreadyExistsWithinGivenPathException;
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\Directory
@@ -10,12 +13,6 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 class DirectoryTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
-
-    public function testExceptionIfNonStringIsSpecifiedAsDirectoryPath()
-    {
-        $this->expectException(InvalidDirectoryPathException::class);
-        Directory::fromPath(1);
-    }
 
     public function testExceptionIsThrownIfFileWithGivenPathAlreadyExists()
     {

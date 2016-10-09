@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeForImportedProductException;
@@ -18,22 +20,14 @@ class ProductXmlToProductBuilderLocator
         $this->productTypeBuilderFactories = $productTypeBuildersFactories;
     }
 
-    /**
-     * @param string $xml
-     * @return ProductBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    public function createProductBuilderFromXml($xml)
+    public function createProductBuilderFromXml(string $xml) : ProductBuilder
     {
         $parser = new XPathParser($xml);
         $productTypeCode = ProductTypeCode::fromString($this->getTypeCodeFromXml($parser));
         return $this->createProductBuilderForProductType($productTypeCode, $parser);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return string
-     */
-    private function getTypeCodeFromXml(XPathParser $parser)
+    private function getTypeCodeFromXml(XPathParser $parser) : string
     {
         $typeNode = $parser->getXmlNodesArrayByXPath('/product/@type');
         return $this->getTypeCodeStringFromDomNodeArray($typeNode);
@@ -43,7 +37,7 @@ class ProductXmlToProductBuilderLocator
      * @param mixed[] $nodeArray
      * @return string
      */
-    private function getTypeCodeStringFromDomNodeArray(array $nodeArray)
+    private function getTypeCodeStringFromDomNodeArray(array $nodeArray) : string
     {
         if (1 !== count($nodeArray)) {
             throw new InvalidProductTypeCodeForImportedProductException(
@@ -65,11 +59,7 @@ class ProductXmlToProductBuilderLocator
         return $builder->createProductBuilder($parser);
     }
 
-    /**
-     * @param ProductTypeCode $typeCode
-     * @return ProductXmlToProductBuilder
-     */
-    private function getProductBuilderForProductType(ProductTypeCode $typeCode)
+    private function getProductBuilderForProductType(ProductTypeCode $typeCode) : ProductXmlToProductBuilder
     {
         foreach ($this->productTypeBuilderFactories as $productTypeBuilderFactory) {
             if ($typeCode->isEqualTo($productTypeBuilderFactory->getSupportedProductTypeCode())) {

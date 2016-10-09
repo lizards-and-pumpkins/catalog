@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\RestApi;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -28,26 +30,18 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
      */
     private $logger;
 
-    /**
-     * @param CatalogImport $catalogImport
-     * @param string $importDirectoryPath
-     * @param Logger $logger
-     */
-    private function __construct(CatalogImport $catalogImport, $importDirectoryPath, Logger $logger)
+    private function __construct(CatalogImport $catalogImport, string $importDirectoryPath, Logger $logger)
     {
         $this->catalogImport = $catalogImport;
         $this->importDirectoryPath = $importDirectoryPath;
         $this->logger = $logger;
     }
 
-    /**
-     * @param CatalogImport $catalogImport
-     * @param string $importDirectoryPath
-     * @param Logger $logger
-     * @return CatalogImportApiV1PutRequestHandler
-     */
-    public static function create(CatalogImport $catalogImport, $importDirectoryPath, Logger $logger)
-    {
+    public static function create(
+        CatalogImport $catalogImport,
+        string $importDirectoryPath,
+        Logger $logger
+    ) : CatalogImportApiV1PutRequestHandler {
         if (!is_readable($importDirectoryPath)) {
             throw new CatalogImportApiDirectoryNotReadableException(
                 sprintf('%s is not readable.', $importDirectoryPath)
@@ -57,20 +51,12 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         return new self($catalogImport, $importDirectoryPath, $logger);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    final public function canProcess(HttpRequest $request)
+    final public function canProcess(HttpRequest $request) : bool
     {
         return HttpRequest::METHOD_PUT === $request->getMethod();
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    final protected function getResponse(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request) : HttpResponse
     {
         $headers = [];
         $body = '';
@@ -78,26 +64,18 @@ class CatalogImportApiV1PutRequestHandler extends ApiRequestHandler
         return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
     }
 
-    protected function processRequest(HttpRequest $request)
+    final protected function processRequest(HttpRequest $request)
     {
         $filePath = $this->getValidImportFilePathFromRequest($request);
         $this->catalogImport->importFile($filePath);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getValidImportFilePathFromRequest(HttpRequest $request)
+    private function getValidImportFilePathFromRequest(HttpRequest $request) : string
     {
         return $this->importDirectoryPath . '/' . $this->getImportFileNameFromRequest($request);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getImportFileNameFromRequest(HttpRequest $request)
+    private function getImportFileNameFromRequest(HttpRequest $request) : string
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 

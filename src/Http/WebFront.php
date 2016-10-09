@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
@@ -34,20 +36,14 @@ abstract class WebFront
         $this->implementationSpecificFactory = $implementationSpecificFactory;
     }
 
-    /**
-     * @return HttpResponse
-     */
-    public function run()
+    public function run() : HttpResponse
     {
         $response = $this->processRequest();
         $response->send();
         return $response;
     }
 
-    /**
-     * @return HttpResponse
-     */
-    public function processRequest()
+    public function processRequest() : HttpResponse
     {
         $this->buildFactory();
         $this->buildRouterChain();
@@ -63,33 +59,18 @@ abstract class WebFront
         $this->masterFactory->register($factory);
     }
 
-    /**
-     * @return MasterFactory
-     */
-    abstract protected function createMasterFactory();
+    abstract protected function createMasterFactory() : MasterFactory;
 
-    /**
-     * @param MasterFactory $factory
-     */
     abstract protected function registerFactories(MasterFactory $factory);
 
-    /**
-     * @param HttpRouterChain $router
-     */
     abstract protected function registerRouters(HttpRouterChain $router);
 
-    /**
-     * @return HttpRequest
-     */
-    final protected function getRequest()
+    final protected function getRequest() : HttpRequest
     {
         return $this->request;
     }
 
-    /**
-     * @return Factory
-     */
-    final public function getImplementationSpecificFactory()
+    final public function getImplementationSpecificFactory() : Factory
     {
         return $this->implementationSpecificFactory;
     }
@@ -111,10 +92,7 @@ abstract class WebFront
         $this->registerRouters($this->routerChain);
     }
 
-    /**
-     * @return MasterFactory
-     */
-    public function getMasterFactory()
+    public function getMasterFactory() : MasterFactory
     {
         $this->buildFactory();
         return $this->masterFactory;
@@ -134,7 +112,7 @@ abstract class WebFront
      * @param mixed $value
      * @return string
      */
-    private function getExceptionMessageClassNameRepresentation($value)
+    private function getExceptionMessageClassNameRepresentation($value) : string
     {
         if (is_object($value)) {
             return get_class($value);

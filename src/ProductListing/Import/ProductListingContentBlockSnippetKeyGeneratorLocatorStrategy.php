@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 
 class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
@@ -17,18 +20,12 @@ class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy implements Sn
         $this->contentBlockKeyGeneratorClosure = $contentBlockKeyGeneratorClosure;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function canHandle($snippetCode)
+    public function canHandle(string $snippetCode) : bool
     {
         return strpos($snippetCode, 'product_listing_content_block_') === 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getKeyGeneratorForSnippetCode($snippetCode)
+    public function getKeyGeneratorForSnippetCode(string $snippetCode) : SnippetKeyGenerator
     {
         if (!$this->canHandle($snippetCode)) {
             throw new SnippetCodeCanNotBeProcessedException(

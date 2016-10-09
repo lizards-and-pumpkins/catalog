@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\Product\Product;

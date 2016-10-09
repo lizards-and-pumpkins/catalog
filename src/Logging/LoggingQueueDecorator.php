@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\MessageReceiver;
@@ -25,10 +27,7 @@ class LoggingQueueDecorator implements Queue, Clearable
         $this->logger = $logger;
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return $this->decoratedQueue->count();
     }
@@ -46,11 +45,7 @@ class LoggingQueueDecorator implements Queue, Clearable
         }
     }
 
-    /**
-     * @param MessageReceiver $messageReceiver
-     * @param int $maxNumberOfMessagesToConsume
-     */
-    public function consume(MessageReceiver $messageReceiver, $maxNumberOfMessagesToConsume)
+    public function consume(MessageReceiver $messageReceiver, int $maxNumberOfMessagesToConsume)
     {
         $this->decoratedQueue->consume($messageReceiver, $maxNumberOfMessagesToConsume);
     }

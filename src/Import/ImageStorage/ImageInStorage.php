@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;
@@ -35,71 +36,44 @@ class ImageInStorage implements Image
         $this->fileContent = $fileContent;
     }
 
-    /**
-     * @param StorageSpecificFileUri $fileURI
-     * @param ImageToImageStorage $imageStorage
-     * @return ImageInStorage
-     */
     public static function create(
         StorageSpecificFileUri $fileURI,
         ImageToImageStorage $imageStorage
-    ) {
+    ) : ImageInStorage {
         return new self($fileURI, $imageStorage, null);
     }
 
-    /**
-     * @param StorageSpecificFileUri $fileURI
-     * @param ImageToImageStorage $imageStorage
-     * @param FileContent $fileContent
-     * @return ImageInStorage
-     */
     public static function createWithContent(
         StorageSpecificFileUri $fileURI,
         ImageToImageStorage $imageStorage,
         FileContent $fileContent
-    ) {
+    ) : ImageInStorage {
         return new self($fileURI, $imageStorage, $fileContent);
     }
 
-    /**
-     * @param Context $context
-     * @return HttpUrl
-     */
-    public function getUrl(Context $context)
+    public function getUrl(Context $context) : HttpUrl
     {
         return HttpUrl::fromString($this->imageStorage->url($this, $context));
     }
 
-    /**
-     * @return bool
-     */
-    public function exists()
+    public function exists() : bool
     {
         return $this->imageStorage->isPresent($this);
     }
     
-    /**
-     * @return FileContent
-     */
-    public function getContent()
+    public function getContent() : FileContent
     {
         return null === $this->fileContent ?
             FileContent::fromString($this->imageStorage->read($this)) :
             $this->fileContent;
     }
 
-    /**
-     * @return StorageSpecificFileUri
-     */
-    public function getInStorageUri()
+    public function getInStorageUri() : StorageSpecificFileUri
     {
         return $this->fileURI;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return (string) $this->fileURI;
     }

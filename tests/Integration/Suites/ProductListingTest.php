@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -66,9 +68,9 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Adidas Rausverkauf!', $titleSnippet);
         
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
-            SearchCriterionGreaterThan::create('stock_qty', '0'),
-            SearchCriterionEqual::create('category', 'sale'),
-            SearchCriterionEqual::create('brand', 'Adidas')
+            new SearchCriterionGreaterThan('stock_qty', '0'),
+            new SearchCriterionEqual('category', 'sale'),
+            new SearchCriterionEqual('brand', 'Adidas')
         ));
 
         $this->assertEquals(ProductListingTemplateSnippetRenderer::CODE, $metaInfoSnippet['root_snippet_code']);
@@ -85,7 +87,7 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/sale'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);

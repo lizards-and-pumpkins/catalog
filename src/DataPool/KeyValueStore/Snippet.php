@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
@@ -18,42 +20,27 @@ class Snippet
      */
     private $content;
 
-    /**
-     * @param string $key
-     * @param string $content
-     * @return Snippet
-     */
-    public static function create($key, $content)
+    public static function create(string $key, string $content) : Snippet
     {
-        if (!is_string($key) || !preg_match(self::KEY_PATTERN, $key)) {
-            throw new InvalidKeyException(sprintf('Key "%s" is invalid.', (is_scalar($key) ? $key : gettype($key))));
+        if (!preg_match(self::KEY_PATTERN, $key)) {
+            throw new InvalidKeyException(sprintf('Key "%s" is invalid.', $key));
         }
 
-        return new self($key, (string) $content);
+        return new self($key, $content);
     }
 
-    /**
-     * @param string $key
-     * @param string $content
-     */
-    private function __construct($key, $content)
+    private function __construct(string $key, string $content)
     {
         $this->key = $key;
         $this->content = $content;
     }
 
-    /**
-     * @return string
-     */
-    public function getKey()
+    public function getKey() : string
     {
         return $this->key;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent() : string
     {
         return $this->content;
     }

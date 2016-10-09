@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -12,11 +14,7 @@ class HttpRouterChain implements HttpRouter
      */
     private $routers = [];
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpRequestHandler
-     */
-    public function route(HttpRequest $request)
+    public function route(HttpRequest $request) : HttpRequestHandler
     {
         foreach ($this->routers as $router) {
             $handler = $router->route($request);

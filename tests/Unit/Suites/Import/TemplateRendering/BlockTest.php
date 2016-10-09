@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
+use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\TemplateFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
@@ -112,7 +115,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesFetchingTheBaseUrlToTheBlockRenderer()
     {
-        $dummyBaseUrl = 'dummy base url';
+        $dummyBaseUrl = new HttpBaseUrl('http://example.com/');
         $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($dummyBaseUrl);
         
         $this->assertSame($dummyBaseUrl, $this->block->getBaseUrl());

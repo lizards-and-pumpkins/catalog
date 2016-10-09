@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
@@ -9,7 +11,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\Product;
@@ -67,21 +69,13 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    public function canProcess(HttpRequest $request) : bool
     {
         $this->loadPageMetaInfoSnippet($request);
         return (bool)$this->pageMetaInfo;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    public function process(HttpRequest $request)
+    public function process(HttpRequest $request) : HttpResponse
     {
         if (!$this->canProcess($request)) {
             throw new UnableToHandleRequestException(sprintf('Unable to handle request to "%s"', $request->getUrl()));
@@ -113,9 +107,9 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
 
     /**
      * @param string $metaInfoSnippetKey
-     * @return string
+     * @return mixed
      */
-    private function getPageMetaInfoJsonIfExists($metaInfoSnippetKey)
+    private function getPageMetaInfoJsonIfExists(string $metaInfoSnippetKey)
     {
         try {
             $snippet = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
@@ -125,11 +119,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         return $snippet;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getMetaInfoSnippetKey(HttpRequest $request)
+    private function getMetaInfoSnippetKey(HttpRequest $request) : string
     {
         $urlKey = $request->getPathWithoutWebsitePrefix();
         $metaInfoSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
@@ -149,11 +139,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $snippetContents
-     */
-    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContents)
+    private function addDynamicSnippetToPageBuilder(string $snippetCode, string $snippetContents)
     {
         $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];

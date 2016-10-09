@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -16,20 +18,13 @@ class ProductImageImportCallbackFailureMessage implements LogMessage
      */
     private $productImageXml;
 
-    /**
-     * @param \Exception $exception
-     * @param string $productImageXml
-     */
-    public function __construct(\Exception $exception, $productImageXml)
+    public function __construct(\Exception $exception, string $productImageXml)
     {
         $this->exception = $exception;
         $this->productImageXml = $productImageXml;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf(
             'Error during processing catalog product image XML import callback: %s',
@@ -40,7 +35,7 @@ class ProductImageImportCallbackFailureMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return [
             'exception' => $this->exception,
@@ -48,10 +43,7 @@ class ProductImageImportCallbackFailureMessage implements LogMessage
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis() : string
     {
         $exceptionSynopsis = sprintf('File: %s:%d', $this->exception->getFile(), $this->exception->getLine());
         $xmlSynopsis = sprintf('Image XML: %s', str_replace(["\n", "\r"], ' ', $this->productImageXml));

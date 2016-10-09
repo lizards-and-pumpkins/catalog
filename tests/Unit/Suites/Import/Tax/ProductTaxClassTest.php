@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Tax;
 
 use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxClassNameException;
@@ -36,34 +38,10 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param mixed $nonString
-     * @param string $expectedType
-     * @dataProvider nonStringDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheTaxClassNameIsNotAString($nonString, string $expectedType)
-    {
-        $this->expectException(InvalidTaxClassNameException::class);
-        $this->expectExceptionMessage('The tax class name has to be a string, got "' . $expectedType . '"');
-        ProductTaxClass::fromString($nonString);
-    }
-
     public function testItReturnsTheGivenTaxClassInstanceIfATaxClassInstanceIsGiven()
     {
         $testClass = ProductTaxClass::fromString('test');
         $this->assertSame($testClass, ProductTaxClass::fromString($testClass));
-    }
-
-    /**
-     * @return array[]
-     */
-    public function nonStringDataProvider() : array
-    {
-        return [
-            [123, 'integer'],
-            [[], 'array'],
-            [$this, get_class($this)]
-        ];
     }
 
     public function testTheNamedConstructorReturnsATaxClassInstance()

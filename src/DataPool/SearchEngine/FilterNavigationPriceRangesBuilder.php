@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Price\Price;
@@ -9,7 +11,7 @@ class FilterNavigationPriceRangesBuilder
     /**
      * @return FacetFilterRange[]
      */
-    public static function getPriceRanges()
+    public static function getPriceRanges() : array
     {
         $base = pow(10, Price::DEFAULT_DECIMAL_PLACES);
         $rangeStep = 20 * $base;

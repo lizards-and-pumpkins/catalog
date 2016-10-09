@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 
 class UpdatingProductImageImportCommandFactory implements ProductImageImportCommandFactory
@@ -14,7 +17,7 @@ class UpdatingProductImageImportCommandFactory implements ProductImageImportComm
      * @param DataVersion $dataVersion
      * @return Command[]
      */
-    public function createProductImageImportCommands($imageFilePath, DataVersion $dataVersion)
+    public function createProductImageImportCommands(string $imageFilePath, DataVersion $dataVersion) : array
     {
         return [new AddImageCommand($imageFilePath, $dataVersion)];
     }

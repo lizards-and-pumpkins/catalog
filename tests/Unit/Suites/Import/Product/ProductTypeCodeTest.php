@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
@@ -10,13 +12,6 @@ use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeException;
  */
 class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
 {
-    public function testItThrowsAnExceptionIfTheTypeIsNotAString()
-    {
-        $this->expectException(InvalidProductTypeCodeException::class);
-        $this->expectExceptionMessage('The product type code has to be a string, got "integer"');
-        ProductTypeCode::fromString(123);
-    }
-
     public function testItThrowsAnExceptionIfTheTypeStringIsEmpty()
     {
         $this->expectException(InvalidProductTypeCodeException::class);

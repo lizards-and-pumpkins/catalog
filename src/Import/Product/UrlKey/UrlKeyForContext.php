@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Context\Context;
@@ -21,55 +23,34 @@ class UrlKeyForContext
      */
     private $urlKeyTypeString;
 
-    /**
-     * @param UrlKey $urlKey
-     * @param Context $context
-     * @param string $urlKeyTypeString
-     */
-    public function __construct(UrlKey $urlKey, Context $context, $urlKeyTypeString)
+    public function __construct(UrlKey $urlKey, Context $context, string $urlKeyTypeString)
     {
         $this->urlKey = $urlKey;
         $this->context = $context;
         $this->urlKeyTypeString = $urlKeyTypeString;
     }
 
-    /**
-     * @return UrlKey
-     */
-    public function getUrlKey()
+    public function getUrlKey() : UrlKey
     {
         return $this->urlKey;
     }
 
-    /**
-     * @return Context
-     */
-    public function getContext()
+    public function getContext() : Context
     {
         return $this->context;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return (string) $this->urlKey;
     }
 
-    /**
-     * @param string $code
-     * @return string
-     */
-    public function getContextValue($code)
+    public function getContextValue(string $code) : string
     {
         return $this->context->getValue($code);
     }
 
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType() : string
     {
         return $this->urlKeyTypeString;
     }

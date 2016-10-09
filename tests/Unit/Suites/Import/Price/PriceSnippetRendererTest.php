@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Price;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -53,9 +57,9 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private $stubTaxServiceLocator;
 
     /**
-     * @var string
+     * @var AttributeCode
      */
-    private $testPriceAttributeCode = 'foo';
+    private $testPriceAttributeCode;
 
     private function createStubProductView() : \PHPUnit_Framework_MockObject_MockObject
     {
@@ -83,6 +87,8 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
         $this->stubContextBuilder->method('expandContext')->willReturn($this->createMock(Context::class));
+
+        $this->testPriceAttributeCode = AttributeCode::fromString('foo');
 
         $this->renderer = new PriceSnippetRenderer(
             $this->stubTaxableCountries,
@@ -123,7 +129,7 @@ class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProduct->method('hasAttribute')->with($this->testPriceAttributeCode)->willReturn(true);
         $stubProduct->method('getFirstValueOfAttribute')->with($this->testPriceAttributeCode)
             ->willReturn($dummyPriceAttributeValue);
-        $stubProduct->method('getTaxClass')->willReturn('test class');
+        $stubProduct->method('getTaxClass')->willReturn(ProductTaxClass::fromString('test class'));
         $this->stubContextWebsiteAndCountry($stubProduct);
 
         /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubProductView */

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -82,16 +84,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return SelfContainedContextBuilder::rehydrateContext($contextDataSet);
     }
 
-    private function createStubSortOrderConfig(string $sortByFieldCode, string $sortDirection) : SortOrderConfig
+    private function createSortOrderConfig(string $sortByFieldCode, string $sortDirection) : SortOrderConfig
     {
-        $stubAttributeCode = $this->createMock(AttributeCode::class);
-        $stubAttributeCode->method('__toString')->willReturn($sortByFieldCode);
-
-        $sortOrderConfig = $this->createMock(SortOrderConfig::class);
-        $sortOrderConfig->method('getAttributeCode')->willReturn($stubAttributeCode);
-        $sortOrderConfig->method('getSelectedDirection')->willReturn($sortDirection);
-
-        return $sortOrderConfig;
+        return SortOrderConfig::create(
+            AttributeCode::fromString($sortByFieldCode),
+            SortOrderDirection::create($sortDirection)
+        );
     }
 
     private function assertFacetFieldCollectionContainsFieldWithCodeAndValue(
@@ -158,7 +156,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createStubQueryOptionsWithGivenContext(Context $context) : QueryOptions
     {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
-        $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $stubSortOrderConfig = $this->createSortOrderConfig('product_id', SortOrderDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
@@ -180,7 +178,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         array $selectedFilters
     ) : QueryOptions {
-        $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $stubSortOrderConfig = $this->createSortOrderConfig('product_id', SortOrderDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn($selectedFilters);
@@ -218,7 +216,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createStubQueryOptionsWithGivenPagination(int $rowsPerPage, int $pageNumber) : QueryOptions
     {
         $facetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
-        $stubSortOrderConfig = $this->createStubSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $stubSortOrderConfig = $this->createSortOrderConfig('product_id', SortOrderDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
@@ -245,7 +243,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchEngineResponseIsReturned()
     {
-        $criteria = SearchCriterionEqual::create('foo', 'bar');
+        $criteria = new SearchCriterionEqual('foo', 'bar');
         $result = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
 
         $this->assertInstanceOf(SearchEngineResponse::class, $result);
@@ -256,8 +254,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $fieldName = 'foo';
         $fieldValue = 'bar';
 
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
         $documentAContext = $this->createContextFromDataParts(['website' => 'value-1']);
         $documentBContext = $this->createContextFromDataParts(['website' => 'value-2']);
         $queryContext = $this->createContextFromDataParts(['website' => 'value-2']);
@@ -269,7 +267,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $criteria = new SearchCriterionEqual($fieldName, $fieldValue);
         $queryOptions = $this->createStubQueryOptionsWithGivenContext($queryContext);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
@@ -284,8 +282,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $fieldName = 'foo';
         $fieldValue = 'bar';
 
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
         $documentAContext = $this->createContextFromDataParts(['locale' => 'value2']);
         $documentBContext = $this->createContextFromDataParts([ 'locale' => 'value2']);
         $queryContext = $this->createContextFromDataParts(['website' => 'value1', 'locale' => 'value2']);
@@ -297,7 +295,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $criteria = new SearchCriterionEqual($fieldName, $fieldValue);
         $queryOptions = $this->createStubQueryOptionsWithGivenContext($queryContext);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
@@ -311,8 +309,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $fieldName = 'baz';
 
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $searchDocumentA = $this->createSearchDocument([$fieldName => 'Hidden bar here.'], $productAId);
         $searchDocumentB = $this->createSearchDocument([$fieldName => 'Here there is none.'], $productBId);
@@ -328,7 +326,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
     {
-        $searchCriteria = SearchCriterionEqual::create('foo', 'some-value-which-is-definitely-absent-in-index');
+        $searchCriteria = new SearchCriterionEqual('foo', 'some-value-which-is-definitely-absent-in-index');
         $searchEngineResponse = $this->searchEngine->query($searchCriteria, $this->createStubQueryOptions());
 
         $this->assertCount(0, $searchEngineResponse->getProductIds());
@@ -339,8 +337,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria(SearchCriteria $searchCriteria)
     {
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['foo' => 'bar'], $productAId);
         $searchDocumentB = $this->createSearchDocument(['foo' => 'baz'], $productBId);
@@ -361,12 +359,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function searchCriteriaProvider() : array
     {
         return [
-            [SearchCriterionEqual::create('foo', 'bar')],
-            [SearchCriterionNotEqual::create('foo', 'baz')],
+            [new SearchCriterionEqual('foo', 'bar')],
+            [new SearchCriterionNotEqual('foo', 'baz')],
             [
                 CompositeSearchCriterion::createAnd(
-                    SearchCriterionEqual::create('foo', 'bar'),
-                    SearchCriterionNotEqual::create('foo', 'baz')
+                    new SearchCriterionEqual('foo', 'bar'),
+                    new SearchCriterionNotEqual('foo', 'baz')
                 )
             ],
         ];
@@ -377,8 +375,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollectionContainsOnlySearchDocumentsMatchingRangeCriteria(SearchCriteria $searchCriteria)
     {
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $searchDocumentA = $this->createSearchDocument(['price' => 10], $productAId);
         $searchDocumentB = $this->createSearchDocument(['price' => 20], $productBId);
@@ -399,18 +397,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function searchRangeCriteriaProvider() : array
     {
         return [
-            [SearchCriterionLessThan::create('price', 20)],
-            [SearchCriterionLessOrEqualThan::create('price', 10)],
+            [new SearchCriterionLessThan('price', 20)],
+            [new SearchCriterionLessOrEqualThan('price', 10)],
             [
                 CompositeSearchCriterion::createAnd(
-                    SearchCriterionGreaterThan::create('price', 5),
-                    SearchCriterionLessOrEqualThan::create('price', 10)
+                    new SearchCriterionGreaterThan('price', 5),
+                    new SearchCriterionLessOrEqualThan('price', 10)
                 )
             ],
             [
                 CompositeSearchCriterion::createAnd(
-                    SearchCriterionGreaterOrEqualThan::create('price', 10),
-                    SearchCriterionLessThan::create('price', 20)
+                    new SearchCriterionGreaterOrEqualThan('price', 10),
+                    new SearchCriterionLessThan('price', 20)
                 )
             ],
         ];
@@ -420,7 +418,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $productId = ProductId::fromString(uniqid());
+        $productId = new ProductId(uniqid());
 
         $searchDocumentA = $this->createSearchDocument([$fieldName => $fieldValue], $productId);
         $searchDocumentB = $this->createSearchDocument([$fieldName => $fieldValue], $productId);
@@ -428,7 +426,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $criteria = new SearchCriterionEqual($fieldName, $fieldValue);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
@@ -440,13 +438,13 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
-        $productId = ProductId::fromString('id');
+        $productId = new ProductId('id');
 
         $searchDocument = $this->createSearchDocument([$fieldName => $fieldValue], $productId);
         $this->searchEngine->addDocument($searchDocument);
         $this->searchEngine->clear();
 
-        $criteria = SearchCriterionEqual::create($fieldName, $fieldValue);
+        $criteria = new SearchCriterionEqual($fieldName, $fieldValue);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
 
@@ -455,8 +453,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testDocumentIsUniqueForProductIdAndContextCombination()
     {
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $fieldName = 'foo';
         $uniqueValue = uniqid();
@@ -470,7 +468,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
         $this->searchEngine->addDocument($searchDocumentC);
 
-        $criteria = SearchCriterionEqual::create($fieldName, $uniqueValue);
+        $criteria = new SearchCriterionEqual($fieldName, $uniqueValue);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
@@ -483,8 +481,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     public function testFacetFieldCollectionOnlyContainsSpecifiedAttributes()
     {
         $keyword = uniqid();
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $fieldACode = 'foo';
         $fieldBCode = 'bar';
@@ -497,9 +495,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
 
         $criteria = CompositeSearchCriterion::createOr(
-            SearchCriterionEqual::create($fieldACode, $keyword),
-            SearchCriterionEqual::create($fieldBCode, $keyword),
-            SearchCriterionEqual::create($fieldCCode, $keyword)
+            new SearchCriterionEqual($fieldACode, $keyword),
+            new SearchCriterionEqual($fieldBCode, $keyword),
+            new SearchCriterionEqual($fieldCCode, $keyword)
         );
 
         $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
@@ -518,7 +516,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNoTransformationIsRegisteredForRangedFacetField()
     {
-        $productId = ProductId::fromString('id');
+        $productId = new ProductId('id');
 
         $fieldName = 'price';
         $fieldValue = 0;
@@ -537,7 +535,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $selectedFilters = [];
         $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
+        $criteria = new SearchCriterionGreaterOrEqualThan($fieldName, $fieldValue);
 
         $this->expectException(NoFacetFieldTransformationRegisteredException::class);
 
@@ -546,9 +544,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testFacetFieldCollectionContainsConfiguredRanges()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
-        $productCId = ProductId::fromString('C');
+        $productAId = new ProductId('A');
+        $productBId = new ProductId('B');
+        $productCId = new ProductId('C');
 
         $fieldName = 'price';
         $fieldValue = 0;
@@ -582,7 +580,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $selectedFilters = [];
         $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
+        $criteria = new SearchCriterionGreaterOrEqualThan($fieldName, $fieldValue);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $facetFieldsCollection = $searchEngineResponse->getFacetFieldCollection();
@@ -597,8 +595,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $field = 'foo';
         $keyword = uniqid();
 
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $searchDocumentA = $this->createSearchDocument([$field => $keyword], $productAId);
         $searchDocumentB = $this->createSearchDocument([$field => $keyword], $productBId);
@@ -606,7 +604,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $criteria = SearchCriterionEqual::create($field, $keyword);
+        $criteria = new SearchCriterionEqual($field, $keyword);
 
         $rowsPerPage = 1;
         $pageNumber = 1;
@@ -623,8 +621,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $keywordA = uniqid();
         $keywordB = uniqid();
 
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $fieldACode = 'foo';
         $fieldBCode = 'bar';
@@ -635,7 +633,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($documentA);
         $this->searchEngine->addDocument($documentB);
 
-        $criteria = SearchCriterionEqual::create($fieldACode, $keywordA);
+        $criteria = new SearchCriterionEqual($fieldACode, $keywordA);
 
         $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
             new FacetFilterRequestSimpleField(AttributeCode::fromString($fieldACode)),
@@ -661,8 +659,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $fieldValueB = uniqid();
         $keyword = uniqid();
 
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $documentA = $this->createSearchDocument([$fieldACode => $fieldValueA, $fieldBCode => $keyword], $productAId);
         $documentB = $this->createSearchDocument([$fieldACode => $fieldValueB, $fieldBCode => $keyword], $productBId);
@@ -676,7 +674,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $selectedFilters = [$fieldACode => [$fieldValueB]];
         $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 
-        $criteria = SearchCriterionEqual::create($fieldBCode, $keyword);
+        $criteria = new SearchCriterionEqual($fieldBCode, $keyword);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getFacetFieldCollection()->getFacetFields();
@@ -688,9 +686,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testSearchResultsAreSortedAccordingToGivenOrder()
     {
-        $productAId = ProductId::fromString('A');
-        $productBId = ProductId::fromString('B');
-        $productCId = ProductId::fromString('C');
+        $productAId = new ProductId('A');
+        $productBId = new ProductId('B');
+        $productCId = new ProductId('C');
 
         $fieldName = 'price';
         $fieldValue = 0;
@@ -703,9 +701,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($documentB);
         $this->searchEngine->addDocument($documentC);
 
-        $criteria = SearchCriterionGreaterOrEqualThan::create($fieldName, $fieldValue);
+        $criteria = new SearchCriterionGreaterOrEqualThan($fieldName, $fieldValue);
 
-        $sortOrderConfig = $this->createStubSortOrderConfig($fieldName, SortOrderDirection::DESC);
+        $sortOrderConfig = $this->createSortOrderConfig($fieldName, SortOrderDirection::DESC);
         $selectedFilters = [];
         $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
 
@@ -717,9 +715,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAnEmptyArrayForRequestsWithSelectedFacetsIfTheSearchEngineIndexIsEmpty()
     {
-        $criteria = SearchCriterionAnything::create();
+        $criteria = new SearchCriterionAnything();
 
-        $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
+        $sortOrderConfig = $this->createSortOrderConfig('foo', SortOrderDirection::DESC);
         $selectedFilters = ['foo' => ['bar']];
         $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
 
@@ -732,12 +730,12 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $fieldValue = ['foo', 'bar', 'baz'];
 
-        $searchDocument = $this->createSearchDocument(['qux' => $fieldValue], ProductId::fromString('ID'));
+        $searchDocument = $this->createSearchDocument(['qux' => $fieldValue], new ProductId('ID'));
         $this->searchEngine->addDocument($searchDocument);
         
-        $criteria = SearchCriterionAnything::create();
+        $criteria = new SearchCriterionAnything();
 
-        $sortOrderConfig = $this->createStubSortOrderConfig('foo', SortOrderDirection::DESC);
+        $sortOrderConfig = $this->createSortOrderConfig('foo', SortOrderDirection::DESC);
         $selectedFilters = ['qux' => ['bar']];
         $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
 
@@ -749,8 +747,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     public function testFacetFilterOptionValuesAreOrderedAlphabetically()
     {
-        $productAId = ProductId::fromString(uniqid());
-        $productBId = ProductId::fromString(uniqid());
+        $productAId = new ProductId(uniqid());
+        $productBId = new ProductId(uniqid());
 
         $fieldCode = 'foo';
 
@@ -764,8 +762,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentB);
 
         $criteria = CompositeSearchCriterion::createOr(
-            SearchCriterionEqual::create($fieldCode, $facetValueA),
-            SearchCriterionEqual::create($fieldCode, $facetValueB)
+            new SearchCriterionEqual($fieldCode, $facetValueA),
+            new SearchCriterionEqual($fieldCode, $facetValueB)
         );
 
         $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
@@ -778,8 +776,8 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $facetFields = $searchEngineResponse->getFacetFieldCollection()->getFacetFields();
         $expectedValues = [
-            FacetFieldValue::create($facetValueB, 1),
-            FacetFieldValue::create($facetValueA, 1),
+            new FacetFieldValue($facetValueB, 1),
+            new FacetFieldValue($facetValueA, 1),
         ];
 
         $this->assertEquals($expectedValues, $facetFields[0]->getValues());

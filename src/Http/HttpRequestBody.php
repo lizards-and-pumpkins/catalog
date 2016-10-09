@@ -1,8 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Http;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\Http\Exception\InvalidHttpRequestBodyException;
+namespace LizardsAndPumpkins\Http;
 
 class HttpRequestBody
 {
@@ -11,32 +11,12 @@ class HttpRequestBody
      */
     private $requestBody;
 
-    /**
-     * @param string $requestBody
-     */
-    private function __construct($requestBody)
+    public function __construct(string $requestBody)
     {
         $this->requestBody = $requestBody;
     }
     
-    /**
-     * @param string $requestBody
-     * @return HttpRequestBody
-     */
-    public static function fromString($requestBody)
-    {
-        if (! is_string($requestBody)) {
-            throw new InvalidHttpRequestBodyException(
-                sprintf('The request body has to be of type string, got "%s"', gettype($requestBody))
-            );
-        }
-        return new self($requestBody);
-    }
-
-    /**
-     * @return string
-     */
-    public function toString()
+    public function toString() : string
     {
         return $this->requestBody;
     }

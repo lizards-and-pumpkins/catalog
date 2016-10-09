@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 interface LogMessageWriter
 {
-    /**
-     * @param LogMessage $logMessage
-     * @return void
-     */
     public function write(LogMessage $logMessage);
 }

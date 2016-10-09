@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Stub\StubContextSource;
@@ -99,6 +101,7 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
                     $this->assertArrayHasKey(DataVersion::CONTEXT_CODE, $dataSet);
                     $this->assertSame($dataSet[DataVersion::CONTEXT_CODE], (string)$testVersion);
                 }, $dataSets);
+                return [];
             });
         $this->contextSource->getAllAvailableContextsWithVersion($testVersion);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 interface PageMetaInfoSnippetContent
@@ -12,20 +14,17 @@ interface PageMetaInfoSnippetContent
     /**
      * @return mixed[]
      */
-    public function getInfo();
+    public function getInfo() : array;
 
-    /**
-     * @return string
-     */
-    public function getRootSnippetCode();
+    public function getRootSnippetCode() : string;
 
     /**
      * @return string[]
      */
-    public function getPageSnippetCodes();
+    public function getPageSnippetCodes() : array;
 
     /**
      * @return array[]
      */
-    public function getContainerSnippets();
+    public function getContainerSnippets() : array;
 }

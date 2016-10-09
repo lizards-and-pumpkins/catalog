@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -21,11 +23,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    public function canProcess(HttpRequest $request) : bool
     {
         if (HttpRequest::METHOD_PUT !== $request->getMethod()) {
             return false;
@@ -38,18 +36,14 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
         return true;
     }
 
-    protected function processRequest(HttpRequest $request)
+    final protected function processRequest(HttpRequest $request)
     {
         $templateId = $this->extractTemplateIdFromRequest($request);
         // todo: add command which validates input data to command queue, the have the command handler create the event
         $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody()));
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    protected function getResponse(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request) : HttpResponse
     {
         $headers = [];
         $body = '';
@@ -63,7 +57,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
      */
     private function extractTemplateIdFromRequest(HttpRequest $request)
     {
-        preg_match('#/templates/([^/]+)#i', $request->getUrl(), $urlTokens);
+        preg_match('#/templates/([^/]+)#i', (string) $request->getUrl(), $urlTokens);
 
         if (count($urlTokens) < 2) {
             return null;

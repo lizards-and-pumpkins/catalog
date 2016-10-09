@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -43,7 +45,7 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
      * @param ProductListing $productListing
      * @return Snippet[]
      */
-    public function render(ProductListing $productListing)
+    public function render(ProductListing $productListing) : array
     {
         if (! $productListing->hasAttribute('description')) {
             return [];
@@ -52,11 +54,7 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
         return [$this->createListingDescriptionSnippet($productListing)];
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return Snippet
-     */
-    private function createListingDescriptionSnippet(ProductListing $productListing)
+    private function createListingDescriptionSnippet(ProductListing $productListing) : Snippet
     {
         $context = $this->getContextFromProductListingData($productListing);
         $snippetKeyData = [PageMetaInfoSnippetContent::URL_KEY => $productListing->getUrlKey()];
@@ -66,11 +64,7 @@ class ProductListingDescriptionSnippetRenderer implements SnippetRenderer
         return Snippet::create($snippetKey, $snippetContent);
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return Context
-     */
-    private function getContextFromProductListingData(ProductListing $productListing)
+    private function getContextFromProductListingData(ProductListing $productListing) : Context
     {
         $contextData = $productListing->getContextData();
         return $this->contextBuilder->createContext($contextData);

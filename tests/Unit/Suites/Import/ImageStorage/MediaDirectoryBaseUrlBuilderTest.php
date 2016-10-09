@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -39,14 +41,6 @@ class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MediaBaseUrlBuilder::class, $this->mediaBaseUrlBuilder);
     }
 
-    public function testItThrowsAnExceptionIfTheMediaBaseUrlPathIsNoString()
-    {
-        $this->expectException(InvalidMediaBaseUrlPathException::class);
-        $this->expectExceptionMessage('The media base URL path has to be a string, got "integer"');
-        $invalidPath = 123;
-        new MediaDirectoryBaseUrlBuilder($this->mockBaseUrlBuilder, $invalidPath);
-    }
-
     public function testItThrowsAnExceptionIfTheMediaBaseUrlPathDoesNotEndWithASlash()
     {
         $this->expectException(InvalidMediaBaseUrlPathException::class);
@@ -59,7 +53,7 @@ class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $stubContext = $this->createMock(Context::class);
         $this->mockBaseUrlBuilder->method('create')->with($stubContext)->willReturn(
-            HttpBaseUrl::fromString('http://example.com/test/')
+            new HttpBaseUrl('http://example.com/test/')
         );
         $result = $this->mediaBaseUrlBuilder->create($stubContext);
         $this->assertSame('http://example.com/test/' . $this->testMediaBaseUrlPath, (string) $result);

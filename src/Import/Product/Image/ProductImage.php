@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
@@ -23,23 +25,17 @@ class ProductImage implements \JsonSerializable
      * @param array[] $imageAttributeArray
      * @return ProductImage
      */
-    public static function fromArray(array $imageAttributeArray)
+    public static function fromArray(array $imageAttributeArray) : ProductImage
     {
         return new self(ProductAttributeList::fromArray($imageAttributeArray));
     }
 
-    /**
-     * @return string
-     */
-    public function getFileName()
+    public function getFileName() : string
     {
         return $this->attributeList->getAttributesWithCode(self::FILE)[0]->getValue();
     }
 
-    /**
-     * @return string
-     */
-    public function getLabel()
+    public function getLabel() : string
     {
         if (! $this->attributeList->hasAttribute(self::LABEL)) {
             return '';
@@ -50,7 +46,7 @@ class ProductImage implements \JsonSerializable
     /**
      * @return array[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return $this->attributeList->jsonSerialize();
     }

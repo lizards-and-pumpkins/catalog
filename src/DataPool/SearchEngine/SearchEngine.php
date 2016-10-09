@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -8,23 +10,9 @@ use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
 interface SearchEngine
 {
-    /**
-     * @param SearchDocument $searchDocument
-     * @return void
-     */
     public function addDocument(SearchDocument $searchDocument);
 
-    /**
-     * @param SearchCriteria $criteria
-     * @param QueryOptions $queryOptions
-     * @return SearchEngineResponse
-     */
-    public function query(SearchCriteria $criteria, QueryOptions $queryOptions);
+    public function query(SearchCriteria $criteria, QueryOptions $queryOptions) : SearchEngineResponse;
 
-    /**
-     * @param string $searchString
-     * @param QueryOptions $queryOptions
-     * @return SearchEngineResponse
-     */
-    public function queryFullText($searchString, QueryOptions $queryOptions);
+    public function queryFullText(string $searchString, QueryOptions $queryOptions) : SearchEngineResponse;
 }

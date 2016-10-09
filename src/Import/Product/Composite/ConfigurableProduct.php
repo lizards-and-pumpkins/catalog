@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -67,12 +70,12 @@ class ConfigurableProduct implements CompositeProduct
      * @param mixed[] $sourceArray
      * @return ConfigurableProduct
      */
-    public static function fromArray(array $sourceArray)
+    public static function fromArray(array $sourceArray) : ConfigurableProduct
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
             SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT]),
-            ProductVariationAttributeList::fromArray($sourceArray[self::VARIATION_ATTRIBUTES]),
+            ProductVariationAttributeList::fromArray(...$sourceArray[self::VARIATION_ATTRIBUTES]),
             AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS])
         );
     }
@@ -80,7 +83,7 @@ class ConfigurableProduct implements CompositeProduct
     /**
      * @return mixed[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             Product::TYPE_KEY          => self::TYPE_CODE,
@@ -90,19 +93,16 @@ class ConfigurableProduct implements CompositeProduct
         ];
     }
 
-    /**
-     * @return ProductId
-     */
-    public function getId()
+    public function getId() : ProductId
     {
         return $this->simpleProductDelegate->getId();
     }
 
     /**
      * @param string $attributeCode
-     * @return string
+     * @return mixed
      */
-    public function getFirstValueOfAttribute($attributeCode)
+    public function getFirstValueOfAttribute(string $attributeCode)
     {
         return $this->simpleProductDelegate->getFirstValueOfAttribute($attributeCode);
     }
@@ -111,115 +111,72 @@ class ConfigurableProduct implements CompositeProduct
      * @param string $attributeCode
      * @return string[]
      */
-    public function getAllValuesOfAttribute($attributeCode)
+    public function getAllValuesOfAttribute(string $attributeCode) : array
     {
         return $this->simpleProductDelegate->getAllValuesOfAttribute($attributeCode);
     }
 
-    /**
-     * @param string $attributeCode
-     * @return bool
-     */
-    public function hasAttribute($attributeCode)
+    public function hasAttribute(AttributeCode $attributeCode) : bool
     {
         return $this->simpleProductDelegate->hasAttribute($attributeCode);
     }
 
-    /**
-     * @return ProductAttributeList
-     */
-    public function getAttributes()
+    public function getAttributes() : ProductAttributeList
     {
         return $this->simpleProductDelegate->getAttributes();
     }
 
-    /**
-     * @return Context
-     */
-    public function getContext()
+    public function getContext() : Context
     {
         return $this->simpleProductDelegate->getContext();
     }
 
-    /**
-     * @return ProductImageList
-     */
-    public function getImages()
+    public function getImages() : ProductImageList
     {
         return $this->simpleProductDelegate->getImages();
     }
 
-    /**
-     * @return int
-     */
-    public function getImageCount()
+    public function getImageCount() : int
     {
         return $this->simpleProductDelegate->getImageCount();
     }
 
-    /**
-     * @param int $imageNumber
-     * @return ProductImage
-     */
-    public function getImageByNumber($imageNumber)
+    public function getImageByNumber(int $imageNumber) : ProductImage
     {
         return $this->simpleProductDelegate->getImageByNumber($imageNumber);
     }
 
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageFileNameByNumber($imageNumber)
+    public function getImageFileNameByNumber(int $imageNumber) : string
     {
         return $this->simpleProductDelegate->getImageFileNameByNumber($imageNumber);
     }
 
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageLabelByNumber($imageNumber)
+    public function getImageLabelByNumber(int $imageNumber) : string
     {
         return $this->simpleProductDelegate->getImageLabelByNumber($imageNumber);
     }
 
-    /**
-     * @return string
-     */
-    public function getMainImageFileName()
+    public function getMainImageFileName() : string
     {
         return $this->simpleProductDelegate->getMainImageFileName();
     }
 
-    /**
-     * @return string
-     */
-    public function getMainImageLabel()
+    public function getMainImageLabel() : string
     {
         return $this->simpleProductDelegate->getMainImageLabel();
     }
 
-    /**
-     * @return ProductVariationAttributeList
-     */
-    public function getVariationAttributes()
+    public function getVariationAttributes() : ProductVariationAttributeList
     {
         return $this->variationAttributes;
     }
 
-    /**
-     * @return AssociatedProductList
-     */
-    public function getAssociatedProducts()
+    public function getAssociatedProducts() : AssociatedProductList
     {
         return $this->associatedProducts;
     }
 
-    /**
-     * @return ProductTaxClass
-     */
-    public function getTaxClass()
+    public function getTaxClass() : ProductTaxClass
     {
         return $this->simpleProductDelegate->getTaxClass();
     }

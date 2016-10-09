@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -16,20 +18,13 @@ class DomainEventProcessedLogMessage implements LogMessage
      */
     private $domainEventHandler;
 
-    /**
-     * @param string $message
-     * @param DomainEventHandler $domainEventHandler
-     */
-    public function __construct($message, DomainEventHandler $domainEventHandler)
+    public function __construct(string $message, DomainEventHandler $domainEventHandler)
     {
         $this->message = $message;
         $this->domainEventHandler = $domainEventHandler;
     }
     
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->message;
     }
@@ -37,15 +32,12 @@ class DomainEventProcessedLogMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return ['domain_event_handler' => $this->domainEventHandler];
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis() : string
     {
         return sprintf('DomainEventHandler Class: %s', get_class($this->domainEventHandler));
     }

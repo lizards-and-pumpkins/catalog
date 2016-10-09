@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
@@ -80,7 +82,7 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfNoneOfSearchDocumentFieldsIsNotMatchingCriteria()
     {
-        $testCriterion = SearchCriterionEqual::create('foo', 'bar');
+        $testCriterion = new SearchCriterionEqual('foo', 'bar');
 
         $criteria = CompositeSearchCriterion::createOr($testCriterion);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields([]);
@@ -90,8 +92,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfSearchDocumentFieldsAreNotMatchingAllCriteriaConditions()
     {
-        $testCriterionA = SearchCriterionEqual::create('foo', 'bar');
-        $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
+        $testCriterionA = new SearchCriterionEqual('foo', 'bar');
+        $testCriterionB = new SearchCriterionEqual('baz', 'qux');
         $criteria = CompositeSearchCriterion::createAnd($testCriterionA, $testCriterionB);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => ['bar']]);
@@ -101,8 +103,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfAllOfSearchDocumentFieldsAreMatchingCriteria()
     {
-        $testCriterionA = SearchCriterionEqual::create('foo', 'bar');
-        $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
+        $testCriterionA = new SearchCriterionEqual('foo', 'bar');
+        $testCriterionB = new SearchCriterionEqual('baz', 'qux');
         $criteria = CompositeSearchCriterion::createAnd($testCriterionA, $testCriterionB);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => ['bar'], 'baz' => ['qux']]);
@@ -112,8 +114,8 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
 
     public function testTrueIsReturnedIfAtLeastOneCriteriaConditionMatchesAnyOfSearchDocumentFields()
     {
-        $testCriterionA = SearchCriterionEqual::create('foo', 'bar');
-        $testCriterionB = SearchCriterionEqual::create('baz', 'qux');
+        $testCriterionA = new SearchCriterionEqual('foo', 'bar');
+        $testCriterionB = new SearchCriterionEqual('baz', 'qux');
         $criteria = CompositeSearchCriterion::createOr($testCriterionA, $testCriterionB);
 
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(['foo' => ['bar']]);

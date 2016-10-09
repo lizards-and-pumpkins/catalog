@@ -1,30 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 interface FileStorage
 {
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return File
-     */
-    public function getFileReference(StorageAgnosticFileUri $identifier);
+    public function getFileReference(StorageAgnosticFileUri $identifier) : File;
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return bool
-     */
-    public function contains(StorageAgnosticFileUri $identifier);
+    public function contains(StorageAgnosticFileUri $identifier) : bool;
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @param FileContent $content
-     */
     public function putContent(StorageAgnosticFileUri $identifier, FileContent $content);
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return FileContent
-     */
-    public function getContent(StorageAgnosticFileUri $identifier);
+    public function getContent(StorageAgnosticFileUri $identifier) : FileContent;
 }

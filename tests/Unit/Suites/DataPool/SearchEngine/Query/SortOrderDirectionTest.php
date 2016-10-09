@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortOrderDirectionException;
@@ -41,9 +43,6 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
             ['foo'],
             ['aSc'],
             ['ASC'],
-            [new \stdClass()],
-            [1],
-            [null],
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
@@ -26,15 +28,10 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
      */
     private $mediaBaseDirectory;
 
-    /**
-     * @param FilesystemFileStorage $fileStorage
-     * @param MediaBaseUrlBuilder $mediaBaseUrlBuilder
-     * @param string $mediaBaseDirectory
-     */
     public function __construct(
         FilesystemFileStorage $fileStorage,
         MediaBaseUrlBuilder $mediaBaseUrlBuilder,
-        $mediaBaseDirectory
+        string $mediaBaseDirectory
     ) {
         $this->fileStorage = $fileStorage;
         $this->mediaBaseUrlBuilder = $mediaBaseUrlBuilder;
@@ -43,19 +40,15 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
 
     /**
      * @param StorageAgnosticFileUri $identifier
-     * @return Image
+     * @return Image|File
      */
-    public function getFileReference(StorageAgnosticFileUri $identifier)
+    public function getFileReference(StorageAgnosticFileUri $identifier) : File
     {
         $file = $this->fileStorage->getFileReference($identifier);
         return ImageInStorage::create($file->getInStorageUri(), $this);
     }
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return bool
-     */
-    public function contains(StorageAgnosticFileUri $identifier)
+    public function contains(StorageAgnosticFileUri $identifier) : bool
     {
         return $this->fileStorage->contains($identifier);
     }
@@ -65,40 +58,23 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
         $this->fileStorage->putContent($identifier, $content);
     }
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return FileContent
-     */
-    public function getContent(StorageAgnosticFileUri $identifier)
+    public function getContent(StorageAgnosticFileUri $identifier) : FileContent
     {
         return $this->fileStorage->getContent($identifier);
     }
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @param Context $context
-     * @return HttpUrl
-     */
-    public function getUrl(StorageAgnosticFileUri $identifier, Context $context)
+    public function getUrl(StorageAgnosticFileUri $identifier, Context $context) : HttpUrl
     {
         $image = $this->getFileReference($identifier);
         return $image->getUrl($context);
     }
 
-    /**
-     * @param File $image
-     * @return bool
-     */
-    public function isPresent(File $image)
+    public function isPresent(File $image) : bool
     {
         return $this->fileStorage->isPresent($image);
     }
 
-    /**
-     * @param File $image
-     * @return string
-     */
-    public function read(File $image)
+    public function read(File $image) : string
     {
         return $this->fileStorage->read($image);
     }
@@ -108,13 +84,9 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
         $this->fileStorage->write($file);
     }
 
-    /**
-     * @param Image $image
-     * @param Context $context
-     * @return string
-     */
-    public function url(Image $image, Context $context)
+    public function url(Image $image, Context $context) : string
     {
-        return $this->mediaBaseUrlBuilder->create($context) . substr($image, strlen($this->mediaBaseDirectory) + 1);
+        return $this->mediaBaseUrlBuilder->create($context)
+               . substr((string) $image, strlen($this->mediaBaseDirectory) + 1);
     }
 }

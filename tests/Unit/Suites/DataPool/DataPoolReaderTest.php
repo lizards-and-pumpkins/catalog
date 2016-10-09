@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
@@ -72,63 +74,11 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         ];
     }
 
-    /**
-     * @dataProvider brokenJsonProvider
-     * @param mixed $brokenJson
-     */
-    public function testExceptionIsThrownIfJsonIsBroken($brokenJson)
+    public function testExceptionIsThrownIfJsonIsBroken()
     {
         $this->expectException(\RuntimeException::class);
-        $this->addGetMethodToStubKeyValueStore($brokenJson);
+        $this->addGetMethodToStubKeyValueStore('not a JSON string');
         $this->dataPoolReader->getChildSnippetKeys('some_key');
-    }
-
-    /**
-     * @return array[]
-     */
-    public function brokenJsonProvider() : array
-    {
-        return [
-            [new \stdClass()],
-            [[]],
-            ['test'],
-            [123],
-            [123.23]
-        ];
-    }
-
-    /**
-     * @dataProvider invalidKeyProvider
-     * @param mixed $key
-     */
-    public function testOnlyStringKeyIsAcceptedForSnippets($key)
-    {
-        $this->expectException(InvalidKeyValueStoreKeyException::class);
-        $this->dataPoolReader->getChildSnippetKeys($key);
-    }
-
-    /**
-     * @dataProvider invalidKeyProvider
-     * @param mixed $key
-     */
-    public function testOnlyStringKeysAreAcceptedForGetSnippet($key)
-    {
-        $this->expectException(InvalidKeyValueStoreKeyException::class);
-        $this->dataPoolReader->getSnippet($key);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function invalidKeyProvider() : array
-    {
-        return [
-            [new \stdClass()],
-            [123],
-            [123.23],
-            [[]],
-        ];
-
     }
 
     public function testExceptionIsThrownIfTheKeyIsEmpty()

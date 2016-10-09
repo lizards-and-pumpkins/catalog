@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
@@ -34,12 +37,9 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
         }, []);
     }
 
-    /**
-     * @param string $productIdString
-     * @return DuplicateAssociatedProductException
-     */
-    private function createDuplicateAssociatedProductException($productIdString)
-    {
+    private function createDuplicateAssociatedProductException(
+        string $productIdString
+    ) : DuplicateAssociatedProductException {
         $message = sprintf('The product "%s" is associated two times to the same composite product', $productIdString);
         return new DuplicateAssociatedProductException($message);
     }
@@ -48,7 +48,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
      * @param array[] $sourceArray
      * @return AssociatedProductList
      */
-    public static function fromArray(array $sourceArray)
+    public static function fromArray(array $sourceArray) : AssociatedProductList
     {
         $associatedProducts = self::createAssociatedProductsFromArray($sourceArray);
         return new self(...$associatedProducts);
@@ -58,7 +58,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
      * @param array[] $sourceArray
      * @return Product[]
      */
-    private static function createAssociatedProductsFromArray(array $sourceArray)
+    private static function createAssociatedProductsFromArray(array $sourceArray) : array
     {
         return array_map(function ($idx) use ($sourceArray) {
             $class = $sourceArray[self::PHP_CLASSES][$idx];
@@ -72,7 +72,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
      * @param mixed[] $productSourceArray
      * @return Product
      */
-    private static function createAssociatedProductFromArray($class, array $productSourceArray)
+    private static function createAssociatedProductFromArray(string $class, array $productSourceArray) : Product
     {
         return forward_static_call([$class, 'fromArray'], $productSourceArray);
     }
@@ -80,7 +80,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     /**
      * @return Product[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             self::PHP_CLASSES => $this->getAssociatedProductClassNames(),
@@ -91,7 +91,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     /**
      * @return string[]
      */
-    private function getAssociatedProductClassNames()
+    private function getAssociatedProductClassNames() : array
     {
         return array_map(function (Product $product) {
             return get_class($product);
@@ -101,27 +101,21 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
     /**
      * @return Product[]
      */
-    public function getProducts()
+    public function getProducts() : array
     {
         return $this->products;
     }
 
-    /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator() : \ArrayIterator
     {
         return new \ArrayIterator($this->products);
     }
 
-    /**
-     * @param string[] $attributeCodes
-     */
-    public function validateUniqueValueCombinationForEachProductAttribute(...$attributeCodes)
+    public function validateUniqueValueCombinationForEachProductAttribute(AttributeCode ...$attributeCodes)
     {
         $this->validateAllProductsHaveTheAttributes(...$attributeCodes);
         array_reduce($this->products, function ($carry, Product $product) use ($attributeCodes) {
-            $attributeValuesForProduct = $this->getAttributeValuesForProduct($product, $attributeCodes);
+            $attributeValuesForProduct = $this->getAttributeValuesForProduct($product, ...$attributeCodes);
             $otherProductId = array_search($attributeValuesForProduct, $carry);
             if (false !== $otherProductId) {
                 throw $this->createProductAttributeValueCombinationNotUniqueException(
@@ -136,62 +130,48 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
 
     /**
      * @param Product $product
-     * @param string[] $attributeCodes
+     * @param AttributeCode[] $attributeCodes
      * @return array[]
      */
-    private function getAttributeValuesForProduct(Product $product, array $attributeCodes)
+    private function getAttributeValuesForProduct(Product $product, AttributeCode ...$attributeCodes) : array
     {
-        return array_reduce($attributeCodes, function ($carry, $attributeCode) use ($product) {
-            $allValuesOfAttribute = $product->getAllValuesOfAttribute($attributeCode);
+        return array_reduce($attributeCodes, function ($carry, AttributeCode $attributeCode) use ($product) {
+            $allValuesOfAttribute = $product->getAllValuesOfAttribute((string) $attributeCode);
             return array_merge($carry, [(string) $attributeCode => $allValuesOfAttribute]);
         }, []);
     }
 
-    /**
-     * @param string $productId1
-     * @param string $productId2
-     * @param string[] $attrCodes
-     * @return ProductAttributeValueCombinationNotUniqueException
-     */
-    private function createProductAttributeValueCombinationNotUniqueException($productId1, $productId2, ...$attrCodes)
-    {
+    private function createProductAttributeValueCombinationNotUniqueException(
+        string $productId1,
+        string $productId2,
+        AttributeCode ...$attributeCodes
+    ) : ProductAttributeValueCombinationNotUniqueException{
         $message = sprintf(
             'The associated products "%s" and "%s" have the same value combination for the attributes "%s"',
             $productId1,
             $productId2,
-            implode('" and "', $attrCodes)
+            implode('" and "', $attributeCodes)
         );
         return new ProductAttributeValueCombinationNotUniqueException($message);
     }
 
-    /**
-     * @param string[] $attributeCodes
-     */
-    private function validateAllProductsHaveTheAttributes(...$attributeCodes)
+    private function validateAllProductsHaveTheAttributes(AttributeCode ...$attributeCodes)
     {
         every($this->products, function (Product $product) use ($attributeCodes) {
-            $this->validateProductHasAttributes($product, $attributeCodes);
+            $this->validateProductHasAttributes($product, ...$attributeCodes);
         });
     }
 
-    /**
-     * @param Product $product
-     * @param string[] $attributeCodes
-     */
-    private function validateProductHasAttributes(Product $product, array $attributeCodes)
+    private function validateProductHasAttributes(Product $product, AttributeCode ...$attributeCodes)
     {
-        every($attributeCodes, function ($attributeCode) use ($product) {
+        every($attributeCodes, function (AttributeCode $attributeCode) use ($product) {
             $this->validateProductHasAttribute($product, $attributeCode);
         });
     }
 
-    /**
-     * @param Product $product
-     * @param string $attributeCode
-     */
-    private function validateProductHasAttribute(Product $product, $attributeCode)
+    private function validateProductHasAttribute(Product $product, AttributeCode $attributeCode)
     {
-        if (!$product->hasAttribute($attributeCode)) {
+        if (! $product->hasAttribute($attributeCode)) {
             $message = sprintf(
                 'The associated product "%s" is missing the required attribute "%s"',
                 $product->getId(),
@@ -201,10 +181,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
         }
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return count($this->products);
     }

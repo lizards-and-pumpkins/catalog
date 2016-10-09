@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 class ThemeLocator
@@ -9,28 +11,18 @@ class ThemeLocator
      */
     private $themeDirectoryPath;
 
-    /**
-     * @param string $themeDirectoryPath
-     */
-    public function __construct($themeDirectoryPath)
+    public function __construct(string $themeDirectoryPath)
     {
         // TODO: Validate
         $this->themeDirectoryPath = $themeDirectoryPath . '/theme';
     }
 
-    /**
-     * @return string
-     */
-    public function getThemeDirectory()
+    public function getThemeDirectory() : string
     {
         return $this->themeDirectoryPath;
     }
 
-    /**
-     * @param string $layoutHandle
-     * @return Layout
-     */
-    public function getLayoutForHandle($layoutHandle)
+    public function getLayoutForHandle(string $layoutHandle) : Layout
     {
         $layoutFile = $this->themeDirectoryPath . '/layout/' . $layoutHandle . '.xml';
         return (new LayoutReader())->loadLayoutFromXmlFile($layoutFile);

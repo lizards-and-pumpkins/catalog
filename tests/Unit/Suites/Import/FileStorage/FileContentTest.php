@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileContentTypeException;
@@ -65,7 +67,7 @@ class FileContentTest extends \PHPUnit_Framework_TestCase
     {
         $testContent = 'file content';
         $mockFile = $this->createMock(File::class);
-        $mockFile->method('getContent')->willReturn($testContent);
+        $mockFile->method('getContent')->willReturn(FileContent::fromString($testContent));
         
         $fileContent = FileContent::fromFile($mockFile);
         

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\TestFileFixtureTrait;
@@ -180,7 +182,7 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->mockFile->method('getInStorageUri')->willReturn(FilesystemFileUri::fromString($filesystemPath));
         $this->mockFile->method('__toString')->willReturn($filesystemPath);
-        $this->mockFile->method('getContent')->willReturn($this->testFileContent);
+        $this->mockFile->method('getContent')->willReturn(FileContent::fromString($this->testFileContent));
 
         $this->fileStorage->write($this->mockFile);
 
@@ -196,7 +198,7 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->mockFile->method('getInStorageUri')->willReturn(FilesystemFileUri::fromString($filesystemPath));
         $this->mockFile->method('__toString')->willReturn($filesystemPath);
-        $this->mockFile->method('getContent')->willReturn($this->testFileContent);
+        $this->mockFile->method('getContent')->willReturn(FileContent::fromString($this->testFileContent));
 
         $this->fileStorage->write($this->mockFile);
 

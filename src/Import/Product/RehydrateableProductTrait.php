@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
@@ -11,7 +13,7 @@ trait RehydrateableProductTrait
      * @param string $expectedType
      * @param mixed[] $sourceArray
      */
-    protected static function validateTypeCodeInSourceArray($expectedType, array $sourceArray)
+    protected static function validateTypeCodeInSourceArray(string $expectedType, array $sourceArray)
     {
         if (! isset($sourceArray[Product::TYPE_KEY])) {
             $message = sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY);
@@ -28,7 +30,7 @@ trait RehydrateableProductTrait
      * @param mixed $variable
      * @return string
      */
-    private static function getVariableAsString($variable)
+    private static function getVariableAsString($variable) : string
     {
         if (is_string($variable)) {
             return $variable;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
@@ -12,9 +14,9 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
     private $supportedSnippetCode = 'bar';
 
     /**
-     * @var \Closure
+     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSnippetKeyGeneratorClosure;
+    private $stubSnippetKeyGenetator;
 
     /**
      * @var CompositeSnippetKeyGeneratorLocatorStrategy
@@ -23,16 +25,14 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
 
     protected function setUp()
     {
-        $this->stubSnippetKeyGeneratorClosure = function () {
-            // intentionally left empty
-        };
+        $this->stubSnippetKeyGenetator = $this->createMock(SnippetKeyGenerator::class);
 
         $stubSnippetKeyGeneratorLocatorStrategy = $this->createMock(SnippetKeyGeneratorLocator::class);
-        $stubSnippetKeyGeneratorLocatorStrategy->method('canHandle')->willReturnMap([
-            [$this->supportedSnippetCode, true]
-        ]);
+        $stubSnippetKeyGeneratorLocatorStrategy->method('canHandle')->willReturnCallback(function (string $code) {
+            return $code === $this->supportedSnippetCode;
+        });
         $stubSnippetKeyGeneratorLocatorStrategy->method('getKeyGeneratorForSnippetCode')->willReturnMap([
-            [$this->supportedSnippetCode, $this->stubSnippetKeyGeneratorClosure]
+            [$this->supportedSnippetCode, $this->stubSnippetKeyGenetator]
         ]);
 
         $this->strategy = new CompositeSnippetKeyGeneratorLocatorStrategy($stubSnippetKeyGeneratorLocatorStrategy);
@@ -64,6 +64,6 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
     public function testFirstSnippetKeyGeneratorWhichCanHandleSnippetCodeIsReturned()
     {
         $result = $this->strategy->getKeyGeneratorForSnippetCode($this->supportedSnippetCode);
-        $this->assertSame($this->stubSnippetKeyGeneratorClosure, $result);
+        $this->assertSame($this->stubSnippetKeyGenetator, $result);
     }
 }

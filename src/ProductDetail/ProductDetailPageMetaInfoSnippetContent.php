@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
@@ -45,7 +47,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      * @param string[] $pageSnippetCodes
      * @param SnippetContainer[] $containers
      */
-    private function __construct($productId, $rootSnippetCode, array $pageSnippetCodes, array $containers)
+    private function __construct(string $productId, string $rootSnippetCode, array $pageSnippetCodes, array $containers)
     {
         $this->productId = $productId;
         $this->rootSnippetCode = $rootSnippetCode;
@@ -53,16 +55,12 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         $this->containers = $containers;
     }
 
-    /**
-     * @param string $productId
-     * @param string $rootSnippetCode
-     * @param string[] $pageSnippetCodes
-     * @param array[] $containerData
-     * @return ProductDetailPageMetaInfoSnippetContent
-     */
-    public static function create($productId, $rootSnippetCode, array $pageSnippetCodes, array $containerData)
-    {
-        self::validateProductId($productId);
+    public static function create(
+        string $productId,
+        string $rootSnippetCode,
+        array $pageSnippetCodes,
+        array $containerData
+    ) : ProductDetailPageMetaInfoSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
         $pageSnippetCodes = array_unique(array_merge(
             [
@@ -80,18 +78,14 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      * @param array[] $containerArray
      * @return SnippetContainer[]
      */
-    private static function createSnippetContainers(array $containerArray)
+    private static function createSnippetContainers(array $containerArray) : array
     {
         return array_map(function ($code) use ($containerArray) {
             return new SnippetContainer($code, $containerArray[$code]);
         }, array_keys($containerArray));
     }
 
-    /**
-     * @param string $json
-     * @return ProductDetailPageMetaInfoSnippetContent
-     */
-    public static function fromJson($json)
+    public static function fromJson(string $json) : ProductDetailPageMetaInfoSnippetContent
     {
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
@@ -101,17 +95,6 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
             $pageInfo[self::KEY_PAGE_SNIPPET_CODES],
             $pageInfo[self::KEY_CONTAINER_SNIPPETS]
         );
-    }
-
-    /**
-     * @param mixed $sourceId
-     * @return string
-     */
-    private static function getNonScalarTypeRepresentation($sourceId)
-    {
-        return is_object($sourceId) ?
-            get_class($sourceId) :
-            gettype($sourceId);
     }
 
     /**
@@ -130,7 +113,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      * @param string $json
      * @return mixed[]
      */
-    private static function decodeJson($json)
+    private static function decodeJson(string $json) : array
     {
         $result = json_decode($json, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -145,7 +128,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return mixed[]
      */
-    public function getInfo()
+    public function getInfo() : array
     {
         return [
             self::KEY_PRODUCT_ID => $this->productId,
@@ -156,30 +139,14 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     }
 
     /**
-     * @param mixed $sourceId
-     */
-    private static function validateProductId($sourceId)
-    {
-        if (! is_scalar($sourceId)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The page meta info source id has to be a scalar value, got "%s"',
-                self::getNonScalarTypeRepresentation($sourceId)
-            ));
-        }
-    }
-
-    /**
      * @return string
      */
-    public function getProductId()
+    public function getProductId() : string
     {
         return $this->productId;
     }
 
-    /**
-     * @return string
-     */
-    public function getRootSnippetCode()
+    public function getRootSnippetCode() : string
     {
         return $this->rootSnippetCode;
     }
@@ -187,7 +154,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return string[]
      */
-    public function getPageSnippetCodes()
+    public function getPageSnippetCodes() : array
     {
         return $this->pageSnippetCodes;
     }
@@ -195,7 +162,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return array[]
      */
-    public function getContainerSnippets()
+    public function getContainerSnippets() : array
     {
         return array_reduce($this->containers, function ($carry, SnippetContainer $container) {
             return array_merge($carry, $container->toArray());

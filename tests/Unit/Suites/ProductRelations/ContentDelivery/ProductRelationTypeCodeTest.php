@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeCodeException;
@@ -13,32 +15,6 @@ class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
     {
         $result = ProductRelationTypeCode::fromString('test');
         $this->assertInstanceOf(ProductRelationTypeCode::class, $result);
-    }
-
-    /**
-     * @param mixed $nonStringTypeCode
-     * @param string $expectedType
-     * @dataProvider nonStringTypeCodeDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheTypeCodeIsNotAString($nonStringTypeCode, string $expectedType)
-    {
-        $this->expectException(InvalidProductRelationTypeCodeException::class);
-        $this->expectExceptionMessage(
-            sprintf('Expected the product relation type code to be a string, got "%s"', $expectedType)
-        );
-        ProductRelationTypeCode::fromString($nonStringTypeCode);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function nonStringTypeCodeDataProvider() : array
-    {
-        return [
-            [111, 'integer'],
-            [[], 'array'],
-            [null, 'NULL']
-        ];
     }
 
     /**

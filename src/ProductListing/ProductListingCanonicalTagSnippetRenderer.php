@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -40,9 +42,9 @@ class ProductListingCanonicalTagSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductListing $productListing
-     * @return string
+     * @return Snippet[]
      */
-    public function render(ProductListing $productListing)
+    public function render(ProductListing $productListing) : array
     {
         $key = $this->getProductListingCanonicalTagSnippetKey($productListing);
         $content = $this->createProductListingCanonicalTag($productListing);
@@ -60,11 +62,7 @@ class ProductListingCanonicalTagSnippetRenderer implements SnippetRenderer
         );
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return string
-     */
-    private function createProductListingCanonicalTag(ProductListing $productListing)
+    private function createProductListingCanonicalTag(ProductListing $productListing) : string
     {
         $baseUrl = $this->baseUrlBuilder->create($this->getContextFromProductListingData($productListing));
         $urlKey = $productListing->getUrlKey();
@@ -72,11 +70,7 @@ class ProductListingCanonicalTagSnippetRenderer implements SnippetRenderer
         return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return Context
-     */
-    private function getContextFromProductListingData(ProductListing $productListing)
+    private function getContextFromProductListingData(ProductListing $productListing) : Context
     {
         $contextData = $productListing->getContextData();
         return $this->contextBuilder->createContext($contextData);

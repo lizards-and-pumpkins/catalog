@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\FileSystem;
+
+use LizardsAndPumpkins\Util\FileSystem\Exception\FileAlreadyExistsWithinGivenPathException;
 
 class Directory
 {
@@ -9,26 +13,13 @@ class Directory
      */
     private $directoryPath;
 
-    /**
-     * @param string $directoryPath
-     */
-    private function __construct($directoryPath)
+    private function __construct(string $directoryPath)
     {
         $this->directoryPath = $directoryPath;
     }
 
-    /**
-     * @param string $directoryPath
-     * @return Directory
-     */
-    public static function fromPath($directoryPath)
+    public static function fromPath(string $directoryPath) : Directory
     {
-        if (!is_string($directoryPath)) {
-            throw new InvalidDirectoryPathException(
-                sprintf('Directory path is supposed to be a string, %s given.', gettype($directoryPath))
-            );
-        }
-
         if (is_file($directoryPath)) {
             throw new FileAlreadyExistsWithinGivenPathException(
                 sprintf('The specified directory is a file: %s.', $directoryPath)
@@ -38,18 +29,12 @@ class Directory
         return new self($directoryPath);
     }
 
-    /**
-     * @return bool
-     */
-    public function isReadable()
+    public function isReadable() : bool
     {
         return is_readable($this->directoryPath);
     }
 
-    /**
-     * @return string
-     */
-    public function getPath()
+    public function getPath() : string
     {
         return $this->directoryPath;
     }

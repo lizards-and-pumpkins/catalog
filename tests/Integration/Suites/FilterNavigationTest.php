@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -46,7 +48,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString($this->testUrl),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
@@ -71,7 +73,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString($url),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
@@ -97,7 +99,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString($url),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
 use LizardsAndPumpkins\Context\Website\Exception\NoConfiguredBaseUrlException;
@@ -21,42 +23,26 @@ class WebsiteBaseUrlBuilder implements BaseUrlBuilder
         $this->configReader = $configReader;
     }
 
-    /**
-     * @param Context $context
-     * @return HttpBaseUrl
-     */
-    public function create(Context $context)
+    public function create(Context $context) : BaseUrl
     {
         $baseUrlString = $this->configReader->get($this->getBaseUrlConfigKey($context));
         if (! $baseUrlString) {
             throw $this->createConfigMissingException($context);
         }
-        return HttpBaseUrl::fromString($baseUrlString);
+        return new HttpBaseUrl($baseUrlString);
     }
 
-    /**
-     * @param Context $context
-     * @return string
-     */
-    private function getBaseUrlConfigKey(Context $context)
+    private function getBaseUrlConfigKey(Context $context) : string
     {
         return self::CONFIG_PREFIX . $this->getWebsiteCode($context);
     }
 
-    /**
-     * @param Context $context
-     * @return string
-     */
-    private function getWebsiteCode(Context $context)
+    private function getWebsiteCode(Context $context) : string
     {
         return $context->getValue(Website::CONTEXT_CODE);
     }
 
-    /**
-     * @param Context $context
-     * @return NoConfiguredBaseUrlException
-     */
-    private function createConfigMissingException(Context $context)
+    private function createConfigMissingException(Context $context) : NoConfiguredBaseUrlException
     {
         $message = sprintf('No base URL configuration found for the website "%s"', $this->getWebsiteCode($context));
         return new NoConfiguredBaseUrlException($message);

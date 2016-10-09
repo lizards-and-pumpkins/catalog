@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Import\Exception\InvalidSnippetContainerCodeException;
@@ -30,14 +32,6 @@ class SnippetContainerTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->createInstance('test', ['abc', 'def']);
         $this->assertSame(['abc', 'def'], $container->getSnippetCodes());
-    }
-
-    public function testItThrowsAnExceptionIfTheContainerCodeIsNotAString()
-    {
-        $this->expectException(InvalidSnippetContainerCodeException::class);
-        $this->expectExceptionMessage('The snippet container code has to be a string');
-
-        new SnippetContainer(12, []);
     }
 
     public function testItThrowsAnExceptionIfTheContainerCodeIsTooShort()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\Context\Context;
@@ -11,5 +13,5 @@ interface SnippetKeyGenerator
      * @param mixed[] $data
      * @return string
      */
-    public function getKeyForContext(Context $context, array $data);
+    public function getKeyForContext(Context $context, array $data) : string;
 }

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\DuplicateAssociatedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
@@ -42,10 +45,10 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         }, range(1, $numberOfAssociatedProducts));
     }
 
-    private function createStubAttribute(string $code, string $value) : ProductAttribute
+    private function createStubAttribute(AttributeCode $attributeCode, string $value) : ProductAttribute
     {
         $stubAttribute = $this->createMock(ProductAttribute::class);
-        $stubAttribute->method('getCode')->willReturn($code);
+        $stubAttribute->method('getCode')->willReturn($attributeCode);
         $stubAttribute->method('getValue')->willReturn($value);
         return $stubAttribute;
     }
@@ -53,34 +56,37 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     private function createStubProduct(string $productId, ProductAttribute ...$attributes) : Product
     {
         $stubProduct = $this->createMock(Product::class);
-        $getAttributesValueMap = $this->createStubProductAttributeReturnValueMap(...$attributes);
-        $hasAttributesValueMap = $this->createHasProductAttributeValueMap(...$attributes);
-        $stubProduct->method('getAllValuesOfAttribute')->willReturnMap($getAttributesValueMap);
-        $stubProduct->method('hasAttribute')->willReturnMap($hasAttributesValueMap);
-        $stubProduct->method('getId')->willReturn(ProductId::fromString($productId));
+        $getAttributesValueMap = $this->createStubProductAttributeReturnValueCallback(...$attributes);
+        $hasAttributesValueCallback = $this->createHasProductAttributeValueCallback(...$attributes);
+        $stubProduct->method('getAllValuesOfAttribute')->willReturnCallback($getAttributesValueMap);
+        $stubProduct->method('hasAttribute')->willReturnCallback($hasAttributesValueCallback);
+        $stubProduct->method('getId')->willReturn(new ProductId($productId));
         return $stubProduct;
     }
 
-    /**
-     * @param ProductAttribute[] $attributes
-     * @return array[]
-     */
-    private function createStubProductAttributeReturnValueMap(ProductAttribute ...$attributes) : array
+    private function createStubProductAttributeReturnValueCallback(ProductAttribute ...$attributes) : callable
     {
-        return array_map(function (ProductAttribute $attribute) {
-            return [$attribute->getCode(), [$attribute->getValue()]];
-        }, $attributes);
+        return function (string $attributeCode) use ($attributes) {
+            return array_reduce($attributes, function(array $carry, ProductAttribute $attribute) use ($attributeCode) {
+                if ((string) $attribute->getCode() !== $attributeCode) {
+                    return $carry;
+                }
+                return array_merge($carry, [$attribute->getValue()]);
+            }, []);
+        };
     }
 
-    /**
-     * @param ProductAttribute[] $attributes
-     * @return array[]
-     */
-    private function createHasProductAttributeValueMap(ProductAttribute ...$attributes) : array
+    private function createHasProductAttributeValueCallback(ProductAttribute ...$attributes) : callable
     {
-        return array_map(function (ProductAttribute $attribute) {
-            return [$attribute->getCode(), true];
-        }, $attributes);
+        return function (AttributeCode $attributeCode) use ($attributes) {
+            foreach ($attributes as $attribute) {
+                if ($attributeCode->isEqualTo($attribute->getCode())) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
     }
 
     public function testItReturnsTheInjectedProducts()
@@ -121,7 +127,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     public function testItCanBeSerializedAndRehydrated()
     {
         $associatedProduct = new SimpleProduct(
-            ProductId::fromString('test'),
+            new ProductId('test'),
             ProductTaxClass::fromString('test'),
             new ProductAttributeList(),
             new ProductImageList(),
@@ -139,9 +145,9 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         $this->expectException(DuplicateAssociatedProductException::class);
         $this->expectExceptionMessage('The product "test" is associated two times to the same composite product');
         $stubProductOne = $this->createMock(Product::class);
-        $stubProductOne->method('getId')->willReturn(ProductId::fromString('test'));
+        $stubProductOne->method('getId')->willReturn(new ProductId('test'));
         $stubProductTwo = $this->createMock(Product::class);
-        $stubProductTwo->method('getId')->willReturn(ProductId::fromString('test'));
+        $stubProductTwo->method('getId')->willReturn(new ProductId('test'));
 
         new AssociatedProductList($stubProductOne, $stubProductTwo);
     }
@@ -151,49 +157,66 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         $this->expectException(ProductAttributeValueCombinationNotUniqueException::class);
         $this->expectExceptionMessage(
             'The associated products "test1" and "test2" have the same value combination ' .
-            'for the attributes "attribute_1" and "attribute_2"'
+            'for the attributes "code_a" and "code_b"'
         );
 
-        $fooAttribute1 = $this->createStubAttribute('attribute_1', 'foo1');
-        $fooAttribute2 = $this->createStubAttribute('attribute_1', 'foo1');
-        $barAttribute1 = $this->createStubAttribute('attribute_2', 'bar1');
-        $barAttribute2 = $this->createStubAttribute('attribute_2', 'bar1');
+        $dummyAttributeCodeA = AttributeCode::fromString('code_a');
+        $dummyAttributeCodeB = AttributeCode::fromString('code_b');
+
+        $fooAttribute1 = $this->createStubAttribute($dummyAttributeCodeA, 'foo1');
+        $fooAttribute2 = $this->createStubAttribute($dummyAttributeCodeA, 'foo1');
+        $barAttribute1 = $this->createStubAttribute($dummyAttributeCodeB, 'bar1');
+        $barAttribute2 = $this->createStubAttribute($dummyAttributeCodeB, 'bar1');
 
         $stubProductOne = $this->createStubProduct('test1', $fooAttribute1, $barAttribute1);
         $stubProductTwo = $this->createStubProduct('test2', $fooAttribute2, $barAttribute2);
 
         $associatedProductList = new AssociatedProductList($stubProductOne, $stubProductTwo);
 
-        $associatedProductList->validateUniqueValueCombinationForEachProductAttribute('attribute_1', 'attribute_2');
+        $associatedProductList->validateUniqueValueCombinationForEachProductAttribute(
+            $dummyAttributeCodeA,
+            $dummyAttributeCodeB
+        );
     }
 
     public function testItThrowsNoExceptionIfTheValueCombinationsForTheGivenAttributesAreUnique()
     {
-        $fooAttribute1 = $this->createStubAttribute('attribute_1', 'foo1');
-        $fooAttribute2 = $this->createStubAttribute('attribute_1', 'foo2');
-        $barAttribute1 = $this->createStubAttribute('attribute_2', 'bar1');
-        $barAttribute2 = $this->createStubAttribute('attribute_2', 'bar2');
+        $dummyAttributeCodeA = AttributeCode::fromString('code_a');
+        $dummyAttributeCodeB = AttributeCode::fromString('code_b');
+
+        $fooAttribute1 = $this->createStubAttribute($dummyAttributeCodeA, 'foo1');
+        $fooAttribute2 = $this->createStubAttribute($dummyAttributeCodeA, 'foo2');
+        $barAttribute1 = $this->createStubAttribute($dummyAttributeCodeB, 'bar1');
+        $barAttribute2 = $this->createStubAttribute($dummyAttributeCodeB, 'bar2');
 
         $stubProductOne = $this->createStubProduct('test1', $fooAttribute1, $barAttribute1);
         $stubProductTwo = $this->createStubProduct('test2', $fooAttribute2, $barAttribute2);
 
         $associatedProductList = new AssociatedProductList($stubProductOne, $stubProductTwo);
 
-        $associatedProductList->validateUniqueValueCombinationForEachProductAttribute('attribute_1', 'attribute_2');
+        $associatedProductList->validateUniqueValueCombinationForEachProductAttribute(
+            $dummyAttributeCodeA,
+            $dummyAttributeCodeB
+        );
         $this->assertTrue(true, 'No exception was thrown');
     }
 
     public function testItThrowsAnExceptionIfAssociatedProductsAreMissingGivenAttributes()
     {
         $this->expectException(AssociatedProductIsMissingRequiredAttributesException::class);
-        $this->expectExceptionMessage('The associated product "test" is missing the required attribute "attribute_2"');
+        $this->expectExceptionMessage('The associated product "test" is missing the required attribute "code_b"');
 
-        $stubAttribute = $this->createStubAttribute('attribute_1', 'foo');
+        $dummyAttributeCodeA = AttributeCode::fromString('code_a');
+        $dummyAttributeCodeB = AttributeCode::fromString('code_b');
+        $stubAttribute = $this->createStubAttribute($dummyAttributeCodeA, 'foo');
 
         $stubProduct = $this->createStubProduct('test', $stubAttribute);
 
         $associatedProductList = new AssociatedProductList($stubProduct);
 
-        $associatedProductList->validateUniqueValueCombinationForEachProductAttribute('attribute_1', 'attribute_2');
+        $associatedProductList->validateUniqueValueCombinationForEachProductAttribute(
+            $dummyAttributeCodeA,
+            $dummyAttributeCodeB
+        );
     }
 }

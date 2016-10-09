@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
@@ -20,22 +22,13 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
      */
     private $criteria = [];
 
-    /**
-     * @param string $condition
-     * @param SearchCriteria[] $criteria
-     */
-    private function __construct($condition, SearchCriteria ...$criteria)
+    private function __construct(string $condition, SearchCriteria ...$criteria)
     {
         $this->condition = $condition;
         $this->criteria = $criteria;
     }
 
-    /**
-     * @param string $condition
-     * @param SearchCriteria[] $criteria
-     * @return CompositeSearchCriterion
-     */
-    public static function create($condition, SearchCriteria ...$criteria)
+    public static function create(string $condition, SearchCriteria ...$criteria) : CompositeSearchCriterion
     {
         if (strcasecmp($condition, self::AND_CONDITION) === 0) {
             return new self($condition, ...$criteria);
@@ -48,29 +41,17 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
         throw new InvalidCriterionConditionException(sprintf('Unknown search criteria condition "%s".', $condition));
     }
 
-    /**
-     * @param SearchCriteria[] $criteria
-     * @return CompositeSearchCriterion
-     */
-    public static function createAnd(SearchCriteria ...$criteria)
+    public static function createAnd(SearchCriteria ...$criteria) : CompositeSearchCriterion
     {
         return new self(self::AND_CONDITION, ...$criteria);
     }
 
-    /**
-     * @param SearchCriteria[] $criteria
-     * @return CompositeSearchCriterion
-     */
-    public static function createOr(SearchCriteria ...$criteria)
+    public static function createOr(SearchCriteria ...$criteria) : CompositeSearchCriterion
     {
         return new self(self::OR_CONDITION, ...$criteria);
     }
 
-    /**
-     * @param SearchDocument $searchDocument
-     * @return bool
-     */
-    public function matches(SearchDocument $searchDocument)
+    public function matches(SearchDocument $searchDocument) : bool
     {
         $isMatching = false;
 
@@ -84,18 +65,12 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
         return $isMatching;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasAndCondition()
+    private function hasAndCondition() : bool
     {
         return self::AND_CONDITION === $this->condition;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasOrCondition()
+    private function hasOrCondition() : bool
     {
         return self::OR_CONDITION === $this->condition;
     }
@@ -103,7 +78,7 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
     /**
      * @return mixed[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'condition' => $this->condition,

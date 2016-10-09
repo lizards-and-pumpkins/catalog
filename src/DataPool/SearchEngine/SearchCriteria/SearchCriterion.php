@@ -1,9 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionNameException;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionValueTypeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 
@@ -15,46 +15,24 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
     private $fieldName;
 
     /**
-     * @var string
+     * @var mixed
      */
     private $fieldValue;
 
     /**
      * @param string $fieldName
-     * @param string $fieldValue
+     * @param mixed $fieldValue
      */
-    private function __construct($fieldName, $fieldValue)
+    public function __construct(string $fieldName, $fieldValue)
     {
         $this->fieldName = $fieldName;
         $this->fieldValue = $fieldValue;
     }
 
     /**
-     * @param string $fieldName
-     * @param string $fieldValue
-     * @return SearchCriterion
+     * @return mixed[]
      */
-    public static function create($fieldName, $fieldValue)
-    {
-        if (!is_string($fieldName)) {
-            throw new InvalidCriterionNameException(
-                sprintf('Criterion field name should be a string, got "%s".', gettype($fieldName))
-            );
-        }
-
-        if (!is_string($fieldValue) && !is_int($fieldValue) && !is_float($fieldValue)) {
-            throw new InvalidCriterionValueTypeException(
-                sprintf('Criterion field value should be a string, integer or float, got "%s".', gettype($fieldValue))
-            );
-        }
-
-        return new static($fieldName, $fieldValue);
-    }
-
-    /**
-     * @return string[]
-     */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'fieldName' => $this->fieldName,
@@ -63,11 +41,7 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
         ];
     }
 
-    /**
-     * @param SearchDocument $searchDocument
-     * @return bool
-     */
-    public function matches(SearchDocument $searchDocument)
+    public function matches(SearchDocument $searchDocument) : bool
     {
         /** @var SearchDocumentField $searchDocumentField */
         foreach ($searchDocument->getFieldsCollection() as $searchDocumentField) {
@@ -83,11 +57,7 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
         return false;
     }
 
-    /**
-     * @param SearchDocumentField $searchDocumentField
-     * @return bool
-     */
-    private function hasValueMatchingOneOfFieldValues(SearchDocumentField $searchDocumentField)
+    private function hasValueMatchingOneOfFieldValues(SearchDocumentField $searchDocumentField) : bool
     {
         foreach ($searchDocumentField->getValues() as $value) {
             if ($this->hasValueMatchingOperator($value, $this->fieldValue)) {
@@ -98,16 +68,13 @@ abstract class SearchCriterion implements SearchCriteria, \JsonSerializable
     }
 
     /**
-     * @param string $searchDocumentFieldValue
-     * @param string $criterionValue
+     * @param mixed $searchDocumentFieldValue
+     * @param mixed $criterionValue
      * @return bool
      */
-    abstract protected function hasValueMatchingOperator($searchDocumentFieldValue, $criterionValue);
+    abstract protected function hasValueMatchingOperator($searchDocumentFieldValue, $criterionValue) : bool;
 
-    /**
-     * @return string
-     */
-    private function extractOperationNameFromClassName()
+    private function extractOperationNameFromClassName() : string
     {
         return preg_replace('/.*\\SearchCriterion/', '', get_called_class());
     }

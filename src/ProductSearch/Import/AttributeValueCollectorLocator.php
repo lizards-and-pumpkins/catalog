@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -18,11 +20,7 @@ class AttributeValueCollectorLocator
         $this->factory = $factory;
     }
     
-    /**
-     * @param Product $product
-     * @return DefaultAttributeValueCollector
-     */
-    public function forProduct(Product $product)
+    public function forProduct(Product $product) : DefaultAttributeValueCollector
     {
         return $product instanceof ConfigurableProduct ?
             $this->factory->createConfigurableProductAttributeValueCollector() :

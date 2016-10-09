@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
 interface ImageProcessingStrategy
 {
-    /**
-     * @param string $binaryImageData
-     * @return string
-     */
-    public function processBinaryImageData($binaryImageData);
+    public function processBinaryImageData(string $binaryImageData) : string;
 }

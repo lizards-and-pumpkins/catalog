@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -65,9 +66,8 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubCompositeProductView = $this->createMock(CompositeProductView::class);
         $this->stubCompositeProductView->method('getContext')->willReturn($this->createMock(Context::class));
 
-        $stubAssociatedProductList = $this->createMock(AssociatedProductList::class);
-        $stubAssociatedProductList->method('jsonSerialize')->willReturn($this->testAssociatedAttributesJsonData);
-        $this->stubCompositeProductView->method('getAssociatedProducts')->willReturn($stubAssociatedProductList);
+        $this->stubCompositeProductView->method('getAssociatedProducts')
+            ->willReturn($this->testAssociatedAttributesJsonData);
 
         $stubVariationAttributes = $this->createMock(ProductVariationAttributeList::class);
         $stubVariationAttributes->method('jsonSerialize')->willReturn($this->testVariationAttributesJsonData);

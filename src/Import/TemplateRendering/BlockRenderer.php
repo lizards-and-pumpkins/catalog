@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\Locale;
@@ -65,17 +68,14 @@ abstract class BlockRenderer
         $this->baseUrlBuilder = $baseUrlBuilder;
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getLayoutHandle();
+    abstract public function getLayoutHandle() : string;
 
     /**
      * @param mixed $dataObject
      * @param Context $context
      * @return string
      */
-    public function render($dataObject, Context $context)
+    public function render($dataObject, Context $context) : string
     {
         $this->dataObject = $dataObject;
         $this->context = $context;
@@ -95,10 +95,7 @@ abstract class BlockRenderer
         return $this->dataObject;
     }
 
-    /**
-     * @return Layout
-     */
-    private function getOuterMostBlockLayout()
+    private function getOuterMostBlockLayout() : Layout
     {
         $layout = $this->getLayout();
         $rootBlocks = $layout->getNodeChildren();
@@ -113,11 +110,7 @@ abstract class BlockRenderer
         return $rootBlocks[0];
     }
 
-    /**
-     * @param Layout $layout
-     * @return Block
-     */
-    private function createBlockWithChildrenRecursively(Layout $layout)
+    private function createBlockWithChildrenRecursively(Layout $layout) : Block
     {
         $blockClass = $layout->getAttribute('class');
         $this->validateBlockClass($blockClass);
@@ -133,11 +126,7 @@ abstract class BlockRenderer
         return $blockInstance;
     }
 
-    /**
-     * @param Layout $layout
-     * @param string $parentName
-     */
-    private function addDeclaredChildBlocks(Layout $layout, $parentName)
+    private function addDeclaredChildBlocks(Layout $layout, string $parentName)
     {
         if ($layout->hasChildren()) {
             /** @var Layout $childBlockLayout */
@@ -148,10 +137,7 @@ abstract class BlockRenderer
         }
     }
 
-    /**
-     * @param string $blockClass
-     */
-    private function validateBlockClass($blockClass)
+    private function validateBlockClass(string $blockClass)
     {
         if (is_null($blockClass)) {
             throw new CanNotInstantiateBlockException('Block class is not specified.');
@@ -167,20 +153,12 @@ abstract class BlockRenderer
         }
     }
 
-    /**
-     * @return Layout
-     */
-    private function getLayout()
+    private function getLayout() : Layout
     {
         return $this->themeLocator->getLayoutForHandle($this->getLayoutHandle());
     }
 
-    /**
-     * @param string $parentName
-     * @param string $childName
-     * @return string
-     */
-    public function getChildBlockOutput($parentName, $childName)
+    public function getChildBlockOutput(string $parentName, string $childName) : string
     {
         if (!$this->blockStructure->hasChildBlock($parentName, $childName)) {
             $placeholder = $this->getBlockPlaceholder($childName);
@@ -190,10 +168,7 @@ abstract class BlockRenderer
         return $this->blockStructure->getBlock($childName)->render();
     }
 
-    /**
-     * @return string
-     */
-    public function getRootSnippetCode()
+    public function getRootSnippetCode() : string
     {
         return $this->getLayoutHandle();
     }
@@ -201,7 +176,7 @@ abstract class BlockRenderer
     /**
      * @return string[]
      */
-    public function getNestedSnippetCodes()
+    public function getNestedSnippetCodes() : array
     {
         if (is_null($this->missingBlockNames)) {
             throw new MethodNotYetAvailableException(
@@ -211,40 +186,26 @@ abstract class BlockRenderer
         return $this->missingBlockNames;
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
-    public function translate($string)
+    public function translate(string $string) : string
     {
         $locale = $this->context->getValue(Locale::CONTEXT_CODE);
         return $this->translatorRegistry->getTranslator($this->getLayoutHandle(), $locale)->translate($string);
     }
 
-    /**
-     * @return \LizardsAndPumpkins\Context\BaseUrl\BaseUrl
-     */
-    public function getBaseUrl()
+    public function getBaseUrl() : BaseUrl
     {
         return $this->baseUrlBuilder->create($this->context);
     }
 
-    /**
-     * @return string
-     */
-    public function getWebsiteCode()
+    public function getWebsiteCode() : string
     {
         return $this->context->getValue(Website::CONTEXT_CODE);
     }
 
-    /**
-     * @param string $blockName
-     * @return string
-     * @see \LizardsAndPumpkins\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
-     */
-    private function getBlockPlaceholder($blockName)
+    private function getBlockPlaceholder(string $blockName) : string
     {
         // TODO use delegate to generate the placeholder string
+        // @see \LizardsAndPumpkins\UrlKeyRequestHandler::buildPlaceholdersFromCodes()
         return '{{snippet ' . $blockName . '}}';
     }
 }

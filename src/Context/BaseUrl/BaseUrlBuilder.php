@@ -1,15 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\Context;
 
 interface BaseUrlBuilder
 {
-    /**
-     * @param Context $context
-     * @return BaseUrl
-     */
-    public function create(Context $context);
+    public function create(Context $context) : BaseUrl;
 }

@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\ImageStorage\Exception\InvalidMediaBaseUrlPathException;
 
 class MediaDirectoryBaseUrlBuilder implements MediaBaseUrlBuilder
@@ -19,18 +20,8 @@ class MediaDirectoryBaseUrlBuilder implements MediaBaseUrlBuilder
      */
     private $mediaBaseUrlPath;
 
-    /**
-     * @param BaseUrlBuilder $baseUrlBuilder
-     * @param string $mediaBaseUrlPath
-     */
-    public function __construct(BaseUrlBuilder $baseUrlBuilder, $mediaBaseUrlPath)
+    public function __construct(BaseUrlBuilder $baseUrlBuilder, string $mediaBaseUrlPath)
     {
-        if (! is_string($mediaBaseUrlPath)) {
-            $type = $this->getVariableType($mediaBaseUrlPath);
-            $message = sprintf('The media base URL path has to be a string, got "%s"', $type);
-            throw new InvalidMediaBaseUrlPathException($message);
-        }
-        
         if ('/' !== substr($mediaBaseUrlPath, -1)) {
             throw new InvalidMediaBaseUrlPathException('The media base URL path has to end with a training slash');
         }
@@ -39,23 +30,8 @@ class MediaDirectoryBaseUrlBuilder implements MediaBaseUrlBuilder
         $this->mediaBaseUrlPath = $mediaBaseUrlPath;
     }
 
-    /**
-     * @param Context $context
-     * @return HttpUrl
-     */
-    public function create(Context $context)
+    public function create(Context $context) : string
     {
         return $this->baseUrlBuilder->create($context) . $this->mediaBaseUrlPath;
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getVariableType($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSearchFieldToQueryParameterMapException;
@@ -51,81 +53,36 @@ class SearchFieldToRequestParamMap
      * @param string[] $map
      * @param string $nameInExceptions
      */
-    private function validateArrayMap(array $map, $nameInExceptions)
+    private function validateArrayMap(array $map, string $nameInExceptions)
     {
-        every($map, function ($value, $key) use ($nameInExceptions) {
+        every($map, function (string $value, string $key) use ($nameInExceptions) {
             $this->validateArrayKey($key, $nameInExceptions);
             $this->validateArrayValue($value, $nameInExceptions);
         });
     }
 
-    /**
-     * @param mixed $arrayKey
-     * @param string $nameInException
-     */
-    private function validateArrayKey($arrayKey, $nameInException)
+    private function validateArrayKey(string $arrayKey, string $nameInException)
     {
-        if (!is_string($arrayKey)) {
-            throw $this->createInvalidArrayKeyTypeException($arrayKey, $nameInException);
-        }
         if ('' === $arrayKey) {
             $message = sprintf('The %s Map must have not have empty string keys', $nameInException);
             throw new InvalidSearchFieldToQueryParameterMapException($message);
         }
     }
 
-    /**
-     * @param mixed $arrayValue
-     * @param string $nameInException
-     */
-    private function validateArrayValue($arrayValue, $nameInException)
+    private function validateArrayValue(string $arrayValue, string $nameInException)
     {
-        if (!is_string($arrayValue)) {
-            throw $this->createInvalidValueTypeException($arrayValue, $nameInException);
-        }
         if ('' === $arrayValue) {
             $message = sprintf('The %s Map must have not have empty string values', $nameInException);
             throw new InvalidSearchFieldToQueryParameterMapException($message);
         }
     }
 
-    /**
-     * @param mixed $arrayKey
-     * @param string $nameInException
-     * @return InvalidSearchFieldToQueryParameterMapException
-     */
-    private function createInvalidArrayKeyTypeException($arrayKey, $nameInException)
-    {
-        $message = sprintf('The %s Map must have string keys, got "%s"', $nameInException, $arrayKey);
-        return new InvalidSearchFieldToQueryParameterMapException($message);
-    }
-
-    /**
-     * @param mixed $arrayValue
-     * @param string $nameInException
-     * @return InvalidSearchFieldToQueryParameterMapException
-     */
-    private function createInvalidValueTypeException($arrayValue, $nameInException)
-    {
-        $type = $this->getType($arrayValue);
-        $message = sprintf('The %s Map must have string values, got "%s"', $nameInException, $type);
-        return new InvalidSearchFieldToQueryParameterMapException($message);
-    }
-
-    /**
-     * @param string $requestParameterName
-     * @return string
-     */
-    public function getSearchFieldName($requestParameterName)
+    public function getSearchFieldName(string $requestParameterName) : string
     {
         return $this->getFieldValueOrDefault($this->queryParametersToFacetFields, $requestParameterName);
     }
 
-    /**
-     * @param string $searchFieldName
-     * @return string
-     */
-    public function getQueryParameterName($searchFieldName)
+    public function getQueryParameterName(string $searchFieldName) : string
     {
         return $this->getFieldValueOrDefault($this->searchFieldsToQueryParameters, $searchFieldName);
     }
@@ -135,21 +92,10 @@ class SearchFieldToRequestParamMap
      * @param string $key
      * @return string
      */
-    private function getFieldValueOrDefault($array, $key)
+    private function getFieldValueOrDefault(array $array, string $key) : string
     {
         return isset($array[$key]) ?
             $array[$key] :
             $key;
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getType($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
     }
 }

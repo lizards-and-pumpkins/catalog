@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -21,14 +23,9 @@ class SearchEngineResponse
      */
     private $productIds;
 
-    /**
-     * @param FacetFieldCollection $facetFieldCollection
-     * @param int $totalNumberOfResults
-     * @param ProductId[] $productIds
-     */
     public function __construct(
         FacetFieldCollection $facetFieldCollection,
-        $totalNumberOfResults,
+        int $totalNumberOfResults,
         ProductId ...$productIds
     ) {
         $this->facetFieldCollection = $facetFieldCollection;
@@ -39,23 +36,17 @@ class SearchEngineResponse
     /**
      * @return ProductId[]
      */
-    public function getProductIds()
+    public function getProductIds() : array
     {
         return $this->productIds;
     }
 
-    /**
-     * @return FacetFieldCollection
-     */
-    public function getFacetFieldCollection()
+    public function getFacetFieldCollection() : FacetFieldCollection
     {
         return $this->facetFieldCollection;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotalNumberOfResults()
+    public function getTotalNumberOfResults() : int
     {
         return $this->totalNumberOfResults;
     }

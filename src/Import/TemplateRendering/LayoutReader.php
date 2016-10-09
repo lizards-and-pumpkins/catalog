@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\LayoutFileNotReadableException;
@@ -7,11 +9,7 @@ use LizardsAndPumpkins\Import\XPathParser;
 
 class LayoutReader
 {
-    /**
-     * @param string $layoutXmlFilePath
-     * @return Layout
-     */
-    public function loadLayoutFromXmlFile($layoutXmlFilePath)
+    public function loadLayoutFromXmlFile(string $layoutXmlFilePath) : Layout
     {
         if (!is_readable($layoutXmlFilePath) || is_dir($layoutXmlFilePath)) {
             throw new LayoutFileNotReadableException(sprintf(

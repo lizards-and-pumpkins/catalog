@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
@@ -21,18 +23,12 @@ class AddProductListingCommand implements Command
         $this->productListing = $productListing;
     }
 
-    /**
-     * @return ProductListing
-     */
-    public function getProductListing()
+    public function getProductListing() : ProductListing
     {
         return $this->productListing;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $name = self::CODE;
         $payload = ['listing' => $this->productListing->serialize()];
@@ -40,11 +36,7 @@ class AddProductListingCommand implements Command
         return Message::withCurrentTime($name, $payload, $metadata);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : AddProductListingCommand
     {
         if ($message->getName() !== self::CODE) {
             throw self::createInvalidMessageNameException($message->getName());
@@ -53,12 +45,9 @@ class AddProductListingCommand implements Command
         return new self($productListing);
     }
 
-    /**
-     * @param string $messageName
-     * @return NoAddProductListingCommandMessageException
-     */
-    private static function createInvalidMessageNameException($messageName)
-    {
+    private static function createInvalidMessageNameException(
+        string $messageName
+    ) : NoAddProductListingCommandMessageException {
         return new NoAddProductListingCommandMessageException(sprintf(
             'Unable to rehydrate from "%s" queue message, expected "%s"',
             $messageName,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -40,9 +42,9 @@ class ProductListingTemplateSnippetRenderer implements SnippetRenderer
 
     /**
      * @param mixed $dataObject
-     * @return Snippet
+     * @return Snippet[]
      */
-    public function render($dataObject)
+    public function render($dataObject) : array
     {
         // todo: important! Use data version from $dataObject
         return array_map(function (Context $context) use ($dataObject) {
@@ -56,7 +58,7 @@ class ProductListingTemplateSnippetRenderer implements SnippetRenderer
      * @param Context $context
      * @return Snippet
      */
-    private function renderProductListingPageSnippetForContext($dataObject, Context $context)
+    private function renderProductListingPageSnippetForContext($dataObject, Context $context) : Snippet
     {
         $content = $this->blockRenderer->render($dataObject, $context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, []);

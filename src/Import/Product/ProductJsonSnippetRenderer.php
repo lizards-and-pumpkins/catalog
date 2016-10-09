@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -25,23 +27,20 @@ class ProductJsonSnippetRenderer implements SnippetRenderer
      * @param ProductView $product
      * @return Snippet[]
      */
-    public function render(ProductView $product)
+    public function render(ProductView $product) : array
     {
         return [
             $this->createProductJsonSnippet($product)
         ];
     }
 
-    /**
-     * @param ProductView $product
-     * @return Snippet
-     */
-    private function createProductJsonSnippet(ProductView $product)
+    private function createProductJsonSnippet(ProductView $product) : Snippet
     {
         $key = $this->productJsonKeyGenerator->getKeyForContext(
             $product->getContext(),
             ['product_id' => $product->getId()]
         );
+
         return Snippet::create($key, json_encode($product));
     }
 }

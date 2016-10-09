@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
 use LizardsAndPumpkins\Util\Storage\Clearable;
@@ -16,37 +18,27 @@ class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements 
         $this->urlKeys = [];
     }
 
-    /**
-     * @param string $dataVersionString
-     * @param string $urlKeyString
-     * @param string $contextDataString
-     * @param string $urlKeyTypeString
-     */
-    public function addUrlKeyForVersion($dataVersionString, $urlKeyString, $contextDataString, $urlKeyTypeString)
-    {
-        $this->validateParameters($dataVersionString, $urlKeyString, $contextDataString, $urlKeyTypeString);
+    public function addUrlKeyForVersion(
+        string $dataVersionString,
+        string $urlKeyString,
+        string $contextDataString,
+        string $urlKeyTypeString
+    ) {
+        $this->validateParameters($dataVersionString, $urlKeyString);
         $this->urlKeys[$dataVersionString][] = [$urlKeyString, $contextDataString, $urlKeyTypeString];
     }
 
-    /**
-     * @param string $dataVersionString
-     * @param string $urlKeyString
-     * @param string $contextDataString
-     * @param string $urlKeyTypeString
-     */
-    private function validateParameters($dataVersionString, $urlKeyString, $contextDataString, $urlKeyTypeString)
+    private function validateParameters(string $dataVersionString, string $urlKeyString)
     {
         $this->validateUrlKeyString($urlKeyString);
         $this->validateDataVersionString($dataVersionString);
-        $this->validateContextDataString($contextDataString);
-        $this->validateUrlKeyTypeString($urlKeyTypeString);
     }
 
     /**
      * @param string $dataVersionString
      * @return string[]
      */
-    public function getForDataVersion($dataVersionString)
+    public function getForDataVersion(string $dataVersionString) : array
     {
         $this->validateDataVersionString($dataVersionString);
         return isset($this->urlKeys[$dataVersionString]) ?

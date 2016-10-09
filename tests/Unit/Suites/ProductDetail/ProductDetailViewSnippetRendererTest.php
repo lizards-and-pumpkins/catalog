@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
@@ -53,7 +55,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
     private function createStubProductDetailViewBlockRenderer() : ProductDetailViewBlockRenderer
     {
         $blockRenderer = $this->createMock(ProductDetailViewBlockRenderer::class);
-        $blockRenderer->method('render')->willReturn('dummy content');
+        $blockRenderer->method('render')->willReturnCallback(function () {
+            return '';
+        });
         $blockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
         $blockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
@@ -122,6 +126,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->stubProductView = $this->createMock(ProductView::class);
         $this->stubProductView->method('getContext')->willReturn($this->createMock(Context::class));
+        $this->stubProductView->method('getProductPageTitle')->willReturn('');
     }
 
     public function testSnippetRendererInterfaceIsImplemented()
@@ -192,6 +197,8 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->stubProductView->method('getFirstValueOfAttribute')->willReturnMap([
             [Product::URL_KEY, 'canonical'],
+            ['meta_description', 'foo'],
+            ['meta_keywords', 'bar'],
         ]);
 
         $result = $this->renderer->render($this->stubProductView);
@@ -201,7 +208,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testHtmlHeadMetaTagsAreRendererdEmpty()
+    public function testHtmlHeadMetaTagsAreRenderedEmpty()
     {
         $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn('stub-content-key');
         $this->stubProductTitleSnippetKeyGenerator->method('getKeyForContext')->willReturn('title');
@@ -234,6 +241,7 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
 
         $this->stubProductView->method('getFirstValueOfAttribute')->willReturnMap(
             [
+                [Product::URL_KEY, 'foo'],
                 ['meta_description', $metaDescription],
                 ['meta_keywords', $metaKeywords],
             ]

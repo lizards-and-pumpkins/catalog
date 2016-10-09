@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
@@ -44,7 +46,7 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $parameterValue = 'bar';
 
         $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
-        $expectedCriteria = SearchCriterionEqual::create($parameterName, $parameterValue);
+        $expectedCriteria = new SearchCriterionEqual($parameterName, $parameterValue);
 
         $this->assertEquals($expectedCriteria, $result);
     }
@@ -70,8 +72,8 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
         $result = $this->builder->fromFieldNameAndValue($parameterName, $parameterValue);
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
-            SearchCriterionGreaterOrEqualThan::create($parameterName, $rangeFrom),
-            SearchCriterionLessOrEqualThan::create($parameterName, $rangeTo)
+            new SearchCriterionGreaterOrEqualThan($parameterName, $rangeFrom),
+            new SearchCriterionLessOrEqualThan($parameterName, $rangeTo)
         );
 
         $this->assertEquals($expectedCriteria, $result);
@@ -86,8 +88,8 @@ class SearchCriteriaBuilderTest extends \PHPUnit_Framework_TestCase
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
             CompositeSearchCriterion::createOr(
-                SearchCriterionLike::create('foo', $queryString),
-                SearchCriterionLike::create('bar', $queryString)
+                new SearchCriterionLike('foo', $queryString),
+                new SearchCriterionLike('bar', $queryString)
             ),
             $this->stubGlobalProductListingCriteria
         );

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
@@ -32,17 +34,17 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
         $this->mockUrlKeyStore = $this->createMock(UrlKeyStore::class);
     }
 
-    final protected function getMockUrlKeyStore() : UrlKeyStore
+    final protected function getMockUrlKeyStore() : \PHPUnit_Framework_MockObject_MockObject
     {
         return $this->mockUrlKeyStore;
     }
 
-    final protected function getMockSearchEngine() : SearchEngine
+    final protected function getMockSearchEngine() : \PHPUnit_Framework_MockObject_MockObject
     {
         return $this->mockSearchEngine;
     }
 
-    final protected function getMockKeyValueStore() : KeyValueStore
+    final protected function getMockKeyValueStore() : \PHPUnit_Framework_MockObject_MockObject
     {
         return $this->mockKeyValueStore;
     }

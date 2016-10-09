@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
@@ -15,7 +17,7 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      */
     private function createContext(array $data) : SelfContainedContext
     {
-        return SelfContainedContext::fromArray($data);
+        return new SelfContainedContext($data);
     }
     
     public function testItImplementsTheContextInterface()
@@ -34,15 +36,15 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
 
     public function testItExtractsTheGivenParts()
     {
-        $this->assertSame('key1:value1', (string) $this->createContext(['key1' => 'value1'])->getIdForParts(['key1']));
+        $this->assertSame('key1:value1', (string) $this->createContext(['key1' => 'value1'])->getIdForParts('key1'));
         $this->assertSame(
             'key2:value2',
-            (string) $this->createContext(['key1' => 'value1', 'key2' => 'value2'])->getIdForParts(['key2'])
+            (string) $this->createContext(['key1' => 'value1', 'key2' => 'value2'])->getIdForParts('key2')
         );
         $contextData = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3', 'key4' => 'value4'];
         $this->assertSame(
             'key2:value2_key4:value4',
-            (string) $this->createContext($contextData)->getIdForParts(['key2', 'key4'])
+            (string) $this->createContext($contextData)->getIdForParts('key2', 'key4')
         );
     }
 

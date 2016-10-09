@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering\Block;
 
+use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -86,7 +89,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
     public function testProductUrlIsReturned()
     {
         $urlKey = 'foo';
-        $testBaseUrl = '/lizards-and-pumpkins/';
+        $testBaseUrl = new HttpBaseUrl('http://example.com/');
 
         $this->stubBlockRenderer->method('getBaseUrl')->willReturn($testBaseUrl);
         $this->stubProductView->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);
@@ -131,7 +134,7 @@ class ProductBlockTest extends \PHPUnit_Framework_TestCase
 
     public function testProductStockQuantityIsReturned()
     {
-        $testStockQuantity = 3;
+        $testStockQuantity = '3';
         $this->stubProductView->method('getFirstValueOfAttribute')->with('stock_qty')->willReturn($testStockQuantity);
 
         $this->assertSame($testStockQuantity, $this->productBlock->getProductStockQuantity());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
@@ -18,10 +20,7 @@ class RestApiFactory implements Factory
      */
     private $memoizedApiRequestHandlerLocator;
 
-    /**
-     * @return ApiRouter
-     */
-    public function createApiRouter()
+    public function createApiRouter() : ApiRouter
     {
         $requestHandlerLocator = $this->getApiRequestHandlerLocator();
         $this->registerApiRequestHandlers($requestHandlerLocator);
@@ -57,10 +56,7 @@ class RestApiFactory implements Factory
         );
     }
 
-    /**
-     * @return CatalogImportApiV1PutRequestHandler
-     */
-    public function createCatalogImportApiV1PutRequestHandler()
+    public function createCatalogImportApiV1PutRequestHandler() : CatalogImportApiV1PutRequestHandler
     {
         return CatalogImportApiV1PutRequestHandler::create(
             $this->getMasterFactory()->createCatalogImport(),
@@ -69,30 +65,21 @@ class RestApiFactory implements Factory
         );
     }
 
-    /**
-     * @return ContentBlocksApiV1PutRequestHandler
-     */
-    public function createContentBlocksApiV1PutRequestHandler()
+    public function createContentBlocksApiV1PutRequestHandler() : ContentBlocksApiV1PutRequestHandler
     {
         return new ContentBlocksApiV1PutRequestHandler(
             $this->getMasterFactory()->getCommandQueue()
         );
     }
 
-    /**
-     * @return TemplatesApiV1PutRequestHandler
-     */
-    public function createTemplatesApiV1PutRequestHandler()
+    public function createTemplatesApiV1PutRequestHandler() : TemplatesApiV1PutRequestHandler
     {
         return new TemplatesApiV1PutRequestHandler(
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
-    /**
-     * @return string
-     */
-    private function getCatalogImportDirectoryConfig()
+    private function getCatalogImportDirectoryConfig() : string
     {
         /** @var ConfigReader $configReader */
         $configReader = $this->getMasterFactory()->createConfigReader();
@@ -105,10 +92,7 @@ class RestApiFactory implements Factory
         return $catalogImportDirectory;
     }
 
-    /**
-     * @return ApiRequestHandlerLocator
-     */
-    public function getApiRequestHandlerLocator()
+    public function getApiRequestHandlerLocator() : ApiRequestHandlerLocator
     {
         if (null === $this->memoizedApiRequestHandlerLocator) {
             $this->memoizedApiRequestHandlerLocator = new ApiRequestHandlerLocator();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
@@ -39,7 +41,7 @@ trait MasterFactoryTrait
      * @param mixed[] $parameters
      * @return mixed
      */
-    final public function __call($method, array $parameters)
+    final public function __call(string $method, array $parameters)
     {
         if (!isset($this->methods[$method])) {
             throw new UndefinedFactoryMethodException(sprintf('Unknown method "%s"', $method));

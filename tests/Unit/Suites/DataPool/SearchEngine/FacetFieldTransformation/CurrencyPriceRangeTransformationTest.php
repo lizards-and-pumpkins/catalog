@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationInputException;
@@ -43,7 +45,6 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncodedPriceRangeIsReturned(int $rangeFrom, int $rangeTo, string $expectation)
     {
-        /** @var FacetFilterRange|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRange */
         $stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
         $stubFacetFilterRange->method('from')->willReturn($rangeFrom);
         $stubFacetFilterRange->method('to')->willReturn($rangeTo);
@@ -64,6 +65,15 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
             [$conv('0.01'), $conv('0.20'), '0,01 € - 0,20 €'],
             [$conv('10'), $conv('19.00'), '10,00 € - 19,00 €'],
         ];
+    }
+
+    public function testPriceRangeCanBeEncodedFromStringValues()
+    {
+        $stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
+        $stubFacetFilterRange->method('from')->willReturn('100000');
+        $stubFacetFilterRange->method('to')->willReturn('190000');
+
+        $this->assertSame('10,00 € - 19,00 €', $this->transformation->encode($stubFacetFilterRange));
     }
 
     /**

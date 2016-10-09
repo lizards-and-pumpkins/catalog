@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -62,27 +64,24 @@ class SimpleProduct implements Product
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
-            ProductId::fromString($sourceArray['product_id']),
+            new ProductId($sourceArray['product_id']),
             ProductTaxClass::fromString($sourceArray['tax_class']),
             ProductAttributeList::fromArray($sourceArray['attributes']),
-            ProductImageList::fromArray($sourceArray['images']),
+            ProductImageList::fromArray(...$sourceArray['images']),
             SelfContainedContextBuilder::rehydrateContext($sourceArray[self::CONTEXT])
         );
     }
 
-    /**
-     * @return ProductId
-     */
-    public function getId()
+    public function getId() : ProductId
     {
         return $this->productId;
     }
 
     /**
      * @param string $attributeCode
-     * @return string
+     * @return mixed
      */
-    public function getFirstValueOfAttribute($attributeCode)
+    public function getFirstValueOfAttribute(string $attributeCode)
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
 
@@ -95,7 +94,7 @@ class SimpleProduct implements Product
      * @param string $attributeCode
      * @return string[]
      */
-    public function getAllValuesOfAttribute($attributeCode)
+    public function getAllValuesOfAttribute(string $attributeCode) : array
     {
         if (!$this->attributeList->hasAttribute($attributeCode)) {
             return [];
@@ -105,19 +104,12 @@ class SimpleProduct implements Product
         }, $this->attributeList->getAttributesWithCode($attributeCode));
     }
 
-    /**
-     * @param string $attributeCode
-     * @return bool
-     */
-    public function hasAttribute($attributeCode)
+    public function hasAttribute(AttributeCode $attributeCode) : bool
     {
         return $this->attributeList->hasAttribute($attributeCode);
     }
 
-    /**
-     * @return ProductAttributeList
-     */
-    public function getAttributes()
+    public function getAttributes() : ProductAttributeList
     {
         return $this->attributeList;
     }
@@ -125,7 +117,7 @@ class SimpleProduct implements Product
     /**
      * @return mixed[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'product_id' => (string) $this->productId,
@@ -137,77 +129,47 @@ class SimpleProduct implements Product
         ];
     }
 
-    /**
-     * @return Context
-     */
-    public function getContext()
+    public function getContext() : Context
     {
         return $this->context;
     }
 
-    /**
-     * @return ProductImageList
-     */
-    public function getImages()
+    public function getImages() : ProductImageList
     {
         return $this->images;
     }
 
-    /**
-     * @return int
-     */
-    public function getImageCount()
+    public function getImageCount() : int
     {
         return count($this->images);
     }
 
-    /**
-     * @param int $imageNumber
-     * @return ProductImage
-     */
-    public function getImageByNumber($imageNumber)
+    public function getImageByNumber(int $imageNumber) : ProductImage
     {
         return $this->images[$imageNumber];
     }
 
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageFileNameByNumber($imageNumber)
+    public function getImageFileNameByNumber(int $imageNumber) : string
     {
         return $this->images[$imageNumber]->getFileName();
     }
 
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageLabelByNumber($imageNumber)
+    public function getImageLabelByNumber(int $imageNumber) : string
     {
         return $this->images[$imageNumber]->getLabel();
     }
 
-    /**
-     * @return string
-     */
-    public function getMainImageFileName()
+    public function getMainImageFileName() : string
     {
         return $this->getImageFileNameByNumber(0);
     }
 
-    /**
-     * @return string
-     */
-    public function getMainImageLabel()
+    public function getMainImageLabel() : string
     {
         return $this->getImageLabelByNumber(0);
     }
 
-    /**
-     * @return ProductTaxClass
-     */
-    public function getTaxClass()
+    public function getTaxClass() : ProductTaxClass
     {
         return $this->taxClass;
     }

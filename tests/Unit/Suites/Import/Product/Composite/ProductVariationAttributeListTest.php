@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -46,7 +48,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             ProductVariationAttributeList::class,
-            ProductVariationAttributeList::fromArray(['test'])
+            ProductVariationAttributeList::fromArray(...['test'])
         );
     }
 
@@ -113,7 +115,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
         $sourceVariationAttributeList = new ProductVariationAttributeList(...$attributeCodes);
 
         $json = json_encode($sourceVariationAttributeList);
-        $rehydratedVariationAttributeList = ProductVariationAttributeList::fromArray(json_decode($json, true));
+        $rehydratedVariationAttributeList = ProductVariationAttributeList::fromArray(...json_decode($json, true));
 
         $this->assertCount(count($attributeCodes), $rehydratedVariationAttributeList);
         foreach ($rehydratedVariationAttributeList as $rehydratedAttributeCode) {

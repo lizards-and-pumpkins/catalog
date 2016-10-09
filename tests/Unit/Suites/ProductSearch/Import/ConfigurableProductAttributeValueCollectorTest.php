@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -72,8 +74,9 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
         $stubConfigurableProduct->expects($this->once())
             ->method('getAllValuesOfAttribute')
             ->willReturn(['a value']);
-        
-        $stubConfigurableProduct->method('getVariationAttributes')->willReturn(new \ArrayIterator([]));
+
+        $stubProductVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
+        $stubConfigurableProduct->method('getVariationAttributes')->willReturn($stubProductVariationAttributeList);
 
         $result = $this->valueCollector->getValues($stubConfigurableProduct, AttributeCode::fromString('test'));
         $this->assertSame(['a value'], $result);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 use LizardsAndPumpkins\Context\Context;
@@ -29,26 +31,17 @@ class SearchDocument
         $this->productId = $productId;
     }
 
-    /**
-     * @return SearchDocumentFieldCollection
-     */
-    public function getFieldsCollection()
+    public function getFieldsCollection() : SearchDocumentFieldCollection
     {
         return $this->fields;
     }
 
-    /**
-     * @return Context
-     */
-    public function getContext()
+    public function getContext() : Context
     {
         return $this->context;
     }
 
-    /**
-     * @return ProductId
-     */
-    public function getProductId()
+    public function getProductId() : ProductId
     {
         return $this->productId;
     }

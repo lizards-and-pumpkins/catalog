@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
@@ -27,11 +29,7 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     public function invalidKeyProvider() : array
     {
         return [
-            [null],
             [''],
-            [123],
-            [new \stdClass()],
-            [[]],
             ['äöü'],
             ['%'],
             ['$']

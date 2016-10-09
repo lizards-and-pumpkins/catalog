@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Import\FileStorage\File;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -11,88 +15,46 @@ use LizardsAndPumpkins\Import\ImageStorage\Image;
 
 interface ProductView extends \JsonSerializable
 {
-    /**
-     * @return Product
-     */
-    public function getOriginalProduct();
+    public function getOriginalProduct() : Product;
     
-    /**
-     * @return ProductId
-     */
-    public function getId();
+    public function getId() : ProductId;
 
-    /**
-     * @param string $attributeCode
-     * @return string
-     */
-    public function getFirstValueOfAttribute($attributeCode);
+    public function getFirstValueOfAttribute(string $attributeCode) : string;
 
     /**
      * @param string $attributeCode
      * @return string[]
      */
-    public function getAllValuesOfAttribute($attributeCode);
+    public function getAllValuesOfAttribute(string $attributeCode) : array;
 
-    /**
-     * @param string $attributeCode
-     * @return bool
-     */
-    public function hasAttribute($attributeCode);
+    public function hasAttribute(string $attributeCode) : bool;
 
-    /**
-     * @return ProductAttributeList
-     */
-    public function getAttributes();
+    public function getAttributes() : ProductAttributeList;
 
-    /**
-     * @return Context
-     */
-    public function getContext();
+    public function getContext() : Context;
 
     /**
      * @param string $variation
      * @return Image[]
      */
-    public function getImages($variation);
+    public function getImages(string $variation) : array;
     
-    /**
-     * @return int
-     */
-    public function getImageCount();
+    public function getImageCount() : int;
 
     /**
      * @param int $imageNumber
      * @param string $variation
      * @return Image
      */
-    public function getImageByNumber($imageNumber, $variation);
+    public function getImageByNumber(int $imageNumber, string $variation);
 
-    /**
-     * @param int $imageNumber
-     * @param string $variation
-     * @return HttpUrl
-     */
-    public function getImageUrlByNumber($imageNumber, $variation);
+    public function getImageUrlByNumber(int $imageNumber, string $variation) : HttpUrl;
     
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageLabelByNumber($imageNumber);
+    public function getImageLabelByNumber(int $imageNumber) : string ;
 
-    /**
-     * @param string $variation
-     * @return HttpUrl
-     */
-    public function getMainImageUrl($variation);
+    public function getMainImageUrl(string $variation) : HttpUrl;
 
-    /**
-     * @return string
-     */
-    public function getMainImageLabel();
+    public function getMainImageLabel() : string;
 
-    /**
-     * @return string
-     */
-    public function getProductPageTitle();
+    public function getProductPageTitle() : string;
 }

@@ -1,20 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
 
 interface ProductBuilder
 {
-    /**
-     * @param Context $context
-     * @return bool
-     */
-    public function isAvailableForContext(Context $context);
+    public function isAvailableForContext(Context $context) : bool;
 
-    /**
-     * @param Context $context
-     * @return Product
-     */
-    public function getProductForContext(Context $context);
+    public function getProductForContext(Context $context) : Product;
 }

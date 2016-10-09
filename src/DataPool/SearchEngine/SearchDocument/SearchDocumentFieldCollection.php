@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
@@ -21,7 +23,7 @@ class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
      * @param string[] $fieldsArray
      * @return SearchDocumentFieldCollection
      */
-    public static function fromArray(array $fieldsArray)
+    public static function fromArray(array $fieldsArray) : SearchDocumentFieldCollection
     {
         $fields = [];
 

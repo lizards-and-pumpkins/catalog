@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 class FacetFieldCollection implements \Countable, \IteratorAggregate, \JsonSerializable
@@ -14,18 +16,12 @@ class FacetFieldCollection implements \Countable, \IteratorAggregate, \JsonSeria
         $this->facetFields = $facetFields;
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return count($this->facetFields);
     }
 
-    /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator() : \ArrayIterator
     {
         return new \ArrayIterator($this->facetFields);
     }
@@ -33,7 +29,7 @@ class FacetFieldCollection implements \Countable, \IteratorAggregate, \JsonSeria
     /**
      * @return FacetField[]
      */
-    public function getFacetFields()
+    public function getFacetFields() : array
     {
         return $this->facetFields;
     }
@@ -41,7 +37,7 @@ class FacetFieldCollection implements \Countable, \IteratorAggregate, \JsonSeria
     /**
      * @return FacetField[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return array_reduce($this->facetFields, function ($carry, FacetField $facetField) {
             return array_merge($carry, [(string) $facetField->getAttributeCode() => $facetField->getValues()]);

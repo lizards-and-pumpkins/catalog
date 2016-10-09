@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 
 /**
- * @todo: make serializable (without using php serialize())
+ * @todo: make serializable (without using <?php
+
+declare(strict_types=1); serialize())
  */
 class ProductListing
 {
@@ -48,10 +52,7 @@ class ProductListing
         $this->attributeList = $attributeList;
     }
 
-    /**
-     * @return UrlKey
-     */
-    public function getUrlKey()
+    public function getUrlKey() : UrlKey
     {
         return $this->urlKey;
     }
@@ -59,24 +60,17 @@ class ProductListing
     /**
      * @return string[]
      */
-    public function getContextData()
+    public function getContextData() : array
     {
         return $this->contextData;
     }
 
-    /**
-     * @return SearchCriteria
-     */
-    public function getCriteria()
+    public function getCriteria() : SearchCriteria
     {
         return $this->criteria;
     }
 
-    /**
-     * @param string $code
-     * @return bool
-     */
-    public function hasAttribute($code)
+    public function hasAttribute(string $code) : bool
     {
         return $this->attributeList->hasAttribute($code);
     }
@@ -85,25 +79,23 @@ class ProductListing
      * @param string $code
      * @return bool|float|int|string
      */
-    public function getAttributeValueByCode($code)
+    public function getAttributeValueByCode(string $code)
     {
         return $this->attributeList->getAttributeValueByCode($code);
     }
 
     /**
      * @todo: use json_encode for serialization
-     * @return string
      */
-    public function serialize()
+    public function serialize() : string
     {
         return serialize($this);
     }
 
     /**
      * @todo: use json_decode for unserialization
-     * @return self
      */
-    public static function rehydrate($serialized)
+    public static function rehydrate($serialized) : ProductListing
     {
         return unserialize($serialized);
     }

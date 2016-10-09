@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
@@ -11,7 +13,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -64,20 +66,12 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $this->sortOrderConfig = $sortOrderConfig;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    public function canProcess(HttpRequest $request) : bool
     {
         return $this->isValidSearchRequest($request);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    public function process(HttpRequest $request)
+    public function process(HttpRequest $request) : HttpResponse
     {
         if (!$this->isValidSearchRequest($request)) {
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
@@ -97,11 +91,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         return $this->pageBuilder->buildPage($metaInfoSnippetContent, $this->context, $keyGeneratorParams);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    private function isValidSearchRequest(HttpRequest $request)
+    private function isValidSearchRequest(HttpRequest $request) : bool
     {
         $urlPathWithoutTrailingSlash = rtrim($request->getPathWithoutWebsitePrefix(), '/');
 
@@ -113,18 +103,14 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
             return false;
         }
 
-        if (strlen($request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1) {
+        if (strlen((string) $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1) {
             return false;
         }
 
         return true;
     }
 
-    /**
-     * @param string $queryString
-     * @return SearchEngineResponse
-     */
-    private function getSearchEngineResponse($queryString)
+    private function getSearchEngineResponse(string$queryString) : SearchEngineResponse
     {
         $selectedFilters = [];
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
@@ -162,7 +148,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      * @param string[] $productInAutosuggestionSnippetKeys
      * @return string[]
      */
-    private function getProductInAutosuggestionSnippetCodeToKeyMap($productInAutosuggestionSnippetKeys)
+    private function getProductInAutosuggestionSnippetCodeToKeyMap(array $productInAutosuggestionSnippetKeys) : array
     {
         return array_reduce($productInAutosuggestionSnippetKeys, function (array $acc, $key) {
             $snippetCode = sprintf('product_%d', count($acc) + 1);
@@ -171,10 +157,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         }, []);
     }
 
-    /**
-     * @param string $searchQueryString
-     */
-    private function addSearchQueryStringSnippetToPageBuilder($searchQueryString)
+    private function addSearchQueryStringSnippetToPageBuilder(string $searchQueryString)
     {
         $snippetCode = 'query_string';
         $snippetContent = $searchQueryString;
@@ -182,22 +165,15 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContent);
     }
 
-    /**
-     * @param string $totalNumberOfResults
-     */
-    private function addTotalNumberOfResultsSnippetToPageBuilder($totalNumberOfResults)
+    private function addTotalNumberOfResultsSnippetToPageBuilder(int $totalNumberOfResults)
     {
         $snippetCode = 'total_number_of_results';
         $snippetContent = $totalNumberOfResults;
 
-        $this->addDynamicSnippetToPageBuilder($snippetCode, $snippetContent);
+        $this->addDynamicSnippetToPageBuilder($snippetCode, (string) $snippetContent);
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $snippetContent
-     */
-    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContent)
+    private function addDynamicSnippetToPageBuilder(string $snippetCode, string $snippetContent)
     {
         $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
         $snippetKeyToContentMap = [$snippetCode => $snippetContent];
@@ -205,10 +181,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 
-    /**
-     * @return ProductSearchAutosuggestionMetaSnippetContent
-     */
-    private function getMetaInfoSnippetContent()
+    private function getMetaInfoSnippetContent() : ProductSearchAutosuggestionMetaSnippetContent
     {
         $metaInfoSnippetKeyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductSearchAutosuggestionMetaSnippetRenderer::CODE
@@ -223,7 +196,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getProductInAutosuggestionSnippetKeys(ProductId ...$productIds)
+    private function getProductInAutosuggestionSnippetKeys(ProductId ...$productIds) : array
     {
         $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode(
             ProductInSearchAutosuggestionSnippetRenderer::CODE

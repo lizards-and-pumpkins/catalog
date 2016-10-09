@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -272,14 +274,16 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTrueIfTheProductAttributeIsPresent()
     {
-        $this->stubProductAttributeList->method('hasAttribute')->with('test')->willReturn(true);
-        $this->assertTrue($this->product->hasAttribute('test'));
+        $dummyAttributeCode = AttributeCode::fromString('test');
+        $this->stubProductAttributeList->method('hasAttribute')->with($dummyAttributeCode)->willReturn(true);
+        $this->assertTrue($this->product->hasAttribute($dummyAttributeCode));
     }
 
     public function testItReturnsFalseIfTheProductAttributeIsMissing()
     {
-        $this->stubProductAttributeList->method('hasAttribute')->with('test')->willReturn(false);
-        $this->assertFalse($this->product->hasAttribute('test'));
+        $dummyAttributeCode = AttributeCode::fromString('test');
+        $this->stubProductAttributeList->method('hasAttribute')->with($dummyAttributeCode)->willReturn(false);
+        $this->assertFalse($this->product->hasAttribute($dummyAttributeCode));
     }
 
     public function testItReturnsTheAttributeList()

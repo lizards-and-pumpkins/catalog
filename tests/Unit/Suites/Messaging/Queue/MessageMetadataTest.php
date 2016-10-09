@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException;
@@ -9,13 +11,6 @@ use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException
  */
 class MessageMetadataTest extends \PHPUnit_Framework_TestCase
 {
-    public function testThrowsExceptionForNonStringKeys()
-    {
-        $this->expectException(InvalidMessageMetadataException::class);
-        $this->expectExceptionMessage('The message metadata may only have string array keys');
-        new MessageMetadata([0 => 'foo']);
-    }
-
     public function testThrowsExceptionIfArrayKeyIsEmptyString()
     {
         $this->expectException(InvalidMessageMetadataException::class);

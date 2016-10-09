@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
@@ -35,7 +37,7 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      * @param ProductView $product
      * @return Snippet[]
      */
-    public function render(ProductView $product)
+    public function render(ProductView $product) : array
     {
         return [
             $this->createVariationAttributesJsonSnippet($product),
@@ -43,20 +45,12 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
         ];
     }
 
-    /**
-     * @param ProductView $productView
-     * @return bool
-     */
-    private function isCompositeProduct(ProductView $productView)
+    private function isCompositeProduct(ProductView $productView) : bool
     {
         return $productView instanceof CompositeProductView;
     }
 
-    /**
-     * @param ProductView $product
-     * @return Snippet
-     */
-    private function createVariationAttributesJsonSnippet(ProductView $product)
+    private function createVariationAttributesJsonSnippet(ProductView $product) : Snippet
     {
         $key = $this->variationAttributesJsonSnippetKeyGenerator->getKeyForContext(
             $product->getContext(),
@@ -65,11 +59,7 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
         return Snippet::create($key, $this->createVariationAttributesJsonSnippetContent($product));
     }
 
-    /**
-     * @param ProductView $product
-     * @return string
-     */
-    private function createVariationAttributesJsonSnippetContent(ProductView $product)
+    private function createVariationAttributesJsonSnippetContent(ProductView $product) : string
     {
         if ($this->isCompositeProduct($product)) {
             return json_encode($this->getVariationAttributesJsonData($product));
@@ -82,16 +72,12 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      * @param CompositeProductView $product
      * @return string[]
      */
-    private function getVariationAttributesJsonData(CompositeProductView $product)
+    private function getVariationAttributesJsonData(CompositeProductView $product) : array
     {
         return json_decode(json_encode($product->getVariationAttributes()), true);
     }
 
-    /**
-     * @param ProductView $product
-     * @return Snippet
-     */
-    private function createAssociatedProductsJsonSnippet(ProductView $product)
+    private function createAssociatedProductsJsonSnippet(ProductView $product) : Snippet
     {
         $key = $this->associatedProductsJsonSnippetKeyGenerator->getKeyForContext(
             $product->getContext(),
@@ -100,11 +86,7 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
         return Snippet::create($key, $this->createAssociatedProductsJsonSnippetContent($product));
     }
 
-    /**
-     * @param ProductView $product
-     * @return string
-     */
-    private function createAssociatedProductsJsonSnippetContent(ProductView $product)
+    private function createAssociatedProductsJsonSnippetContent(ProductView $product) : string
     {
         if ($this->isCompositeProduct($product)) {
             return json_encode($this->getAssociatedProductListJson($product));
@@ -117,7 +99,7 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
      * @param CompositeProductView $product
      * @return array[]
      */
-    private function getAssociatedProductListJson(CompositeProductView $product)
+    private function getAssociatedProductListJson(CompositeProductView $product) : array
     {
         return $product->getAssociatedProducts();
     }

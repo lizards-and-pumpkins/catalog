@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
@@ -294,8 +296,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testInitialSortOrderConfigSnippetIsAddedToPageBuilder()
     {
-        $selectedSortOrderConfigRepresentation = 'selected-sort-order-config';
-        $initialSortOrderConfigRepresentation = 'initial-sort-order-config';
+        $selectedSortOrderConfigRepresentation = ['selected-sort-order-config'];
+        $initialSortOrderConfigRepresentation = ['initial-sort-order-config'];
 
         $stubAttributeCode = $this->createMock(AttributeCode::class);
 
@@ -325,8 +327,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testUserSelectedSortOrderConfigSnippetIsAddedToPageBuilder()
     {
-        $selectedSortOrderConfigRepresentation = 'selected-sort-order-config';
-        $initialSortOrderConfigRepresentation = 'initial-sort-order-config';
+        $selectedSortOrderConfigRepresentation = ['selected-sort-order-config'];
+        $initialSortOrderConfigRepresentation = ['initial-sort-order-config'];
 
         $stubAttributeCodeA = $this->createMock(AttributeCode::class);
         $stubAttributeCodeA->method('__toString')->willReturn('A');

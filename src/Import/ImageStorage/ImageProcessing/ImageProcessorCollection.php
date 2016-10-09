@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
 class ImageProcessorCollection
@@ -14,10 +16,7 @@ class ImageProcessorCollection
         $this->processors[] = $processor;
     }
 
-    /**
-     * @param string $imageFilePath
-     */
-    public function process($imageFilePath)
+    public function process(string $imageFilePath)
     {
         foreach ($this->processors as $processor) {
             $processor->process($imageFilePath);

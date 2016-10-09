@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util;
 
 use League\CLImate\CLImate;
@@ -17,10 +19,7 @@ abstract class BaseCliCommand
         $this->climate = $climate;
     }
 
-    /**
-     * @return CLImate
-     */
-    final protected function getCLImate()
+    final protected function getCLImate() : CLImate
     {
         if (null === $this->climate) {
             $this->setCLImate(new CLImate());
@@ -70,7 +69,7 @@ abstract class BaseCliCommand
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate)
+    protected function getCommandLineArgumentsArray(CLImate $climate) : array
     {
         return [
             'environmentConfig' => [
@@ -121,7 +120,7 @@ abstract class BaseCliCommand
      * @param string $arg
      * @return bool|float|int|null|string
      */
-    final protected function getArg($arg)
+    final protected function getArg(string $arg)
     {
         return $this->getCLImate()->arguments->get($arg);
     }
@@ -130,15 +129,12 @@ abstract class BaseCliCommand
      * @param string $message
      * @return mixed
      */
-    final protected function output($message)
+    final protected function output(string $message)
     {
         return $this->getCLImate()->output($message);
     }
 
-    /**
-     * @param string $environmentConfigSettingsString
-     */
-    private function applyEnvironmentConfigSettings($environmentConfigSettingsString)
+    private function applyEnvironmentConfigSettings(string $environmentConfigSettingsString)
     {
         every(explode(',', $environmentConfigSettingsString), function ($setting) {
             list($key, $value) = $this->parseSetting($setting);
@@ -150,17 +146,13 @@ abstract class BaseCliCommand
      * @param string $setting
      * @return string[]
      */
-    private function parseSetting($setting)
+    private function parseSetting(string $setting) : array
     {
         $this->validateSettingFormat($setting);
         return [$this->parseSettingKey($setting), $this->parseSettingValue($setting)];
     }
 
-    /**
-     * @param string $setting
-     * @return string
-     */
-    private function parseSettingKey($setting)
+    private function parseSettingKey(string $setting) : string
     {
         $key = trim(substr($setting, 0, strpos($setting, '=')));
         if ('' === $key) {
@@ -170,19 +162,12 @@ abstract class BaseCliCommand
         return $key;
     }
 
-    /**
-     * @param string $setting
-     * @return string
-     */
-    private function parseSettingValue($setting)
+    private function parseSettingValue(string $setting) : string
     {
         return substr($setting, strpos($setting, '=') + 1);
     }
 
-    /**
-     * @param string $setting
-     */
-    private function validateSettingFormat($setting)
+    private function validateSettingFormat(string $setting)
     {
         if (false === strpos($setting, '=')) {
             $message = sprintf('Environment settings have to be key=value pairs, "=" not found in "%s"', $setting);

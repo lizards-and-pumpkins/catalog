@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -21,46 +23,29 @@ class ImageWasAddedDomainEvent implements DomainEvent
      */
     private $dataVersion;
 
-    /**
-     * @param string $imageFilePath
-     * @param DataVersion $dataVersion
-     */
-    public function __construct($imageFilePath, DataVersion $dataVersion)
+    public function __construct(string $imageFilePath, DataVersion $dataVersion)
     {
         $this->imageFilePath = $imageFilePath;
         $this->dataVersion = $dataVersion;
     }
 
-    /**
-     * @return string
-     */
-    public function getImageFilePath()
+    public function getImageFilePath() : string
     {
         return $this->imageFilePath;
     }
 
-    /**
-     * @return DataVersion
-     */
-    public function getDataVersion()
+    public function getDataVersion() : DataVersion
     {
         return $this->dataVersion;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $payload = ['file_path' => $this->getImageFilePath()];
         return Message::withCurrentTime(self::CODE, $payload, ['data_version' => (string) $this->getDataVersion()]);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : ImageWasAddedDomainEvent
     {
         if ($message->getName() !== self::CODE) {
             throw new NoImageWasAddedDomainEventMessageException(

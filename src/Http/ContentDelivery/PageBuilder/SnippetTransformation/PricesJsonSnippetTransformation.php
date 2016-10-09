@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation;
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
@@ -21,18 +23,14 @@ class PricesJsonSnippetTransformation implements SnippetTransformation
     }
 
     /**
-     * @param string $input
+     * @param mixed $input
      * @param Context $context
      * @param PageSnippets $pageSnippets
      * @return string
      */
-    public function __invoke($input, Context $context, PageSnippets $pageSnippets)
+    public function __invoke($input, Context $context, PageSnippets $pageSnippets) : string
     {
-        if (!is_string($input)) {
-            return '';
-        }
-
-        $allPrices = json_decode($input);
+        $allPrices = json_decode((string) $input);
         if (!is_array($allPrices)) {
             return '';
         }

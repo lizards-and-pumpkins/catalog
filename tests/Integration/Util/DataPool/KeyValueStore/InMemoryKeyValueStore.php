@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
@@ -16,7 +18,7 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @return mixed
      */
-    public function get($key) // TODO: Add type hint once interface is modified
+    public function get(string $key)
     {
         if (!isset($this->store[$key])) {
             throw new KeyNotFoundException(sprintf('Key not found "%s"', $key));
@@ -28,16 +30,12 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @param mixed $value
      */
-    public function set($key, $value) // TODO: Add type hint once interface is modified
+    public function set(string $key, $value)
     {
         $this->store[$key] = $value;
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function has($key) : bool // TODO: Add type hint once interface is modified
+    public function has(string $key) : bool
     {
         return array_key_exists($key, $this->store);
     }
@@ -46,17 +44,14 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string[] $keys
      * @return mixed[]
      */
-    public function multiGet(array $keys) // TODO: Convert to variadic once interface is modified
+    public function multiGet(string ...$keys) : array
     {
-        $foundValues = [];
-
-        foreach ($keys as $key) {
-            if (array_key_exists($key, $this->store)) {
-                $foundValues[$key] = $this->store[$key];
+        return array_reduce($keys, function ($carry, string $key) {
+            if (!isset($this->store[$key])) {
+                return $carry;
             }
-        }
-
-        return $foundValues;
+            return array_merge($carry, [$key => $this->store[$key]]);
+        }, []);
     }
 
     /**

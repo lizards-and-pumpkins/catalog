@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Config;
 
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
-use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotAStringException;
 
 class EnvironmentConfigReader implements ConfigReader
 {
@@ -22,10 +23,7 @@ class EnvironmentConfigReader implements ConfigReader
         $this->environmentConfig = $environmentConfig;
     }
 
-    /**
-     * @return EnvironmentConfigReader
-     */
-    public static function fromGlobalState()
+    public static function fromGlobalState() : EnvironmentConfigReader
     {
         return static::fromArray($_SERVER);
     }
@@ -34,16 +32,12 @@ class EnvironmentConfigReader implements ConfigReader
      * @param string[] $environmentConfig
      * @return EnvironmentConfigReader
      */
-    public static function fromArray(array $environmentConfig)
+    public static function fromArray(array $environmentConfig) : EnvironmentConfigReader
     {
         return new self($environmentConfig);
     }
 
-    /**
-     * @param string $configKey
-     * @return bool
-     */
-    public function has($configKey)
+    public function has(string $configKey) : bool
     {
         $this->validateConfigKey($configKey);
         $normalizedKey = $this->normalizeConfigKey($configKey);
@@ -54,7 +48,7 @@ class EnvironmentConfigReader implements ConfigReader
      * @param string $configKey
      * @return null|string
      */
-    public function get($configKey)
+    public function get(string $configKey)
     {
         $this->validateConfigKey($configKey);
         $normalizedKey = $this->normalizeConfigKey($configKey);
@@ -63,42 +57,7 @@ class EnvironmentConfigReader implements ConfigReader
             null;
     }
 
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getVariableType($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
-    }
-
-    /**
-     * @param string $configKey
-     */
-    private function validateConfigKey($configKey)
-    {
-        $this->validateConfigKeyIsString($configKey);
-        $this->validateConfigKeyNotEmpty($configKey);
-    }
-
-    /**
-     * @param string $configKey
-     */
-    private function validateConfigKeyIsString($configKey)
-    {
-        if (!is_string($configKey)) {
-            $variableType = $this->getVariableType($configKey);
-            $message = sprintf('The given environment configuration key is not a string: "%s"', $variableType);
-            throw new EnvironmentConfigKeyIsNotAStringException($message);
-        }
-    }
-
-    /**
-     * @param string $configKey
-     */
-    private function validateConfigKeyNotEmpty($configKey)
+    private function validateConfigKey(string $configKey)
     {
         if ('' === trim($configKey)) {
             $message = 'The given environment configuration key is empty.';
@@ -106,11 +65,7 @@ class EnvironmentConfigReader implements ConfigReader
         }
     }
 
-    /**
-     * @param string $configKey
-     * @return string
-     */
-    private function normalizeConfigKey($configKey)
+    private function normalizeConfigKey(string $configKey) : string
     {
         return self::ENV_VAR_PREFIX . strtoupper(str_replace(' ', '', $configKey));
     }

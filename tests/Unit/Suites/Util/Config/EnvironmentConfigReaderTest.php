@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Config;
 
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
-use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotAStringException;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
@@ -14,13 +15,6 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(EnvironmentConfigReader::class, EnvironmentConfigReader::fromGlobalState());
         $this->assertInstanceOf(EnvironmentConfigReader::class, EnvironmentConfigReader::fromArray([]));
-    }
-
-    public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
-    {
-        $this->expectException(EnvironmentConfigKeyIsNotAStringException::class);
-        $this->expectExceptionMessage('The given environment configuration key is not a string: "');
-        EnvironmentConfigReader::fromArray([])->has(123);
     }
 
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsEmpty()
@@ -39,13 +33,6 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     {
         $environmentConfig = ['LP_TEST' => ''];
         $this->assertTrue(EnvironmentConfigReader::fromArray($environmentConfig)->has('test'));
-    }
-
-    public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
-    {
-        $this->expectException(EnvironmentConfigKeyIsNotAStringException::class);
-        $this->expectExceptionMessage('The given environment configuration key is not a string: "');
-        EnvironmentConfigReader::fromArray([])->get(123);
     }
 
     /**

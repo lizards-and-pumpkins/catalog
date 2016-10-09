@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -42,7 +44,7 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
      * @param mixed $dataObject
      * @return Snippet[]
      */
-    public function render($dataObject)
+    public function render($dataObject) : array
     {
         // todo: important! Use the data version embedded in $dataObject, whatever that may be!!
         return array_map(function (Context $context) use ($dataObject) {
@@ -55,7 +57,7 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
      * @param Context $context
      * @return Snippet
      */
-    private function renderMetaInfoSnippetForContext($dataObject, Context $context)
+    private function renderMetaInfoSnippetForContext($dataObject, Context $context) : Snippet
     {
         $this->blockRenderer->render($dataObject, $context);
 
@@ -73,7 +75,7 @@ class ProductSearchAutosuggestionMetaSnippetRenderer implements SnippetRenderer
      * @param string[] $pageSnippetCodes
      * @return ProductSearchAutosuggestionMetaSnippetContent|string
      */
-    private function getMetaSnippetContentJson($rootSnippetCode, array $pageSnippetCodes)
+    private function getMetaSnippetContentJson(string $rootSnippetCode, array $pageSnippetCodes)
     {
         $metaSnippetContent = ProductSearchAutosuggestionMetaSnippetContent::create(
             $rootSnippetCode,

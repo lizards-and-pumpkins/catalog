@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -52,7 +54,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      * @param ProductListing $productListing
      * @return Snippet[]
      */
-    public function render(ProductListing $productListing)
+    public function render(ProductListing $productListing) : array
     {
         return [
             $this->createPageMetaSnippet($productListing),
@@ -60,22 +62,14 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         ];
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return Snippet
-     */
-    private function createPageMetaSnippet(ProductListing $productListing)
+    private function createPageMetaSnippet(ProductListing $productListing) : Snippet
     {
         $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListing);
         $metaDataSnippetContent = $this->getProductListingPageMetaInfoSnippetContent($productListing);
         return Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return string
-     */
-    private function getProductListingMetaDataSnippetKey(ProductListing $productListing)
+    private function getProductListingMetaDataSnippetKey(ProductListing $productListing) : string
     {
         $productListingUrlKey = $productListing->getUrlKey();
         $snippetKey = $this->metaSnippetKeyGenerator->getKeyForContext(
@@ -86,11 +80,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return $snippetKey;
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return string
-     */
-    private function getProductListingPageMetaInfoSnippetContent(ProductListing $productListing)
+    private function getProductListingPageMetaInfoSnippetContent(ProductListing $productListing) : string
     {
         $metaSnippetContent = ProductListingSnippetContent::create(
             $productListing->getCriteria(),
@@ -110,28 +100,20 @@ class ProductListingSnippetRenderer implements SnippetRenderer
      * @param ProductListing $productListing
      * @return string[]
      */
-    private function getPageSnippetCodes(ProductListing $productListing)
+    private function getPageSnippetCodes(ProductListing $productListing) : array
     {
         $context = $this->getContextFromProductListingData($productListing);
         $this->blockRenderer->render($productListing, $context);
         return $this->blockRenderer->getNestedSnippetCodes();
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return Context
-     */
-    private function getContextFromProductListingData(ProductListing $productListing)
+    private function getContextFromProductListingData(ProductListing $productListing) : Context
     {
         $contextData = $productListing->getContextData();
         return $this->contextBuilder->createContext($contextData);
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return Snippet
-     */
-    private function createHtmlHeadMetaSnippet(ProductListing $productListing)
+    private function createHtmlHeadMetaSnippet(ProductListing $productListing) : Snippet
     {
         $productListingUrlKey = $productListing->getUrlKey();
         $key = $this->htmlHeadMetaKeyGenerator->getKeyForContext(
@@ -144,32 +126,21 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return Snippet::create($key, $metaDescription . $metaKeywords);
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return string
-     */
-    private function getMetaDescriptionHtml(ProductListing $productListing)
+    private function getMetaDescriptionHtml(ProductListing $productListing) : string
     {
         return $this->getMetaHtmlFromAttribute($productListing, 'meta_description', 'description');
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return string
-     */
-    private function getMetaKeywordsHtml(ProductListing $productListing)
+    private function getMetaKeywordsHtml(ProductListing $productListing) : string
     {
         return $this->getMetaHtmlFromAttribute($productListing, 'meta_keywords', 'keywords');
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @param string $attribute
-     * @param string $metaName
-     * @return string
-     */
-    private function getMetaHtmlFromAttribute(ProductListing $productListing, $attribute, $metaName)
-    {
+    private function getMetaHtmlFromAttribute(
+        ProductListing $productListing,
+        string $attribute,
+        string $metaName
+    ) : string {
         $attributeValue = '';
         if ($productListing->hasAttribute($attribute)) {
             $attributeValue = $productListing->getAttributeValueByCode($attribute);

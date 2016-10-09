@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Tax;
 
 interface TaxServiceLocator
@@ -12,5 +14,5 @@ interface TaxServiceLocator
      * @param mixed[] $options
      * @return TaxService
      */
-    public function get(array $options);
+    public function get(array $options) : TaxService;
 }

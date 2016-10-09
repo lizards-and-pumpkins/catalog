@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging\Writer;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -15,10 +17,7 @@ class FileLogMessageWriter implements LogMessageWriter
      */
     private $logFilePath;
 
-    /**
-     * @param string $logFilePath
-     */
-    public function __construct($logFilePath)
+    public function __construct(string $logFilePath)
     {
         $this->logFilePath = $logFilePath;
     }
@@ -39,10 +38,7 @@ class FileLogMessageWriter implements LogMessageWriter
         }
     }
 
-    /**
-     * @param string $logDirPath
-     */
-    private function createLogDir($logDirPath)
+    private function createLogDir(string $logDirPath)
     {
         try {
             mkdir($logDirPath, 0700, true);
@@ -65,10 +61,7 @@ class FileLogMessageWriter implements LogMessageWriter
         }
     }
 
-    /**
-     * @param string $messageString
-     */
-    private function writeToFile($messageString)
+    private function writeToFile(string $messageString)
     {
         $f = fopen($this->logFilePath, 'a');
         flock($f, LOCK_EX);
@@ -77,11 +70,7 @@ class FileLogMessageWriter implements LogMessageWriter
         fclose($f);
     }
 
-    /**
-     * @param LogMessage $message
-     * @return string
-     */
-    private function formatMessage(LogMessage $message)
+    private function formatMessage(LogMessage $message) : string
     {
         return sprintf("%s\t%s\t%s\t%s\n", date('c'), $message, get_class($message), $message->getContextSynopsis());
     }

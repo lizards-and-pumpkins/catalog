@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
@@ -11,23 +13,23 @@ class SearchCriterionAnythingTest extends \PHPUnit_Framework_TestCase
 {
     public function testItImplementsTheSearchCriteriaInterface()
     {
-        $this->assertInstanceOf(SearchCriteria::class, SearchCriterionAnything::create());
+        $this->assertInstanceOf(SearchCriteria::class, new SearchCriterionAnything());
     }
 
     public function testItMatchesAnySearchDocument()
     {
         $mockSearchDocument = $this->createMock(SearchDocument::class);
-        $this->assertTrue(SearchCriterionAnything::create()->matches($mockSearchDocument));
+        $this->assertTrue((new SearchCriterionAnything())->matches($mockSearchDocument));
     }
 
     public function testItImplementsJsonSerializable()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, SearchCriterionAnything::create());
+        $this->assertInstanceOf(\JsonSerializable::class, new SearchCriterionAnything());
     }
 
     public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
     {
-        $result = SearchCriterionAnything::create()->jsonSerialize();
+        $result = (new SearchCriterionAnything())->jsonSerialize();
         
         $expectation = [
             'fieldName'  => '',

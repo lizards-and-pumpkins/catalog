@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
@@ -34,24 +36,18 @@ class ProductInSearchAutosuggestionSnippetRenderer implements SnippetRenderer
 
     /**
      * @param ProductView $projectionSourceData
-     * @return Snippet
+     * @return Snippet[]
      */
-    public function render($projectionSourceData)
+    public function render($projectionSourceData) : array
     {
         if (!($projectionSourceData instanceof ProductView)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a ProductView instance.');
         }
 
-        return [
-            $this->createProductInSearchAutosuggestionSnippet($projectionSourceData)
-        ];
+        return [$this->createProductInSearchAutosuggestionSnippet($projectionSourceData)];
     }
 
-    /**
-     * @param ProductView $product
-     * @return Snippet
-     */
-    private function createProductInSearchAutosuggestionSnippet(ProductView $product)
+    private function createProductInSearchAutosuggestionSnippet(ProductView $product) : Snippet
     {
         $content = $this->blockRenderer->render($product, $product->getContext());
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);

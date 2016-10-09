@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 interface FileStorageReader
 {
-    /**
-     * @param string $filePath
-     * @return string
-     */
-    public function getFileContents($filePath);
+    public function getFileContents(string $filePath) : string;
 }

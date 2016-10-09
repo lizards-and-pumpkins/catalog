@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Price;
 
 use LizardsAndPumpkins\Import\Price\Exception\InvalidNumberOfDecimalPointsForPriceException;
@@ -9,15 +11,6 @@ use LizardsAndPumpkins\Import\Price\Exception\InvalidNumberOfDecimalPointsForPri
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger()
-    {
-        $this->expectException(InvalidNumberOfDecimalPointsForPriceException::class);
-        $this->expectExceptionMessage(
-            'The number of decimal points for a price have to be specified as an integer, got string'
-        );
-        Price::fromFractionsWithDecimalPlaces(1, '2');
-    }
-
     public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsAreNegative()
     {
         $this->expectException(InvalidNumberOfDecimalPointsForPriceException::class);

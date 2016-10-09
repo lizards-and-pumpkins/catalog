@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\Context\Context;
@@ -28,7 +30,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      * @param string[] $contextParts
      * @param string[] $usedDataParts
      */
-    public function __construct($snippetCode, array $contextParts, array $usedDataParts)
+    public function __construct(string $snippetCode, array $contextParts, array $usedDataParts)
     {
         SnippetCodeValidator::validate($snippetCode);
 
@@ -42,12 +44,12 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      * @param mixed[] $data
      * @return string
      */
-    public function getKeyForContext(Context $context, array $data)
+    public function getKeyForContext(Context $context, array $data) : string
     {
         $this->validateDataContainsRequiredParts($data);
 
         $snippetKeyData = $this->getSnippetKeyDataAsString($data);
-        $snippetKey = $this->snippetCode . $snippetKeyData . '_' . $context->getIdForParts($this->contextParts);
+        $snippetKey = $this->snippetCode . $snippetKeyData . '_' . $context->getIdForParts(...$this->contextParts);
 
         return $snippetKey;
     }
@@ -70,7 +72,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
      * @param string[] $data
      * @return string
      */
-    private function getSnippetKeyDataAsString(array $data)
+    private function getSnippetKeyDataAsString(array $data) : string
     {
         return array_reduce($this->usedDataParts, function ($carry, $dataKey) use ($data) {
             return $carry . '_' . $data[$dataKey];

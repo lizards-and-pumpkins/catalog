@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\XmlParser;
 
 use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileIsNotReadableException;
-use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXMLNotAStringException;
 
 class CatalogXmlParser
 {
@@ -43,14 +43,8 @@ class CatalogXmlParser
         $this->xmlReader->close();
     }
 
-    /**
-     * @param string $sourceFilePath
-     * @param Logger $logger
-     * @return CatalogXmlParser
-     */
-    public static function fromFilePath($sourceFilePath, Logger $logger)
+    public static function fromFilePath(string $sourceFilePath, Logger $logger) : CatalogXmlParser
     {
-        self::validateSourceFilePathIsString($sourceFilePath);
         self::validateSourceFileExists($sourceFilePath);
         self::validateSourceFileIsReadable($sourceFilePath);
         $xmlReader = new \XMLReader();
@@ -58,36 +52,14 @@ class CatalogXmlParser
         return new self($xmlReader, $logger);
     }
 
-    /**
-     * @param string $xmlString
-     * @param Logger $logger
-     * @return CatalogXmlParser
-     */
-    public static function fromXml($xmlString, Logger $logger)
+    public static function fromXml(string $xmlString, Logger $logger) : CatalogXmlParser
     {
-        self::validateSourceXmlIsString($xmlString);
         $xmlReader = new \XMLReader();
         $xmlReader->XML($xmlString);
         return new self($xmlReader, $logger);
     }
 
-    /**
-     * @param string $sourceFilePath
-     */
-    private static function validateSourceFilePathIsString($sourceFilePath)
-    {
-        if (!is_string($sourceFilePath)) {
-            throw new CatalogImportSourceFilePathIsNotAStringException(sprintf(
-                'Expected the catalog XML import file path to be a string, got "%s"',
-                self::getVariableType($sourceFilePath)
-            ));
-        }
-    }
-
-    /**
-     * @param string $sourceFilePath
-     */
-    private static function validateSourceFileExists($sourceFilePath)
+    private static function validateSourceFileExists(string $sourceFilePath)
     {
         if (!file_exists($sourceFilePath)) {
             throw new CatalogImportSourceXmlFileDoesNotExistException(
@@ -96,40 +68,13 @@ class CatalogXmlParser
         }
     }
 
-    /**
-     * @param string $sourceFilePath
-     */
-    private static function validateSourceFileIsReadable($sourceFilePath)
+    private static function validateSourceFileIsReadable(string $sourceFilePath)
     {
         if (!is_readable($sourceFilePath)) {
             throw new CatalogImportSourceXmlFileIsNotReadableException(
                 sprintf('The catalog XML import file "%s" is not readable', $sourceFilePath)
             );
         }
-    }
-
-    /**
-     * @param string $xmlString
-     */
-    private static function validateSourceXmlIsString($xmlString)
-    {
-        if (!is_string($xmlString)) {
-            throw new CatalogImportSourceXMLNotAStringException(sprintf(
-                'Expected the catalog XML to be a string, got "%s"',
-                self::getVariableType($xmlString)
-            ));
-        }
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private static function getVariableType($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
     }
 
     public function registerProductCallback(callable $callback)
@@ -173,28 +118,17 @@ class CatalogXmlParser
         }
     }
     
-    /**
-     * @return bool
-     */
-    private function isProductNode()
+    private function isProductNode() : bool
     {
         return $this->isElementOnDepth('product', 2);
     }
 
-    /**
-     * @return bool
-     */
-    private function isListingNode()
+    private function isListingNode() : bool
     {
         return $this->isElementOnDepth('listing', 2);
     }
 
-    /**
-     * @param string $name
-     * @param int $depth
-     * @return bool
-     */
-    private function isElementOnDepth($name, $depth)
+    private function isElementOnDepth(string $name, int $depth) : bool
     {
         return
             $this->xmlReader->nodeType === \XMLReader::ELEMENT &&
@@ -206,9 +140,9 @@ class CatalogXmlParser
      * @param callable[] $callbacks
      * @param string $argument
      */
-    private function processCallbacksWithArg(array $callbacks, $argument)
+    private function processCallbacksWithArg(array $callbacks, string $argument)
     {
-        @array_map(function (callable $callback) use ($argument) {
+        array_map(function (callable $callback) use ($argument) {
             call_user_func($callback, $argument);
         }, $callbacks);
     }

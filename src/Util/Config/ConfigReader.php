@@ -1,18 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Config;
 
 interface ConfigReader
 {
-    /**
-     * @param string $configKey
-     * @return bool
-     */
-    public function has($configKey);
+    public function has(string $configKey) : bool;
 
     /**
      * @param string $configKey
      * @return null|string
      */
-    public function get($configKey);
+    public function get(string $configKey);
 }

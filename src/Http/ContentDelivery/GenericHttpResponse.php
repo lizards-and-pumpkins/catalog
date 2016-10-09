@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
-use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidResponseBodyException;
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidStatusCodeException;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -24,12 +25,7 @@ class GenericHttpResponse implements HttpResponse
      */
     private $statusCode;
 
-    /**
-     * @param string $body
-     * @param HttpHeaders $headers
-     * @param int $statusCode
-     */
-    private function __construct($body, HttpHeaders $headers, $statusCode)
+    private function __construct(string $body, HttpHeaders $headers, int $statusCode)
     {
         $this->body = $body;
         $this->headers = $headers;
@@ -42,9 +38,8 @@ class GenericHttpResponse implements HttpResponse
      * @param int $statusCode
      * @return GenericHttpResponse
      */
-    public static function create($body, array $headers, $statusCode)
+    public static function create(string $body, array $headers, int $statusCode) : GenericHttpResponse
     {
-        self::validateResponseBody($body);
         self::validateStatusCode($statusCode);
 
         $httpHeaders = HttpHeaders::fromArray($headers);
@@ -52,18 +47,12 @@ class GenericHttpResponse implements HttpResponse
         return new self($body, $httpHeaders, $statusCode);
     }
 
-    /**
-     * @return string
-     */
-    public function getBody()
+    public function getBody() : string
     {
         return $this->body;
     }
 
-    /**
-     * @return int
-     */
-    public function getStatusCode()
+    public function getStatusCode() : int
     {
         return $this->statusCode;
     }
@@ -82,37 +71,14 @@ class GenericHttpResponse implements HttpResponse
         }
     }
 
-    /**
-     * @param string $body
-     */
-    private static function validateResponseBody($body)
+    private static function validateStatusCode(int $statusCode)
     {
-        if (! is_string($body)) {
-            throw new InvalidResponseBodyException(sprintf('Response body must be a string, got %s.', gettype($body)));
-        }
-    }
-
-    /**
-     * @param int $statusCode
-     */
-    private static function validateStatusCode($statusCode)
-    {
-        if (! is_int($statusCode)) {
-            throw new InvalidStatusCodeException(
-                sprintf('Response status code must be an integer, got %s.', gettype($statusCode))
-            );
-        }
-
         if (! self::isStatusCodeSupported($statusCode)) {
             throw new InvalidStatusCodeException(sprintf('Response status code %s is not supported.', $statusCode));
         }
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
-    private static function isStatusCodeSupported($code)
+    private static function isStatusCodeSupported(int $code) : bool
     {
         return ($code >= 100 && $code <= 102) ||
                ($code >= 200 && $code <= 208) || $code === 226 ||

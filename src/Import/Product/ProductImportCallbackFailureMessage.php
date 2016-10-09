@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -19,20 +21,13 @@ class ProductImportCallbackFailureMessage implements LogMessage
      */
     private $productXml;
 
-    /**
-     * @param \Exception $exception
-     * @param string $productXml
-     */
-    public function __construct(\Exception $exception, $productXml)
+    public function __construct(\Exception $exception, string $productXml)
     {
         $this->exception = $exception;
         $this->productXml = $productXml;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf(
             'Error during processing catalog product XML import for product "%s": %s',
@@ -44,7 +39,7 @@ class ProductImportCallbackFailureMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return [
             'exception' => $this->exception,
@@ -52,10 +47,7 @@ class ProductImportCallbackFailureMessage implements LogMessage
         ];
     }
 
-    /**
-     * @return string
-     */
-    private function getSkuFromProductXml()
+    private function getSkuFromProductXml() : string
     {
         try {
             $node = (new XPathParser($this->productXml))->getXmlNodesArrayByXPath('/product/@sku');
@@ -66,10 +58,7 @@ class ProductImportCallbackFailureMessage implements LogMessage
             $this->unknownSku;
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis() : string
     {
         return sprintf('File: %s:%d', $this->exception->getFile(), $this->exception->getLine());
     }

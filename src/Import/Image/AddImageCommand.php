@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Image;
 
+use LizardsAndPumpkins\Import\Image\Exception\ImageFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Image\Exception\NoAddImageCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -21,11 +24,7 @@ class AddImageCommand implements Command
      */
     private $dataVersion;
 
-    /**
-     * @param string $imageFilePath
-     * @param DataVersion $dataVersion
-     */
-    public function __construct($imageFilePath, DataVersion $dataVersion)
+    public function __construct(string $imageFilePath, DataVersion $dataVersion)
     {
         if (!file_exists($imageFilePath)) {
             throw new ImageFileDoesNotExistException(
@@ -36,26 +35,17 @@ class AddImageCommand implements Command
         $this->dataVersion = $dataVersion;
     }
 
-    /**
-     * @return string
-     */
-    public function getImageFilePath()
+    public function getImageFilePath() : string
     {
         return $this->imageFilePath;
     }
 
-    /**
-     * @return DataVersion
-     */
-    public function getDataVersion()
+    public function getDataVersion() : DataVersion
     {
         return $this->dataVersion;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $name = self::CODE;
         $payload = ['file_path' => $this->imageFilePath, 'data_version' => (string)$this->dataVersion];
@@ -63,11 +53,7 @@ class AddImageCommand implements Command
         return Message::withCurrentTime($name, $payload, $metadata);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : AddImageCommand
     {
         if ($message->getName() != self::CODE) {
             throw new NoAddImageCommandMessageException(sprintf(

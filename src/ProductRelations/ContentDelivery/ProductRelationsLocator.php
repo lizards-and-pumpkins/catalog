@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeException;
@@ -18,11 +20,7 @@ class ProductRelationsLocator
         $this->factoryMethods[(string) $relationTypeCode] = $factoryMethod;
     }
 
-    /**
-     * @param ProductRelationTypeCode $relationTypeCode
-     * @return ProductRelations
-     */
-    public function locate(ProductRelationTypeCode $relationTypeCode)
+    public function locate(ProductRelationTypeCode $relationTypeCode) : ProductRelations
     {
         if (!isset($this->factoryMethods[(string) $relationTypeCode])) {
             $message = sprintf('The product relation "%s" is unknown', $relationTypeCode);
@@ -31,11 +29,7 @@ class ProductRelationsLocator
         return $this->createProductRelationType($relationTypeCode);
     }
 
-    /**
-     * @param ProductRelationTypeCode $relationTypeCode
-     * @return ProductRelations
-     */
-    private function createProductRelationType(ProductRelationTypeCode $relationTypeCode)
+    private function createProductRelationType(ProductRelationTypeCode $relationTypeCode) : ProductRelations
     {
         $productRelationType = call_user_func($this->factoryMethods[(string) $relationTypeCode]);
         $this->validateProductRelationType($productRelationType);
@@ -46,7 +40,7 @@ class ProductRelationsLocator
      * @param mixed $variable
      * @return string
      */
-    private function getVariableType($variable)
+    private function getVariableType($variable) : string
     {
         return is_object($variable) ?
             get_class($variable) :
