@@ -35,7 +35,7 @@ abstract class AbstractConfigurableProductView extends AbstractProductView imple
     }
 
     /**
-     * ProductView[]
+     * @return ProductView[]
      */
     public function getAssociatedProducts() : array
     {
