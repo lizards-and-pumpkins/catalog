@@ -70,10 +70,13 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
     public function write(File $file)
     {
         $this->validateFileStorageType($file);
-        if (! file_exists(dirname((string) $file))) {
-            mkdir(dirname((string) $file), 0755, true);
+        $filePath = (string) $file;
+
+        if (! file_exists(dirname($filePath))) {
+            mkdir(dirname($filePath), 0755, true);
         }
-        file_put_contents((string) $file, $file->getContent());
+
+        file_put_contents($filePath, $file->getContent());
     }
 
     private function validateFileStorageType(File $file)
