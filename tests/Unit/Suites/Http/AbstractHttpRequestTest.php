@@ -19,13 +19,19 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
      */
     private $originalCookieState;
 
-    protected function setUp()
+    /**
+     * @before
+     */
+    final public function saveGlobalsState()
     {
         $this->originalServerState = $_SERVER;
         $this->originalCookieState = $_COOKIE;
     }
 
-    protected function tearDown()
+    /**
+     * @after
+     */
+    final public function restoreGlobalsState()
     {
         $_SERVER = $this->originalServerState;
         $_COOKIE = $this->originalCookieState;
