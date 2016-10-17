@@ -49,7 +49,7 @@ abstract class HttpRequest
         }
 
         $url = HttpUrl::fromString($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
-        $headers = HttpHeaders::fromArray(self::getGlobalRequestHeaders());
+        $headers = HttpHeaders::fromGlobalRequestHeaders();
         $body = HttpRequestBody::fromString($requestBody);
 
         return self::fromParameters($requestMethod, $url, $headers, $body);
@@ -77,18 +77,6 @@ abstract class HttpRequest
                     sprintf('Unsupported request method: "%s"', $requestMethod)
                 );
         }
-    }
-
-    /**
-     * @return string[]
-     */
-    private static function getGlobalRequestHeaders()
-    {
-        return array_reduce(array_keys($_SERVER), function (array $result, $key) {
-            return substr($key, 0, 5) !== 'HTTP_' ?
-                $result :
-                array_merge($result, [strtolower(str_replace('_', '-', substr($key, 5))) => $_SERVER[$key]]);
-        }, []);
     }
 
     /**
