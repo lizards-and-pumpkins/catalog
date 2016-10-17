@@ -20,6 +20,8 @@ class HttpPutRequestTest extends AbstractHttpRequestTest
 
     protected function setUp()
     {
+        parent::setUp();
+
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->createMock(HttpUrl::class);
 
