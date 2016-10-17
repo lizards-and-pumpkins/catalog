@@ -30,6 +30,7 @@ class XPathParser
     public function __construct($xmlString)
     {
         libxml_clear_errors();
+        libxml_disable_entity_loader(true);
         $internal = libxml_use_internal_errors(true);
 
         $this->document = new \DOMDocument;

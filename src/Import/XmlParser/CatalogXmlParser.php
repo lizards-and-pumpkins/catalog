@@ -50,6 +50,7 @@ class CatalogXmlParser
      */
     public static function fromFilePath($sourceFilePath, Logger $logger)
     {
+        libxml_disable_entity_loader(true);
         self::validateSourceFilePathIsString($sourceFilePath);
         self::validateSourceFileExists($sourceFilePath);
         self::validateSourceFileIsReadable($sourceFilePath);
@@ -65,6 +66,7 @@ class CatalogXmlParser
      */
     public static function fromXml($xmlString, Logger $logger)
     {
+        libxml_disable_entity_loader(true);
         self::validateSourceXmlIsString($xmlString);
         $xmlReader = new \XMLReader();
         $xmlReader->XML($xmlString);
