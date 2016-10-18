@@ -151,7 +151,8 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      * @param string[] $nonMatchingSet
      */
     public function testItDoesNotMatchADataSetWhereTheValueOfACommonPartIsDifferent(
-        array $contextDataSet, array $nonMatchingSet
+        array $contextDataSet,
+        array $nonMatchingSet
     ) {
         $this->assertFalse($this->createContext($contextDataSet)->matchesDataSet($nonMatchingSet));
     }

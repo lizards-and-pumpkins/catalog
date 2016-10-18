@@ -86,7 +86,7 @@ abstract class HttpRequest
 
     public function getPathWithWebsitePrefix() : string
     {
-       return $this->getUrl()->getPathWithWebsitePrefix();
+        return $this->getUrl()->getPathWithWebsitePrefix();
     }
 
     public function getHeader(string $headerName) : string

@@ -145,7 +145,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
         string $productId1,
         string $productId2,
         AttributeCode ...$attributeCodes
-    ) : ProductAttributeValueCombinationNotUniqueException{
+    ) : ProductAttributeValueCombinationNotUniqueException {
         $message = sprintf(
             'The associated products "%s" and "%s" have the same value combination for the attributes "%s"',
             $productId1,

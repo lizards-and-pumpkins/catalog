@@ -67,7 +67,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
     private function createStubProductAttributeReturnValueCallback(ProductAttribute ...$attributes) : callable
     {
         return function (string $attributeCode) use ($attributes) {
-            return array_reduce($attributes, function(array $carry, ProductAttribute $attribute) use ($attributeCode) {
+            return array_reduce($attributes, function (array $carry, ProductAttribute $attribute) use ($attributeCode) {
                 if ((string) $attribute->getCode() !== $attributeCode) {
                     return $carry;
                 }
