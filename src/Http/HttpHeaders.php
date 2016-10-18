@@ -53,10 +53,6 @@ class HttpHeaders
         return self::fromArray($globalRequestHeaders);
     }
 
-    /**
-     * @param string $headerName
-     * @return string
-     */
     public function get(string $headerName) : string
     {
         $normalizedHeaderName = strtolower($headerName);
