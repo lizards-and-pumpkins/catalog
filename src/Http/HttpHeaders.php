@@ -42,6 +42,21 @@ class HttpHeaders
         return new self($normalizedHeaders);
     }
 
+    public static function fromGlobalRequestHeaders() : HttpHeaders
+    {
+        $globalRequestHeaders = array_reduce(array_keys($_SERVER), function (array $result, $key) {
+            return substr($key, 0, 5) !== 'HTTP_' ?
+                $result :
+                array_merge($result, [strtolower(str_replace('_', '-', substr($key, 5))) => $_SERVER[$key]]);
+        }, []);
+
+        return self::fromArray($globalRequestHeaders);
+    }
+
+    /**
+     * @param string $headerName
+     * @return string
+     */
     public function get(string $headerName) : string
     {
         $normalizedHeaderName = strtolower($headerName);

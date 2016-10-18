@@ -85,4 +85,44 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
             [[1 => []]]
         ];
     }
+
+    public function testHeadersCanBeCreatedFromGlobals()
+    {
+        $this->assertInstanceOf(HttpHeaders::class, HttpHeaders::fromGlobalRequestHeaders());
+    }
+
+    public function testHeadersContainGlobalValues()
+    {
+        $dummyValue = 'bar';
+        $_SERVER['HTTP_FOO'] = $dummyValue;
+        
+        $result = HttpHeaders::fromGlobalRequestHeaders();
+
+        unset($_SERVER['HTTP_FOO']);
+
+        $this->assertSame(['foo' => $dummyValue], $result->getAll());
+    }
+    
+    public function testOnlyHttpGlobalsAreUsedForCreatingHeaders()
+    {
+        $_SERVER['FOO_BAR'] = 'baz';
+
+        $result = HttpHeaders::fromGlobalRequestHeaders();
+
+        unset($_SERVER['FOO_BAR']);
+
+        $this->assertSame([], $result->getAll());
+    }
+    
+    public function testHeadersCreatedFromGlobalsAreNormalized()
+    {
+        $_SERVER['HTTP_FOO'] = 'bar';
+
+        $result = HttpHeaders::fromGlobalRequestHeaders();
+
+        unset($_SERVER['HTTP_FOO']);
+
+        $this->assertTrue($result->has('foo'));
+
+    }
 }

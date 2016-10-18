@@ -11,6 +11,34 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 {
     private $testRequestHost = 'example.com';
 
+    /**
+     * @var string[]
+     */
+    private $originalServerState;
+
+    /**
+     * @var string[]
+     */
+    private $originalCookieState;
+
+    /**
+     * @before
+     */
+    final public function saveGlobalsState()
+    {
+        $this->originalServerState = $_SERVER;
+        $this->originalCookieState = $_COOKIE;
+    }
+
+    /**
+     * @after
+     */
+    final public function restoreGlobalsState()
+    {
+        $_SERVER = $this->originalServerState;
+        $_COOKIE = $this->originalCookieState;
+    }
+
     private function setUpGlobalState(bool $isSecure = false)
     {
         $_SERVER['REQUEST_METHOD'] = HttpRequest::METHOD_GET;
@@ -167,42 +195,42 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayOfCookiesIsReturned()
     {
-        $expectedCookies = ['foo' => 'bar', 'baz' => 'qux'];
+        $this->setUpGlobalState();
 
-        $originalState = $_COOKIE;
+        $expectedCookies = ['foo' => 'bar', 'baz' => 'qux'];
         $_COOKIE = $expectedCookies;
 
         $request = HttpRequest::fromGlobalState();
         $result = $request->getCookies();
-
-        $_COOKIE = $originalState;
 
         $this->assertSame($expectedCookies, $result);
     }
 
     public function testFalseIsReturnedIfRequestedCookieIsNotSet()
     {
+        $this->setUpGlobalState();
+
         $request = HttpRequest::fromGlobalState();
         $this->assertFalse($request->hasCookie('foo'));
     }
 
     public function testTrueIsReturnedIfRequestedCookieIsSet()
     {
-        $expectedCookieKey = 'foo';
+        $this->setUpGlobalState();
 
-        $originalState = $_COOKIE;
+        $expectedCookieKey = 'foo';
         $_COOKIE[$expectedCookieKey] = 'whatever';
 
         $request = HttpRequest::fromGlobalState();
         $result = $request->hasCookie($expectedCookieKey);
-
-        $_COOKIE = $originalState;
 
         $this->assertTrue($result);
     }
 
     public function testExceptionIsThrownDuringAttemptToGetValueOfCookieWhichIsNotSet()
     {
+        $this->setUpGlobalState();
+
         $request = HttpRequest::fromGlobalState();
         $this->expectException(CookieNotSetException::class);
         $request->getCookieValue('foo');
@@ -210,16 +238,14 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testCookieValueIsReturned()
     {
+        $this->setUpGlobalState();
+
         $expectedCookieName = 'foo';
         $expectedCookieValue = 'bar';
-
-        $originalState = $_COOKIE;
         $_COOKIE = [$expectedCookieName => $expectedCookieValue];
 
         $request = HttpRequest::fromGlobalState();
         $result = $request->getCookieValue($expectedCookieName);
-
-        $_COOKIE = $originalState;
 
         $this->assertSame($expectedCookieValue, $result);
     }
