@@ -34,12 +34,6 @@
             ]
         }
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.lizardsandpumpkins.com"
-        }
-    ],
     "scripts": {
         "test": [
             "vendor/bin/phpunit -c tests/Unit/phpunit.xml.dist",
