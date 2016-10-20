@@ -75,7 +75,7 @@ class ConfigurableProduct implements CompositeProduct
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(
             SimpleProduct::fromArray($sourceArray[self::SIMPLE_PRODUCT]),
-            ProductVariationAttributeList::fromArray(...$sourceArray[self::VARIATION_ATTRIBUTES]),
+            ProductVariationAttributeList::fromStrings(...$sourceArray[self::VARIATION_ATTRIBUTES]),
             AssociatedProductList::fromArray($sourceArray[self::ASSOCIATED_PRODUCTS])
         );
     }

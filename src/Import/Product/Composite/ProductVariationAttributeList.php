@@ -21,7 +21,7 @@ class ProductVariationAttributeList implements \JsonSerializable, \IteratorAggre
         $this->attributeCodes = $attributeCodes;
     }
 
-    public static function fromArray(string ...$attributeCodeStrings) : ProductVariationAttributeList
+    public static function fromStrings(string ...$attributeCodeStrings) : ProductVariationAttributeList
     {
         $attributeCodes = array_map(function ($code) {
             return AttributeCode::fromString($code);

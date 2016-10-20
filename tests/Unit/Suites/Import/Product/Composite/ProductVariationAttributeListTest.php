@@ -48,7 +48,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             ProductVariationAttributeList::class,
-            ProductVariationAttributeList::fromArray(...['test'])
+            ProductVariationAttributeList::fromStrings(...['test'])
         );
     }
 
@@ -115,7 +115,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
         $sourceVariationAttributeList = new ProductVariationAttributeList(...$attributeCodes);
 
         $json = json_encode($sourceVariationAttributeList);
-        $rehydratedVariationAttributeList = ProductVariationAttributeList::fromArray(...json_decode($json, true));
+        $rehydratedVariationAttributeList = ProductVariationAttributeList::fromStrings(...json_decode($json, true));
 
         $this->assertCount(count($attributeCodes), $rehydratedVariationAttributeList);
         foreach ($rehydratedVariationAttributeList as $rehydratedAttributeCode) {
