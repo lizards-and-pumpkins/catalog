@@ -18,7 +18,7 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
         $this->images = $images;
     }
 
-    public static function fromArray(array ...$productImagesArray) : ProductImageList
+    public static function fromImages(array ...$productImagesArray) : ProductImageList
     {
         $images = array_map(function ($productImageArray) {
             return ProductImage::fromArray($productImageArray);

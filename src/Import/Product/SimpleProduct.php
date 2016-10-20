@@ -67,7 +67,7 @@ class SimpleProduct implements Product
             new ProductId($sourceArray['product_id']),
             ProductTaxClass::fromString($sourceArray['tax_class']),
             ProductAttributeList::fromArray($sourceArray['attributes']),
-            ProductImageList::fromArray(...$sourceArray['images']),
+            ProductImageList::fromImages(...$sourceArray['images']),
             SelfContainedContextBuilder::rehydrateContext($sourceArray[self::CONTEXT])
         );
     }
