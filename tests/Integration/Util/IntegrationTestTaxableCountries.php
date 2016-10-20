@@ -10,7 +10,7 @@ class IntegrationTestTaxableCountries implements TaxableCountries
 {
     private static $countries = ['DE', 'FR'];
 
-    public function getIterator() : \ArrayIterator
+    public function getIterator() : \Iterator
     {
         return new \ArrayIterator(self::$countries);
     }
