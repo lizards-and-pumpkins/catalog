@@ -78,12 +78,7 @@ class HttpUrl
     public function getQueryParameter(string $parameterName)
     {
         $requestQuery = $this->url->getQuery();
-
-        if (!isset($requestQuery[$parameterName])) {
-            return null;
-        }
-
-        return $requestQuery[$parameterName];
+        return $requestQuery[$parameterName] ?? null;
     }
 
     public function hasQueryParameters() : bool

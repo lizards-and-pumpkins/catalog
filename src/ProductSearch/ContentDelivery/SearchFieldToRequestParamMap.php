@@ -94,8 +94,6 @@ class SearchFieldToRequestParamMap
      */
     private function getFieldValueOrDefault(array $array, string $key) : string
     {
-        return isset($array[$key]) ?
-            $array[$key] :
-            $key;
+        return $array[$key] ?? $key;
     }
 }

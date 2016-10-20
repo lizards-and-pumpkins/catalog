@@ -52,9 +52,7 @@ class EnvironmentConfigReader implements ConfigReader
     {
         $this->validateConfigKey($configKey);
         $normalizedKey = $this->normalizeConfigKey($configKey);
-        return isset($this->environmentConfig[$normalizedKey]) ?
-            $this->environmentConfig[$normalizedKey] :
-            null;
+        return $this->environmentConfig[$normalizedKey] ?? null;
     }
 
     private function validateConfigKey(string $configKey)

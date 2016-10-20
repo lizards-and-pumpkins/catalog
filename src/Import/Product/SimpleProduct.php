@@ -84,10 +84,7 @@ class SimpleProduct implements Product
     public function getFirstValueOfAttribute(string $attributeCode)
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
-
-        return isset($attributeValues[0]) ?
-            $attributeValues[0] :
-            '';
+        return $attributeValues[0] ?? '';
     }
 
     /**

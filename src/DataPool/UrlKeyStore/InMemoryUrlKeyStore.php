@@ -41,8 +41,6 @@ class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements 
     public function getForDataVersion(string $dataVersionString) : array
     {
         $this->validateDataVersionString($dataVersionString);
-        return isset($this->urlKeys[$dataVersionString]) ?
-            $this->urlKeys[$dataVersionString] :
-            [];
+        return $this->urlKeys[$dataVersionString] ?? [];
     }
 }

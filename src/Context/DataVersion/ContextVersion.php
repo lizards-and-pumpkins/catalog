@@ -24,9 +24,7 @@ class ContextVersion implements ContextPartBuilder
      */
     public function getValue(array $inputDataSet) : string
     {
-        return isset($inputDataSet[DataVersion::CONTEXT_CODE]) ?
-            (string) $inputDataSet[DataVersion::CONTEXT_CODE] :
-            (string) $this->dataVersion;
+        return (string) ($inputDataSet[DataVersion::CONTEXT_CODE] ?? $this->dataVersion);
     }
 
     public function getCode() : string
