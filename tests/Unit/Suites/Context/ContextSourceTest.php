@@ -99,7 +99,11 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function (array $dataSets) use ($testVersion) {
                 array_map(function ($dataSet) use ($testVersion) {
                     $this->assertArrayHasKey(DataVersion::CONTEXT_CODE, $dataSet);
-                    $this->assertSame($dataSet[DataVersion::CONTEXT_CODE], (string)$testVersion);
+                    $testVersionAsStringToSatisfyMockedMethodReturnType = (string) $testVersion;
+                    $this->assertSame(
+                        $dataSet[DataVersion::CONTEXT_CODE],
+                        $testVersionAsStringToSatisfyMockedMethodReturnType
+                    );
                 }, $dataSets);
                 return [];
             });
