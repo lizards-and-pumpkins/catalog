@@ -75,7 +75,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsAProductImageListBuilderInstance()
     {
-        $productImageList = ProductImageListBuilder::fromArray($this->testProductId);
+        $productImageList = ProductImageListBuilder::fromImageArrays($this->testProductId);
         $this->assertInstanceOf(ProductImageListBuilder::class, $productImageList);
     }
 
@@ -85,14 +85,14 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             $this->getImageAttributeArray('test1.jpg', 'The label A'),
             $this->getImageAttributeArray('test2.jpg', 'The label B')
         ];
-        $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId, ...$productImageListArray);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId, ...$productImageListArray);
         $imageBuilders = $this->getImageBuilderArrayFromInstance($productImageListBuilder);
         $this->assertCount(2, $imageBuilders);
     }
 
     public function testItReturnsAProductImageListInstance()
     {
-        $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId);
         $stubContext = $this->createMock(Context::class);
         $productImageList = $productImageListBuilder->getImageListForContext($stubContext);
         $this->assertInstanceOf(ProductImageList::class, $productImageList);
@@ -104,7 +104,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             $this->getImageAttributeArray('test1.jpg', 'The label A'),
             $this->getImageAttributeArray('test2.jpg', 'The label B')
         ];
-        $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId, ...$productImageListArray);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId, ...$productImageListArray);
         $imageList = $productImageListBuilder->getImageListForContext($this->createMock(Context::class));
         $this->assertCount(2, $imageList);
     }

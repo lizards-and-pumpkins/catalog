@@ -19,8 +19,10 @@ class ProductImageListBuilder
         $this->imageBuilders = $imageBuilders;
     }
 
-    public static function fromArray(ProductId $productId, array ...$productImageArrayList) : ProductImageListBuilder
-    {
+    public static function fromImageArrays(
+        ProductId $productId,
+        array ...$productImageArrayList
+    ) : ProductImageListBuilder {
         $productImageLists = array_map(function (array $imageArray) use ($productId) {
             return ProductImageBuilder::fromArray($productId, $imageArray);
         }, $productImageArrayList);

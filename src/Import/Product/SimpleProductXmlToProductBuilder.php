@@ -51,7 +51,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
         $imagesArray = array_map(function (array $imageNode) {
             return $imageNode['value'];
         }, array_map([$this, 'nodeArrayAsAttributeArray'], $imagesNodes));
-        return ProductImageListBuilder::fromArray($productId, ...$imagesArray);
+        return ProductImageListBuilder::fromImageArrays($productId, ...$imagesArray);
     }
 
     /**
