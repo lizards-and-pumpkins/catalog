@@ -13,10 +13,7 @@ class FileContent
      */
     private $content;
 
-    /**
-     * @param string|File $content
-     */
-    private function __construct($content)
+    private function __construct(string $content)
     {
         $this->content = $content;
     }
@@ -63,7 +60,7 @@ class FileContent
 
     public static function fromFile(File $file) : FileContent
     {
-        return new self($file);
+        return new self((string) $file);
     }
 
     public function __toString() : string
