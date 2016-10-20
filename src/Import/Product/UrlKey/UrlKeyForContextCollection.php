@@ -21,7 +21,7 @@ class UrlKeyForContextCollection implements \Countable, \IteratorAggregate
         return count($this->urlKeysForContext);
     }
 
-    public function getIterator() : \ArrayIterator
+    public function getIterator() : \Iterator
     {
         return new \ArrayIterator($this->urlKeysForContext);
     }
