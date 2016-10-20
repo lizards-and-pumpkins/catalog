@@ -39,7 +39,7 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
         return $this->images;
     }
 
-    public function getIterator() : \ArrayIterator
+    public function getIterator() : \Iterator
     {
         return new \ArrayIterator($this->images);
     }
