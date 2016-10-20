@@ -16,7 +16,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSnippetKeyGenetator;
+    private $stubSnippetKeyGenerator;
 
     /**
      * @var CompositeSnippetKeyGeneratorLocatorStrategy
@@ -25,14 +25,14 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
 
     protected function setUp()
     {
-        $this->stubSnippetKeyGenetator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
         $stubSnippetKeyGeneratorLocatorStrategy = $this->createMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocatorStrategy->method('canHandle')->willReturnCallback(function (string $code) {
             return $code === $this->supportedSnippetCode;
         });
         $stubSnippetKeyGeneratorLocatorStrategy->method('getKeyGeneratorForSnippetCode')->willReturnMap([
-            [$this->supportedSnippetCode, $this->stubSnippetKeyGenetator]
+            [$this->supportedSnippetCode, $this->stubSnippetKeyGenerator]
         ]);
 
         $this->strategy = new CompositeSnippetKeyGeneratorLocatorStrategy($stubSnippetKeyGeneratorLocatorStrategy);
@@ -64,6 +64,6 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework
     public function testFirstSnippetKeyGeneratorWhichCanHandleSnippetCodeIsReturned()
     {
         $result = $this->strategy->getKeyGeneratorForSnippetCode($this->supportedSnippetCode);
-        $this->assertSame($this->stubSnippetKeyGenetator, $result);
+        $this->assertSame($this->stubSnippetKeyGenerator, $result);
     }
 }
