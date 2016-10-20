@@ -110,7 +110,7 @@ class ProductSearchAutosuggestionRequestHandler implements HttpRequestHandler
         return true;
     }
 
-    private function getSearchEngineResponse(string$queryString) : SearchEngineResponse
+    private function getSearchEngineResponse(string $queryString) : SearchEngineResponse
     {
         $selectedFilters = [];
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
