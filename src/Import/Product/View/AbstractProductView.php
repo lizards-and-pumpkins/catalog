@@ -292,7 +292,7 @@ abstract class AbstractProductView implements ProductView
      * @param string $label
      * @return string[]
      */
-    private function imageToArray($image, string $label) : array
+    private function imageToArray(Image $image, string $label) : array
     {
         return ['url' => (string) $image->getUrl($this->getContext()), 'label' => $label];
     }
