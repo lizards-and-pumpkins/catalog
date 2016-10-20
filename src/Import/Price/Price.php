@@ -24,7 +24,7 @@ class Price
      * @param int|string $fractions
      * @param int $numDecimalPlaces
      */
-    private function __construct($fractions, $numDecimalPlaces)
+    private function __construct($fractions, int $numDecimalPlaces)
     {
         $this->validateNumberOfDecimalPlaces($numDecimalPlaces);
 
