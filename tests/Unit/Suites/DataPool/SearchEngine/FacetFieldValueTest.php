@@ -23,6 +23,22 @@ class FacetFieldValueTest extends \PHPUnit_Framework_TestCase
         $this->facetFieldValue = new FacetFieldValue($this->testFieldValue, $this->testFieldCount);
     }
 
+    public function testExceptionIsThrownIfFacetFieldValueIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+
+        $invalidValue = new \stdClass;
+        new FacetFieldValue($invalidValue, $this->testFieldCount);
+    }
+
+    public function testExceptionIsThrownIfFacetFieldValueCountIsNotInteger()
+    {
+        $this->expectException(\TypeError::class);
+
+        $invalidValueCount = [];
+        new FacetFieldValue($this->testFieldValue, $invalidValueCount);
+    }
+
     public function testJsonSerializableInterfaceIsImplemented()
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->facetFieldValue);

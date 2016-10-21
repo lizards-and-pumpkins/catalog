@@ -10,6 +10,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\Block
+ * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {

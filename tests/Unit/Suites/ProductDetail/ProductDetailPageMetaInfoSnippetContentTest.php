@@ -62,6 +62,18 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
         }
     }
 
+    public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
+    {
+        $this->expectException(\TypeError::class);
+        ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], []);
+    }
+
+    public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
+    {
+        $this->expectException(\TypeError::class);
+        ProductDetailPageMetaInfoSnippetContent::create('foo', 1.0, [], []);
+    }
+
     public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';

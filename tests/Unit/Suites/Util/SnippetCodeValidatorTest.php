@@ -11,6 +11,12 @@ use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
  */
 class SnippetCodeValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    public function testExceptionIsThrownIfSnippetCodeIsNonString()
+    {
+        $this->expectException(\TypeError::class);
+        SnippetCodeValidator::validate(123);
+    }
+
     public function testExceptionIsThrownIfSnippetCodeIsAnEmptyString()
     {
         $this->expectException(InvalidSnippetCodeException::class);

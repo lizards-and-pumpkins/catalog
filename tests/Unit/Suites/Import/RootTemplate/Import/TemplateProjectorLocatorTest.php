@@ -22,6 +22,12 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator = new TemplateProjectorLocator;
     }
 
+    public function testExceptionIsThrownIfNonStringCodeIsPassed()
+    {
+        $this->expectException(\TypeError::class);
+        $this->locator->getTemplateProjectorForCode(1);
+    }
+
     public function testExceptionIsThrownIfProjectorCanNotBeLocated()
     {
         $this->expectException(UnableToLocateTemplateProjectorException::class);

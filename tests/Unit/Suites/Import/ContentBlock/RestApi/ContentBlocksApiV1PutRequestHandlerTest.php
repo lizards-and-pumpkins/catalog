@@ -22,6 +22,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {

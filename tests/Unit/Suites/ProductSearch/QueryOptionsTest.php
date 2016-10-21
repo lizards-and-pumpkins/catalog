@@ -56,6 +56,21 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testExceptionIsThrownIfRowsPerPageIsNotAnInteger()
+    {
+        $this->expectException(\TypeError::class);
+
+        $invalidRowsPerPage = 'foo';
+        $this->queryOptions = QueryOptions::create(
+            $this->testFilterSelection,
+            $this->stubContext,
+            $this->stubFacetFiltersToIncludeInResult,
+            $invalidRowsPerPage,
+            $this->testPageNumber,
+            $this->stubSearchOrderConfig
+        );
+    }
+
     public function testExceptionIsThrownIfRowsPerPageIsNotPositive()
     {
         $invalidRowsPerPage = 0;
@@ -74,6 +89,22 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchOrderConfig
         );
     }
+
+    public function testExceptionIsThrownIfCurrentPageNumberIsNotAnInteger()
+    {
+        $this->expectException(\TypeError::class);
+
+        $invalidPageNumber = 'foo';
+        $this->queryOptions = QueryOptions::create(
+            $this->testFilterSelection,
+            $this->stubContext,
+            $this->stubFacetFiltersToIncludeInResult,
+            $this->testRowsPerPage,
+            $invalidPageNumber,
+            $this->stubSearchOrderConfig
+        );
+    }
+
 
     public function testExceptionIsThrownIfPageNumberIsNegative()
     {

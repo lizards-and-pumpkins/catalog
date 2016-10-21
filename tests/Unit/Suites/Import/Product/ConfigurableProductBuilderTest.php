@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct

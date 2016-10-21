@@ -19,6 +19,28 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $this->requestHandlerChain = new ApiRequestHandlerLocator();
     }
 
+    public function testExceptionIsThrownDuringAttemptToRegisterRequestHandlerWithNonIntVersion()
+    {
+        $this->expectException(\TypeError::class);
+
+        $requestHandlerCode = 'foo';
+        $requestHandlerVersion = 'bar';
+
+        /** @var ApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubApiRequestHandler */
+        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
+        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToLocateRequestHandlerWithNonIntVersion()
+    {
+        $this->expectException(\TypeError::class);
+
+        $requestHandlerCode = 'foo';
+        $requestHandlerVersion = 'bar';
+
+        $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
+    }
+
     public function testNullApiRequestHandlerIsReturnedIfNoApiRequestHandlerIsFound()
     {
         $requestHandlerCode = 'foo';

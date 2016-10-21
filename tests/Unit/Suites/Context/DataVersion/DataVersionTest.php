@@ -32,6 +32,12 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testExceptionIsThrownIfVersionIsInvalid()
+    {
+        $this->expectException(\TypeError::class);
+        DataVersion::fromVersionString(true);
+    }
+
     public function testVersionIsReturned()
     {
         $version = '1.0';

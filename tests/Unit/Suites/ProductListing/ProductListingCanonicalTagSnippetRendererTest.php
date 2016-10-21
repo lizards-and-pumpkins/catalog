@@ -18,6 +18,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @covers \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
+ * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
 class ProductListingCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {

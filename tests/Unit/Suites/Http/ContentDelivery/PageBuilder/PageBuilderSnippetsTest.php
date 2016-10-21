@@ -86,6 +86,12 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
         $this->pageSnippets->updateSnippetByKey('not-existing-key', 'new content');
     }
 
+    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithKeySpec()
+    {
+        $this->expectException(\TypeError::class);
+        $this->pageSnippets->updateSnippetByKey('a-key', null);
+    }
+
     public function testItUpdatesASnippetWithTheGivenCode()
     {
         $this->pageSnippets->updateSnippetByCode($this->testCode, 'new content');
@@ -97,6 +103,12 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NonExistingSnippetException::class);
         $this->expectExceptionMessage('The snippet code "not-existing-code" does not exist on the current page');
         $this->pageSnippets->updateSnippetByCode('not-existing-code', 'new content');
+    }
+
+    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithCodeSpec()
+    {
+        $this->expectException(\TypeError::class);
+        $this->pageSnippets->updateSnippetByCode($this->testCode, 123);
     }
 
     public function testItThrowsAnExceptionIfThePageIsBuiltTwice()

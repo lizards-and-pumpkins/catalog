@@ -13,6 +13,16 @@ use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNo
  */
 class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 {
+    public function testExceptionIsThrownIfAttributeCodeIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+
+        $attributeCode = 0;
+        $attributeValue = 'foo';
+
+        ProductListingAttributeList::fromArray([$attributeCode => $attributeValue]);
+    }
+
     public function testExceptionIsThrownIfAttributeCodeIsAnEmptyString()
     {
         $this->expectException(InvalidProductListingAttributeCodeException::class);

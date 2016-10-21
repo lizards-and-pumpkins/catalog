@@ -48,6 +48,12 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testExceptionIsThrownIfInvalidKeyTypeIsSpecified()
+    {
+        $this->expectException(\TypeError::class);
+        SearchDocumentField::fromKeyAndValues(1, ['foo']);
+    }
+
     public function testItThrowsAnExceptionIfTheValuesContainNonScalars()
     {
         $this->expectException(InvalidSearchDocumentFieldValueException::class);

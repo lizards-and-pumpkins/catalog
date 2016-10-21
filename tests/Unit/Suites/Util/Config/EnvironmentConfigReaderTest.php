@@ -17,6 +17,13 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(EnvironmentConfigReader::class, EnvironmentConfigReader::fromArray([]));
     }
 
+    public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        EnvironmentConfigReader::fromArray([])->has(123);
+    }
+
+
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsEmpty()
     {
         $this->expectException(EnvironmentConfigKeyIsEmptyException::class);

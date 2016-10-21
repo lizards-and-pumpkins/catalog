@@ -11,6 +11,12 @@ use LizardsAndPumpkins\Import\Price\Exception\InvalidNumberOfDecimalPointsForPri
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
+    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger()
+    {
+        $this->expectException(\TypeError::class);
+        Price::fromFractionsWithDecimalPlaces(1, '2');
+    }
+
     public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsAreNegative()
     {
         $this->expectException(InvalidNumberOfDecimalPointsForPriceException::class);

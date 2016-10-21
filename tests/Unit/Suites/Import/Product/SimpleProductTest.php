@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 /**
  * @covers \LizardsAndPumpkins\Import\Product\SimpleProduct
  * @covers \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId

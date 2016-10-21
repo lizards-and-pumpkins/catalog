@@ -11,6 +11,14 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
  */
 class SnippetTest extends \PHPUnit_Framework_TestCase
 {
+    public function testExceptionIsThrownOnNonStringKey()
+    {
+        $this->expectException(\TypeError::class);
+
+        $content = 'doesn\'t matter';
+        Snippet::create(1, $content);
+    }
+
     /**
      * @dataProvider invalidKeyProvider
      * @param mixed $invalidKey

@@ -16,6 +16,12 @@ class CountryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Country::class, Country::from2CharIso3166('de'));
     }
 
+    public function testItThrowsAnExceptionIfTheInputIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        Country::from2CharIso3166(new \stdClass());
+    }
+
     /**
      * @dataProvider invalidCountrySpecStringProvider
      */

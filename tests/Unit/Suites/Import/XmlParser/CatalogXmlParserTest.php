@@ -192,6 +192,18 @@ EOT;
         $this->mockLogger = $this->createMock(Logger::class);
     }
 
+    public function testItThrowsAnExceptionIfTheFromFileConstructorInputIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        CatalogXmlParser::fromFilePath(123, $this->mockLogger);
+    }
+
+    public function testItThrowsAnExceptionIfTheFromXmlConstructorInputIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        CatalogXmlParser::fromXml([], $this->mockLogger);
+    }
+
     public function testItThrowsAnExceptionIfTheInputFileDoesNotExist()
     {
         $sourceFilePath = 'non-existent-file.xml';

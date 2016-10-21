@@ -24,6 +24,28 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(HttpResponse::class, $result);
     }
 
+    public function testExceptionIsThrownDuringAttemptToCreateResponseWithNonStringBody()
+    {
+        $invalidBody = 1;
+        $dummyHeaders = [];
+        $dummyStatusCode = HttpResponse::STATUS_OK;
+
+        $this->expectException(\TypeError::class);
+
+        GenericHttpResponse::create($invalidBody, $dummyHeaders, $dummyStatusCode);
+    }
+
+    public function testExceptionIsThrownDuringAttemptToCreateResponseWithNonIntegerStatusCode()
+    {
+        $dummyBody = 'foo';
+        $dummyHeaders = [];
+        $invalidStatusCode = false;
+
+        $this->expectException(\TypeError::class);
+
+        GenericHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
+    }
+
     public function testExceptionIsThrownIfGivenResponseStatusCodeIsOutOfRange()
     {
         $dummyBody = 'foo';

@@ -45,6 +45,14 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
+    public function testExceptionIsThrownIfNoBlockClassIsSpecified()
+    {
+        $this->addStubRootBlock(null, 'dummy-template');
+        $this->expectException(\TypeError::class);
+
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
+    }
+
     public function testExceptionIsThrownIfTheClassDoesNotExist()
     {
         $this->addStubRootBlock('None\\Existing\\BlockClass', 'dummy-template');

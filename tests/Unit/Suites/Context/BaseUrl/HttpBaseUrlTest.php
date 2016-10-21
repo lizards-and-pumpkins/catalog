@@ -11,6 +11,12 @@ use LizardsAndPumpkins\Context\BaseUrl\Exception\InvalidBaseUrlSourceDataExcepti
  */
 class HttpBaseUrlTest extends \PHPUnit_Framework_TestCase
 {
+    public function testItShouldThrowAnExceptionIfTheSourceIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        new HttpBaseUrl(123);
+    }
+
     public function testItThrowsAnExceptionIfTheSourceStringIsEmpty()
     {
         $this->expectException(InvalidBaseUrlSourceDataException::class);

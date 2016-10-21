@@ -35,11 +35,29 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
         $this->assertInstanceOf(Clearable::class, $this->urlKeyStore);
     }
 
+    public function testItThrowsAnExceptionIfTheUrkKeyToAddIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        $this->urlKeyStore->addUrlKeyForVersion('1.0', 123, 'dummy-context-string', 'type-string');
+    }
+
+    public function testItThrowsAnExceptionIfAVersionToAddIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        $this->urlKeyStore->addUrlKeyForVersion(123, 'test.html', 'dummy-context-string', 'type-string');
+    }
+
     public function testItThrowsAnExceptionIfTheUrlKeyIsEmpty()
     {
         $this->expectException(UrlKeyToWriteIsEmptyStringException::class);
         $this->expectExceptionMessage('Invalid URL key: url key strings have to be one or more characters long');
         $this->urlKeyStore->addUrlKeyForVersion('1.0', '', 'dummy-context-string', 'type-string');
+    }
+
+    public function testItThrowsAnExceptionIfADataVersionToGetUrlKeysForIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        $this->urlKeyStore->getForDataVersion(555);
     }
 
     public function testItThrowsAnExceptionIfADataVersionToWriteIsAnEmptyString()
@@ -54,6 +72,18 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework
         $this->expectException(DataVersionToWriteIsEmptyStringException::class);
         $this->expectExceptionMessage('Invalid data version: version strings have to be one or more characters long');
         $this->urlKeyStore->getForDataVersion('');
+    }
+
+    public function testItThrowsAnExceptionIfTheContextIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', [], 'type-string');
+    }
+
+    public function testItThrowsAnExceptionIfTheUrlKeyTypeIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', '', 42);
     }
 
     public function testItReturnsUrlKeysForAGivenVersion()

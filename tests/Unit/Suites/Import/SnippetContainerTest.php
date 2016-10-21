@@ -34,6 +34,12 @@ class SnippetContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['abc', 'def'], $container->getSnippetCodes());
     }
 
+    public function testItThrowsAnExceptionIfTheContainerCodeIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        new SnippetContainer(12, []);
+    }
+
     public function testItThrowsAnExceptionIfTheContainerCodeIsTooShort()
     {
         $this->expectException(InvalidSnippetContainerCodeException::class);

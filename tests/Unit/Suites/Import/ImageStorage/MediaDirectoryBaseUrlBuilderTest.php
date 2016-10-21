@@ -41,6 +41,13 @@ class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(MediaBaseUrlBuilder::class, $this->mediaBaseUrlBuilder);
     }
 
+    public function testItThrowsAnExceptionIfTheMediaBaseUrlPathIsNoString()
+    {
+        $this->expectException(\TypeError::class);
+        $invalidPath = 123;
+        new MediaDirectoryBaseUrlBuilder($this->mockBaseUrlBuilder, $invalidPath);
+    }
+
     public function testItThrowsAnExceptionIfTheMediaBaseUrlPathDoesNotEndWithASlash()
     {
         $this->expectException(InvalidMediaBaseUrlPathException::class);

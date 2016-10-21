@@ -55,6 +55,13 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $this->keyGenerator);
     }
 
+    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromNonString()
+    {
+        $this->expectException(\TypeError::class);
+        $snippetCode = 1;
+        new GenericSnippetKeyGenerator($snippetCode, $this->dummyContextParts, $this->dummyUsedDataParts);
+    }
+
     public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromAnEmptyString()
     {
         $this->expectException(InvalidSnippetCodeException::class);

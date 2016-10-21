@@ -9,6 +9,12 @@ namespace LizardsAndPumpkins\Import\Product\UrlKey;
  */
 class UrlKeyTest extends \PHPUnit_Framework_TestCase
 {
+    public function testExceptionIsThrownDuringAttemptToCreateUrlKeyFromNonString()
+    {
+        $this->expectException(\TypeError::class);
+        UrlKey::fromString(1);
+    }
+
     public function testUrlKeyCanBeCastedToString()
     {
         $dummyKey = 'foo';

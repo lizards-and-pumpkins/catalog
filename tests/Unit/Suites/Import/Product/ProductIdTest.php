@@ -9,6 +9,12 @@ namespace LizardsAndPumpkins\Import\Product;
  */
 class ProductIdTest extends \PHPUnit_Framework_TestCase
 {
+    public function testExceptionIsThrownDuringAttemptToCreateProductIdFromNonString()
+    {
+        $this->expectException(\TypeError::class);
+        new ProductId(1);
+    }
+
     public function testProductIdCanBeCreatedFromString()
     {
         $productId = new ProductId('foo');

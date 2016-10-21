@@ -25,6 +25,12 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($direction, (string) $result);
     }
 
+    public function testExceptionIsThrownIfParameterIsNonString()
+    {
+        $this->expectException(\TypeError::class);
+        $this->assertFalse(SortOrderDirection::isValid(new \stdClass()));
+    }
+
     /**
      * @dataProvider invalidSortOrderDirectionProvider
      * @param mixed $invalidDirection

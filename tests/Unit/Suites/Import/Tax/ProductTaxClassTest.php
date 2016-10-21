@@ -38,6 +38,12 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testItThrowsAnExceptionIfTheTaxClassNameIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        ProductTaxClass::fromString([]);
+    }
+
     public function testItReturnsTheGivenTaxClassInstanceIfATaxClassInstanceIsGiven()
     {
         $testClass = ProductTaxClass::fromString('test');

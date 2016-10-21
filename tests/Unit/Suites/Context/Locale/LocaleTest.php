@@ -9,6 +9,13 @@ namespace LizardsAndPumpkins\Context\Locale;
  */
 class LocaleTest extends \PHPUnit_Framework_TestCase
 {
+    public function testExceptionIsThrownDuringAttemptToCreateLocaleFromNonString()
+    {
+        $this->expectException(\TypeError::class);
+        $invalidLocaleCode = new \stdClass();
+        new Locale($invalidLocaleCode);
+    }
+
     public function testLocaleCanBeConvertedToString()
     {
         $localeCode = 'foo_BAR';

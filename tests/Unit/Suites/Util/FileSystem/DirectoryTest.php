@@ -14,6 +14,12 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
 {
     use TestFileFixtureTrait;
 
+    public function testExceptionIfNonStringIsSpecifiedAsDirectoryPath()
+    {
+        $this->expectException(\TypeError::class);
+        Directory::fromPath(1);
+    }
+
     public function testExceptionIsThrownIfFileWithGivenPathAlreadyExists()
     {
         $filePath = $this->getUniqueTempDir() . '/' . uniqid();

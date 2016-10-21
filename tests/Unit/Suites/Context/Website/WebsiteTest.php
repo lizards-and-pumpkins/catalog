@@ -11,6 +11,13 @@ use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
  */
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
+    public function testItThrowsAnExceptionIfTheInputIsNotAString()
+    {
+        $this->expectException(InvalidWebsiteCodeException::class);
+        $this->expectExceptionMessage('The website code must be a string, got "integer"');
+        Website::fromString(123);
+    }
+
     /**
      * @dataProvider emptyWebsiteCodeDataProvider
      */

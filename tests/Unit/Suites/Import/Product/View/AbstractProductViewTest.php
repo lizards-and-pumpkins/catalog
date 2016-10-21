@@ -21,6 +21,7 @@ use LizardsAndPumpkins\Import\Product\View\Stub\StubProductView;
  * @covers \LizardsAndPumpkins\Import\Product\View\AbstractProductView
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImage
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  */

@@ -81,6 +81,18 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->dataPoolReader->getChildSnippetKeys('some_key');
     }
 
+    public function testOnlyStringKeyIsAcceptedForSnippets()
+    {
+        $this->expectException(\TypeError::class);
+        $this->dataPoolReader->getChildSnippetKeys(1);
+    }
+
+    public function testOnlyStringKeysAreAcceptedForGetSnippet()
+    {
+        $this->expectException(\TypeError::class);
+        $this->dataPoolReader->getSnippet(1);
+    }
+
     public function testExceptionIsThrownIfTheKeyIsEmpty()
     {
         $this->expectException(InvalidKeyValueStoreKeyException::class);

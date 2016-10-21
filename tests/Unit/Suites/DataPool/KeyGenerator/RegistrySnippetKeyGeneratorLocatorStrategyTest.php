@@ -59,6 +59,12 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 
+    public function testExceptionIsThrownIfNonStringSnippetRendererCodeIsPassed()
+    {
+        $this->expectException(\TypeError::class);
+        $this->strategy->getKeyGeneratorForSnippetCode(new \stdClass());
+    }
+
     /**
      * @dataProvider emptySnippetCodeDataProvider
      */

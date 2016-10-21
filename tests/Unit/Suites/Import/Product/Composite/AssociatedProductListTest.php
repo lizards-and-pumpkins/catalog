@@ -20,6 +20,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait

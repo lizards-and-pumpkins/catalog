@@ -15,4 +15,10 @@ class HttpRequestBodyTest extends \PHPUnit_Framework_TestCase
         $requestBody = new HttpRequestBody($requestContent);
         $this->assertSame($requestContent, $requestBody->toString());
     }
+
+    public function testItThrowsAnExceptionIfANonStringIsSpecified()
+    {
+        $this->expectException(\TypeError::class);
+        new HttpRequestBody([]);
+    }
 }

@@ -22,6 +22,12 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test_code', (string) AttributeCode::fromString('test_code'));
     }
 
+    public function testItThrowsAnExceptionIfTheCodeIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        AttributeCode::fromString(123);
+    }
+
     /**
      * @dataProvider tooShortAttributeCodeProvider
      */

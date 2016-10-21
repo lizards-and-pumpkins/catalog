@@ -37,6 +37,18 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SearchFieldToRequestParamMap::class, $this->map);
     }
 
+    public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNumericKeys()
+    {
+        $this->expectException(\TypeError::class);
+        new SearchFieldToRequestParamMap([0 => 'test'], []);
+    }
+
+    public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNonStringValues()
+    {
+        $this->expectException(\TypeError::class);
+        new SearchFieldToRequestParamMap(['test' => 0], []);
+    }
+
     public function testItThrowsAnExceptionIfTheSearchFieldArrayHasAnEmptyStringKey()
     {
         $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
@@ -54,7 +66,19 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
         );
         new SearchFieldToRequestParamMap(['empty_value' => ''], []);
     }
-    
+
+    public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNumericKeys()
+    {
+        $this->expectException(\TypeError::class);
+        new SearchFieldToRequestParamMap([], [0 => 'test']);
+    }
+
+    public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNonStringValues()
+    {
+        $this->expectException(\TypeError::class);
+        new SearchFieldToRequestParamMap([], ['test' => 0]);
+    }
+
     public function testItThrowsAnExceptionIfTheQueryParameterArrayHasAnEmptyStringKey()
     {
         $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);

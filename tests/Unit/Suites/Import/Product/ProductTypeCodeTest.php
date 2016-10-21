@@ -12,6 +12,12 @@ use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeException;
  */
 class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
 {
+    public function testItThrowsAnExceptionIfTheTypeIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        ProductTypeCode::fromString(123);
+    }
+
     public function testItThrowsAnExceptionIfTheTypeStringIsEmpty()
     {
         $this->expectException(InvalidProductTypeCodeException::class);

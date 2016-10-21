@@ -22,6 +22,7 @@ use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 /**
  * @covers \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Price\Price
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Context\Website\Website

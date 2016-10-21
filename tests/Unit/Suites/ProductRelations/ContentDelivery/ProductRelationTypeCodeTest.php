@@ -17,6 +17,12 @@ class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductRelationTypeCode::class, $result);
     }
 
+    public function testItThrowsAnExceptionIfTheTypeCodeIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        ProductRelationTypeCode::fromString(123);
+    }
+
     /**
      * @dataProvider emptyRelationTypeCodeProvider
      */

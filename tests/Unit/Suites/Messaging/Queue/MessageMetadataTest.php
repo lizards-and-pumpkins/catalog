@@ -11,6 +11,12 @@ use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException
  */
 class MessageMetadataTest extends \PHPUnit_Framework_TestCase
 {
+    public function testThrowsExceptionForNonStringKeys()
+    {
+        $this->expectException(\TypeError::class);
+        new MessageMetadata([0 => 'foo']);
+    }
+
     public function testThrowsExceptionIfArrayKeyIsEmptyString()
     {
         $this->expectException(InvalidMessageMetadataException::class);
