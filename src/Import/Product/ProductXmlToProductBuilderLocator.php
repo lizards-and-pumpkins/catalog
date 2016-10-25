@@ -20,10 +20,6 @@ class ProductXmlToProductBuilderLocator
         $this->productTypeBuilderFactories = $productTypeBuildersFactories;
     }
 
-    /**
-     * @param string $xml
-     * @return ProductBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
     public function createProductBuilderFromXml(string $xml) : ProductBuilder
     {
         $parser = new XPathParser($xml);
