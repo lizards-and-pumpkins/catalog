@@ -34,21 +34,33 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
         $this->mockUrlKeyStore = $this->createMock(UrlKeyStore::class);
     }
 
-    final protected function getMockUrlKeyStore() : \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @return UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getMockUrlKeyStore()
     {
         return $this->mockUrlKeyStore;
     }
 
-    final protected function getMockSearchEngine() : \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @return SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getMockSearchEngine()
     {
         return $this->mockSearchEngine;
     }
 
-    final protected function getMockKeyValueStore() : \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @return KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getMockKeyValueStore()
     {
         return $this->mockKeyValueStore;
     }
 
+    /**
+     * @return ProductId|\PHPUnit_Framework_MockObject_MockObject
+     */
     final protected function getStubProductId() : ProductId
     {
         return $this->createMock(ProductId::class);

@@ -48,6 +48,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $stubRequest;
 
+    /**
+     * @return DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubDataPoolReader() : DataPoolReader
     {
         /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
@@ -73,6 +76,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         return $mockDataPoolReader;
     }
 
+    /**
+     * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubProductListingPageRequest() : ProductListingPageRequest
     {
         $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
@@ -89,6 +95,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         return $stubProductListingPageRequest;
     }
 
+    /**
+     * @return ProductListingPageContentBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubProductListingPageContentBuilder() : ProductListingPageContentBuilder
     {
         $stubHttpResponse = $this->createMock(HttpResponse::class);

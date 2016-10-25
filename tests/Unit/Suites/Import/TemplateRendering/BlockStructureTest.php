@@ -133,16 +133,22 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($stubChildBlock, $this->blockStructure->getChildBlock($parentName, $childName));
     }
 
+    /**
+     * @return Block|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function getStubBlock() : \PHPUnit_Framework_MockObject_MockObject
     {
         return $this->createMock(Block::class);
     }
 
+    /**
+     * @param string $blockName
+     * @return Block|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function getStubBlockWithName(string $blockName) : \PHPUnit_Framework_MockObject_MockObject
     {
         $stubBlock = $this->getStubBlock();
-        $stubBlock->method('getBlockName')
-            ->willReturn($blockName);
+        $stubBlock->method('getBlockName')->willReturn($blockName);
         return $stubBlock;
     }
 

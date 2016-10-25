@@ -41,7 +41,10 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubHtmlHeadMetaKeyGenerator;
 
-    private function createStubProductListing() : \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubProductListing()
     {
         $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubProductListing = $this->createMock(ProductListing::class);

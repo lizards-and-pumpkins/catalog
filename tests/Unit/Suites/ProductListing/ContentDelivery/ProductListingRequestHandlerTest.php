@@ -75,6 +75,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
+    /**
+     * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubProductListingPageRequest() : ProductListingPageRequest
     {
         $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
@@ -90,6 +93,9 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         return $stubProductListingPageRequest;
     }
 
+    /**
+     * @return ProductListingPageContentBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubProductListingPageContentBuilder() : ProductListingPageContentBuilder
     {
         $stubHttpResponse = $this->createMock(HttpResponse::class);

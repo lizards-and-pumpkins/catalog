@@ -40,6 +40,9 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $command;
 
+    /**
+     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubContext() : Context
     {
         $stubContext = $this->createMock(Context::class);

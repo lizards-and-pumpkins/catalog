@@ -79,9 +79,11 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
      */
     private $contextSource;
 
+    /**
+     * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createMockProductXmlToProductBuilder() : ProductXmlToProductBuilderLocator
     {
-        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->createMock(ProductBuilder::class);
         $stubProductBuilder->method('getProductForContext')->willReturn($this->createMock(Product::class));
 
@@ -90,6 +92,9 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         return $productXmlToProductBuilder;
     }
 
+    /**
+     * @return ProductListingBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createMockProductsPerPageForContextBuilder() : ProductListingBuilder
     {
         $productListing = $this->createMock(ProductListing::class);

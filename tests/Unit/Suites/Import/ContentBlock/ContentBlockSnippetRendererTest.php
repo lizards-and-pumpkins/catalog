@@ -27,6 +27,9 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $renderer;
 
+    /**
+     * @return ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubContextBuilder() : ContextBuilder
     {
         $stubContext = $this->createMock(Context::class);
@@ -36,6 +39,10 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
         return $stubContextBuilder;
     }
 
+    /**
+     * @param string $contentBlockContent
+     * @return ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubContentBlockSource(string $contentBlockContent) : ContentBlockSource
     {
         $stubContentBlockSource = $this->createMock(ContentBlockSource::class);

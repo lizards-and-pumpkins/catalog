@@ -72,6 +72,9 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($resultA, $resultB);
     }
 
+    /**
+     * @return Projector|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function getStubProjector() : Projector
     {
         return $this->createMock(Projector::class);

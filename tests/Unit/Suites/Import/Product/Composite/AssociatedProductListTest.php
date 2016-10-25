@@ -46,6 +46,11 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         }, range(1, $numberOfAssociatedProducts));
     }
 
+    /**
+     * @param AttributeCode $attributeCode
+     * @param string $value
+     * @return ProductAttribute|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubAttribute(AttributeCode $attributeCode, string $value) : ProductAttribute
     {
         $stubAttribute = $this->createMock(ProductAttribute::class);
@@ -54,6 +59,11 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
         return $stubAttribute;
     }
 
+    /**
+     * @param string $productId
+     * @param ProductAttribute[] ...$attributes
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubProduct(string $productId, ProductAttribute ...$attributes) : Product
     {
         $stubProduct = $this->createMock(Product::class);

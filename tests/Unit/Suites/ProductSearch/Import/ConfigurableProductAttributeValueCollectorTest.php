@@ -50,6 +50,10 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
         return $stubAssociatedProduct;
     }
 
+    /**
+     * @param \LizardsAndPumpkins\Import\Product\Product[] ...$associatedProducts
+     * @return AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createMockAssociatedProductList(Product ...$associatedProducts) : AssociatedProductList
     {
         $stubAssociatedProductList = $this->createMock(AssociatedProductList::class);

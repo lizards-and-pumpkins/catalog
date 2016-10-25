@@ -16,6 +16,9 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
      */
     private $registry;
 
+    /**
+     * @return callable|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubTranslatorFactory() : callable
     {
         $stubTranslatorFactory = $this->getMockBuilder(\stdClass::class)->setMethods(['__invoke'])->getMock();

@@ -95,6 +95,9 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $stubSearchFieldToRequestParamMap;
 
+    /**
+     * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createMockPageBuilder() : PageBuilder
     {
         $mockPageBuilder = $this->createMock(PageBuilder::class);
@@ -134,6 +137,9 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
+    /**
+     * @return SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubSearchEngineResponse() : SearchEngineResponse
     {
         $stubProductId = $this->createMock(ProductId::class);

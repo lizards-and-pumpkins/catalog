@@ -61,6 +61,11 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         $this->dataPoolWriter->writeSearchDocument($stubSearchDocument);
     }
 
+    /**
+     * @param string $mockSnippetKey
+     * @param string $mockSnippetContent
+     * @return Snippet|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function getMockSnippet(string $mockSnippetKey, string $mockSnippetContent) : Snippet
     {
         $mockSnippet = $this->createMock(Snippet::class);

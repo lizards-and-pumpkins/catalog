@@ -27,6 +27,10 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
         return $stubSearchDocumentField;
     }
 
+    /**
+     * @param SearchDocumentField $stubSearchDocumentFields
+     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubSearchDocumentWithGivenField(
         SearchDocumentField $stubSearchDocumentFields
     ) : SearchDocument {

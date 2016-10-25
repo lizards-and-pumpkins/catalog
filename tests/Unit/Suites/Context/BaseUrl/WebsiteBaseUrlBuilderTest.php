@@ -44,6 +44,9 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
         return $stubConfigReader;
     }
 
+    /**
+     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubContext() : Context
     {
         $stubContext = $this->createMock(Context::class);

@@ -52,6 +52,9 @@ class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $stubProductDetailPageHtmlHeadMetaSnippetKeyGenerator;
 
+    /**
+     * @return ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubProductDetailViewBlockRenderer() : ProductDetailViewBlockRenderer
     {
         $blockRenderer = $this->createMock(ProductDetailViewBlockRenderer::class);

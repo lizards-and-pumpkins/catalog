@@ -139,6 +139,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($keys, $sortedKeys, 'Failed asserting elements order');
     }
 
+    /**
+     * @return FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubFacetFiltersToIncludeInResult() : FacetFiltersToIncludeInResult
     {
         $stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
@@ -148,11 +151,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return $stubFacetFiltersToIncludeInResult;
     }
 
+    /**
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubQueryOptions() : QueryOptions
     {
         return $this->createStubQueryOptionsWithGivenContext($this->testContext);
     }
 
+    /**
+     * @param Context $context
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubQueryOptionsWithGivenContext(Context $context) : QueryOptions
     {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
@@ -213,6 +223,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return $stubQueryOptions;
     }
 
+    /**
+     * @param int $rowsPerPage
+     * @param int $pageNumber
+     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubQueryOptionsWithGivenPagination(int $rowsPerPage, int $pageNumber) : QueryOptions
     {
         $facetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();

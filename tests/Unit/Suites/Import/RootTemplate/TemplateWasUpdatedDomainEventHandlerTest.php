@@ -43,6 +43,9 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
         );
     }
 
+    /**
+     * @return ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createStubContextSource() : ContextSource
     {
         return $this->createMock(ContextSource::class);

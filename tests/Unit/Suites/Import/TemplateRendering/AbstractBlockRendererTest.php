@@ -44,7 +44,10 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $mockBaseUrlBuilder;
 
-    final protected function getStubLayout() : \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getStubLayout()
     {
         return $this->stubLayout;
     }
@@ -55,19 +58,25 @@ abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Context
+     * @return Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    final protected function getStubContext() : \PHPUnit_Framework_MockObject_MockObject
+    final protected function getStubContext()
     {
         return $this->createMock(Context::class);
     }
 
-    final protected function getStubTranslator() : \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @return Translator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getStubTranslator()
     {
         return $this->stubTranslator;
     }
 
-    final protected function getMockBaseUrlBuilder() : \PHPUnit_Framework_MockObject_MockObject
+    /**
+     * @return BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getMockBaseUrlBuilder()
     {
         return $this->mockBaseUrlBuilder;
     }
