@@ -37,7 +37,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @return UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject
      */
-    final protected function getMockUrlKeyStore()
+    final protected function getMockUrlKeyStore() : UrlKeyStore
     {
         return $this->mockUrlKeyStore;
     }
@@ -45,7 +45,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @return SearchEngine|\PHPUnit_Framework_MockObject_MockObject
      */
-    final protected function getMockSearchEngine()
+    final protected function getMockSearchEngine() : SearchEngine
     {
         return $this->mockSearchEngine;
     }
@@ -53,7 +53,7 @@ abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @return KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
      */
-    final protected function getMockKeyValueStore()
+    final protected function getMockKeyValueStore() : KeyValueStore
     {
         return $this->mockKeyValueStore;
     }

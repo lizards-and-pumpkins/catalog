@@ -36,7 +36,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
      * @param mixed $baseUrlString
      * @return ConfigReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubConfigReader($baseUrlString)
+    private function createStubConfigReader($baseUrlString) : ConfigReader
     {
         $stubConfigReader = $this->createMock(ConfigReader::class);
         $configKey = WebsiteBaseUrlBuilder::CONFIG_PREFIX . 'test_website';

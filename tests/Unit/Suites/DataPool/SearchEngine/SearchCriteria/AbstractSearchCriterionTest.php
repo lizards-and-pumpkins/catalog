@@ -18,7 +18,7 @@ abstract class AbstractSearchCriterionTest extends \PHPUnit_Framework_TestCase
      * @param string[] $fieldValues
      * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubSearchDocumentField($fieldKey, array $fieldValues)
+    private function createStubSearchDocumentField($fieldKey, array $fieldValues) : SearchDocumentField
     {
         $stubSearchDocumentField = $this->createMock(SearchDocumentField::class);
         $stubSearchDocumentField->method('getKey')->willReturn($fieldKey);

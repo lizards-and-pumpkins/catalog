@@ -42,7 +42,7 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testTemplatecontentIsReturned()
+    public function testTemplateContentIsReturned()
     {
         $result = $this->domainEvent->getTemplateContent();
         $this->assertSame($this->dummyTemplateContent, $result);

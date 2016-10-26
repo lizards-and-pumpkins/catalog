@@ -44,7 +44,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListing()
+    private function createStubProductListing() : ProductListing
     {
         $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubProductListing = $this->createMock(ProductListing::class);

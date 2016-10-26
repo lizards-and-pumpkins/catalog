@@ -108,6 +108,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
     private function setProductIsAvailableForContextFixture(bool $isAvailableInContext)
     {
+        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->stubProductXmlToProductBuilder->createProductBuilderFromXml('');
         $stubProductBuilder->method('isAvailableForContext')->willReturn($isAvailableInContext);
 
