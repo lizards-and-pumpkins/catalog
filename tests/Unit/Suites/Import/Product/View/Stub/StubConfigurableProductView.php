@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\View\Stub;
 
 use LizardsAndPumpkins\Import\Product\Composite\CompositeProduct;
@@ -35,34 +37,22 @@ class StubConfigurableProductView extends AbstractConfigurableProductView
         $this->productViewLocator = $productViewLocator;
     }
     
-    /**
-     * @return ProductImageFileLocator
-     */
-    final protected function getProductImageFileLocator()
+    final protected function getProductImageFileLocator() : ProductImageFileLocator
     {
         return $this->imageFileLocator;
     }
 
-    /**
-     * @return Product
-     */
-    public function getOriginalProduct()
+    public function getOriginalProduct() : Product
     {
         return $this->compositeProduct;
     }
 
-    /**
-     * @return ProductViewLocator
-     */
-    final protected function getProductViewLocator()
+    final protected function getProductViewLocator() : ProductViewLocator
     {
         return $this->productViewLocator;
     }
 
-    /**
-     * @return string
-     */
-    public function getProductPageTitle()
+    public function getProductPageTitle() : string
     {
         return $this->getFirstValueOfAttribute('name');
     }

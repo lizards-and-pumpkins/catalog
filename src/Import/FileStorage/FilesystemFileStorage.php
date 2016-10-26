@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\FileDoesNotExistException;
@@ -12,29 +14,18 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
      */
     private $baseDirectory;
 
-    /**
-     * @param string $baseDirectory
-     */
-    public function __construct($baseDirectory)
+    public function __construct(string $baseDirectory)
     {
         $this->baseDirectory = rtrim($baseDirectory, '/');
     }
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return File
-     */
-    public function getFileReference(StorageAgnosticFileUri $identifier)
+    public function getFileReference(StorageAgnosticFileUri $identifier) : File
     {
         $filesystemPath = $this->buildFileSystemPath($identifier);
         return FileInStorage::create(FilesystemFileUri::fromString($filesystemPath), $this);
     }
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return bool
-     */
-    public function contains(StorageAgnosticFileUri $identifier)
+    public function contains(StorageAgnosticFileUri $identifier) : bool
     {
         $file = $this->getFileReference($identifier);
         return $this->isPresent($file);
@@ -47,11 +38,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
         $this->write($file);
     }
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return FileContent
-     */
-    public function getContent(StorageAgnosticFileUri $identifier)
+    public function getContent(StorageAgnosticFileUri $identifier) : FileContent
     {
         if (! $this->contains($identifier)) {
             $message = sprintf('Unable to get contents of non-existing file "%s"', $identifier);
@@ -61,44 +48,35 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
         return FileContent::fromString($this->read($file));
     }
 
-    /**
-     * @param StorageAgnosticFileUri $identifier
-     * @return string
-     */
-    private function buildFileSystemPath(StorageAgnosticFileUri $identifier)
+    private function buildFileSystemPath(StorageAgnosticFileUri $identifier) : string
     {
         return $this->baseDirectory . '/' . $identifier;
     }
 
-    /**
-     * @param File $file
-     * @return bool
-     */
-    public function isPresent(File $file)
+    public function isPresent(File $file) : bool
     {
         $this->validateFileStorageType($file);
         return file_exists((string) $file);
     }
 
-    /**
-     * @param File $file
-     * @return string
-     */
-    public function read(File $file)
+    public function read(File $file) : string
     {
         if (! $this->isPresent($file)) {
             throw new FileDoesNotExistException(sprintf('Unable to get contents of non-existing file "%s"', $file));
         }
-        return file_get_contents($file);
+        return file_get_contents((string) $file);
     }
 
     public function write(File $file)
     {
         $this->validateFileStorageType($file);
-        if (! file_exists(dirname($file))) {
-            mkdir(dirname($file), 0755, true);
+        $filePath = (string) $file;
+
+        if (! file_exists(dirname($filePath))) {
+            mkdir(dirname($filePath), 0755, true);
         }
-        file_put_contents($file, $file->getContent());
+
+        file_put_contents($filePath, $file->getContent());
     }
 
     private function validateFileStorageType(File $file)
@@ -109,12 +87,9 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
         }
     }
 
-    /**
-     * @param StorageSpecificFileUri $storageSpecificFileURI
-     * @return FileStorageTypeMismatchException
-     */
-    private function createStorageTypeMismatchException(StorageSpecificFileUri $storageSpecificFileURI)
-    {
+    private function createStorageTypeMismatchException(
+        StorageSpecificFileUri $storageSpecificFileURI
+    ) : FileStorageTypeMismatchException {
         $thisURIType = get_class($this);
         $otherURIType = get_class($storageSpecificFileURI);
         $message = sprintf('FileStorage %s not compatible with file %s', $thisURIType, $otherURIType);

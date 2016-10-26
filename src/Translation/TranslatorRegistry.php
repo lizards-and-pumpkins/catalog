@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Translation;
 
 use LizardsAndPumpkins\Translation\Exception\UndefinedTranslatorException;
@@ -16,21 +18,12 @@ class TranslatorRegistry
      */
     private $translators = [];
 
-    /**
-     * @param string $pageCode
-     * @param callable $translatorFactory
-     */
-    public function register($pageCode, callable $translatorFactory)
+    public function register(string $pageCode, callable $translatorFactory)
     {
         $this->translatorFactories[$pageCode] = $translatorFactory;
     }
 
-    /**
-     * @param string $pageCode
-     * @param string $locale
-     * @return Translator
-     */
-    public function getTranslator($pageCode, $locale)
+    public function getTranslator(string $pageCode, string $locale) : Translator
     {
         if (! isset($this->translatorFactories[$pageCode])) {
             throw new UndefinedTranslatorException(sprintf('No translator found for page "%s".', $pageCode));

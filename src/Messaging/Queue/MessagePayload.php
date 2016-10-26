@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidQueueMessagePayloadException;
@@ -24,15 +26,16 @@ class MessagePayload
     /**
      * @return mixed[]
      */
-    public function getPayload()
+    public function getPayload() : array
     {
         return $this->payload;
     }
 
     /**
      * @param mixed[] $payload
+     * @param string $path
      */
-    private function validatePayload(array $payload, $path)
+    private function validatePayload(array $payload, string $path)
     {
         foreach ($payload as $key => $value) {
             if (is_array($value)) {
@@ -52,7 +55,7 @@ class MessagePayload
      * @param mixed $var
      * @return string
      */
-    private function getType($var)
+    private function getType($var) : string
     {
         return is_object($var) ?
             get_class($var) :

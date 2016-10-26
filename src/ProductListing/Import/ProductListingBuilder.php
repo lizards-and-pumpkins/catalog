@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -19,12 +21,7 @@ use LizardsAndPumpkins\Import\XPathParser;
 
 class ProductListingBuilder
 {
-    /**
-     * @param string $xml
-     * @param DataVersion $dataVersion
-     * @return ProductListing
-     */
-    public function createProductListingFromXml($xml, DataVersion $dataVersion)
+    public function createProductListingFromXml(string $xml, DataVersion $dataVersion) : ProductListing
     {
         $parser = new XPathParser($xml);
 
@@ -55,7 +52,7 @@ class ProductListingBuilder
      * @param mixed[] $urlKeyAttributeNode
      * @return string
      */
-    private function getUrlKeyStringFromDomNodeArray(array $urlKeyAttributeNode)
+    private function getUrlKeyStringFromDomNodeArray(array $urlKeyAttributeNode) : string
     {
         if (count($urlKeyAttributeNode) === 0) {
             throw new MissingUrlKeyXmlAttributeException('"url_key" attribute is missing in product listing XML.');
@@ -69,7 +66,7 @@ class ProductListingBuilder
      * @param DataVersion $dataVersion
      * @return string[]
      */
-    private function getFormattedContextData(array $xmlNodeAttributes, DataVersion $dataVersion)
+    private function getFormattedContextData(array $xmlNodeAttributes, DataVersion $dataVersion) : array
     {
         return array_reduce($xmlNodeAttributes, function (array $carry, array $xmlAttribute) {
             if (Product::URL_KEY !== $xmlAttribute['nodeName']) {
@@ -83,7 +80,7 @@ class ProductListingBuilder
      * @param array[] $criteriaNode
      * @return CompositeSearchCriterion
      */
-    private function createSearchCriteria(array $criteriaNode)
+    private function createSearchCriteria(array $criteriaNode) : CompositeSearchCriterion
     {
         $this->validateCriteriaNode($criteriaNode);
 
@@ -103,10 +100,10 @@ class ProductListingBuilder
      * @param array[] $criterionNode
      * @return SearchCriterion
      */
-    private function createCriterion(array $criterionNode)
+    private function createCriterion(array $criterionNode) : SearchCriterion
     {
         $className = $this->getCriterionClassNameForOperation($criterionNode['attributes']['is']);
-        return call_user_func([$className, 'create'], $criterionNode['attributes']['name'], $criterionNode['value']);
+        return new $className($criterionNode['attributes']['name'], $criterionNode['value']);
     }
 
     /**
@@ -145,11 +142,7 @@ class ProductListingBuilder
         }
     }
 
-    /**
-     * @param string $operationName
-     * @return string
-     */
-    private function getCriterionClassNameForOperation($operationName)
+    private function getCriterionClassNameForOperation(string $operationName) : string
     {
         return SearchCriterion::class . $operationName;
     }
@@ -158,7 +151,7 @@ class ProductListingBuilder
      * @param array[] $xmlNodes
      * @return ProductListingAttributeList
      */
-    private function createProductListingAttributeList(array $xmlNodes)
+    private function createProductListingAttributeList(array $xmlNodes) : ProductListingAttributeList
     {
         $attributesArray = $this->getAttributesFromXmlNodes($xmlNodes);
         return ProductListingAttributeList::fromArray($attributesArray);
@@ -168,13 +161,13 @@ class ProductListingBuilder
      * @param array[] $xmlNodes
      * @return mixed[]
      */
-    private function getAttributesFromXmlNodes(array $xmlNodes)
+    private function getAttributesFromXmlNodes(array $xmlNodes) : array
     {
         if (count($xmlNodes) === 0) {
             return [];
         }
 
-        return @array_reduce($xmlNodes[0]['value'], function (array $carry, array $attributeXmlNode) {
+        return array_reduce($xmlNodes[0]['value'], function (array $carry, array $attributeXmlNode) {
             if (!isset($attributeXmlNode['attributes']['name'])) {
                 throw new MissingProductListingAttributeNameXmlAttributeException(
                     'Missing "name" attribute in product listing "attribute" XML node.'

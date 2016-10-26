@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 /**
@@ -8,10 +10,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
  */
 class SearchCriterionLessOrEqualThanTest extends AbstractSearchCriterionTest
 {
-    /**
-     * @return string
-     */
-    final protected function getOperationName()
+    final protected function getOperationName() : string
     {
         return 'LessOrEqualThan';
     }
@@ -19,7 +18,7 @@ class SearchCriterionLessOrEqualThanTest extends AbstractSearchCriterionTest
     /**
      * @return array[]
      */
-    final public function getNonMatchingValues()
+    final public function getNonMatchingValues() : array
     {
         return [
             [['2'], '1'],
@@ -29,7 +28,7 @@ class SearchCriterionLessOrEqualThanTest extends AbstractSearchCriterionTest
     /**
      * @return array[]
      */
-    final public function getMatchingValues()
+    final public function getMatchingValues() : array
     {
         return[
             [['1'], '2'],

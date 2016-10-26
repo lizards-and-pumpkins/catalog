@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
@@ -8,7 +10,7 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
 class InMemoryKeyValueStore implements KeyValueStore, Clearable
 {
     /**
-     * @var array
+     * @var mixed[]
      */
     private $store = [];
 
@@ -16,7 +18,7 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @return mixed
      */
-    public function get($key)
+    public function get(string $key)
     {
         if (!isset($this->store[$key])) {
             throw new KeyNotFoundException(sprintf('Key not found "%s"', $key));
@@ -27,18 +29,13 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
     /**
      * @param string $key
      * @param mixed $value
-     * @return void
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         $this->store[$key] = $value;
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function has($key)
+    public function has(string $key) : bool
     {
         return array_key_exists($key, $this->store);
     }
@@ -47,22 +44,18 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string[] $keys
      * @return mixed[]
      */
-    public function multiGet(array $keys)
+    public function multiGet(string ...$keys) : array
     {
-        $foundValues = [];
-
-        foreach ($keys as $key) {
-            if (array_key_exists($key, $this->store)) {
-                $foundValues[$key] = $this->store[$key];
+        return array_reduce($keys, function ($carry, string $key) {
+            if (!isset($this->store[$key])) {
+                return $carry;
             }
-        }
-
-        return $foundValues;
+            return array_merge($carry, [$key => $this->store[$key]]);
+        }, []);
     }
 
     /**
      * @param mixed[] $items
-     * @return null
      */
     public function multiSet(array $items)
     {

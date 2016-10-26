@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Website;
 
 interface UrlToWebsiteMap
 {
-    /**
-     * @param string $url
-     * @return Website
-     */
-    public function getWebsiteCodeByUrl($url);
+    public function getWebsiteCodeByUrl(string $url) : Website;
 }

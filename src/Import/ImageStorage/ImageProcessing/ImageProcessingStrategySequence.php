@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
 class ImageProcessingStrategySequence implements ImageProcessingStrategy
@@ -14,13 +16,9 @@ class ImageProcessingStrategySequence implements ImageProcessingStrategy
         $this->strategies[] = $strategy;
     }
 
-    /**
-     * @param string $imageBinaryData
-     * @return string
-     */
-    public function processBinaryImageData($imageBinaryData)
+    public function processBinaryImageData(string $imageBinaryData) : string
     {
-        return @array_reduce($this->strategies, function ($carryImageBinaryData, ImageProcessingStrategy $strategy) {
+        return array_reduce($this->strategies, function ($carryImageBinaryData, ImageProcessingStrategy $strategy) {
             return $strategy->processBinaryImageData($carryImageBinaryData);
         }, $imageBinaryData);
     }

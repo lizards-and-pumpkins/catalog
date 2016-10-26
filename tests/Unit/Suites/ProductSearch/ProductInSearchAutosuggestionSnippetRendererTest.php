@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\Context\Context;
@@ -37,7 +39,7 @@ class ProductInSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framewor
      * @param string $dummyProductIdString
      * @return ProductView|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubProductView($dummyProductIdString)
+    private function getStubProductView(string $dummyProductIdString) : ProductView
     {
         $stubProductId = $this->createMock(ProductId::class);
         $stubProductId->method('__toString')->willReturn($dummyProductIdString);

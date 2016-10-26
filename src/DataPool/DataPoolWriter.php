@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -72,7 +74,7 @@ class DataPoolWriter implements Clearable
 
     public function writeUrlKeyCollection(UrlKeyForContextCollection $urlKeysForContextsCollection)
     {
-        @array_map(function (UrlKeyForContext $urlKeyForContext) {
+        array_map(function (UrlKeyForContext $urlKeyForContext) {
             $version = (string) $urlKeyForContext->getContextValue(DataVersion::CONTEXT_CODE);
             $urlKey = (string) $urlKeyForContext->getUrlKey();
             $context = (string) $urlKeyForContext;

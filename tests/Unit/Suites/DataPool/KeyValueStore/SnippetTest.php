@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
@@ -9,6 +11,14 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
  */
 class SnippetTest extends \PHPUnit_Framework_TestCase
 {
+    public function testExceptionIsThrownOnNonStringKey()
+    {
+        $this->expectException(\TypeError::class);
+
+        $content = 'doesn\'t matter';
+        Snippet::create(1, $content);
+    }
+
     /**
      * @dataProvider invalidKeyProvider
      * @param mixed $invalidKey
@@ -22,16 +32,12 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array[]
      */
-    public function invalidKeyProvider()
+    public function invalidKeyProvider() : array
     {
         return [
-            [null],
             [''],
-            [123],
-            [new \stdClass()],
-            [[]],
             ['äöü'],
             ['%'],
             ['$']
@@ -39,10 +45,9 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $validKey
      * @dataProvider validKeyProvider
      */
-    public function testSnippetIsCreatedIfValidKeyIsProvided($validKey)
+    public function testSnippetIsCreatedIfValidKeyIsProvided(string $validKey)
     {
         $content = 'doesn\'t matter';
         $result = Snippet::create($validKey, $content);
@@ -50,9 +55,9 @@ class SnippetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return string[]
+     * @return array[]
      */
-    public function validKeyProvider()
+    public function validKeyProvider() : array
     {
         return [
             ['abcdef'],

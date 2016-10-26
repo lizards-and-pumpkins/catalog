@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -10,6 +12,7 @@ use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
@@ -44,7 +47,7 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mockVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
-        $this->mockVariationAttributeList->method('getAttributes')->willReturn(['test']);
+        $this->mockVariationAttributeList->method('getAttributes')->willReturn([AttributeCode::fromString('test')]);
 
         $this->mockAssociatedProductListBuilder = $this->createMock(AssociatedProductListBuilder::class);
         $this->mockAssociatedProductListBuilder->method('getAssociatedProductListForContext')->willReturn(
@@ -67,9 +70,7 @@ class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAConfigurableProductInstanceForTheGivenContext()
     {
         $stubContext = $this->createMock(Context::class);
-        
         $result = $this->configurableProductBuilder->getProductForContext($stubContext);
-        
         $this->assertInstanceOf(ConfigurableProduct::class, $result);
     }
 

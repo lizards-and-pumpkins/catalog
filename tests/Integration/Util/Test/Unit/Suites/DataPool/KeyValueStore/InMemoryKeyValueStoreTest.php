@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
@@ -53,7 +55,7 @@ class InMemoryKeyValueStoreTest extends \PHPUnit_Framework_TestCase
         $items = array_combine($keys, $values);
 
         $this->store->multiSet($items);
-        $result = $this->store->multiGet($keys);
+        $result = $this->store->multiGet(...$keys);
 
         $this->assertSame($items, $result);
     }

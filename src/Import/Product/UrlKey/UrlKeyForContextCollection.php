@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 class UrlKeyForContextCollection implements \Countable, \IteratorAggregate
@@ -14,18 +16,12 @@ class UrlKeyForContextCollection implements \Countable, \IteratorAggregate
         $this->urlKeysForContext = $urlKeys;
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return count($this->urlKeysForContext);
     }
 
-    /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator() : \Iterator
     {
         return new \ArrayIterator($this->urlKeysForContext);
     }
@@ -33,7 +29,7 @@ class UrlKeyForContextCollection implements \Countable, \IteratorAggregate
     /**
      * @return UrlKeyForContext[]
      */
-    public function getUrlKeys()
+    public function getUrlKeys() : array
     {
         return $this->urlKeysForContext;
     }

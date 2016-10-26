@@ -1,21 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 interface LogMessage
 {
-    /**
-     * @return string
-     */
-    public function __toString();
+    public function __toString() : string;
 
     /**
      * @return mixed[]
      */
-    public function getContext();
+    public function getContext() : array;
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis();
+    public function getContextSynopsis() : string;
 }

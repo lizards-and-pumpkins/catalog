@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Import\Exception\InvalidSnippetContainerCodeException;
@@ -20,7 +22,7 @@ class SnippetContainer
      * @param string $containerCode
      * @param string[] $containedSnippetCodes
      */
-    public function __construct($containerCode, array $containedSnippetCodes)
+    public function __construct(string $containerCode, array $containedSnippetCodes)
     {
         $this->validateContainerCode($containerCode);
         // todo: validate contained snippet codes (via yet to be implemented snippet code value object)
@@ -28,14 +30,8 @@ class SnippetContainer
         $this->containedSnippetCodes = $containedSnippetCodes;
     }
 
-    /**
-     * @param string $containerCode
-     */
-    private function validateContainerCode($containerCode)
+    private function validateContainerCode(string $containerCode)
     {
-        if (!is_string($containerCode)) {
-            throw new InvalidSnippetContainerCodeException('The snippet container code has to be a string');
-        }
         if (strlen($containerCode) < 2) {
             $message = 'The snippet container code has to be at least 2 characters long';
             throw new InvalidSnippetContainerCodeException($message);
@@ -45,17 +41,14 @@ class SnippetContainer
     /**
      * @param string $code
      * @param string[] $containedSnippetCodes
-     * @return static
+     * @return SnippetContainer
      */
-    public static function rehydrate($code, array $containedSnippetCodes)
+    public static function rehydrate(string $code, array $containedSnippetCodes) : SnippetContainer
     {
         return new static($code, $containedSnippetCodes);
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode() : string
     {
         return $this->containerCode;
     }
@@ -63,7 +56,7 @@ class SnippetContainer
     /**
      * @return string[]
      */
-    public function getSnippetCodes()
+    public function getSnippetCodes() : array
     {
         return $this->containedSnippetCodes;
     }
@@ -71,7 +64,7 @@ class SnippetContainer
     /**
      * @return string[]
      */
-    public function toArray()
+    public function toArray() : array
     {
         return [$this->getCode() => $this->getSnippetCodes()];
     }

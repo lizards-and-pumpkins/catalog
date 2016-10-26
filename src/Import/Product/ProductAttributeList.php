@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\ConflictingContextDataForProductAttributeListException;
@@ -21,7 +23,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      * @param mixed[] $attributesArray
      * @return ProductAttributeList
      */
-    public static function fromArray(array $attributesArray)
+    public static function fromArray(array $attributesArray) : ProductAttributeList
     {
         $attributes = array_map(function (array $attributeArray) {
             return ProductAttribute::fromArray($attributeArray);
@@ -54,7 +56,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      */
     private function validateContextPartIsValidInAttributeList(
         ProductAttribute $attribute,
-        $part,
+        string $part,
         array $attributeListContextParts
     ) {
         if (isset($attributeListContextParts[$part])) {
@@ -63,26 +65,18 @@ class ProductAttributeList implements \Countable, \JsonSerializable
         }
     }
 
-    /**
-     * @param string $contextPart
-     * @param string $valueA
-     * @param string $valueB
-     */
-    private function validateContextPartValuesMatch($contextPart, $valueA, $valueB)
+    private function validateContextPartValuesMatch(string $contextPart, string $valueA, string $valueB)
     {
         if ($valueA !== $valueB) {
             throw $this->getConflictingContextDataFoundException($contextPart, $valueA, $valueB);
         }
     }
 
-    /**
-     * @param string $contextPart
-     * @param string $valueA
-     * @param string $valueB
-     * @return ConflictingContextDataForProductAttributeListException
-     */
-    private function getConflictingContextDataFoundException($contextPart, $valueA, $valueB)
-    {
+    private function getConflictingContextDataFoundException(
+        string $contextPart,
+        string $valueA,
+        string $valueB
+    ) : ConflictingContextDataForProductAttributeListException {
         $message = sprintf('Conflicting context "%s" data set values found for attributes ' .
             'to be included in one attribute list: "%s" != "%s"', $contextPart, $valueA, $valueB);
         return new ConflictingContextDataForProductAttributeListException($message);
@@ -96,10 +90,10 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     }
 
     /**
-     * @param string $code
+     * @param string|AttributeCode $code
      * @return ProductAttribute[]
      */
-    public function getAttributesWithCode($code)
+    public function getAttributesWithCode($code) : array
     {
         $attributeCode = AttributeCode::fromString($code);
         if (!$this->hasAttribute($attributeCode)) {
@@ -114,7 +108,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      * @param string|AttributeCode $code
      * @return ProductAttribute[]
      */
-    private function getAttributesByCodeFromArray(array $attributes, $code)
+    private function getAttributesByCodeFromArray(array $attributes, $code) : array
     {
         return array_values(array_filter($attributes, function (ProductAttribute $attribute) use ($code) {
             return $attribute->isCodeEqualTo($code);
@@ -125,7 +119,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
      * @param string|AttributeCode $attributeCode
      * @return bool
      */
-    public function hasAttribute($attributeCode)
+    public function hasAttribute($attributeCode) : bool
     {
         return isset($this->attributeCodes[(string)$attributeCode]);
     }
@@ -133,15 +127,12 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     /**
      * @return AttributeCode[]
      */
-    public function getAttributeCodes()
+    public function getAttributeCodes() : array
     {
         return array_values($this->attributeCodes);
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return count($this->attributes);
     }
@@ -149,7 +140,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     /**
      * @return array[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return array_map(function (ProductAttribute $productAttribute) {
             return $productAttribute->jsonSerialize();
@@ -159,7 +150,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
     /**
      * @return ProductAttribute[]
      */
-    public function getAllAttributes()
+    public function getAllAttributes() : array
     {
         return $this->attributes;
     }

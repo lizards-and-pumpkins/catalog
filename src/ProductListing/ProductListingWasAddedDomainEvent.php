@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -22,29 +24,19 @@ class ProductListingWasAddedDomainEvent implements DomainEvent
         $this->productListing = $productListing;
     }
 
-    /**
-     * @return ProductListing
-     */
-    public function getListingCriteria()
+    public function getListingCriteria() : ProductListing
     {
         return $this->productListing;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $payload = ['listing' => $this->productListing->serialize()];
         $version = DataVersion::fromVersionString($this->productListing->getContextData()[DataVersion::CONTEXT_CODE]);
         return Message::withCurrentTime(self::CODE, $payload, ['data_version' => (string) $version]);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : ProductListingWasAddedDomainEvent
     {
         if ($message->getName() !== self::CODE) {
             throw new NoProductListingWasAddedDomainEventMessage(
@@ -55,10 +47,7 @@ class ProductListingWasAddedDomainEvent implements DomainEvent
         return new self($productListing);
     }
 
-    /**
-     * @return DataVersion
-     */
-    public function getDataVersion()
+    public function getDataVersion() : DataVersion
     {
         return DataVersion::fromVersionString($this->getListingCriteria()->getContextData()[DataVersion::CONTEXT_CODE]);
     }

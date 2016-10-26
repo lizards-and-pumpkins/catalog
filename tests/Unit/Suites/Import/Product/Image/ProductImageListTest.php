@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
@@ -16,7 +18,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
      * @param int $numberOfImages
      * @return ProductImage[]|\PHPUnit_Framework_MockObject_MockObject[]
      */
-    private function createArrayOfStubImagesWithSize($numberOfImages)
+    private function createArrayOfStubImagesWithSize(int $numberOfImages) : array
     {
         if (0 === $numberOfImages) {
             return [];
@@ -32,10 +34,9 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $numberOfImages
      * @dataProvider numberOfImagesProvider
      */
-    public function testItReturnsTheCorrectNumberOfImages($numberOfImages)
+    public function testItReturnsTheCorrectNumberOfImages(int $numberOfImages)
     {
         $stubImages = $this->createArrayOfStubImagesWithSize($numberOfImages);
         $imageList = new ProductImageList(...$stubImages);
@@ -45,7 +46,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function numberOfImagesProvider()
+    public function numberOfImagesProvider() : array
     {
         return [[0], [1], [2], [3]];
     }
@@ -124,7 +125,7 @@ class ProductImageListTest extends \PHPUnit_Framework_TestCase
         $sourceProductImageList = new ProductImageList($productImage);
         
         $json = json_encode($sourceProductImageList);
-        $rehydratedProductImageList = ProductImageList::fromArray(json_decode($json, true));
+        $rehydratedProductImageList = ProductImageList::fromImages(...json_decode($json, true));
         
         $this->assertSame(count($sourceProductImageList), count($rehydratedProductImageList));
     }

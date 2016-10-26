@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
@@ -75,7 +77,7 @@ class HttpHeadersTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function getMalformedHeadersSources()
+    public function getMalformedHeadersSources() : array
     {
         return [
             [['foo' => 1]],

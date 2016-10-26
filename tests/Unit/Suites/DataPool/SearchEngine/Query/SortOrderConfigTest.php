@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;

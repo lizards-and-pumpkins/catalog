@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -29,7 +31,7 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    public function getValues(Product $product, AttributeCode $attributeCode)
+    public function getValues(Product $product, AttributeCode $attributeCode) : array
     {
         $values = $this->useSpecialPriceInsteadOfPrice($product, $attributeCode) ?
             $this->getAttributeValuesFromProduct($product, $this->specialPriceAttribute) :
@@ -41,7 +43,7 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
      * @param mixed $value
      * @return bool
      */
-    private function isSearchableAttributeValue($value)
+    private function isSearchableAttributeValue($value) : bool
     {
         if (!is_scalar($value)) {
             return false;
@@ -54,23 +56,14 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
         return true;
     }
 
-    /**
-     * @param Product $product
-     * @param AttributeCode $attributeCode
-     * @return bool
-     */
-    private function useSpecialPriceInsteadOfPrice(Product $product, AttributeCode $attributeCode)
+    private function useSpecialPriceInsteadOfPrice(Product $product, AttributeCode $attributeCode) : bool
     {
         return $attributeCode->isEqualTo($this->priceAttribute) && $this->hasSpecialPrice($product);
     }
 
-    /**
-     * @param Product $product
-     * @return bool
-     */
-    private function hasSpecialPrice(Product $product)
+    private function hasSpecialPrice(Product $product) : bool
     {
-        return $product->hasAttribute((string) $this->specialPriceAttribute);
+        return $product->hasAttribute($this->specialPriceAttribute);
     }
 
     /**
@@ -78,7 +71,7 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    protected function getAttributeValuesFromProduct(Product $product, AttributeCode $attributeCode)
+    private function getAttributeValuesFromProduct(Product $product, AttributeCode $attributeCode) : array
     {
         return $product->getAllValuesOfAttribute((string) $attributeCode);
     }

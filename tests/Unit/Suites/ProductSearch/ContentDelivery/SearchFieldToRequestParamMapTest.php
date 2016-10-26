@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSearchFieldToQueryParameterMapException;
@@ -37,19 +39,13 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNumericKeys()
     {
-        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
-        $this->expectExceptionMessage(
-            sprintf('The Search Field to Query Parameter Map must have string keys, got "%s"', 0)
-        );
+        $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap([0 => 'test'], []);
     }
 
     public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNonStringValues()
     {
-        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
-        $this->expectExceptionMessage(
-            sprintf('The Search Field to Query Parameter Map must have string values, got "integer"')
-        );
+        $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap(['test' => 0], []);
     }
 
@@ -70,22 +66,16 @@ class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
         );
         new SearchFieldToRequestParamMap(['empty_value' => ''], []);
     }
-    
+
     public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNumericKeys()
     {
-        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
-        $this->expectExceptionMessage(
-            sprintf('The Query Parameter to Search Field Map must have string keys, got "%s"', 0)
-        );
+        $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap([], [0 => 'test']);
     }
 
     public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNonStringValues()
     {
-        $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
-        $this->expectExceptionMessage(
-            sprintf('The Query Parameter to Search Field Map must have string values, got "integer"')
-        );
+        $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap([], ['test' => 0]);
     }
 

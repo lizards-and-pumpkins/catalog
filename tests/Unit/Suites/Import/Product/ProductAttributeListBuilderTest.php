@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -17,7 +19,7 @@ class ProductAttributeListBuilderTest extends \PHPUnit_Framework_TestCase
      * @param mixed[] $contextDataSet
      * @return Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubContextWithDataSet(array $contextDataSet)
+    private function createStubContextWithDataSet(array $contextDataSet) : Context
     {
         $context = $this->createMock(Context::class);
         $context->method('matchesDataSet')->with($contextDataSet)->willReturn(true);

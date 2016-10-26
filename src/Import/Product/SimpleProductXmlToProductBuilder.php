@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
@@ -10,77 +12,53 @@ use LizardsAndPumpkins\Import\XPathParser;
 
 class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
 {
-    /**
-     * @return ProductTypeCode
-     */
-    public function getSupportedProductTypeCode()
+    public function getSupportedProductTypeCode() : ProductTypeCode
     {
         return ProductTypeCode::fromString(SimpleProduct::TYPE_CODE);
     }
     
-    /**
-     * @param XPathParser $parser
-     * @return SimpleProductBuilder
-     */
-    public function createProductBuilder(XPathParser $parser)
+    public function createProductBuilder(XPathParser $parser) : ProductBuilder
     {
-        $productId = ProductId::fromString($this->getSkuFromXml($parser));
+        $productId = new ProductId($this->getSkuFromXml($parser));
         $taxClass = ProductTaxClass::fromString($this->getTaxClassFromXml($parser));
         $attributeListBuilder = $this->createProductAttributeListBuilder($parser);
         $imageListBuilder = $this->createProductImageListBuilder($parser, $productId);
         return new SimpleProductBuilder($productId, $taxClass, $attributeListBuilder, $imageListBuilder);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return string
-     */
-    private function getSkuFromXml(XPathParser $parser)
+    private function getSkuFromXml(XPathParser $parser) : string
     {
         $skuNode = $parser->getXmlNodesArrayByXPath('/product/@sku');
         return $this->getSkuStringFromDomNodeArray($skuNode);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return string
-     */
-    public function getTaxClassFromXml(XPathParser $parser)
+    public function getTaxClassFromXml(XPathParser $parser) : string
     {
         $skuNode = $parser->getXmlNodesArrayByXPath('/product/@tax_class');
         return $this->getTaxClassStringFromDomNodeArray($skuNode);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @return ProductAttributeListBuilder
-     */
-    private function createProductAttributeListBuilder(XPathParser $parser)
+    private function createProductAttributeListBuilder(XPathParser $parser) : ProductAttributeListBuilder
     {
         $attributeNodes = $parser->getXmlNodesArrayByXPath('/product/attributes/attribute');
         $attributesArray = array_map([$this, 'nodeArrayAsAttributeArray'], $attributeNodes);
         return ProductAttributeListBuilder::fromArray($attributesArray);
     }
 
-    /**
-     * @param XPathParser $parser
-     * @param ProductId $productId
-     * @return ProductImageListBuilder
-     */
-    private function createProductImageListBuilder(XPathParser $parser, ProductId $productId)
+    private function createProductImageListBuilder(XPathParser $parser, ProductId $productId) : ProductImageListBuilder
     {
         $imagesNodes = $parser->getXmlNodesArrayByXPath('/product/images/image');
         $imagesArray = array_map(function (array $imageNode) {
             return $imageNode['value'];
         }, array_map([$this, 'nodeArrayAsAttributeArray'], $imagesNodes));
-        return ProductImageListBuilder::fromArray($productId, $imagesArray);
+        return ProductImageListBuilder::fromImageArrays($productId, ...$imagesArray);
     }
 
     /**
      * @param mixed[] $nodeArray
      * @return string
      */
-    private function getSkuStringFromDomNodeArray(array $nodeArray)
+    private function getSkuStringFromDomNodeArray(array $nodeArray) : string
     {
         if (1 !== count($nodeArray)) {
             throw new InvalidNumberOfSkusForImportedProductException(
@@ -95,7 +73,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
      * @param mixed[] $nodeArray
      * @return string
      */
-    private function getTaxClassStringFromDomNodeArray(array $nodeArray)
+    private function getTaxClassStringFromDomNodeArray(array $nodeArray) : string
     {
         if (1 !== count($nodeArray)) {
             throw new TaxClassAttributeMissingForImportedProductException(
@@ -110,7 +88,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
      * @param mixed[] $node
      * @return mixed[]
      */
-    private function nodeArrayAsAttributeArray(array $node)
+    private function nodeArrayAsAttributeArray(array $node) : array
     {
         return [
             ProductAttribute::CODE => $this->getCode($node),
@@ -123,7 +101,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
      * @param mixed[] $node
      * @return string
      */
-    private function getCode(array $node)
+    private function getCode(array $node) : string
     {
         if ('attribute' === $node['nodeName']) {
             return $node['attributes']['name'];
@@ -136,7 +114,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
      * @param string[] $node
      * @return string[]
      */
-    private function getContextParts(array $node)
+    private function getContextParts(array $node) : array
     {
         if ('attribute' === $node['nodeName']) {
             return array_diff_key($node['attributes'], ['name' => null]);

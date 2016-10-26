@@ -1,16 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeValueCombinationNotUniqueException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMismatchException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
+use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
+use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
@@ -49,10 +57,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
      */
     private $mockAssociatedProductList;
 
-    /**
-     * @return ConfigurableProduct
-     */
-    private function createConfigurableProductInstance()
+    private function createConfigurableProductInstance() : ConfigurableProduct
     {
         return new ConfigurableProduct(
             $this->mockSimpleProduct,
@@ -65,7 +70,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockSimpleProduct = $this->createMock(SimpleProduct::class);
         $this->mockVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
-        $this->mockVariationAttributeList->method('getAttributes')->willReturn(['attribute_1', 'attribute_2']);
+        $this->mockVariationAttributeList->method('getAttributes')->willReturn([]);
         $this->mockAssociatedProductList = $this->createMock(AssociatedProductList::class);
         $this->configurableProduct = $this->createConfigurableProductInstance();
     }
@@ -82,7 +87,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheSimpleProductToFetchTheId()
     {
-        $testId = new \stdClass();
+        $testId = new ProductId('foo');
         $this->mockSimpleProduct->method('getId')->willReturn($testId);
         $this->assertSame($testId, $this->configurableProduct->getId());
     }
@@ -109,8 +114,9 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheSimpleProductToCheckIfAnAttributeIsPresent()
     {
-        $this->mockSimpleProduct->method('hasAttribute')->with('test')->willReturn(true);
-        $this->assertTrue($this->configurableProduct->hasAttribute('test'));
+        $dummyAttributeCode = AttributeCode::fromString('test');
+        $this->mockSimpleProduct->method('hasAttribute')->with($dummyAttributeCode)->willReturn(true);
+        $this->assertTrue($this->configurableProduct->hasAttribute($dummyAttributeCode));
     }
 
     public function testItDelegatesToTheSimpleProductToGetAllAttributes()
@@ -168,8 +174,10 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
      * @param string $typeCodeString
      * @dataProvider invalidProductTypeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch($invalidTypeCode, $typeCodeString)
-    {
+    public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch(
+        $invalidTypeCode,
+        string $typeCodeString
+    ) {
         $this->expectException(ProductTypeCodeMismatchException::class);
         $this->expectExceptionMessage(
             sprintf('Expected the product type code string "configurable", got "%s"', $typeCodeString)
@@ -185,7 +193,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidProductTypeCodeProvider()
+    public function invalidProductTypeCodeProvider() : array
     {
         return [
             ['c0nf1gur4b13', 'c0nf1gur4b13'],
@@ -196,16 +204,16 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTheContextFromTheSimpleProductComponent()
     {
-        $testContext = new \stdClass();
-        $this->mockSimpleProduct->method('getContext')->willReturn($testContext);
-        $this->assertSame($testContext, $this->configurableProduct->getContext());
+        $stubContext = $this->createMock(Context::class);
+        $this->mockSimpleProduct->method('getContext')->willReturn($stubContext);
+        $this->assertSame($stubContext, $this->configurableProduct->getContext());
     }
 
     public function testItDelegatesToTheSimpleProductToFetchTheImagesList()
     {
-        $testImageList = new \stdClass;
-        $this->mockSimpleProduct->method('getImages')->willReturn($testImageList);
-        $this->assertSame($testImageList, $this->configurableProduct->getImages());
+        $stubImageList = $this->createMock(ProductImageList::class);
+        $this->mockSimpleProduct->method('getImages')->willReturn($stubImageList);
+        $this->assertSame($stubImageList, $this->configurableProduct->getImages());
     }
 
     public function testItDelegatesToTheSimpleProductToGetTheImageCount()
@@ -216,7 +224,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheSimpleProductToGetAnImageByNumber()
     {
-        $stubImage = new \stdClass();
+        $stubImage = $this->createMock(ProductImage::class);
         $this->mockSimpleProduct->method('getImageByNumber')->with(0)->willReturn($stubImage);
         $this->assertSame($stubImage, $this->configurableProduct->getImageByNumber(0));
     }
@@ -263,7 +271,6 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param AssociatedProductListDomainException $exception
      * @dataProvider associatedProductListValidationFailureExceptionProvider
      */
     public function testItThrowsAnExceptionIfAnAssociatedProductIsMissingVariationAttributes(
@@ -271,7 +278,9 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     ) {
         $this->expectException(ConfigurableProductAssociatedProductListInvariantViolationException::class);
         $this->expectExceptionMessage('Invalid configurable product "test":');
-        $this->mockSimpleProduct->method('getId')->willReturn('test');
+
+        $dummyProductId = new ProductId('test');
+        $this->mockSimpleProduct->method('getId')->willReturn($dummyProductId);
 
         $this->mockAssociatedProductList->method('validateUniqueValueCombinationForEachProductAttribute')
             ->willThrowException($exception);
@@ -281,7 +290,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function associatedProductListValidationFailureExceptionProvider()
+    public function associatedProductListValidationFailureExceptionProvider() : array
     {
         return [
             [new AssociatedProductIsMissingRequiredAttributesException()],
@@ -291,7 +300,8 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItDelegatesToTheSimpleProductToGetTheTaxClass()
     {
-        $this->mockSimpleProduct->method('getTaxClass')->willReturn('test');
-        $this->assertSame('test', $this->configurableProduct->getTaxClass());
+        $stubProductTaxClass = $this->createMock(ProductTaxClass::class);
+        $this->mockSimpleProduct->method('getTaxClass')->willReturn($stubProductTaxClass);
+        $this->assertSame($stubProductTaxClass, $this->configurableProduct->getTaxClass());
     }
 }

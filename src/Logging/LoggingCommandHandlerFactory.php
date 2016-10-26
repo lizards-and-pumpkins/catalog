@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
@@ -22,19 +24,12 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         $this->commandFactoryDelegate = $commandFactoryDelegate;
     }
 
-    /**
-     * @return CommandHandlerFactory
-     */
-    private function getCommandFactoryDelegate()
+    private function getCommandFactoryDelegate() : CommandHandlerFactory
     {
         return $this->commandFactoryDelegate;
     }
 
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createUpdateContentBlockCommandHandler(Message $message)
+    public function createUpdateContentBlockCommandHandler(Message $message) : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
@@ -42,11 +37,7 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         );
     }
 
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createUpdateProductCommandHandler(Message $message)
+    public function createUpdateProductCommandHandler(Message $message) : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
@@ -54,11 +45,7 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         );
     }
 
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createAddProductListingCommandHandler(Message $message)
+    public function createAddProductListingCommandHandler(Message $message) : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
@@ -66,11 +53,7 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         );
     }
 
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createAddImageCommandHandler(Message $message)
+    public function createAddImageCommandHandler(Message $message) : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(

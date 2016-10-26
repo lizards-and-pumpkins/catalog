@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
@@ -28,7 +30,7 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
      * @param string[] $pageSnippetCodes
      * @param SnippetContainer[] $snippetContainers
      */
-    private function __construct($rootSnippetCode, array $pageSnippetCodes, array $snippetContainers)
+    private function __construct(string $rootSnippetCode, array $pageSnippetCodes, array $snippetContainers)
     {
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
@@ -41,8 +43,11 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
      * @param array[] $snippetContainerData
      * @return ProductSearchAutosuggestionMetaSnippetContent
      */
-    public static function create($rootSnippetCode, array $pageSnippetCodes, array $snippetContainerData)
-    {
+    public static function create(
+        string $rootSnippetCode,
+        array $pageSnippetCodes,
+        array $snippetContainerData
+    ) : ProductSearchAutosuggestionMetaSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
 
         if (!in_array($rootSnippetCode, $pageSnippetCodes)) {
@@ -56,18 +61,14 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
      * @param array[] $containerArray
      * @return SnippetContainer[]
      */
-    private static function createSnippetContainers(array $containerArray)
+    private static function createSnippetContainers(array $containerArray) : array
     {
         return array_map(function ($code) use ($containerArray) {
             return new SnippetContainer($code, $containerArray[$code]);
         }, array_keys($containerArray));
     }
 
-    /**
-     * @param string $json
-     * @return ProductSearchAutosuggestionMetaSnippetContent
-     */
-    public static function fromJson($json)
+    public static function fromJson(string $json) : ProductSearchAutosuggestionMetaSnippetContent
     {
         $pageMetaInfo = json_decode($json, true);
 
@@ -91,7 +92,7 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
     /**
      * @return mixed[]
      */
-    public function getInfo()
+    public function getInfo() : array
     {
         return [
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
@@ -100,10 +101,7 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getRootSnippetCode()
+    public function getRootSnippetCode() : string
     {
         return $this->rootSnippetCode;
     }
@@ -111,7 +109,7 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
     /**
      * @return string[]
      */
-    public function getPageSnippetCodes()
+    public function getPageSnippetCodes() : array
     {
         return $this->pageSnippetCodes;
     }
@@ -119,7 +117,7 @@ class ProductSearchAutosuggestionMetaSnippetContent implements PageMetaInfoSnipp
     /**
      * @return array[]
      */
-    public function getContainerSnippets()
+    public function getContainerSnippets() : array
     {
         return array_reduce($this->snippetContainers, function ($carry, SnippetContainer $container) {
             return array_merge($carry, $container->toArray());

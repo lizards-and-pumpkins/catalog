@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
@@ -11,7 +13,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
@@ -78,10 +80,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $addSnippetsToPageSpy;
 
-    /**
-     * @return string
-     */
-    private function createProductDetailPageMetaInfoContentJson()
+    private function createProductDetailPageMetaInfoContentJson() : string
     {
         return json_encode(ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
@@ -91,11 +90,7 @@ class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
         )->getInfo());
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $snippetValue
-     */
-    private function assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $snippetValue)
+    private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {

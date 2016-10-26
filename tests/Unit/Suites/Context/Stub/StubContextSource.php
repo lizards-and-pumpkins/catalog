@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Stub;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -16,7 +18,7 @@ class StubContextSource extends ContextSource
      * @param ContextBuilder $contextBuilder
      * @param array[] $testContextMatrix
      */
-    public function __construct(ContextBuilder $contextBuilder, array $testContextMatrix)
+    final public function __construct(ContextBuilder $contextBuilder, array $testContextMatrix)
     {
         parent::__construct($contextBuilder);
         $this->testContextMatrix = $testContextMatrix;
@@ -25,7 +27,7 @@ class StubContextSource extends ContextSource
     /**
      * @return array[]
      */
-    protected function getContextMatrix()
+    final protected function getContextMatrix() : array
     {
         return $this->testContextMatrix;
     }

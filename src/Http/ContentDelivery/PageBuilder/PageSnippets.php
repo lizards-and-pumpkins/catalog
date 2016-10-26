@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 interface PageSnippets
@@ -7,17 +9,9 @@ interface PageSnippets
     /**
      * @return string[]
      */
-    public function getSnippetCodes();
+    public function getSnippetCodes() : array;
 
-    /**
-     * @param string $snippetCode
-     * @return bool
-     */
-    public function hasSnippetCode($snippetCode);
+    public function hasSnippetCode(string $snippetCode) : bool;
 
-    /**
-     * @param string $snippetCode
-     * @return string
-     */
-    public function getSnippetByCode($snippetCode);
+    public function getSnippetByCode(string $snippetCode) : string;
 }

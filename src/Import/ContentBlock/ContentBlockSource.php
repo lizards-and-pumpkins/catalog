@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 class ContentBlockSource
@@ -42,18 +44,12 @@ class ContentBlockSource
         $this->keyGeneratorParams = $keyGeneratorParams;
     }
 
-    /**
-     * @return ContentBlockId
-     */
-    public function getContentBlockId()
+    public function getContentBlockId() : ContentBlockId
     {
         return $this->contentBlockId;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent() : string
     {
         return $this->content;
     }
@@ -61,7 +57,7 @@ class ContentBlockSource
     /**
      * @return string[]
      */
-    public function getContextData()
+    public function getContextData() : array
     {
         return $this->contextData;
     }
@@ -69,15 +65,12 @@ class ContentBlockSource
     /**
      * @return mixed[]
      */
-    public function getKeyGeneratorParams()
+    public function getKeyGeneratorParams() : array
     {
         return $this->keyGeneratorParams;
     }
 
-    /**
-     * @return string
-     */
-    public function serialize()
+    public function serialize() : string
     {
         return json_encode([
             'id' => (string) $this->contentBlockId,
@@ -87,11 +80,7 @@ class ContentBlockSource
         ]);
     }
 
-    /**
-     * @param string $json
-     * @return ContentBlockSource
-     */
-    public static function rehydrate($json)
+    public static function rehydrate(string $json) : ContentBlockSource
     {
         $data = json_decode($json, true);
         return new self(

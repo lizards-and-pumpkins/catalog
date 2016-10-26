@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -9,11 +11,7 @@ use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
 abstract class ApiRequestHandler implements HttpRequestHandler
 {
-    /**
-     * @param HttpRequest $request
-     * @return GenericHttpResponse
-     */
-    final public function process(HttpRequest $request)
+    final public function process(HttpRequest $request) : HttpResponse
     {
         try {
             $this->processRequest($request);
@@ -32,11 +30,7 @@ abstract class ApiRequestHandler implements HttpRequestHandler
         return GenericHttpResponse::create($response->getBody(), $headers, $response->getStatusCode());
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    abstract protected function getResponse(HttpRequest $request);
+    abstract protected function getResponse(HttpRequest $request) : HttpResponse;
 
     protected function processRequest(HttpRequest $request)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileContentTypeException;
@@ -11,19 +13,16 @@ class FileContent
      */
     private $content;
 
-    /**
-     * @param string|File $content
-     */
-    private function __construct($content)
+    private function __construct(string $content)
     {
         $this->content = $content;
     }
 
     /**
-     * @param string $content
+     * @param mixed $content
      * @return FileContent
      */
-    public static function fromString($content)
+    public static function fromString($content) : FileContent
     {
         if (! self::isCastableToString($content)) {
             throw new InvalidFileContentTypeException(
@@ -37,7 +36,7 @@ class FileContent
      * @param mixed $variable
      * @return string
      */
-    private static function getVariableType($variable)
+    private static function getVariableType($variable) : string
     {
         return is_object($variable) ?
             get_class($variable) :
@@ -48,7 +47,7 @@ class FileContent
      * @param mixed $variable
      * @return bool
      */
-    private static function isCastableToString($variable)
+    private static function isCastableToString($variable): bool
     {
         if (is_array($variable)) {
             return false;
@@ -59,22 +58,15 @@ class FileContent
         return true;
     }
 
-    /**
-     * @param File $file
-     * @return FileContent
-     */
-    public static function fromFile(File $file)
+    public static function fromFile(File $file) : FileContent
     {
-        return new self($file);
+        return new self((string) $file);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->content instanceof File ?
-            $this->content->getContent() :
+            (string) $this->content->getContent() :
             $this->content;
     }
 }

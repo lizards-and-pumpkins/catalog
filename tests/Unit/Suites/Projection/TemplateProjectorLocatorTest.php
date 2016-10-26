@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Projection;
 
 use LizardsAndPumpkins\Import\Projector;
@@ -32,7 +34,7 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNonStringCodeIsPassed()
     {
-        $this->expectException(InvalidTemplateProjectorCodeException::class);
+        $this->expectException(\TypeError::class);
         $this->locator->getTemplateProjectorForCode(1);
     }
 
@@ -45,7 +47,7 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownDuringAttemptToRegisterProjectorWithNonStringCode()
     {
         $invalidTemplateCode = 1;
-        $this->expectException(InvalidTemplateProjectorCodeException::class);
+        $this->expectException(\TypeError::class);
 
         $this->locator->register($invalidTemplateCode, $this->getStubProjector());
     }
@@ -89,10 +91,9 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param  string[] $codesToRegister
      * @dataProvider projectorCodesToRegisterProvider
      */
-    public function testReturnsTheRegisteredProjectorCodes(... $codesToRegister)
+    public function testReturnsTheRegisteredProjectorCodes(string ...$codesToRegister)
     {
         array_map(function ($codeToRegister) {
             $this->locator->register($codeToRegister, $this->getStubProjector());
@@ -103,7 +104,7 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function projectorCodesToRegisterProvider()
+    public function projectorCodesToRegisterProvider() : array
     {
         return [
             'none' => [],

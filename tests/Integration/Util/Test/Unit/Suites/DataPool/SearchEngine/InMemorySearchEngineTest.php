@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -34,18 +36,17 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilde
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  */
 class InMemorySearchEngineTest extends AbstractSearchEngineTest
 {
-    /**
-     * {@inheritdoc}
-     */
     final protected function createSearchEngineInstance(
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
-    ) {
+    ) : SearchEngine {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubGlobalProductListingCriteria */
         $stubGlobalProductListingCriteria = $this->createMock(SearchCriteria::class);
         $stubGlobalProductListingCriteria->method('matches')->willReturn(true);
@@ -58,9 +59,9 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
         $testSearchableFields = ['baz'];
 
         return new InMemorySearchEngine(
-            $testSearchableFields,
             $searchCriteriaBuilder,
-            $facetFieldTransformationRegistry
+            $facetFieldTransformationRegistry,
+            ...$testSearchableFields
         );
     }
 }

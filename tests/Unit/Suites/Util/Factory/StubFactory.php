@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Factory;
 
 class StubFactory implements Factory
@@ -14,11 +16,7 @@ class StubFactory implements Factory
         $this->masterFactory = $masterFactory;
     }
 
-    /**
-     * @param string $parameter
-     * @return string
-     */
-    public function createSomething($parameter)
+    public function createSomething(string $parameter) : string
     {
         return $parameter;
     }

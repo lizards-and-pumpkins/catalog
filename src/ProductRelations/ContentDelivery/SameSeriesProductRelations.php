@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\ProductRelations;
@@ -48,7 +50,7 @@ class SameSeriesProductRelations implements ProductRelations
      * @param ProductId $productId
      * @return ProductId[]
      */
-    public function getById(ProductId $productId)
+    public function getById(ProductId $productId) : array
     {
         $key = $this->productJsonSnippetKeyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
         $productData = json_decode($this->dataPoolReader->getSnippet($key), true);
@@ -62,7 +64,7 @@ class SameSeriesProductRelations implements ProductRelations
      * @param array[] $productData
      * @return bool
      */
-    private function hasRequiredAttributes(array $productData)
+    private function hasRequiredAttributes(array $productData) : bool
     {
         return
             isset($productData['attributes']['series']) &&
@@ -74,7 +76,7 @@ class SameSeriesProductRelations implements ProductRelations
      * @param array[] $productData
      * @return ProductId[]
      */
-    private function getMatchingProductIds(array $productData)
+    private function getMatchingProductIds(array $productData) : array
     {
         $criteria = $this->createCriteria($productData);
         $sortBy = $this->createSortOrderConfig();
@@ -94,16 +96,16 @@ class SameSeriesProductRelations implements ProductRelations
      * @param mixed[] $productData
      * @return CompositeSearchCriterion
      */
-    private function createCriteria(array $productData)
+    private function createCriteria(array $productData) : CompositeSearchCriterion
     {
         return CompositeSearchCriterion::createAnd(
             $this->getBrandCriteria($productData),
             $this->getGenderCriteria($productData),
             $this->getSeriesCriteria($productData),
-            SearchCriterionNotEqual::create('product_id', $productData['product_id']),
+            new SearchCriterionNotEqual('product_id', $productData['product_id']),
             CompositeSearchCriterion::createOr(
-                SearchCriterionGreaterThan::create('stock_qty', 0),
-                SearchCriterionEqual::create('backorders', 'true')
+                new SearchCriterionGreaterThan('stock_qty', 0),
+                new SearchCriterionEqual('backorders', 'true')
             )
         );
     }
@@ -112,7 +114,7 @@ class SameSeriesProductRelations implements ProductRelations
      * @param mixed[] $productData
      * @return SearchCriteria
      */
-    private function getBrandCriteria(array $productData)
+    private function getBrandCriteria(array $productData) : SearchCriteria
     {
         return $this->createSearchCriteriaMatching('brand', $productData['attributes']['brand']);
     }
@@ -121,7 +123,7 @@ class SameSeriesProductRelations implements ProductRelations
      * @param mixed[] $productData
      * @return SearchCriteria
      */
-    private function getGenderCriteria(array $productData)
+    private function getGenderCriteria(array $productData) : SearchCriteria
     {
         return $this->createSearchCriteriaMatching('gender', $productData['attributes']['gender']);
     }
@@ -130,7 +132,7 @@ class SameSeriesProductRelations implements ProductRelations
      * @param mixed[] $productData
      * @return SearchCriteria
      */
-    private function getSeriesCriteria(array $productData)
+    private function getSeriesCriteria(array $productData) : SearchCriteria
     {
         return $this->createSearchCriteriaMatching('series', $productData['attributes']['series']);
     }
@@ -140,20 +142,17 @@ class SameSeriesProductRelations implements ProductRelations
      * @param string|string[] $valueToMatch
      * @return SearchCriteria
      */
-    private function createSearchCriteriaMatching($attributeCode, $valueToMatch)
+    private function createSearchCriteriaMatching(string $attributeCode, $valueToMatch) : SearchCriteria
     {
         if (is_array($valueToMatch)) {
             return CompositeSearchCriterion::createOr(...array_map(function ($value) use ($attributeCode) {
                 return $this->createSearchCriteriaMatching($attributeCode, $value);
             }, $valueToMatch));
         }
-        return SearchCriterionEqual::create($attributeCode, $valueToMatch);
+        return new SearchCriterionEqual($attributeCode, $valueToMatch);
     }
 
-    /**
-     * @return SortOrderConfig
-     */
-    private function createSortOrderConfig()
+    private function createSortOrderConfig() : SortOrderConfig
     {
         return SortOrderConfig::create(
             AttributeCode::fromString('created_at'),

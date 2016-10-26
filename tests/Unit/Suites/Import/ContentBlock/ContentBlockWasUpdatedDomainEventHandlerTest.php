@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
@@ -34,12 +36,7 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_Te
 
     protected function setUp()
     {
-        $testContentBlockSource = new ContentBlockSource(
-            ContentBlockId::fromString('foo'),
-            '',
-            [],
-            []
-        );
+        $testContentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', [], []);
         $this->testMessage = (new ContentBlockWasUpdatedDomainEvent($testContentBlockSource))->toMessage();
         $this->mockProjector = $this->createMock(ContentBlockProjector::class);
 

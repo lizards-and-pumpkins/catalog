@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\Context\Context;
@@ -53,27 +55,18 @@ class GenericSnippetKeyGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $this->keyGenerator);
     }
 
-    /**
-     * @dataProvider invalidTypeSnippetCodeProvider
-     * @param mixed $invalidSnippetType
-     */
-    public function testExceptionIsThrownIfTheSnippetCodeIsNoString($invalidSnippetType)
+    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromNonString()
     {
-        $this->expectException(InvalidSnippetCodeException::class);
-        new GenericSnippetKeyGenerator($invalidSnippetType, $this->dummyContextParts, $this->dummyUsedDataParts);
+        $this->expectException(\TypeError::class);
+        $snippetCode = 1;
+        new GenericSnippetKeyGenerator($snippetCode, $this->dummyContextParts, $this->dummyUsedDataParts);
     }
 
-    /**
-     * @return array[]
-     */
-    public function invalidTypeSnippetCodeProvider()
+    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromAnEmptyString()
     {
-        return [
-            [12],
-            [[]],
-            [1.2],
-            [new \stdClass()],
-        ];
+        $this->expectException(InvalidSnippetCodeException::class);
+        $snippetCode = '';
+        new GenericSnippetKeyGenerator($snippetCode, $this->dummyContextParts, $this->dummyUsedDataParts);
     }
 
     public function testSnippetKeyContainsSnippetCode()

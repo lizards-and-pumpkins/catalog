@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -13,7 +15,7 @@ class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCo
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    public function getValues(Product $product, AttributeCode $attributeCode)
+    public function getValues(Product $product, AttributeCode $attributeCode) : array
     {
         /** @var ConfigurableProduct $product */
         return $this->isConfigurableProduct($product) && $this->isVariationAttribute($product, $attributeCode) ?
@@ -21,12 +23,7 @@ class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCo
             parent::getValues($product, $attributeCode);
     }
 
-    /**
-     * @param ConfigurableProduct $product
-     * @param AttributeCode $attributeCode
-     * @return bool
-     */
-    private function isVariationAttribute(ConfigurableProduct $product, AttributeCode $attributeCode)
+    private function isVariationAttribute(ConfigurableProduct $product, AttributeCode $attributeCode) : bool
     {
         foreach ($product->getVariationAttributes() as $variationAttribute) {
             if ($attributeCode->isEqualTo($variationAttribute)) {
@@ -36,11 +33,7 @@ class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCo
         return false;
     }
 
-    /**
-     * @param Product $product
-     * @return bool
-     */
-    private function isConfigurableProduct(Product $product)
+    private function isConfigurableProduct(Product $product) : bool
     {
         return $product instanceof ConfigurableProduct;
     }
@@ -50,7 +43,7 @@ class ConfigurableProductAttributeValueCollector extends DefaultAttributeValueCo
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    private function getValuesFromAssociatedProducts(ConfigurableProduct $product, AttributeCode $attributeCode)
+    private function getValuesFromAssociatedProducts(ConfigurableProduct $product, AttributeCode $attributeCode) : array
     {
         return array_reduce(
             $product->getAssociatedProducts()->getProducts(),

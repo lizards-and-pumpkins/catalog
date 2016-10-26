@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 /**
@@ -27,7 +29,7 @@ class HttpPutRequestTest extends AbstractHttpRequestTest
             HttpRequest::METHOD_PUT,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
     }
 

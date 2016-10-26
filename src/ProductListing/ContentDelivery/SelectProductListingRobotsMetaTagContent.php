@@ -1,16 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class SelectProductListingRobotsMetaTagContent
 {
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    public function getRobotsMetaTagContentForRequest(HttpRequest $request)
+    public function getRobotsMetaTagContentForRequest(HttpRequest $request) : string
     {
         return $request->hasQueryParameters() ?
             'noindex' :

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -34,8 +36,7 @@ class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testNullIsReturnedIfRequestHandlerIsUnableToProcessRequest()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->getStubRequest();
+        $stubRequest = $this->createStubRequest();
         $this->mockRequestHandler->expects($this->once())->method('canProcess')->willReturn(false);
 
         $this->assertNull($this->router->route($stubRequest));
@@ -43,17 +44,16 @@ class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestHandlerIsReturnedIfRequestHandlerCanProcessRequest()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->getStubRequest();
+        $stubRequest = $this->createStubRequest();
         $this->mockRequestHandler->expects($this->once())->method('canProcess')->willReturn(true);
 
         $this->assertSame($this->mockRequestHandler, $this->router->route($stubRequest));
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubRequest()
+    private function createStubRequest() : HttpRequest
     {
         $stubRequest = $this->createMock(HttpRequest::class);
         $stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/'));

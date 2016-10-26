@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\ProductRelations;
@@ -46,9 +48,8 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
      * @param string $field
      * @param string $condition
      * @param string $value
-     * @return bool
      */
-    private function failIfNotContainsCondition(array $criteria, $field, $condition, $value)
+    private function failIfNotContainsCondition(array $criteria, string $field, string $condition, string $value)
     {
         $expectedCriterion = ['fieldName' => $field, 'fieldValue' => $value, 'operation' => $condition];
 
@@ -60,7 +61,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array[] $criteria
      */
-    private function failIfStockAvailabilityConditionIsNotFound($criteria)
+    private function failIfStockAvailabilityConditionIsNotFound(array $criteria)
     {
         $expectedCriterion = [
             'condition' => CompositeSearchCriterion::OR_CONDITION,
@@ -79,10 +80,13 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
      * @param string $brand
      * @param string $gender
      * @param string $series
-     * @return string
+     * @return mixed[]
      */
-    private function getStubProductDataWithBrandAndGenderAndSeries($brand, $gender, $series)
-    {
+    private function getStubProductDataWithBrandAndGenderAndSeries(
+        string $brand,
+        string $gender,
+        string $series
+    ) : array {
         return [
             'product_id' => 'test',
             'attributes' => [
@@ -112,10 +116,9 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $missingAttribute
      * @dataProvider missingRequiredAttributeProvider
      */
-    public function testItReturnsAnEmptyArrayIfARequiredAttributeIsMissing($missingAttribute)
+    public function testItReturnsAnEmptyArrayIfARequiredAttributeIsMissing(string $missingAttribute)
     {
         /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
         $stubProductId = $this->createMock(ProductId::class);
@@ -131,7 +134,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function missingRequiredAttributeProvider()
+    public function missingRequiredAttributeProvider() : array
     {
         return [
             ['gender'],

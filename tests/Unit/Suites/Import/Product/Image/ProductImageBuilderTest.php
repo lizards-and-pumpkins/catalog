@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Import\Product\Image\Exception\InvalidProductImageAttributeListException;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductId;
 
@@ -32,7 +35,7 @@ class ProductImageBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testProductId = ProductId::fromString('test-sku');
+        $this->testProductId = new ProductId('test-sku');
     }
     
     public function testItReturnsAProductImageBuilderInstanceFromNamedConstructor()

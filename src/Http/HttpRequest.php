@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
@@ -35,11 +37,7 @@ abstract class HttpRequest
         $this->body = $body;
     }
 
-    /**
-     * @param string $requestBody
-     * @return HttpRequest
-     */
-    public static function fromGlobalState($requestBody = '')
+    public static function fromGlobalState(string $requestBody = '') : HttpRequest
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
@@ -50,20 +48,17 @@ abstract class HttpRequest
 
         $url = HttpUrl::fromString($protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
         $headers = HttpHeaders::fromGlobalRequestHeaders();
-        $body = HttpRequestBody::fromString($requestBody);
+        $body = new HttpRequestBody($requestBody);
 
         return self::fromParameters($requestMethod, $url, $headers, $body);
     }
 
-    /**
-     * @param string $requestMethod
-     * @param HttpUrl $url
-     * @param HttpHeaders $headers
-     * @param HttpRequestBody $body
-     * @return HttpRequest
-     */
-    public static function fromParameters($requestMethod, HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
-    {
+    public static function fromParameters(
+        string $requestMethod,
+        HttpUrl $url,
+        HttpHeaders $headers,
+        HttpRequestBody $body
+    ) : HttpRequest {
         switch (strtoupper($requestMethod)) {
             case self::METHOD_GET:
             case self::METHOD_HEAD:
@@ -79,65 +74,43 @@ abstract class HttpRequest
         }
     }
 
-    /**
-     * @return HttpUrl
-     */
-    public function getUrl()
+    public function getUrl() : HttpUrl
     {
         return $this->url;
     }
 
-    /**
-     * @return string
-     */
-    public function getPathWithoutWebsitePrefix()
+    public function getPathWithoutWebsitePrefix() : string
     {
         return $this->getUrl()->getPathWithoutWebsitePrefix();
     }
 
-    /**
-     * @return string
-     */
-    public function getPathWithWebsitePrefix()
+    public function getPathWithWebsitePrefix() : string
     {
-       return $this->getUrl()->getPathWithWebsitePrefix();
+        return $this->getUrl()->getPathWithWebsitePrefix();
     }
 
-    /**
-     * @param string $headerName
-     * @return string
-     */
-    public function getHeader($headerName)
+    public function getHeader(string $headerName) : string
     {
         return $this->headers->get($headerName);
     }
 
-    /**
-     * @return string
-     */
-    public function getRawBody()
+    public function getRawBody() : string
     {
         return $this->body->toString();
     }
 
-    /**
-     * @return string
-     */
-    abstract public function getMethod();
+    abstract public function getMethod() : string;
 
     /**
      * @param string $parameterName
-     * @return string
+     * @return null|string
      */
-    public function getQueryParameter($parameterName)
+    public function getQueryParameter(string $parameterName)
     {
         return $this->url->getQueryParameter($parameterName);
     }
 
-    /**
-     * @return bool
-     */
-    public function hasQueryParameters()
+    public function hasQueryParameters() : bool
     {
         return $this->url->hasQueryParameters();
     }
@@ -145,25 +118,17 @@ abstract class HttpRequest
     /**
      * @return string[]
      */
-    public function getCookies()
+    public function getCookies() : array
     {
         return $_COOKIE;
     }
 
-    /**
-     * @param string $cookieName
-     * @return bool
-     */
-    public function hasCookie($cookieName)
+    public function hasCookie(string $cookieName) : bool
     {
         return isset($_COOKIE[$cookieName]);
     }
 
-    /**
-     * @param string $cookieName
-     * @return string
-     */
-    public function getCookieValue($cookieName)
+    public function getCookieValue(string $cookieName) : string
     {
         if (!$this->hasCookie($cookieName)) {
             throw new CookieNotSetException(sprintf('Cookie with "%s" name is not set.', $cookieName));
@@ -172,10 +137,7 @@ abstract class HttpRequest
         return $_COOKIE[$cookieName];
     }
 
-    /**
-     * @return string
-     */
-    public function getHost()
+    public function getHost() : string
     {
         return $this->url->getHost();
     }

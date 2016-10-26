@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -25,7 +27,7 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
      * @param string[] $variationAttributes
      * @return ProductVariationAttributeList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockVariationAttributeList(array $variationAttributes)
+    private function createMockVariationAttributeList(array $variationAttributes) : ProductVariationAttributeList
     {
         $variationAttributeCodes = array_map(function ($attributeCode) {
             return AttributeCode::fromString($attributeCode);
@@ -39,9 +41,9 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
     /**
      * @param string $variationAttribute
      * @param string[] $values
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductWithAttributeValues($variationAttribute, array $values)
+    private function createMockProductWithAttributeValues($variationAttribute, array $values) : Product
     {
         $stubAssociatedProduct = $this->createMock(Product::class);
         $stubAssociatedProduct->method('getAllValuesOfAttribute')->with($variationAttribute)->willReturn($values);
@@ -49,10 +51,10 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
     }
 
     /**
-     * @param Product[] $associatedProducts
+     * @param \LizardsAndPumpkins\Import\Product\Product[] ...$associatedProducts
      * @return AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockAssociatedProductList(Product ...$associatedProducts)
+    private function createMockAssociatedProductList(Product ...$associatedProducts) : AssociatedProductList
     {
         $stubAssociatedProductList = $this->createMock(AssociatedProductList::class);
         $stubAssociatedProductList->method('getIterator')->willReturn(new \ArrayIterator($associatedProducts));
@@ -76,8 +78,9 @@ class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_
         $stubConfigurableProduct->expects($this->once())
             ->method('getAllValuesOfAttribute')
             ->willReturn(['a value']);
-        
-        $stubConfigurableProduct->method('getVariationAttributes')->willReturn(new \ArrayIterator([]));
+
+        $stubProductVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
+        $stubConfigurableProduct->method('getVariationAttributes')->willReturn($stubProductVariationAttributeList);
 
         $result = $this->valueCollector->getValues($stubConfigurableProduct, AttributeCode::fromString('test'));
         $this->assertSame(['a value'], $result);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidAttributeCodeException;
@@ -20,7 +22,7 @@ class AttributeCode implements \JsonSerializable
     }
 
     /**
-     * @param string $attributeCode
+     * @param string|AttributeCode $attributeCode
      * @return AttributeCode
      */
     public static function fromString($attributeCode)
@@ -32,26 +34,8 @@ class AttributeCode implements \JsonSerializable
         return new self($attributeCode);
     }
 
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private static function getType($variable)
+    private static function validateAttributeCode(string $attributeCode)
     {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
-    }
-
-    /**
-     * @param mixed $attributeCode
-     */
-    private static function validateAttributeCode($attributeCode)
-    {
-        if (!is_string($attributeCode)) {
-            $message = sprintf('The attribute code has to be a string, got "%s"', self::getType($attributeCode));
-            throw new InvalidAttributeCodeException($message);
-        }
         if (strlen($attributeCode) < 3) {
             $message = sprintf('The attribute code has to be at least 3 characters long, got "%s"', $attributeCode);
             throw new InvalidAttributeCodeException($message);
@@ -74,18 +58,12 @@ class AttributeCode implements \JsonSerializable
         }
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->code;
     }
 
-    /**
-     * @return string
-     */
-    public function jsonSerialize()
+    public function jsonSerialize() : string
     {
         return $this->code;
     }
@@ -94,7 +72,7 @@ class AttributeCode implements \JsonSerializable
      * @param string|AttributeCode $attributeCode
      * @return bool
      */
-    public function isEqualTo($attributeCode)
+    public function isEqualTo($attributeCode) : bool
     {
         return $this->code === (string) $attributeCode;
     }

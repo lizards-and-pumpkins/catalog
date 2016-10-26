@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Import\FileStorage\File;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
-use LizardsAndPumpkins\Import\ImageStorage\Image;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 
 class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
@@ -20,13 +22,7 @@ class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
         $this->imageStorage = $imageStorage;
     }
 
-    /**
-     * @param string $imageFileName
-     * @param string $imageVariantCode
-     * @param Context $context
-     * @return Image
-     */
-    public function get($imageFileName, $imageVariantCode, Context $context)
+    public function get(string $imageFileName, string $imageVariantCode, Context $context) : File
     {
         $identifierString = sprintf('product/%s/%s', $imageVariantCode, $imageFileName);
         return $this->imageStorage->getFileReference(StorageAgnosticFileUri::fromString($identifierString));
@@ -35,9 +31,9 @@ class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
     /**
      * @param string $imageVariantCode
      * @param Context $context
-     * @return Image
+     * @return File
      */
-    public function getPlaceholder($imageVariantCode, Context $context)
+    public function getPlaceholder(string $imageVariantCode, Context $context)
     {
         $identifierString = sprintf('product/placeholder/%s.jpg', $imageVariantCode);
         return $this->imageStorage->getFileReference(StorageAgnosticFileUri::fromString($identifierString));
@@ -46,7 +42,7 @@ class IntegrationTestProductImageFileLocator implements ProductImageFileLocator
     /**
      * @return string[]
      */
-    public function getVariantCodes()
+    public function getVariantCodes() : array
     {
         return [
             'small',

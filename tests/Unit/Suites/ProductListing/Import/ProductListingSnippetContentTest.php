@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
@@ -77,10 +80,10 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
+    public function testExceptionIsThrownIfTheRootSnippetCodeIsAnEmptyString()
     {
         $this->expectException(InvalidSnippetCodeException::class);
-        ProductListingSnippetContent::create($this->stubSelectionCriteria, 1.0, [], []);
+        ProductListingSnippetContent::create($this->stubSelectionCriteria, '', [], []);
     }
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
@@ -112,9 +115,8 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
-     * @param string $key
      */
-    public function testExceptionIsThrownIfARequiredKeyIsMissing($key)
+    public function testExceptionIsThrownIfARequiredKeyIsMissing(string $key)
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Missing key in input JSON');
@@ -126,7 +128,7 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function pageInfoArrayKeyProvider()
+    public function pageInfoArrayKeyProvider() : array
     {
         return [
             [ProductListingSnippetContent::KEY_CRITERIA],
@@ -285,7 +287,7 @@ class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
         $result = $metaSnippetContent->getSelectionCriteria();
 
         $className = SearchCriterion::class . $operation;
-        $expectedCriterion = call_user_func([$className, 'create'], $fieldName, $fieldValue);
+        $expectedCriterion = new $className($fieldName, $fieldValue);
         $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion);
 
         $this->assertEquals($expectedCriteria, $result);

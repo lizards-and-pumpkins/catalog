@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Block;
@@ -7,18 +9,12 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 
 class ProductListingDescriptionBlock extends Block
 {
-    /**
-     * @return ProductListing
-     */
-    private function getProductListing()
+    private function getProductListing() : ProductListing
     {
         return $this->getDataObject();
     }
 
-    /**
-     * @return string
-     */
-    public function getListingDescription()
+    public function getListingDescription() : string
     {
         $productListing = $this->getProductListing();
         return $productListing->hasAttribute('description') ?
@@ -26,10 +22,7 @@ class ProductListingDescriptionBlock extends Block
             '';
     }
 
-    /**
-     * @return string
-     */
-    public function getListingTitle()
+    public function getListingTitle() : string
     {
         $productListing = $this->getProductListing();
         return $productListing->hasAttribute('title') ?

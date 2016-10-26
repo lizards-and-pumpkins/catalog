@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
-use LizardsAndPumpkins\Context\DataVersion\Exception\InvalidVersionException;
 
 class DataVersion
 {
@@ -14,16 +15,8 @@ class DataVersion
      */
     private $version;
 
-    /**
-     * @param string $version
-     * @return DataVersion
-     */
-    public static function fromVersionString($version)
+    public static function fromVersionString(string $version) : DataVersion
     {
-        if (!is_string($version)) {
-            throw new InvalidVersionException(sprintf('Data version must be a string, got %s.', gettype($version)));
-        }
-
         if (trim($version) === '') {
             throw new EmptyVersionException('The specified version is empty.');
         }
@@ -31,18 +24,12 @@ class DataVersion
         return new self($version);
     }
 
-    /**
-     * @param string $version
-     */
-    private function __construct($version)
+    private function __construct(string $version)
     {
         $this->version = $version;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->version;
     }

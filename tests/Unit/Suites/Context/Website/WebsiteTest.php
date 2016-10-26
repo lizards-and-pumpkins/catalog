@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
@@ -12,15 +14,14 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     public function testItThrowsAnExceptionIfTheInputIsNotAString()
     {
         $this->expectException(InvalidWebsiteCodeException::class);
-        $this->expectExceptionMessage('The website code must be a string, got "');
+        $this->expectExceptionMessage('The website code must be a string, got "integer"');
         Website::fromString(123);
     }
 
     /**
-     * @param string $emptyWebsiteCode
      * @dataProvider emptyWebsiteCodeDataProvider
      */
-    public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty($emptyWebsiteCode)
+    public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty(string $emptyWebsiteCode)
     {
         $this->expectException(InvalidWebsiteCodeException::class);
         $this->expectExceptionMessage('The website code may not be empty');
@@ -30,7 +31,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyWebsiteCodeDataProvider()
+    public function emptyWebsiteCodeDataProvider() : array
     {
         return [
             [''],
@@ -44,10 +45,9 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $websiteCode
      * @dataProvider websiteCodeDataProvider
      */
-    public function testItReturnsTheWebsiteCodeAsAString($websiteCode)
+    public function testItReturnsTheWebsiteCodeAsAString(string $websiteCode)
     {
         $this->assertSame($websiteCode, (string) Website::fromString($websiteCode));
     }
@@ -55,7 +55,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function websiteCodeDataProvider()
+    public function websiteCodeDataProvider() : array
     {
         return [
             ['abc'],

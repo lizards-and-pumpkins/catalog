@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeCodeException;
@@ -13,8 +15,7 @@ class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
 {
     public function testExceptionIsThrownIfAttributeCodeIsNotAString()
     {
-        $this->expectException(InvalidProductListingAttributeCodeException::class);
-        $this->expectExceptionMessage('Product listing attribute code must be a string, got "integer".');
+        $this->expectException(\TypeError::class);
 
         $attributeCode = 0;
         $attributeValue = 'foo';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -35,27 +37,19 @@ class ProductCanonicalTagSnippetRenderer implements SnippetRenderer
      * @param ProductView $productView
      * @return Snippet[]
      */
-    public function render(ProductView $productView)
+    public function render(ProductView $productView) : array
     {
         return [Snippet::create($this->createSnippetKey($productView), $this->createSnippetContent($productView))];
     }
 
-    /**
-     * @param ProductView $productView
-     * @return string
-     */
-    private function createSnippetContent(ProductView $productView)
+    private function createSnippetContent(ProductView $productView) : string
     {
         $urlKey = $productView->getFirstValueOfAttribute(Product::URL_KEY);
         $baseUrl = $this->baseUrlBuilder->create($productView->getContext());
         return sprintf('<link rel="canonical" href="%s%s" />', $baseUrl, $urlKey);
     }
 
-    /**
-     * @param ProductView $productView
-     * @return string
-     */
-    private function createSnippetKey(ProductView $productView)
+    private function createSnippetKey(ProductView $productView) : string
     {
         return $this->canonicalTagSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),

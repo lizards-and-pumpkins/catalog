@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
@@ -60,7 +62,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return array[]
      */
-    public function get(ProductId ...$productIds)
+    public function get(ProductId ...$productIds) : array
     {
         return $this->buildProductData(
             $this->getProductJsonSnippetKeys($productIds),
@@ -73,7 +75,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getProductJsonSnippetKeys(array $productIds)
+    private function getProductJsonSnippetKeys(array $productIds) : array
     {
         return $this->getSnippetKeys($productIds, $this->productJsonSnippetKeyGenerator);
     }
@@ -82,7 +84,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getPriceSnippetKeys(array $productIds)
+    private function getPriceSnippetKeys(array $productIds) : array
     {
         return $this->getSnippetKeys($productIds, $this->priceSnippetKeyGenerator);
     }
@@ -91,7 +93,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getSpecialPriceSnippetKeys(array $productIds)
+    private function getSpecialPriceSnippetKeys(array $productIds) : array
     {
         return $this->getSnippetKeys($productIds, $this->specialPriceSnippetKeyGenerator);
     }
@@ -101,7 +103,7 @@ class ProductJsonService
      * @param SnippetKeyGenerator $keyGenerator
      * @return string[]
      */
-    private function getSnippetKeys(array $productIds, SnippetKeyGenerator $keyGenerator)
+    private function getSnippetKeys(array $productIds, SnippetKeyGenerator $keyGenerator) : array
     {
         return array_map(function (ProductId $productId) use ($keyGenerator) {
             return $keyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
@@ -114,8 +116,11 @@ class ProductJsonService
      * @param string[] $specialPriceSnippetKeys
      * @return array[]
      */
-    private function buildProductData($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys)
-    {
+    private function buildProductData(
+        array $productJsonSnippetKeys,
+        array $priceSnippetKeys,
+        array $specialPriceSnippetKeys
+    ) : array {
         $snippets = $this->getSnippets($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
 
         return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($snippets) {
@@ -133,8 +138,11 @@ class ProductJsonService
      * @param string[] $specialPriceSnippetKeys
      * @return string[]
      */
-    private function getSnippets($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys)
-    {
+    private function getSnippets(
+        array $productJsonSnippetKeys,
+        array $priceSnippetKeys,
+        array $specialPriceSnippetKeys
+    ) : array {
         $keys = array_merge($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
         return $this->dataPoolReader->getSnippets($keys);
     }

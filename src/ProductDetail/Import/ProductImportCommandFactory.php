@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
@@ -12,5 +14,5 @@ interface ProductImportCommandFactory extends Factory
      * @param Product $product
      * @return Command[]
      */
-    public function createProductImportCommands(Product $product);
+    public function createProductImportCommands(Product $product) : array;
 }

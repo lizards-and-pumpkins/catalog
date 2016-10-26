@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -33,7 +35,7 @@ class ImageImportTest extends AbstractIntegrationTest
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 

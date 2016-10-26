@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Import\Product\Image\Exception\InvalidProductImageAttributeListException;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -24,7 +27,7 @@ class ProductImageBuilder
      * @param array[] $imageAttributesArray
      * @return ProductImageBuilder
      */
-    public static function fromArray(ProductId $productId, array $imageAttributesArray)
+    public static function fromArray(ProductId $productId, array $imageAttributesArray) : ProductImageBuilder
     {
         self::validateImageAttributesArray($productId, $imageAttributesArray);
         return new self(ProductAttributeListBuilder::fromArray($imageAttributesArray));
@@ -44,8 +47,11 @@ class ProductImageBuilder
      * @param array[] $imageAttributesArray
      * @param string $code
      */
-    private static function validateItHasGivenImageAttribute(ProductId $productId, array $imageAttributesArray, $code)
-    {
+    private static function validateItHasGivenImageAttribute(
+        ProductId $productId,
+        array $imageAttributesArray,
+        string $code
+    ) {
         if (!self::isAttributeInArray($code, $imageAttributesArray)) {
             $message = sprintf('The image attribute "%s" is missing for product "%s"', $code, $productId);
             throw new InvalidProductImageAttributeListException($message);
@@ -57,18 +63,14 @@ class ProductImageBuilder
      * @param array[] $attributesArray
      * @return bool
      */
-    private static function isAttributeInArray($code, array $attributesArray)
+    private static function isAttributeInArray(string $code, array $attributesArray) : bool
     {
         return array_reduce($attributesArray, function ($found, array $attribute) use ($code) {
             return $found || isset($attribute[ProductAttribute::CODE]) && $attribute[ProductAttribute::CODE] === $code;
         }, false);
     }
 
-    /**
-     * @param Context $context
-     * @return ProductImage
-     */
-    public function getImageForContext(Context $context)
+    public function getImageForContext(Context $context) : ProductImage
     {
         $attributes = $this->attributeListBuilder->getAttributeListForContext($context);
         return new ProductImage($attributes);

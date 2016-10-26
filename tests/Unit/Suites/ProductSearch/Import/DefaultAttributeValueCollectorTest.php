@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -63,7 +65,7 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidAttributeValueProvider()
+    public function invalidAttributeValueProvider() : array
     {
         return [
             ['non-scalar' => ['x', 'y']],

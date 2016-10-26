@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 interface SearchDocumentBuilder
@@ -8,5 +10,5 @@ interface SearchDocumentBuilder
      * @param mixed $projectionSourceDataData
      * @return SearchDocument
      */
-    public function aggregate($projectionSourceDataData);
+    public function aggregate($projectionSourceDataData) : SearchDocument;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockDoesNotExistException;
@@ -14,6 +16,41 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
      * @var BlockStructure
      */
     private $blockStructure;
+
+    /**
+     * @return Block|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStubBlock() : Block
+    {
+        return $this->createMock(Block::class);
+    }
+
+    /**
+     * @param string $blockName
+     * @return Block|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getStubBlockWithName(string $blockName) : Block
+    {
+        $stubBlock = $this->getStubBlock();
+        $stubBlock->method('getBlockName')->willReturn($blockName);
+        return $stubBlock;
+    }
+
+    private function assertParentHasChild(string $parentName, string $childName)
+    {
+        $property = new \ReflectionProperty($this->blockStructure, 'blockChildren');
+        $property->setAccessible(true);
+        $childBlocks = $property->getValue($this->blockStructure);
+        $this->assertTrue(
+            array_key_exists($parentName, $childBlocks),
+            sprintf('No children blocks set for parent "%s"', $parentName)
+        );
+        $this->assertContains(
+            $childName,
+            $childBlocks[$parentName],
+            sprintf('The child block "%s" is not set for the parent block "%s"', $childName, $parentName)
+        );
+    }
 
     protected function setUp()
     {
@@ -129,45 +166,5 @@ class BlockStructureTest extends \PHPUnit_Framework_TestCase
         $this->blockStructure->addBlock($stubChildBlock);
         $this->blockStructure->setParentBlock($parentName, $stubChildBlock);
         $this->assertSame($stubChildBlock, $this->blockStructure->getChildBlock($parentName, $childName));
-    }
-
-    /**
-     * @return Block|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubBlock()
-    {
-        return $this->createMock(Block::class);
-    }
-
-    /**
-     * @param string $blockName
-     * @return Block|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubBlockWithName($blockName)
-    {
-        $stubBlock = $this->getStubBlock();
-        $stubBlock->method('getBlockName')
-            ->willReturn($blockName);
-        return $stubBlock;
-    }
-
-    /**
-     * @param string $parentName
-     * @param string $childName
-     */
-    private function assertParentHasChild($parentName, $childName)
-    {
-        $property = new \ReflectionProperty($this->blockStructure, 'blockChildren');
-        $property->setAccessible(true);
-        $childBlocks = $property->getValue($this->blockStructure);
-        $this->assertTrue(
-            array_key_exists($parentName, $childBlocks),
-            sprintf('No children blocks set for parent "%s"', $parentName)
-        );
-        $this->assertContains(
-            $childName,
-            $childBlocks[$parentName],
-            sprintf('The child block "%s" is not set for the parent block "%s"', $childName, $parentName)
-        );
     }
 }

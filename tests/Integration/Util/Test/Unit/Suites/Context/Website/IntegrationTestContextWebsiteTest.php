@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
@@ -30,10 +32,9 @@ class IntegrationTestContextWebsiteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $websiteCode
      * @dataProvider websiteCodeProvider
      */
-    public function testItReturnsTheWebsiteIfPresentInTheInput($websiteCode)
+    public function testItReturnsTheWebsiteIfPresentInTheInput(string $websiteCode)
     {
         $inputDataSet = [Website::CONTEXT_CODE => $websiteCode];
         $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet));
@@ -42,7 +43,7 @@ class IntegrationTestContextWebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function websiteCodeProvider()
+    public function websiteCodeProvider() : array
     {
         return [['foo'], ['bar']];
     }

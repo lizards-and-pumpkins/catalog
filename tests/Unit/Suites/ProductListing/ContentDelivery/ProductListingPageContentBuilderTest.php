@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
@@ -96,7 +98,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockPageBuilder()
+    private function createMockPageBuilder() : PageBuilder
     {
         $mockPageBuilder = $this->createMock(PageBuilder::class);
 
@@ -106,10 +108,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         return $mockPageBuilder;
     }
 
-    /**
-     * @param string $snippetCode
-     */
-    private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode)
+    private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder(string $snippetCode)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function ($invocation) use ($snippetCode) {
             return intval([$snippetCode => $snippetCode] === $invocation->parameters[0]);
@@ -122,11 +121,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $snippetValue
-     */
-    private function assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $snippetValue)
+    private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {
@@ -145,7 +140,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubSearchEngineResponse()
+    private function createStubSearchEngineResponse() : SearchEngineResponse
     {
         $stubProductId = $this->createMock(ProductId::class);
         $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
@@ -307,8 +302,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testInitialSortOrderConfigSnippetIsAddedToPageBuilder()
     {
-        $selectedSortOrderConfigRepresentation = 'selected-sort-order-config';
-        $initialSortOrderConfigRepresentation = 'initial-sort-order-config';
+        $selectedSortOrderConfigRepresentation = ['selected-sort-order-config'];
+        $initialSortOrderConfigRepresentation = ['initial-sort-order-config'];
 
         $stubAttributeCode = $this->createMock(AttributeCode::class);
 
@@ -338,8 +333,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testUserSelectedSortOrderConfigSnippetIsAddedToPageBuilder()
     {
-        $selectedSortOrderConfigRepresentation = 'selected-sort-order-config';
-        $initialSortOrderConfigRepresentation = 'initial-sort-order-config';
+        $selectedSortOrderConfigRepresentation = ['selected-sort-order-config'];
+        $initialSortOrderConfigRepresentation = ['initial-sort-order-config'];
 
         $stubAttributeCodeA = $this->createMock(AttributeCode::class);
         $stubAttributeCodeA->method('__toString')->willReturn('A');

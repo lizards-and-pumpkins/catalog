@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryDoesNotExistException;
@@ -115,11 +117,8 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getRelativePath
-     * @param string $basePath
-     * @param string $path
-     * @param string $expected
      */
-    public function testRelativePathIsReturned($basePath, $path, $expected)
+    public function testRelativePathIsReturned(string $basePath, string $path, string $expected)
     {
         $this->assertSame($expected, $this->filesystem->getRelativePath($basePath, $path));
     }
@@ -127,7 +126,7 @@ class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function getRelativePath()
+    public function getRelativePath() : array
     {
         return [
             'path within bp' => ['/base/path', '/base/path/file', 'file'],

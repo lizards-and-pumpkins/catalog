@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -74,10 +76,7 @@ class CatalogImport
         $this->logger = $logger;
     }
 
-    /**
-     * @param string $importFilePath
-     */
-    public function importFile($importFilePath)
+    public function importFile(string $importFilePath)
     {
         // Todo: once all projectors support using the passed data version of context data sets, use the UUID version
         $this->dataVersion = DataVersion::fromVersionString('-1'); // UuidGenerator::getUuid()
@@ -90,10 +89,7 @@ class CatalogImport
         $this->addCatalogImportedDomainEvent();
     }
 
-    /**
-     * @param string $importFilePath
-     */
-    private function validateImportFilePath($importFilePath)
+    private function validateImportFilePath(string $importFilePath)
     {
         if (!file_exists($importFilePath)) {
             throw new CatalogImportFileDoesNotExistException(
@@ -107,21 +103,14 @@ class CatalogImport
         }
     }
 
-    /**
-     * @param string $methodName
-     * @return \Closure
-     */
-    private function createClosureForMethod($methodName)
+    private function createClosureForMethod(string $methodName) : \Closure
     {
         return function (...$args) use ($methodName) {
             return $this->{$methodName}(...$args);
         };
     }
 
-    /**
-     * @param string $productXml
-     */
-    private function processProductXml($productXml)
+    private function processProductXml(string $productXml)
     {
         try {
             $this->addProductsAndProductImagesToQueue($productXml);
@@ -134,10 +123,7 @@ class CatalogImport
         }
     }
 
-    /**
-     * @param string $productXml
-     */
-    public function addProductsAndProductImagesToQueue($productXml)
+    public function addProductsAndProductImagesToQueue(string $productXml)
     {
         $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
         $contexts = $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion);
@@ -150,10 +136,7 @@ class CatalogImport
         });
     }
 
-    /**
-     * @param string $productXml
-     */
-    private function processImagesInProductXml($productXml)
+    private function processImagesInProductXml(string $productXml)
     {
         $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
         every($imageNodes, function ($productImageXml) {
@@ -161,10 +144,7 @@ class CatalogImport
         });
     }
 
-    /**
-     * @param string $productImageXml
-     */
-    private function processProductImageXml($productImageXml)
+    private function processProductImageXml(string $productImageXml)
     {
         try {
             $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
@@ -175,10 +155,7 @@ class CatalogImport
         }
     }
 
-    /**
-     * @param string $listingXml
-     */
-    private function processListingXml($listingXml)
+    private function processListingXml(string $listingXml)
     {
         try {
             $productListing = $this->productListingBuilder

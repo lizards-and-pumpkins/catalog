@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Config;
 
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
-use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotAStringException;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
@@ -18,10 +19,10 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
     {
-        $this->expectException(EnvironmentConfigKeyIsNotAStringException::class);
-        $this->expectExceptionMessage('The given environment configuration key is not a string: "');
+        $this->expectException(\TypeError::class);
         EnvironmentConfigReader::fromArray([])->has(123);
     }
+
 
     public function testTheHasMethodThrowsAnExceptionIfTheGivenKeyIsEmpty()
     {
@@ -41,18 +42,10 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(EnvironmentConfigReader::fromArray($environmentConfig)->has('test'));
     }
 
-    public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsNotAString()
-    {
-        $this->expectException(EnvironmentConfigKeyIsNotAStringException::class);
-        $this->expectExceptionMessage('The given environment configuration key is not a string: "');
-        EnvironmentConfigReader::fromArray([])->get(123);
-    }
-
     /**
-     * @param string $emptyConfigKey
      * @dataProvider emptyConfigKeyProvider
      */
-    public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsEmpty($emptyConfigKey)
+    public function testTheGetMethodThrowsAnExceptionIfTheGivenKeyIsEmpty(string $emptyConfigKey)
     {
         $this->expectException(EnvironmentConfigKeyIsEmptyException::class);
         $this->expectExceptionMessage('The given environment configuration key is empty.');
@@ -62,7 +55,7 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyConfigKeyProvider()
+    public function emptyConfigKeyProvider() : array
     {
         return [
             [''],

@@ -1,12 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\View;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Import\FileStorage\File;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
+use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 
@@ -22,18 +27,12 @@ abstract class AbstractProductView implements ProductView
      */
     abstract protected function getProductImageFileLocator();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getId() : ProductId
     {
         return $this->getOriginalProduct()->getId();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFirstValueOfAttribute($attributeCode)
+    public function getFirstValueOfAttribute(string $attributeCode) : string
     {
         $attributeValues = $this->getAllValuesOfAttribute($attributeCode);
 
@@ -45,9 +44,10 @@ abstract class AbstractProductView implements ProductView
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $attributeCode
+     * @return string[]
      */
-    public function getAllValuesOfAttribute($attributeCode)
+    public function getAllValuesOfAttribute(string $attributeCode) : array
     {
         $attributeList = $this->getAttributes();
 
@@ -60,18 +60,12 @@ abstract class AbstractProductView implements ProductView
         }, $attributeList->getAttributesWithCode($attributeCode));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasAttribute($attributeCode)
+    public function hasAttribute(string $attributeCode) : bool
     {
         return $this->getAttributes()->hasAttribute($attributeCode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributes()
+    public function getAttributes() : ProductAttributeList
     {
         if (null === $this->memoizedProductAttributes) {
             $attributesArray = $this->getOriginalProduct()->getAttributes()->getAllAttributes();
@@ -82,39 +76,23 @@ abstract class AbstractProductView implements ProductView
         return $this->memoizedProductAttributes;
     }
 
-    /**
-     * @param ProductAttribute $attribute
-     * @return bool
-     */
-    protected function isAttributePublic(ProductAttribute $attribute)
+    protected function isAttributePublic(ProductAttribute $attribute) : bool
     {
         return !in_array($attribute->getCode(), [PriceSnippetRenderer::PRICE, PriceSnippetRenderer::SPECIAL_PRICE]);
     }
 
-    /**
-     * @param ProductAttribute $attribute
-     * @return ProductAttribute
-     */
-    protected function getProcessedAttribute(ProductAttribute $attribute)
+    protected function getProcessedAttribute(ProductAttribute $attribute) : ProductAttribute
     {
         // Hook method to allow the processing of attribute values
         return $attribute;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getContext()
+    public function getContext() : Context
     {
         return $this->getOriginalProduct()->getContext();
     }
 
-    /**
-     * @param ProductImage $productImage
-     * @param string $variation
-     * @return Image
-     */
-    private function convertImage(ProductImage $productImage, $variation)
+    private function convertImage(ProductImage $productImage, string $variation) : File
     {
         return $this->getProductImageFileLocator()->get(
             $productImage->getFileName(),
@@ -124,68 +102,53 @@ abstract class AbstractProductView implements ProductView
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $variantCode
+     * @return Image[]
      */
-    public function getImages($variantCode)
+    public function getImages(string $variantCode) : array
     {
         return array_map(function (ProductImage $productImage) use ($variantCode) {
             return $this->convertImage($productImage, $variantCode);
         }, iterator_to_array($this->getOriginalProduct()->getImages()));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getImageCount()
+    public function getImageCount() : int
     {
         return $this->getOriginalProduct()->getImageCount();
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $imageNumber
+     * @param string $variantCode
+     * @return File|ProductImage
      */
-    public function getImageByNumber($imageNumber, $variantCode)
+    public function getImageByNumber(int $imageNumber, string $variantCode)
     {
         return $imageNumber > $this->getImageCount() ?
             $this->getPlaceholderImage($variantCode) :
             $this->convertImage($this->getOriginalProduct()->getImageByNumber($imageNumber), $variantCode);
     }
 
-    /**
-     * @param int $imageNumber
-     * @param string $variantCode
-     * @return HttpUrl
-     */
-    public function getImageUrlByNumber($imageNumber, $variantCode)
+    public function getImageUrlByNumber(int $imageNumber, string $variantCode) : HttpUrl
     {
         return $this->getImageByNumber($imageNumber, $variantCode)->getUrl($this->getContext());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getImageLabelByNumber($imageNumber)
+    public function getImageLabelByNumber(int $imageNumber) : string
     {
         return $imageNumber > $this->getImageCount() ?
             $this->getPlaceholderImageLabel() :
             $this->getOriginalProduct()->getImageLabelByNumber($imageNumber);
     }
 
-    /**
-     * @param string $variantCode
-     * @return HttpUrl
-     */
-    public function getMainImageUrl($variantCode)
+    public function getMainImageUrl(string $variantCode) : HttpUrl
     {
         return $this->getImageCount() === 0 ?
             $this->getPlaceholderImageUrl($variantCode) :
             $this->getImageUrlByNumber(0, $variantCode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMainImageLabel()
+    public function getMainImageLabel() : string
     {
         return $this->getImageCount() === 0 ?
             $this->getPlaceholderImageLabel() :
@@ -193,9 +156,9 @@ abstract class AbstractProductView implements ProductView
     }
 
     /**
-     * {@inheritdoc}
+     * @return mixed[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         $original = $this->getOriginalProduct()->jsonSerialize();
         return $this->transformProductJson($original);
@@ -205,7 +168,7 @@ abstract class AbstractProductView implements ProductView
      * @param mixed[] $productData
      * @return mixed[]
      */
-    protected function transformProductJson(array $productData)
+    protected function transformProductJson(array $productData) : array
     {
         return array_reduce(array_keys($productData), function (array $carry, $key) use ($productData) {
             switch ($key) {
@@ -234,7 +197,7 @@ abstract class AbstractProductView implements ProductView
      * @param array[] $attributes
      * @return array[]
      */
-    private function transformAttributeDataToKeyValueMap(array $attributes)
+    private function transformAttributeDataToKeyValueMap(array $attributes) : array
     {
         return array_reduce($attributes, function (array $carry, array $attribute) {
             $code = $attribute[ProductAttribute::CODE];
@@ -260,7 +223,7 @@ abstract class AbstractProductView implements ProductView
      * @param string|string[] $existing
      * @return string[]
      */
-    private function getAttributeValuesAsArray(array $attribute, $existing)
+    private function getAttributeValuesAsArray(array $attribute, $existing) : array
     {
         $existingValues = is_array($existing) ?
             $existing :
@@ -270,26 +233,19 @@ abstract class AbstractProductView implements ProductView
 
     /**
      * @param string $variantCode
-     * @return Image
+     * @return ProductImage
      */
-    protected function getPlaceholderImage($variantCode)
+    protected function getPlaceholderImage(string $variantCode)
     {
         return $this->getProductImageFileLocator()->getPlaceholder($variantCode, $this->getContext());
     }
 
-    /**
-     * @param string $variantCode
-     * @return HttpUrl
-     */
-    protected function getPlaceholderImageUrl($variantCode)
+    protected function getPlaceholderImageUrl(string $variantCode) : HttpUrl
     {
         return $this->getPlaceholderImage($variantCode)->getUrl($this->getContext());
     }
 
-    /**
-     * @return string
-     */
-    protected function getPlaceholderImageLabel()
+    protected function getPlaceholderImageLabel() : string
     {
         return '';
     }
@@ -297,7 +253,7 @@ abstract class AbstractProductView implements ProductView
     /**
      * @return array[]
      */
-    final protected function getAllProductImageUrls()
+    final protected function getAllProductImageUrls() : array
     {
         $imageUrls = [];
         foreach ($this->getProductImageFileLocator()->getVariantCodes() as $variantCode) {
@@ -314,7 +270,7 @@ abstract class AbstractProductView implements ProductView
      * @param string $variantCode
      * @return array[]
      */
-    private function getProductImagesAsImageArray($variantCode)
+    private function getProductImagesAsImageArray(string $variantCode) : array
     {
         return array_map(function (ProductImage $productImage) use ($variantCode) {
             return $this->imageToArray($this->convertImage($productImage, $variantCode), $productImage->getLabel());
@@ -325,7 +281,7 @@ abstract class AbstractProductView implements ProductView
      * @param string $variantCode
      * @return string[]
      */
-    private function getPlaceholderImageArray($variantCode)
+    private function getPlaceholderImageArray(string $variantCode) : array
     {
         $placeholder = $this->getProductImageFileLocator()->getPlaceholder($variantCode, $this->getContext());
         return $this->imageToArray($placeholder, '');
@@ -336,7 +292,7 @@ abstract class AbstractProductView implements ProductView
      * @param string $label
      * @return string[]
      */
-    private function imageToArray(Image $image, $label)
+    private function imageToArray(Image $image, string $label) : array
     {
         return ['url' => (string) $image->getUrl($this->getContext()), 'label' => $label];
     }

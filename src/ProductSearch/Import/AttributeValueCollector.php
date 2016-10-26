@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -12,5 +14,5 @@ interface AttributeValueCollector
      * @param AttributeCode $attributeCode
      * @return string[]
      */
-    public function getValues(Product $product, AttributeCode $attributeCode);
+    public function getValues(Product $product, AttributeCode $attributeCode) : array;
 }

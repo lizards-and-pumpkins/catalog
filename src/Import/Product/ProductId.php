@@ -1,8 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Import\Product;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\Import\Product\Exception\InvalidProductIdException;
+namespace LizardsAndPumpkins\Import\Product;
 
 class ProductId
 {
@@ -11,32 +11,13 @@ class ProductId
      */
     private $id;
 
-    /**
-     * @param string $id
-     */
-    private function __construct($id)
+    public function __construct(string $id)
     {
         $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return (string)$this->id;
-    }
-
-    /**
-     * @param string $productId
-     * @return ProductId
-     */
-    public static function fromString($productId)
-    {
-        if (!is_string($productId)) {
-            throw new InvalidProductIdException(sprintf('Can not create product ID from %s.', gettype($productId)));
-        }
-
-        return new ProductId((string) $productId);
     }
 }

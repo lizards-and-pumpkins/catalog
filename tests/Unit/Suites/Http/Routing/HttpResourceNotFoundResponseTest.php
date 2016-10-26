@@ -1,9 +1,11 @@
 <?php
 
-namespace LizardsAndPumpkins\Http\Routing\Exception;
+declare(strict_types=1);
+
+namespace LizardsAndPumpkins\Http\Routing;
 
 /**
- * @covers \LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse
+ * @covers \LizardsAndPumpkins\Http\Routing\HttpResourceNotFoundResponse
  */
 class HttpResourceNotFoundResponseTest extends \PHPUnit_Framework_TestCase
 {

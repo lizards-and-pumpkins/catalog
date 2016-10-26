@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\MessageReceiver;
@@ -13,18 +15,12 @@ class InMemoryQueue implements Queue, Clearable
      */
     private $queue = [];
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return count($this->queue);
     }
 
-    /**
-     * @return bool
-     */
-    private function isReadyForNext()
+    private function isReadyForNext() : bool
     {
         return $this->count() > 0;
     }
@@ -34,10 +30,7 @@ class InMemoryQueue implements Queue, Clearable
         $this->queue[] = $message->serialize();
     }
 
-    /**
-     * @return Message
-     */
-    private function next()
+    private function next() : Message
     {
         if ([] === $this->queue) {
             throw new \UnderflowException('Trying to get next message of an empty queue');
@@ -53,11 +46,7 @@ class InMemoryQueue implements Queue, Clearable
         $this->queue = [];
     }
 
-    /**
-     * @param MessageReceiver $messageReceiver
-     * @param int $numberOfMessagesBeforeReturn
-     */
-    public function consume(MessageReceiver $messageReceiver, $numberOfMessagesBeforeReturn)
+    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesBeforeReturn)
     {
         while ($this->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
             $messageReceiver->receive($this->next());

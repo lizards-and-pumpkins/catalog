@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -42,7 +44,7 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
      * @param mixed $dataObject
      * @return Snippet[]
      */
-    public function render($dataObject)
+    public function render($dataObject) : array
     {
         // todo: important! use the data version from $dataObject, whatever that is
         return array_map(function (Context $context) use ($dataObject) {
@@ -55,7 +57,7 @@ class ProductSearchAutosuggestionSnippetRenderer implements SnippetRenderer
      * @param Context $context
      * @return Snippet
      */
-    private function createSearchAutosuggestionSnippetForContext($dataObject, Context $context)
+    private function createSearchAutosuggestionSnippetForContext($dataObject, Context $context) : Snippet
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($context, []);
         $content = $this->blockRenderer->render($dataObject, $context);

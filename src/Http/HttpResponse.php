@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 interface HttpResponse
@@ -8,18 +10,9 @@ interface HttpResponse
     const STATUS_ACCEPTED = 202;
     const STATUS_NOT_FOUND = 404;
 
-    /**
-     * @return string
-     */
-    public function getBody();
+    public function getBody() : string;
 
-    /**
-     * @return int
-     */
-    public function getStatusCode();
+    public function getStatusCode() : int;
 
-    /**
-     * @return void
-     */
     public function send();
 }

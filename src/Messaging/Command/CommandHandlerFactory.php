@@ -1,32 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 interface CommandHandlerFactory
 {
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createUpdateContentBlockCommandHandler(Message $message);
+    public function createUpdateContentBlockCommandHandler(Message $message) : CommandHandler;
 
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createUpdateProductCommandHandler(Message $message);
+    public function createUpdateProductCommandHandler(Message $message) : CommandHandler;
 
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createAddProductListingCommandHandler(Message $message);
+    public function createAddProductListingCommandHandler(Message $message) : CommandHandler;
 
-    /**
-     * @param Message $message
-     * @return CommandHandler
-     */
-    public function createAddImageCommandHandler(Message $message);
+    public function createAddImageCommandHandler(Message $message) : CommandHandler;
 }

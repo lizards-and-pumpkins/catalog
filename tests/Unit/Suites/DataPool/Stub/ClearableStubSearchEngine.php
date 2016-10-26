@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\Stub;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
@@ -20,17 +23,12 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
         // Intentionally left empty
     }
 
-    public function query(SearchCriteria $criteria, QueryOptions $queryOptions)
+    public function query(SearchCriteria $criteria, QueryOptions $queryOptions) : SearchEngineResponse
     {
         // Intentionally left empty
     }
 
-    /**
-     * @param string $searchString
-     * @param QueryOptions $queryOptions
-     * @return void
-     */
-    public function queryFullText($searchString, QueryOptions $queryOptions)
+    public function queryFullText(string $searchString, QueryOptions $queryOptions) : SearchEngineResponse
     {
         // Intentionally left empty
     }

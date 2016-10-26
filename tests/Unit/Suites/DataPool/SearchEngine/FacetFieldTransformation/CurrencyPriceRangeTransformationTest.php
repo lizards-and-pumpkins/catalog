@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationInputException;
@@ -40,13 +42,9 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider rangeDataProvider
-     * @param int $rangeFrom
-     * @param int $rangeTo
-     * @param string $expectation
      */
-    public function testEncodedPriceRangeIsReturned($rangeFrom, $rangeTo, $expectation)
+    public function testEncodedPriceRangeIsReturned(int $rangeFrom, int $rangeTo, string $expectation)
     {
-        /** @var FacetFilterRange|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRange */
         $stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
         $stubFacetFilterRange->method('from')->willReturn($rangeFrom);
         $stubFacetFilterRange->method('to')->willReturn($rangeTo);
@@ -57,7 +55,7 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function rangeDataProvider()
+    public function rangeDataProvider() : array
     {
         $conv = function ($price) {
             return Price::fromDecimalValue($price)->getAmount();
@@ -69,11 +67,19 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testPriceRangeCanBeEncodedFromStringValues()
+    {
+        $stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
+        $stubFacetFilterRange->method('from')->willReturn('100000');
+        $stubFacetFilterRange->method('to')->willReturn('190000');
+
+        $this->assertSame('10,00 € - 19,00 €', $this->transformation->encode($stubFacetFilterRange));
+    }
+
     /**
      * @dataProvider nonMatchingEncodedInputDataProvider
-     * @param string $nonMatchingEncodedInput
      */
-    public function testExceptionIsThrownIfInputCanNotBeDecoded($nonMatchingEncodedInput)
+    public function testExceptionIsThrownIfInputCanNotBeDecoded(string $nonMatchingEncodedInput)
     {
         $this->expectException(InvalidTransformationInputException::class);
         $this->transformation->decode($nonMatchingEncodedInput);
@@ -82,7 +88,7 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function nonMatchingEncodedInputDataProvider()
+    public function nonMatchingEncodedInputDataProvider() : array
     {
         return [
             ['foo'],
@@ -93,11 +99,8 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider matchingEncodedInputDataProvider
-     * @param string $input
-     * @param int $rangeFrom
-     * @param int $rangeTo
      */
-    public function testFilterPricePriceRangeIsReturned($input, $rangeFrom, $rangeTo)
+    public function testFilterPricePriceRangeIsReturned(string $input, int $rangeFrom, int $rangeTo)
     {
         $result = $this->transformation->decode($input);
 
@@ -109,7 +112,7 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function matchingEncodedInputDataProvider()
+    public function matchingEncodedInputDataProvider() : array
     {
         $conv = function ($price) {
             return Price::fromDecimalValue($price)->getAmount();

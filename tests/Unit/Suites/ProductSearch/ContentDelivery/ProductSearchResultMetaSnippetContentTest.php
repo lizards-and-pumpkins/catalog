@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
@@ -38,10 +40,10 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
         $this->assertInstanceOf(PageMetaInfoSnippetContent::class, $this->metaSnippetContent);
     }
 
-    public function testExceptionIsThrownIfTheRootSnippetCodeIsNoString()
+    public function testExceptionIsThrownIfTheRootSnippetCodeIsAnEmptyString()
     {
         $this->expectException(InvalidSnippetCodeException::class);
-        ProductSearchResultMetaSnippetContent::create(1, [], []);
+        ProductSearchResultMetaSnippetContent::create('', [], []);
     }
 
     public function testMetaSnippetContentInfoContainsRequiredKeys()
@@ -87,9 +89,8 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
-     * @param string $missingKey
      */
-    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData($missingKey)
+    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData(string $missingKey)
     {
         $pageMetaInfo = $this->metaSnippetContent->getInfo();
         unset($pageMetaInfo[$missingKey]);
@@ -103,7 +104,7 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
     /**
      * @return array[]
      */
-    public function pageInfoArrayKeyProvider()
+    public function pageInfoArrayKeyProvider() : array
     {
         return [
             [ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],

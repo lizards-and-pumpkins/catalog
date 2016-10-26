@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
@@ -120,7 +122,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getSearchableAttributeCodes()
+    public function getSearchableAttributeCodes() : array
     {
         return ['name', 'category', 'brand'];
     }
@@ -129,7 +131,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
      * @param Context $context
      * @return FacetFilterRequestField[]
      */
-    public function getProductListingFacetFilterRequestFields(Context $context)
+    public function getProductListingFacetFilterRequestFields(Context $context) : array
     {
         return $this->getCommonFacetFilterRequestFields();
     }
@@ -138,7 +140,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
      * @param Context $context
      * @return FacetFilterRequestField[]
      */
-    public function getProductSearchFacetFilterRequestFields(Context $context)
+    public function getProductSearchFacetFilterRequestFields(Context $context) : array
     {
         return array_merge(
             $this->getCommonFacetFilterRequestFields(),
@@ -149,7 +151,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getFacetFilterRequestFieldCodesForSearchDocuments()
+    public function getFacetFilterRequestFieldCodesForSearchDocuments() : array
     {
         return array_map(function (FacetFilterRequestField $field) {
             return (string) $field->getAttributeCode();
@@ -159,7 +161,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return FacetFilterRequestField[]
      */
-    private function getCommonFacetFilterRequestFields()
+    private function getCommonFacetFilterRequestFields() : array
     {
         return [
             new FacetFilterRequestSimpleField(AttributeCode::fromString('gender')),
@@ -172,15 +174,12 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getAdditionalAttributesForSearchIndex()
+    public function getAdditionalAttributesForSearchIndex() : array
     {
         return ['backorders', 'stock_qty', 'series'];
     }
 
-    /**
-     * @return InMemoryKeyValueStore
-     */
-    public function createKeyValueStore()
+    public function createKeyValueStore() : InMemoryKeyValueStore
     {
         return new InMemoryKeyValueStore();
     }
@@ -190,10 +189,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         $this->commandMessageQueue = $commandQueue;
     }
 
-    /**
-     * @return CommandQueue
-     */
-    public function getCommandQueue()
+    public function getCommandQueue() : CommandQueue
     {
         if (null === $this->commandQueue) {
             $this->commandQueue = $this->createCommandQueue();
@@ -201,18 +197,12 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->commandQueue;
     }
 
-    /**
-     * @return CommandQueue
-     */
-    public function createCommandQueue()
+    public function createCommandQueue() : CommandQueue
     {
         return new CommandQueue($this->getCommandMessageQueue());
     }
 
-    /**
-     * @return Queue
-     */
-    public function getCommandMessageQueue()
+    public function getCommandMessageQueue() : Queue
     {
         if (null === $this->commandMessageQueue) {
             $this->commandMessageQueue = $this->createCommandMessageQueue();
@@ -220,10 +210,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->commandMessageQueue;
     }
 
-    /**
-     * @return Queue
-     */
-    public function createCommandMessageQueue()
+    public function createCommandMessageQueue() : Queue
     {
         return new InMemoryQueue();
     }
@@ -233,10 +220,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         $this->eventMessageQueue = $eventQueue;
     }
 
-    /**
-     * @return DomainEventQueue
-     */
-    public function getEventQueue()
+    public function getEventQueue() : DomainEventQueue
     {
         if (null === $this->eventQueue) {
             $this->eventQueue = $this->createEventQueue();
@@ -244,18 +228,12 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->eventQueue;
     }
 
-    /**
-     * @return DomainEventQueue
-     */
-    public function createEventQueue()
+    public function createEventQueue() : DomainEventQueue
     {
         return new DomainEventQueue($this->getEventMessageQueue());
     }
 
-    /**
-     * @return Queue
-     */
-    public function getEventMessageQueue()
+    public function getEventMessageQueue() : Queue
     {
         if (null === $this->eventMessageQueue) {
             $this->eventMessageQueue = $this->createEventMessageQueue();
@@ -263,54 +241,36 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->eventMessageQueue;
     }
 
-    /**
-     * @return Queue
-     */
-    public function createEventMessageQueue()
+    public function createEventMessageQueue() : Queue
     {
         return new InMemoryQueue();
     }
 
-    /**
-     * @return InMemoryLogger
-     */
-    public function createLogger()
+    public function createLogger() : InMemoryLogger
     {
         return new InMemoryLogger();
     }
 
-    /**
-     * @return InMemorySearchEngine
-     */
-    public function createSearchEngine()
+    public function createSearchEngine() : InMemorySearchEngine
     {
         return new InMemorySearchEngine(
-            $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->createSearchCriteriaBuilder(),
-            $this->getMasterFactory()->getFacetFieldTransformationRegistry()
+            $this->getMasterFactory()->getFacetFieldTransformationRegistry(),
+            ...$this->getMasterFactory()->getSearchableAttributeCodes()
         );
     }
 
-    /**
-     * @return FacetFieldTransformationRegistry
-     */
-    public function createFacetFieldTransformationRegistry()
+    public function createFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry
     {
         return new FacetFieldTransformationRegistry;
     }
 
-    /**
-     * @return UrlKeyStore
-     */
-    public function createUrlKeyStore()
+    public function createUrlKeyStore() : UrlKeyStore
     {
         return new InMemoryUrlKeyStore();
     }
 
-    /**
-     * @return ImageProcessorCollection
-     */
-    public function createImageProcessorCollection()
+    public function createImageProcessorCollection() : ImageProcessorCollection
     {
         $processorCollection = new ImageProcessorCollection();
         $processorCollection->add($this->getMasterFactory()->createImageProcessor());
@@ -318,10 +278,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $processorCollection;
     }
 
-    /**
-     * @return ImageProcessor
-     */
-    public function createImageProcessor()
+    public function createImageProcessor() : ImageProcessor
     {
         $strategySequence = $this->getMasterFactory()->createImageProcessingStrategySequence();
         $fileStorageReader = $this->getMasterFactory()->createFileStorageReader();
@@ -332,42 +289,27 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return new ImageProcessor($strategySequence, $fileStorageReader, $fileStorageWriter, $resultImageDir);
     }
 
-    /**
-     * @return FileStorageReader
-     */
-    public function createFileStorageReader()
+    public function createFileStorageReader() : FileStorageReader
     {
         return new LocalFilesystemStorageReader();
     }
 
-    /**
-     * @return FileStorageWriter
-     */
-    public function createFileStorageWriter()
+    public function createFileStorageWriter() : FileStorageWriter
     {
         return new LocalFilesystemStorageWriter();
     }
 
-    /**
-     * @return IntegrationTestFixedBaseUrlBuilder
-     */
-    public function createBaseUrlBuilder()
+    public function createBaseUrlBuilder() : IntegrationTestFixedBaseUrlBuilder
     {
         return new IntegrationTestFixedBaseUrlBuilder();
     }
 
-    /**
-     * @return ImageProcessingStrategySequence
-     */
-    public function createImageProcessingStrategySequence()
+    public function createImageProcessingStrategySequence() : ImageProcessingStrategySequence
     {
         return new ImageProcessingStrategySequence();
     }
 
-    /**
-     * @return KeyValueStore
-     */
-    public function getKeyValueStore()
+    public function getKeyValueStore() : KeyValueStore
     {
         if (null === $this->keyValueStore) {
             $this->keyValueStore = $this->createKeyValueStore();
@@ -380,10 +322,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         $this->keyValueStore = $keyValueStore;
     }
 
-    /**
-     * @return SearchEngine
-     */
-    public function getSearchEngine()
+    public function getSearchEngine() : SearchEngine
     {
         if (null === $this->searchEngine) {
             $this->searchEngine = $this->createSearchEngine();
@@ -396,10 +335,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         $this->searchEngine = $searchEngine;
     }
 
-    /**
-     * @return UrlKeyStore
-     */
-    public function getUrlKeyStore()
+    public function getUrlKeyStore() : UrlKeyStore
     {
         if (null === $this->urlKeyStore) {
             $this->urlKeyStore = $this->createUrlKeyStore();
@@ -412,10 +348,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         $this->urlKeyStore = $urlKeyStore;
     }
 
-    /**
-     * @return string
-     */
-    public function getFileStorageBasePathConfig()
+    public function getFileStorageBasePathConfig() : string
     {
         return sys_get_temp_dir();
     }
@@ -423,7 +356,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return SortOrderConfig[]
      */
-    public function getProductListingSortOrderConfig()
+    public function getProductListingSortOrderConfig() : array
     {
         if (null === $this->memoizedProductListingSortOrderConfig) {
             $this->memoizedProductListingSortOrderConfig = [
@@ -440,7 +373,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return SortOrderConfig[]
      */
-    public function getProductSearchSortOrderConfig()
+    public function getProductSearchSortOrderConfig() : array
     {
         if (null === $this->memoizedProductSearchSortOrderConfig) {
             $this->memoizedProductSearchSortOrderConfig = [
@@ -454,10 +387,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->memoizedProductSearchSortOrderConfig;
     }
 
-    /**
-     * @return ProductsPerPage
-     */
-    public function getProductsPerPageConfig()
+    public function getProductsPerPageConfig() : ProductsPerPage
     {
         if (null === $this->memoizedProductsPerPageConfig) {
             $numbersOfProductsPerPage = [9, 12, 18];
@@ -472,10 +402,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->memoizedProductsPerPageConfig;
     }
 
-    /**
-     * @return SortOrderConfig
-     */
-    public function getProductSearchAutosuggestionSortOrderConfig()
+    public function getProductSearchAutosuggestionSortOrderConfig() : SortOrderConfig
     {
         if (null === $this->memoizedProductSearchAutosuggestionSortOrderConfig) {
             $this->memoizedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
@@ -487,50 +414,32 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
     }
 
-    /**
-     * @return TaxableCountries
-     */
-    public function createTaxableCountries()
+    public function createTaxableCountries() : TaxableCountries
     {
         return new IntegrationTestTaxableCountries();
     }
 
-    /**
-     * @return IntegrationTestTaxServiceLocator
-     */
-    public function createTaxServiceLocator()
+    public function createTaxServiceLocator() : IntegrationTestTaxServiceLocator
     {
         return new IntegrationTestTaxServiceLocator();
     }
 
-    /**
-     * @return ProductViewLocator
-     */
-    public function createProductViewLocator()
+    public function createProductViewLocator() : ProductViewLocator
     {
         return new IntegrationTestProductViewLocator($this->getMasterFactory()->createProductImageFileLocator());
     }
 
-    /**
-     * @return SearchCriteria
-     */
-    public function createGlobalProductListingCriteria()
+    public function createGlobalProductListingCriteria() : SearchCriteria
     {
-        return SearchCriterionGreaterThan::create('stock_qty', 0);
+        return new SearchCriterionGreaterThan('stock_qty', 0);
     }
 
-    /**
-     * @return ProductImageFileLocator
-     */
-    public function createProductImageFileLocator()
+    public function createProductImageFileLocator() : ProductImageFileLocator
     {
         return new IntegrationTestProductImageFileLocator($this->getMasterFactory()->createImageStorage());
     }
 
-    /**
-     * @return ImageStorage
-     */
-    public function createImageStorage()
+    public function createImageStorage() : ImageStorage
     {
         return new FilesystemImageStorage(
             $this->getMasterFactory()->createFilesystemFileStorage(),
@@ -539,52 +448,34 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         );
     }
 
-    /**
-     * @return SearchFieldToRequestParamMap
-     */
-    public function createSearchFieldToRequestParamMap()
+    public function createSearchFieldToRequestParamMap() : SearchFieldToRequestParamMap
     {
         $facetFieldToQueryParameterMap = [];
         $queryParameterToFacetFieldMap = [];
         return new SearchFieldToRequestParamMap($facetFieldToQueryParameterMap, $queryParameterToFacetFieldMap);
     }
 
-    /**
-     * @return ThemeLocator
-     */
-    public function createThemeLocator()
+    public function createThemeLocator() : ThemeLocator
     {
         return new ThemeLocator(__DIR__ . '/../fixture');
     }
 
-    /**
-     * @return ContextSource
-     */
-    public function createContextSource()
+    public function createContextSource() : ContextSource
     {
         return new IntegrationTestContextSource($this->getMasterFactory()->createContextBuilder());
     }
 
-    /**
-     * @return ContextPartBuilder
-     */
-    public function createLocaleContextPartBuilder()
+    public function createLocaleContextPartBuilder() : ContextPartBuilder
     {
         return new IntegrationTestContextLocale();
     }
 
-    /**
-     * @return ContextPartBuilder
-     */
-    public function createCountryContextPartBuilder()
+    public function createCountryContextPartBuilder() : ContextPartBuilder
     {
         return new IntegrationTestContextCountry();
     }
 
-    /**
-     * @return ContextPartBuilder
-     */
-    public function createWebsiteContextPartBuilder()
+    public function createWebsiteContextPartBuilder() : ContextPartBuilder
     {
         return new IntegrationTestContextWebsite();
     }

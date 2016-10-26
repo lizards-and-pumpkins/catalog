@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
@@ -23,11 +25,7 @@ class ProductImageTest extends \PHPUnit_Framework_TestCase
      */
     private $productImage;
 
-    /**
-     * @param string $attributeCode
-     * @param string $attributeValue
-     */
-    private function addStubAttributeWithCodeAndValue($attributeCode, $attributeValue)
+    private function addStubAttributeWithCodeAndValue(string $attributeCode, string $attributeValue)
     {
         $stubAttribute = $this->createMock(ProductAttribute::class);
         $stubAttribute->method('getValue')->willReturn($attributeValue);

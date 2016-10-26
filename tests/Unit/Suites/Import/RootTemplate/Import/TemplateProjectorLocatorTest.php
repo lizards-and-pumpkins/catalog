@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
 use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\TemplateRendering\Exception\InvalidTemplateProjectorCodeException;
 use LizardsAndPumpkins\Import\RootTemplate\Exception\UnableToLocateTemplateProjectorException;
 
 /**
@@ -23,7 +24,7 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownIfNonStringCodeIsPassed()
     {
-        $this->expectException(InvalidTemplateProjectorCodeException::class);
+        $this->expectException(\TypeError::class);
         $this->locator->getTemplateProjectorForCode(1);
     }
 
@@ -31,14 +32,6 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(UnableToLocateTemplateProjectorException::class);
         $this->locator->getTemplateProjectorForCode('foo');
-    }
-
-    public function testExceptionIsThrownDuringAttemptToRegisterProjectorWithNonStringCode()
-    {
-        $invalidTemplateCode = 1;
-        $this->expectException(InvalidTemplateProjectorCodeException::class);
-
-        $this->locator->register($invalidTemplateCode, $this->getStubProjector());
     }
 
     public function testProjectorForTemplateCodesIsReturned()
@@ -82,7 +75,7 @@ class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Projector|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getStubProjector()
+    private function getStubProjector() : Projector
     {
         return $this->createMock(Projector::class);
     }

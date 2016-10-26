@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -31,7 +33,7 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
      * @param ContentBlockSource $contentBlockSource
      * @return Snippet[]
      */
-    public function render(ContentBlockSource $contentBlockSource)
+    public function render(ContentBlockSource $contentBlockSource) : array
     {
         $snippetCode = (string) $contentBlockSource->getContentBlockId();
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
@@ -42,8 +44,6 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
         $key = $keyGenerator->getKeyForContext($context, $keyGeneratorParameters);
         $content = $contentBlockSource->getContent();
 
-        return [
-            Snippet::create($key, $content)
-        ];
+        return [Snippet::create($key, $content)];
     }
 }

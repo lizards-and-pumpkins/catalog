@@ -1,26 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 interface File
 {
-    /**
-     * @return bool
-     */
-    public function exists();
+    public function exists() : bool;
 
-    /**
-     * @return FileContent
-     */
-    public function getContent();
+    public function getContent() : FileContent;
 
-    /**
-     * @return StorageSpecificFileUri
-     */
-    public function getInStorageUri();
+    public function getInStorageUri() : StorageSpecificFileUri;
 
-    /**
-     * @return string
-     */
-    public function __toString();
+    public function __toString() : string;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Import\ContentBlock\Exception\NoContentBlockWasUpdatedDomainEventMessageException;
@@ -26,28 +28,18 @@ class ContentBlockWasUpdatedDomainEvent implements DomainEvent
         $this->contentBlockSource = $contentBlockSource;
     }
 
-    /**
-     * @return ContentBlockSource
-     */
-    public function getContentBlockSource()
+    public function getContentBlockSource() : ContentBlockSource
     {
         return $this->contentBlockSource;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $payload = ['id' => (string)$this->contentBlockId, 'source' => $this->contentBlockSource->serialize()];
         return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : ContentBlockWasUpdatedDomainEvent
     {
         if ($message->getName() !== self::CODE) {
             throw new NoContentBlockWasUpdatedDomainEventMessageException(

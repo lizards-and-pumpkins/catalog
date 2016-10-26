@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException;
@@ -11,8 +13,7 @@ class MessageMetadataTest extends \PHPUnit_Framework_TestCase
 {
     public function testThrowsExceptionForNonStringKeys()
     {
-        $this->expectException(InvalidMessageMetadataException::class);
-        $this->expectExceptionMessage('The message metadata may only have string array keys');
+        $this->expectException(\TypeError::class);
         new MessageMetadata([0 => 'foo']);
     }
 
@@ -28,7 +29,7 @@ class MessageMetadataTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedType
      * @dataProvider invalidMetadataValueTypeProvider
      */
-    public function testThrowsExceptionIfValueIsNotStringOrBoolOrIntOrDouble($invalidValue, $expectedType)
+    public function testThrowsExceptionIfValueIsNotStringOrBoolOrIntOrDouble($invalidValue, string $expectedType)
     {
         $this->expectException(InvalidMessageMetadataException::class);
         $message = 'The message metadata values may only me strings, booleans, integers or doubles,' .
@@ -40,7 +41,7 @@ class MessageMetadataTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidMetadataValueTypeProvider()
+    public function invalidMetadataValueTypeProvider() : array
     {
         return [
             'object' => [$this, get_class($this)],

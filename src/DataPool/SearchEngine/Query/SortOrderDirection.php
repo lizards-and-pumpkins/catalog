@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortOrderDirectionException;
@@ -14,19 +16,12 @@ class SortOrderDirection
      */
     private $direction;
 
-    /**
-     * @param string $direction
-     */
-    private function __construct($direction)
+    private function __construct(string $direction)
     {
         $this->direction = $direction;
     }
 
-    /**
-     * @param string $direction
-     * @return SortOrderDirection
-     */
-    public static function create($direction)
+    public static function create(string $direction) : SortOrderDirection
     {
         if (!self::isValid($direction)) {
             throw new InvalidSortOrderDirectionException(
@@ -37,19 +32,12 @@ class SortOrderDirection
         return new self($direction);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->direction;
     }
 
-    /**
-     * @param string $direction
-     * @return bool
-     */
-    public static function isValid($direction)
+    public static function isValid(string $direction) : bool
     {
         return self::ASC === $direction || self::DESC === $direction;
     }

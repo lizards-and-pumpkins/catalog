@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
@@ -17,11 +19,7 @@ class IntegrationTestProductViewLocator implements ProductViewLocator
         $this->productImageFileLocator = $productImageFileLocator;
     }
     
-    /**
-     * @param Product $product
-     * @return ProductView
-     */
-    public function createForProduct(Product $product)
+    public function createForProduct(Product $product) : ProductView
     {
         return $product instanceof ConfigurableProduct ?
             new IntegrationTestConfigurableProductView($product, $this, $this->productImageFileLocator) :

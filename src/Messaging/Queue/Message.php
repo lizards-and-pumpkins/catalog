@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 class Message
@@ -52,7 +54,7 @@ class Message
      * @param string[] $metadata
      * @return Message
      */
-    public static function withCurrentTime($name, array $payload, array $metadata)
+    public static function withCurrentTime(string $name, array $payload, array $metadata) : Message
     {
         return new self($name, $payload, $metadata, new \DateTimeImmutable());
     }
@@ -64,15 +66,16 @@ class Message
      * @param \DateTimeInterface $dateTime
      * @return Message
      */
-    public static function withGivenTime($name, array $payload, array $metadata, \DateTimeInterface $dateTime)
-    {
+    public static function withGivenTime(
+        string $name,
+        array $payload,
+        array $metadata,
+        \DateTimeInterface $dateTime
+    ) : Message {
         return new self($name, $payload, $metadata, $dateTime);
     }
 
-    /**
-     * @return string
-     */
-    public function serialize()
+    public function serialize() : string
     {
         return json_encode([
             self::$nameField => $this->getName(),
@@ -82,11 +85,7 @@ class Message
         ]);
     }
 
-    /**
-     * @param string $json
-     * @return Message
-     */
-    public static function rehydrate($json)
+    public static function rehydrate(string $json) : Message
     {
         $data = json_decode($json, true);
         return new Message(
@@ -97,26 +96,20 @@ class Message
         );
     }
 
-    /**
-     * @return int
-     */
-    public function getTimestamp()
+    public function getTimestamp() : int
     {
         return $this->timestamp;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getPayload()
+    public function getPayload() : array
     {
         return $this->payload;
     }
@@ -124,7 +117,7 @@ class Message
     /**
      * @return string[]
      */
-    public function getMetadata()
+    public function getMetadata() : array
     {
         return $this->metadata;
     }

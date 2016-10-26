@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;

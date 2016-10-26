@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\Stub;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
@@ -17,25 +19,21 @@ class ClearableStubKeyValueStore implements KeyValueStore, Clearable
      * @param mixed $value
      * @return void
      */
-    public function set($key, $value)
+    public function set(string $key, $value)
     {
         // Intentionally left empty
     }
 
     /**
      * @param string $key
-     * @return mixed
+     * @return void
      */
-    public function get($key)
+    public function get(string $key)
     {
         // Intentionally left empty
     }
 
-    /**
-     * @param string $key
-     * @return bool
-     */
-    public function has($key)
+    public function has(string $key) : bool
     {
         // Intentionally left empty
     }
@@ -44,7 +42,7 @@ class ClearableStubKeyValueStore implements KeyValueStore, Clearable
      * @param string[] $keys
      * @return mixed[]
      */
-    public function multiGet(array $keys)
+    public function multiGet(string ...$keys) : array
     {
         // Intentionally left empty
     }

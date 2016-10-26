@@ -1,20 +1,19 @@
 <?php
 
-namespace LizardsAndPumpkins\Http\Routing\Exception;
+declare(strict_types=1);
+
+namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpResponse;
 
 class HttpResourceNotFoundResponse implements HttpResponse
 {
-    /**
-     * @return string
-     */
-    public function getBody()
+    public function getBody() : string
     {
         return '<h1>404 Resource not found</h1>';
     }
 
-    public function getStatusCode()
+    public function getStatusCode() : int
     {
         return HttpResponse::STATUS_NOT_FOUND;
     }

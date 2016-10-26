@@ -1,9 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueCountException;
-use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFieldValueException;
+namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue
@@ -21,23 +20,23 @@ class FacetFieldValueTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->facetFieldValue = FacetFieldValue::create($this->testFieldValue, $this->testFieldCount);
+        $this->facetFieldValue = new FacetFieldValue($this->testFieldValue, $this->testFieldCount);
     }
 
     public function testExceptionIsThrownIfFacetFieldValueIsNotAString()
     {
-        $this->expectException(InvalidFacetFieldValueException::class);
+        $this->expectException(\TypeError::class);
 
         $invalidValue = new \stdClass;
-        FacetFieldValue::create($invalidValue, $this->testFieldCount);
+        new FacetFieldValue($invalidValue, $this->testFieldCount);
     }
 
     public function testExceptionIsThrownIfFacetFieldValueCountIsNotInteger()
     {
-        $this->expectException(InvalidFacetFieldValueCountException::class);
+        $this->expectException(\TypeError::class);
 
         $invalidValueCount = [];
-        FacetFieldValue::create($this->testFieldValue, $invalidValueCount);
+        new FacetFieldValue($this->testFieldValue, $invalidValueCount);
     }
 
     public function testJsonSerializableInterfaceIsImplemented()

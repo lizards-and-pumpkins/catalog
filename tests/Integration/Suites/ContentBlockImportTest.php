@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -22,7 +24,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
         ]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
@@ -46,7 +48,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
         ]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
@@ -58,17 +60,13 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->factory->createDomainEventConsumer()->process();
     }
 
-    /**
-     * @param string $urlKey
-     * @return string
-     */
-    private function getProductListingPageHtmlByUrlKey($urlKey)
+    private function getProductListingPageHtmlByUrlKey(string $urlKey) : string
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/' . $urlKey),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
@@ -77,17 +75,13 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         return $page->getBody();
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $httpRequestBodyString
-     */
-    private function importContentBlockViaApi($snippetCode, $httpRequestBodyString)
+    private function importContentBlockViaApi(string $snippetCode, string $httpRequestBodyString)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/' . $snippetCode);
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json'
         ]);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $domainCommandQueue = $this->factory->getCommandMessageQueue();
@@ -114,7 +108,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
      * @param mixed[] $keyGeneratorParameters
      * @return string
      */
-    private function getContentBlockSnippetContent($snippetCode, array $keyGeneratorParameters)
+    private function getContentBlockSnippetContent(string $snippetCode, array $keyGeneratorParameters) : string
     {
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[1];
@@ -136,7 +130,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
     }

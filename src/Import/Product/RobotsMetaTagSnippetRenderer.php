@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -25,19 +27,14 @@ class RobotsMetaTagSnippetRenderer implements SnippetRenderer
      * @param Context $context
      * @return Snippet[]
      */
-    public function render(Context $context)
+    public function render(Context $context) : array
     {
         return array_map(function ($tagContent) use ($context) {
             return $this->createRobotsMetaTagSnippetForContent($context, $tagContent);
         }, $this->robotsMetaTags);
     }
 
-    /**
-     * @param Context $context
-     * @param string $tagContent
-     * @return Snippet
-     */
-    private function createRobotsMetaTagSnippetForContent(Context $context, $tagContent)
+    private function createRobotsMetaTagSnippetForContent(Context $context, string $tagContent) : Snippet
     {
         $snippetKey = $this->keyGenerator->getKeyForContext($context, ['robots' => $tagContent]);
         $snippetContent = sprintf('<meta name="robots" content="%s"/>', $tagContent);

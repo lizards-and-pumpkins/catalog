@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -19,15 +21,12 @@ class ProductVariationAttributeList implements \JsonSerializable, \IteratorAggre
         $this->attributeCodes = $attributeCodes;
     }
 
-    /**
-     * @param string[] $attributeCodeStrings
-     * @return ProductVariationAttributeList
-     */
-    public static function fromArray(array $attributeCodeStrings)
+    public static function fromStrings(string ...$attributeCodeStrings) : ProductVariationAttributeList
     {
         $attributeCodes = array_map(function ($code) {
             return AttributeCode::fromString($code);
         }, $attributeCodeStrings);
+
         return new self(...$attributeCodes);
     }
 
@@ -55,12 +54,9 @@ class ProductVariationAttributeList implements \JsonSerializable, \IteratorAggre
         }, []);
     }
 
-    /**
-     * @param string $code
-     * @return ProductVariationAttributesNotUniqueException
-     */
-    private function createVariationAttributeNotUniqueException($code)
-    {
+    private function createVariationAttributeNotUniqueException(
+        string $code
+    ) : ProductVariationAttributesNotUniqueException {
         $message = sprintf('The product variation attribute list contained the attribute "%s" more then once', $code);
         return new ProductVariationAttributesNotUniqueException($message);
     }
@@ -68,15 +64,12 @@ class ProductVariationAttributeList implements \JsonSerializable, \IteratorAggre
     /**
      * @return AttributeCode[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return $this->attributeCodes;
     }
 
-    /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator() : \ArrayIterator
     {
         return new \ArrayIterator($this->attributeCodes);
     }
@@ -84,7 +77,7 @@ class ProductVariationAttributeList implements \JsonSerializable, \IteratorAggre
     /**
      * @return AttributeCode[]
      */
-    public function getAttributes()
+    public function getAttributes() : array
     {
         return $this->attributeCodes;
     }

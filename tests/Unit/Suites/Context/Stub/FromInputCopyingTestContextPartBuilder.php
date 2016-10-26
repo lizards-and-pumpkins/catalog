@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Stub;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
@@ -11,10 +13,7 @@ class FromInputCopyingTestContextPartBuilder implements ContextPartBuilder
      */
     private $code;
 
-    /**
-     * @param string $code
-     */
-    public function __construct($code)
+    public function __construct(string $code)
     {
         $this->code = $code;
     }
@@ -30,10 +29,7 @@ class FromInputCopyingTestContextPartBuilder implements ContextPartBuilder
             null;
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode() : string
     {
         return $this->code;
     }

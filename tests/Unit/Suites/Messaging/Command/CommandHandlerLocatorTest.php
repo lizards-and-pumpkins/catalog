@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;

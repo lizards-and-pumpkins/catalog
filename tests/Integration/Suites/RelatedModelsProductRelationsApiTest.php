@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -13,7 +15,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
      * @param string $expectedProductId
      * @param array[] $productsData
      */
-    private function assertContainsProductData($expectedProductId, array $productsData)
+    private function assertContainsProductData(string $expectedProductId, array $productsData)
     {
         $found = array_reduce($productsData, function ($found, array $productData) use ($expectedProductId) {
             return $found || $productData['product_id'] === (string) $expectedProductId;
@@ -28,7 +30,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.product_relations.v1+json'
         ]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -51,7 +53,7 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.product_relations.v1+json'
         ]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
@@ -27,7 +29,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
      * @param mixed $projectionSourceData
      * @return Snippet[]
      */
-    public function render($projectionSourceData)
+    public function render($projectionSourceData) : array
     {
         if (!($projectionSourceData instanceof ProductView)) {
             throw new InvalidProjectionSourceDataTypeException('First argument must be a ProductView instance.');
@@ -38,11 +40,7 @@ class ProductInListingSnippetRenderer implements SnippetRenderer
         ];
     }
 
-    /**
-     * @param ProductView $product
-     * @return Snippet
-     */
-    private function getProductInListingSnippet(ProductView $product)
+    private function getProductInListingSnippet(ProductView $product) : Snippet
     {
         $key = $this->snippetKeyGenerator->getKeyForContext($product->getContext(), [Product::ID => $product->getId()]);
         $content = json_encode($product);

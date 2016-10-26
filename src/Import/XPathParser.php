@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 class XPathParser
@@ -24,10 +26,7 @@ class XPathParser
      */
     private $namespacePrefixDefault = 'uniqueDomParserPrefix';
 
-    /**
-     * @param string $xmlString
-     */
-    public function __construct($xmlString)
+    public function __construct(string $xmlString)
     {
         libxml_clear_errors();
         $internal = libxml_use_internal_errors(true);
@@ -53,7 +52,7 @@ class XPathParser
      * @param string $xPath
      * @return array[]
      */
-    public function getXmlNodesArrayByXPath($xPath)
+    public function getXmlNodesArrayByXPath(string $xPath) : array
     {
         $nodeList = $this->getDomNodeListByXPath($xPath);
 
@@ -64,7 +63,7 @@ class XPathParser
      * @param \DOMNodeList $nodeList
      * @return array[]
      */
-    private function getDomTreeAsArray(\DOMNodeList $nodeList)
+    private function getDomTreeAsArray(\DOMNodeList $nodeList) : array
     {
         $nodeArray = [];
 
@@ -89,7 +88,7 @@ class XPathParser
      * @param string $xPath
      * @return string[]
      */
-    public function getXmlNodesRawXmlArrayByXPath($xPath)
+    public function getXmlNodesRawXmlArrayByXPath(string $xPath) : array
     {
         $nodeXmlArray = [];
         $nodeList = $this->getDomNodeListByXPath($xPath);
@@ -101,11 +100,7 @@ class XPathParser
         return $nodeXmlArray;
     }
 
-    /**
-     * @param string $xPath
-     * @return \DOMNodeList
-     */
-    private function getDomNodeListByXPath($xPath)
+    private function getDomNodeListByXPath(string $xPath) : \DOMNodeList
     {
         $xPath = $this->addNamespacePrefixesToXPathString($xPath);
         $nodeList = $this->xPathEngine->query($xPath);
@@ -114,7 +109,7 @@ class XPathParser
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     private function getNamespaceUri()
     {
@@ -123,11 +118,7 @@ class XPathParser
         return $namespaceUri;
     }
 
-    /**
-     * @param string $xPathString
-     * @return string
-     */
-    private function addNamespacePrefixesToXPathString($xPathString)
+    private function addNamespacePrefixesToXPathString(string $xPathString) : string
     {
         if ($this->namespacePrefix) {
             $xPathString = preg_replace('#(/|^)([^@.+/])#', '$1' . $this->namespacePrefix . ':$2', $xPathString);
@@ -140,7 +131,7 @@ class XPathParser
      * @param \DOMNode $node
      * @return string[]
      */
-    private function getNodeAttributesAsArray(\DOMNode $node)
+    private function getNodeAttributesAsArray(\DOMNode $node) : array
     {
         if ($node instanceof \DOMAttr) {
             return [$node->name => $node->value];

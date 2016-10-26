@@ -1,11 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\RestApi;
 
-use LizardsAndPumpkins\RestApi\Exception\ApiVersionMustBeIntException;
-
 /**
- * @covers LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @covers \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  */
 class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +21,7 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToRegisterRequestHandlerWithNonIntVersion()
     {
-        $this->expectException(ApiVersionMustBeIntException::class);
+        $this->expectException(\TypeError::class);
 
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 'bar';
@@ -33,7 +33,7 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownDuringAttemptToLocateRequestHandlerWithNonIntVersion()
     {
-        $this->expectException(ApiVersionMustBeIntException::class);
+        $this->expectException(\TypeError::class);
 
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 'bar';

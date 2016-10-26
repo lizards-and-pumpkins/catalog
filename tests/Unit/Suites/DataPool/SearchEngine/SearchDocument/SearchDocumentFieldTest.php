@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidSearchDocumentFieldKeyException;
@@ -34,7 +36,7 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed[]
      */
-    public function invalidKeyProvider()
+    public function invalidKeyProvider() : array
     {
         return [
             [''],
@@ -42,14 +44,14 @@ class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
             ['.foo'],
             ['1'],
             ['-'],
-            [111],
             ['1foo'],
-            [null],
-            [[]],
-            [new \stdClass()],
-            [true],
-            [false],
         ];
+    }
+
+    public function testExceptionIsThrownIfInvalidKeyTypeIsSpecified()
+    {
+        $this->expectException(\TypeError::class);
+        SearchDocumentField::fromKeyAndValues(1, ['foo']);
     }
 
     public function testItThrowsAnExceptionIfTheValuesContainNonScalars()

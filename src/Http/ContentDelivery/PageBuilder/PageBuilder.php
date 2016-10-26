@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Context\Context;
@@ -71,10 +73,13 @@ class PageBuilder
      * @param PageMetaInfoSnippetContent $metaInfo
      * @param Context $context
      * @param mixed[] $keyGeneratorParams
-     * @return GenericHttpResponse
+     * @return HttpResponse
      */
-    public function buildPage(PageMetaInfoSnippetContent $metaInfo, Context $context, array $keyGeneratorParams)
-    {
+    public function buildPage(
+        PageMetaInfoSnippetContent $metaInfo,
+        Context $context,
+        array $keyGeneratorParams
+    ) : HttpResponse {
         $this->context = $context;
         $this->keyGeneratorParams = $keyGeneratorParams;
 
@@ -108,7 +113,7 @@ class PageBuilder
      * @param PageMetaInfoSnippetContent $metaInfo
      * @return string[]
      */
-    private function initFromMetaInfo(PageMetaInfoSnippetContent $metaInfo)
+    private function initFromMetaInfo(PageMetaInfoSnippetContent $metaInfo) : array
     {
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
         $containerSnippetCodes = array_reduce($metaInfo->getContainerSnippets(), function ($carry, $codes) {
@@ -129,18 +134,14 @@ class PageBuilder
     /**
      * @return string[]
      */
-    private function getFlattenedContainerSnippetCodes()
+    private function getFlattenedContainerSnippetCodes() : array
     {
         return array_reduce($this->containerSnippets, function (array $flattened, array $snippetsInContainer) {
             return array_merge($flattened, $snippetsInContainer);
         }, []);
     }
 
-    /**
-     * @param string $snippetCode
-     * @param callable $transformation
-     */
-    public function registerSnippetTransformation($snippetCode, callable $transformation)
+    public function registerSnippetTransformation(string $snippetCode, callable $transformation)
     {
         if (!array_key_exists($snippetCode, $this->snippetTransformations)) {
             $this->snippetTransformations[$snippetCode] = [];
@@ -148,29 +149,17 @@ class PageBuilder
         $this->snippetTransformations[$snippetCode][] = $transformation;
     }
 
-    /**
-     * @param string $containerCode
-     * @param string $snippetCode
-     */
-    public function addSnippetToContainer($containerCode, $snippetCode)
+    public function addSnippetToContainer(string $containerCode, string $snippetCode)
     {
         $this->containerSnippets[$containerCode][] = $snippetCode;
     }
 
-    /**
-     * @param string $snippetCode
-     * @param string $snippetContent
-     */
-    public function addSnippetToPage($snippetCode, $snippetContent)
+    public function addSnippetToPage(string $snippetCode, string $snippetContent)
     {
         $this->addSnippetsToPage([$snippetCode => $snippetCode], [$snippetCode => $snippetContent]);
     }
 
-    /**
-     * @param string $snippetCode
-     * @return string
-     */
-    private function tryToGetSnippetKey($snippetCode)
+    private function tryToGetSnippetKey(string $snippetCode) : string
     {
         try {
             $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
@@ -184,7 +173,7 @@ class PageBuilder
     /**
      * @return string[]
      */
-    private function loadSnippets()
+    private function loadSnippets() : array
     {
         $keys = $this->getSnippetKeysInContext();
         $this->snippetKeyToContentMap = array_merge(
@@ -197,7 +186,7 @@ class PageBuilder
     /**
      * @return string[]
      */
-    private function getSnippetKeysInContext()
+    private function getSnippetKeysInContext() : array
     {
         return array_values($this->removeCodesThatCouldNotBeMappedToAKey($this->snippetCodeToKeyMap));
     }
@@ -206,7 +195,7 @@ class PageBuilder
      * @param string[] $snippetKeys
      * @return string[]
      */
-    private function removeCodesThatCouldNotBeMappedToAKey(array $snippetKeys)
+    private function removeCodesThatCouldNotBeMappedToAKey(array $snippetKeys) : array
     {
         return array_filter($snippetKeys);
     }
@@ -221,7 +210,7 @@ class PageBuilder
     /**
      * @return string[]
      */
-    private function getCodesOfSnippetsWithTransformations()
+    private function getCodesOfSnippetsWithTransformations() : array
     {
         return array_intersect(
             array_keys($this->snippetTransformations),
@@ -229,10 +218,7 @@ class PageBuilder
         );
     }
 
-    /**
-     * @param string $snippetCode
-     */
-    private function applyTransformationToSnippetByCode($snippetCode)
+    private function applyTransformationToSnippetByCode(string $snippetCode)
     {
         $this->pageSnippets->updateSnippetByCode(
             $snippetCode,
@@ -244,12 +230,7 @@ class PageBuilder
         );
     }
 
-    /**
-     * @param string $content
-     * @param callable $transformation
-     * @return string
-     */
-    private function applyTransformationToSnippetContent($content, callable $transformation)
+    private function applyTransformationToSnippetContent(string $content, callable $transformation) : string
     {
         return $transformation($content, $this->context, $this->pageSnippets);
     }
@@ -258,7 +239,7 @@ class PageBuilder
      * @param string $snippetCode
      * @return callable[]
      */
-    private function getTransformationsForSnippetByCode($snippetCode)
+    private function getTransformationsForSnippetByCode(string $snippetCode) : array
     {
         return $this->snippetTransformations[$snippetCode];
     }

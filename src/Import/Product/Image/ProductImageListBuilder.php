@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Context\Context;
@@ -17,13 +19,10 @@ class ProductImageListBuilder
         $this->imageBuilders = $imageBuilders;
     }
 
-    /**
-     * @param ProductId $productId
-     * @param array[] $productImageArrayList
-     * @return ProductImageListBuilder
-     */
-    public static function fromArray(ProductId $productId, array $productImageArrayList)
-    {
+    public static function fromImageArrays(
+        ProductId $productId,
+        array ...$productImageArrayList
+    ) : ProductImageListBuilder {
         $productImageLists = array_map(function (array $imageArray) use ($productId) {
             return ProductImageBuilder::fromArray($productId, $imageArray);
         }, $productImageArrayList);

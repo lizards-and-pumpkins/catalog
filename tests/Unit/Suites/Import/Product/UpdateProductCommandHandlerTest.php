@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -48,11 +50,11 @@ class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->testProduct = new SimpleProduct(
-            ProductId::fromString('foo'),
+            new ProductId('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz'])
+            new SelfContainedContext([DataVersion::CONTEXT_CODE => 'buz'])
         );
         
         $testCommand = new UpdateProductCommand($this->testProduct);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -37,11 +39,7 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
      */
     private $mockProductView;
 
-    /**
-     * @param string $expectedSnippetKey
-     * @param Snippet[] $result
-     */
-    private function assertContainsSnippetWithKey($expectedSnippetKey, array $result)
+    private function assertContainsSnippetWithKey(string $expectedSnippetKey, Snippet ...$result)
     {
         $found = array_reduce($result, function ($found, Snippet $snippet) use ($expectedSnippetKey) {
             return $found || $snippet->getKey() === $expectedSnippetKey;
@@ -70,7 +68,7 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubCanonicalTagSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
-        $this->stubBaseUrlBuilder->method('create')->willReturn(HttpBaseUrl::fromString('https://example.com/'));
+        $this->stubBaseUrlBuilder->method('create')->willReturn(new HttpBaseUrl('https://example.com/'));
         $this->renderer = new ProductCanonicalTagSnippetRenderer(
             $this->stubCanonicalTagSnippetKeyGenerator,
             $this->stubBaseUrlBuilder
@@ -96,7 +94,7 @@ class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result);
         $this->assertNotEmpty($result);
         $this->assertContainsOnlyInstancesOf(Snippet::class, $result);
-        $this->assertContainsSnippetWithKey($snippetKey, $result);
+        $this->assertContainsSnippetWithKey($snippetKey, ...$result);
 
         $snippet = $this->findSnippetByKey($snippetKey, $result);
 

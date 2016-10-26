@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
@@ -59,7 +61,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      * @param ProductView $productView
      * @return Snippet[]
      */
-    public function render(ProductView $productView)
+    public function render(ProductView $productView) : array
     {
         $contentSnippets = [
             $this->createdContentSnippet($productView),
@@ -75,7 +77,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      * @param ProductView $productView
      * @return Snippet[]
      */
-    private function createProductDetailPageMetaSnippets(ProductView $productView)
+    private function createProductDetailPageMetaSnippets(ProductView $productView) : array
     {
         $pageMetaData = json_encode($this->getPageMetaSnippetContent($productView));
         return array_map(function ($urlKey) use ($pageMetaData, $productView) {
@@ -84,11 +86,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         }, $this->getAllProductUrlKeys($productView));
     }
 
-    /**
-     * @param ProductView $productView
-     * @return Snippet
-     */
-    private function createdContentSnippet(ProductView $productView)
+    private function createdContentSnippet(ProductView $productView) : Snippet
     {
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
@@ -99,11 +97,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         return Snippet::create($key, $content);
     }
 
-    /**
-     * @param ProductView $productView
-     * @return Snippet
-     */
-    private function createProductTitleSnippet(ProductView $productView)
+    private function createProductTitleSnippet(ProductView $productView) : Snippet
     {
         $key = $this->productTitleSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
@@ -118,7 +112,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      * @param ProductView $productView
      * @return mixed[]
      */
-    private function getPageMetaSnippetContent(ProductView $productView)
+    private function getPageMetaSnippetContent(ProductView $productView) : array
     {
         $rootBlockName = $this->productDetailViewBlockRenderer->getRootSnippetCode();
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
@@ -134,11 +128,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         return $pageMetaInfo->getInfo();
     }
 
-    /**
-     * @param ProductView $productView
-     * @return Snippet
-     */
-    private function createProductDetailPageMetaDescriptionSnippet(ProductView $productView)
+    private function createProductDetailPageMetaDescriptionSnippet(ProductView $productView) : Snippet
     {
         $productMetaDescription = $productView->getFirstValueOfAttribute('meta_description');
         $description = sprintf('<meta name="description" content="%s" />', htmlspecialchars($productMetaDescription));
@@ -154,12 +144,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         return Snippet::create($key, $description . $keywords);
     }
 
-    /**
-     * @param string $urlKey
-     * @param ProductView $productView
-     * @return string
-     */
-    private function createPageMetaSnippetKey($urlKey, ProductView $productView)
+    private function createPageMetaSnippetKey(string $urlKey, ProductView $productView) : string
     {
         return $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
@@ -171,7 +156,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      * @param ProductView $productView
      * @return string[]
      */
-    private function getAllProductUrlKeys(ProductView $productView)
+    private function getAllProductUrlKeys(ProductView $productView) : array
     {
         return array_merge(
             [$productView->getFirstValueOfAttribute(Product::URL_KEY)],

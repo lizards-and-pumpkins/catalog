@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\XmlParser;
 
 use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceFilePathIsNotAStringException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileIsNotReadableException;
-use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXMLNotAStringException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
@@ -26,10 +26,7 @@ class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
      */
     private $mockLogger;
 
-    /**
-     * @return string
-     */
-    private function getListingXml()
+    private function getListingXml() : string
     {
         return <<<EOT
         <listing url_key="lizards" condition="and" website="test1" locale="xx_XX">
@@ -39,10 +36,7 @@ class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
 EOT;
     }
 
-    /**
-     * @return string
-     */
-    private function getFirstImageXml()
+    private function getFirstImageXml() : string
     {
         return <<<EOT
                 <image>
@@ -53,10 +47,7 @@ EOT;
 
     }
 
-    /**
-     * @return string
-     */
-    private function getSecondImageXml()
+    private function getSecondImageXml() : string
     {
         return <<<EOT
                 <image>
@@ -72,7 +63,7 @@ EOT;
      * @param string|null $imageXml
      * @return string
      */
-    private function getSimpleProductXml($imageXml = null)
+    private function getSimpleProductXml($imageXml = null) : string
     {
         $imageContent = isset($imageXml) ? $imageXml : ($this->getFirstImageXml() . $this->getSecondImageXml());
         return sprintf('
@@ -98,11 +89,7 @@ EOT;
 ', $this->getImagesSectionWithContext($imageContent));
     }
 
-    /**
-     * @param string $content
-     * @return string
-     */
-    private function getProductSectionWithContent($content)
+    private function getProductSectionWithContent(string $content) : string
     {
         return sprintf('
     <products>
@@ -111,11 +98,7 @@ EOT;
 ', $content);
     }
 
-    /**
-     * @param string $content
-     * @return string
-     */
-    private function getImagesSectionWithContext($content)
+    private function getImagesSectionWithContext(string $content) : string
     {
         return sprintf('
     <images>
@@ -124,11 +107,7 @@ EOT;
 ', $content);
     }
 
-    /**
-     * @param string $content
-     * @return string
-     */
-    private function getListingSectionWithContent($content)
+    private function getListingSectionWithContent(string $content) : string
     {
         return sprintf('
     <listings>
@@ -137,11 +116,7 @@ EOT;
 ', $content);
     }
 
-    /**
-     * @param string $content
-     * @return string
-     */
-    private function getCatalogXmlWithContent($content)
+    private function getCatalogXmlWithContent(string $content) : string
     {
         return sprintf(
             '<catalog  xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -151,10 +126,7 @@ EOT;
         );
     }
 
-    /**
-     * @return string
-     */
-    private function getCatalogXmlWithOneSimpleProduct()
+    private function getCatalogXmlWithOneSimpleProduct() : string
     {
         return $this->getCatalogXmlWithContent(
             $this->getProductSectionWithContent(
@@ -163,10 +135,7 @@ EOT;
         );
     }
 
-    /**
-     * @return string
-     */
-    public function getCatalogXmlWithTwoSimpleProducts()
+    public function getCatalogXmlWithTwoSimpleProducts() : string
     {
         return $this->getCatalogXmlWithContent(
             $this->getProductSectionWithContent(
@@ -176,10 +145,7 @@ EOT;
         );
     }
 
-    /**
-     * @return string
-     */
-    private function getCatalogXmlWithTwoListings()
+    private function getCatalogXmlWithTwoListings() : string
     {
         return $this->getCatalogXmlWithContent(
             $this->getListingSectionWithContent(
@@ -189,20 +155,13 @@ EOT;
         );
     }
 
-    /**
-     * @param string $filePath ∂
-     * @param string $content
-     */
-    private function createFixtureFileAndPathWithContent($filePath, $content)
+    private function createFixtureFileAndPathWithContent(string $filePath, string $content)
     {
         $this->createFixtureDirectory(dirname($filePath));
         $this->createFixtureFile($filePath, $content);
     }
 
-    /**
-     * @return string
-     */
-    private function createCatalogXmlFileWithOneSimpleProduct()
+    private function createCatalogXmlFileWithOneSimpleProduct() : string
     {
         $filePath = $this->getUniqueTempDir() . '/simple-product.xml';
         $this->createFixtureFileAndPathWithContent($filePath, $this->getCatalogXmlWithOneSimpleProduct());
@@ -213,10 +172,13 @@ EOT;
      * @param string $expectedXml
      * @param int $expectedCallCount
      * @param string $callbackIdentifier
-     * @return \Closure|\PHPUnit_Framework_MockObject_MockObject
+     * @return callable|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockCallbackExpectingXml($expectedXml, $expectedCallCount, $callbackIdentifier)
-    {
+    private function createMockCallbackExpectingXml(
+        string $expectedXml,
+        int $expectedCallCount,
+        string $callbackIdentifier
+    ) : callable {
         $mockCallback = $this->getMockBuilder(\stdClass::class)->setMethods(['__invoke'])->getMock();
         $expected = new \DOMDocument();
         $expected->loadXML($expectedXml);
@@ -236,46 +198,16 @@ EOT;
         $this->mockLogger = $this->createMock(Logger::class);
     }
 
-    /**
-     * @param int|object|null $invalidSourceFilePath
-     * @param string $expectedType
-     * @dataProvider invalidSourceFilePathDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheFromFileConstructorInputIsNotAString(
-        $invalidSourceFilePath,
-        $expectedType
-    ) {
-        $this->expectException(CatalogImportSourceFilePathIsNotAStringException::class);
-        $this->expectExceptionMessage(
-            sprintf('Expected the catalog XML import file path to be a string, got "%s"', $expectedType)
-        );
-        CatalogXmlParser::fromFilePath($invalidSourceFilePath, $this->mockLogger);
-    }
-
-    /**
-     * @param int|object|null $noXmlStringInput
-     * @param string $expectedType
-     * @dataProvider invalidSourceFilePathDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheFromXmlConstructorInputIsNotAString(
-        $noXmlStringInput,
-        $expectedType
-    ) {
-        $this->expectException(CatalogImportSourceXMLNotAStringException::class);
-        $this->expectExceptionMessage(sprintf('Expected the catalog XML to be a string, got "%s"', $expectedType));
-        CatalogXmlParser::fromXml($noXmlStringInput, $this->mockLogger);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function invalidSourceFilePathDataProvider()
+    public function testItThrowsAnExceptionIfTheFromFileConstructorInputIsNotAString()
     {
-        return [
-            [null, 'NULL'],
-            [42, 'integer'],
-            [new \stdClass(), 'stdClass'],
-        ];
+        $this->expectException(\TypeError::class);
+        CatalogXmlParser::fromFilePath(123, $this->mockLogger);
+    }
+
+    public function testItThrowsAnExceptionIfTheFromXmlConstructorInputIsNotAString()
+    {
+        $this->expectException(\TypeError::class);
+        CatalogXmlParser::fromXml([], $this->mockLogger);
     }
 
     public function testItThrowsAnExceptionIfTheInputFileDoesNotExist()

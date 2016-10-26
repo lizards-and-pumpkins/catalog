@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
@@ -41,7 +43,7 @@ class ProductRelationsService
     public function getRelatedProductData(
         ProductRelationTypeCode $productRelationTypeCode,
         ProductId $productId
-    ) {
+    ) : array {
         $productRelations = $this->productRelationsLocator->locate($productRelationTypeCode);
         $relatedProductIds = $productRelations->getById($productId);
 
@@ -54,7 +56,7 @@ class ProductRelationsService
      * @param ProductId[] $productIds
      * @return array[]
      */
-    private function getProductDataByProductIds(array $productIds)
+    private function getProductDataByProductIds(array $productIds) : array
     {
         return $this->productJsonService->get(...$productIds);
     }

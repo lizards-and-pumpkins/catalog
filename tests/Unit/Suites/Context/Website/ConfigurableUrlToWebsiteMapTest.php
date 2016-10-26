@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Util\Config\ConfigReader;
@@ -58,23 +60,20 @@ class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider websiteMapProvider
-     * @param $testMap
-     * @param $testUrl
-     * @param $expectedWebsiteCode
      */
-    public function testFirstMatchingWebsiteCodeIsReturned($testMap, $testUrl, $expectedWebsiteCode)
+    public function testFirstMatchingWebsiteCodeIsReturned(string $testMap, string $testUrl, string $expectedCode)
     {
         $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
         $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
         $result = $websiteMap->getWebsiteCodeByUrl($testUrl);
 
-        $this->assertWebsiteEqual(Website::fromString($expectedWebsiteCode), $result);
+        $this->assertWebsiteEqual(Website::fromString($expectedCode), $result);
     }
 
     /**
      * @return array[]
      */
-    public function websiteMapProvider()
+    public function websiteMapProvider() : array
     {
         return [
             ['http://example.com/=foo|https://127.0.0.1=bar', 'http://example.com/', 'foo'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
@@ -28,17 +30,11 @@ class ImageProcessor
      */
     private $targetImageDirectoryPath;
 
-    /**
-     * @param ImageProcessingStrategySequence $strategySequence
-     * @param FileStorageReader $reader
-     * @param FileStorageWriter $writer
-     * @param string $targetImageDirectoryPath
-     */
     public function __construct(
         ImageProcessingStrategySequence $strategySequence,
         FileStorageReader $reader,
         FileStorageWriter $writer,
-        $targetImageDirectoryPath
+        string $targetImageDirectoryPath
     ) {
         $this->strategySequence = $strategySequence;
         $this->reader = $reader;
@@ -46,15 +42,10 @@ class ImageProcessor
         $this->targetImageDirectoryPath = $targetImageDirectoryPath;
     }
 
-    /**
-     * @param string $imageFilePath
-     */
-    public function process($imageFilePath)
+    public function process(string $imageFilePath)
     {
         $imageBinaryData = $this->reader->getFileContents($imageFilePath);
-
         $processedImageStream = $this->strategySequence->processBinaryImageData($imageBinaryData);
-
         $targetFilePath = $this->targetImageDirectoryPath . '/' . basename($imageFilePath);
 
         $this->ensureTargetDirectoryExists();
@@ -69,10 +60,7 @@ class ImageProcessor
         }
     }
 
-    /**
-     * @param string $directoryPath
-     */
-    private function createDirectory($directoryPath)
+    private function createDirectory(string $directoryPath)
     {
         if (!is_writable(dirname($directoryPath))) {
             $message = sprintf('Unable to create the target directory for processed images "%s"', $directoryPath);

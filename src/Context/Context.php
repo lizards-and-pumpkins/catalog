@@ -1,52 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 interface Context extends \JsonSerializable
 {
-    /**
-     * @return string
-     */
-    public function __toString();
+    public function __toString() : string;
 
-    /**
-     * @param string[] $requestedParts
-     * @return string
-     */
-    public function getIdForParts(array $requestedParts);
+    public function getIdForParts(string ...$requestedParts) : string;
     
-    /**
-     * @param string $code
-     * @return string
-     */
-    public function getValue($code);
+    public function getValue(string $code) : string;
 
     /**
      * @return string[]
      */
-    public function getSupportedCodes();
+    public function getSupportedCodes() : array;
 
-    /**
-     * @param string $code
-     * @return bool
-     */
-    public function supportsCode($code);
+    public function supportsCode(string $code) : bool;
 
-    /**
-     * @param Context $otherContext
-     * @return bool
-     */
-    public function isSubsetOf(Context $otherContext);
+    public function isSubsetOf(Context $otherContext) : bool;
 
-    /**
-     * @param Context $otherContext
-     * @return bool
-     */
-    public function contains(Context $otherContext);
+    public function contains(Context $otherContext) : bool;
 
     /**
      * @param string[] $dataSet
      * @return bool
      */
-    public function matchesDataSet(array $dataSet);
+    public function matchesDataSet(array $dataSet) : bool;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -34,7 +36,7 @@ class ProductListingTitleSnippetRenderer implements SnippetRenderer
      * @param ProductListing $productListing
      * @return Snippet[]
      */
-    public function render(ProductListing $productListing)
+    public function render(ProductListing $productListing) : array
     {
         if (!$productListing->hasAttribute(self::TITLE_ATTRIBUTE_CODE)) {
             return [];

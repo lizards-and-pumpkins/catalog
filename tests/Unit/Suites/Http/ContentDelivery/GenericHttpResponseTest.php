@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
-use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidResponseBodyException;
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidStatusCodeException;
 use LizardsAndPumpkins\Http\HttpResponse;
 
@@ -29,8 +30,8 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [];
         $dummyStatusCode = HttpResponse::STATUS_OK;
 
-        $this->expectException(InvalidResponseBodyException::class);
-        
+        $this->expectException(\TypeError::class);
+
         GenericHttpResponse::create($invalidBody, $dummyHeaders, $dummyStatusCode);
     }
 
@@ -40,9 +41,8 @@ class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
         $dummyHeaders = [];
         $invalidStatusCode = false;
 
-        $this->expectException(InvalidStatusCodeException::class);
-        $this->expectExceptionMessage('Response status code must be an integer, got boolean.');
-        
+        $this->expectException(\TypeError::class);
+
         GenericHttpResponse::create($dummyBody, $dummyHeaders, $invalidStatusCode);
     }
 

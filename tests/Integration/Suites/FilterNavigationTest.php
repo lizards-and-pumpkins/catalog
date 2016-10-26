@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -17,7 +19,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
      * @param string $html
      * @return mixed[]
      */
-    private function extractFilterNavigation($html)
+    private function extractFilterNavigation(string $html) : array
     {
         preg_match('/var filterNavigationJson = ({[^<]+})/ism', $html, $matches);
 
@@ -40,13 +42,13 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
     /**
      * @return mixed[]
      */
-    public function testListingPageContainsValidFilterNavigationJson()
+    public function testListingPageContainsValidFilterNavigationJson() : array
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString($this->testUrl),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
@@ -59,7 +61,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testListingPageContainsValidFilterNavigationJson
-     * @param array[] $initialFilterNavigation
+     * @param mixed[] $initialFilterNavigation
      */
     public function testFilterNavigationIsChangedIfFilterIsSelected(array $initialFilterNavigation)
     {
@@ -71,7 +73,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString($url),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
@@ -97,7 +99,7 @@ class FilterNavigationTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString($url),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);

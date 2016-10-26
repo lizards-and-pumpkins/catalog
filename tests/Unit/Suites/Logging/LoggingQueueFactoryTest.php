@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\MessageQueueFactory;
@@ -25,7 +27,6 @@ class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
         $implementationFactory = new UnitTestFactory($this);
         
         $masterFactory = new SampleMasterFactory();

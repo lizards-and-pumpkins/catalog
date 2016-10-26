@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileIdentifierException;
@@ -20,10 +22,10 @@ class StorageAgnosticFileUri
     }
     
     /**
-     * @param string $fileIdentifier
+     * @param string|StorageAgnosticFileUri $fileIdentifier
      * @return StorageAgnosticFileUri
      */
-    public static function fromString($fileIdentifier)
+    public static function fromString($fileIdentifier) : StorageAgnosticFileUri
     {
         if ($fileIdentifier instanceof self) {
             return $fileIdentifier;
@@ -45,17 +47,14 @@ class StorageAgnosticFileUri
      * @param mixed $variable
      * @return string
      */
-    private static function getVariableType($variable)
+    private static function getVariableType($variable) : string
     {
         return is_object($variable) ?
             get_class($variable) :
             gettype($variable);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->fileURI;
     }

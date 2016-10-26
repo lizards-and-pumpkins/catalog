@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Country;
 
 use LizardsAndPumpkins\Context\Country\Exception\InvalidCountrySpecificationException;
@@ -14,33 +16,16 @@ class CountryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Country::class, Country::from2CharIso3166('de'));
     }
 
-    /**
-     * @param mixed $nonString
-     * @dataProvider nonStringDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheInputIsNotAString($nonString)
+    public function testItThrowsAnExceptionIfTheInputIsNotAString()
     {
-        $this->expectException(InvalidCountrySpecificationException::class);
-        $this->expectExceptionMessage('The country specification has to be a string, got "');
-        Country::from2CharIso3166($nonString);
+        $this->expectException(\TypeError::class);
+        Country::from2CharIso3166(new \stdClass());
     }
 
     /**
-     * @return array[]
-     */
-    public function nonStringDataProvider()
-    {
-        return [
-            [null],
-            [0],
-        ];
-    }
-
-    /**
-     * @param string $invalidCountrySpec
      * @dataProvider invalidCountrySpecStringProvider
      */
-    public function testItThrowsAnExceptionIfTheInputStringIsNotTwoCharactersLong($invalidCountrySpec)
+    public function testItThrowsAnExceptionIfTheInputStringIsNotTwoCharactersLong(string $invalidCountrySpec)
     {
         $this->expectException(InvalidCountrySpecificationException::class);
         $this->expectExceptionMessage('Two character string country specification expected (ISO 3166), got "');
@@ -50,7 +35,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidCountrySpecStringProvider()
+    public function invalidCountrySpecStringProvider() : array
     {
         return [
             ['x'],
@@ -60,10 +45,9 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $emptyStringProvider
      * @dataProvider emptyStringDataProvider
      */
-    public function testItThrowsAnExceptionIfTheInputStringIsEmpty($emptyStringProvider)
+    public function testItThrowsAnExceptionIfTheInputStringIsEmpty(string $emptyStringProvider)
     {
         $this->expectException(InvalidCountrySpecificationException::class);
         $this->expectExceptionMessage('The country specification must not be empty');
@@ -73,7 +57,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyStringDataProvider()
+    public function emptyStringDataProvider() : array
     {
         return [
             [''],
@@ -82,10 +66,9 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $outOfBoundsCountrySpec
      * @dataProvider countrySpecWithInvalidCharactersProvider
      */
-    public function testItThrowsAnExceptionIfItContainsCharactersBeyondAToZ($outOfBoundsCountrySpec)
+    public function testItThrowsAnExceptionIfItContainsCharactersBeyondAToZ(string $outOfBoundsCountrySpec)
     {
         $this->expectException(InvalidCountrySpecificationException::class);
         $this->expectExceptionMessage(
@@ -97,7 +80,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function countrySpecWithInvalidCharactersProvider()
+    public function countrySpecWithInvalidCharactersProvider() : array
     {
         return [
             ['e1'],

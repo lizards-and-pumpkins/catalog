@@ -1,8 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Http;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\Http\Exception\InvalidHttpRequestBodyException;
+namespace LizardsAndPumpkins\Http;
 
 /**
  * @covers \LizardsAndPumpkins\Http\HttpRequestBody
@@ -12,13 +12,13 @@ class HttpRequestBodyTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsTheRequestBodyAsString()
     {
         $requestContent = 'the request content';
-        $requestBody = HttpRequestBody::fromString($requestContent);
+        $requestBody = new HttpRequestBody($requestContent);
         $this->assertSame($requestContent, $requestBody->toString());
     }
 
     public function testItThrowsAnExceptionIfANonStringIsSpecified()
     {
-        $this->expectException(InvalidHttpRequestBodyException::class);
-        HttpRequestBody::fromString([]);
+        $this->expectException(\TypeError::class);
+        new HttpRequestBody([]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\Image\Exception\ProductImageListNotMutableException;
@@ -16,11 +18,7 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
         $this->images = $images;
     }
 
-    /**
-     * @param array[] $productImagesArray
-     * @return ProductImageList
-     */
-    public static function fromArray(array $productImagesArray)
+    public static function fromImages(array ...$productImagesArray) : ProductImageList
     {
         $images = array_map(function ($productImageArray) {
             return ProductImage::fromArray($productImageArray);
@@ -28,10 +26,7 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
         return new self(...$images);
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return count($this->images);
     }
@@ -39,33 +34,30 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
     /**
      * @return ProductImage[]
      */
-    public function getImages()
+    public function getImages() : array
     {
         return $this->images;
     }
 
-    /**
-     * @return \Iterator
-     */
-    public function getIterator()
+    public function getIterator() : \Iterator
     {
         return new \ArrayIterator($this->images);
     }
 
     /**
-     * @param int $offset
+     * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset) : bool
     {
         return isset($this->images[$offset]);
     }
 
     /**
-     * @param int $offset
+     * @param mixed $offset
      * @return ProductImage
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset) : ProductImage
     {
         return $this->images[$offset];
     }
@@ -90,7 +82,7 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
     /**
      * @return ProductImage[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return $this->images;
     }

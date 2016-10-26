@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
@@ -14,42 +16,22 @@ class SelfContainedContext implements Context
     /**
      * @param string[] $contextParts
      */
-    private function __construct(array $contextParts)
+    public function __construct(array $contextParts)
     {
         $this->contextParts = $contextParts;
     }
 
-    /**
-     * @param string[] $contextParts
-     * @return SelfContainedContext
-     */
-    public static function fromArray(array $contextParts)
-    {
-        return new self($contextParts);
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->combineParts($this->contextParts);
     }
 
-    /**
-     * @param string[] $requestedParts
-     * @return string
-     */
-    public function getIdForParts(array $requestedParts)
+    public function getIdForParts(string ...$requestedParts) : string
     {
         return $this->combineParts(array_intersect_key($this->contextParts, array_flip($requestedParts)));
     }
 
-    /**
-     * @param string $code
-     * @return string
-     */
-    public function getValue($code)
+    public function getValue(string $code) : string
     {
         if (!isset($this->contextParts[$code])) {
             $message = sprintf('No value found in the current context for the code "%s"', $code);
@@ -61,25 +43,17 @@ class SelfContainedContext implements Context
     /**
      * @return string[]
      */
-    public function getSupportedCodes()
+    public function getSupportedCodes() : array
     {
         return array_keys($this->contextParts);
     }
 
-    /**
-     * @param string $code
-     * @return bool
-     */
-    public function supportsCode($code)
+    public function supportsCode(string $code) : bool
     {
         return isset($this->contextParts[$code]);
     }
 
-    /**
-     * @param Context $otherContext
-     * @return bool
-     */
-    public function isSubsetOf(Context $otherContext)
+    public function isSubsetOf(Context $otherContext) : bool
     {
         foreach ($this->getSupportedCodes() as $code) {
             if (!$otherContext->supportsCode($code) || !$this->hasSameValue($otherContext, $code)) {
@@ -89,11 +63,7 @@ class SelfContainedContext implements Context
         return true;
     }
 
-    /**
-     * @param Context $otherContext
-     * @return bool
-     */
-    public function contains(Context $otherContext)
+    public function contains(Context $otherContext) : bool
     {
         return $otherContext->isSubsetOf($this);
     }
@@ -102,7 +72,7 @@ class SelfContainedContext implements Context
      * @param string[] $dataSet
      * @return bool
      */
-    public function matchesDataSet(array $dataSet)
+    public function matchesDataSet(array $dataSet) : bool
     {
         foreach ($this->getSupportedCodes() as $code) {
             if (isset($dataSet[$code]) && $this->getValue($code) !== $dataSet[$code]) {
@@ -115,7 +85,7 @@ class SelfContainedContext implements Context
     /**
      * @return string[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return $this->contextParts;
     }
@@ -124,19 +94,14 @@ class SelfContainedContext implements Context
      * @param string[] $contextParts
      * @return string
      */
-    private function combineParts(array $contextParts)
+    private function combineParts(array $contextParts) : string
     {
         return implode('_', array_map(function ($key, $value) {
             return $key . ':' . $value;
         }, array_keys($contextParts), $contextParts));
     }
 
-    /**
-     * @param Context $otherContext
-     * @param string $code
-     * @return bool
-     */
-    private function hasSameValue(Context $otherContext, $code)
+    private function hasSameValue(Context $otherContext, string $code) : bool
     {
         return $this->getValue($code) === $otherContext->getValue($code);
     }

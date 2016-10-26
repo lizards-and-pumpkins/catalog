@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeCodeException;
@@ -25,7 +27,7 @@ class ProductListingAttributeList
      * @param int[]|float[]|string[]|bool[] $attributes
      * @return ProductListingAttributeList
      */
-    public static function fromArray(array $attributes)
+    public static function fromArray(array $attributes) : ProductListingAttributeList
     {
         every($attributes, function ($value, $code) {
             self::validateAttributeCode($code);
@@ -35,11 +37,7 @@ class ProductListingAttributeList
         return new self($attributes);
     }
 
-    /**
-     * @param string $code
-     * @return bool
-     */
-    public function hasAttribute($code)
+    public function hasAttribute(string $code) : bool
     {
         return isset($this->attributes[$code]);
     }
@@ -48,7 +46,7 @@ class ProductListingAttributeList
      * @param string $code
      * @return int|float|string|bool
      */
-    public function getAttributeValueByCode($code)
+    public function getAttributeValueByCode(string $code)
     {
         if (!$this->hasAttribute($code)) {
             throw new ProductListingAttributeNotFoundException(
@@ -59,17 +57,8 @@ class ProductListingAttributeList
         return $this->attributes[$code];
     }
 
-    /**
-     * @param string $code
-     */
-    private static function validateAttributeCode($code)
+    private static function validateAttributeCode(string $code)
     {
-        if (!is_string($code)) {
-            throw new InvalidProductListingAttributeCodeException(
-                sprintf('Product listing attribute code must be a string, got "%s".', gettype($code))
-            );
-        }
-
         if ('' === $code) {
             throw new InvalidProductListingAttributeCodeException(
                 'Product listing attribute code can not be empty string.'

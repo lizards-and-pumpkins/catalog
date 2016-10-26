@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException;
@@ -34,19 +36,13 @@ class MessageMetadata
     /**
      * @return string[]
      */
-    public function getMetadata()
+    public function getMetadata() : array
     {
         return $this->metadata;
     }
 
-    /**
-     * @param string|int $key
-     */
-    private function validateKey($key)
+    private function validateKey(string $key)
     {
-        if (!is_string($key)) {
-            throw new InvalidMessageMetadataException('The message metadata may only have string array keys');
-        }
         if ('' === $key) {
             throw new InvalidMessageMetadataException('The message metadata array keys must not be empty');
         }
@@ -69,7 +65,7 @@ class MessageMetadata
      * @param mixed $var
      * @return string
      */
-    private function getType($var)
+    private function getType($var) : string
     {
         return is_object($var) ?
             get_class($var) :

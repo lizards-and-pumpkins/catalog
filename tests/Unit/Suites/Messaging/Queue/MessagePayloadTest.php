@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidQueueMessagePayloadException;
@@ -21,7 +23,7 @@ class MessagePayloadTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function messagePayloadDataProvider()
+    public function messagePayloadDataProvider() : array
     {
         return [
             [[]],
@@ -35,8 +37,11 @@ class MessagePayloadTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedPath
      * @dataProvider invalidPayloadProvider
      */
-    public function testThrowsExceptionIfPayloadContainsNonScalarValues($invalidPayload, $expectedType, $expectedPath)
-    {
+    public function testThrowsExceptionIfPayloadContainsNonScalarValues(
+        array $invalidPayload,
+        string $expectedType,
+        string $expectedPath
+    ) {
         $this->expectException(InvalidQueueMessagePayloadException::class);
         $this->expectExceptionMessage(sprintf(
             'Invalid message payload data type found at "%s": %s (must be string, int, float or boolean)',
@@ -50,7 +55,7 @@ class MessagePayloadTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidPayloadProvider()
+    public function invalidPayloadProvider() : array
     {
         return [
             [['foo' => $this], get_class($this), '/foo'],

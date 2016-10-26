@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -21,10 +23,7 @@ class TestDefaultWebFront extends DefaultWebFront
         $this->testMasterFactory = $testMasterFactory;
     }
 
-    /**
-     * @return MasterFactory
-     */
-    protected function createMasterFactory()
+    final protected function createMasterFactory() : MasterFactory
     {
         return $this->testMasterFactory;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
 use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainEventMessageException;
@@ -20,47 +22,29 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
      */
     private $templateContent;
 
-    /**
-     * @param string $templateId
-     * @param string $templateContent
-     */
-    public function __construct($templateId, $templateContent)
+    public function __construct(string $templateId, string $templateContent)
     {
-        // todo: validate template id and content are strings... or use PHP7 and scalar typing
         $this->templateId = $templateId;
         $this->templateContent = $templateContent;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getTemplateContent()
+    public function getTemplateContent() : string
     {
         return $this->templateContent;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplateId()
+    public function getTemplateId() : string
     {
         return $this->templateId;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $payload = ['id' => $this->templateId, 'template' => $this->templateContent];
         return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : TemplateWasUpdatedDomainEvent
     {
         if ($message->getName() !== self::CODE) {
             $message = sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName());

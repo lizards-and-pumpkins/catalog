@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\Country;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
@@ -12,7 +14,7 @@ class IntegrationTestContextCountry implements ContextPartBuilder
      * @param mixed[] $inputDataSet
      * @return string
      */
-    public function getValue(array $inputDataSet)
+    public function getValue(array $inputDataSet) : string
     {
         if (isset($inputDataSet[Country::CONTEXT_CODE])) {
             return (string) $inputDataSet[Country::CONTEXT_CODE];
@@ -21,10 +23,7 @@ class IntegrationTestContextCountry implements ContextPartBuilder
         return $this->defaultCountryCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode() : string
     {
         return Country::CONTEXT_CODE;
     }

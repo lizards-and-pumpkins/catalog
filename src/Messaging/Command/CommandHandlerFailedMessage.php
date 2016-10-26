@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -23,10 +25,7 @@ class CommandHandlerFailedMessage implements LogMessage
         $this->exception = $exception;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf(
             "Failure during processing %s command with following message:\n\n%s",
@@ -38,15 +37,12 @@ class CommandHandlerFailedMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return ['exception' => $this->exception];
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis() : string
     {
         return sprintf('File: %s:%d', $this->exception->getFile(), $this->exception->getLine());
     }

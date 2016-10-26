@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
@@ -13,9 +15,9 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      * @param string[] $data
      * @return SelfContainedContext
      */
-    private function createContext(array $data)
+    private function createContext(array $data) : SelfContainedContext
     {
-        return SelfContainedContext::fromArray($data);
+        return new SelfContainedContext($data);
     }
     
     public function testItImplementsTheContextInterface()
@@ -34,15 +36,15 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
 
     public function testItExtractsTheGivenParts()
     {
-        $this->assertSame('key1:value1', (string) $this->createContext(['key1' => 'value1'])->getIdForParts(['key1']));
+        $this->assertSame('key1:value1', (string) $this->createContext(['key1' => 'value1'])->getIdForParts('key1'));
         $this->assertSame(
             'key2:value2',
-            (string) $this->createContext(['key1' => 'value1', 'key2' => 'value2'])->getIdForParts(['key2'])
+            (string) $this->createContext(['key1' => 'value1', 'key2' => 'value2'])->getIdForParts('key2')
         );
         $contextData = ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3', 'key4' => 'value4'];
         $this->assertSame(
             'key2:value2_key4:value4',
-            (string) $this->createContext($contextData)->getIdForParts(['key2', 'key4'])
+            (string) $this->createContext($contextData)->getIdForParts('key2', 'key4')
         );
     }
 
@@ -122,8 +124,10 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      * @param string[] $matchingDataSet
      * @dataProvider matchingDataSetProvider
      */
-    public function testItMatchesDataSetsWhereAllSharedPartsHaveTheSameValue($contextDataSet, $matchingDataSet)
-    {
+    public function testItMatchesDataSetsWhereAllSharedPartsHaveTheSameValue(
+        array $contextDataSet,
+        array $matchingDataSet
+    ) {
         $this->assertTrue($this->createContext($contextDataSet)->matchesDataSet($matchingDataSet));
     }
 
@@ -146,15 +150,17 @@ class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
      * @param string[] $contextDataSet
      * @param string[] $nonMatchingSet
      */
-    public function testItDoesNotMatchADataSetWhereTheValueOfACommonPartIsDifferent($contextDataSet, $nonMatchingSet)
-    {
+    public function testItDoesNotMatchADataSetWhereTheValueOfACommonPartIsDifferent(
+        array $contextDataSet,
+        array $nonMatchingSet
+    ) {
         $this->assertFalse($this->createContext($contextDataSet)->matchesDataSet($nonMatchingSet));
     }
 
     /**
      * @return array[]
      */
-    public function nonMatchingDataSetProvider()
+    public function nonMatchingDataSetProvider() : array
     {
         return [
             [['key1' => 'value1'], ['key1' => 'XXX']],

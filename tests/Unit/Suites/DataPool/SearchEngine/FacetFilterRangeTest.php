@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFilterRangeBoundariesException;
@@ -15,8 +17,11 @@ class FacetFilterRangeTest extends \PHPUnit_Framework_TestCase
      * @param mixed $rangeTo
      * @param string $exceptionMessage
      */
-    public function testExceptionIsThrownIfEitherOfRangeBoundariesIsNotScalar($rangeFrom, $rangeTo, $exceptionMessage)
-    {
+    public function testExceptionIsThrownIfEitherOfRangeBoundariesIsNotScalar(
+        $rangeFrom,
+        $rangeTo,
+        string $exceptionMessage
+    ) {
         $this->expectException(InvalidFacetFilterRangeBoundariesException::class);
         $this->expectExceptionMessage($exceptionMessage);
         FacetFilterRange::create($rangeFrom, $rangeTo);
@@ -25,7 +30,7 @@ class FacetFilterRangeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidRangeBoundariesDataProvider()
+    public function invalidRangeBoundariesDataProvider() : array
     {
         $exceptionMessagePattern = 'Facet filter range boundary must be numeric, string or null, got "%s".';
 
@@ -61,7 +66,7 @@ class FacetFilterRangeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function rangeBoundariesDataProvider()
+    public function rangeBoundariesDataProvider() : array
     {
         return [
             [1, 1.5],

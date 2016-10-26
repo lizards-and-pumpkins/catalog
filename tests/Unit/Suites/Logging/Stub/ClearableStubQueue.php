@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging\Stub;
 
 use LizardsAndPumpkins\Messaging\MessageReceiver;
@@ -14,7 +16,7 @@ class ClearableStubQueue implements Queue, Clearable
         // Intentionally left empty
     }
 
-    public function count()
+    public function count() : int
     {
         // Intentionally left empty
     }
@@ -24,11 +26,7 @@ class ClearableStubQueue implements Queue, Clearable
         // Intentionally left empty
     }
 
-    /**
-     * @param MessageReceiver $messageReceiver
-     * @param int $maxNumberOfMessagesToConsume
-     */
-    public function consume(MessageReceiver $messageReceiver, $maxNumberOfMessagesToConsume)
+    public function consume(MessageReceiver $messageReceiver, int $maxNumberOfMessagesToConsume)
     {
         // Intentionally left empty
     }

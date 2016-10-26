@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Tax;
 
 use LizardsAndPumpkins\Import\Tax\TaxService;
@@ -11,7 +13,7 @@ class IntegrationTestTaxServiceLocator implements TaxServiceLocator
      * @param mixed[] $options
      * @return TaxService
      */
-    public function get(array $options)
+    public function get(array $options) : TaxService
     {
         return new IntegrationTestTaxService();
     }

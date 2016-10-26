@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -21,72 +23,35 @@ interface Product extends \JsonSerializable
 
     /**
      * @param string $attributeCode
-     * @return string
+     * @return mixed
      */
-    public function getFirstValueOfAttribute($attributeCode);
+    public function getFirstValueOfAttribute(string $attributeCode);
 
     /**
      * @param string $attributeCode
      * @return string[]
      */
-    public function getAllValuesOfAttribute($attributeCode);
+    public function getAllValuesOfAttribute(string $attributeCode) : array;
 
-    /**
-     * @param string $attributeCode
-     * @return bool
-     */
-    public function hasAttribute($attributeCode);
+    public function hasAttribute(AttributeCode $attributeCode) : bool;
 
-    /**
-     * @return ProductAttributeList
-     */
-    public function getAttributes();
+    public function getAttributes() : ProductAttributeList;
 
-    /**
-     * @return Context
-     */
-    public function getContext();
+    public function getContext() : Context;
 
-    /**
-     * @return ProductImageList
-     */
-    public function getImages();
+    public function getImages() : ProductImageList;
 
-    /**
-     * @return int
-     */
-    public function getImageCount();
+    public function getImageCount() : int;
 
-    /**
-     * @param int $imageNumber
-     * @return ProductImage
-     */
-    public function getImageByNumber($imageNumber);
+    public function getImageByNumber(int $imageNumber) : ProductImage;
 
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageFileNameByNumber($imageNumber);
+    public function getImageFileNameByNumber(int $imageNumber) : string;
 
-    /**
-     * @param int $imageNumber
-     * @return string
-     */
-    public function getImageLabelByNumber($imageNumber);
+    public function getImageLabelByNumber(int $imageNumber) : string;
 
-    /**
-     * @return string
-     */
-    public function getMainImageFileName();
+    public function getMainImageFileName() : string;
 
-    /**
-     * @return string
-     */
-    public function getMainImageLabel();
+    public function getMainImageLabel() : string;
 
-    /**
-     * @return ProductTaxClass
-     */
-    public function getTaxClass();
+    public function getTaxClass() : ProductTaxClass;
 }

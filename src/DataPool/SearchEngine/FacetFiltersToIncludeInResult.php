@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 class FacetFiltersToIncludeInResult
@@ -22,7 +24,7 @@ class FacetFiltersToIncludeInResult
     /**
      * @return FacetFilterRequestField[]
      */
-    public function getFields()
+    public function getFields() : array
     {
         return $this->fields;
     }
@@ -30,7 +32,7 @@ class FacetFiltersToIncludeInResult
     /**
      * @return string[]
      */
-    public function getAttributeCodeStrings()
+    public function getAttributeCodeStrings() : array
     {
         if (null === $this->memoizedAttributeCodeStrings) {
             $this->memoizedAttributeCodeStrings = array_map(function (FacetFilterRequestField $field) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
@@ -24,7 +26,7 @@ class HttpHeaders
      * @param string[] $headers
      * @return HttpHeaders
      */
-    public static function fromArray(array $headers)
+    public static function fromArray(array $headers) : HttpHeaders
     {
         $normalizedHeaders = [];
 
@@ -40,10 +42,7 @@ class HttpHeaders
         return new self($normalizedHeaders);
     }
 
-    /**
-     * @return HttpHeaders
-     */
-    public static function fromGlobalRequestHeaders()
+    public static function fromGlobalRequestHeaders() : HttpHeaders
     {
         $globalRequestHeaders = array_reduce(array_keys($_SERVER), function (array $result, $key) {
             return substr($key, 0, 5) !== 'HTTP_' ?
@@ -54,11 +53,7 @@ class HttpHeaders
         return self::fromArray($globalRequestHeaders);
     }
 
-    /**
-     * @param string $headerName
-     * @return string
-     */
-    public function get($headerName)
+    public function get(string $headerName) : string
     {
         $normalizedHeaderName = strtolower($headerName);
         if (!$this->has($normalizedHeaderName)) {
@@ -70,16 +65,12 @@ class HttpHeaders
     /**
      * @return string[]
      */
-    public function getAll()
+    public function getAll() : array
     {
         return $this->headers;
     }
 
-    /**
-     * @param string $headerName
-     * @return bool
-     */
-    public function has($headerName)
+    public function has(string $headerName) : bool
     {
         return array_key_exists(strtolower($headerName), $this->headers);
     }

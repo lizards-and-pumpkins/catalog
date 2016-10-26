@@ -1,17 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
 use LizardsAndPumpkins\Context\Context;
 
 class IntegrationTestFixedBaseUrlBuilder implements BaseUrlBuilder
 {
-    /**
-     * @param Context $context
-     * @return BaseUrl
-     */
-    public function create(Context $context)
+    public function create(Context $context) : BaseUrl
     {
-        return HttpBaseUrl::fromString('http://example.com/');
+        return new HttpBaseUrl('http://example.com/');
     }
 }

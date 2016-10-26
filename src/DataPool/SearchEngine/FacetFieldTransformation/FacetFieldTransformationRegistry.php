@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
@@ -12,21 +14,13 @@ class FacetFieldTransformationRegistry
      */
     private $transformations = [];
 
-    /**
-     * @param string $code
-     * @param FacetFieldTransformation $transformation
-     */
-    public function register($code, FacetFieldTransformation $transformation)
+    public function register(string $code, FacetFieldTransformation $transformation)
     {
         $this->validateCode($code);
         $this->transformations[$code] = $transformation;
     }
 
-    /**
-     * @param string $code
-     * @return FacetFieldTransformation
-     */
-    public function getTransformationByCode($code)
+    public function getTransformationByCode(string $code) : FacetFieldTransformation
     {
         if (!$this->hasTransformationForCode($code)) {
             throw new UnableToFindTransformationException(
@@ -37,22 +31,15 @@ class FacetFieldTransformationRegistry
         return $this->transformations[$code];
     }
 
-    /**
-     * @param string $code
-     * @return bool
-     */
-    public function hasTransformationForCode($code)
+    public function hasTransformationForCode(string $code) : bool
     {
         self::validateCode($code);
         return isset($this->transformations[$code]);
     }
 
-    /**
-     * @param string $code
-     */
-    private function validateCode($code)
+    private function validateCode(string $code)
     {
-        if (!is_string($code) || trim($code) === '') {
+        if (trim($code) === '') {
             throw new InvalidTransformationCodeException('Facet field transformation code must be a non-empty string.');
         }
     }

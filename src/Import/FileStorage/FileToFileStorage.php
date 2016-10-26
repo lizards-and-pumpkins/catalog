@@ -1,24 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 interface FileToFileStorage
 {
-    /**
-     * @param File $file
-     * @return bool
-     */
-    public function isPresent(File $file);
+    public function isPresent(File $file) : bool;
 
-    /**
-     * @param File $file
-     * @return string
-     */
-    public function read(File $file);
+    public function read(File $file) : string;
 
-    /**
-     * @param File $file
-     * @return void
-     */
     public function write(File $file);
 }

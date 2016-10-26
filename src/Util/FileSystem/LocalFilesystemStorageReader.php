@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
@@ -8,21 +10,14 @@ use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotReadableException;
 class LocalFilesystemStorageReader implements FileStorageReader
 {
 
-    /**
-     * @param string $filePath
-     * @return string
-     */
-    public function getFileContents($filePath)
+    public function getFileContents(string $filePath) : string
     {
         $this->checkIfFileIsReadable($filePath);
 
         return file_get_contents($filePath);
     }
 
-    /**
-     * @param string $filePath
-     */
-    private function checkIfFileIsReadable($filePath)
+    private function checkIfFileIsReadable(string $filePath)
     {
         if (!is_file($filePath)) {
             throw new FileNotReadableException(sprintf('Can not read %s file', $filePath));

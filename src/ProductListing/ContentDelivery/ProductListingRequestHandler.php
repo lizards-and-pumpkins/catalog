@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
@@ -9,7 +11,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -77,20 +79,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $memoizedPageMetaInfo;
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    public function canProcess(HttpRequest $request) : bool
     {
         return $this->getPageMetaInfoSnippet($request) !== false;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    public function process(HttpRequest $request)
+    public function process(HttpRequest $request) : HttpResponse
     {
         if (!$this->canProcess($request)) {
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
@@ -142,9 +136,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     /**
      * @param string $metaInfoSnippetKey
-     * @return string
+     * @return mixed
      */
-    private function getPageMetaInfoJsonIfExists($metaInfoSnippetKey)
+    private function getPageMetaInfoJsonIfExists(string $metaInfoSnippetKey)
     {
         try {
             $snippet = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
@@ -154,17 +148,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $snippet;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @param ProductsPerPage $productsPerPage
-     * @param SortOrderConfig $selectedSortOrderConfig
-     * @return SearchEngineResponse
-     */
     private function getSearchResultsMatchingCriteria(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
-    ) {
+    ) : SearchEngineResponse {
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
         $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
 
@@ -179,19 +167,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $this->getResults($request, $numberOfProductsPerPage, $lastPageNumber, $selectedSortOrderConfig);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @param int $numberOfProductsPerPage
-     * @param int $currentPageNumber
-     * @param SortOrderConfig $selectedSortOrderConfig
-     * @return SearchEngineResponse
-     */
     private function getResults(
         HttpRequest $request,
-        $numberOfProductsPerPage,
-        $currentPageNumber,
+        int $numberOfProductsPerPage,
+        int $currentPageNumber,
         SortOrderConfig $selectedSortOrderConfig
-    ) {
+    ) : SearchEngineResponse {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
             $request,
@@ -211,35 +192,20 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
     }
 
-    /**
-     * @param SearchEngineResponse $searchEngineResponse
-     * @param int $currentPageNumber
-     * @param int $numberOfProductsPerPage
-     * @return bool
-     */
     private function isPageWithinBounds(
         SearchEngineResponse $searchEngineResponse,
-        $currentPageNumber,
-        $numberOfProductsPerPage
-    ) {
+        int $currentPageNumber,
+        int $numberOfProductsPerPage
+    ) : bool {
         return $currentPageNumber <= $this->getLastPageNumber($searchEngineResponse, $numberOfProductsPerPage);
     }
 
-    /**
-     * @param SearchEngineResponse $searchEngineResponse
-     * @param int $numberOfProductsPerPage
-     * @return int
-     */
-    private function getLastPageNumber(SearchEngineResponse $searchEngineResponse, $numberOfProductsPerPage)
+    private function getLastPageNumber(SearchEngineResponse $searchEngineResponse, int $numberOfProductsPerPage) : int
     {
         return max(0, (int) ceil($searchEngineResponse->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getMetaInfoSnippetKey(HttpRequest $request)
+    private function getMetaInfoSnippetKey(HttpRequest $request) : string
     {
         $urlKey = $request->getPathWithoutWebsitePrefix();
         $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext(

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -33,6 +35,7 @@ class ProductSearchAutosuggestionSnippetRendererTest extends \PHPUnit_Framework_
 
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->createMock(BlockRenderer::class);
+        $stubBlockRenderer->method('render')->willReturn('');
         
         $stubContext = $this->createMock(Context::class);
         $this->stubContextSource = $this->createMock(ContextSource::class);

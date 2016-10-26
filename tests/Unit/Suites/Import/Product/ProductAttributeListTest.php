@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\ConflictingContextDataForProductAttributeListException;
@@ -112,7 +114,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
      * @param string[] $expected
      * @dataProvider numberOfAttributesToAddProvider
      */
-    public function testItReturnsTheCodesOfAttributesInTheList($numAttributesToAdd, $expected)
+    public function testItReturnsTheCodesOfAttributesInTheList(int $numAttributesToAdd, array $expected)
     {
         $attributes = [];
         for ($i = 0; $i < $numAttributesToAdd; $i++) {
@@ -134,7 +136,7 @@ class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function numberOfAttributesToAddProvider()
+    public function numberOfAttributesToAddProvider() : array
     {
         return [
             [0, []],

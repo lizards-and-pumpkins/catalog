@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 /**
@@ -26,7 +28,7 @@ class HttpGetRequestTest extends AbstractHttpRequestTest
             HttpRequest::METHOD_GET,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
     }
 
@@ -44,7 +46,7 @@ class HttpGetRequestTest extends AbstractHttpRequestTest
             HttpRequest::METHOD_HEAD,
             $stubHttpUrl,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->assertInstanceOf(HttpGetRequest::class, $request);

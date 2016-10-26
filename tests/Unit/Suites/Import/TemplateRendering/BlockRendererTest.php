@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -18,19 +20,12 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  */
 class BlockRendererTest extends AbstractBlockRendererTest
 {
-    /**
-     * @param ThemeLocator $stubThemeLocator
-     * @param BlockStructure $stubBlockStructure
-     * @param TranslatorRegistry $stubTranslatorRegistry
-     * @param BaseUrlBuilder $baseUrlBuilder
-     * @return StubBlockRenderer
-     */
-    protected function createRendererInstance(
+    final protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
         BaseUrlBuilder $baseUrlBuilder
-    ) {
+    ) : BlockRenderer {
         return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry, $baseUrlBuilder);
     }
 
@@ -53,8 +48,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testExceptionIsThrownIfNoBlockClassIsSpecified()
     {
         $this->addStubRootBlock(null, 'dummy-template');
-        $this->expectException(CanNotInstantiateBlockException::class);
-        $this->expectExceptionMessage('Block class is not specified.');
+        $this->expectException(\TypeError::class);
 
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }

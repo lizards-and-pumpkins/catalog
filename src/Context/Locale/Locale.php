@@ -1,8 +1,8 @@
 <?php
 
-namespace LizardsAndPumpkins\Context\Locale;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\Context\Locale\Exception\InvalidLocaleSpecificationException;
+namespace LizardsAndPumpkins\Context\Locale;
 
 class Locale
 {
@@ -10,33 +10,12 @@ class Locale
 
     private $localeCode;
 
-    /**
-     * @param string $localeCode
-     */
-    public function __construct($localeCode)
+    public function __construct(string $localeCode)
     {
         $this->localeCode = $localeCode;
     }
 
-    /**
-     * @param string $localeCode
-     * @return Locale
-     */
-    public static function fromCodeString($localeCode)
-    {
-        if (!is_string($localeCode)) {
-            throw new InvalidLocaleSpecificationException(
-                sprintf('The locale specification has to be a string, got "%s".', gettype($localeCode))
-            );
-        }
-        
-        return new self($localeCode);
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->localeCode;
     }

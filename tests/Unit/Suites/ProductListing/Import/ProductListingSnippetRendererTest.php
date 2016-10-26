@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -8,6 +10,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
@@ -17,6 +20,7 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlo
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
+ * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
@@ -40,7 +44,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListing()
+    private function createStubProductListing() : ProductListing
     {
         $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubProductListing = $this->createMock(ProductListing::class);
@@ -55,7 +59,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
      * @param Snippet[] $result
      * @return Snippet|null
      */
-    private function findSnippetByKey($snippetKey, $result)
+    private function findSnippetByKey(string $snippetKey, Snippet ...$result)
     {
         return array_reduce($result, function ($carry, Snippet $snippet) use ($snippetKey) {
             if ($carry) {
@@ -128,7 +132,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProductListing = $this->createStubProductListing();
         $result = $this->renderer->render($stubProductListing);
 
-        $metaSnippet = $this->findSnippetByKey($metaSnippetKey, $result);
+        $metaSnippet = $this->findSnippetByKey($metaSnippetKey, ...$result);
         $pageData = json_decode($metaSnippet->getContent(), true);
         $this->assertSame('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE]);
         $this->assertContains('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]);
@@ -142,7 +146,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey);
 
         $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getUrlKey')->willReturn('listing.html');
+        $stubProductListing->method('getUrlKey')->willReturn(UrlKey::fromString('listing.html'));
         $stubProductListing->method('hasAttribute')->willReturn(true);
         $stubProductListing->method('getAttributeValueByCode')->willReturnMap(
             [
@@ -152,7 +156,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         );
         $result = $this->renderer->render($stubProductListing);
 
-        $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+        $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
         $this->assertInstanceOf(Snippet::class, $metaDescriptionSnippet);
 
         $this->assertContains(
@@ -177,8 +181,8 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $stubProductListing->method('hasAttribute')->willReturn(true);
         $result = $this->renderer->render($stubProductListing);
 
-        $metaSnippet = $this->findSnippetByKey($testSnippetKey, $result);
-        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+        $metaSnippet = $this->findSnippetByKey($testSnippetKey, ...$result);
+        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
 
         $this->assertContains(
             '<meta name="description" content="meta_description_value" />',
@@ -208,7 +212,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         );
         $result = $this->renderer->render($stubProductListing);
 
-        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
         $this->assertContains(
             '<meta name="description" content="" />',
             $htmlHeadMetaKeySnippet->getContent()
@@ -229,7 +233,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         );
         $result = $this->renderer->render($stubProductListing);
 
-        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
         $this->assertContains(
             '<meta name="keywords" content="" />',
             $htmlHeadMetaKeySnippet->getContent()
@@ -245,13 +249,13 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey);
 
         $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getUrlKey')->willReturn('listing.html');
+        $stubProductListing->method('getUrlKey')->willReturn(UrlKey::fromString('listing.html'));
         $stubProductListing->method('hasAttribute')->willReturn(true);
         $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaContent);
 
         $result = $this->renderer->render($stubProductListing);
 
-        $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, $result);
+        $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
 
         $this->assertContains(
             "<meta name=\"description\" content=\"$expectedContent\" />",

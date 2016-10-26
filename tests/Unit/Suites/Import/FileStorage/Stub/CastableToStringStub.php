@@ -1,13 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage\Stub;
 
 class CastableToStringStub
 {
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return 'stub string content';
     }

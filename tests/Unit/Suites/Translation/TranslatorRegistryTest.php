@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Translation;
 
 use LizardsAndPumpkins\Translation\Exception\UndefinedTranslatorException;
@@ -17,7 +19,7 @@ class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return callable|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function createStubTranslatorFactory()
+    private function createStubTranslatorFactory() : callable
     {
         $stubTranslatorFactory = $this->getMockBuilder(\stdClass::class)->setMethods(['__invoke'])->getMock();
         $stubTranslatorFactory->method('__invoke')->willReturnCallback(function () {

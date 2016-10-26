@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
@@ -54,17 +56,11 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider nonIntegerProvider
-     * @param mixed $invalidRowsPerPage
-     */
-    public function testExceptionIsThrownIfRowsPerPageIsNotAnInteger($invalidRowsPerPage)
+    public function testExceptionIsThrownIfRowsPerPageIsNotAnInteger()
     {
-        $this->expectException(InvalidRowsPerPageException::class);
-        $this->expectExceptionMessage(
-            sprintf('Number of rows per page must be an integer, got "%s".', gettype($invalidRowsPerPage))
-        );
+        $this->expectException(\TypeError::class);
 
+        $invalidRowsPerPage = 'foo';
         $this->queryOptions = QueryOptions::create(
             $this->testFilterSelection,
             $this->stubContext,
@@ -94,17 +90,11 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider nonIntegerProvider
-     * @param mixed $invalidPageNumber
-     */
-    public function testExceptionIsThrownIfCurrentPageNumberIsNotAnInteger($invalidPageNumber)
+    public function testExceptionIsThrownIfCurrentPageNumberIsNotAnInteger()
     {
-        $this->expectException(InvalidRowsPerPageException::class);
-        $this->expectExceptionMessage(
-            sprintf('Current page number must be an integer, got "%s".', gettype($invalidPageNumber))
-        );
+        $this->expectException(\TypeError::class);
 
+        $invalidPageNumber = 'foo';
         $this->queryOptions = QueryOptions::create(
             $this->testFilterSelection,
             $this->stubContext,
@@ -114,6 +104,7 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchOrderConfig
         );
     }
+
 
     public function testExceptionIsThrownIfPageNumberIsNegative()
     {
@@ -132,21 +123,6 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
             $invalidPageNumber,
             $this->stubSearchOrderConfig
         );
-    }
-
-    /**
-     * @return array[]
-     */
-    public function nonIntegerProvider()
-    {
-        return [
-            [1.1],
-            ['1'],
-            [new \stdClass()],
-            [[]],
-            [false],
-            [null]
-        ];
     }
 
     public function testFilterSelectionIsReturned()

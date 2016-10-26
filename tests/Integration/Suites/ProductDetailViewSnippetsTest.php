@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -25,7 +26,7 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
             'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
         ]);
         $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -38,10 +39,7 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         $this->factory->createDomainEventConsumer()->process();
     }
 
-    /**
-     * @return string
-     */
-    private function getSkuOfFirstSimpleProductInFixture()
+    private function getSkuOfFirstSimpleProductInFixture() : string
     {
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $parser = new XPathParser($xml);
@@ -49,10 +47,7 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         return $skuNode[0]['value'];
     }
 
-    /**
-     * @return string
-     */
-    private function getSkuOfFirstConfigurableProductInFixture()
+    private function getSkuOfFirstConfigurableProductInFixture() : string
     {
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
         $parser = new XPathParser($xml);
@@ -60,76 +55,45 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         return $skuNode[0]['value'];
     }
 
-    /**
-     * @param string $productIdString
-     * @return string
-     */
-    private function getProductJsonSnippetForId($productIdString)
+    private function getProductJsonSnippetForId(string $productIdString) : string
     {
         $key = $this->getProductJsonSnippetKeyForId($productIdString);
         return $this->getSnippetFromDataPool($key);
     }
 
-    /**
-     * @param string $productIdString
-     * @return string
-     */
-    private function getConfigurableProductVariationAttributesJsonSnippetForId($productIdString)
+    private function getConfigurableProductVariationAttributesJsonSnippetForId(string $productIdString) : string
     {
         $key = $this->getConfigurableProductVariationAttributesJsonSnippetKeyForId($productIdString);
         return $this->getSnippetFromDataPool($key);
     }
 
-    /**
-     * @param string $productIdString
-     * @return string
-     */
-    private function getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString)
+    private function getConfigurableProductAssociatedProductsJsonSnippetForId(string $productIdString) : string
     {
         $key = $this->getConfigurableProductAssociatedProductsJsonSnippetKeyForId($productIdString);
         return $this->getSnippetFromDataPool($key);
     }
 
-    /**
-     * @param string $key
-     * @return string
-     */
-    private function getSnippetFromDataPool($key)
+    private function getSnippetFromDataPool(string $key) : string
     {
         return $this->factory->createDataPoolReader()->getSnippet($key);
     }
 
-    /**
-     * @param string $productIdString
-     * @return string
-     */
-    private function getProductJsonSnippetKeyForId($productIdString)
+    private function getProductJsonSnippetKeyForId(string $productIdString) : string
     {
-        /** @var SnippetKeyGenerator $keyGenerator */
         $keyGenerator = $this->factory->createProductJsonSnippetKeyGenerator();
         $context = $this->factory->createContext();
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
-    /**
-     * @param string $productIdString
-     * @return string
-     */
-    private function getConfigurableProductVariationAttributesJsonSnippetKeyForId($productIdString)
+    private function getConfigurableProductVariationAttributesJsonSnippetKeyForId(string $productIdString) : string
     {
-        /** @var SnippetKeyGenerator $keyGenerator */
         $keyGenerator = $this->factory->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
         $context = $this->factory->createContext();
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
-    /**
-     * @param string $productIdString
-     * @return string
-     */
-    private function getConfigurableProductAssociatedProductsJsonSnippetKeyForId($productIdString)
+    private function getConfigurableProductAssociatedProductsJsonSnippetKeyForId(string $productIdString) : string
     {
-        /** @var SnippetKeyGenerator $keyGenerator */
         $keyGenerator = $this->factory->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
         $context = $this->factory->createContext();
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);

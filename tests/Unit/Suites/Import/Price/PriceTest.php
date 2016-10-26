@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Price;
 
 use LizardsAndPumpkins\Import\Price\Exception\InvalidNumberOfDecimalPointsForPriceException;
@@ -11,10 +13,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 {
     public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger()
     {
-        $this->expectException(InvalidNumberOfDecimalPointsForPriceException::class);
-        $this->expectExceptionMessage(
-            'The number of decimal points for a price have to be specified as an integer, got string'
-        );
+        $this->expectException(\TypeError::class);
         Price::fromFractionsWithDecimalPlaces(1, '2');
     }
 
@@ -43,12 +42,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $amount
-     * @param int $numDecimalPoints
-     * @param int $expected
      * @dataProvider fractionConversionDataProvider
      */
-    public function testItRoundsTheAmountToGivenFractions($amount, $numDecimalPoints, $expected)
+    public function testItRoundsTheAmountToGivenFractions(int $amount, int $numDecimalPoints, int $expected)
     {
         $price = Price::fromFractionsWithDecimalPlaces($amount, 6);
         $roundedPrice = $price->round($numDecimalPoints);
@@ -58,7 +54,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function fractionConversionDataProvider()
+    public function fractionConversionDataProvider() : array
     {
         // amount, fractions, expected
         return [
@@ -81,7 +77,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @param float|int $factor
      * @param int $expected
      */
-    public function testItMultipliesByTheGivenFactor($amount, $factor, $expected)
+    public function testItMultipliesByTheGivenFactor(int $amount, $factor, int $expected)
     {
         $price = Price::fromFractions($amount);
         $result = $price->multiplyBy($factor);
@@ -91,7 +87,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function priceMultiplicationDataProvider()
+    public function priceMultiplicationDataProvider() : array
     {
         // amount, factor, expected
         return [

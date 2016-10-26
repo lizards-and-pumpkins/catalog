@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductAttributeValueException;
@@ -44,13 +46,13 @@ class ProductAttribute implements \JsonSerializable
      * @param mixed[] $attribute
      * @return ProductAttribute
      */
-    public static function fromArray(array $attribute)
+    public static function fromArray(array $attribute) : ProductAttribute
     {
         return new self($attribute[self::CODE], $attribute[self::VALUE], $attribute[self::CONTEXT]);
     }
 
     /**
-     * @param string $value
+     * @param mixed $value
      * @param AttributeCode $code
      */
     private function validateValue($value, AttributeCode $code)
@@ -76,16 +78,12 @@ class ProductAttribute implements \JsonSerializable
     /**
      * @return string[]
      */
-    public function getContextParts()
+    public function getContextParts() : array
     {
         return array_keys($this->contextData);
     }
 
-    /**
-     * @param ProductAttribute $attribute
-     * @return bool
-     */
-    public function hasSameContextPartsAs(ProductAttribute $attribute)
+    public function hasSameContextPartsAs(ProductAttribute $attribute) : bool
     {
         $ownContextParts = $this->getContextParts();
         $foreignContextParts = $attribute->getContextParts();
@@ -95,10 +93,7 @@ class ProductAttribute implements \JsonSerializable
             !array_diff($foreignContextParts, $ownContextParts);
     }
 
-    /**
-     * @return AttributeCode
-     */
-    public function getCode()
+    public function getCode() : AttributeCode
     {
         return $this->code;
     }
@@ -107,7 +102,7 @@ class ProductAttribute implements \JsonSerializable
      * @param string|AttributeCode|ProductAttribute $attributeCode
      * @return bool
      */
-    public function isCodeEqualTo($attributeCode)
+    public function isCodeEqualTo($attributeCode) : bool
     {
         $codeToCompare = $attributeCode instanceof ProductAttribute ?
             $attributeCode->getCode() :
@@ -116,27 +111,20 @@ class ProductAttribute implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     * @param string $contextPartCode
-     * @return string
-     */
-    public function getContextPartValue($contextPartCode)
+    public function getContextPartValue(string $contextPartCode) : string
     {
         $this->validateContextPartIsPresent($contextPartCode);
         return $this->contextData[$contextPartCode];
     }
 
-    /**
-     * @param string $contextCode
-     */
-    private function validateContextPartIsPresent($contextCode)
+    private function validateContextPartIsPresent(string $contextCode)
     {
         if (!isset($this->contextData[$contextCode])) {
             throw new ProductAttributeDoesNotContainContextPartException(
@@ -148,7 +136,7 @@ class ProductAttribute implements \JsonSerializable
     /**
      * @return string[]
      */
-    public function getContextDataSet()
+    public function getContextDataSet() : array
     {
         return $this->contextData;
     }
@@ -156,7 +144,7 @@ class ProductAttribute implements \JsonSerializable
     /**
      * @return mixed[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             self::CODE => $this->code->jsonSerialize(),
@@ -165,11 +153,7 @@ class ProductAttribute implements \JsonSerializable
         ];
     }
 
-    /**
-     * @param ProductAttribute $otherAttribute
-     * @return bool
-     */
-    public function isEqualTo(ProductAttribute $otherAttribute)
+    public function isEqualTo(ProductAttribute $otherAttribute) : bool
     {
         return
             $this->isCodeEqualTo($otherAttribute) &&
@@ -177,29 +161,17 @@ class ProductAttribute implements \JsonSerializable
             $this->isContextDataSetEqualTo($otherAttribute);
     }
 
-    /**
-     * @param ProductAttribute $otherAttribute
-     * @return bool
-     */
-    private function isValueEqualTo(ProductAttribute $otherAttribute)
+    private function isValueEqualTo(ProductAttribute $otherAttribute) : bool
     {
         return $this->value === $otherAttribute->getValue();
     }
 
-    /**
-     * @param ProductAttribute $otherAttribute
-     * @return bool
-     */
-    private function isContextDataSetEqualTo(ProductAttribute $otherAttribute)
+    private function isContextDataSetEqualTo(ProductAttribute $otherAttribute) : bool
     {
         return $this->hasSameContextPartsAs($otherAttribute) && $this->hasSameContextPartValuesAs($otherAttribute);
     }
 
-    /**
-     * @param ProductAttribute $otherAttribute
-     * @return bool
-     */
-    private function hasSameContextPartValuesAs(ProductAttribute $otherAttribute)
+    private function hasSameContextPartValuesAs(ProductAttribute $otherAttribute) : bool
     {
         return array_reduce($otherAttribute->getContextParts(), function ($carry, $contextPart) use ($otherAttribute) {
             $myValue = $this->getContextPartValue($contextPart);

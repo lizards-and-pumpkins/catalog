@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 /**
@@ -37,10 +39,9 @@ class FileInStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $fileExistsInStorage
      * @dataProvider fileExistsInStorageProvider
      */
-    public function testItDelegatesToTheStorageToCheckIfTheFileExists($fileExistsInStorage)
+    public function testItDelegatesToTheStorageToCheckIfTheFileExists(bool $fileExistsInStorage)
     {
         $this->mockFileStorage->expects($this->once())->method('isPresent')
             ->with($this->equalTo($this->fileInStorage))
@@ -51,7 +52,7 @@ class FileInStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function fileExistsInStorageProvider()
+    public function fileExistsInStorageProvider() : array
     {
         return [
             [true],

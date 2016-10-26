@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -67,7 +69,7 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @param string $field
      * @return mixed
      */
-    private function getPrivateFieldValue($object, $field)
+    private function getPrivateFieldValue($object, string $field)
     {
         $property = new \ReflectionProperty($object, $field);
         $property->setAccessible(true);

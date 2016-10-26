@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockDoesNotExistException;
@@ -22,11 +24,7 @@ class BlockStructure
         $this->blocks[$blockInstance->getBlockName()] = $blockInstance;
     }
 
-    /**
-     * @param string $parentName
-     * @param Block $childBlockInstance
-     */
-    public function setParentBlock($parentName, Block $childBlockInstance)
+    public function setParentBlock(string $parentName, Block $childBlockInstance)
     {
         if (!$this->hasBlock($parentName)) {
             throw new BlockDoesNotExistException(sprintf(
@@ -40,21 +38,12 @@ class BlockStructure
         }
     }
 
-    /**
-     * @param string $blockName
-     * @return bool
-     */
-    public function hasBlock($blockName)
+    public function hasBlock(string $blockName) : bool
     {
         return array_key_exists($blockName, $this->blocks);
     }
 
-    /**
-     * @param string $parentName
-     * @param string $childName
-     * @return bool
-     */
-    public function hasChildBlock($parentName, $childName)
+    public function hasChildBlock(string $parentName, string $childName) : bool
     {
         if (!array_key_exists($parentName, $this->blockChildren)) {
             return false;
@@ -65,11 +54,7 @@ class BlockStructure
         return true;
     }
 
-    /**
-     * @param string $blockName
-     * @return Block
-     */
-    public function getBlock($blockName)
+    public function getBlock(string $blockName) : Block
     {
         if (!array_key_exists($blockName, $this->blocks)) {
             throw new BlockDoesNotExistException(sprintf('Block does not exist: "%s"', $blockName));
@@ -77,12 +62,7 @@ class BlockStructure
         return $this->blocks[$blockName];
     }
 
-    /**
-     * @param string $parentName
-     * @param string $childName
-     * @return string
-     */
-    public function getChildBlock($parentName, $childName)
+    public function getChildBlock(string $parentName, string $childName) : Block
     {
         if (!$this->hasChildBlock($parentName, $childName)) {
             throw new BlockIsNotAChildOfParentBlockException(sprintf(

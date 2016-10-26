@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -24,7 +26,7 @@ abstract class ContextSource
     /**
      * @return Context[]
      */
-    public function getAllAvailableContexts()
+    public function getAllAvailableContexts() : array
     {
         if (null === $this->memoizedAllAvailableContexts) {
             $this->memoizedAllAvailableContexts = $this->contextBuilder->createContextsFromDataSets(
@@ -39,7 +41,7 @@ abstract class ContextSource
      * @param string[] $requestedContextParts
      * @return Context[]
      */
-    public function getContextsForParts(array $requestedContextParts)
+    public function getContextsForParts(array $requestedContextParts) : array
     {
         $contextDataSets = $this->getContextMatrixForParts($requestedContextParts);
         
@@ -49,13 +51,13 @@ abstract class ContextSource
     /**
      * @return array[]
      */
-    abstract protected function getContextMatrix();
+    abstract protected function getContextMatrix() : array;
 
     /**
      * @param string[] $requestedParts
      * @return array[]
      */
-    private function getContextMatrixForParts(array $requestedParts)
+    private function getContextMatrixForParts(array $requestedParts) : array
     {
         $aggregatedResult = [];
         $flippedRequestedParts = array_flip($requestedParts);
@@ -74,7 +76,7 @@ abstract class ContextSource
      * @param string[] $flippedRequestedParts
      * @return string[]
      */
-    private function extractMatchingParts($contextSourceRecord, $flippedRequestedParts)
+    private function extractMatchingParts(array $contextSourceRecord, array $flippedRequestedParts) : array
     {
         return array_intersect_key($contextSourceRecord, $flippedRequestedParts);
     }
@@ -84,8 +86,10 @@ abstract class ContextSource
      * @param array[] $aggregatedResult
      * @return array[]
      */
-    private function addExtractedContextToAggregateIfNotAlreadyPresent($matchingContextParts, $aggregatedResult)
-    {
+    private function addExtractedContextToAggregateIfNotAlreadyPresent(
+        array $matchingContextParts,
+        array $aggregatedResult
+    ) : array {
         if (!in_array($matchingContextParts, $aggregatedResult)) {
             $aggregatedResult[] = $matchingContextParts;
         }
@@ -96,7 +100,7 @@ abstract class ContextSource
      * @param DataVersion $version
      * @return Context[]
      */
-    public function getAllAvailableContextsWithVersion(DataVersion $version)
+    public function getAllAvailableContextsWithVersion(DataVersion $version) : array
     {
         return $this->contextBuilder->createContextsFromDataSets(
             array_map(function (array $dataSet) use ($version) {

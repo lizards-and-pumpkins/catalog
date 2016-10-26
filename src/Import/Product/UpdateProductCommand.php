@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -22,18 +24,12 @@ class UpdateProductCommand implements Command
         $this->product = $product;
     }
 
-    /**
-     * @return Product
-     */
-    public function getProduct()
+    public function getProduct() : Product
     {
         return $this->product;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $name = self::CODE;
         $payload = ['id' => (string)$this->product->getId(), 'product' => json_encode($this->product)];
@@ -41,11 +37,7 @@ class UpdateProductCommand implements Command
         return Message::withCurrentTime($name, $payload, $metadata);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : UpdateProductCommand
     {
         if ($message->getName() !== 'update_product') {
             throw self::createInvalidMessageException($message->getName());
@@ -55,11 +47,7 @@ class UpdateProductCommand implements Command
         return new self($product);
     }
 
-    /**
-     * @param string $messageName
-     * @return NoUpdateProductCommandMessageException
-     */
-    private static function createInvalidMessageException($messageName)
+    private static function createInvalidMessageException(string $messageName) : NoUpdateProductCommandMessageException
     {
         $message = sprintf('Unable to rehydrate from "%s" queue message, expected "%s"', $messageName, self::CODE);
         return new NoUpdateProductCommandMessageException($message);
@@ -78,10 +66,7 @@ class UpdateProductCommand implements Command
         return $product;
     }
 
-    /**
-     * @return DataVersion
-     */
-    public function getDataVersion()
+    public function getDataVersion() : DataVersion
     {
         return DataVersion::fromVersionString($this->product->getContext()->getValue(DataVersion::CONTEXT_CODE));
     }

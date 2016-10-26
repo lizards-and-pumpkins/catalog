@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Context\Context;
@@ -28,7 +30,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubContextBuilder()
+    private function createStubContextBuilder() : ContextBuilder
     {
         $stubContext = $this->createMock(Context::class);
         $stubContextBuilder = $this->createMock(ContextBuilder::class);
@@ -41,7 +43,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
      * @param string $contentBlockContent
      * @return ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubContentBlockSource($contentBlockContent)
+    private function createStubContentBlockSource(string $contentBlockContent) : ContentBlockSource
     {
         $stubContentBlockSource = $this->createMock(ContentBlockSource::class);
         $stubContentBlockSource->method('getContent')->willReturn($contentBlockContent);

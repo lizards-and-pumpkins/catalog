@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortOrderDirectionException;
@@ -23,6 +25,12 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($direction, (string) $result);
     }
 
+    public function testExceptionIsThrownIfParameterIsNonString()
+    {
+        $this->expectException(\TypeError::class);
+        $this->assertFalse(SortOrderDirection::isValid(new \stdClass()));
+    }
+
     /**
      * @dataProvider invalidSortOrderDirectionProvider
      * @param mixed $invalidDirection
@@ -35,15 +43,12 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidSortOrderDirectionProvider()
+    public function invalidSortOrderDirectionProvider() : array
     {
         return [
             ['foo'],
             ['aSc'],
             ['ASC'],
-            [new \stdClass()],
-            [1],
-            [null],
         ];
     }
 
@@ -59,7 +64,7 @@ class SortOrderDirectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function validSortOrderDirectionProvider()
+    public function validSortOrderDirectionProvider() : array
     {
         return [
             ['asc'],

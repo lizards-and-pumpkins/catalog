@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 
 interface FacetFilterRequestField
 {
-    /**
-     * @return bool
-     */
-    public function isRanged();
+    public function isRanged() : bool;
 
-    /**
-     * @return AttributeCode
-     */
-    public function getAttributeCode();
+    public function getAttributeCode() : AttributeCode;
 }

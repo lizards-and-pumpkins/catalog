@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations;
 
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
@@ -17,10 +19,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
 {
     use FactoryTrait;
 
-    /**
-     * @return ProductRelationsService
-     */
-    public function createProductRelationsService()
+    public function createProductRelationsService() : ProductRelationsService
     {
         return new ProductRelationsService(
             $this->getMasterFactory()->createProductRelationsLocator(),
@@ -29,10 +28,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
         );
     }
 
-    /**
-     * @return SameSeriesProductRelations
-     */
-    public function createSameSeriesProductRelations()
+    public function createSameSeriesProductRelations() : SameSeriesProductRelations
     {
         return new SameSeriesProductRelations(
             $this->getMasterFactory()->createDataPoolReader(),
@@ -41,10 +37,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
         );
     }
 
-    /**
-     * @return ProductRelationsLocator
-     */
-    public function createProductRelationsLocator()
+    public function createProductRelationsLocator() : ProductRelationsLocator
     {
         $productRelationsLocator = new ProductRelationsLocator();
         $productRelationsLocator->register(
@@ -54,10 +47,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
         return $productRelationsLocator;
     }
 
-    /**
-     * @return ProductRelationsApiV1GetRequestHandler
-     */
-    public function createProductRelationsApiV1GetRequestHandler()
+    public function createProductRelationsApiV1GetRequestHandler() : ProductRelationsApiV1GetRequestHandler
     {
         return new ProductRelationsApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductRelationsService()

@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
@@ -63,14 +64,14 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
 
     public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\TypeError::class);
         ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], []);
     }
 
     public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
     {
-        $this->expectException(InvalidSnippetCodeException::class);
-        ProductDetailPageMetaInfoSnippetContent::create(123, 1.0, [], []);
+        $this->expectException(\TypeError::class);
+        ProductDetailPageMetaInfoSnippetContent::create('foo', 1.0, [], []);
     }
 
     public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()
@@ -97,9 +98,8 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
-     * @param string $key
      */
-    public function testExceptionIsThrownIfRequiredKeyIsMissing($key)
+    public function testExceptionIsThrownIfRequiredKeyIsMissing(string $key)
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Missing key in input JSON');
@@ -111,7 +111,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_Tes
     /**
      * @return array[]
      */
-    public function pageInfoArrayKeyProvider()
+    public function pageInfoArrayKeyProvider() : array
     {
         return [
             [ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID],

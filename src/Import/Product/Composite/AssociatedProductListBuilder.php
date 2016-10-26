@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Context\Context;
@@ -22,11 +24,7 @@ class AssociatedProductListBuilder
         $this->productBuilders = $productBuilders;
     }
 
-    /**
-     * @param Context $context
-     * @return AssociatedProductList
-     */
-    public function getAssociatedProductListForContext(Context $context)
+    public function getAssociatedProductListForContext(Context $context) : AssociatedProductList
     {
         if (! isset($this->memoizedProductLists[(string) $context])) {
             $this->memoizedProductLists[(string) $context] = $this->createAssociatedProductList($context);
@@ -34,11 +32,7 @@ class AssociatedProductListBuilder
         return $this->memoizedProductLists[(string) $context];
     }
 
-    /**
-     * @param Context $context
-     * @return AssociatedProductList
-     */
-    private function createAssociatedProductList(Context $context)
+    private function createAssociatedProductList(Context $context) : AssociatedProductList
     {
         $builders = array_filter($this->productBuilders, function (ProductBuilder $productBuilder) use ($context) {
             return $productBuilder->isAvailableForContext($context);

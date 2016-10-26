@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
-use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
@@ -60,16 +61,14 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
 
     public function testExceptionIsThrownIfNonStringSnippetRendererCodeIsPassed()
     {
-        $stubSnippetRenderer = $this->createMock(SnippetRenderer::class);
-        $this->expectException(InvalidSnippetCodeException::class);
-        $this->strategy->getKeyGeneratorForSnippetCode($stubSnippetRenderer);
+        $this->expectException(\TypeError::class);
+        $this->strategy->getKeyGeneratorForSnippetCode(new \stdClass());
     }
 
     /**
      * @dataProvider emptySnippetCodeDataProvider
-     * @param string $emptySnippetCode
      */
-    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed($emptySnippetCode)
+    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed(string $emptySnippetCode)
     {
         $this->expectException(InvalidSnippetCodeException::class);
         $this->expectExceptionMessage('Snippet code must not be empty.');
@@ -79,7 +78,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     /**
      * @return array[]
      */
-    public function emptySnippetCodeDataProvider()
+    public function emptySnippetCodeDataProvider() : array
     {
         return [
             [''],
@@ -99,9 +98,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
         $this->assertSame($this->stubSnippetKeyGenerator, $this->strategy->getKeyGeneratorForSnippetCode($snippetCode));
     }
 
-    public function testExceptionIsThrownWhenRegisteringNonStringSnippetCode()
+    public function testExceptionIsThrownWhenRegisteringEmptyStringSnippetCode()
     {
-        $invalidSnippetCode = 123;
+        $invalidSnippetCode = '';
         $testClosure = function () {
             // intentionally left empty
         };
@@ -114,8 +113,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_
     public function testSameInstanceForSameSnippetCodeIsReturned()
     {
         $snippetCode = 'foo';
-        $testClosure = function () {
-            // intentionally left empty
+        $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $testClosure = function () use ($stubSnippetKeyGenerator) {
+            return $stubSnippetKeyGenerator;
         };
 
         $this->strategy->register($snippetCode, $testClosure);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
@@ -8,9 +10,5 @@ use LizardsAndPumpkins\Import\FileStorage\File;
 
 interface Image extends File
 {
-    /**
-     * @param Context $context
-     * @return HttpUrl
-     */
-    public function getUrl(Context $context);
+    public function getUrl(Context $context) : HttpUrl;
 }

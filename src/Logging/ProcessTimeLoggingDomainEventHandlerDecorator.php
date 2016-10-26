@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
@@ -33,11 +35,7 @@ class ProcessTimeLoggingDomainEventHandlerDecorator implements DomainEventHandle
         ));
     }
 
-    /**
-     * @param float $time
-     * @return string
-     */
-    private function formatMessageString($time)
+    private function formatMessageString(float $time) : string
     {
         return sprintf('DomainEventHandler::process %s %f', get_class($this->component), $time);
     }

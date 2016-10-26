@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
@@ -48,11 +50,7 @@ class ProductListingPageRequest
         $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return int
-     */
-    public function getCurrentPageNumber(HttpRequest $request)
+    public function getCurrentPageNumber(HttpRequest $request) : int
     {
         return max(0, $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME) - 1);
     }
@@ -62,21 +60,19 @@ class ProductListingPageRequest
      * @param FacetFiltersToIncludeInResult $facetFilterRequest
      * @return array[]
      */
-    public function getSelectedFilterValues(HttpRequest $request, FacetFiltersToIncludeInResult $facetFilterRequest)
-    {
+    public function getSelectedFilterValues(
+        HttpRequest $request,
+        FacetFiltersToIncludeInResult $facetFilterRequest
+    ) : array {
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         return array_reduce($facetFilterAttributeCodeStrings, function (array $carry, $filterName) use ($request) {
             $queryParameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($filterName);
-            $carry[$filterName] = array_filter(explode(',', $request->getQueryParameter($queryParameterName)));
+            $carry[$filterName] = array_filter(explode(',', (string) $request->getQueryParameter($queryParameterName)));
             return $carry;
         }, []);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return ProductsPerPage
-     */
-    public function getProductsPerPage(HttpRequest $request)
+    public function getProductsPerPage(HttpRequest $request) : ProductsPerPage
     {
         $productsPerPageQueryStringValue = $this->getProductsPerPageQueryStringValue($request);
         if (null !== $productsPerPageQueryStringValue) {
@@ -93,11 +89,7 @@ class ProductListingPageRequest
         return $this->productsPerPage;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return SortOrderConfig
-     */
-    public function getSelectedSortOrderConfig(HttpRequest $request)
+    public function getSelectedSortOrderConfig(HttpRequest $request) : SortOrderConfig
     {
         $sortOrderQueryStringValue = $this->getSortOrderQueryStringValue($request);
         $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
@@ -149,11 +141,7 @@ class ProductListingPageRequest
         }
     }
 
-    /**
-     * @param SortOrderConfig $sortOrderConfig
-     * @return SortOrderConfig
-     */
-    public function createSortOrderConfigForRequest(SortOrderConfig $sortOrderConfig)
+    public function createSortOrderConfigForRequest(SortOrderConfig $sortOrderConfig) : SortOrderConfig
     {
         $attributeCodeString = (string) $sortOrderConfig->getAttributeCode();
         $mappedAttributeCodeString = $this->searchFieldToRequestParamMap->getSearchFieldName($attributeCodeString);
@@ -164,27 +152,24 @@ class ProductListingPageRequest
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return null|string
      */
     private function getProductsPerPageQueryStringValue(HttpRequest $request)
     {
         return $request->getQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME);
     }
 
-    /**
-     * @param string $attributeCodeString
-     * @param SortOrderDirection $direction
-     * @return SortOrderConfig
-     */
-    private function createSelectedSortOrderConfig($attributeCodeString, SortOrderDirection $direction)
-    {
+    private function createSelectedSortOrderConfig(
+        string $attributeCodeString,
+        SortOrderDirection $direction
+    ) : SortOrderConfig {
         $attributeCode = AttributeCode::fromString($attributeCodeString);
         return SortOrderConfig::createSelected($attributeCode, $direction);
     }
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return null|string
      */
     private function getSortOrderQueryStringValue(HttpRequest $request)
     {
@@ -193,7 +178,7 @@ class ProductListingPageRequest
 
     /**
      * @param HttpRequest $request
-     * @return string
+     * @return null|string
      */
     private function getSortDirectionQueryStringValue(HttpRequest $request)
     {
@@ -201,11 +186,11 @@ class ProductListingPageRequest
     }
 
     /**
-     * @param string $sortOrder
-     * @param string $direction
+     * @param string|null $sortOrder
+     * @param string|null $direction
      * @return bool
      */
-    private function isValidSortOrder($sortOrder, $direction)
+    private function isValidSortOrder($sortOrder, $direction) : bool
     {
         if (null === $sortOrder || null === $direction) {
             return false;

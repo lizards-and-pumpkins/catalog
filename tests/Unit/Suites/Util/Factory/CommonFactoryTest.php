@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -229,11 +231,11 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     public function testProductWasUpdatedDomainEventHandlerIsReturned()
     {
         $testProduct = new SimpleProduct(
-            ProductId::fromString('foo'),
+            new ProductId('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
-            SelfContainedContext::fromArray([DataVersion::CONTEXT_CODE => 'buz'])
+            new SelfContainedContext([DataVersion::CONTEXT_CODE => 'buz'])
         );
         $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
         $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($testEvent->toMessage());
@@ -494,7 +496,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubContext->method('getValue')->willReturn('123');
         $product = new SimpleProduct(
-            ProductId::fromString('foo'),
+            new ProductId('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),
@@ -808,10 +810,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $expected
      * @dataProvider productListSnippetRenderersProvider
      */
-    public function testContainsProductListingPageSnippetRenderersinSnippetRendererList($expected)
+    public function testContainsProductListingPageSnippetRenderersInSnippetRendererList(string $expected)
     {
         $found = array_reduce(
             $this->commonFactory->createProductListingSnippetRendererList(),
@@ -826,7 +827,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function productListSnippetRenderersProvider()
+    public function productListSnippetRenderersProvider() : array
     {
         return [
             [ProductListingDescriptionSnippetRenderer::class],
@@ -837,10 +838,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $expected
      * @dataProvider productSnippetRenderersProvider
      */
-    public function testContainsProductSnippetRenderersinSnippetRendererList($expected)
+    public function testContainsProductSnippetRenderersInSnippetRendererList(string $expected)
     {
         $found = array_reduce(
             $this->commonFactory->createProductDetailPageSnippetRendererList(),
@@ -855,7 +855,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function productSnippetRenderersProvider()
+    public function productSnippetRenderersProvider() : array
     {
         return [
             [ProductDetailViewSnippetRenderer::class],

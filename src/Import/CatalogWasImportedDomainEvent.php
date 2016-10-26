@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -22,27 +24,17 @@ class CatalogWasImportedDomainEvent implements DomainEvent
         $this->dataVersion = $dataVersion;
     }
 
-    /**
-     * @return DataVersion
-     */
-    public function getDataVersion()
+    public function getDataVersion() : DataVersion
     {
         return $this->dataVersion;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         return Message::withCurrentTime(self::CODE, [], ['data_version' => (string) $this->dataVersion]);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : CatalogWasImportedDomainEvent
     {
         if ($message->getName() !== self::CODE) {
             throw new NoCatalogWasImportedDomainEventMessageException(

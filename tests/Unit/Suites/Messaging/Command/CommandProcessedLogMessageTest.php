@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -14,11 +16,7 @@ class CommandProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
      */
     private $mockCommandHandler;
 
-    /**
-     * @param string $message
-     * @return CommandProcessedLogMessage
-     */
-    private function createMessageInstance($message)
+    private function createMessageInstance(string $message) : CommandProcessedLogMessage
     {
         return new CommandProcessedLogMessage($message, $this->mockCommandHandler);
     }

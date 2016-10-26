@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -22,18 +24,12 @@ class FacetFilterRequestRangedField implements FacetFilterRequestField
         $this->ranges = $ranges;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isRanged()
+    public function isRanged() : bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributeCode()
+    public function getAttributeCode() : AttributeCode
     {
         return $this->attributeCode;
     }
@@ -41,7 +37,7 @@ class FacetFilterRequestRangedField implements FacetFilterRequestField
     /**
      * @return FacetFilterRange[]
      */
-    public function getRanges()
+    public function getRanges() : array
     {
         return $this->ranges;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -27,7 +29,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {
-    private $testProductId = 333;
+    private $testProductId = '333';
 
     /**
      * @var SampleMasterFactory
@@ -44,11 +46,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
      */
     private $request;
 
-    /**
-     * @param string $productDetailPageMetaSnippetKey
-     * @param Context $context
-     */
-    private function addSnippetsFixtureToKeyValueStorage($productDetailPageMetaSnippetKey, Context $context)
+    private function addSnippetsFixtureToKeyValueStorage(string $productDetailPageMetaSnippetKey, Context $context)
     {
         $dataPoolWriter = $this->factory->createDataPoolWriter();
 
@@ -71,10 +69,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $dataPoolWriter->writeSnippets($rootSnippet, $metaInfoSnippet, ...$pageSnippets);
     }
 
-    /**
-     * @param string $rootSnippetCode
-     */
-    private function registerSnippetKeyGenerators($rootSnippetCode)
+    private function registerSnippetKeyGenerators(string $rootSnippetCode)
     {
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
             ProductDetailViewSnippetRenderer::CODE,
@@ -92,12 +87,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         });
     }
 
-    /**
-     * @param string $code
-     * @param Context $context
-     * @return SnippetKeyGenerator
-     */
-    private function getSnippetKey($code, Context $context)
+    private function getSnippetKey(string $code, Context $context) : string
     {
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($code);
         return $keyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
@@ -107,7 +97,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
      * @param Context $context
      * @return Snippet[]
      */
-    private function createTestProductDetailPageSnippets(Context $context)
+    private function createTestProductDetailPageSnippets(Context $context) : array
     {
         $headSnippetContent = '<title>Page Title</title>';
         $headSnippet = Snippet::create($this->getSnippetKey('head', $context), $headSnippetContent);
@@ -130,31 +120,21 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         return [$headSnippet, $bodySnippet, $productJsonSnippet, $priceSnippet, $specialPriceSnippet];
     }
 
-    /**
-     * @param HttpUrl $url
-     * @return HttpRequest
-     */
-    private function createDummyRequest(HttpUrl $url)
+    private function createDummyRequest(HttpUrl $url) : HttpRequest
     {
         return HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             $url,
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
     }
 
-    /**
-     * @param Context $context
-     * @param Logger $logger
-     * @param SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
-     * @return ProductDetailViewRequestHandler
-     */
     private function createProductDetailViewRequestHandler(
         Context $context,
         Logger $logger,
         SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
-    ) {
+    ) : ProductDetailViewRequestHandler {
         $dataPoolReader = $this->factory->createDataPoolReader();
 
         return new ProductDetailViewRequestHandler(

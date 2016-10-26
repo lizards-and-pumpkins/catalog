@@ -1,35 +1,21 @@
 <?php
 
-namespace LizardsAndPumpkins\RestApi;
+declare(strict_types=1);
 
-use LizardsAndPumpkins\RestApi\Exception\ApiVersionMustBeIntException;
+namespace LizardsAndPumpkins\RestApi;
 
 class ApiRequestHandlerLocator
 {
     private $requestHandlers = [];
 
-    /**
-     * @param string $code
-     * @param int $version
-     * @param ApiRequestHandler $requestHandler
-     */
-    public function register($code, $version, ApiRequestHandler $requestHandler)
+    public function register(string $code, int $version, ApiRequestHandler $requestHandler)
     {
-        $this->validateApiVersion($version);
-
         $key = $this->getRequestProcessorLocatorKey($code, $version);
         $this->requestHandlers[$key] = $requestHandler;
     }
 
-    /**
-     * @param string $code
-     * @param int $version
-     * @return ApiRequestHandler
-     */
-    public function getApiRequestHandler($code, $version)
+    public function getApiRequestHandler(string $code, int $version) : ApiRequestHandler
     {
-        $this->validateApiVersion($version);
-
         $key = $this->getRequestProcessorLocatorKey($code, $version);
 
         if (!isset($this->requestHandlers[$key])) {
@@ -39,25 +25,8 @@ class ApiRequestHandlerLocator
         return $this->requestHandlers[$key];
     }
 
-    /**
-     * @param string $code
-     * @param string $version
-     * @return string
-     */
-    private function getRequestProcessorLocatorKey($code, $version)
+    private function getRequestProcessorLocatorKey(string $code, int $version) : string
     {
         return sprintf('v%s_%s', $version, $code);
-    }
-
-    /**
-     * @param int $version
-     */
-    private function validateApiVersion($version)
-    {
-        if (!is_int($version)) {
-            throw new ApiVersionMustBeIntException(
-                sprintf('Api version is supposed to be an integer, got %.', gettype($version))
-            );
-        }
     }
 }

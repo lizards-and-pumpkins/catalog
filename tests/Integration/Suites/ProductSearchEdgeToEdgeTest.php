@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
@@ -24,7 +26,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
         ]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -39,10 +41,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
-    /**
-     * @return ProductSearchRequestHandler
-     */
-    private function getProductSearchRequestHandler()
+    private function getProductSearchRequestHandler() : ProductSearchRequestHandler
     {
         return $this->factory->createProductSearchRequestHandler();
     }
@@ -77,10 +76,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->assertContains($expectedRootSnippetCode, $metaInfoSnippet['page_snippet_codes']);
     }
 
-    /**
-     * @return HttpResponse
-     */
-    public function testProductListingPageHtmlIsReturned()
+    public function testProductListingPageHtmlIsReturned() : HttpResponse
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
@@ -88,7 +84,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/catalogsearch/result/?q=adi'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $this->importCatalogFixture($this->factory);

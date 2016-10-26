@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Composite;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -16,7 +18,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
      * @param string[] $attributeCodeStrings
      * @return AttributeCode[]
      */
-    private function createAttributeCodeListFromStrings(array $attributeCodeStrings)
+    private function createAttributeCodeListFromStrings(array $attributeCodeStrings) : array
     {
         return array_map(function ($code) {
             return AttributeCode::fromString($code);
@@ -46,7 +48,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf(
             ProductVariationAttributeList::class,
-            ProductVariationAttributeList::fromArray(['test'])
+            ProductVariationAttributeList::fromStrings(...['test'])
         );
     }
 
@@ -82,7 +84,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
      * @param int $expectedCount
      * @dataProvider attributeCodeStringCountProvider
      */
-    public function testItCountsTheNumberOfAttributesInTheList(array $attributeCodeStrings, $expectedCount)
+    public function testItCountsTheNumberOfAttributesInTheList(array $attributeCodeStrings, int $expectedCount)
     {
         $attributeCodes = $this->createAttributeCodeListFromStrings($attributeCodeStrings);
         $this->assertCount($expectedCount, new ProductVariationAttributeList(...$attributeCodes));
@@ -91,7 +93,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function attributeCodeStringCountProvider()
+    public function attributeCodeStringCountProvider() : array
     {
         return [
             [['test'], 1],
@@ -113,7 +115,7 @@ class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
         $sourceVariationAttributeList = new ProductVariationAttributeList(...$attributeCodes);
 
         $json = json_encode($sourceVariationAttributeList);
-        $rehydratedVariationAttributeList = ProductVariationAttributeList::fromArray(json_decode($json, true));
+        $rehydratedVariationAttributeList = ProductVariationAttributeList::fromStrings(...json_decode($json, true));
 
         $this->assertCount(count($attributeCodes), $rehydratedVariationAttributeList);
         foreach ($rehydratedVariationAttributeList as $rehydratedAttributeCode) {

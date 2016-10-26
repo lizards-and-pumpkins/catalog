@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
@@ -14,7 +16,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\UnableToHandleRequestException;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
@@ -68,20 +70,12 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->productListingPageRequest = $productListingPageRequest;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    public function canProcess(HttpRequest $request) : bool
     {
         return $this->isValidSearchRequest($request);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    public function process(HttpRequest $request)
+    public function process(HttpRequest $request) : HttpResponse
     {
         if (!$this->canProcess($request)) {
             throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
@@ -112,11 +106,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    private function isValidSearchRequest(HttpRequest $request)
+    private function isValidSearchRequest(HttpRequest $request) : bool
     {
         $urlPathWithoutTrailingSlash = rtrim($request->getPathWithoutWebsitePrefix(), '/');
 
@@ -128,24 +118,18 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             return false;
         }
 
-        if (strlen($request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1) {
+        if (strlen((string) $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1) {
             return false;
         }
 
         return true;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @param ProductsPerPage $productsPerPage
-     * @param SortOrderConfig $selectedSortOrderConfig
-     * @return SearchEngineResponse
-     */
     private function getSearchResultsMatchingCriteria(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
-    ) {
+    ) : SearchEngineResponse {
         $requestSortOrder = $this->productListingPageRequest->createSortOrderConfigForRequest($selectedSortOrderConfig);
 
         $queryOptions = QueryOptions::create(
@@ -162,10 +146,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         return $this->dataPoolReader->getSearchResultsMatchingString($queryString, $queryOptions);
     }
 
-    /**
-     * @return ProductSearchResultMetaSnippetContent
-     */
-    private function getPageMetaInfo()
+    private function getPageMetaInfo() : ProductSearchResultMetaSnippetContent
     {
         $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
         $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);

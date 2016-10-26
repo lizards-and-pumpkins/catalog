@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
@@ -64,7 +66,7 @@ class DataPoolWriterTest extends AbstractDataPoolTest
      * @param string $mockSnippetContent
      * @return Snippet|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockSnippet($mockSnippetKey, $mockSnippetContent)
+    private function getMockSnippet(string $mockSnippetKey, string $mockSnippetContent) : Snippet
     {
         $mockSnippet = $this->createMock(Snippet::class);
         $mockSnippet->expects($this->once())->method('getKey')->willReturn($mockSnippetKey);

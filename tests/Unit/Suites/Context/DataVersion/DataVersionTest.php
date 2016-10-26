@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
-use LizardsAndPumpkins\Context\DataVersion\Exception\InvalidVersionException;
 
 /**
- * @covers LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @covers \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class DataVersionTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +24,7 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyVersionProvider()
+    public function emptyVersionProvider() : array
     {
         return [
             [''],
@@ -31,30 +32,10 @@ class DataVersionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidVersionProvider
-     * @param mixed $invalidVersion
-     */
-    public function testExceptionIsThrownIfVersionIsInvalid($invalidVersion)
+    public function testExceptionIsThrownIfVersionIsInvalid()
     {
-        $this->expectException(InvalidVersionException::class);
-        DataVersion::fromVersionString($invalidVersion);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function invalidVersionProvider()
-    {
-        return [
-            [1],
-            [.1],
-            [null],
-            [[]],
-            [new \stdClass()],
-            [true],
-            [false],
-        ];
+        $this->expectException(\TypeError::class);
+        DataVersion::fromVersionString(true);
     }
 
     public function testVersionIsReturned()

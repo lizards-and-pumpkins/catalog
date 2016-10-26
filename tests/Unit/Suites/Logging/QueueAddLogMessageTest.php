@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Queue;
 
 /**
- * @covers LizardsAndPumpkins\Logging\QueueAddLogMessage
+ * @covers \LizardsAndPumpkins\Logging\QueueAddLogMessage
  */
 class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +31,7 @@ class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
      * @param string $expected
      * @dataProvider nonObjectDataProvider
      */
-    public function testItUsesTheDataTypeForTheStringRepresentationForNonObjects($nonObject, $expected)
+    public function testItUsesTheDataTypeForTheStringRepresentationForNonObjects($nonObject, string $expected)
     {
         $this->assertSame($expected, (string) new QueueAddLogMessage($nonObject, $this->stubQueue));
     }
@@ -37,7 +39,7 @@ class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function nonObjectDataProvider()
+    public function nonObjectDataProvider() : array
     {
         return [
             [[], 'Array added to queue'],

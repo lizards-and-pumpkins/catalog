@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
@@ -20,17 +22,12 @@ class ContextVersion implements ContextPartBuilder
      * @param mixed[] $inputDataSet
      * @return string
      */
-    public function getValue(array $inputDataSet)
+    public function getValue(array $inputDataSet) : string
     {
-        return isset($inputDataSet[DataVersion::CONTEXT_CODE]) ?
-            (string) $inputDataSet[DataVersion::CONTEXT_CODE] :
-            (string) $this->dataVersion;
+        return (string) ($inputDataSet[DataVersion::CONTEXT_CODE] ?? $this->dataVersion);
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode() : string
     {
         return DataVersion::CONTEXT_CODE;
     }

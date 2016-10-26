@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering\Block;
 
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -9,90 +12,54 @@ use LizardsAndPumpkins\Import\TemplateRendering\Block;
 
 class ProductBlock extends Block
 {
-    /**
-     * @param string $attributeCode
-     * @return string
-     */
-    public function getFirstValueOfProductAttribute($attributeCode)
+    public function getFirstValueOfProductAttribute(string $attributeCode) : string
     {
         return $this->getProduct()->getFirstValueOfAttribute($attributeCode);
     }
 
-    /**
-     * @param string $attributeCode
-     * @param string $glue
-     * @return string
-     */
-    public function getImplodedValuesOfProductAttribute($attributeCode, $glue)
+    public function getImplodedValuesOfProductAttribute(string $attributeCode, string $glue) : string
     {
         $attributeValues = $this->getProduct()->getAllValuesOfAttribute($attributeCode);
 
         return implode($glue, $attributeValues);
     }
 
-    /**
-     * @return string
-     */
-    public function getProductUrl()
+    public function getProductUrl() : string
     {
         return $this->getBaseUrl() . $this->getFirstValueOfProductAttribute(Product::URL_KEY);
     }
 
-    /**
-     * @return ProductId
-     */
-    public function getProductId()
+    public function getProductId() : ProductId
     {
         return $this->getProduct()->getId();
     }
 
-    /**
-     * @return string
-     */
-    public function getMainProductImageLabel()
+    public function getMainProductImageLabel() : string
     {
         return $this->getProduct()->getMainImageLabel();
     }
 
-    /**
-     * @param string $variantCode
-     * @return string
-     */
-    public function getMainProductImageUrl($variantCode)
+    public function getMainProductImageUrl(string $variantCode) : HttpUrl
     {
         return $this->getProduct()->getMainImageUrl($variantCode);
     }
 
-    /**
-     * @return ProductView
-     */
-    private function getProduct()
+    private function getProduct() : ProductView
     {
         return $this->getDataObject();
     }
 
-    /**
-     * @return int
-     */
-    public function getProductImageCount()
+    public function getProductImageCount() : int
     {
         return $this->getProduct()->getImageCount();
     }
 
-    /**
-     * @param int $imageNumber
-     * @param string $variantCode
-     * @return string
-     */
-    public function getProductImageUrlByNumber($imageNumber, $variantCode)
+    public function getProductImageUrlByNumber(int $imageNumber, string $variantCode) : HttpUrl
     {
         return $this->getProduct()->getImageUrlByNumber($imageNumber, $variantCode);
     }
 
-    /**
-     * @return int
-     */
-    public function getProductStockQuantity()
+    public function getProductStockQuantity() : string
     {
         return $this->getProduct()->getFirstValueOfAttribute('stock_qty');
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
@@ -23,8 +25,8 @@ class EnrichProductJsonWithPrices
     
     /**
      * @param string[] $productData
-     * @param int $priceInt
-     * @param int|null $specialPriceInt
+     * @param int|string $priceInt
+     * @param int|string|null $specialPriceInt
      * @return array[]
      */
     public function addPricesToProductData(array $productData, $priceInt, $specialPriceInt = null)
@@ -47,21 +49,13 @@ class EnrichProductJsonWithPrices
         return $productData;
     }
 
-    /**
-     * @param Price $price
-     * @param Currency $currency
-     * @return string
-     */
-    private function formatPriceSnippet(Price $price, Currency $currency)
+    private function formatPriceSnippet(Price $price, Currency $currency) : string
     {
         $localeString = $this->context->getValue(Locale::CONTEXT_CODE);
         return (new IntlFormatter($localeString))->format(new Money($price->getAmount(), $currency));
     }
 
-    /**
-     * @return string
-     */
-    private function getCurrencyCode()
+    private function getCurrencyCode() : string
     {
         return 'EUR';
     }

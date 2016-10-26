@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -16,7 +18,6 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
@@ -81,9 +82,8 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductXmlToProductBuilder()
+    private function createMockProductXmlToProductBuilder() : ProductXmlToProductBuilderLocator
     {
-        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->createMock(ProductBuilder::class);
         $stubProductBuilder->method('getProductForContext')->willReturn($this->createMock(Product::class));
 
@@ -95,7 +95,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ProductListingBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductsPerPageForContextBuilder()
+    private function createMockProductsPerPageForContextBuilder() : ProductListingBuilder
     {
         $productListing = $this->createMock(ProductListing::class);
         $productListing->method('getUrlKey')->willReturn('dummy-url-key');
@@ -106,11 +106,9 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         return $productsPerPageForContextBuilder;
     }
 
-    /**
-     * @param bool $isAvailableInContext
-     */
-    private function setProductIsAvailableForContextFixture($isAvailableInContext)
+    private function setProductIsAvailableForContextFixture(bool $isAvailableInContext)
     {
+        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->stubProductXmlToProductBuilder->createProductBuilderFromXml('');
         $stubProductBuilder->method('isAvailableForContext')->willReturn($isAvailableInContext);
 

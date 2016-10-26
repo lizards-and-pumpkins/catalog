@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -14,6 +16,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 /**
  * @covers \LizardsAndPumpkins\Import\Product\SimpleProduct
  * @covers \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
@@ -220,7 +223,7 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidProductTypeCodeProvider()
+    public function invalidProductTypeCodeProvider() : array
     {
         return [
             ['z1mp3l', 'z1mp3l'],
@@ -272,14 +275,16 @@ class SimpleProductTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsTrueIfTheProductAttributeIsPresent()
     {
-        $this->stubProductAttributeList->method('hasAttribute')->with('test')->willReturn(true);
-        $this->assertTrue($this->product->hasAttribute('test'));
+        $dummyAttributeCode = AttributeCode::fromString('test');
+        $this->stubProductAttributeList->method('hasAttribute')->with($dummyAttributeCode)->willReturn(true);
+        $this->assertTrue($this->product->hasAttribute($dummyAttributeCode));
     }
 
     public function testItReturnsFalseIfTheProductAttributeIsMissing()
     {
-        $this->stubProductAttributeList->method('hasAttribute')->with('test')->willReturn(false);
-        $this->assertFalse($this->product->hasAttribute('test'));
+        $dummyAttributeCode = AttributeCode::fromString('test');
+        $this->stubProductAttributeList->method('hasAttribute')->with($dummyAttributeCode)->willReturn(false);
+        $this->assertFalse($this->product->hasAttribute($dummyAttributeCode));
     }
 
     public function testItReturnsTheAttributeList()

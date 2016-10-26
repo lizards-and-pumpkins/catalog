@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -7,6 +9,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetContainer;
+use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
 class ProductListingSnippetContent implements PageMetaInfoSnippetContent
@@ -48,7 +51,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      */
     private function __construct(
         SearchCriteria $productSelectionCriteria,
-        $rootSnippetCode,
+        string $rootSnippetCode,
         array $pageSnippetCodes,
         array $containers
     ) {
@@ -67,10 +70,10 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      */
     public static function create(
         SearchCriteria $selectionCriteria,
-        $rootSnippetCode,
+        string $rootSnippetCode,
         array $pageSnippetCodes,
         array $containerData
-    ) {
+    ) : ProductListingSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
         if (! in_array($rootSnippetCode, $pageSnippetCodes)) {
             $pageSnippetCodes = array_merge([$rootSnippetCode], $pageSnippetCodes);
@@ -87,18 +90,14 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      * @param array[] $containerArray
      * @return SnippetContainer[]
      */
-    private static function createSnippetContainers(array $containerArray)
+    private static function createSnippetContainers(array $containerArray) : array
     {
         return array_map(function ($code) use ($containerArray) {
             return new SnippetContainer($code, $containerArray[$code]);
         }, array_keys($containerArray));
     }
 
-    /**
-     * @param string $json
-     * @return ProductListingSnippetContent
-     */
-    public static function fromJson($json)
+    public static function fromJson(string $json) : ProductListingSnippetContent
     {
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
@@ -130,7 +129,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      * @param string $json
      * @return mixed[]
      */
-    private static function decodeJson($json)
+    private static function decodeJson(string $json) : array
     {
         $result = json_decode($json, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -142,7 +141,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @return mixed[]
      */
-    public function getInfo()
+    public function getInfo() : array
     {
         return [
             self::KEY_CRITERIA => $this->selectionCriteria,
@@ -152,18 +151,12 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         ];
     }
 
-    /**
-     * @return SearchCriteria
-     */
-    public function getSelectionCriteria()
+    public function getSelectionCriteria() : SearchCriteria
     {
         return $this->selectionCriteria;
     }
 
-    /**
-     * @return string
-     */
-    public function getRootSnippetCode()
+    public function getRootSnippetCode() : string
     {
         return $this->rootSnippetCode;
     }
@@ -171,7 +164,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @return string[]
      */
-    public function getPageSnippetCodes()
+    public function getPageSnippetCodes() : array
     {
         return $this->pageSnippetCodes;
     }
@@ -180,18 +173,16 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      * @param mixed[] $metaInfo
      * @return SearchCriteria
      */
-    private static function createSearchCriteriaFromMetaInfo(array $metaInfo)
+    private static function createSearchCriteriaFromMetaInfo(array $metaInfo) : SearchCriteria
     {
         $criterionArray = array_map(function (array $criterionMetaInfo) {
             if (isset($criterionMetaInfo['condition'])) {
                 return self::createSearchCriteriaFromMetaInfo($criterionMetaInfo);
             }
 
-            return call_user_func(
-                [self::getCriterionClassNameForOperation($criterionMetaInfo['operation']), 'create'],
-                $criterionMetaInfo['fieldName'],
-                $criterionMetaInfo['fieldValue']
-            );
+            $className = self::getCriterionClassNameForOperation($criterionMetaInfo['operation']);
+
+            return new $className($criterionMetaInfo['fieldName'], $criterionMetaInfo['fieldValue']);
         }, $metaInfo['criteria']);
 
         return CompositeSearchCriterion::create($metaInfo['condition'], ...$criterionArray);
@@ -244,11 +235,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         }
     }
 
-    /**
-     * @param string $operationName
-     * @return string
-     */
-    private static function getCriterionClassNameForOperation($operationName)
+    private static function getCriterionClassNameForOperation(string $operationName) : string
     {
         return SearchCriterion::class . $operationName;
     }
@@ -256,7 +243,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @return array[]
      */
-    public function getContainerSnippets()
+    public function getContainerSnippets() : array
     {
         return array_reduce($this->containers, function ($carry, SnippetContainer $container) {
             return array_merge($carry, $container->toArray());

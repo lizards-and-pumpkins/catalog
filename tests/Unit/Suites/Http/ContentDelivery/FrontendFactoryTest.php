@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
@@ -109,7 +111,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/'),
             HttpHeaders::fromArray([]),
-            HttpRequestBody::fromString('')
+            new HttpRequestBody('')
         );
 
         $this->frontendFactory = new FrontendFactory($request);
@@ -178,10 +180,9 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $snippetCode
      * @dataProvider registeredSnippetCodeDataProvider
      */
-    public function testSnippetKeyGeneratorForGivenCodeIsReturned($snippetCode)
+    public function testSnippetKeyGeneratorForGivenCodeIsReturned(string $snippetCode)
     {
         $snippetKeyGeneratorLocator = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
@@ -192,7 +193,7 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function registeredSnippetCodeDataProvider()
+    public function registeredSnippetCodeDataProvider() : array
     {
         return [
             [ProductDetailViewSnippetRenderer::CODE],

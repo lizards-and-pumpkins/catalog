@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -20,9 +22,9 @@ class SelfContainedContextBuilder implements ContextBuilder
      * @param mixed[] $inputDataSet
      * @return Context
      */
-    public function createContext(array $inputDataSet)
+    public function createContext(array $inputDataSet) : Context
     {
-        $contextDataSet = @array_reduce(
+        $contextDataSet = array_reduce(
             $this->partBuilders,
             function ($carry, ContextPartBuilder $builder) use ($inputDataSet) {
                 $value = $builder->getValue($inputDataSet);
@@ -35,14 +37,10 @@ class SelfContainedContextBuilder implements ContextBuilder
             },
             []
         );
-        return SelfContainedContext::fromArray($contextDataSet);
+        return new SelfContainedContext($contextDataSet);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return Context
-     */
-    public function createFromRequest(HttpRequest $request)
+    public function createFromRequest(HttpRequest $request) : Context
     {
         return $this->createContext([self::REQUEST => $request]);
     }
@@ -51,7 +49,7 @@ class SelfContainedContextBuilder implements ContextBuilder
      * @param array[] $contextDataSets
      * @return Context[]
      */
-    public function createContextsFromDataSets(array $contextDataSets)
+    public function createContextsFromDataSets(array $contextDataSets) : array
     {
         return array_map([$this, 'createContext'], $contextDataSets);
     }
@@ -60,9 +58,9 @@ class SelfContainedContextBuilder implements ContextBuilder
      * @param string[] $dataSet
      * @return Context
      */
-    public static function rehydrateContext(array $dataSet)
+    public static function rehydrateContext(array $dataSet) : Context
     {
-        return SelfContainedContext::fromArray($dataSet);
+        return new SelfContainedContext($dataSet);
     }
 
     /**
@@ -70,7 +68,7 @@ class SelfContainedContextBuilder implements ContextBuilder
      * @param string[] $additionDataSet
      * @return Context
      */
-    public function expandContext(Context $context, array $additionDataSet)
+    public function expandContext(Context $context, array $additionDataSet) : Context
     {
         $originalDataSet = $this->extractDataSetFromContext($context);
         return $this->createContext(array_merge($originalDataSet, $additionDataSet));
@@ -80,7 +78,7 @@ class SelfContainedContextBuilder implements ContextBuilder
      * @param Context $context
      * @return string[]
      */
-    private function extractDataSetFromContext(Context $context)
+    private function extractDataSetFromContext(Context $context) : array
     {
         return array_reduce($context->getSupportedCodes(), function ($carry, $code) use ($context) {
             return array_merge($carry, [$code => $context->getValue($code)]);

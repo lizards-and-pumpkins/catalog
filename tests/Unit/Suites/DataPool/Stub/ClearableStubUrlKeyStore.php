@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\Stub;
 
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
@@ -12,14 +14,12 @@ class ClearableStubUrlKeyStore implements UrlKeyStore, Clearable
         // Intentionally left empty
     }
 
-    /**
-     * @param string $dataVersionString
-     * @param string $urlKeyString
-     * @param string $contextDataString
-     * @param string $urlKeyTypeString
-     */
-    public function addUrlKeyForVersion($dataVersionString, $urlKeyString, $contextDataString, $urlKeyTypeString)
-    {
+    public function addUrlKeyForVersion(
+        string $dataVersionString,
+        string $urlKeyString,
+        string $contextDataString,
+        string $urlKeyTypeString
+    ) {
         // Intentionally left empty
     }
 
@@ -27,7 +27,7 @@ class ClearableStubUrlKeyStore implements UrlKeyStore, Clearable
      * @param string $dataVersionString
      * @return array[]
      */
-    public function getForDataVersion($dataVersionString)
+    public function getForDataVersion(string $dataVersionString) : array
     {
         // Intentionally left empty
     }

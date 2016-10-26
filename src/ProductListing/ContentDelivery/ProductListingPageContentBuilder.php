@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
-use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
@@ -65,7 +67,7 @@ class ProductListingPageContentBuilder
      * @param SearchEngineResponse $searchEngineResponse
      * @param ProductsPerPage $productsPerPage
      * @param SortOrderConfig $selectedSortOrderConfig
-     * @return GenericHttpResponse
+     * @return HttpResponse
      */
     public function buildPageContent(
         PageMetaInfoSnippetContent $metaInfo,
@@ -74,7 +76,7 @@ class ProductListingPageContentBuilder
         SearchEngineResponse $searchEngineResponse,
         ProductsPerPage $productsPerPage,
         SortOrderConfig $selectedSortOrderConfig
-    ) {
+    ) : HttpResponse {
         $productIds = $searchEngineResponse->getProductIds();
         $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
 
@@ -103,7 +105,7 @@ class ProductListingPageContentBuilder
      * @param array[] $facetFields
      * @return array[]
      */
-    private function replaceInternalWithExternalFieldNames(array $facetFields)
+    private function replaceInternalWithExternalFieldNames(array $facetFields) : array
     {
         return array_reduce(array_keys($facetFields), function ($carry, $fieldName) use ($facetFields) {
             $parameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($fieldName);
@@ -138,7 +140,7 @@ class ProductListingPageContentBuilder
      * @param SortOrderConfig $selectedSortOrderConfig
      * @return SortOrderConfig[]
      */
-    private function getSortOrderConfigsWithGivenConfigSelected(SortOrderConfig $selectedSortOrderConfig)
+    private function getSortOrderConfigsWithGivenConfigSelected(SortOrderConfig $selectedSortOrderConfig) : array
     {
         return array_map(function (SortOrderConfig $sortOrderConfig) use ($selectedSortOrderConfig) {
             if ($sortOrderConfig->getAttributeCode() == $selectedSortOrderConfig->getAttributeCode()) {
@@ -158,9 +160,9 @@ class ProductListingPageContentBuilder
 
     /**
      * @param string $snippetCode
-     * @param string $snippetContents
+     * @param string|int $snippetContents
      */
-    private function addDynamicSnippetToPageBuilder($snippetCode, $snippetContents)
+    private function addDynamicSnippetToPageBuilder(string $snippetCode, $snippetContents)
     {
         $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];

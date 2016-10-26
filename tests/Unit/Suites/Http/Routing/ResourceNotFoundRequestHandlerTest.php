@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler

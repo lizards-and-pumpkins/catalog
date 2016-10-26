@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context;
 
 interface ContextPartBuilder
@@ -10,8 +12,5 @@ interface ContextPartBuilder
      */
     public function getValue(array $inputDataSet);
 
-    /**
-     * @return string
-     */
-    public function getCode();
+    public function getCode() : string;
 }

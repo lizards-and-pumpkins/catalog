@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileURIException;
@@ -14,7 +16,7 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedType
      * @dataProvider invalidNonStringFileUriProvider
      */
-    public function testItThrowsAnExceptionIfTheFileUriIsNotAString($notStringURI, $expectedType)
+    public function testItThrowsAnExceptionIfTheFileUriIsNotAString($notStringURI, string $expectedType)
     {
         $this->expectException(InvalidFileURIException::class);
         $this->expectExceptionMessage(sprintf('The file URI has to be a string, got "%s"', $expectedType));
@@ -24,7 +26,7 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidNonStringFileUriProvider()
+    public function invalidNonStringFileUriProvider() : array
     {
         return [
             [null, 'NULL'],
@@ -33,10 +35,9 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $emptyURI
      * @dataProvider emptyFileUriProvider
      */
-    public function testItThrowsAnExceptionIfTheUriIsEmpty($emptyURI)
+    public function testItThrowsAnExceptionIfTheUriIsEmpty(string $emptyURI)
     {
         $this->expectException(InvalidFileURIException::class);
         $this->expectExceptionMessage('The file URI must not be an empty string');
@@ -46,7 +47,7 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyFileUriProvider()
+    public function emptyFileUriProvider() : array
     {
         return [
             [''],

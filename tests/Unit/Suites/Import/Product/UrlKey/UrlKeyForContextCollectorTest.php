@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Import\Product\Product;
@@ -31,7 +33,7 @@ class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
      * @param string $urlKey
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductWithUrlKey($urlKey)
+    private function createStubProductWithUrlKey(string $urlKey) : Product
     {
         $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('getFirstValueOfAttribute')->with(Product::URL_KEY)->willReturn($urlKey);

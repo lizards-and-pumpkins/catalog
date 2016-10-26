@@ -1,19 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\XPathParser;
 
 interface ProductXmlToProductBuilder
 {
-    /**
-     * @return ProductTypeCode
-     */
-    public function getSupportedProductTypeCode();
+    public function getSupportedProductTypeCode() : ProductTypeCode;
 
-    /**
-     * @param XPathParser $parser
-     * @return ProductBuilder
-     */
-    public function createProductBuilder(XPathParser $parser);
+    public function createProductBuilder(XPathParser $parser) : ProductBuilder;
 }

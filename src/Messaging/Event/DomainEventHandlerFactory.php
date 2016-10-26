@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
@@ -18,39 +20,15 @@ use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 
 interface DomainEventHandlerFactory
 {
-    /**
-     * @param Message $event
-     * @return DomainEventHandler
-     */
-    public function createProductWasUpdatedDomainEventHandler(Message $event);
+    public function createProductWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler;
 
-    /**
-     * @param Message $event
-     * @return DomainEventHandler
-     */
-    public function createTemplateWasUpdatedDomainEventHandler(Message $event);
+    public function createTemplateWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler;
 
-    /**
-     * @param Message $event
-     * @return DomainEventHandler
-     */
-    public function createImageWasAddedDomainEventHandler(Message $event);
+    public function createImageWasAddedDomainEventHandler(Message $event) : DomainEventHandler;
 
-    /**
-     * @param Message $event
-     * @return DomainEventHandler
-     */
-    public function createProductListingWasAddedDomainEventHandler(Message $event);
+    public function createProductListingWasAddedDomainEventHandler(Message $event) : DomainEventHandler;
 
-    /**
-     * @param Message $event
-     * @return DomainEventHandler
-     */
-    public function createContentBlockWasUpdatedDomainEventHandler(Message $event);
+    public function createContentBlockWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler;
 
-    /**
-     * @param Message $event
-     * @return DomainEventHandler
-     */
-    public function createCatalogWasImportedDomainEventHandler(Message $event);
+    public function createCatalogWasImportedDomainEventHandler(Message $event) : DomainEventHandler;
 }

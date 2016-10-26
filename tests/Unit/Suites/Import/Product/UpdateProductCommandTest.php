@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -41,7 +43,7 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubContext()
+    private function createStubContext() : Context
     {
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
@@ -54,7 +56,7 @@ class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->testProduct = new SimpleProduct(
-            ProductId::fromString('foo'),
+            new ProductId('foo'),
             ProductTaxClass::fromString('bar'),
             new ProductAttributeList(),
             new ProductImageList(),

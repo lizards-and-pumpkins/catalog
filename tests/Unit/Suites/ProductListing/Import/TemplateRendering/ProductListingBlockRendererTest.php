@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
@@ -15,19 +17,12 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  */
 class ProductListingBlockRendererTest extends AbstractBlockRendererTest
 {
-    /**
-     * @param ThemeLocator $stubThemeLocator
-     * @param BlockStructure $stubBlockStructure
-     * @param TranslatorRegistry $stubTranslatorRegistry
-     * @param BaseUrlBuilder $baseUrlBuilder
-     * @return BlockRenderer
-     */
-    protected function createRendererInstance(
+    final protected function createRendererInstance(
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
         BaseUrlBuilder $baseUrlBuilder
-    ) {
+    ) : BlockRenderer {
         return new ProductListingBlockRenderer(
             $stubThemeLocator,
             $stubBlockStructure,

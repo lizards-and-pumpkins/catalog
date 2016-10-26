@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
-use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class LoggingQueueFactory implements Factory, MessageQueueFactory
 {
@@ -22,10 +23,7 @@ class LoggingQueueFactory implements Factory, MessageQueueFactory
         $this->implementationFactoryDelegate = $implementationFactoryDelegate;
     }
 
-    /**
-     * @return Queue|Clearable
-     */
-    public function createEventMessageQueue()
+    public function createEventMessageQueue() : Queue
     {
         return new LoggingQueueDecorator(
             $this->implementationFactoryDelegate->createEventMessageQueue(),
@@ -33,10 +31,7 @@ class LoggingQueueFactory implements Factory, MessageQueueFactory
         );
     }
 
-    /**
-     * @return Queue|Clearable
-     */
-    public function createCommandMessageQueue()
+    public function createCommandMessageQueue() : Queue
     {
         return new LoggingQueueDecorator(
             $this->implementationFactoryDelegate->createCommandMessageQueue(),

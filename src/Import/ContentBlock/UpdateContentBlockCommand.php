@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Import\ContentBlock\Exception\NoUpdateContentBlockCommandMessageException;
@@ -20,18 +22,12 @@ class UpdateContentBlockCommand implements Command
         $this->contentBlockSource = $contentBlockSource;
     }
 
-    /**
-     * @return ContentBlockSource
-     */
-    public function getContentBlockSource()
+    public function getContentBlockSource() : ContentBlockSource
     {
         return $this->contentBlockSource;
     }
 
-    /**
-     * @return Message
-     */
-    public function toMessage()
+    public function toMessage() : Message
     {
         $name = self::CODE;
         $payload = ['block' => $this->contentBlockSource->serialize()];
@@ -39,11 +35,7 @@ class UpdateContentBlockCommand implements Command
         return Message::withCurrentTime($name, $payload, $metadata);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message) : UpdateContentBlockCommand
     {
         if ($message->getName() !== self::CODE) {
             throw new NoUpdateContentBlockCommandMessageException(sprintf(

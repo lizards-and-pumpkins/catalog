@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
@@ -32,17 +34,13 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
      * @param string $content
      * @return Snippet|null
      */
-    private function findRobotsMetaTagSnippetByContent($content)
+    private function findRobotsMetaTagSnippetByContent(string $content)
     {
         $snippets = $this->renderer->render($this->stubContext);
         return $this->findSnippetByKey($snippets, $this->getDummyRobotsTagKeyBasedOnContent($content));
     }
 
-    /**
-     * @param string $robotsTagContent
-     * @return string
-     */
-    private function getDummyRobotsTagKeyBasedOnContent($robotsTagContent)
+    private function getDummyRobotsTagKeyBasedOnContent(string $robotsTagContent) : string
     {
         return str_replace([',', ' '], '', $robotsTagContent);
     }
@@ -52,17 +50,14 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
      * @param string $snippetKey
      * @return Snippet|null
      */
-    private function findSnippetByKey(array $snippets, $snippetKey)
+    private function findSnippetByKey(array $snippets, string $snippetKey)
     {
         return array_reduce($snippets, function ($carry, Snippet $snippet) use ($snippetKey) {
             return $carry ?: ($snippet->getKey() === $snippetKey ? $snippet : null);
         });
     }
 
-    /**
-     * @param string $expectedContent
-     */
-    private function assertRobotsMetaTagSnippetForContent($expectedContent)
+    private function assertRobotsMetaTagSnippetForContent(string $expectedContent)
     {
         $snippet = $this->findRobotsMetaTagSnippetByContent($expectedContent);
         if (null === $snippet) {
@@ -99,10 +94,9 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $expectedContent
      * @dataProvider robotsMetaTagContentProvider
      */
-    public function testRobotsMetaTagIsPresent($expectedContent)
+    public function testRobotsMetaTagIsPresent(string $expectedContent)
     {
         $this->assertRobotsMetaTagSnippetForContent($expectedContent);
     }
@@ -110,7 +104,7 @@ class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function robotsMetaTagContentProvider()
+    public function robotsMetaTagContentProvider() : array
     {
         return [
             ['all'],

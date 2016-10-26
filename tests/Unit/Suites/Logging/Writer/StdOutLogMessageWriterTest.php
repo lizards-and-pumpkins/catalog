@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging\Writer;
 
 use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Logging\LogMessageWriter;
 
 /**
- * @covers LizardsAndPumpkins\Logging\Writer\StdOutLogMessageWriter
+ * @covers \LizardsAndPumpkins\Logging\Writer\StdOutLogMessageWriter
  */
 class StdOutLogMessageWriterTest extends \PHPUnit_Framework_TestCase
 {

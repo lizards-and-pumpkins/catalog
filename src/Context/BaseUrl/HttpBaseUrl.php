@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
-use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
 use LizardsAndPumpkins\Context\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
 
 class HttpBaseUrl implements BaseUrl
@@ -12,44 +13,14 @@ class HttpBaseUrl implements BaseUrl
      */
     private $baseUrlString;
 
-    /**
-     * @param string $baseUrlString
-     */
-    private function __construct($baseUrlString)
+    public function __construct(string $baseUrlString)
     {
         $this->validateInputString($baseUrlString);
         $this->baseUrlString = $baseUrlString;
     }
 
-    /**
-     * @param string $baseUrlString
-     * @return HttpBaseUrl
-     */
-    public static function fromString($baseUrlString)
+    private function validateInputString(string $baseUrlString)
     {
-        return new self($baseUrlString);
-    }
-
-    /**
-     * @param string $variable
-     * @return string
-     */
-    private static function getTypeAsString($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
-    }
-
-    /**
-     * @param string $baseUrlString
-     */
-    private function validateInputString($baseUrlString)
-    {
-        if (!is_string($baseUrlString)) {
-            $type = self::getTypeAsString($baseUrlString);
-            throw self::createException(sprintf('The input for the base URL has to be a string, got "%s"', $type));
-        }
         if (trim($baseUrlString) === '') {
             throw self::createException('Invalid empty source data for the base URL specified');
         }
@@ -64,19 +35,12 @@ class HttpBaseUrl implements BaseUrl
         }
     }
 
-    /**
-     * @param string $message
-     * @return InvalidBaseUrlSourceDataException
-     */
-    private static function createException($message)
+    private static function createException(string $message) : InvalidBaseUrlSourceDataException
     {
         return new InvalidBaseUrlSourceDataException($message);
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->baseUrlString;
     }

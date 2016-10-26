@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidAttributeCodeException;
 
 /**
- * @covers LizardsAndPumpkins\Import\Product\AttributeCode
+ * @covers \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class AttributeCodeTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,39 +22,16 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test_code', (string) AttributeCode::fromString('test_code'));
     }
 
-    /**
-     * @dataProvider invalidAttributeCodeTypeProvider
-     * @param string $invalidAttributeCode
-     */
-    public function testItThrowsAnExceptionIfTheCodeIsNotAString($invalidAttributeCode)
+    public function testItThrowsAnExceptionIfTheCodeIsNotAString()
     {
-        $type = is_object($invalidAttributeCode) ?
-            get_class($invalidAttributeCode) :
-            gettype($invalidAttributeCode);
-        $this->expectException(InvalidAttributeCodeException::class);
-        $this->expectExceptionMessage(sprintf('The attribute code has to be a string, got "%s"', $type));
-        AttributeCode::fromString($invalidAttributeCode);
+        $this->expectException(\TypeError::class);
+        AttributeCode::fromString(123);
     }
 
     /**
-     * @return array[]
-     */
-    public function invalidAttributeCodeTypeProvider()
-    {
-        return [
-            'integer' => [222],
-            'null' => [null],
-            'array' => [['foo']],
-            'object' => [new \stdClass],
-            'float' => [2.2]
-        ];
-    }
-
-    /**
-     * @param string $shortAttributeCode
      * @dataProvider tooShortAttributeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong($shortAttributeCode)
+    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong(string $shortAttributeCode)
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage(
@@ -64,7 +43,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function tooShortAttributeCodeProvider()
+    public function tooShortAttributeCodeProvider() : array
     {
         return [
             [''],
@@ -74,10 +53,9 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $attributeCode
      * @dataProvider attributeCodeWithInvalidFirstCharacterProvider
      */
-    public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ($attributeCode)
+    public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ(string $attributeCode)
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage('The first letter of the attribute code has to be a character from a-z, got ');
@@ -87,7 +65,7 @@ class AttributeCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function attributeCodeWithInvalidFirstCharacterProvider()
+    public function attributeCodeWithInvalidFirstCharacterProvider() : array
     {
         return [
             ['Aaaaa'],

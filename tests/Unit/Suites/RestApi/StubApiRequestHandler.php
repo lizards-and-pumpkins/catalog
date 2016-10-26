@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -10,20 +12,12 @@ class StubApiRequestHandler extends ApiRequestHandler
 {
     const DUMMY_BODY_CONTENT = 'dummy';
 
-    /**
-     * @param HttpRequest $request
-     * @return bool
-     */
-    public function canProcess(HttpRequest $request)
+    final public function canProcess(HttpRequest $request) : bool
     {
         return true;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpResponse
-     */
-    protected function getResponse(HttpRequest $request)
+    final protected function getResponse(HttpRequest $request) : HttpResponse
     {
         $headers = [];
 

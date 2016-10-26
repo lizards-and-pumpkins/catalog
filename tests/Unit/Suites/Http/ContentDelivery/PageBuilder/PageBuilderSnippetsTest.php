@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
-use LizardsAndPumpkins\Import\Exception\InvalidSnippetContentException;
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
 
@@ -87,10 +88,7 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithKeySpec()
     {
-        $this->expectException(InvalidSnippetContentException::class);
-        $this->expectExceptionMessage(
-            'Invalid snippet content for the key "a-key" specified: expected string, got "NULL"'
-        );
+        $this->expectException(\TypeError::class);
         $this->pageSnippets->updateSnippetByKey('a-key', null);
     }
 
@@ -109,10 +107,7 @@ class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
 
     public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithCodeSpec()
     {
-        $this->expectException(InvalidSnippetContentException::class);
-        $this->expectExceptionMessage(
-            'Invalid snippet content for the code "a-code" specified: expected string, got "integer"'
-        );
+        $this->expectException(\TypeError::class);
         $this->pageSnippets->updateSnippetByCode($this->testCode, 123);
     }
 

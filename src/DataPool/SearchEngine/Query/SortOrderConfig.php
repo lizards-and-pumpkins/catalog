@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -21,58 +23,36 @@ class SortOrderConfig implements \JsonSerializable
      */
     private $isSelected;
 
-    /**
-     * @param AttributeCode $attributeCode
-     * @param SortOrderDirection $selectedDirection
-     * @param bool $isSelected
-     */
-    private function __construct(AttributeCode $attributeCode, SortOrderDirection $selectedDirection, $isSelected)
+    private function __construct(AttributeCode $attributeCode, SortOrderDirection $selectedDirection, bool $isSelected)
     {
         $this->attributeCode = $attributeCode;
         $this->selectedDirection = $selectedDirection;
         $this->isSelected = $isSelected;
     }
 
-    /**
-     * @param AttributeCode $attributeCode
-     * @param SortOrderDirection $selectedDirection
-     * @return SortOrderConfig
-     */
-    public static function create(AttributeCode $attributeCode, SortOrderDirection $selectedDirection)
+    public static function create(AttributeCode $attributeCode, SortOrderDirection $selectedDirection) : SortOrderConfig
     {
         return new self($attributeCode, $selectedDirection, false);
     }
 
-    /**
-     * @param AttributeCode $attributeCode
-     * @param SortOrderDirection $selectedDirection
-     * @return SortOrderConfig
-     */
-    public static function createSelected(AttributeCode $attributeCode, SortOrderDirection $selectedDirection)
-    {
+    public static function createSelected(
+        AttributeCode $attributeCode,
+        SortOrderDirection $selectedDirection
+    ) : SortOrderConfig {
         return new self($attributeCode, $selectedDirection, true);
     }
 
-    /**
-     * @return AttributeCode
-     */
-    public function getAttributeCode()
+    public function getAttributeCode() : AttributeCode
     {
         return $this->attributeCode;
     }
 
-    /**
-     * @return SortOrderDirection
-     */
-    public function getSelectedDirection()
+    public function getSelectedDirection() : SortOrderDirection
     {
         return $this->selectedDirection;
     }
 
-    /**
-     * @return bool
-     */
-    public function isSelected()
+    public function isSelected() : bool
     {
         return $this->isSelected;
     }
@@ -80,7 +60,7 @@ class SortOrderConfig implements \JsonSerializable
     /**
      * @return mixed[]
      */
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'code' => (string) $this->attributeCode,

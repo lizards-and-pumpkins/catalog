@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
@@ -42,7 +44,7 @@ class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createMockProductListing()
+    private function createMockProductListing() : ProductListing
     {
         return $this->createMock(ProductListing::class);
     }

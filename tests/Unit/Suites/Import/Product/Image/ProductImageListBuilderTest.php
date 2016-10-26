@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Context\Context;
@@ -28,7 +30,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
      * @param ProductImageListBuilder $productImageListBuilder
      * @return ProductImageBuilder[]
      */
-    private function getImageBuilderArrayFromInstance(ProductImageListBuilder $productImageListBuilder)
+    private function getImageBuilderArrayFromInstance(ProductImageListBuilder $productImageListBuilder) : array
     {
         return $this->getPropertyFromInstance($productImageListBuilder, 'imageBuilders');
     }
@@ -38,7 +40,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $attributeCode
      * @return mixed
      */
-    private function getPropertyFromInstance(ProductImageListBuilder $productImageListBuilder, $attributeCode)
+    private function getPropertyFromInstance(ProductImageListBuilder $productImageListBuilder, string $attributeCode)
     {
         $property = new \ReflectionProperty($productImageListBuilder, $attributeCode);
         $property->setAccessible(true);
@@ -50,7 +52,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $label
      * @return array[]
      */
-    private function getImageAttributeArray($fileName, $label)
+    private function getImageAttributeArray(string $fileName, string $label) : array
     {
         return [
             [
@@ -68,12 +70,12 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testProductId = ProductId::fromString('test-sku');
+        $this->testProductId = new ProductId('test-sku');
     }
 
     public function testItReturnsAProductImageListBuilderInstance()
     {
-        $productImageList = ProductImageListBuilder::fromArray($this->testProductId, []);
+        $productImageList = ProductImageListBuilder::fromImageArrays($this->testProductId);
         $this->assertInstanceOf(ProductImageListBuilder::class, $productImageList);
     }
 
@@ -83,14 +85,14 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             $this->getImageAttributeArray('test1.jpg', 'The label A'),
             $this->getImageAttributeArray('test2.jpg', 'The label B')
         ];
-        $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId, $productImageListArray);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId, ...$productImageListArray);
         $imageBuilders = $this->getImageBuilderArrayFromInstance($productImageListBuilder);
         $this->assertCount(2, $imageBuilders);
     }
 
     public function testItReturnsAProductImageListInstance()
     {
-        $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId, []);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId);
         $stubContext = $this->createMock(Context::class);
         $productImageList = $productImageListBuilder->getImageListForContext($stubContext);
         $this->assertInstanceOf(ProductImageList::class, $productImageList);
@@ -102,7 +104,7 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             $this->getImageAttributeArray('test1.jpg', 'The label A'),
             $this->getImageAttributeArray('test2.jpg', 'The label B')
         ];
-        $productImageListBuilder = ProductImageListBuilder::fromArray($this->testProductId, $productImageListArray);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId, ...$productImageListArray);
         $imageList = $productImageListBuilder->getImageListForContext($this->createMock(Context::class));
         $this->assertCount(2, $imageList);
     }

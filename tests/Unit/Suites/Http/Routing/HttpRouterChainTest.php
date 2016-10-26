@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToRouteRequestException;
 
 /**
- * @covers LizardsAndPumpkins\Http\Routing\HttpRouterChain
+ * @covers \LizardsAndPumpkins\Http\Routing\HttpRouterChain
  */
 class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
 {

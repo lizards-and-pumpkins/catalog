@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -22,10 +24,7 @@ class FacetField
         $this->values = $facetFieldValues;
     }
 
-    /**
-     * @return AttributeCode
-     */
-    public function getAttributeCode()
+    public function getAttributeCode() : AttributeCode
     {
         return $this->attributeCode;
     }
@@ -33,7 +32,7 @@ class FacetField
     /**
      * @return FacetFieldValue[]
      */
-    public function getValues()
+    public function getValues() : array
     {
         return $this->values;
     }

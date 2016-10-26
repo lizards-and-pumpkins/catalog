@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -59,8 +61,8 @@ EOX;
         $expectedUrlKey = 'men-accessories';
         $expectedContextData = ['version' => '-1', 'website' => 'ru', 'locale' => 'en_US'];
         $expectedCriteria = CompositeSearchCriterion::createAnd(
-            SearchCriterionEqual::create('category', 'accessories'),
-            SearchCriterionEqual::create('gender', 'male')
+            new SearchCriterionEqual('category', 'accessories'),
+            new SearchCriterionEqual('gender', 'male')
         );
 
         $this->assertInstanceOf(ProductListing::class, $productListing);
@@ -83,8 +85,8 @@ EOX;
         $productListing = $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
 
         $expectedCriteria = CompositeSearchCriterion::createOr(
-            SearchCriterionEqual::create('category', 'accessories'),
-            SearchCriterionEqual::create('gender', 'male')
+            new SearchCriterionEqual('category', 'accessories'),
+            new SearchCriterionEqual('gender', 'male')
         );
 
         $this->assertEquals($expectedCriteria, $productListing->getCriteria());
@@ -107,10 +109,10 @@ EOX;
         $productListing = $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
-            SearchCriterionEqual::create('category', 'accessories'),
+            new SearchCriterionEqual('category', 'accessories'),
             CompositeSearchCriterion::createOr(
-                SearchCriterionGreaterThan::create('stock_qty', 0),
-                SearchCriterionEqual::create('backorders', 'true')
+                new SearchCriterionGreaterThan('stock_qty', 0),
+                new SearchCriterionEqual('backorders', 'true')
             )
         );
 

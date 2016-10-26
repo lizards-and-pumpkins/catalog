@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -16,20 +18,13 @@ class CommandProcessedLogMessage implements LogMessage
      */
     private $commandHandler;
 
-    /**
-     * @param string $message
-     * @param CommandHandler $commandHandler
-     */
-    public function __construct($message, CommandHandler $commandHandler)
+    public function __construct(string $message, CommandHandler $commandHandler)
     {
         $this->message = $message;
         $this->commandHandler = $commandHandler;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return $this->message;
     }
@@ -37,15 +32,12 @@ class CommandProcessedLogMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return ['command_handler' => $this->commandHandler];
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis() : string
     {
         return sprintf('CommandHandler Class: %s', get_class($this->commandHandler));
     }

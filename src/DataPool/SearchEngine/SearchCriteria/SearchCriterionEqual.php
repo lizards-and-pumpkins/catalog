@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 class SearchCriterionEqual extends SearchCriterion
 {
     /**
-     * @param string $searchDocumentFieldValue
-     * @param string $criterionValue
+     * @param mixed $searchDocumentFieldValue
+     * @param mixed $criterionValue
      * @return bool
      */
-    final protected function hasValueMatchingOperator($searchDocumentFieldValue, $criterionValue)
+    final protected function hasValueMatchingOperator($searchDocumentFieldValue, $criterionValue) : bool
     {
-        return $searchDocumentFieldValue == $criterionValue;
+        return $searchDocumentFieldValue === $criterionValue;
     }
 }

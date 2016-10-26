@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -33,7 +35,7 @@ class ProductListingRobotsMetaTagSnippetRenderer implements SnippetRenderer
      * @param ProductListing $productListing
      * @return Snippet[]
      */
-    public function render(ProductListing $productListing)
+    public function render(ProductListing $productListing) : array
     {
         $context = $this->contextBuilder->createContext($productListing->getContextData());
         return $this->robotsMetaTagSnippetRenderer->render($context);

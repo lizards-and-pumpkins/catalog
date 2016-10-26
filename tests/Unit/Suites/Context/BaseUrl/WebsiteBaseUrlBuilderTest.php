@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
 use LizardsAndPumpkins\Context\Website\Exception\NoConfiguredBaseUrlException;
@@ -31,10 +33,10 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     private $stubConfigReader;
 
     /**
-     * @param string $baseUrlString
+     * @param mixed $baseUrlString
      * @return ConfigReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubConfigReader($baseUrlString)
+    private function createStubConfigReader($baseUrlString) : ConfigReader
     {
         $stubConfigReader = $this->createMock(ConfigReader::class);
         $configKey = WebsiteBaseUrlBuilder::CONFIG_PREFIX . 'test_website';
@@ -45,7 +47,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubContext()
+    private function createStubContext() : Context
     {
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('getValue')->with(Website::CONTEXT_CODE)->willReturn('test_website');

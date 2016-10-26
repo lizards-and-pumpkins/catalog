@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Queue;
@@ -25,10 +27,7 @@ class QueueAddLogMessage implements LogMessage
         $this->queue = $queue;
     }
     
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         if (is_object($this->data)) {
             $message = sprintf('%s instance added to queue', get_class($this->data));
@@ -41,7 +40,7 @@ class QueueAddLogMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return [
             'queue' => $this->queue,
@@ -49,10 +48,7 @@ class QueueAddLogMessage implements LogMessage
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis() : string
     {
         return sprintf('Queue Class: %s', get_class($this->queue));
     }

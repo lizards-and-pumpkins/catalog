@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
@@ -8,10 +10,7 @@ class IntegrationTestTaxableCountries implements TaxableCountries
 {
     private static $countries = ['DE', 'FR'];
 
-    /**
-     * @return \ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator() : \Iterator
     {
         return new \ArrayIterator(self::$countries);
     }
@@ -19,7 +18,7 @@ class IntegrationTestTaxableCountries implements TaxableCountries
     /**
      * @return string[]
      */
-    public function getCountries()
+    public function getCountries() : array
     {
         return self::$countries;
     }

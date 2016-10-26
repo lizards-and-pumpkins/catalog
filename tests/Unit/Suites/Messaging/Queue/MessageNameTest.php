@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidQueueMessageNameException;
@@ -10,10 +12,9 @@ use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidQueueMessageNameExceptio
 class MessageNameTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param string $emptyMessageName
      * @dataProvider emptyMessageNameProvider
      */
-    public function testThrowsExceptionIfEmpty($emptyMessageName)
+    public function testThrowsExceptionIfEmpty(string $emptyMessageName)
     {
         $this->expectException(InvalidQueueMessageNameException::class);
         $this->expectExceptionMessage('The message name must not be empty');
@@ -23,7 +24,7 @@ class MessageNameTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyMessageNameProvider()
+    public function emptyMessageNameProvider() : array
     {
         return [
             [''],

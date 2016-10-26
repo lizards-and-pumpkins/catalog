@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductAttributeValueException;
@@ -21,7 +23,6 @@ class ProductAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testFalseIsReturnedIfAttributeHasDifferentCode()
     {
-
         $attribute = new ProductAttribute('foo', 'value', []);
 
         $this->assertFalse($attribute->isCodeEqualTo('bar'));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeCodeException;
@@ -15,37 +17,16 @@ class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductRelationTypeCode::class, $result);
     }
 
-    /**
-     * @param mixed $nonStringTypeCode
-     * @param string $expectedType
-     * @dataProvider nonStringTypeCodeDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheTypeCodeIsNotAString($nonStringTypeCode, $expectedType)
+    public function testItThrowsAnExceptionIfTheTypeCodeIsNotAString()
     {
-        $this->expectException(InvalidProductRelationTypeCodeException::class);
-        $this->expectExceptionMessage(
-            sprintf('Expected the product relation type code to be a string, got "%s"', $expectedType)
-        );
-        ProductRelationTypeCode::fromString($nonStringTypeCode);
+        $this->expectException(\TypeError::class);
+        ProductRelationTypeCode::fromString(123);
     }
 
     /**
-     * @return array[]
-     */
-    public function nonStringTypeCodeDataProvider()
-    {
-        return [
-            [111, 'integer'],
-            [[], 'array'],
-            [null, 'NULL']
-        ];
-    }
-
-    /**
-     * @param string $emptyRelationTypeCode
      * @dataProvider emptyRelationTypeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheProductRelationTypeCodeIsEmpty($emptyRelationTypeCode)
+    public function testItThrowsAnExceptionIfTheProductRelationTypeCodeIsEmpty(string $emptyRelationTypeCode)
     {
         $this->expectException(InvalidProductRelationTypeCodeException::class);
         $this->expectExceptionMessage('The product relation type code can not be empty');
@@ -55,7 +36,7 @@ class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyRelationTypeCodeProvider()
+    public function emptyRelationTypeCodeProvider() : array
     {
         return [
             [''],

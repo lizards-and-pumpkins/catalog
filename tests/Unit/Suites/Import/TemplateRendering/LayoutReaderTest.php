@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\LayoutFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
- * @covers LizardsAndPumpkins\Import\TemplateRendering\LayoutReader
- * @uses LizardsAndPumpkins\Import\XPathParser
- * @uses LizardsAndPumpkins\Import\TemplateRendering\Layout
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\LayoutReader
+ * @uses   \LizardsAndPumpkins\Import\XPathParser
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\Layout
  */
 class LayoutReaderTest extends \PHPUnit_Framework_TestCase
 {

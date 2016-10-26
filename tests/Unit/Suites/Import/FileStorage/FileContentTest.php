@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileContentTypeException;
@@ -11,11 +13,11 @@ use LizardsAndPumpkins\Import\FileStorage\Stub\CastableToStringStub;
 class FileContentTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @dataProvider invalidStringContentProvider
      * @param mixed $invalidStringContent
      * @param string $expectedType
-     * @dataProvider invalidStringContentProvider
      */
-    public function testItThrowsAnExceptionIfTheInputIsNotCastableToString($invalidStringContent, $expectedType)
+    public function testItThrowsAnExceptionIfTheInputIsNotCastableToString($invalidStringContent, string $expectedType)
     {
         $this->expectException(InvalidFileContentTypeException::class);
         $this->expectExceptionMessage(sprintf('Unable to cast file content to string, got "%s"', $expectedType));
@@ -25,7 +27,7 @@ class FileContentTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function invalidStringContentProvider()
+    public function invalidStringContentProvider() : array
     {
         return [
             [[], 'array'],
@@ -34,8 +36,8 @@ class FileContentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param mixed $validStringContent
      * @dataProvider validStringContentProvider
+     * @param mixed $validStringContent
      */
     public function testItReturnsAFileContentInstanceForStringableTypes($validStringContent)
     {
@@ -45,7 +47,7 @@ class FileContentTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function validStringContentProvider()
+    public function validStringContentProvider() : array
     {
         return [
             ['test'],
@@ -65,7 +67,8 @@ class FileContentTest extends \PHPUnit_Framework_TestCase
     {
         $testContent = 'file content';
         $mockFile = $this->createMock(File::class);
-        $mockFile->method('getContent')->willReturn($testContent);
+        $mockFile->method('getContent')->willReturn(FileContent::fromString($testContent));
+        $mockFile->method('__toString')->willReturn($testContent);
         
         $fileContent = FileContent::fromFile($mockFile);
         

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Tax;
 
 use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxClassNameException;
@@ -16,10 +18,9 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $emptyName
      * @dataProvider emptyTaxClassNameProvider
      */
-    public function testItThrowsAnExceptionIfTheNameIsEmpty($emptyName)
+    public function testItThrowsAnExceptionIfTheNameIsEmpty(string $emptyName)
     {
         $this->expectException(InvalidTaxClassNameException::class);
         $this->expectExceptionMessage('The tax class name can not be empty');
@@ -29,7 +30,7 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function emptyTaxClassNameProvider()
+    public function emptyTaxClassNameProvider() : array
     {
         return [
             'zero length string' => [''],
@@ -37,34 +38,16 @@ class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param mixed $nonString
-     * @param string $expectedType
-     * @dataProvider nonStringDataProvider
-     */
-    public function testItThrowsAnExceptionIfTheTaxClassNameIsNotAString($nonString, $expectedType)
+    public function testItThrowsAnExceptionIfTheTaxClassNameIsNotAString()
     {
-        $this->expectException(InvalidTaxClassNameException::class);
-        $this->expectExceptionMessage('The tax class name has to be a string, got "' . $expectedType . '"');
-        ProductTaxClass::fromString($nonString);
+        $this->expectException(\TypeError::class);
+        ProductTaxClass::fromString([]);
     }
 
     public function testItReturnsTheGivenTaxClassInstanceIfATaxClassInstanceIsGiven()
     {
         $testClass = ProductTaxClass::fromString('test');
         $this->assertSame($testClass, ProductTaxClass::fromString($testClass));
-    }
-
-    /**
-     * @return array[]
-     */
-    public function nonStringDataProvider()
-    {
-        return [
-            [123, 'integer'],
-            [[], 'array'],
-            [$this, get_class($this)]
-        ];
     }
 
     public function testTheNamedConstructorReturnsATaxClassInstance()

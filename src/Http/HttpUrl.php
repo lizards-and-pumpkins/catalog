@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Http;
 
 use League\Url\UrlImmutable;
@@ -13,24 +15,17 @@ class HttpUrl
      */
     private $url;
 
-    protected function __construct(AbstractUrl $url)
+    private function __construct(AbstractUrl $url)
     {
         $this->url = $url;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return (string) $this->url;
     }
 
-    /**
-     * @param string $urlString
-     * @return HttpUrl
-     */
-    public static function fromString($urlString)
+    public static function fromString(string $urlString) : HttpUrl
     {
         try {
             $url = UrlImmutable::createFromUrl($urlString);
@@ -43,10 +38,7 @@ class HttpUrl
         return new self($url);
     }
 
-    /**
-     * @return string
-     */
-    public function getPath()
+    public function getPath() : string
     {
         /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
@@ -54,10 +46,7 @@ class HttpUrl
         return $path->getUriComponent();
     }
 
-    /**
-     * @return string
-     */
-    public function getPathWithoutWebsitePrefix()
+    public function getPathWithoutWebsitePrefix() : string
     {
         /** @var \League\Url\Components\Path $path */
         $path = $this->url->getPath();
@@ -66,10 +55,7 @@ class HttpUrl
         return ltrim($path->getUriComponent(), '/');
     }
 
-    /**
-     * @return string
-     */
-    public function getPathWithWebsitePrefix()
+    public function getPathWithWebsitePrefix() : string
     {
         $pathToRemove = preg_replace('#/[^/]*$#', '', $this->getAppEntryPointPath());
         
@@ -80,10 +66,7 @@ class HttpUrl
         return ltrim($path->getUriComponent(), '/');
     }
 
-    /**
-     * @return string
-     */
-    private function getAppEntryPointPath()
+    private function getAppEntryPointPath() : string
     {
         return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
     }
@@ -92,31 +75,20 @@ class HttpUrl
      * @param string $parameterName
      * @return string|null
      */
-    public function getQueryParameter($parameterName)
+    public function getQueryParameter(string $parameterName)
     {
         $requestQuery = $this->url->getQuery();
-
-        if (!isset($requestQuery[$parameterName])) {
-            return null;
-        }
-
-        return $requestQuery[$parameterName];
+        return $requestQuery[$parameterName] ?? null;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasQueryParameters()
+    public function hasQueryParameters() : bool
     {
         /** @var \League\Url\Components\QueryInterface $requestQuery */
         $requestQuery = $this->url->getQuery();
         return count($requestQuery->toArray()) > 0;
     }
 
-    /**
-     * @return string
-     */
-    public function getHost()
+    public function getHost() : string
     {
         return (string) $this->url->getHost();
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
@@ -13,5 +15,5 @@ interface ProductImageImportCommandFactory extends Factory
      * @param DataVersion $dataVersion
      * @return Command[]
      */
-    public function createProductImageImportCommands($imageFilePath, DataVersion $dataVersion);
+    public function createProductImageImportCommands(string $imageFilePath, DataVersion $dataVersion) : array;
 }

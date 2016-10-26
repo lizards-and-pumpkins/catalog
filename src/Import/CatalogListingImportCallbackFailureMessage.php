@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Logging\LogMessage;
@@ -16,20 +18,13 @@ class CatalogListingImportCallbackFailureMessage implements LogMessage
      */
     private $listingXml;
 
-    /**
-     * @param \Exception $exception
-     * @param string $listingXml
-     */
-    public function __construct(\Exception $exception, $listingXml)
+    public function __construct(\Exception $exception, string $listingXml)
     {
         $this->exception = $exception;
         $this->listingXml = $listingXml;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         return sprintf(
             'An error occurred while processing catalog XML import listing callbacks: %s',
@@ -40,7 +35,7 @@ class CatalogListingImportCallbackFailureMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext()
+    public function getContext() : array
     {
         return [
             'exception' => $this->exception,
@@ -48,10 +43,7 @@ class CatalogListingImportCallbackFailureMessage implements LogMessage
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getContextSynopsis()
+    public function getContextSynopsis(): string
     {
         return sprintf('File %s:%d', $this->exception->getFile(), $this->exception->getLine());
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
@@ -37,32 +39,28 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
      * @param string[] $attributes
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingWithAttributes(array $attributes)
+    private function createStubProductListingWithAttributes(array $attributes) : ProductListing
     {
         $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([]);
         $stubProductListing->method('getCriteria')->willReturn($stubSearchCriteria);
 
-        $getAttributeValueMap = $hasAttributeValueMap = [];
+        $getAttributeValueMap = [];
         foreach ($attributes as $attributeCode => $attributeValue) {
             $getAttributeValueMap[] = [$attributeCode, $attributeValue];
-            $hasAttributeValueMap[] = [$attributeCode, true];
         }
-        $hasAttributeValueMap[] = [$this->anything(), false];
 
         $stubProductListing->method('getAttributeValueByCode')->willReturnMap($getAttributeValueMap);
-        $stubProductListing->method('hasAttribute')->willReturnMap($hasAttributeValueMap);
+
+        $stubProductListing->method('hasAttribute')->willReturnCallback(function ($attributeCode) use ($attributes) {
+            return array_key_exists($attributeCode, $attributes);
+        });
 
         return $stubProductListing;
     }
 
-    /**
-     * @param string $snippetKey
-     * @param Snippet[] $snippets
-     * @return Snippet
-     */
-    public function findSnippetByKey($snippetKey, array $snippets)
+    public function findSnippetByKey(string $snippetKey, Snippet ...$snippets) : Snippet
     {
         foreach ($snippets as $snippet) {
             if ($snippet->getKey() === $snippetKey) {
@@ -112,7 +110,7 @@ class ProductListingDescriptionSnippetRendererTest extends \PHPUnit_Framework_Te
         $productListing = $this->createStubProductListingWithAttributes(['description' => 'Test']);
         $this->stubDescriptionBlockRenderer->method('render')->willReturn('Test');
         $result = $this->renderer->render($productListing);
-        $descriptionSnippet = $this->findSnippetByKey($this->testSnippetKey, $result);
+        $descriptionSnippet = $this->findSnippetByKey($this->testSnippetKey, ...$result);
 
         $this->assertSame('Test', $descriptionSnippet->getContent());
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrl;
@@ -33,7 +35,7 @@ class Block
      * @param string $name
      * @param mixed $dataObject
      */
-    final public function __construct(BlockRenderer $blockRenderer, $template, $name, $dataObject)
+    final public function __construct(BlockRenderer $blockRenderer, string $template, string $name, $dataObject)
     {
         // TODO Decouple from template rendering logic
         $this->blockRenderer = $blockRenderer;
@@ -42,26 +44,17 @@ class Block
         $this->dataObject = $dataObject;
     }
 
-    /**
-     * @return string
-     */
-    public function getBlockName()
+    public function getBlockName() : string
     {
         return $this->blockName;
     }
 
-    /**
-     * @return BaseUrl
-     */
-    public function getBaseUrl()
+    public function getBaseUrl() : BaseUrl
     {
         return $this->blockRenderer->getBaseUrl();
     }
 
-    /**
-     * @return string
-     */
-    public function getWebsiteCode()
+    public function getWebsiteCode() : string
     {
         return $this->blockRenderer->getWebsiteCode();
     }
@@ -74,22 +67,16 @@ class Block
         return $this->dataObject;
     }
 
-    /**
-     * @return string
-     */
-    final public function getLayoutHandle()
+    final public function getLayoutHandle() : string
     {
         return $this->blockRenderer->getLayoutHandle();
     }
 
-    /**
-     * @return string
-     */
-    final public function render()
+    final public function render() : string
     {
         $templatePath = realpath($this->template);
 
-        if (!is_readable($templatePath) || is_dir($templatePath)) {
+        if (false === $templatePath || !is_readable($templatePath) || is_dir($templatePath)) {
             throw new TemplateFileNotReadableException(sprintf('Template "%s" is not readable.', $this->template));
         }
 
@@ -100,20 +87,12 @@ class Block
         return ob_get_clean();
     }
 
-    /**
-     * @param string $childName
-     * @return string
-     */
-    final public function getChildOutput($childName)
+    final public function getChildOutput(string $childName) : string
     {
         return $this->blockRenderer->getChildBlockOutput($this->blockName, $childName);
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
-    public function __($string)
+    public function __(string $string) : string
     {
         return $this->blockRenderer->translate($string);
     }

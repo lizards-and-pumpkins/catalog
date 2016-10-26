@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Messaging\Queue;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
 class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -53,7 +56,7 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRequestCanNotBeProcessedIfUrlDoesNotContainTemplateId()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates');
+        $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates'));
 
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
@@ -61,14 +64,14 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
     public function testRequestCanBeProcessedIfValid()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
+        $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
 
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
     public function testTemplateWasUpdatedDomainEventIsEmitted()
     {
-        $this->mockRequest->method('getUrl')->willReturn('http://example.com/api/templates/foo');
+        $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn('Raw Request Body');
 
         $this->mockDomainEventQueue->expects($this->once())->method('add');

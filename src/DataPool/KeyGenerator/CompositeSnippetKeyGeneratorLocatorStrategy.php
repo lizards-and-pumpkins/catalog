@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
@@ -16,10 +18,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenerator
         $this->strategies = $strategies;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function canHandle($snippetCode)
+    public function canHandle(string $snippetCode) : bool
     {
         foreach ($this->strategies as $strategy) {
             if ($strategy->canHandle($snippetCode)) {
@@ -30,10 +29,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGenerator
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getKeyGeneratorForSnippetCode($snippetCode)
+    public function getKeyGeneratorForSnippetCode(string $snippetCode) : SnippetKeyGenerator
     {
         foreach ($this->strategies as $strategy) {
             if ($strategy->canHandle($snippetCode)) {

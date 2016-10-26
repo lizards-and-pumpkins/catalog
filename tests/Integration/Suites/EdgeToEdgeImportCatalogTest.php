@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Country\Country;
@@ -10,7 +12,7 @@ use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\Routing\Exception\HttpResourceNotFoundResponse;
+use LizardsAndPumpkins\Http\Routing\HttpResourceNotFoundResponse;
 use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\Price;
@@ -30,17 +32,14 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    /**
-     * @param string $importFileName
-     */
-    private function importCatalog($importFileName)
+    private function importCatalog(string $importFileName)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
         ]);
         $httpRequestBodyString = json_encode(['fileName' => $importFileName]);
-        $httpRequestBody = HttpRequestBody::fromString($httpRequestBodyString);
+        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -55,7 +54,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
     public function testCatalogImportDomainEventPutsProductToKeyValueStoreAndSearchIndex()
     {
-        $productId = ProductId::fromString('118235-251');
+        $productId = new ProductId('118235-251');
         $productName = 'LED Arm-Signallampe';
         $expectedProductPrice = Price::fromDecimalValue(11.45)->getAmount();
 
@@ -116,7 +115,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $this->assertEquals($expectedProductPrice, $priceSnippetContents);
         }
 
-        $criteria = SearchCriterionEqual::create('name', 'LED Arm-Signallampe');
+        $criteria = new SearchCriterionEqual('name', 'LED Arm-Signallampe');
         $selectedFilters = [];
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
         $rowsPerPage = 100;
@@ -149,7 +148,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
         $httpHeaders = HttpHeaders::fromArray([]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
         $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
@@ -171,7 +170,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $httpUrl = HttpUrl::fromString('http://example.com/' . $urlKeys[0]['value']);
         $httpHeaders = HttpHeaders::fromArray([]);
-        $httpRequestBody = HttpRequestBody::fromString('');
+        $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
         $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
@@ -186,7 +185,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
     {
         $url = HttpUrl::fromString('http://example.com/non/existent/path');
         $headers = HttpHeaders::fromArray([]);
-        $requestBody = HttpRequestBody::fromString('');
+        $requestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $url, $headers, $requestBody);
 
         $masterFactory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
@@ -210,13 +209,13 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             ProductDetailViewSnippetRenderer::CODE
         );
 
-        $validProductId = ProductId::fromString('288193NEU');
+        $validProductId = new ProductId('288193NEU');
         $validProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
             [Product::ID => $validProductId]
         );
 
-        $invalidProductId = ProductId::fromString('T4H2N-4701');
+        $invalidProductId = new ProductId('T4H2N-4701');
         $invalidProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
             $context,
             [Product::ID => $invalidProductId]

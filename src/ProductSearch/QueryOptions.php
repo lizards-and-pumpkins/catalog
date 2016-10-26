@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
@@ -51,8 +53,8 @@ class QueryOptions
         array $filterSelection,
         Context $context,
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
-        $rowsPerPage,
-        $pageNumber,
+        int $rowsPerPage,
+        int $pageNumber,
         SortOrderConfig $sortOrderConfig
     ) {
         $this->filterSelection = $filterSelection;
@@ -76,8 +78,8 @@ class QueryOptions
         array $filterSelection,
         Context $context,
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
-        $rowsPerPage,
-        $pageNumber,
+        int $rowsPerPage,
+        int $pageNumber,
         SortOrderConfig $sortOrderConfig
     ) {
         self::validateRowsPerPage($rowsPerPage);
@@ -101,57 +103,33 @@ class QueryOptions
         return $this->filterSelection;
     }
 
-    /**
-     * @return Context
-     */
-    public function getContext()
+    public function getContext() : Context
     {
         return $this->context;
     }
 
-    /**
-     * @return FacetFiltersToIncludeInResult
-     */
-    public function getFacetFiltersToIncludeInResult()
+    public function getFacetFiltersToIncludeInResult() : FacetFiltersToIncludeInResult
     {
         return $this->facetFiltersToIncludeInResult;
     }
 
-    /**
-     * @return int
-     */
-    public function getRowsPerPage()
+    public function getRowsPerPage() : int
     {
         return $this->rowsPerPage;
     }
 
-    /**
-     * @return int
-     */
-    public function getPageNumber()
+    public function getPageNumber() : int
     {
         return $this->pageNumber;
     }
 
-    /**
-     * @return SortOrderConfig
-     */
-    public function getSortOrderConfig()
+    public function getSortOrderConfig() : SortOrderConfig
     {
         return $this->sortOrderConfig;
     }
 
-    /**
-     * @param int $rowsPerPage
-     */
-    private static function validateRowsPerPage($rowsPerPage)
+    private static function validateRowsPerPage(int $rowsPerPage)
     {
-        if (!is_int($rowsPerPage)) {
-            throw new InvalidRowsPerPageException(
-                sprintf('Number of rows per page must be an integer, got "%s".', gettype($rowsPerPage))
-            );
-        }
-
         if ($rowsPerPage <= 0) {
             throw new InvalidRowsPerPageException(
                 sprintf('Number of rows per page must be positive, got "%s".', $rowsPerPage)
@@ -159,17 +137,8 @@ class QueryOptions
         }
     }
 
-    /**
-     * @param int $pageNumber
-     */
-    private static function validatePageNumber($pageNumber)
+    private static function validatePageNumber(int $pageNumber)
     {
-        if (!is_int($pageNumber)) {
-            throw new InvalidRowsPerPageException(
-                sprintf('Current page number must be an integer, got "%s".', gettype($pageNumber))
-            );
-        }
-
         if ($pageNumber < 0) {
             throw new InvalidRowsPerPageException(
                 sprintf('Current page number can not be negative, got "%s".', $pageNumber)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
 use LizardsAndPumpkins\Context\ContextSource;

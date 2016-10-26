@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Translation;
 
 interface Translator extends \JsonSerializable
 {
-    /**
-     * @param string $string
-     * @return string
-     */
-    public function translate($string);
+    public function translate(string $string) : string;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Image\ProductImageImportCommandFactory;
@@ -24,7 +26,7 @@ class ProductImageImportCommandLocator
      * @param DataVersion $dataVersion
      * @return Command[]
      */
-    public function getProductImageImportCommands($imageFilePath, DataVersion $dataVersion)
+    public function getProductImageImportCommands(string $imageFilePath, DataVersion $dataVersion) : array
     {
         return $this->factory->createProductImageImportCommands($imageFilePath, $dataVersion);
     }

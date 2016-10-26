@@ -4,20 +4,12 @@
     "license": "BSD-3-Clause",
     "authors": [
         {
-            "name": "Vinai Kopp",
-            "email": "vinai@lizardsandpumpkins.com"
-        },
-        {
-            "name": "Tim Bezhashvyly",
-            "email": "tim@lizardsandpumpkins.com"
-        },
-        {
-            "name": "Fabian Blechschmidt",
-            "email": "fabian@lizardsandpumpkins.com"
+            "name": "Lizards & Pumpkins UG",
+            "email": "hello@lizardsandpumpkins.com"
         }
     ],
     "require": {
-        "php": "^5.6.7|^7.0.0",
+        "php": "^7.0.0",
         "league/url": "3.1.1",
         "sebastian/money": "^1.5",
         "ramsey/uuid": "^2.8",
@@ -42,12 +34,6 @@
             ]
         }
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packages.lizardsandpumpkins.com"
-        }
-    ],
     "scripts": {
         "test": [
             "vendor/bin/phpunit -c tests/Unit/phpunit.xml.dist",

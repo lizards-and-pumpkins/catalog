@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -31,12 +32,7 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
      */
     private $stubCompositeProductView;
 
-    /**
-     * @param string $snippetKey
-     * @param Snippet[] $snippets
-     * @return Snippet
-     */
-    private function getSnippetWithKey($snippetKey, Snippet ...$snippets)
+    private function getSnippetWithKey(string $snippetKey, Snippet ...$snippets) : Snippet
     {
         foreach ($snippets as $snippet) {
             if ($snippet->getKey() === $snippetKey) {
@@ -47,11 +43,7 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->fail(sprintf('No snippet with key "%s" found in snippet list', $snippetKey));
     }
 
-    /**
-     * @param string $expected
-     * @param Snippet $snippet
-     */
-    private function assertSnippetContent($expected, Snippet $snippet)
+    private function assertSnippetContent(string $expected, Snippet $snippet)
     {
         $this->assertSame($expected, $snippet->getContent());
     }
@@ -74,9 +66,8 @@ class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_Test
         $this->stubCompositeProductView = $this->createMock(CompositeProductView::class);
         $this->stubCompositeProductView->method('getContext')->willReturn($this->createMock(Context::class));
 
-        $stubAssociatedProductList = $this->createMock(AssociatedProductList::class);
-        $stubAssociatedProductList->method('jsonSerialize')->willReturn($this->testAssociatedAttributesJsonData);
-        $this->stubCompositeProductView->method('getAssociatedProducts')->willReturn($stubAssociatedProductList);
+        $this->stubCompositeProductView->method('getAssociatedProducts')
+            ->willReturn($this->testAssociatedAttributesJsonData);
 
         $stubVariationAttributes = $this->createMock(ProductVariationAttributeList::class);
         $stubVariationAttributes->method('jsonSerialize')->willReturn($this->testVariationAttributesJsonData);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
@@ -48,11 +50,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
      */
     private $urlKeyStore;
     
-    /**
-     * @param HttpRequest $request
-     * @return SampleMasterFactory
-     */
-    final protected function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request)
+    final protected function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request) : SampleMasterFactory
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $factory->register(new FrontendFactory($request));
@@ -60,10 +58,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         return $factory;
     }
     
-    /**
-     * @return SampleMasterFactory
-     */
-    final protected function prepareIntegrationTestMasterFactory()
+    final protected function prepareIntegrationTestMasterFactory() : SampleMasterFactory
     {
         $factory = new SampleMasterFactory();
         $factory->register(new CommonFactory());
@@ -95,11 +90,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @param MasterFactory $masterFactory
-     * @return IntegrationTestFactory
-     */
-    final protected function getIntegrationTestFactory(MasterFactory $masterFactory)
+    final protected function getIntegrationTestFactory(MasterFactory $masterFactory) : IntegrationTestFactory
     {
         $factory = new IntegrationTestFactory($masterFactory);
         if ($this->isFirstInstantiationOfFactory()) {
@@ -110,10 +101,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         return $factory;
     }
 
-    /**
-     * @return bool
-     */
-    private function isFirstInstantiationOfFactory()
+    private function isFirstInstantiationOfFactory() : bool
     {
         return null === $this->keyValueStore;
     }

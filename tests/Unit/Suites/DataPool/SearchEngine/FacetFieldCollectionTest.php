@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -12,9 +14,9 @@ class FacetFieldCollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $attributeCode
      * @param \PHPUnit_Framework_MockObject_MockObject[] $stubFacetFieldValueCount
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return FacetField|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubFacetField($attributeCode, array $stubFacetFieldValueCount)
+    private function createStubFacetField(string $attributeCode, array $stubFacetFieldValueCount) : FacetField
     {
         $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('__toString')->willReturn($attributeCode);

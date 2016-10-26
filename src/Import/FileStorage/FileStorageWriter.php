@@ -1,12 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\Import\FileStorage;
 
 interface FileStorageWriter
 {
-    /**
-     * @param string $filePath
-     * @param string $contents
-     */
-    public function putFileContents($filePath, $contents);
+    public function putFileContents(string $filePath, string $contents);
 }

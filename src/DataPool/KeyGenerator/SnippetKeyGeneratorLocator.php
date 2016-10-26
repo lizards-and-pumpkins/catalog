@@ -1,18 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 interface SnippetKeyGeneratorLocator
 {
-    /**
-     * @param string $snippetCode
-     * @return bool
-     */
-    public function canHandle($snippetCode);
+    public function canHandle(string $snippetCode) : bool;
 
-    /**
-     * @param string $snippetCode
-     * @return SnippetKeyGenerator
-     */
-    public function getKeyGeneratorForSnippetCode($snippetCode);
+    public function getKeyGeneratorForSnippetCode(string $snippetCode) : SnippetKeyGenerator;
 }
