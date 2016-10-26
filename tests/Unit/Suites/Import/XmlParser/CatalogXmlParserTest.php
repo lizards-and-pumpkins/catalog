@@ -168,11 +168,17 @@ EOT;
         return $filePath;
     }
 
+    /**
+     * @param string $expectedXml
+     * @param int $expectedCallCount
+     * @param string $callbackIdentifier
+     * @return callable|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createMockCallbackExpectingXml(
         string $expectedXml,
         int $expectedCallCount,
         string $callbackIdentifier
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ) : callable {
         $mockCallback = $this->getMockBuilder(\stdClass::class)->setMethods(['__invoke'])->getMock();
         $expected = new \DOMDocument();
         $expected->loadXML($expectedXml);
