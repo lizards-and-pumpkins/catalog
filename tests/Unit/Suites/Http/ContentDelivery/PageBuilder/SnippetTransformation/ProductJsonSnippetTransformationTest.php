@@ -93,7 +93,7 @@ class ProductJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->mockEnrichesProductJsonWithPrices->expects($this->once())
-            ->method('addPricesToProductData')->with([], '999', null)
+            ->method('addPricesToProductData')->with($this->stubContext, [], '999', null)
             ->willReturn($enrichedProductData);
 
         $this->assertTransformation(json_encode($enrichedProductData), $inputJson);

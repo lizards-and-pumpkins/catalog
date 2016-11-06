@@ -10,8 +10,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -56,7 +54,6 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
@@ -219,18 +216,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
             [ProductListingRobotsMetaTagSnippetRenderer::CODE],
             [ProductDetailPageRobotsMetaTagSnippetRenderer::CODE],
         ];
-    }
-
-    public function testItReturnsAProductJsonService()
-    {
-        $result = $this->frontendFactory->createProductJsonService();
-        $this->assertInstanceOf(ProductJsonService::class, $result);
-    }
-
-    public function testItReturnsAnEnrichProductJsonWithPrices()
-    {
-        $result = $this->frontendFactory->createEnrichProductJsonWithPrices();
-        $this->assertInstanceOf(EnrichProductJsonWithPrices::class, $result);
     }
 
     public function testItReturnsAProductJsonSnippetTransformation()

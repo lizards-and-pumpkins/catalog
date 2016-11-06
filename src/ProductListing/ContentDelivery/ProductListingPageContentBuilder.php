@@ -81,7 +81,7 @@ class ProductListingPageContentBuilder
         $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
 
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
-        $this->addProductsInListingToPageBuilder(...$productIds);
+        $this->addProductsInListingToPageBuilder($context, ...$productIds);
         $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
         $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
         $this->addTranslationsToPageBuilder($context);
@@ -113,9 +113,9 @@ class ProductListingPageContentBuilder
         }, []);
     }
 
-    private function addProductsInListingToPageBuilder(ProductId ...$productIds)
+    private function addProductsInListingToPageBuilder(Context $context, ProductId ...$productIds)
     {
-        $productData = $this->productJsonService->get(...$productIds);
+        $productData = $this->productJsonService->get($context, ...$productIds);
         $this->addDynamicSnippetToPageBuilder('product_grid', json_encode($productData));
     }
 

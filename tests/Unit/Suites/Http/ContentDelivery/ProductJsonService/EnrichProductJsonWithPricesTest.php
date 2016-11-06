@@ -43,7 +43,9 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubContext = $this->createMock(Context::class);
-        $this->enrichProductJsonWithPrices = new EnrichProductJsonWithPrices($this->stubContext);
+        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
+
+        $this->enrichProductJsonWithPrices = new EnrichProductJsonWithPrices();
     }
 
     public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation()
@@ -51,10 +53,13 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $productData = [];
         $price = $this->getPriceAsFractionUnits('19.99');
         $specialPrice = $this->getPriceAsFractionUnits('17.99');
-        
-        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
-        $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
+        $result = $this->enrichProductJsonWithPrices->addPricesToProductData(
+            $this->stubContext,
+            $productData,
+            $price,
+            $specialPrice
+        );
 
         $this->assertProductJsonDataHas('price', '19,99 €', $result['attributes']);
         $this->assertProductJsonDataHas('raw_price', 1999, $result['attributes']);
@@ -70,10 +75,13 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $productData = [];
         $price = '1999';
         $specialPrice = null;
-        
-        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
-        $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
+        $result = $this->enrichProductJsonWithPrices->addPricesToProductData(
+            $this->stubContext,
+            $productData,
+            $price,
+            $specialPrice
+        );
         
         $this->assertArrayNotHasKey('special_price', $result['attributes']);
         $this->assertArrayNotHasKey('raw_special_price', $result['attributes']);
@@ -84,9 +92,13 @@ class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
         $productData = [];
         $price = '1999';
         $specialPrice = '1799';
-        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
-        $result = $this->enrichProductJsonWithPrices->addPricesToProductData($productData, $price, $specialPrice);
+        $result = $this->enrichProductJsonWithPrices->addPricesToProductData(
+            $this->stubContext,
+            $productData,
+            $price,
+            $specialPrice
+        );
 
         $this->assertProductJsonDataHas('price_currency', 'EUR', $result['attributes']);
         $this->assertProductJsonDataHas('price_faction_digits', 2, $result['attributes']);

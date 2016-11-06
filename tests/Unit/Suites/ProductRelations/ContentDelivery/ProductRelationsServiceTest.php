@@ -62,8 +62,7 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
         
         $this->productRelationsService = new ProductRelationsService(
             $this->stubProductRelationsLocator,
-            $this->stubProductJsonService,
-            $this->stubContext
+            $this->stubProductJsonService
         );
     }
     
@@ -73,7 +72,8 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
         
         $result = $this->productRelationsService->getRelatedProductData(
             $this->stubProductRelationTypeCode,
-            $this->stubProductId
+            $this->stubProductId,
+            $this->stubContext
         );
         $this->assertSame([], $result);
     }
@@ -92,7 +92,8 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
         
         $this->assertSame($stubRelatedProductData, $this->productRelationsService->getRelatedProductData(
             $this->stubProductRelationTypeCode,
-            $this->stubProductId
+            $this->stubProductId,
+            $this->stubContext
         ));
     }
 }

@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\ProductRelations\ProductRelationsFactory;
 
 class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
 {
@@ -34,6 +35,8 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $factory->register(new ProductRelationsFactory());
+
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory);
 
@@ -57,6 +60,8 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $factory->register(new ProductRelationsFactory());
+
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory);
 

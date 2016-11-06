@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
@@ -379,24 +377,5 @@ class FrontendFactory implements Factory
     public function createProductJsonSnippetTransformation() : ProductJsonSnippetTransformation
     {
         return new ProductJsonSnippetTransformation($this->getMasterFactory()->createEnrichProductJsonWithPrices());
-    }
-
-    public function createProductJsonService() : ProductJsonService
-    {
-        return new ProductJsonService(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
-            $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
-            $this->getMasterFactory()->createEnrichProductJsonWithPrices(),
-            $this->getMasterFactory()->createContext()
-        );
-    }
-
-    public function createEnrichProductJsonWithPrices() : EnrichProductJsonWithPrices
-    {
-        return new EnrichProductJsonWithPrices(
-            $this->getMasterFactory()->createContext()
-        );
     }
 }

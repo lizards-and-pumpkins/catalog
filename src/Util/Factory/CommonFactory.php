@@ -13,6 +13,8 @@ use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
@@ -1457,5 +1459,21 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createBaseUrlBuilder(),
             $this->getMasterFactory()->createContextBuilder()
         );
+    }
+
+    public function createProductJsonService() : ProductJsonService
+    {
+        return new ProductJsonService(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createEnrichProductJsonWithPrices()
+        );
+    }
+
+    public function createEnrichProductJsonWithPrices() : EnrichProductJsonWithPrices
+    {
+        return new EnrichProductJsonWithPrices();
     }
 }

@@ -127,7 +127,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
         unset($productData['attributes'][$missingAttribute]);
         $this->stubDataPoolReader->method('getSnippet')->willReturn(json_encode($productData));
         
-        $result = $this->sameSeriesProductRelations->getById($stubProductId);
+        $result = $this->sameSeriesProductRelations->getById($this->stubContext, $stubProductId);
         $this->assertSame([], $result);
     }
 
@@ -163,7 +163,7 @@ class SameSeriesProductRelationsTest extends \PHPUnit_Framework_TestCase
                 return $stubMatchingProductIds;
             });
 
-        $result = $this->sameSeriesProductRelations->getById($stubProductId);
+        $result = $this->sameSeriesProductRelations->getById($this->stubContext, $stubProductId);
         $this->assertSame($stubMatchingProductIds, $result);
     }
 }
