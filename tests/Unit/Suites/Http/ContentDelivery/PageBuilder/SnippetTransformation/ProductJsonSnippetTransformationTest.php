@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation;
 
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPricesBuilder;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 
 /**
@@ -47,12 +48,16 @@ class ProductJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $class = EnrichProductJsonWithPrices::class;
-        $this->mockEnrichesProductJsonWithPrices = $this->createMock($class);
-        $this->transformation = new ProductJsonSnippetTransformation($this->mockEnrichesProductJsonWithPrices);
+        $this->mockEnrichesProductJsonWithPrices = $this->createMock(EnrichProductJsonWithPrices::class);
+        $this->stubContext = $this->createMock(Context::class);
+
+        $stubEnrichesProductJsonWithPricesBuilder = $this->createMock(EnrichProductJsonWithPricesBuilder::class);
+        $stubEnrichesProductJsonWithPricesBuilder->method('getForContext')->with($this->stubContext)
+            ->willReturn($this->mockEnrichesProductJsonWithPrices);
+
+        $this->transformation = new ProductJsonSnippetTransformation($stubEnrichesProductJsonWithPricesBuilder);
 
         $this->stubPageSnippets = $this->createMock(PageSnippets::class);
-        $this->stubContext = $this->createMock(Context::class);
     }
     
     public function testItIsASnippetTransformation()
@@ -72,11 +77,11 @@ class ProductJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
             [PriceSnippetRenderer::PRICE, '999'],
             [PriceSnippetRenderer::SPECIAL_PRICE, '799'],
         ]);
-        
+
         $this->mockEnrichesProductJsonWithPrices->expects($this->once())
             ->method('addPricesToProductData')
             ->willReturn($enrichedProductData);
-        
+
         $this->assertTransformation(json_encode($enrichedProductData), $inputJson);
     }
 
