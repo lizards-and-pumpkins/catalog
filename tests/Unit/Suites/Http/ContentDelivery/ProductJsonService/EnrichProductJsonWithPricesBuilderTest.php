@@ -4,7 +4,6 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPricesBuilder
@@ -16,8 +15,8 @@ class EnrichProductJsonWithPricesBuilderTest extends \PHPUnit_Framework_TestCase
         $stubEnrichProductJsonWithPrices = $this->createMock(EnrichProductJsonWithPrices::class);
         $stubContext = $this->createMock(Context::class);
 
-        $stubMasterFactory = $this->getMockBuilder(SampleMasterFactory::class)
-            ->setMethods(['createEnrichProductJsonWithPrices'])->getMock();
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
+            ->setMethods(['createEnrichProductJsonWithPrices', 'register'])->getMock();
         $stubMasterFactory->method('createEnrichProductJsonWithPrices')->with($stubContext)
             ->willReturn($stubEnrichProductJsonWithPrices);
 

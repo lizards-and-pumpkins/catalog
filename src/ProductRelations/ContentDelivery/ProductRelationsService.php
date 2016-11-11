@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\Product\ProductId;
 
 class ProductRelationsService
@@ -16,23 +15,16 @@ class ProductRelationsService
     private $productRelationsLocator;
 
     /**
-     * @var Context
+     * @var ProductJsonService
      */
-    private $context;
-
-    /**
-     * @var ProductJsonServiceBuilder
-     */
-    private $productJsonServiceBuilder;
+    private $productJsonService;
 
     public function __construct(
         ProductRelationsLocator $productRelationsLocator,
-        ProductJsonServiceBuilder $productJsonServiceBuilder,
-        Context $context
+        ProductJsonService $productJsonService
     ) {
         $this->productRelationsLocator = $productRelationsLocator;
-        $this->productJsonServiceBuilder = $productJsonServiceBuilder;
-        $this->context = $context;
+        $this->productJsonService = $productJsonService;
     }
 
     /**
@@ -58,8 +50,6 @@ class ProductRelationsService
      */
     private function getProductDataByProductIds(array $productIds) : array
     {
-        $productJsonServiceBuilder = $this->productJsonServiceBuilder->getForContext($this->context);
-
-        return $productJsonServiceBuilder->get(...$productIds);
+        return $this->productJsonService->get(...$productIds);
     }
 }

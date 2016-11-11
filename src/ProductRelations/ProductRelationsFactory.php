@@ -25,7 +25,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
     {
         return new ProductRelationsService(
             $this->getMasterFactory()->createProductRelationsLocator(),
-            $this->getMasterFactory()->createProductJsonServiceBuilder(),
+            $this->getMasterFactory()->createProductJsonService($context),
             $context
         );
     }

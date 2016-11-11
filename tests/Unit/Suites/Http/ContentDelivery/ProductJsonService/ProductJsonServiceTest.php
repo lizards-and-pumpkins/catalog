@@ -61,16 +61,12 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubEnrichProductJsonWithPrices = $this->createMock(EnrichProductJsonWithPrices::class);
         $this->stubContext = $this->createMock(Context::class);
 
-        $stubEnrichProductJsonWithPricesBuilder = $this->createMock(EnrichProductJsonWithPricesBuilder::class);
-        $stubEnrichProductJsonWithPricesBuilder->method('getForContext')->with($this->stubContext)
-            ->willReturn($this->stubEnrichProductJsonWithPrices);
-
         $this->productJsonService = new ProductJsonService(
             $this->mockDataPoolReader,
             $this->stubProductJsonSnippetKeyGenerator,
             $this->stubPriceSnippetKeyGenerator,
             $this->stubSpecialPriceSnippetKeyGenerator,
-            $stubEnrichProductJsonWithPricesBuilder,
+            $this->stubEnrichProductJsonWithPrices,
             $this->stubContext
         );
     }

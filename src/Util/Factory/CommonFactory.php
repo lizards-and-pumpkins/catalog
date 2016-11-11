@@ -1471,7 +1471,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
             $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
             $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
-            $this->getMasterFactory()->createEnrichProductJsonWithPricesBuilder(),
+            $this->getMasterFactory()->createEnrichProductJsonWithPrices($context),
             $context
         );
     }

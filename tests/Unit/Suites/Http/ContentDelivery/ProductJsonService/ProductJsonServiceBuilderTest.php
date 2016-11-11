@@ -3,7 +3,7 @@
 namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder
@@ -15,8 +15,8 @@ class ProductJsonServiceBuilderTest extends \PHPUnit_Framework_TestCase
         $stubProductJsonService = $this->createMock(ProductJsonService::class);
         $stubContext = $this->createMock(Context::class);
 
-        $stubMasterFactory = $this->getMockBuilder(SampleMasterFactory::class)
-            ->setMethods(['createProductJsonService'])->getMock();
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
+            ->setMethods(['createProductJsonService', 'register'])->getMock();
         $stubMasterFactory->method('createProductJsonService')->with($stubContext)
             ->willReturn($stubProductJsonService);
 

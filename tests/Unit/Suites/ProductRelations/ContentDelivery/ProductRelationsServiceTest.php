@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductRelations\ProductRelations;
 
@@ -45,30 +43,19 @@ class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $productRelationsService;
 
-    /**
-     * @var Context
-     */
-    private $stubContext;
-
     protected function setUp()
     {
         $this->mockProductRelations = $this->createMock(ProductRelations::class);
         $this->stubProductRelationsLocator = $this->createMock(ProductRelationsLocator::class);
         $this->stubProductRelationsLocator->method('locate')->willReturn($this->mockProductRelations);
         $this->stubProductJsonService = $this->createMock(ProductJsonService::class);
-        $this->stubContext = $this->createMock(Context::class);
-        
+
         $this->stubProductId = $this->createMock(ProductId::class);
         $this->stubProductRelationTypeCode = $this->createMock(ProductRelationTypeCode::class);
 
-        $stubProductJsonServiceBuilder = $this->createMock(ProductJsonServiceBuilder::class);
-        $stubProductJsonServiceBuilder->method('getForContext')->with($this->stubContext)
-            ->willReturn($this->stubProductJsonService);
-
         $this->productRelationsService = new ProductRelationsService(
             $this->stubProductRelationsLocator,
-            $stubProductJsonServiceBuilder,
-            $this->stubContext
+            $this->stubProductJsonService
         );
     }
     

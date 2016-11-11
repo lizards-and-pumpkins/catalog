@@ -33,9 +33,9 @@ class ProductJsonService
     private $specialPriceSnippetKeyGenerator;
 
     /**
-     * @var EnrichProductJsonWithPricesBuilder
+     * @var EnrichProductJsonWithPrices
      */
-    private $enrichProductJsonWithPricesBuilder;
+    private $enrichProductJsonWithPrices;
 
     /**
      * @var Context
@@ -47,14 +47,14 @@ class ProductJsonService
         SnippetKeyGenerator $productJsonSnippetKeyGenerator,
         SnippetKeyGenerator $priceSnippetKeyGenerator,
         SnippetKeyGenerator $specialPriceSnippetKeyGenerator,
-        EnrichProductJsonWithPricesBuilder $enrichProductJsonWithPricesBuilder,
+        EnrichProductJsonWithPrices $enrichProductJsonWithPrices,
         Context $context
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->productJsonSnippetKeyGenerator = $productJsonSnippetKeyGenerator;
         $this->priceSnippetKeyGenerator = $priceSnippetKeyGenerator;
         $this->specialPriceSnippetKeyGenerator = $specialPriceSnippetKeyGenerator;
-        $this->enrichProductJsonWithPricesBuilder = $enrichProductJsonWithPricesBuilder;
+        $this->enrichProductJsonWithPrices = $enrichProductJsonWithPrices;
         $this->context = $context;
     }
 
@@ -122,14 +122,9 @@ class ProductJsonService
         array $specialPriceSnippetKeys
     ) : array {
         $snippets = $this->getSnippets($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
-        $enrichProductJsonWithPricesBuilder = $this->enrichProductJsonWithPricesBuilder->getForContext($this->context);
 
-        return array_map(function (
-            $productJsonSnippetKey,
-            $priceKey,
-            $specialPriceKey
-        ) use ($snippets, $enrichProductJsonWithPricesBuilder) {
-            return $enrichProductJsonWithPricesBuilder->addPricesToProductData(
+        return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($snippets) {
+            return $this->enrichProductJsonWithPrices->addPricesToProductData(
                 json_decode($snippets[$productJsonSnippetKey], true),
                 $snippets[$priceKey],
                 @$snippets[$specialPriceKey]
