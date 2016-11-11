@@ -31,32 +31,24 @@ class SameSeriesProductRelations implements ProductRelations
      */
     private $productJsonSnippetKeyGenerator;
 
-    /**
-     * @var Context
-     */
-    private $context;
-
-    public function __construct(
-        DataPoolReader $dataPoolReader,
-        SnippetKeyGenerator $productJsonSnippetKeyGenerator,
-        Context $context
-    ) {
+    public function __construct(DataPoolReader $dataPoolReader, SnippetKeyGenerator $productJsonSnippetKeyGenerator)
+    {
         $this->dataPoolReader = $dataPoolReader;
         $this->productJsonSnippetKeyGenerator = $productJsonSnippetKeyGenerator;
-        $this->context = $context;
     }
 
     /**
+     * @param Context $context
      * @param ProductId $productId
      * @return ProductId[]
      */
-    public function getById(ProductId $productId) : array
+    public function getById(Context $context, ProductId $productId) : array
     {
-        $key = $this->productJsonSnippetKeyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
+        $key = $this->productJsonSnippetKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
         $productData = json_decode($this->dataPoolReader->getSnippet($key), true);
 
         return $this->hasRequiredAttributes($productData) ?
-            $this->getMatchingProductIds($productData) :
+            $this->getMatchingProductIds($context, $productData) :
             [];
     }
 
@@ -73,10 +65,11 @@ class SameSeriesProductRelations implements ProductRelations
     }
 
     /**
+     * @param Context $context
      * @param array[] $productData
      * @return ProductId[]
      */
-    private function getMatchingProductIds(array $productData) : array
+    private function getMatchingProductIds(Context $context, array $productData) : array
     {
         $criteria = $this->createCriteria($productData);
         $sortBy = $this->createSortOrderConfig();
@@ -85,7 +78,7 @@ class SameSeriesProductRelations implements ProductRelations
 
         return $this->dataPoolReader->getProductIdsMatchingCriteria(
             $criteria,
-            $this->context,
+            $context,
             $sortBy,
             $rowsPerPage,
             $pageNumber

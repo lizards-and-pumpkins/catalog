@@ -23,8 +23,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
     {
         return new ProductRelationsService(
             $this->getMasterFactory()->createProductRelationsLocator(),
-            $this->getMasterFactory()->createProductJsonService(),
-            $this->getMasterFactory()->createContext()
+            $this->getMasterFactory()->createProductJsonService()
         );
     }
 
@@ -32,8 +31,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
     {
         return new SameSeriesProductRelations(
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
-            $this->getMasterFactory()->createContext()
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator()
         );
     }
 
@@ -50,7 +48,8 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
     public function createProductRelationsApiV1GetRequestHandler() : ProductRelationsApiV1GetRequestHandler
     {
         return new ProductRelationsApiV1GetRequestHandler(
-            $this->getMasterFactory()->createProductRelationsService()
+            $this->getMasterFactory()->createProductRelationsService(),
+            $this->getMasterFactory()->createContextBuilder()
         );
     }
 

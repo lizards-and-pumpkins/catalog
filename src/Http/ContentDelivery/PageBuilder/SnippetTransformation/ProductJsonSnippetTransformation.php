@@ -32,7 +32,13 @@ class ProductJsonSnippetTransformation implements SnippetTransformation
         $price = $pageSnippets->getSnippetByCode(PriceSnippetRenderer::PRICE);
         $specialPrice = $this->getSpecialPrice($pageSnippets);
         $productData = json_decode($input, true);
-        $enrichedProductData = $this->enrichProductJson->addPricesToProductData($productData, $price, $specialPrice);
+        $enrichedProductData = $this->enrichProductJson->addPricesToProductData(
+            $context,
+            $productData,
+            $price,
+            $specialPrice
+        );
+
         return json_encode($enrichedProductData);
     }
 

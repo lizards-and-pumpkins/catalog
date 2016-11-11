@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -42,11 +44,21 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
         '/api/products/test/sku/relations/test-relation',
     ];
 
+    /**
+     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubContextBuilder;
+
     protected function setUp()
     {
         $this->mockProductRelationsService = $this->createMock(ProductRelationsService::class);
+        $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
 
-        $this->requestHandler = new ProductRelationsApiV1GetRequestHandler($this->mockProductRelationsService);
+        $this->requestHandler = new ProductRelationsApiV1GetRequestHandler(
+            $this->mockProductRelationsService,
+            $this->stubContextBuilder
+        );
+
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
@@ -130,6 +142,10 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
+
+        $stubContext = $this->createMock(Context::class);
+
+        $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
         $response = $this->requestHandler->process($this->stubRequest);
         

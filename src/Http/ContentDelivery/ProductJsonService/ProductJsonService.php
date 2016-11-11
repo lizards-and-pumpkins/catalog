@@ -37,94 +37,96 @@ class ProductJsonService
      */
     private $enrichProductJsonWithPrices;
 
-    /**
-     * @var Context
-     */
-    private $context;
-
     public function __construct(
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $productJsonSnippetKeyGenerator,
         SnippetKeyGenerator $priceSnippetKeyGenerator,
         SnippetKeyGenerator $specialPriceSnippetKeyGenerator,
-        EnrichProductJsonWithPrices $enrichProductJsonWithPrices,
-        Context $context
+        EnrichProductJsonWithPrices $enrichProductJsonWithPrices
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->productJsonSnippetKeyGenerator = $productJsonSnippetKeyGenerator;
         $this->priceSnippetKeyGenerator = $priceSnippetKeyGenerator;
         $this->specialPriceSnippetKeyGenerator = $specialPriceSnippetKeyGenerator;
         $this->enrichProductJsonWithPrices = $enrichProductJsonWithPrices;
-        $this->context = $context;
     }
 
     /**
+     * @param Context $context
      * @param ProductId[] $productIds
      * @return array[]
      */
-    public function get(ProductId ...$productIds) : array
+    public function get(Context $context, ProductId ...$productIds) : array
     {
         return $this->buildProductData(
-            $this->getProductJsonSnippetKeys($productIds),
-            $this->getPriceSnippetKeys($productIds),
-            $this->getSpecialPriceSnippetKeys($productIds)
+            $context,
+            $this->getProductJsonSnippetKeys($context, $productIds),
+            $this->getPriceSnippetKeys($context, $productIds),
+            $this->getSpecialPriceSnippetKeys($context, $productIds)
         );
     }
 
     /**
+     * @param Context $context
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getProductJsonSnippetKeys(array $productIds) : array
+    private function getProductJsonSnippetKeys(Context $context, array $productIds) : array
     {
-        return $this->getSnippetKeys($productIds, $this->productJsonSnippetKeyGenerator);
+        return $this->getSnippetKeys($context, $productIds, $this->productJsonSnippetKeyGenerator);
     }
 
     /**
+     * @param Context $context
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getPriceSnippetKeys(array $productIds) : array
+    private function getPriceSnippetKeys(Context $context, array $productIds) : array
     {
-        return $this->getSnippetKeys($productIds, $this->priceSnippetKeyGenerator);
+        return $this->getSnippetKeys($context, $productIds, $this->priceSnippetKeyGenerator);
     }
 
     /**
+     * @param Context $context
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getSpecialPriceSnippetKeys(array $productIds) : array
+    private function getSpecialPriceSnippetKeys(Context $context, array $productIds) : array
     {
-        return $this->getSnippetKeys($productIds, $this->specialPriceSnippetKeyGenerator);
+        return $this->getSnippetKeys($context, $productIds, $this->specialPriceSnippetKeyGenerator);
     }
 
     /**
+     * @param Context $context
      * @param ProductId[] $productIds
      * @param SnippetKeyGenerator $keyGenerator
      * @return string[]
      */
-    private function getSnippetKeys(array $productIds, SnippetKeyGenerator $keyGenerator) : array
+    private function getSnippetKeys(Context $context, array $productIds, SnippetKeyGenerator $keyGenerator) : array
     {
-        return array_map(function (ProductId $productId) use ($keyGenerator) {
-            return $keyGenerator->getKeyForContext($this->context, [Product::ID => $productId]);
+        return array_map(function (ProductId $productId) use ($context, $keyGenerator) {
+            return $keyGenerator->getKeyForContext($context, [Product::ID => $productId]);
         }, $productIds);
     }
 
     /**
+     * @param Context $context
      * @param string[] $productJsonSnippetKeys
      * @param string[] $priceSnippetKeys
      * @param string[] $specialPriceSnippetKeys
      * @return array[]
      */
     private function buildProductData(
+        Context $context,
         array $productJsonSnippetKeys,
         array $priceSnippetKeys,
         array $specialPriceSnippetKeys
     ) : array {
         $snippets = $this->getSnippets($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
 
-        return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($snippets) {
+        return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($context, $snippets) {
             return $this->enrichProductJsonWithPrices->addPricesToProductData(
+                $context,
                 json_decode($snippets[$productJsonSnippetKey], true),
                 $snippets[$priceKey],
                 @$snippets[$specialPriceKey]

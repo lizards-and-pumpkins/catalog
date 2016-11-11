@@ -15,6 +15,8 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
@@ -105,6 +107,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler
@@ -923,5 +926,17 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductDetailPageRobotsMetaTagSnippetRenderer();
         $this->assertInstanceOf(ProductDetailPageRobotsMetaTagSnippetRenderer::class, $result);
+    }
+
+    public function testItReturnsAProductJsonService()
+    {
+        $result = $this->commonFactory->createProductJsonService();
+        $this->assertInstanceOf(ProductJsonService::class, $result);
+    }
+
+    public function testItReturnsAnEnrichProductJsonWithPrices()
+    {
+        $result = $this->commonFactory->createEnrichProductJsonWithPrices();
+        $this->assertInstanceOf(EnrichProductJsonWithPrices::class, $result);
     }
 }

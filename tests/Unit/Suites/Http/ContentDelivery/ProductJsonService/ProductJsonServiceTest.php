@@ -43,11 +43,6 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
     private $stubEnrichProductJsonWithPrices;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContext;
-
-    /**
      * @var ProductJsonService
      */
     private $productJsonService;
@@ -59,15 +54,13 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubPriceSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubSpecialPriceSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubEnrichProductJsonWithPrices = $this->createMock(EnrichProductJsonWithPrices::class);
-        $this->stubContext = $this->createMock(Context::class);
 
         $this->productJsonService = new ProductJsonService(
             $this->mockDataPoolReader,
             $this->stubProductJsonSnippetKeyGenerator,
             $this->stubPriceSnippetKeyGenerator,
             $this->stubSpecialPriceSnippetKeyGenerator,
-            $this->stubEnrichProductJsonWithPrices,
-            $this->stubContext
+            $this->stubEnrichProductJsonWithPrices
         );
     }
 
@@ -77,7 +70,8 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
 
-        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
+        $stubContext = $this->createMock(Context::class);
+        $stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')->willReturn($jsonSnippetKey);
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
@@ -91,9 +85,9 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
                 $specialPriceSnippetKey => '999',
             ]);
         
-        $productId = $this->createMock(ProductId::class);
+        $stubProductId = $this->createMock(ProductId::class);
         
-        $this->productJsonService->get($productId);
+        $this->productJsonService->get($stubContext, $stubProductId);
     }
 
     public function testItReturnsTheEnrichedProductData()
@@ -102,7 +96,8 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
 
-        $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
+        $stubContext = $this->createMock(Context::class);
+        $stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')->willReturn($jsonSnippetKey);
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
@@ -118,10 +113,12 @@ class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
 
         $expected = ['dummy enriched data'];
         $this->stubEnrichProductJsonWithPrices->method('addPricesToProductData')
-            ->with($this->dummyProductData, '9999', '8999')
+            ->with($stubContext, $this->dummyProductData, '9999', '8999')
             ->willReturn($expected);
 
-        $result = $this->productJsonService->get($this->createMock(ProductId::class));
+        $stubProductId = $this->createMock(ProductId::class);
+
+        $result = $this->productJsonService->get($stubContext, $stubProductId);
      
         $this->assertContains($expected, $result);
     }

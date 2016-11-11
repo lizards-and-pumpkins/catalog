@@ -14,27 +14,18 @@ use SebastianBergmann\Money\Money;
 class EnrichProductJsonWithPrices
 {
     /**
-     * @var Context
-     */
-    private $context;
-
-    public function __construct(Context $context)
-    {
-        $this->context = $context;
-    }
-    
-    /**
+     * @param Context $context
      * @param string[] $productData
      * @param int|string $priceInt
      * @param int|string|null $specialPriceInt
      * @return array[]
      */
-    public function addPricesToProductData(array $productData, $priceInt, $specialPriceInt = null)
+    public function addPricesToProductData(Context $context, array $productData, $priceInt, $specialPriceInt = null)
     {
         $currency = new Currency($this->getCurrencyCode());
         $price = Price::fromFractions($priceInt)->round($currency->getDefaultFractionDigits());
         $productData['attributes']['raw_price'] = $price->getAmount();
-        $productData['attributes']['price'] = $this->formatPriceSnippet($price, $currency);
+        $productData['attributes']['price'] = $this->formatPriceSnippet($context, $price, $currency);
         $productData['attributes']['price_currency'] = $currency->getCurrencyCode();
         $productData['attributes']['price_faction_digits'] = $currency->getDefaultFractionDigits();
         $productData['attributes']['price_base_unit'] = $currency->getSubUnit();
@@ -43,15 +34,15 @@ class EnrichProductJsonWithPrices
             $specialPrice = Price::fromFractions($specialPriceInt)
                 ->round($currency->getDefaultFractionDigits());
             $productData['attributes']['raw_special_price'] = $specialPrice->getAmount();
-            $productData['attributes']['special_price'] = $this->formatPriceSnippet($specialPrice, $currency);
+            $productData['attributes']['special_price'] = $this->formatPriceSnippet($context, $specialPrice, $currency);
         }
 
         return $productData;
     }
 
-    private function formatPriceSnippet(Price $price, Currency $currency) : string
+    private function formatPriceSnippet(Context $context, Price $price, Currency $currency) : string
     {
-        $localeString = $this->context->getValue(Locale::CONTEXT_CODE);
+        $localeString = $context->getValue(Locale::CONTEXT_CODE);
         return (new IntlFormatter($localeString))->format(new Money($price->getAmount(), $currency));
     }
 
