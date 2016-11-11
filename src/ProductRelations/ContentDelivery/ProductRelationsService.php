@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductId;
 
 class ProductRelationsService
@@ -16,23 +15,16 @@ class ProductRelationsService
     private $productRelationsLocator;
 
     /**
-     * @var Context
-     */
-    private $context;
-
-    /**
      * @var ProductJsonService
      */
     private $productJsonService;
 
     public function __construct(
         ProductRelationsLocator $productRelationsLocator,
-        ProductJsonService $productJsonService,
-        Context $context
+        ProductJsonService $productJsonService
     ) {
         $this->productRelationsLocator = $productRelationsLocator;
         $this->productJsonService = $productJsonService;
-        $this->context = $context;
     }
 
     /**

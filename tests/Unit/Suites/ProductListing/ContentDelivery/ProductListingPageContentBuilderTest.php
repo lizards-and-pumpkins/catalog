@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
@@ -168,8 +169,14 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
 
+        $this->stubContext = $this->createMock(Context::class);
+
+        $stubProductJsonServiceBuilder = $this->createMock(ProductJsonServiceBuilder::class);
+        $stubProductJsonServiceBuilder->method('getForContext')->with($this->stubContext)
+            ->willReturn($this->stubProductJsonService);
+
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
-            $this->stubProductJsonService,
+            $stubProductJsonServiceBuilder,
             $this->mockPageBuilder,
             $this->stubSearchFieldToRequestParamMap,
             $stubTranslatorRegistry,
@@ -177,7 +184,6 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stubPageMetaInfoSnippetContent = $this->createMock(PageMetaInfoSnippetContent::class);
-        $this->stubContext = $this->createMock(Context::class);
         $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $this->stubSelectedSortOrderConfig = $this->createMock(SortOrderConfig::class);
         $this->stubSearchEngineResponse = $this->createStubSearchEngineResponse();

@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation;
 
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPricesBuilder;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 
 class ProductJsonSnippetTransformation implements SnippetTransformation
 {
     /**
-     * @var EnrichProductJsonWithPrices
+     * @var EnrichProductJsonWithPricesBuilder
      */
-    private $enrichProductJson;
+    private $enrichProductJsonWithPricesBuilder;
 
-    public function __construct(EnrichProductJsonWithPrices $enrichProductJsonWithPrices)
+    public function __construct(EnrichProductJsonWithPricesBuilder $enrichProductJsonWithPricesBuilder)
     {
-        $this->enrichProductJson = $enrichProductJsonWithPrices;
+        $this->enrichProductJsonWithPricesBuilder = $enrichProductJsonWithPricesBuilder;
     }
 
     /**
@@ -32,7 +32,13 @@ class ProductJsonSnippetTransformation implements SnippetTransformation
         $price = $pageSnippets->getSnippetByCode(PriceSnippetRenderer::PRICE);
         $specialPrice = $this->getSpecialPrice($pageSnippets);
         $productData = json_decode($input, true);
-        $enrichedProductData = $this->enrichProductJson->addPricesToProductData($productData, $price, $specialPrice);
+        $enrichProductJsonWithPrices = $this->enrichProductJsonWithPricesBuilder->getForContext($context);
+        $enrichedProductData = $enrichProductJsonWithPrices->addPricesToProductData(
+            $productData,
+            $price,
+            $specialPrice
+        );
+
         return json_encode($enrichedProductData);
     }
 

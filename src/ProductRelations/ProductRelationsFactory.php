@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductRelations;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
+use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsServiceBuilder;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
@@ -19,12 +21,19 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
 {
     use FactoryTrait;
 
-    public function createProductRelationsService() : ProductRelationsService
+    public function createProductRelationsService(Context $context) : ProductRelationsService
     {
         return new ProductRelationsService(
             $this->getMasterFactory()->createProductRelationsLocator(),
-            $this->getMasterFactory()->createProductJsonService(),
-            $this->getMasterFactory()->createContext()
+            $this->getMasterFactory()->createProductJsonService($context),
+            $context
+        );
+    }
+
+    public function createProductRelationsServiceBuilder() : ProductRelationsServiceBuilder
+    {
+        return new ProductRelationsServiceBuilder(
+            $this->getMasterFactory()
         );
     }
 
@@ -50,7 +59,8 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
     public function createProductRelationsApiV1GetRequestHandler() : ProductRelationsApiV1GetRequestHandler
     {
         return new ProductRelationsApiV1GetRequestHandler(
-            $this->getMasterFactory()->createProductRelationsService()
+            $this->getMasterFactory()->createProductRelationsServiceBuilder(),
+            $this->getMasterFactory()->createContextBuilder()
         );
     }
 

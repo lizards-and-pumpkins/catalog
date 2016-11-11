@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
@@ -37,9 +37,9 @@ class ProductListingPageContentBuilder
     private $sortOrderConfigs;
 
     /**
-     * @var ProductJsonService
+     * @var ProductJsonServiceBuilder
      */
-    private $productJsonService;
+    private $productJsonServiceBuilder;
 
     /**
      * @var SearchFieldToRequestParamMap
@@ -47,13 +47,13 @@ class ProductListingPageContentBuilder
     private $searchFieldToRequestParamMap;
 
     public function __construct(
-        ProductJsonService $productJsonService,
+        ProductJsonServiceBuilder $productJsonServiceBuilder,
         PageBuilder $pageBuilder,
         SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
         TranslatorRegistry $translatorRegistry,
         SortOrderConfig ...$sortOrderConfigs
     ) {
-        $this->productJsonService = $productJsonService;
+        $this->productJsonServiceBuilder = $productJsonServiceBuilder;
         $this->pageBuilder = $pageBuilder;
         $this->sortOrderConfigs = $sortOrderConfigs;
         $this->translatorRegistry = $translatorRegistry;
@@ -81,7 +81,7 @@ class ProductListingPageContentBuilder
         $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
 
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
-        $this->addProductsInListingToPageBuilder(...$productIds);
+        $this->addProductsInListingToPageBuilder($context, ...$productIds);
         $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
         $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
         $this->addTranslationsToPageBuilder($context);
@@ -113,9 +113,10 @@ class ProductListingPageContentBuilder
         }, []);
     }
 
-    private function addProductsInListingToPageBuilder(ProductId ...$productIds)
+    private function addProductsInListingToPageBuilder(Context $context, ProductId ...$productIds)
     {
-        $productData = $this->productJsonService->get(...$productIds);
+        $productJsonServiceBuilder = $this->productJsonServiceBuilder->getForContext($context);
+        $productData = $productJsonServiceBuilder->get(...$productIds);
         $this->addDynamicSnippetToPageBuilder('product_grid', json_encode($productData));
     }
 

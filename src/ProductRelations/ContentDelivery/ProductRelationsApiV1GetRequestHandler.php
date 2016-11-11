@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -14,13 +15,21 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
 {
     /**
-     * @var ProductRelationsService
+     * @var ProductRelationsServiceBuilder
      */
-    private $productRelationsService;
+    private $productRelationsServiceBuilder;
 
-    public function __construct(ProductRelationsService $productRelationsService)
-    {
-        $this->productRelationsService = $productRelationsService;
+    /**
+     * @var ContextBuilder
+     */
+    private $contextBuilder;
+
+    public function __construct(
+        ProductRelationsServiceBuilder $productRelationsServiceBuilder,
+        ContextBuilder $contextBuilder
+    ) {
+        $this->productRelationsServiceBuilder = $productRelationsServiceBuilder;
+        $this->contextBuilder = $contextBuilder;
     }
     
     public function canProcess(HttpRequest $request) : bool
@@ -38,8 +47,11 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
         if (! $this->canProcess($request)) {
             throw $this->getUnableToProcessRequestException($request);
         }
-        
-        $relatedProductsData = $this->productRelationsService->getRelatedProductData(
+
+        $context = $this->contextBuilder->createFromRequest($request);
+        $productRelationsServiceBuilder = $this->productRelationsServiceBuilder->getForContext($context);
+
+        $relatedProductsData = $productRelationsServiceBuilder->getRelatedProductData(
             $this->getProductRelationTypeCode($request),
             $this->getProductId($request)
         );

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -44,10 +46,23 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
 
     protected function setUp()
     {
+        $this->stubRequest = $this->createMock(HttpRequest::class);
+
+        $stubContext = $this->createMock(Context::class);
+
+        $stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
+
         $this->mockProductRelationsService = $this->createMock(ProductRelationsService::class);
 
-        $this->requestHandler = new ProductRelationsApiV1GetRequestHandler($this->mockProductRelationsService);
-        $this->stubRequest = $this->createMock(HttpRequest::class);
+        $stubProductRelationsServiceBuilder = $this->createMock(ProductRelationsServiceBuilder::class);
+        $stubProductRelationsServiceBuilder->method('getForContext')->with($stubContext)
+            ->willReturn($this->mockProductRelationsService);
+
+        $this->requestHandler = new ProductRelationsApiV1GetRequestHandler(
+            $stubProductRelationsServiceBuilder,
+            $stubContextBuilder
+        );
     }
 
     public function testItIsAnApiRequestHandler()

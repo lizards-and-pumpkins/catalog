@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -13,6 +14,10 @@ use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPricesBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
@@ -1457,5 +1462,32 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createBaseUrlBuilder(),
             $this->getMasterFactory()->createContextBuilder()
         );
+    }
+
+    public function createProductJsonService(Context $context) : ProductJsonService
+    {
+        return new ProductJsonService(
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator(),
+            $this->getMasterFactory()->createPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
+            $this->getMasterFactory()->createEnrichProductJsonWithPrices($context),
+            $context
+        );
+    }
+
+    public function createEnrichProductJsonWithPrices(Context $context) : EnrichProductJsonWithPrices
+    {
+        return new EnrichProductJsonWithPrices($context);
+    }
+
+    public function createEnrichProductJsonWithPricesBuilder() : EnrichProductJsonWithPricesBuilder
+    {
+        return new EnrichProductJsonWithPricesBuilder($this->getMasterFactory());
+    }
+
+    public function createProductJsonServiceBuilder() : ProductJsonServiceBuilder
+    {
+        return new ProductJsonServiceBuilder($this->getMasterFactory());
     }
 }

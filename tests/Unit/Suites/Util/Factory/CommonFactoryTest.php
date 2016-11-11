@@ -15,6 +15,10 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPricesBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
@@ -206,6 +210,10 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPricesBuilder
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServiceBuilder
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -923,5 +931,31 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->commonFactory->createProductDetailPageRobotsMetaTagSnippetRenderer();
         $this->assertInstanceOf(ProductDetailPageRobotsMetaTagSnippetRenderer::class, $result);
+    }
+
+    public function testProductJsonServiceIsReturned()
+    {
+        $stubContext = $this->createMock(Context::class);
+        $result = $this->commonFactory->createProductJsonService($stubContext);
+        $this->assertInstanceOf(ProductJsonService::class, $result);
+    }
+
+    public function testProductJsonServiceBuilderIsReturned()
+    {
+        $result = $this->commonFactory->createProductJsonServiceBuilder();
+        $this->assertInstanceOf(ProductJsonServiceBuilder::class, $result);
+    }
+
+    public function testEnrichProductJsonWithPricesIsReturned()
+    {
+        $stubContext = $this->createMock(Context::class);
+        $result = $this->commonFactory->createEnrichProductJsonWithPrices($stubContext);
+        $this->assertInstanceOf(EnrichProductJsonWithPrices::class, $result);
+    }
+
+    public function testEnrichProductJsonWithPricesBuilderIsReturned()
+    {
+        $result = $this->commonFactory->createEnrichProductJsonWithPricesBuilder();
+        $this->assertInstanceOf(EnrichProductJsonWithPricesBuilder::class, $result);
     }
 }
