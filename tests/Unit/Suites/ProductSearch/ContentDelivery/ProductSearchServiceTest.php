@@ -17,6 +17,11 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOr
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  */
 class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 {

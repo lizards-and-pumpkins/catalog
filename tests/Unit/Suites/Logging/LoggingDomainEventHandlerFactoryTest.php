@@ -40,10 +40,6 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector

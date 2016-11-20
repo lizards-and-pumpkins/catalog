@@ -8,9 +8,9 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\ProductRelations\ProductRelationsFactory;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 
-class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
+class ProductSearchApiTest extends AbstractIntegrationTest
 {
     /**
      * @param string $expectedProductId
@@ -24,18 +24,16 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $message = sprintf('Failed to find expected product id "%s" in product data array', $expectedProductId);
         $this->assertTrue($found, $message);
     }
-    
-    public function testNoRelatedModelsAreReturnsForAProductWithoutSharedSeriesAndBrandAndGender()
+
+    public function testEmptyJsonIsReturnedIfNoProductsMatchTheRequest()
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/products/118235-251/relations/related-models');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.product_relations.v1+json'
-        ]);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=morrissey');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
         $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductRelationsFactory());
+        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory);
@@ -46,33 +44,28 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $this->assertEquals(json_encode(['data' => []]), $response->getBody());
     }
 
-    public function testRelatedProductsWithMatchingBrandAndSeriesAndGenderAreReturned()
+    public function testProductDetailsMatchingRequestSortedDescendingByStockQuantityAreReturned()
     {
-        $testProductId = 'T408Q-9030';
-        $expectedProductIds = ['T530N-0791', 'T530N-9030'];
-
-        $urlString = sprintf('http://example.com/api/products/%s/relations/related-models', $testProductId);
-        $httpUrl = HttpUrl::fromString($urlString);
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.product_relations.v1+json'
-        ]);
+        $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=adi');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
         $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductRelationsFactory());
+        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory);
 
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
+
+        $expectedProductIds = ['Adilette' => '288193NEU', 'Adipure' => 'M29540'];
         $matches = json_decode($response->getBody(), true)['data'];
 
         $this->assertCount(count($expectedProductIds), $matches);
 
-        every($expectedProductIds, function (string $expectedProductId) use ($matches) {
-            $this->assertContainsProductData($expectedProductId, $matches);
-        });
+        $this->assertEquals($matches[0]['product_id'], $expectedProductIds['Adipure']);
+        $this->assertEquals($matches[1]['product_id'], $expectedProductIds['Adilette']);
     }
 }

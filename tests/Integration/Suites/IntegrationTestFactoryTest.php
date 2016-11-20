@@ -202,18 +202,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSameInstanceOfProductSearchAutosuggestionSortOrderConfigIsReturnedOnMultipleCalls()
-    {
-        $this->assertInstanceOf(
-            SortOrderConfig::class,
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
-        );
-        $this->assertSame(
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig(),
-            $this->factory->getProductSearchAutosuggestionSortOrderConfig()
-        );
-    }
-
     public function testItReturnsAnIntegrationTestTaxServiceLocator()
     {
         $this->assertInstanceOf(TaxServiceLocator::class, $this->factory->createTaxServiceLocator());
@@ -232,5 +220,20 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testItReturnsAnImageStorage()
     {
         $this->assertInstanceOf(ImageStorage::class, $this->factory->createImageStorage());
+    }
+
+    public function testReturnsMaxAllowedProductsPerSearchResultsPage()
+    {
+        $this->assertInternalType('int', $this->factory->getMaxAllowedProductsPerSearchResultsPage());
+    }
+
+    public function testReturnsDefaultNumberOfProductsPerSearchResultsPage()
+    {
+        $this->assertInternalType('int', $this->factory->getDefaultNumberOfProductsPerSearchResultsPage());
+    }
+
+    public function testReturnsDefaultSearchResultsPageSortOrderConfig()
+    {
+        $this->assertInstanceOf(SortOrderConfig::class, $this->factory->getDefaultSearchResultsPageSortOrderConfig());
     }
 }

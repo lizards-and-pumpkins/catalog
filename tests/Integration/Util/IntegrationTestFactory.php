@@ -105,11 +105,6 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     private $memoizedProductSearchSortOrderConfig;
 
     /**
-     * @var SortOrderConfig
-     */
-    private $memoizedProductSearchAutosuggestionSortOrderConfig;
-
-    /**
      * @var ProductsPerPage
      */
     private $memoizedProductsPerPageConfig;
@@ -402,18 +397,6 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->memoizedProductsPerPageConfig;
     }
 
-    public function getProductSearchAutosuggestionSortOrderConfig() : SortOrderConfig
-    {
-        if (null === $this->memoizedProductSearchAutosuggestionSortOrderConfig) {
-            $this->memoizedProductSearchAutosuggestionSortOrderConfig = SortOrderConfig::createSelected(
-                AttributeCode::fromString('name'),
-                SortOrderDirection::create(SortOrderDirection::ASC)
-            );
-        }
-
-        return $this->memoizedProductSearchAutosuggestionSortOrderConfig;
-    }
-
     public function createTaxableCountries() : TaxableCountries
     {
         return new IntegrationTestTaxableCountries();
@@ -478,5 +461,20 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     public function createWebsiteContextPartBuilder() : ContextPartBuilder
     {
         return new IntegrationTestContextWebsite();
+    }
+
+    public function getMaxAllowedProductsPerSearchResultsPage() : int
+    {
+        return 120;
+    }
+
+    public function getDefaultNumberOfProductsPerSearchResultsPage()
+    {
+        return 60;
+    }
+
+    public function getDefaultSearchResultsPageSortOrderConfig()
+    {
+        return SortOrderConfig::create(AttributeCode::fromString('stock_qty'), SortOrderDirection::create('desc'));
     }
 }

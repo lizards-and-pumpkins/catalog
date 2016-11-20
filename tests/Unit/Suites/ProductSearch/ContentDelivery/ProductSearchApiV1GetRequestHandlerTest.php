@@ -16,6 +16,12 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
