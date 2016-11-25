@@ -155,7 +155,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
     }
 
-    public function testThrowsAnExceptionIfRequestedNumberOfProductIsHigherThanAllowed()
+    public function testThrowsAnExceptionIfRequestedNumberOfProductsIsHigherThanAllowed()
     {
         $rowsPerPage = $this->maxAllowedProductsPerPage + 1;
 
