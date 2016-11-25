@@ -12,19 +12,6 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 
 class ProductSearchApiTest extends AbstractIntegrationTest
 {
-    /**
-     * @param string $expectedProductId
-     * @param array[] $productsData
-     */
-    private function assertContainsProductData(string $expectedProductId, array $productsData)
-    {
-        $found = array_reduce($productsData, function ($found, array $productData) use ($expectedProductId) {
-            return $found || $productData['product_id'] === (string) $expectedProductId;
-        });
-        $message = sprintf('Failed to find expected product id "%s" in product data array', $expectedProductId);
-        $this->assertTrue($found, $message);
-    }
-
     public function testEmptyJsonIsReturnedIfNoProductsMatchTheRequest()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=morrissey');
@@ -41,7 +28,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
-        $this->assertEquals(json_encode(['data' => []]), $response->getBody());
+        $this->assertEquals(json_encode(['total' => 0, 'data' => []]), $response->getBody());
     }
 
     public function testProductDetailsMatchingRequestSortedDescendingByStockQuantityAreReturned()
@@ -61,11 +48,12 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $response = $website->processRequest();
 
         $expectedProductIds = ['Adilette' => '288193NEU', 'Adipure' => 'M29540'];
-        $matches = json_decode($response->getBody(), true)['data'];
+        $responseJson = json_decode($response->getBody(), true);
 
-        $this->assertCount(count($expectedProductIds), $matches);
+        $this->assertCount(count($expectedProductIds), $responseJson['data']);
+        $this->assertSame(count($expectedProductIds), $responseJson['total']);
 
-        $this->assertEquals($matches[0]['product_id'], $expectedProductIds['Adipure']);
-        $this->assertEquals($matches[1]['product_id'], $expectedProductIds['Adilette']);
+        $this->assertEquals($responseJson['data'][0]['product_id'], $expectedProductIds['Adipure']);
+        $this->assertEquals($responseJson['data'][1]['product_id'], $expectedProductIds['Adilette']);
     }
 }
