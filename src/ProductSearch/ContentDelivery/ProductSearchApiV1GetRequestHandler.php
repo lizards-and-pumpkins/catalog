@@ -88,7 +88,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
         $context = $this->contextBuilder->createFromRequest($request);
 
-        $data = $this->productSearchService->getData(
+        $data = $this->productSearchService->query(
             $queryString,
             $context,
             $this->getNumberOfProductPerPage($request),

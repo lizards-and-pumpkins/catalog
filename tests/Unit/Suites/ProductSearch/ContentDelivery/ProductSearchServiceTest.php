@@ -85,7 +85,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
 
-        $result = $this->service->getData(
+        $result = $this->service->query(
             $queryString,
             $this->stubContext,
             $rowsPerPage,
@@ -114,7 +114,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
 
-        $result = $this->service->getData(
+        $result = $this->service->query(
             $queryString,
             $this->stubContext,
             $rowsPerPage,
@@ -137,7 +137,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode($unsupportedSortAttributeCode);
 
-        $this->service->getData($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
+        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
     }
 
     public function testThrowsAnExceptionIfInvalidNumberOfProductsPerPageTypeIsPassed()
@@ -149,7 +149,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
 
-        $this->service->getData($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
+        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
     }
 
     public function testThrowsAnExceptionIfRequestedNumberOfProductIsHigherThanAllowed()
@@ -167,6 +167,6 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $pageNumber = 0;
         $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
 
-        $this->service->getData($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
+        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
     }
 }

@@ -187,7 +187,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo']
         ]);
 
-        $this->mockProductSearchService->expects($this->once())->method('getData')->willReturn($testProductData);
+        $this->mockProductSearchService->expects($this->once())->method('query')->willReturn($testProductData);
 
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
@@ -211,7 +211,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $this->mockProductSearchService->expects($this->once())->method('getData')
+        $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(
                 $queryString,
                 $stubContext,
@@ -238,7 +238,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $this->mockProductSearchService->expects($this->once())->method('getData')
+        $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(
                 $queryString,
                 $stubContext,
@@ -265,7 +265,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $this->mockProductSearchService->expects($this->once())->method('getData')
+        $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(
                 $queryString,
                 $stubContext,
@@ -297,7 +297,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
 
-        $this->mockProductSearchService->expects($this->once())->method('getData')
+        $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(
                 $queryString,
                 $stubContext,
@@ -323,7 +323,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $this->mockProductSearchService->expects($this->once())->method('getData')
+        $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(
                 $queryString,
                 $stubContext,
@@ -357,7 +357,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             SortOrderDirection::create($sortDirection)
         );
 
-        $this->mockProductSearchService->expects($this->once())->method('getData')
+        $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(
                 $queryString,
                 $stubContext,

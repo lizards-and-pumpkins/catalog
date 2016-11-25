@@ -55,7 +55,7 @@ class ProductSearchService
      * @param SortOrderConfig $sortOrderConfig
      * @return array[]
      */
-    public function getData(
+    public function query(
         string $queryString,
         Context $context,
         int $rowsPerPage,
