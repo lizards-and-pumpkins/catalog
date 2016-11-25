@@ -232,7 +232,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
-            [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCT_PER_PAGE_PARAMETER, $numberOfProductsPerPage],
+            [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, $numberOfProductsPerPage],
         ]);
 
         $stubContext = $this->createMock(Context::class);

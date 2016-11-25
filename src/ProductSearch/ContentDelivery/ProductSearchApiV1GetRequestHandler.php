@@ -18,7 +18,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 {
     const QUERY_PARAMETER = 'q';
 
-    const NUMBER_OF_PRODUCT_PER_PAGE_PARAMETER = 'limit';
+    const NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER = 'limit';
 
     const PAGE_NUMBER_PARAMETER = 'p';
 
@@ -113,7 +113,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function getNumberOfProductPerPage(HttpRequest $request) : int
     {
-        $requestedNumberOfProductsPerPage = $request->getQueryParameter(self::NUMBER_OF_PRODUCT_PER_PAGE_PARAMETER);
+        $requestedNumberOfProductsPerPage = $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
 
         if (null !== $requestedNumberOfProductsPerPage) {
             return (int) $requestedNumberOfProductsPerPage;
