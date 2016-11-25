@@ -52,7 +52,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $stubContext;
 
-    private function createSortOrderConfigWithGivenAttributeCode(string $attributeCode) : SortOrderConfig
+    private function createSortOrderConfigWithAttributeCode(string $attributeCode) : SortOrderConfig
     {
         return SortOrderConfig::create(AttributeCode::fromString($attributeCode), SortOrderDirection::create('asc'));
     }
@@ -83,7 +83,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $rowsPerPage = 10;
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
+        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
 
         $result = $this->service->query(
             $queryString,
@@ -112,7 +112,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $rowsPerPage = 10;
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
+        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
 
         $result = $this->service->query(
             $queryString,
@@ -135,7 +135,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $queryString = 'foo';
         $rowsPerPage = 10;
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode($unsupportedSortAttributeCode);
+        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode($unsupportedSortAttributeCode);
 
         $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
     }
@@ -147,7 +147,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $queryString = 'foo';
         $rowsPerPage = [];
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
+        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
 
         $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
     }
@@ -165,7 +165,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $queryString = 'foo';
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithGivenAttributeCode('bar');
+        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
 
         $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
     }
