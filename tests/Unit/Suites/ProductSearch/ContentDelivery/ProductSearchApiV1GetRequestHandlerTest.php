@@ -179,7 +179,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testFetchingBestsellersIsDelegatesToTheBestsellersService()
     {
-        $testProductData = [['Dummy data']];
+        $testProductData = ['total' => 1, 'data' => ['Dummy data']];
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
@@ -194,7 +194,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $response = $this->requestHandler->process($this->stubRequest);
 
-        $this->assertSame(json_encode(['data' => $testProductData]), $response->getBody());
+        $this->assertSame(json_encode($testProductData), $response->getBody());
         $this->assertSame(HttpResponse::STATUS_OK, $response->getStatusCode());
     }
 

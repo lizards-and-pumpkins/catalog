@@ -72,7 +72,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubContext = $this->createMock(Context::class);
     }
 
-    public function testReturnsAnEmptyArrayIfNoProductsMatchQueryString()
+    public function testReturnsAnEmptyResultIfNoProductsMatchQueryString()
     {
         $queryString = 'foo';
 
@@ -93,10 +93,10 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
             $testSortOrderConfig
         );
 
-        $this->assertSame([], $result);
+        $this->assertSame(['total' => 0, 'data' => []], $result);
     }
 
-    public function testReturnsArrayOfMatchingProductsData()
+    public function testReturnsSetOfMatchingProductsData()
     {
         $queryString = 'foo';
 
@@ -105,6 +105,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn($stubProductIds);
+        $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn(count($dummyProductDataArray));
 
         $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
         $this->stubProductJsonService->method('get')->willReturn($dummyProductDataArray);
@@ -121,7 +122,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
             $testSortOrderConfig
         );
 
-        $this->assertSame($dummyProductDataArray, $result);
+        $this->assertSame(['total' => count($dummyProductDataArray), 'data' => $dummyProductDataArray], $result);
     }
 
     public function testThrowsAnExceptionIfRequestedSortOrderIsNotAllowed()

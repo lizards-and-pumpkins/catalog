@@ -96,7 +96,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             $this->getSortOrderConfig($request)
         );
 
-        $body = json_encode(['data' => $data]);
+        $body = json_encode($data);
         $headers = [];
 
         return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);

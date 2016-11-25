@@ -67,10 +67,13 @@ class ProductSearchService
         $productIds = $searchEngineResponse->getProductIds();
 
         if ([] === $productIds) {
-            return [];
+            return ['total' => 0, 'data' => []];
         }
 
-        return $this->productJsonService->get($context, ...$productIds);
+        return [
+            'total' => $searchEngineResponse->getTotalNumberOfResults(),
+            'data' => $this->productJsonService->get($context, ...$productIds)
+        ];
     }
 
     private function createQueryOptions(
