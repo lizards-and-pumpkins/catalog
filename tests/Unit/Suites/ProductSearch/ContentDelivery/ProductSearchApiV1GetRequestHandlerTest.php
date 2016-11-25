@@ -294,7 +294,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $expectedSortOrderConfig = SortOrderConfig::create(
             AttributeCode::fromString($sortOrder),
-            SortOrderDirection::create('asc')
+            SortOrderDirection::create(SortOrderDirection::ASC)
         );
 
         $this->mockProductSearchService->expects($this->once())->method('getData')

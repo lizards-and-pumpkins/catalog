@@ -157,6 +157,6 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return $requestedSortDirection;
         }
 
-        return 'asc';
+        return SortOrderDirection::ASC;
     }
 }
