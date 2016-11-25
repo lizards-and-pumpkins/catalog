@@ -12,8 +12,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService

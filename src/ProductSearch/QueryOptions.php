@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ProductSearch;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 
 class QueryOptions
 {

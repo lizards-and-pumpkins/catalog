@@ -9,8 +9,8 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
 class ProductSearchService
