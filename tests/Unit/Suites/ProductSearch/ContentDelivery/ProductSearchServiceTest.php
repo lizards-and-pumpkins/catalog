@@ -54,7 +54,10 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
     private function createSortOrderConfigWithAttributeCode(string $attributeCode) : SortOrderConfig
     {
-        return SortOrderConfig::create(AttributeCode::fromString($attributeCode), SortOrderDirection::create('asc'));
+        return SortOrderConfig::create(
+            AttributeCode::fromString($attributeCode),
+            SortOrderDirection::create(SortOrderDirection::ASC)
+        );
     }
 
     final protected function setUp()
