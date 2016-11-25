@@ -169,7 +169,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getAdditionalAttributesForSearchIndex() : array
+    public function getSortableAttributeCodes() : array
     {
         return ['backorders', 'stock_qty', 'series'];
     }

@@ -43,7 +43,7 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->getMaxAllowedProductsPerSearchResultsPage(),
-            ...$this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
+            ...$this->getMasterFactory()->getSortableAttributeCodes()
         );
     }
 }

@@ -845,7 +845,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $indexAttributeCodes = array_unique(array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getFacetFilterRequestFieldCodesForSearchDocuments(),
-            $this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
+            $this->getMasterFactory()->getSortableAttributeCodes()
         ));
 
         return new ProductSearchDocumentBuilder(
