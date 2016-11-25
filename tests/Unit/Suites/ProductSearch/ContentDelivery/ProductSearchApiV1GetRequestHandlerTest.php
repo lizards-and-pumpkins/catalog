@@ -177,7 +177,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->requestHandler->process($this->stubRequest);
     }
 
-    public function testFetchingBestsellersIsDelegatesToTheBestsellersService()
+    public function testDelegatesFetchingProductsToTheProductSearchService()
     {
         $testProductData = ['total' => 1, 'data' => ['Dummy data']];
 
