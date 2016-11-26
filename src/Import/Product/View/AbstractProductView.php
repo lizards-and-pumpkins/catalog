@@ -56,7 +56,7 @@ abstract class AbstractProductView implements ProductView
         }
 
         return array_map(function (ProductAttribute $productAttribute) {
-            return $productAttribute->getValue();
+            return (string) $productAttribute->getValue();
         }, $attributeList->getAttributesWithCode($attributeCode));
     }
 
