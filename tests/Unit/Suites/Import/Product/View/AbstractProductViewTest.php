@@ -102,6 +102,18 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test', $this->productView->getFirstValueOfAttribute($attributeCode));
     }
 
+    public function testCastsTheFirstValueOfAttributesToString()
+    {
+        $attributeCode = 'foo';
+        $integerAttributeValue = 1;
+        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        $mockAttributeList = $this->mockProduct->getAttributes();
+        $mockAttributeList->expects($this->once())->method('getAllAttributes')->willReturn([
+            new ProductAttribute($attributeCode, $integerAttributeValue, []),
+        ]);
+        $this->assertSame("$integerAttributeValue", $this->productView->getFirstValueOfAttribute($attributeCode));
+    }
+
     public function testGettingTheFirstValueOfANonExistantAttributeReturnsAnEmptyString()
     {
         /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
