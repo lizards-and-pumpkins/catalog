@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
+namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 /**
- * @covers   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent
+ * @covers   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @covers   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses     \LizardsAndPumpkins\Import\SnippetContainer
  */

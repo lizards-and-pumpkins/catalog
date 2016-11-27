@@ -46,7 +46,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService

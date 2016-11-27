@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;

@@ -28,7 +28,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**

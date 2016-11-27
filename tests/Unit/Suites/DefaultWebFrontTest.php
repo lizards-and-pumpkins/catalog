@@ -26,7 +26,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices

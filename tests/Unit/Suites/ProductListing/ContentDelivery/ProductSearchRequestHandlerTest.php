@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
+namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -14,14 +14,10 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 
 /**
- * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResultMetaSnippetContent
+ * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
