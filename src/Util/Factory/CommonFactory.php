@@ -84,8 +84,8 @@ use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductProjector;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
+use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;

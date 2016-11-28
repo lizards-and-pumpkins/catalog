@@ -134,7 +134,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector

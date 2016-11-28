@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductSearch\Import;
+namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
