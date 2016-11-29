@@ -16,6 +16,8 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
 class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 {
+    const ENDPOINT_NAME = 'product';
+
     const QUERY_PARAMETER = 'q';
 
     const NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER = 'limit';
@@ -66,7 +68,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
         $parts = $this->getRequestPathParts($request);
 
-        if (count($parts) !== 2 || 'product' !== $parts[1]) {
+        if (count($parts) !== 2 || self::ENDPOINT_NAME !== $parts[1]) {
             return false;
         }
 
