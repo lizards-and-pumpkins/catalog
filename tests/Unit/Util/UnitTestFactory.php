@@ -228,14 +228,6 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return [$this->createMock(SortOrderConfig::class)];
     }
 
-    /**
-     * @return SortOrderConfig
-     */
-    public function getProductSearchAutosuggestionSortOrderConfig()
-    {
-        return $this->createMock(SortOrderConfig::class);
-    }
-
     public function getFileStorageBasePathConfig() : string
     {
         return '';
@@ -279,7 +271,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getAdditionalAttributesForSearchIndex() : array
+    public function getSortableAttributeCodes() : array
     {
         return [];
     }
@@ -351,5 +343,20 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     public function createApiRouter() : ApiRouter
     {
         return $this->createMock(ApiRouter::class);
+    }
+
+    public function getMaxAllowedProductsPerSearchResultsPage() : int
+    {
+        return 120;
+    }
+
+    public function getDefaultNumberOfProductsPerSearchResultsPage() : int
+    {
+        return 20;
+    }
+
+    public function getDefaultSearchResultsPageSortOrderConfig() : SortOrderConfig
+    {
+        return $this->createMock(SortOrderConfig::class);
     }
 }

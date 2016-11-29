@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductSearch\Import;
+namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
@@ -10,14 +10,15 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
 
 /**
- * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetContent
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -30,14 +31,9 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
     private $dummyRootSnippetCode = 'bar';
 
     /**
-     * @var ProductSearchAutosuggestionMetaSnippetRenderer
+     * @var ProductSearchResultMetaSnippetRenderer
      */
     private $renderer;
-
-    /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContextSource;
 
     protected function setUp()
     {
@@ -51,13 +47,14 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
         $stubContext = $this->createMock(Context::class);
-        $this->stubContextSource = $this->createMock(ContextSource::class);
-        $this->stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
+        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        $stubContextSource = $this->createMock(ContextSource::class);
+        $stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
 
-        $this->renderer = new ProductSearchAutosuggestionMetaSnippetRenderer(
+        $this->renderer = new ProductSearchResultMetaSnippetRenderer(
             $stubSnippetKeyGenerator,
             $stubBlockRenderer,
-            $this->stubContextSource
+            $stubContextSource
         );
     }
 
@@ -68,20 +65,23 @@ class ProductSearchAutosuggestionMetaSnippetRendererTest extends \PHPUnit_Framew
 
     public function testArrayOfSnippetsIsReturned()
     {
-        $result = $this->renderer->render('dummy-data-object');
+        $dataObject = new \stdClass();
+        $result = $this->renderer->render($dataObject);
+
         $this->assertContainsOnly(Snippet::class, $result);
     }
 
     public function testSnippetWithValidJsonAsContentAddedToList()
     {
         $expectedSnippetContent = [
-            ProductSearchAutosuggestionMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
-            ProductSearchAutosuggestionMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
-            ProductSearchAutosuggestionMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
+            ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 
-        $result = $this->renderer->render('dummy-data-object');
+        $dataObject = new \stdClass();
+        $result = $this->renderer->render($dataObject);
 
         $this->assertEquals([$expectedSnippet], $result);
     }

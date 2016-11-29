@@ -107,6 +107,7 @@ abstract class HttpRequest
      */
     public function getQueryParameter(string $parameterName)
     {
+        // TODO: Once league/url is gone refactor to hasQueryParameter and exception
         return $this->url->getQueryParameter($parameterName);
     }
 

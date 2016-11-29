@@ -8,8 +8,7 @@ use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchAutosuggestionRequestHandler;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation;
@@ -25,16 +24,13 @@ use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
@@ -193,24 +189,6 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductInSearchAutosuggestionSnippetRenderer::CODE,
-            function () {
-                return $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
-            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
-            function () {
-                return $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
-            ProductSearchAutosuggestionSnippetRenderer::CODE,
-            function () {
-                return $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
             ProductJsonSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductJsonSnippetKeyGenerator();
@@ -345,22 +323,6 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest()
-        );
-    }
-
-    public function createProductSearchAutosuggestionRouter() : HttpRouter
-    {
-        return new GenericHttpRouter($this->createProductSearchAutosuggestionRequestHandler());
-    }
-
-    private function createProductSearchAutosuggestionRequestHandler() : ProductSearchAutosuggestionRequestHandler
-    {
-        return new ProductSearchAutosuggestionRequestHandler(
-            $this->createContext(),
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->getSnippetKeyGeneratorLocator(),
-            $this->getMasterFactory()->getProductSearchAutosuggestionSortOrderConfig()
         );
     }
 

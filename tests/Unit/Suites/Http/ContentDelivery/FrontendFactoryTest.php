@@ -28,11 +28,8 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetR
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
@@ -49,8 +46,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchAutosuggestionRequestHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
@@ -170,12 +166,6 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(PricesJsonSnippetTransformation::class, $result);
     }
 
-    public function testProductSearchAutosuggestionRouterIsReturned()
-    {
-        $result = $this->frontendFactory->createProductSearchAutosuggestionRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
-    }
-
     /**
      * @dataProvider registeredSnippetCodeDataProvider
      */
@@ -194,15 +184,12 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [ProductDetailViewSnippetRenderer::CODE],
-            [ProductInSearchAutosuggestionSnippetRenderer::CODE],
             [ProductInListingSnippetRenderer::CODE],
             [ProductListingTemplateSnippetRenderer::CODE],
             [PriceSnippetRenderer::PRICE],
             [PriceSnippetRenderer::SPECIAL_PRICE],
             [ProductListingSnippetRenderer::CODE],
             [ProductSearchResultMetaSnippetRenderer::CODE],
-            [ProductSearchAutosuggestionMetaSnippetRenderer::CODE],
-            [ProductSearchAutosuggestionSnippetRenderer::CODE],
             [ProductJsonSnippetRenderer::CODE],
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
             [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],

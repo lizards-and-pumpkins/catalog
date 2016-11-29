@@ -28,7 +28,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
@@ -54,8 +54,6 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method GenericSnippetKeyGenerator createProductListingTemplateSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductDetailPageMetaSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
- * @method GenericSnippetKeyGenerator createProductInSearchAutosuggestionSnippetKeyGenerator
- * @method GenericSnippetKeyGenerator createProductSearchAutosuggestionMetaSnippetKeyGenerator
  * @method string[] getRequiredContextParts
  * @method ProductXmlToProductBuilderLocator createProductXmlToProductBuilderLocator
  * @method Context createContext
@@ -65,7 +63,6 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method ProductsPerPage getProductsPerPageConfig
  * @method SortOrderConfig[] getProductListingSortOrderConfig
  * @method SortOrderConfig[] getProductSearchSortOrderConfig
- * @method SortOrderConfig getProductSearchAutosuggestionSortOrderConfig
  * @method ProductListingRequestHandler createProductListingRequestHandler
  * @method ProductSearchRequestHandler createProductSearchRequestHandler
  * @method TaxableCountries createTaxableCountries

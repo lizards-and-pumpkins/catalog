@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ProductSearch;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidRowsPerPageException;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 
 class QueryOptions
 {
@@ -131,7 +131,7 @@ class QueryOptions
     private static function validateRowsPerPage(int $rowsPerPage)
     {
         if ($rowsPerPage <= 0) {
-            throw new InvalidRowsPerPageException(
+            throw new InvalidNumberOfProductsPerPageException(
                 sprintf('Number of rows per page must be positive, got "%s".', $rowsPerPage)
             );
         }
@@ -140,7 +140,7 @@ class QueryOptions
     private static function validatePageNumber(int $pageNumber)
     {
         if ($pageNumber < 0) {
-            throw new InvalidRowsPerPageException(
+            throw new InvalidNumberOfProductsPerPageException(
                 sprintf('Current page number can not be negative, got "%s".', $pageNumber)
             );
         }

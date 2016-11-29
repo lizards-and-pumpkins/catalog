@@ -86,7 +86,6 @@ use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
@@ -125,7 +124,6 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
@@ -136,10 +134,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
@@ -592,18 +587,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result1, $result2);
     }
 
-    public function testProductSearchAutosuggestionTranslatorFactoryIsReturningATranslator()
-    {
-        $translatorFactory = $this->commonFactory->getProductSearchAutosuggestionTranslatorFactory();
-        $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
-    }
-
-    public function testProductInSearchAutosuggestionTranslatorFactoryIsReturningATranslator()
-    {
-        $translatorFactory = $this->commonFactory->getProductInSearchAutosuggestionTranslatorFactory();
-        $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
-    }
-
     public function testProductDetailsViewTranslatorFactoryIsReturningATranslator()
     {
         $translatorFactory = $this->commonFactory->getProductDetailsViewTranslatorFactory();
@@ -863,7 +846,6 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             [ProductDetailViewSnippetRenderer::class],
             [ProductInListingSnippetRenderer::class],
-            [ProductInSearchAutosuggestionSnippetRenderer::class],
             [PriceSnippetRenderer::class],
             [ProductJsonSnippetRenderer::class],
             [ConfigurableProductJsonSnippetRenderer::class],

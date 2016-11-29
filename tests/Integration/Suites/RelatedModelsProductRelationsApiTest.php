@@ -70,9 +70,9 @@ class RelatedModelsProductRelationsApiTest extends AbstractIntegrationTest
         $matches = json_decode($response->getBody(), true)['data'];
 
         $this->assertCount(count($expectedProductIds), $matches);
-        
-        foreach ($expectedProductIds as $expectedProductId) {
+
+        every($expectedProductIds, function (string $expectedProductId) use ($matches) {
             $this->assertContainsProductData($expectedProductId, $matches);
-        }
+        });
     }
 }

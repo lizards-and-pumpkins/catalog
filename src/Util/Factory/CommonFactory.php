@@ -62,8 +62,6 @@ use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRender
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\TemplateRendering\ProductInSearchAutosuggestionBlockRenderer;
-use LizardsAndPumpkins\ProductSearch\ProductInSearchAutosuggestionSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
@@ -73,10 +71,6 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
-use LizardsAndPumpkins\ProductSearch\Import\TemplateRendering\ProductSearchAutosuggestionBlockRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchAutosuggestionTemplateProjector;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
@@ -90,8 +84,8 @@ use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductProjector;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
+use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
@@ -232,10 +226,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getMasterFactory()->createProductListingTemplateProjector()
         );
-        $templateProjectorLocator->register(
-            ProductSearchAutosuggestionSnippetRenderer::CODE,
-            $this->getMasterFactory()->createProductSearchAutosuggestionTemplateProjector()
-        );
 
         return $templateProjectorLocator;
     }
@@ -286,7 +276,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return [
             $this->getMasterFactory()->createProductDetailViewSnippetRenderer(),
             $this->getMasterFactory()->createProductInListingSnippetRenderer(),
-            $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
@@ -341,82 +330,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
-        );
-    }
-
-    public function createProductSearchAutosuggestionTemplateProjector() : ProductSearchAutosuggestionTemplateProjector
-    {
-        return new ProductSearchAutosuggestionTemplateProjector(
-            $this->getMasterFactory()->createDataPoolWriter(),
-            $this->createProductSearchAutosuggestionTemplateRendererCollection()
-        );
-    }
-
-    private function createProductSearchAutosuggestionTemplateRendererCollection() : SnippetRendererCollection
-    {
-        return new SnippetRendererCollection(
-            $this->createProductSearchAutosuggestionRendererList()
-        );
-    }
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    private function createProductSearchAutosuggestionRendererList() : array
-    {
-        return [
-            $this->getMasterFactory()->createProductSearchAutosuggestionSnippetRenderer(),
-            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetRenderer(),
-        ];
-    }
-
-    public function createProductSearchAutosuggestionSnippetRenderer() : ProductSearchAutosuggestionSnippetRenderer
-    {
-        return new ProductSearchAutosuggestionSnippetRenderer(
-            $this->getMasterFactory()->createProductSearchAutosuggestionSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer(),
-            $this->getMasterFactory()->getContextSource()
-        );
-    }
-
-    public function createProductSearchAutosuggestionMetaSnippetRenderer() : ProductSearchAutosuggestionMetaSnippetRenderer
-    {
-        return new ProductSearchAutosuggestionMetaSnippetRenderer(
-            $this->getMasterFactory()->createProductSearchAutosuggestionMetaSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductSearchAutosuggestionBlockRenderer(),
-            $this->getMasterFactory()->getContextSource()
-        );
-    }
-
-    public function createProductSearchAutosuggestionSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [];
-
-        return new GenericSnippetKeyGenerator(
-            ProductSearchAutosuggestionSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
-        );
-    }
-
-    public function createProductSearchAutosuggestionMetaSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [];
-
-        return new GenericSnippetKeyGenerator(
-            ProductSearchAutosuggestionMetaSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
-        );
-    }
-
-    public function createProductSearchAutosuggestionBlockRenderer() : ProductSearchAutosuggestionBlockRenderer
-    {
-        return new ProductSearchAutosuggestionBlockRenderer(
-            $this->getMasterFactory()->getThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createBaseUrlBuilder()
         );
     }
 
@@ -619,14 +532,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductInSearchAutosuggestionSnippetRenderer() : ProductInSearchAutosuggestionSnippetRenderer
-    {
-        return new ProductInSearchAutosuggestionSnippetRenderer(
-            $this->getMasterFactory()->createProductInSearchAutosuggestionBlockRenderer(),
-            $this->getMasterFactory()->createProductInSearchAutosuggestionSnippetKeyGenerator()
-        );
-    }
-
     public function createPriceSnippetRenderer() : PriceSnippetRenderer
     {
         $productRegularPriceAttributeCode = AttributeCode::fromString('price');
@@ -659,27 +564,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             ProductInListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
-        );
-    }
-
-    public function createProductInSearchAutosuggestionBlockRenderer() : ProductInSearchAutosuggestionBlockRenderer
-    {
-        return new ProductInSearchAutosuggestionBlockRenderer(
-            $this->getMasterFactory()->getThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createBaseUrlBuilder()
-        );
-    }
-
-    public function createProductInSearchAutosuggestionSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductInSearchAutosuggestionSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -961,7 +845,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $indexAttributeCodes = array_unique(array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
             $this->getMasterFactory()->getFacetFilterRequestFieldCodesForSearchDocuments(),
-            $this->getMasterFactory()->getAdditionalAttributesForSearchIndex()
+            $this->getMasterFactory()->getSortableAttributeCodes()
         ));
 
         return new ProductSearchDocumentBuilder(
@@ -1189,18 +1073,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->translatorRegistry = new TranslatorRegistry();
 
             $this->translatorRegistry->register(
-                ProductSearchAutosuggestionSnippetRenderer::CODE,
-                $this->getMasterFactory()->getProductSearchAutosuggestionTranslatorFactory()
-            );
-
-            $this->translatorRegistry->register(
                 ProductListingTemplateSnippetRenderer::CODE,
                 $this->getMasterFactory()->getProductListingTranslatorFactory()
-            );
-
-            $this->translatorRegistry->register(
-                ProductInSearchAutosuggestionSnippetRenderer::CODE,
-                $this->getMasterFactory()->getProductInSearchAutosuggestionTranslatorFactory()
             );
 
             $this->translatorRegistry->register(
@@ -1224,22 +1098,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return function ($locale) {
             $files = ['common.csv', 'attributes.csv', 'product-details.csv'];
-            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->getThemeLocator(), $files);
-        };
-    }
-
-    public function getProductInSearchAutosuggestionTranslatorFactory() : callable
-    {
-        return function ($locale) {
-            $files = [];
-            return CsvTranslator::forLocale($locale, $this->getMasterFactory()->getThemeLocator(), $files);
-        };
-    }
-
-    public function getProductSearchAutosuggestionTranslatorFactory() : callable
-    {
-        return function ($locale) {
-            $files = ['product_search_autosuggestion.csv'];
             return CsvTranslator::forLocale($locale, $this->getMasterFactory()->getThemeLocator(), $files);
         };
     }
