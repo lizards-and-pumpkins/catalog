@@ -23,7 +23,7 @@ use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
@@ -355,10 +355,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     {
         if (null === $this->memoizedProductListingSortBy) {
             $this->memoizedProductListingSortBy = [
-                SortBy::createSelected(
-                    AttributeCode::fromString('name'),
-                    SortOrderDirection::create(SortOrderDirection::ASC)
-                ),
+                SortBy::createSelected(AttributeCode::fromString('name'), SortDirection::create(SortDirection::ASC))
             ];
         }
 
@@ -372,10 +369,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     {
         if (null === $this->memoizedProductSearchSortBy) {
             $this->memoizedProductSearchSortBy = [
-                SortBy::createSelected(
-                    AttributeCode::fromString('name'),
-                    SortOrderDirection::create(SortOrderDirection::ASC)
-                ),
+                SortBy::createSelected(AttributeCode::fromString('name'), SortDirection::create(SortDirection::ASC))
             ];
         }
 
@@ -475,6 +469,6 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
 
     public function getDefaultSearchResultsPageSortBy()
     {
-        return SortBy::createUnselected(AttributeCode::fromString('stock_qty'), SortOrderDirection::create('desc'));
+        return SortBy::createUnselected(AttributeCode::fromString('stock_qty'), SortDirection::create('desc'));
     }
 }

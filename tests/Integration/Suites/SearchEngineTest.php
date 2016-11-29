@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -37,10 +37,7 @@ class SearchEngineTest extends AbstractIntegrationTest
         );
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $sortBy = SortBy::createUnselected(
-            AttributeCode::fromString('sku'),
-            SortOrderDirection::create(SortOrderDirection::ASC)
-        );
+        $sortBy = SortBy::createUnselected(AttributeCode::fromString('sku'), SortDirection::create(SortDirection::ASC));
 
         /** @var SearchEngine $searchEngine */
         $searchEngine = $this->factory->getSearchEngine();

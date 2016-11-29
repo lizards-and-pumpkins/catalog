@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
@@ -122,7 +122,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $pageNumber = 0;
         $sortBy = SortBy::createUnselected(
             AttributeCode::fromString('name'),
-            SortOrderDirection::create(SortOrderDirection::ASC)
+            SortDirection::create(SortDirection::ASC)
         );
         $queryOptions = QueryOptions::create(
             $selectedFilters,

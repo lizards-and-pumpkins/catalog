@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\ProductListing\Exception\NoSelectedSortOrderException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
@@ -95,8 +95,8 @@ class ProductListingPageRequest
         $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
 
         if ($this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue)) {
-            $sortOrderDirection = SortOrderDirection::create($sortDirectionQueryStringValue);
-            return $this->createSelectedSortBy($sortOrderQueryStringValue, $sortOrderDirection);
+            $sortDirection = SortDirection::create($sortDirectionQueryStringValue);
+            return $this->createSelectedSortBy($sortOrderQueryStringValue, $sortDirection);
         }
 
         if ($request->hasCookie(self::SORT_ORDER_COOKIE_NAME) &&
@@ -106,8 +106,8 @@ class ProductListingPageRequest
             $direction = $request->getCookieValue(self::SORT_DIRECTION_COOKIE_NAME);
 
             if ($this->isValidSortOrder($sortOrder, $direction)) {
-                $sortOrderDirection = SortOrderDirection::create($direction);
-                return $this->createSelectedSortBy($sortOrder, $sortOrderDirection);
+                $sortDirection = SortDirection::create($direction);
+                return $this->createSelectedSortBy($sortOrder, $sortDirection);
             }
         }
 
@@ -161,7 +161,7 @@ class ProductListingPageRequest
 
     private function createSelectedSortBy(
         string $attributeCodeString,
-        SortOrderDirection $direction
+        SortDirection $direction
     ) : SortBy {
         $attributeCode = AttributeCode::fromString($attributeCodeString);
         return SortBy::createSelected($attributeCode, $direction);
@@ -197,7 +197,7 @@ class ProductListingPageRequest
         }
 
         foreach ($this->availableSortBy as $config) {
-            if ($config->getAttributeCode()->isEqualTo($sortOrder) && SortOrderDirection::isValid($direction)) {
+            if ($config->getAttributeCode()->isEqualTo($sortOrder) && SortDirection::isValid($direction)) {
                 return true;
             }
         }

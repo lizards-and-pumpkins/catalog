@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -17,7 +17,7 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
@@ -294,7 +294,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $expectedSortBy = SortBy::createUnselected(
             AttributeCode::fromString($sortOrder),
-            SortOrderDirection::create(SortOrderDirection::ASC)
+            SortDirection::create(SortDirection::ASC)
         );
 
         $this->mockProductSearchService->expects($this->once())->method('query')
@@ -354,7 +354,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
         $expectedSortBy = SortBy::createUnselected(
             AttributeCode::fromString($sortOrder),
-            SortOrderDirection::create($sortDirection)
+            SortDirection::create($sortDirection)
         );
 
         $this->mockProductSearchService->expects($this->once())->method('query')

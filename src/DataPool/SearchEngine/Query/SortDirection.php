@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
-use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortOrderDirectionException;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortDirectionException;
 
-class SortOrderDirection
+class SortDirection
 {
     const ASC = 'asc';
     const DESC = 'desc';
@@ -21,10 +21,10 @@ class SortOrderDirection
         $this->direction = $direction;
     }
 
-    public static function create(string $direction) : SortOrderDirection
+    public static function create(string $direction) : SortDirection
     {
         if (!self::isValid($direction)) {
-            throw new InvalidSortOrderDirectionException(
+            throw new InvalidSortDirectionException(
                 sprintf('Invalid selected sort order direction "%s" specified.', $direction)
             );
         }

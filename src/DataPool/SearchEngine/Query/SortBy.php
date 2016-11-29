@@ -14,7 +14,7 @@ class SortBy implements \JsonSerializable
     private $attributeCode;
 
     /**
-     * @var SortOrderDirection
+     * @var SortDirection
      */
     private $selectedDirection;
 
@@ -23,19 +23,19 @@ class SortBy implements \JsonSerializable
      */
     private $isSelected;
 
-    private function __construct(AttributeCode $attributeCode, SortOrderDirection $selectedDirection, bool $isSelected)
+    private function __construct(AttributeCode $attributeCode, SortDirection $selectedDirection, bool $isSelected)
     {
         $this->attributeCode = $attributeCode;
         $this->selectedDirection = $selectedDirection;
         $this->isSelected = $isSelected;
     }
 
-    public static function createUnselected(AttributeCode $attributeCode, SortOrderDirection $selectedDirection) : SortBy
+    public static function createUnselected(AttributeCode $attributeCode, SortDirection $selectedDirection) : SortBy
     {
         return new self($attributeCode, $selectedDirection, false);
     }
 
-    public static function createSelected(AttributeCode $attributeCode, SortOrderDirection $selectedDirection) : SortBy
+    public static function createSelected(AttributeCode $attributeCode, SortDirection $selectedDirection) : SortBy
     {
         return new self($attributeCode, $selectedDirection, true);
     }
@@ -45,7 +45,7 @@ class SortBy implements \JsonSerializable
         return $this->attributeCode;
     }
 
-    public function getSelectedDirection() : SortOrderDirection
+    public function getSelectedDirection() : SortDirection
     {
         return $this->selectedDirection;
     }

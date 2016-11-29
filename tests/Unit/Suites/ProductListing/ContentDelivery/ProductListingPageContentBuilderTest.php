@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
@@ -372,13 +372,13 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $stubAttributeCodeB = $this->createMock(AttributeCode::class);
         $stubAttributeCodeA->method('__toString')->willReturn('B');
 
-        $stubSortOrderDirection = $this->createMock(SortOrderDirection::class);
-        $stubSortOrderDirection->method('__toString')->willReturn(SortOrderDirection::ASC);
+        $stubSortDirection = $this->createMock(SortDirection::class);
+        $stubSortDirection->method('__toString')->willReturn(SortDirection::ASC);
 
         $this->stubSelectedSortBy->method('getAttributeCode')->willReturn($stubAttributeCodeA);
 
         $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCodeB);
-        $this->stubSortBy->method('getSelectedDirection')->willReturn($stubSortOrderDirection);
+        $this->stubSortBy->method('getSelectedDirection')->willReturn($stubSortDirection);
         $this->stubSortBy->method('isSelected')->willReturn(true);
 
         $this->stubProductJsonService->method('get')->willReturn([]);

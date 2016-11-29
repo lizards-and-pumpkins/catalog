@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\ProductRelations;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -149,7 +149,7 @@ class SameSeriesProductRelations implements ProductRelations
     {
         return SortBy::createUnselected(
             AttributeCode::fromString('created_at'),
-            SortOrderDirection::create(SortOrderDirection::DESC)
+            SortDirection::create(SortDirection::DESC)
         );
     }
 }

@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -144,7 +144,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
             return SortBy::createUnselected(
                 AttributeCode::fromString($requestedSortOrder),
-                SortOrderDirection::create($sortDirection)
+                SortDirection::create($sortDirection)
             );
         }
 
@@ -159,6 +159,6 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return $requestedSortDirection;
         }
 
-        return SortOrderDirection::ASC;
+        return SortDirection::ASC;
     }
 }

@@ -19,41 +19,41 @@ class SortByTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    private $testDirection = SortOrderDirection::ASC;
+    private $testDirection = SortDirection::ASC;
 
     /**
-     * @var SortOrderDirection|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortDirection|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSortOrderDirection;
+    private $stubSortDirection;
 
     protected function setUp()
     {
         $this->stubAttributeCode = $this->createMock(AttributeCode::class);
-        $this->stubSortOrderDirection = $this->createMock(SortOrderDirection::class);
-        $this->stubSortOrderDirection->method('__toString')->willReturn($this->testDirection);
+        $this->stubSortDirection = $this->createMock(SortDirection::class);
+        $this->stubSortDirection->method('__toString')->willReturn($this->testDirection);
     }
 
     public function testUnselectedSortByCanBeCreated()
     {
-        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortOrderDirection);
+        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortDirection);
 
         $this->assertSame($this->stubAttributeCode, $sortBy->getAttributeCode());
-        $this->assertSame($this->stubSortOrderDirection, $sortBy->getSelectedDirection());
+        $this->assertSame($this->stubSortDirection, $sortBy->getSelectedDirection());
         $this->assertFalse($sortBy->isSelected());
     }
 
     public function testSelectedSortByCanBeCreated()
     {
-        $sortBy = SortBy::createSelected($this->stubAttributeCode, $this->stubSortOrderDirection);
+        $sortBy = SortBy::createSelected($this->stubAttributeCode, $this->stubSortDirection);
 
         $this->assertSame($this->stubAttributeCode, $sortBy->getAttributeCode());
-        $this->assertSame($this->stubSortOrderDirection, $sortBy->getSelectedDirection());
+        $this->assertSame($this->stubSortDirection, $sortBy->getSelectedDirection());
         $this->assertTrue($sortBy->isSelected());
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortOrderDirection);
+        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortDirection);
         $this->assertInstanceOf(\JsonSerializable::class, $sortBy);
     }
 
@@ -63,7 +63,7 @@ class SortByTest extends \PHPUnit_Framework_TestCase
 
         $this->stubAttributeCode->method('__toString')->willReturn($attributeCode);
 
-        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortOrderDirection);
+        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortDirection);
         $expectedArray = [
             'code' => $attributeCode,
             'selectedDirection' => $this->testDirection,

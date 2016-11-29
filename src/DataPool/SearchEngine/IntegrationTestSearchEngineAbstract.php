@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -487,8 +487,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
                 return 0;
             }
 
-            if (SortOrderDirection::ASC === $direction && $fieldA < $fieldB ||
-                SortOrderDirection::DESC === $direction && $fieldA > $fieldB
+            if (SortDirection::ASC === $direction && $fieldA < $fieldB ||
+                SortDirection::DESC === $direction && $fieldA > $fieldB
             ) {
                 return -1;
             }

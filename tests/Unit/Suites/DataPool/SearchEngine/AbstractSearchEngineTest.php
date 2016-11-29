@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
@@ -88,7 +88,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         return SortBy::createUnselected(
             AttributeCode::fromString($sortByFieldCode),
-            SortOrderDirection::create($sortDirection)
+            SortDirection::create($sortDirection)
         );
     }
 
@@ -166,7 +166,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createStubQueryOptionsWithGivenContext(Context $context) : QueryOptions
     {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
-        $stubSortBy = $this->createSortBy('product_id', SortOrderDirection::ASC);
+        $stubSortBy = $this->createSortBy('product_id', SortDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
@@ -188,7 +188,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         array $selectedFilters
     ) : QueryOptions {
-        $stubSortBy = $this->createSortBy('product_id', SortOrderDirection::ASC);
+        $stubSortBy = $this->createSortBy('product_id', SortDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn($selectedFilters);
@@ -229,7 +229,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createStubQueryOptionsWithGivenPagination(int $rowsPerPage, int $pageNumber) : QueryOptions
     {
         $facetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
-        $stubSortBy = $this->createSortBy('product_id', SortOrderDirection::ASC);
+        $stubSortBy = $this->createSortBy('product_id', SortDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
@@ -716,7 +716,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = new SearchCriterionGreaterOrEqualThan($fieldName, $fieldValue);
 
-        $sortBy = $this->createSortBy($fieldName, SortOrderDirection::DESC);
+        $sortBy = $this->createSortBy($fieldName, SortDirection::DESC);
         $selectedFilters = [];
         $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortBy, $selectedFilters);
 
@@ -730,7 +730,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = new SearchCriterionAnything();
 
-        $sortBy = $this->createSortBy('foo', SortOrderDirection::DESC);
+        $sortBy = $this->createSortBy('foo', SortDirection::DESC);
         $selectedFilters = ['foo' => ['bar']];
         $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortBy, $selectedFilters);
 
@@ -748,7 +748,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         
         $criteria = new SearchCriterionAnything();
 
-        $sortBy = $this->createSortBy('foo', SortOrderDirection::DESC);
+        $sortBy = $this->createSortBy('foo', SortDirection::DESC);
         $selectedFilters = ['qux' => ['bar']];
         $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortBy, $selectedFilters);
 
