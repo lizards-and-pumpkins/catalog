@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
@@ -18,7 +18,7 @@ use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageExc
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
@@ -52,9 +52,9 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $stubContext;
 
-    private function createSortOrderConfigWithAttributeCode(string $attributeCode) : SortOrderConfig
+    private function createSortByWithAttributeCode(string $attributeCode) : SortBy
     {
-        return SortOrderConfig::create(
+        return SortBy::createUnselected(
             AttributeCode::fromString($attributeCode),
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
@@ -86,14 +86,14 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $rowsPerPage = 10;
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
+        $testSortBy = $this->createSortByWithAttributeCode('bar');
 
         $result = $this->service->query(
             $queryString,
             $this->stubContext,
             $rowsPerPage,
             $pageNumber,
-            $testSortOrderConfig
+            $testSortBy
         );
 
         $this->assertSame(['total' => 0, 'data' => []], $result);
@@ -115,14 +115,14 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $rowsPerPage = 10;
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
+        $testSortBy = $this->createSortByWithAttributeCode('bar');
 
         $result = $this->service->query(
             $queryString,
             $this->stubContext,
             $rowsPerPage,
             $pageNumber,
-            $testSortOrderConfig
+            $testSortBy
         );
 
         $this->assertSame(['total' => count($dummyProductDataArray), 'data' => $dummyProductDataArray], $result);
@@ -138,9 +138,9 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $queryString = 'foo';
         $rowsPerPage = 10;
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode($unsupportedSortAttributeCode);
+        $testSortBy = $this->createSortByWithAttributeCode($unsupportedSortAttributeCode);
 
-        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
+        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortBy);
     }
 
     public function testThrowsAnExceptionIfInvalidNumberOfProductsPerPageTypeIsPassed()
@@ -150,9 +150,9 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $queryString = 'foo';
         $rowsPerPage = [];
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
+        $testSortBy = $this->createSortByWithAttributeCode('bar');
 
-        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
+        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortBy);
     }
 
     public function testThrowsAnExceptionIfRequestedNumberOfProductsIsHigherThanAllowed()
@@ -168,8 +168,8 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $queryString = 'foo';
         $pageNumber = 0;
-        $testSortOrderConfig = $this->createSortOrderConfigWithAttributeCode('bar');
+        $testSortBy = $this->createSortByWithAttributeCode('bar');
 
-        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortOrderConfig);
+        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortBy);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
@@ -146,7 +146,7 @@ class DataPoolReader
     /**
      * @param SearchCriteria $criteria
      * @param Context $context
-     * @param SortOrderConfig $sortOrderConfig
+     * @param SortBy $sortBy
      * @param int $rowsPerPage
      * @param int $pageNumber
      * @return ProductId[]
@@ -154,7 +154,7 @@ class DataPoolReader
     public function getProductIdsMatchingCriteria(
         SearchCriteria $criteria,
         Context $context,
-        SortOrderConfig $sortOrderConfig,
+        SortBy $sortBy,
         int $rowsPerPage,
         int $pageNumber
     ) : array {
@@ -167,7 +167,7 @@ class DataPoolReader
             $includeNoFacetFiltersInResult,
             $rowsPerPage,
             $pageNumber,
-            $sortOrderConfig
+            $sortBy
         );
 
         $searchResult = $this->searchEngine->query($criteria, $queryOptions);

@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
@@ -93,12 +93,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->productListingPageRequest->processCookies($request);
 
         $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
-        $selectedSortOrderConfig = $this->productListingPageRequest->getSelectedSortOrderConfig($request);
-        $searchEngineResponse = $this->getSearchResultsMatchingCriteria(
-            $request,
-            $productsPerPage,
-            $selectedSortOrderConfig
-        );
+        $selectedSortBy = $this->productListingPageRequest->getSelectedSortBy($request);
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage, $selectedSortBy);
         
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
@@ -112,7 +108,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $keyGeneratorParams,
             $searchEngineResponse,
             $productsPerPage,
-            $selectedSortOrderConfig
+            $selectedSortBy
         );
     }
 
@@ -151,12 +147,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private function getSearchResultsMatchingCriteria(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
-        SortOrderConfig $selectedSortOrderConfig
+        SortBy $selectedSortBy
     ) : SearchEngineResponse {
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
         $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
 
-        $response = $this->getResults($request, $numberOfProductsPerPage, $currentPageNumber, $selectedSortOrderConfig);
+        $response = $this->getResults($request, $numberOfProductsPerPage, $currentPageNumber, $selectedSortBy);
 
         if ($this->isPageWithinBounds($response, $currentPageNumber, $numberOfProductsPerPage)) {
             return $response;
@@ -164,21 +160,21 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
         $lastPageNumber = $this->getLastPageNumber($response, $numberOfProductsPerPage);
 
-        return $this->getResults($request, $numberOfProductsPerPage, $lastPageNumber, $selectedSortOrderConfig);
+        return $this->getResults($request, $numberOfProductsPerPage, $lastPageNumber, $selectedSortBy);
     }
 
     private function getResults(
         HttpRequest $request,
         int $numberOfProductsPerPage,
         int $currentPageNumber,
-        SortOrderConfig $selectedSortOrderConfig
+        SortBy $selectedSortBy
     ) : SearchEngineResponse {
         $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
         $selectedFilters = $this->productListingPageRequest->getSelectedFilterValues(
             $request,
             $this->facetFilterRequest
         );
-        $requestSortOrder = $this->productListingPageRequest->createSortOrderConfigForRequest($selectedSortOrderConfig);
+        $requestSortOrder = $this->productListingPageRequest->createSortByForRequest($selectedSortBy);
 
         $queryOptions = QueryOptions::create(
             $selectedFilters,

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Country\Country;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -120,7 +120,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $sortOrderConfig = SortOrderConfig::create(
+        $sortBy = SortBy::createUnselected(
             AttributeCode::fromString('name'),
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
@@ -130,7 +130,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $facetFilterRequest,
             $rowsPerPage,
             $pageNumber,
-            $sortOrderConfig
+            $sortBy
         );
         $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
 

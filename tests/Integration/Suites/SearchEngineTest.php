@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
@@ -37,7 +37,7 @@ class SearchEngineTest extends AbstractIntegrationTest
         );
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $sortOrderConfig = SortOrderConfig::create(
+        $sortBy = SortBy::createUnselected(
             AttributeCode::fromString('sku'),
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
@@ -53,7 +53,7 @@ class SearchEngineTest extends AbstractIntegrationTest
             $facetFieldRequest,
             $rowsPerPage,
             $pageNumber,
-            $sortOrderConfig
+            $sortBy
         );
 
         $searchEngineResponse = $searchEngine->query(new SearchCriterionAnything(), $queryOptions);

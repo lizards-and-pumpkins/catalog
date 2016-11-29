@@ -22,7 +22,7 @@ use LizardsAndPumpkins\Messaging\Queue\InMemoryQueue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
@@ -95,14 +95,14 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     private $urlKeyStore;
 
     /**
-     * @var SortOrderConfig[]
+     * @var SortBy[]
      */
-    private $memoizedProductListingSortOrderConfig;
+    private $memoizedProductListingSortBy;
 
     /**
-     * @var SortOrderConfig[]
+     * @var SortBy[]
      */
-    private $memoizedProductSearchSortOrderConfig;
+    private $memoizedProductSearchSortBy;
 
     /**
      * @var ProductsPerPage
@@ -349,37 +349,37 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     }
 
     /**
-     * @return SortOrderConfig[]
+     * @return SortBy[]
      */
-    public function getProductListingSortOrderConfig() : array
+    public function getProductListingSortBy() : array
     {
-        if (null === $this->memoizedProductListingSortOrderConfig) {
-            $this->memoizedProductListingSortOrderConfig = [
-                SortOrderConfig::createSelected(
+        if (null === $this->memoizedProductListingSortBy) {
+            $this->memoizedProductListingSortBy = [
+                SortBy::createSelected(
                     AttributeCode::fromString('name'),
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
             ];
         }
 
-        return $this->memoizedProductListingSortOrderConfig;
+        return $this->memoizedProductListingSortBy;
     }
 
     /**
-     * @return SortOrderConfig[]
+     * @return SortBy[]
      */
-    public function getProductSearchSortOrderConfig() : array
+    public function getProductSearchSortBy() : array
     {
-        if (null === $this->memoizedProductSearchSortOrderConfig) {
-            $this->memoizedProductSearchSortOrderConfig = [
-                SortOrderConfig::createSelected(
+        if (null === $this->memoizedProductSearchSortBy) {
+            $this->memoizedProductSearchSortBy = [
+                SortBy::createSelected(
                     AttributeCode::fromString('name'),
                     SortOrderDirection::create(SortOrderDirection::ASC)
                 ),
             ];
         }
 
-        return $this->memoizedProductSearchSortOrderConfig;
+        return $this->memoizedProductSearchSortBy;
     }
 
     public function getProductsPerPageConfig() : ProductsPerPage
@@ -473,8 +473,8 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return 60;
     }
 
-    public function getDefaultSearchResultsPageSortOrderConfig()
+    public function getDefaultSearchResultsPageSortBy()
     {
-        return SortOrderConfig::create(AttributeCode::fromString('stock_qty'), SortOrderDirection::create('desc'));
+        return SortBy::createUnselected(AttributeCode::fromString('stock_qty'), SortOrderDirection::create('desc'));
     }
 }

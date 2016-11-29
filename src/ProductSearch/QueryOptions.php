@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 
@@ -37,9 +37,9 @@ class QueryOptions
     private $pageNumber;
 
     /**
-     * @var SortOrderConfig
+     * @var SortBy
      */
-    private $sortOrderConfig;
+    private $sortBy;
 
     /**
      * @param array[] $filterSelection
@@ -47,7 +47,7 @@ class QueryOptions
      * @param FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult
      * @param int $rowsPerPage
      * @param int $pageNumber
-     * @param SortOrderConfig $sortOrderConfig
+     * @param SortBy $sortBy
      */
     private function __construct(
         array $filterSelection,
@@ -55,14 +55,14 @@ class QueryOptions
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         int $rowsPerPage,
         int $pageNumber,
-        SortOrderConfig $sortOrderConfig
+        SortBy $sortBy
     ) {
         $this->filterSelection = $filterSelection;
         $this->context = $context;
         $this->facetFiltersToIncludeInResult = $facetFiltersToIncludeInResult;
         $this->rowsPerPage = $rowsPerPage;
         $this->pageNumber = $pageNumber;
-        $this->sortOrderConfig = $sortOrderConfig;
+        $this->sortBy = $sortBy;
     }
 
     /**
@@ -71,7 +71,7 @@ class QueryOptions
      * @param FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult
      * @param int $rowsPerPage
      * @param int $pageNumber
-     * @param SortOrderConfig $sortOrderConfig
+     * @param SortBy $sortBy
      * @return QueryOptions
      */
     public static function create(
@@ -80,7 +80,7 @@ class QueryOptions
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         int $rowsPerPage,
         int $pageNumber,
-        SortOrderConfig $sortOrderConfig
+        SortBy $sortBy
     ) {
         self::validateRowsPerPage($rowsPerPage);
         self::validatePageNumber($pageNumber);
@@ -91,7 +91,7 @@ class QueryOptions
             $facetFiltersToIncludeInResult,
             $rowsPerPage,
             $pageNumber,
-            $sortOrderConfig
+            $sortBy
         );
     }
 
@@ -123,9 +123,9 @@ class QueryOptions
         return $this->pageNumber;
     }
 
-    public function getSortOrderConfig() : SortOrderConfig
+    public function getSortBy() : SortBy
     {
-        return $this->sortOrderConfig;
+        return $this->sortBy;
     }
 
     private static function validateRowsPerPage(int $rowsPerPage)

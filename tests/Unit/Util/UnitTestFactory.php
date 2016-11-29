@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
@@ -213,19 +213,19 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     }
 
     /**
-     * @return SortOrderConfig[]
+     * @return SortBy[]
      */
-    public function getProductListingSortOrderConfig() : array
+    public function getProductListingSortBy() : array
     {
-        return [$this->createMock(SortOrderConfig::class)];
+        return [$this->createMock(SortBy::class)];
     }
 
     /**
-     * @return SortOrderConfig[]
+     * @return SortBy[]
      */
-    public function getProductSearchSortOrderConfig() : array
+    public function getProductSearchSortBy() : array
     {
-        return [$this->createMock(SortOrderConfig::class)];
+        return [$this->createMock(SortBy::class)];
     }
 
     public function getFileStorageBasePathConfig() : string
@@ -355,8 +355,8 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return 20;
     }
 
-    public function getDefaultSearchResultsPageSortOrderConfig() : SortOrderConfig
+    public function getDefaultSearchResultsPageSortBy() : SortBy
     {
-        return $this->createMock(SortOrderConfig::class);
+        return $this->createMock(SortBy::class);
     }
 }

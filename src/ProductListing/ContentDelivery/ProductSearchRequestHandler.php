@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -81,12 +81,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->productListingPageRequest->processCookies($request);
 
         $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
-        $selectedSortOrderConfig = $this->productListingPageRequest->getSelectedSortOrderConfig($request);
-        $searchEngineResponse = $this->getSearchResultsMatchingCriteria(
-            $request,
-            $productsPerPage,
-            $selectedSortOrderConfig
-        );
+        $selectedSortBy = $this->productListingPageRequest->getSelectedSortBy($request);
+        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage, $selectedSortBy);
 
         $metaInfoSnippetContent = $this->getPageMetaInfo();
         $keyGeneratorParams = [
@@ -99,7 +95,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $keyGeneratorParams,
             $searchEngineResponse,
             $productsPerPage,
-            $selectedSortOrderConfig
+            $selectedSortBy
         );
     }
 
@@ -125,9 +121,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private function getSearchResultsMatchingCriteria(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
-        SortOrderConfig $selectedSortOrderConfig
+        SortBy $selectedSortBy
     ) : SearchEngineResponse {
-        $requestSortOrder = $this->productListingPageRequest->createSortOrderConfigForRequest($selectedSortOrderConfig);
+        $requestSortOrder = $this->productListingPageRequest->createSortByForRequest($selectedSortBy);
 
         $queryOptions = QueryOptions::create(
             $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFilterRequest),

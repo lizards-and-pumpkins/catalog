@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 
-class SortOrderConfig implements \JsonSerializable
+class SortBy implements \JsonSerializable
 {
     /**
      * @var AttributeCode
@@ -30,15 +30,13 @@ class SortOrderConfig implements \JsonSerializable
         $this->isSelected = $isSelected;
     }
 
-    public static function create(AttributeCode $attributeCode, SortOrderDirection $selectedDirection) : SortOrderConfig
+    public static function createUnselected(AttributeCode $attributeCode, SortOrderDirection $selectedDirection) : SortBy
     {
         return new self($attributeCode, $selectedDirection, false);
     }
 
-    public static function createSelected(
-        AttributeCode $attributeCode,
-        SortOrderDirection $selectedDirection
-    ) : SortOrderConfig {
+    public static function createSelected(AttributeCode $attributeCode, SortOrderDirection $selectedDirection) : SortBy
+    {
         return new self($attributeCode, $selectedDirection, true);
     }
 

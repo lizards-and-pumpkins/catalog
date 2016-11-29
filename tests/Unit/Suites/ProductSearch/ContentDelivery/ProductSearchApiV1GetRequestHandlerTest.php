@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -16,7 +16,7 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
@@ -41,9 +41,9 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
     private $defaultNumberOfProductPerPage = 10;
 
     /**
-     * @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortBy|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubDefaultSortOrderConfig;
+    private $stubDefaultSorBy;
 
     /**
      * @var ProductSearchApiV1GetRequestHandler
@@ -59,13 +59,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
-        $this->stubDefaultSortOrderConfig = $this->createMock(SortOrderConfig::class);
+        $this->stubDefaultSorBy = $this->createMock(SortBy::class);
 
         $this->requestHandler = new ProductSearchApiV1GetRequestHandler(
             $this->mockProductSearchService,
             $this->stubContextBuilder,
             $this->defaultNumberOfProductPerPage,
-            $this->stubDefaultSortOrderConfig
+            $this->stubDefaultSorBy
         );
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
@@ -217,7 +217,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 $stubContext,
                 $this->defaultNumberOfProductPerPage,
                 0,
-                $this->stubDefaultSortOrderConfig
+                $this->stubDefaultSorBy
             )->willReturn([]);
 
         $this->requestHandler->process($this->stubRequest);
@@ -244,7 +244,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 $stubContext,
                 (int) $numberOfProductsPerPage,
                 0,
-                $this->stubDefaultSortOrderConfig
+                $this->stubDefaultSorBy
             )->willReturn([]);
 
         $this->requestHandler->process($this->stubRequest);
@@ -271,7 +271,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 $stubContext,
                 $this->defaultNumberOfProductPerPage,
                 (int) $pageNumber,
-                $this->stubDefaultSortOrderConfig
+                $this->stubDefaultSorBy
             )->willReturn([]);
 
         $this->requestHandler->process($this->stubRequest);
@@ -292,7 +292,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $expectedSortOrderConfig = SortOrderConfig::create(
+        $expectedSortBy = SortBy::createUnselected(
             AttributeCode::fromString($sortOrder),
             SortOrderDirection::create(SortOrderDirection::ASC)
         );
@@ -303,7 +303,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 $stubContext,
                 $this->defaultNumberOfProductPerPage,
                 0,
-                $expectedSortOrderConfig
+                $expectedSortBy
             )->willReturn([]);
 
         $this->requestHandler->process($this->stubRequest);
@@ -329,7 +329,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 $stubContext,
                 $this->defaultNumberOfProductPerPage,
                 0,
-                $this->stubDefaultSortOrderConfig
+                $this->stubDefaultSorBy
             )->willReturn([]);
 
         $this->requestHandler->process($this->stubRequest);
@@ -352,7 +352,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $expectedSortOrderConfig = SortOrderConfig::create(
+        $expectedSortBy = SortBy::createUnselected(
             AttributeCode::fromString($sortOrder),
             SortOrderDirection::create($sortDirection)
         );
@@ -363,7 +363,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 $stubContext,
                 $this->defaultNumberOfProductPerPage,
                 0,
-                $expectedSortOrderConfig
+                $expectedSortBy
             )->willReturn([]);
 
         $this->requestHandler->process($this->stubRequest);

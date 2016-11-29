@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\ProductRelations;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
@@ -72,7 +72,7 @@ class SameSeriesProductRelations implements ProductRelations
     private function getMatchingProductIds(Context $context, array $productData) : array
     {
         $criteria = $this->createCriteria($productData);
-        $sortBy = $this->createSortOrderConfig();
+        $sortBy = $this->createSortBy();
         $rowsPerPage = 20;
         $pageNumber = 0;
 
@@ -145,9 +145,9 @@ class SameSeriesProductRelations implements ProductRelations
         return new SearchCriterionEqual($attributeCode, $valueToMatch);
     }
 
-    private function createSortOrderConfig() : SortOrderConfig
+    private function createSortBy() : SortBy
     {
-        return SortOrderConfig::create(
+        return SortBy::createUnselected(
             AttributeCode::fromString('created_at'),
             SortOrderDirection::create(SortOrderDirection::DESC)
         );
