@@ -215,17 +215,27 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return SortBy[]
      */
-    public function getProductListingSortBy() : array
+    public function getProductListingAvailableSortBy() : array
     {
         return [$this->createMock(SortBy::class)];
+    }
+
+    public function getProductListingDefaultSortBy() : SortBy
+    {
+        return $this->createMock(SortBy::class);
     }
 
     /**
      * @return SortBy[]
      */
-    public function getProductSearchSortBy() : array
+    public function getProductSearchAvailableSortBy() : array
     {
         return [$this->createMock(SortBy::class)];
+    }
+
+    public function getProductSearchDefaultSortBy() : SortBy
+    {
+        return $this->createMock(SortBy::class);
     }
 
     public function getFileStorageBasePathConfig() : string
@@ -353,10 +363,5 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     public function getDefaultNumberOfProductsPerSearchResultsPage() : int
     {
         return 20;
-    }
-
-    public function getDefaultSearchResultsPageSortBy() : SortBy
-    {
-        return $this->createMock(SortBy::class);
     }
 }

@@ -127,6 +127,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
 
+        $stubDefaultSortBy = $this->createMock(SortBy::class);
+
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
             $this->mockDataPoolReader,
@@ -134,7 +136,8 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubFacetFilterRequest,
             $stubProductListingPageContentBuilder,
             $stubSelectRobotsMetaTagContent,
-            $this->mockProductListingPageRequest
+            $this->mockProductListingPageRequest,
+            $stubDefaultSortBy
         );
     }
 

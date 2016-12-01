@@ -141,11 +141,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
         if (null !== $requestedSortOrder) {
             $sortDirection = $this->getSortDirectionString($request);
-
-            return SortBy::createUnselected(
-                AttributeCode::fromString($requestedSortOrder),
-                SortDirection::create($sortDirection)
-            );
+            return new SortBy(AttributeCode::fromString($requestedSortOrder), SortDirection::create($sortDirection));
         }
 
         return $this->defaultSortBy;

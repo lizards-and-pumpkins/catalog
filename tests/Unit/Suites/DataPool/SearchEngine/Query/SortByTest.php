@@ -26,35 +26,30 @@ class SortByTest extends \PHPUnit_Framework_TestCase
      */
     private $stubSortDirection;
 
+    /**
+     * @var SortBy
+     */
+    private $sortBy;
+
     protected function setUp()
     {
         $this->stubAttributeCode = $this->createMock(AttributeCode::class);
+
         $this->stubSortDirection = $this->createMock(SortDirection::class);
         $this->stubSortDirection->method('__toString')->willReturn($this->testDirection);
+
+        $this->sortBy = new SortBy($this->stubAttributeCode, $this->stubSortDirection);
     }
 
-    public function testUnselectedSortByCanBeCreated()
+    public function testCanBeCreated()
     {
-        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortDirection);
-
-        $this->assertSame($this->stubAttributeCode, $sortBy->getAttributeCode());
-        $this->assertSame($this->stubSortDirection, $sortBy->getSelectedDirection());
-        $this->assertFalse($sortBy->isSelected());
-    }
-
-    public function testSelectedSortByCanBeCreated()
-    {
-        $sortBy = SortBy::createSelected($this->stubAttributeCode, $this->stubSortDirection);
-
-        $this->assertSame($this->stubAttributeCode, $sortBy->getAttributeCode());
-        $this->assertSame($this->stubSortDirection, $sortBy->getSelectedDirection());
-        $this->assertTrue($sortBy->isSelected());
+        $this->assertSame($this->stubAttributeCode, $this->sortBy->getAttributeCode());
+        $this->assertSame($this->stubSortDirection, $this->sortBy->getSelectedDirection());
     }
 
     public function testJsonSerializableInterfaceIsImplemented()
     {
-        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortDirection);
-        $this->assertInstanceOf(\JsonSerializable::class, $sortBy);
+        $this->assertInstanceOf(\JsonSerializable::class, $this->sortBy);
     }
 
     public function testArrayRepresentationOfSortByIsReturned()
@@ -63,13 +58,11 @@ class SortByTest extends \PHPUnit_Framework_TestCase
 
         $this->stubAttributeCode->method('__toString')->willReturn($attributeCode);
 
-        $sortBy = SortBy::createUnselected($this->stubAttributeCode, $this->stubSortDirection);
         $expectedArray = [
             'code' => $attributeCode,
             'selectedDirection' => $this->testDirection,
-            'selected' => false
         ];
 
-        $this->assertEquals($expectedArray, $sortBy->jsonSerialize());
+        $this->assertEquals($expectedArray, $this->sortBy->jsonSerialize());
     }
 }

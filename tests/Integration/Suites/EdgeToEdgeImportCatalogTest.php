@@ -120,10 +120,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $sortBy = SortBy::createUnselected(
-            AttributeCode::fromString('name'),
-            SortDirection::create(SortDirection::ASC)
-        );
+        $sortBy = new SortBy(AttributeCode::fromString('name'), SortDirection::create(SortDirection::ASC));
         $queryOptions = QueryOptions::create(
             $selectedFilters,
             $context,

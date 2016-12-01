@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
-use LizardsAndPumpkins\ProductListing\Exception\NoSelectedSortOrderException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -31,22 +30,15 @@ class ProductListingPageRequest
     private $searchFieldToRequestParamMap;
 
     /**
-     * @var SortBy[]
-     */
-    private $availableSortBy;
-
-    /**
      * @var ProductsPerPage
      */
     private $productsPerPage;
 
     public function __construct(
         ProductsPerPage $productsPerPage,
-        SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
-        SortBy ...$availableSortBy
+        SearchFieldToRequestParamMap $searchFieldToRequestParamMap
     ) {
         $this->productsPerPage = $productsPerPage;
-        $this->availableSortBy = $availableSortBy;
         $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
 
@@ -89,14 +81,13 @@ class ProductListingPageRequest
         return $this->productsPerPage;
     }
 
-    public function getSelectedSortBy(HttpRequest $request) : SortBy
+    public function getSelectedSortBy(HttpRequest $request, SortBy $defaultSortBy, SortBy ...$availableSortBy) : SortBy
     {
         $sortOrderQueryStringValue = $this->getSortOrderQueryStringValue($request);
         $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
 
-        if ($this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue)) {
-            $sortDirection = SortDirection::create($sortDirectionQueryStringValue);
-            return $this->createSelectedSortBy($sortOrderQueryStringValue, $sortDirection);
+        if ($this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue, ...$availableSortBy)) {
+            return $this->createSortBy($sortOrderQueryStringValue, $sortDirectionQueryStringValue);
         }
 
         if ($request->hasCookie(self::SORT_ORDER_COOKIE_NAME) &&
@@ -105,22 +96,15 @@ class ProductListingPageRequest
             $sortOrder = $request->getCookieValue(self::SORT_ORDER_COOKIE_NAME);
             $direction = $request->getCookieValue(self::SORT_DIRECTION_COOKIE_NAME);
 
-            if ($this->isValidSortOrder($sortOrder, $direction)) {
-                $sortDirection = SortDirection::create($direction);
-                return $this->createSelectedSortBy($sortOrder, $sortDirection);
+            if ($this->isValidSortOrder($sortOrder, $direction, ...$availableSortBy)) {
+                return $this->createSortBy($sortOrder, $direction);
             }
         }
 
-        foreach ($this->availableSortBy as $sortBy) {
-            if ($sortBy->isSelected()) {
-                return $sortBy;
-            }
-        }
-
-        throw new NoSelectedSortOrderException('No selected sort order config is found.');
+        return $defaultSortBy;
     }
 
-    public function processCookies(HttpRequest $request)
+    public function processCookies(HttpRequest $request, SortBy ...$availableSortBy)
     {
         $productsPerPage = $this->getProductsPerPageQueryStringValue($request);
 
@@ -135,7 +119,7 @@ class ProductListingPageRequest
         $sortOrder = $this->getSortOrderQueryStringValue($request);
         $sortDirection = $this->getSortDirectionQueryStringValue($request);
 
-        if ($this->isValidSortOrder($sortOrder, $sortDirection)) {
+        if ($this->isValidSortOrder($sortOrder, $sortDirection, ...$availableSortBy)) {
             setcookie(self::SORT_ORDER_COOKIE_NAME, $sortOrder, time() + self::SORT_ORDER_COOKIE_TTL);
             setcookie(self::SORT_DIRECTION_COOKIE_NAME, $sortDirection, time() + self::SORT_DIRECTION_COOKIE_TTL);
         }
@@ -147,7 +131,7 @@ class ProductListingPageRequest
         $mappedAttributeCodeString = $this->searchFieldToRequestParamMap->getSearchFieldName($attributeCodeString);
         $attributeCode = AttributeCode::fromString($mappedAttributeCodeString);
 
-        return SortBy::createUnselected($attributeCode, $sortBy->getSelectedDirection());
+        return new SortBy($attributeCode, $sortBy->getSelectedDirection());
     }
 
     /**
@@ -159,12 +143,9 @@ class ProductListingPageRequest
         return $request->getQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME);
     }
 
-    private function createSelectedSortBy(
-        string $attributeCodeString,
-        SortDirection $direction
-    ) : SortBy {
-        $attributeCode = AttributeCode::fromString($attributeCodeString);
-        return SortBy::createSelected($attributeCode, $direction);
+    private function createSortBy(string $attributeCode, string $direction) : SortBy
+    {
+        return new SortBy(AttributeCode::fromString($attributeCode), SortDirection::create($direction));
     }
 
     /**
@@ -188,15 +169,16 @@ class ProductListingPageRequest
     /**
      * @param string|null $sortOrder
      * @param string|null $direction
+     * @param SortBy[] $availableSortBy
      * @return bool
      */
-    private function isValidSortOrder($sortOrder, $direction) : bool
+    private function isValidSortOrder($sortOrder, $direction, SortBy ...$availableSortBy) : bool
     {
         if (null === $sortOrder || null === $direction) {
             return false;
         }
 
-        foreach ($this->availableSortBy as $config) {
+        foreach ($availableSortBy as $config) {
             if ($config->getAttributeCode()->isEqualTo($sortOrder) && SortDirection::isValid($direction)) {
                 return true;
             }

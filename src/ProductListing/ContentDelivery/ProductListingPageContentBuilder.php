@@ -32,11 +32,6 @@ class ProductListingPageContentBuilder
     private $translatorRegistry;
 
     /**
-     * @var SortBy[]
-     */
-    private $availableSortBy;
-
-    /**
      * @var ProductJsonService
      */
     private $productJsonService;
@@ -50,12 +45,10 @@ class ProductListingPageContentBuilder
         ProductJsonService $productJsonService,
         PageBuilder $pageBuilder,
         SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
-        TranslatorRegistry $translatorRegistry,
-        SortBy ...$availableSoryBy
+        TranslatorRegistry $translatorRegistry
     ) {
         $this->productJsonService = $productJsonService;
         $this->pageBuilder = $pageBuilder;
-        $this->availableSortBy = $availableSoryBy;
         $this->translatorRegistry = $translatorRegistry;
         $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
@@ -67,6 +60,7 @@ class ProductListingPageContentBuilder
      * @param SearchEngineResponse $searchEngineResponse
      * @param ProductsPerPage $productsPerPage
      * @param SortBy $selectedSortBy
+     * @param SortBy[] $availableSortBy
      * @return HttpResponse
      */
     public function buildPageContent(
@@ -75,7 +69,8 @@ class ProductListingPageContentBuilder
         array $keyGeneratorParams,
         SearchEngineResponse $searchEngineResponse,
         ProductsPerPage $productsPerPage,
-        SortBy $selectedSortBy
+        SortBy $selectedSortBy,
+        SortBy ...$availableSortBy
     ) : HttpResponse {
         $productIds = $searchEngineResponse->getProductIds();
         $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
@@ -83,7 +78,7 @@ class ProductListingPageContentBuilder
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
         $this->addProductsInListingToPageBuilder($context, ...$productIds);
         $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
-        $this->addSortOrderSnippetToPageBuilder($selectedSortBy);
+        $this->addSortOrderSnippetsToPageBuilder($selectedSortBy, ...$availableSortBy);
         $this->addTranslationsToPageBuilder($context);
         $this->addRobotsMetaTagSnippetToHeadContainer();
 
@@ -130,29 +125,10 @@ class ProductListingPageContentBuilder
         $this->addDynamicSnippetToPageBuilder('products_per_page', json_encode($productsPerPage));
     }
 
-    private function addSortOrderSnippetToPageBuilder(SortBy $selectedSortBy)
+    private function addSortOrderSnippetsToPageBuilder(SortBy $selectedSortBy, SortBy ...$availableSortBy)
     {
-        $listOfSortBy = $this->getSortByListWithGivenConfigSelected($selectedSortBy);
-        $this->addDynamicSnippetToPageBuilder('sort_order_config', json_encode($listOfSortBy));
-    }
-
-    /**
-     * @param SortBy $selectedSortBy
-     * @return SortBy[]
-     */
-    private function getSortByListWithGivenConfigSelected(SortBy $selectedSortBy)
-    {
-        return array_map(function (SortBy $sortBy) use ($selectedSortBy) {
-            if ($sortBy->getAttributeCode() == $selectedSortBy->getAttributeCode()) {
-                return $selectedSortBy;
-            }
-
-            if ($sortBy->isSelected() === true) {
-                return SortBy::createUnselected($sortBy->getAttributeCode(), $sortBy->getSelectedDirection());
-            }
-
-            return $sortBy;
-        }, $this->availableSortBy);
+        $this->addDynamicSnippetToPageBuilder('available_sort_orders', json_encode($availableSortBy));
+        $this->addDynamicSnippetToPageBuilder('selected_sort_order', json_encode($selectedSortBy));
     }
 
     /**

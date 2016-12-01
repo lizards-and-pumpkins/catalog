@@ -123,13 +123,16 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
 
+        $stubDefaultSortBy = $this->createMock(SortBy::class);
+
         $this->requestHandler = new ProductSearchRequestHandler(
             $stubContext,
             $stubDataPoolReader,
             $stubSnippetKeyGenerator,
             $stubFacetFilterRequest,
             $stubProductListingPageContentBuilder,
-            $this->mockProductListingPageRequest
+            $this->mockProductListingPageRequest,
+            $stubDefaultSortBy
         );
     }
 

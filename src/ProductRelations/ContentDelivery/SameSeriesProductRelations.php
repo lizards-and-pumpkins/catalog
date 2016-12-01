@@ -72,7 +72,7 @@ class SameSeriesProductRelations implements ProductRelations
     private function getMatchingProductIds(Context $context, array $productData) : array
     {
         $criteria = $this->createCriteria($productData);
-        $sortBy = $this->createSortBy();
+        $sortBy = $this->createCreatedAtSortBy();
         $rowsPerPage = 20;
         $pageNumber = 0;
 
@@ -145,11 +145,8 @@ class SameSeriesProductRelations implements ProductRelations
         return new SearchCriterionEqual($attributeCode, $valueToMatch);
     }
 
-    private function createSortBy() : SortBy
+    private function createCreatedAtSortBy() : SortBy
     {
-        return SortBy::createUnselected(
-            AttributeCode::fromString('created_at'),
-            SortDirection::create(SortDirection::DESC)
-        );
+        return new SortBy(AttributeCode::fromString('created_at'), SortDirection::create(SortDirection::DESC));
     }
 }

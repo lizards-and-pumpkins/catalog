@@ -54,10 +54,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
     private function createSortByWithAttributeCode(string $attributeCode) : SortBy
     {
-        return SortBy::createUnselected(
-            AttributeCode::fromString($attributeCode),
-            SortDirection::create(SortDirection::ASC)
-        );
+        return new SortBy(AttributeCode::fromString($attributeCode), SortDirection::create(SortDirection::ASC));
     }
 
     final protected function setUp()
