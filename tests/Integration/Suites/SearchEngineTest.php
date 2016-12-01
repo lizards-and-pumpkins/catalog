@@ -37,7 +37,7 @@ class SearchEngineTest extends AbstractIntegrationTest
         );
         $rowsPerPage = 100;
         $pageNumber = 0;
-        $sortBy = SortBy::createUnselected(AttributeCode::fromString('sku'), SortDirection::create(SortDirection::ASC));
+        $sortBy = new SortBy(AttributeCode::fromString('sku'), SortDirection::create(SortDirection::ASC));
 
         /** @var SearchEngine $searchEngine */
         $searchEngine = $this->factory->getSearchEngine();

@@ -33,7 +33,7 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createContextBuilder(),
             $this->getMasterFactory()->getDefaultNumberOfProductsPerSearchResultsPage(),
-            $this->getMasterFactory()->getDefaultSearchResultsPageSortBy()
+            $this->getMasterFactory()->getProductSearchDefaultSortBy()
         );
     }
 

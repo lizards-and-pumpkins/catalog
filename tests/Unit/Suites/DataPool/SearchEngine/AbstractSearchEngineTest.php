@@ -86,10 +86,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
     private function createSortBy(string $sortByFieldCode, string $sortDirection) : SortBy
     {
-        return SortBy::createUnselected(
-            AttributeCode::fromString($sortByFieldCode),
-            SortDirection::create($sortDirection)
-        );
+        return new SortBy(AttributeCode::fromString($sortByFieldCode), SortDirection::create($sortDirection));
     }
 
     private function assertFacetFieldCollectionContainsFieldWithCodeAndValue(

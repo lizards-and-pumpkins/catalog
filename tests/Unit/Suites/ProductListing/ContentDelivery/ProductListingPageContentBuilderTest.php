@@ -31,11 +31,6 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     private $mockPageBuilder;
 
     /**
-     * @var SortBy|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubSortBy;
-
-    /**
      * @var ProductListingPageContentBuilder
      */
     private $pageContentBuilder;
@@ -94,6 +89,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      * @var SearchFieldToRequestParamMap|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubSearchFieldToRequestParamMap;
+
+    /**
+     * @var SortBy[]
+     */
+    private $stubAvailableSortBy;
 
     /**
      * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -166,20 +166,18 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
-        $this->stubSortBy = $this->createMock(SortBy::class);
-
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
             $this->stubProductJsonService,
             $this->mockPageBuilder,
             $this->stubSearchFieldToRequestParamMap,
-            $stubTranslatorRegistry,
-            $this->stubSortBy
+            $stubTranslatorRegistry
         );
 
         $this->stubPageMetaInfoSnippetContent = $this->createMock(PageMetaInfoSnippetContent::class);
         $this->stubContext = $this->createMock(Context::class);
         $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $this->stubSelectedSortBy = $this->createMock(SortBy::class);
+        $this->stubAvailableSortBy = [$this->createMock(SortBy::class)];
         $this->stubSearchEngineResponse = $this->createStubSearchEngineResponse();
     }
 
@@ -195,7 +193,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
     }
 
@@ -210,7 +209,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
 
         $productGridSnippetCode = 'product_grid';
@@ -228,7 +228,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
 
         $snippetCode = 'filter_navigation';
@@ -256,7 +257,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
 
         $snippetCode = 'filter_navigation';
@@ -274,7 +276,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
 
         $snippetCode = 'total_number_of_results';
@@ -292,7 +295,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
 
         $snippetCode = 'products_per_page';
@@ -300,19 +304,34 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode);
     }
 
-    public function testInitialSortBySnippetIsAddedToPageBuilder()
+    public function testAddsAvailableSortByListSnippetToPageBuilder()
     {
-        $selectedSortByRepresentation = ['selected-sort-order-config'];
-        $initialSortByRepresentation = ['initial-sort-order-config'];
+        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
+
+        $this->pageContentBuilder->buildPageContent(
+            $this->stubPageMetaInfoSnippetContent,
+            $this->stubContext,
+            $this->stubKeyGeneratorParams,
+            $this->stubSearchEngineResponse,
+            $this->stubProductsPerPage,
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
+        );
+
+        $snippetCode = 'available_sort_orders';
+
+        $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode);
+    }
+
+    public function testAddsDefaultSortBySnippetToPageBuilder()
+    {
+        $selectedSortByRepresentation = ['selected-sort-by'];
 
         $stubAttributeCode = $this->createMock(AttributeCode::class);
 
         $this->stubSelectedSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
         $this->stubSelectedSortBy->method('jsonSerialize')->willReturn($selectedSortByRepresentation);
 
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
-        $this->stubSortBy->method('jsonSerialize')->willReturn($initialSortByRepresentation);
-
         $this->stubProductJsonService->method('get')->willReturn([]);
         $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
 
@@ -322,79 +341,12 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
 
-        $snippetCode = 'sort_order_config';
-        $expectedSnippetValue = json_encode([$selectedSortByRepresentation]);
-
-        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
-    }
-
-    public function testUserSelectedSortBySnippetIsAddedToPageBuilder()
-    {
-        $selectedSortByRepresentation = ['selected-sort-order-config'];
-        $initialSortByRepresentation = ['initial-sort-order-config'];
-
-        $stubAttributeCodeA = $this->createMock(AttributeCode::class);
-        $stubAttributeCodeA->method('__toString')->willReturn('A');
-        $stubAttributeCodeB = $this->createMock(AttributeCode::class);
-        $stubAttributeCodeA->method('__toString')->willReturn('B');
-
-        $this->stubSelectedSortBy->method('getAttributeCode')->willReturn($stubAttributeCodeA);
-        $this->stubSelectedSortBy->method('jsonSerialize')->willReturn($selectedSortByRepresentation);
-
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCodeB);
-        $this->stubSortBy->method('jsonSerialize')->willReturn($initialSortByRepresentation);
-
-        $this->stubProductJsonService->method('get')->willReturn([]);
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
-        $this->pageContentBuilder->buildPageContent(
-            $this->stubPageMetaInfoSnippetContent,
-            $this->stubContext,
-            $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
-            $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
-        );
-
-        $snippetCode = 'sort_order_config';
-        $expectedSnippetValue = json_encode([$initialSortByRepresentation]);
-
-        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
-    }
-
-    public function testNewSortBySnippetIsAddedToPageBuilder()
-    {
-        $stubAttributeCodeA = $this->createMock(AttributeCode::class);
-        $stubAttributeCodeA->method('__toString')->willReturn('A');
-        $stubAttributeCodeB = $this->createMock(AttributeCode::class);
-        $stubAttributeCodeA->method('__toString')->willReturn('B');
-
-        $stubSortDirection = $this->createMock(SortDirection::class);
-        $stubSortDirection->method('__toString')->willReturn(SortDirection::ASC);
-
-        $this->stubSelectedSortBy->method('getAttributeCode')->willReturn($stubAttributeCodeA);
-
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCodeB);
-        $this->stubSortBy->method('getSelectedDirection')->willReturn($stubSortDirection);
-        $this->stubSortBy->method('isSelected')->willReturn(true);
-
-        $this->stubProductJsonService->method('get')->willReturn([]);
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
-        $this->pageContentBuilder->buildPageContent(
-            $this->stubPageMetaInfoSnippetContent,
-            $this->stubContext,
-            $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
-            $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
-        );
-
-        $snippetCode = 'sort_order_config';
-        $expectedSnippetValue = '[{"code":"","selectedDirection":"asc","selected":false}]';
+        $snippetCode = 'selected_sort_order';
+        $expectedSnippetValue = json_encode($selectedSortByRepresentation);
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }
@@ -411,7 +363,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
 
         $snippetCode = 'translations';
@@ -430,7 +383,8 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubKeyGeneratorParams,
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
-            $this->stubSelectedSortBy
+            $this->stubSelectedSortBy,
+            ...$this->stubAvailableSortBy
         );
     }
 }

@@ -147,9 +147,6 @@ class SameSeriesProductRelations implements ProductRelations
 
     private function createSortBy() : SortBy
     {
-        return SortBy::createUnselected(
-            AttributeCode::fromString('created_at'),
-            SortDirection::create(SortDirection::DESC)
-        );
+        return new SortBy(AttributeCode::fromString('created_at'), SortDirection::create(SortDirection::DESC));
     }
 }

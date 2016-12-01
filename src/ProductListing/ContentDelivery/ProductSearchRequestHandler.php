@@ -51,13 +51,25 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      */
     private $productListingPageRequest;
 
+    /**
+     * @var SortBy
+     */
+    private $defaultSortBy;
+
+    /**
+     * @var SortBy[]
+     */
+    private $availableSortBy;
+
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         FacetFiltersToIncludeInResult $facetFilterRequest,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
-        ProductListingPageRequest $productListingPageRequest
+        ProductListingPageRequest $productListingPageRequest,
+        SortBy $defaultSortBy,
+        SortBy ...$availableSortBy
     ) {
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
@@ -65,6 +77,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->facetFilterRequest = $facetFilterRequest;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
+        $this->defaultSortBy = $defaultSortBy;
+        $this->availableSortBy = $availableSortBy;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -81,7 +95,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->productListingPageRequest->processCookies($request);
 
         $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
-        $selectedSortBy = $this->productListingPageRequest->getSelectedSortBy($request);
+        $selectedSortBy = $this->productListingPageRequest->getSelectedSortBy(
+            $request,
+            $this->defaultSortBy,
+            ...$this->availableSortBy
+        );
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage, $selectedSortBy);
 
         $metaInfoSnippetContent = $this->getPageMetaInfo();

@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
-use LizardsAndPumpkins\ProductListing\Exception\NoSelectedSortOrderException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -26,11 +25,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
      * @var ProductsPerPage|MockObject
      */
     private $stubProductsPerPage;
-
-    /**
-     * @var SortBy|MockObject
-     */
-    private $stubSortBy;
 
     /**
      * @var ProductListingPageRequest
@@ -85,13 +79,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
-        $this->stubSortBy = $this->createMock(SortBy::class);
         $class = SearchFieldToRequestParamMap::class;
         $this->stubSearchFieldToRequestParamMap = $this->createMock($class);
         $this->pageRequest = new ProductListingPageRequest(
             $this->stubProductsPerPage,
-            $this->stubSearchFieldToRequestParamMap,
-            $this->stubSortBy
+            $this->stubSearchFieldToRequestParamMap
         );
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
@@ -179,20 +171,21 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($selectedNumberOfProductsPerPage, $result->getSelectedNumberOfProductsPerPage());
     }
 
-    public function testExceptionIsThrownIfNoSortByIsSpecified()
+    public function testReturnsDefaultSortBy()
     {
-        $this->expectException(NoSelectedSortOrderException::class);
-        $this->pageRequest->getSelectedSortBy($this->stubRequest);
+        $stubDefaultSortBy = $this->createMock(SortBy::class);
+        $stubAvailableSortBy = [$stubDefaultSortBy, $this->createMock(SortBy::class)];
+
+        $result = $this->pageRequest->getSelectedSortBy(
+            $this->stubRequest,
+            $stubDefaultSortBy,
+            ...$stubAvailableSortBy
+        );
+
+        $this->assertSame($stubDefaultSortBy, $result);
     }
 
-    public function testInitialSelectedSortByIsReturned()
-    {
-        $this->stubSortBy->method('isSelected')->willReturn(true);
-        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest);
-        $this->assertSame($this->stubSortBy, $result);
-    }
-
-    public function testSelectedSortByForAttributeAndDirectionSpecifiedInQueryStringIsReturned()
+    public function testReturnsSortByForAttributeAndDirectionSpecifiedInQueryString()
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -202,19 +195,19 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortDirection],
         ]);
 
-        $stubAttributeCode = $this->createMock(AttributeCode::class);
-        $stubAttributeCode->method('isEqualTo')->with($sortAttributeName)->willReturn(true);
+        $stubDefaultSortBy = $this->createMock(SortBy::class);
+        $expectedSortBy = new SortBy(
+            AttributeCode::fromString($sortAttributeName),
+            SortDirection::create($sortDirection)
+        );
+        $availableSortBy = [$stubDefaultSortBy, $expectedSortBy];
 
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
+        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest, $stubDefaultSortBy, ...$availableSortBy);
 
-        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest);
-
-        $this->assertTrue($result->isSelected());
-        $this->assertSame($sortAttributeName, (string) $result->getAttributeCode());
-        $this->assertSame($sortDirection, (string) $result->getSelectedDirection());
+        $this->assertEquals($expectedSortBy, $result);
     }
 
-    public function testSelectedSortByForAttributeAndDirectionSpecifiedInCookieIsReturned()
+    public function testReturnsSortByForAttributeAndDirectionSpecifiedInCookie()
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -229,16 +222,16 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             [ProductListingPageRequest::SORT_DIRECTION_COOKIE_NAME, $sortDirection],
         ]);
 
-        $stubAttributeCode = $this->createMock(AttributeCode::class);
-        $stubAttributeCode->method('isEqualTo')->with($sortAttributeName)->willReturn(true);
+        $stubDefaultSortBy = $this->createMock(SortBy::class);
+        $expectedSortBy = new SortBy(
+            AttributeCode::fromString($sortAttributeName),
+            SortDirection::create($sortDirection)
+        );
+        $availableSortBy = [$stubDefaultSortBy, $expectedSortBy];
 
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
+        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest, $stubDefaultSortBy, ...$availableSortBy);
 
-        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest);
-
-        $this->assertTrue($result->isSelected());
-        $this->assertSame($sortAttributeName, (string) $result->getAttributeCode());
-        $this->assertSame($sortDirection, (string) $result->getSelectedDirection());
+        $this->assertEquals($expectedSortBy, $result);
     }
 
     public function testProductsPerPageCookieIsSetIfCorrespondingQueryParameterIsPresent()
@@ -276,8 +269,6 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
                 return $attributeName === $defaultSortOrderAttributeName;
             });
 
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
-
         $this->pageRequest->processCookies($this->stubRequest);
 
         $this->assertCookieHasNotBeenSet(
@@ -292,7 +283,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testSortOrderAndDirectionCookiesAreSetIfCorrespondingQueryParametersArePresent()
+    public function testSetsSortOrderAndDirectionCookiesIfCorrespondingQueryParametersArePresent()
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -305,9 +296,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $stubAttributeCode = $this->createMock(AttributeCode::class);
         $stubAttributeCode->method('isEqualTo')->with($sortAttributeName)->willReturn(true);
 
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
+        $testAvailableSortBy = [
+            new SortBy(AttributeCode::fromString($sortAttributeName), SortDirection::create($sortDirection))
+        ];
 
-        $this->pageRequest->processCookies($this->stubRequest);
+        $this->pageRequest->processCookies($this->stubRequest, ...$testAvailableSortBy);
 
         $this->assertCookieHasBeenSet(
             ProductListingPageRequest::SORT_ORDER_COOKIE_NAME,
@@ -365,7 +358,7 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($mappedAttributeCodeString, $result->getAttributeCode());
     }
 
-    public function testInitialSelectedSortByIsReturnedIfQueryStringValuesAreNotAmongConfiguredSortOrders()
+    public function testReturnsDefaultSortByIfQueryStringValuesAreNotAmongAvailableSortBy()
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -383,15 +376,15 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
                 return $attributeName === $defaultSortOrderAttributeName;
             });
 
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
-        $this->stubSortBy->method('isSelected')->willReturn(true);
+        $stubDefaultSortBy = $this->createMock(SortBy::class);
+        $availableSortBy = [$stubDefaultSortBy];
 
-        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest);
+        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest, $stubDefaultSortBy, ...$availableSortBy);
 
-        $this->assertSame($this->stubSortBy, $result);
+        $this->assertSame($stubDefaultSortBy, $result);
     }
 
-    public function testInitialSelectedSortByIsReturnedIfCookieValuesAreNotAmongConfiguredSortOrders()
+    public function testReturnsDefaultSortByIfCookieValuesAreNotAmongAvailableSortBy()
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -414,12 +407,12 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
                 return $attributeName === $defaultSortOrderAttributeName;
             });
 
-        $this->stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
-        $this->stubSortBy->method('isSelected')->willReturn(true);
+        $stubDefaultSortBy = $this->createMock(SortBy::class);
+        $availableSortBy = [$stubDefaultSortBy];
 
-        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest);
+        $result = $this->pageRequest->getSelectedSortBy($this->stubRequest, $stubDefaultSortBy, ...$availableSortBy);
 
-        $this->assertSame($this->stubSortBy, $result);
+        $this->assertSame($stubDefaultSortBy, $result);
     }
 }
 

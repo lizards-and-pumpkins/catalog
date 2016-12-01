@@ -292,10 +292,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $expectedSortBy = SortBy::createUnselected(
-            AttributeCode::fromString($sortOrder),
-            SortDirection::create(SortDirection::ASC)
-        );
+        $expectedSortBy = new SortBy(AttributeCode::fromString($sortOrder), SortDirection::create(SortDirection::ASC));
 
         $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(
@@ -352,10 +349,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
-        $expectedSortBy = SortBy::createUnselected(
-            AttributeCode::fromString($sortOrder),
-            SortDirection::create($sortDirection)
-        );
+        $expectedSortBy = new SortBy(AttributeCode::fromString($sortOrder), SortDirection::create($sortDirection));
 
         $this->mockProductSearchService->expects($this->once())->method('query')
             ->with(

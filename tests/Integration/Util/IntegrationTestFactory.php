@@ -95,16 +95,6 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     private $urlKeyStore;
 
     /**
-     * @var SortBy[]
-     */
-    private $memoizedProductListingSortBy;
-
-    /**
-     * @var SortBy[]
-     */
-    private $memoizedProductSearchSortBy;
-
-    /**
      * @var ProductsPerPage
      */
     private $memoizedProductsPerPageConfig;
@@ -351,29 +341,27 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     /**
      * @return SortBy[]
      */
-    public function getProductListingSortBy() : array
+    public function getProductListingAvailableSortBy() : array
     {
-        if (null === $this->memoizedProductListingSortBy) {
-            $this->memoizedProductListingSortBy = [
-                SortBy::createSelected(AttributeCode::fromString('name'), SortDirection::create(SortDirection::ASC))
-            ];
-        }
+        return [$this->getProductListingDefaultSortBy()];
+    }
 
-        return $this->memoizedProductListingSortBy;
+    public function getProductListingDefaultSortBy() : SortBy
+    {
+        return new SortBy(AttributeCode::fromString('name'), SortDirection::create(SortDirection::ASC));
     }
 
     /**
      * @return SortBy[]
      */
-    public function getProductSearchSortBy() : array
+    public function getProductSearchAvailableSortBy() : array
     {
-        if (null === $this->memoizedProductSearchSortBy) {
-            $this->memoizedProductSearchSortBy = [
-                SortBy::createSelected(AttributeCode::fromString('name'), SortDirection::create(SortDirection::ASC))
-            ];
-        }
+        return [$this->getProductSearchDefaultSortBy()];
+    }
 
-        return $this->memoizedProductSearchSortBy;
+    public function getProductSearchDefaultSortBy() : SortBy
+    {
+        return new SortBy(AttributeCode::fromString('stock_qty'), SortDirection::create(SortDirection::DESC));
     }
 
     public function getProductsPerPageConfig() : ProductsPerPage
@@ -465,10 +453,5 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     public function getDefaultNumberOfProductsPerSearchResultsPage()
     {
         return 60;
-    }
-
-    public function getDefaultSearchResultsPageSortBy()
-    {
-        return SortBy::createUnselected(AttributeCode::fromString('stock_qty'), SortDirection::create('desc'));
     }
 }

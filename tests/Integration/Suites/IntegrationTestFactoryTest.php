@@ -184,24 +184,6 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($fileStorageBasePath));
     }
 
-    public function testSameInstanceOfProductListingSortByIsReturnedOnMultipleCalls()
-    {
-        $this->assertContainsOnly(SortBy::class, $this->factory->getProductListingSortBy());
-        $this->assertSame(
-            $this->factory->getProductListingSortBy(),
-            $this->factory->getProductListingSortBy()
-        );
-    }
-
-    public function testSameInstanceOfProductSearchSortByIsReturnedOnMultipleCalls()
-    {
-        $this->assertContainsOnly(SortBy::class, $this->factory->getProductSearchSortBy());
-        $this->assertSame(
-            $this->factory->getProductSearchSortBy(),
-            $this->factory->getProductSearchSortBy()
-        );
-    }
-
     public function testItReturnsAnIntegrationTestTaxServiceLocator()
     {
         $this->assertInstanceOf(TaxServiceLocator::class, $this->factory->createTaxServiceLocator());
@@ -230,10 +212,5 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
     public function testReturnsDefaultNumberOfProductsPerSearchResultsPage()
     {
         $this->assertInternalType('int', $this->factory->getDefaultNumberOfProductsPerSearchResultsPage());
-    }
-
-    public function testReturnsDefaultSearchResultsPageSortBy()
-    {
-        $this->assertInstanceOf(SortBy::class, $this->factory->getDefaultSearchResultsPageSortBy());
     }
 }

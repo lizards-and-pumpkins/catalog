@@ -56,6 +56,16 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $selectProductListingRobotsMetaTagContent;
 
+    /**
+     * @var SortBy
+     */
+    private $defaultSortBy;
+
+    /**
+     * @var SortBy[]
+     */
+    private $availableSortBy;
+
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
@@ -63,7 +73,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
         FacetFiltersToIncludeInResult $facetFilterRequest,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         SelectProductListingRobotsMetaTagContent $selectProductListingRobotsMetaTagContent,
-        ProductListingPageRequest $productListingPageRequest
+        ProductListingPageRequest $productListingPageRequest,
+        SortBy $defaultSortBy,
+        SortBy ...$availableSortBy
     ) {
         $this->context = $context;
         $this->dataPoolReader = $dataPoolReader;
@@ -72,6 +84,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->selectProductListingRobotsMetaTagContent = $selectProductListingRobotsMetaTagContent;
         $this->productListingPageRequest = $productListingPageRequest;
+        $this->defaultSortBy = $defaultSortBy;
+        $this->availableSortBy = $availableSortBy;
     }
 
     /**
@@ -93,7 +107,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->productListingPageRequest->processCookies($request);
 
         $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
-        $selectedSortBy = $this->productListingPageRequest->getSelectedSortBy($request);
+        $selectedSortBy = $this->productListingPageRequest->getSelectedSortBy(
+            $request,
+            $this->defaultSortBy,
+            ...$this->availableSortBy
+        );
         $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage, $selectedSortBy);
         
         $metaInfo = $this->getPageMetaInfoSnippet($request);

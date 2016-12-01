@@ -88,7 +88,9 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductListingFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createSelectProductListingRobotsMetaTagContent(),
-            $this->getMasterFactory()->createProductListingPageRequest()
+            $this->getMasterFactory()->createProductListingPageRequest(),
+            $this->getMasterFactory()->getProductListingDefaultSortBy(),
+            ...$this->getMasterFactory()->getProductListingAvailableSortBy()
         );
     }
 
@@ -115,8 +117,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
-            $this->getMasterFactory()->getTranslatorRegistry(),
-            ...$this->getMasterFactory()->getProductListingSortBy()
+            $this->getMasterFactory()->getTranslatorRegistry()
         );
     }
 
@@ -124,8 +125,7 @@ class FrontendFactory implements Factory
     {
         return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
-            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
-            ...$this->getMasterFactory()->getProductListingSortBy()
+            $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext())
         );
     }
 
@@ -322,7 +322,9 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
-            $this->getMasterFactory()->createProductListingPageRequest()
+            $this->getMasterFactory()->createProductListingPageRequest(),
+            $this->getMasterFactory()->getProductSearchDefaultSortBy(),
+            ...$this->getMasterFactory()->getProductSearchAvailableSortBy()
         );
     }
 
