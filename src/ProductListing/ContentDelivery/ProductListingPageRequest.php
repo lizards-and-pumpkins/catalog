@@ -86,10 +86,7 @@ class ProductListingPageRequest
         $sortOrderQueryStringValue = $this->getSortOrderQueryStringValue($request);
         $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
 
-        if (null !== $sortOrderQueryStringValue &&
-            null !== $sortDirectionQueryStringValue &&
-            $this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue, ...$availableSortBy)
-        ) {
+        if ($this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue, ...$availableSortBy)) {
             return $this->createSortBy($sortOrderQueryStringValue, $sortDirectionQueryStringValue);
         }
 
@@ -122,10 +119,7 @@ class ProductListingPageRequest
         $sortOrder = $this->getSortOrderQueryStringValue($request);
         $sortDirection = $this->getSortDirectionQueryStringValue($request);
 
-        if (null !== $sortOrder &&
-            null !== $sortDirection &&
-            $this->isValidSortOrder($sortOrder, $sortDirection, ...$availableSortBy)
-        ) {
+        if ($this->isValidSortOrder($sortOrder, $sortDirection, ...$availableSortBy)) {
             setcookie(self::SORT_ORDER_COOKIE_NAME, $sortOrder, time() + self::SORT_ORDER_COOKIE_TTL);
             setcookie(self::SORT_DIRECTION_COOKIE_NAME, $sortDirection, time() + self::SORT_DIRECTION_COOKIE_TTL);
         }
@@ -172,8 +166,18 @@ class ProductListingPageRequest
         return $request->getQueryParameter(self::SORT_DIRECTION_QUERY_PARAMETER_NAME);
     }
 
-    private function isValidSortOrder(string $sortOrder, string $direction, SortBy ...$availableSortBy) : bool
+    /**
+     * @param string|null $sortOrder
+     * @param string|null $direction
+     * @param SortBy[] $availableSortBy
+     * @return bool
+     */
+    private function isValidSortOrder($sortOrder, $direction, SortBy ...$availableSortBy) : bool
     {
+        if (null === $sortOrder || null === $direction) {
+            return false;
+        }
+
         foreach ($availableSortBy as $config) {
             if ($config->getAttributeCode()->isEqualTo($sortOrder) && SortDirection::isValid($direction)) {
                 return true;
