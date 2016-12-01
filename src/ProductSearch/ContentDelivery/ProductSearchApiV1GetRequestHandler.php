@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -44,20 +44,20 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private $defaultNumberOfProductPerPage;
 
     /**
-     * @var SortOrderConfig
+     * @var SortBy
      */
-    private $defaultSortOrderConfig;
+    private $defaultSortBy;
 
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
         int $defaultNumberOfProductPerPage,
-        SortOrderConfig $defaultSortOrderConfig
+        SortBy $defaultSortBy
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
         $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
-        $this->defaultSortOrderConfig = $defaultSortOrderConfig;
+        $this->defaultSortBy = $defaultSortBy;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -95,7 +95,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             $context,
             $this->getNumberOfProductPerPage($request),
             $this->getPageNumber($request),
-            $this->getSortOrderConfig($request)
+            $this->getSortBy($request)
         );
 
         $body = json_encode($data);
@@ -135,20 +135,20 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         return 0;
     }
 
-    private function getSortOrderConfig(HttpRequest $request) : SortOrderConfig
+    private function getSortBy(HttpRequest $request) : SortBy
     {
         $requestedSortOrder = $request->getQueryParameter(self::SORT_ORDER_PARAMETER);
 
         if (null !== $requestedSortOrder) {
             $sortDirection = $this->getSortDirectionString($request);
 
-            return SortOrderConfig::create(
+            return SortBy::createUnselected(
                 AttributeCode::fromString($requestedSortOrder),
-                SortOrderDirection::create($sortDirection)
+                SortDirection::create($sortDirection)
             );
         }
 
-        return $this->defaultSortOrderConfig;
+        return $this->defaultSortBy;
     }
 
     private function getSortDirectionString(HttpRequest $request) : string
@@ -159,6 +159,6 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return $requestedSortDirection;
         }
 
-        return SortOrderDirection::ASC;
+        return SortDirection::ASC;
     }
 }

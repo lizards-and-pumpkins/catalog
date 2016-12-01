@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
@@ -52,7 +52,7 @@ class ProductSearchService
      * @param Context $context
      * @param int $rowsPerPage
      * @param int $pageNumber
-     * @param SortOrderConfig $sortOrderConfig
+     * @param SortBy $sortBy
      * @return array[]
      */
     public function query(
@@ -60,9 +60,9 @@ class ProductSearchService
         Context $context,
         int $rowsPerPage,
         int $pageNumber,
-        SortOrderConfig $sortOrderConfig
+        SortBy $sortBy
     ) : array {
-        $queryOptions = $this->createQueryOptions($context, $rowsPerPage, $pageNumber, $sortOrderConfig);
+        $queryOptions = $this->createQueryOptions($context, $rowsPerPage, $pageNumber, $sortBy);
         $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingString($queryString, $queryOptions);
         $productIds = $searchEngineResponse->getProductIds();
 
@@ -80,10 +80,10 @@ class ProductSearchService
         Context $context,
         int $rowsPerPage,
         int $pageNumber,
-        SortOrderConfig $sortOrderConfig
+        SortBy $sortBy
     ) : QueryOptions
     {
-        $this->validateSortOrderConfig($sortOrderConfig);
+        $this->validateSortBy($sortBy);
         $this->validateRowsPerPage($rowsPerPage);
 
         $filterSelection = [];
@@ -95,15 +95,15 @@ class ProductSearchService
             $facetFiltersToIncludeInResult,
             $rowsPerPage,
             $pageNumber,
-            $sortOrderConfig
+            $sortBy
         );
     }
 
-    private function validateSortOrderConfig(SortOrderConfig $sortOrderConfig)
+    private function validateSortBy(SortBy $sortBy)
     {
-        if (!in_array((string) $sortOrderConfig->getAttributeCode(), $this->sortableAttributeCodes)) {
+        if (!in_array((string) $sortBy->getAttributeCode(), $this->sortableAttributeCodes)) {
             throw new UnsupportedSortOrderException(
-                sprintf('Sorting by "%s" is not supported', $sortOrderConfig->getAttributeCode())
+                sprintf('Sorting by "%s" is not supported', $sortBy->getAttributeCode())
             );
         }
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 
@@ -31,7 +31,7 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
     private $testPageNumber = 1;
 
     /**
-     * @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortBy|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubSearchOrderConfig;
 
@@ -44,7 +44,7 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubContext = $this->createMock(Context::class);
         $this->stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
-        $this->stubSearchOrderConfig = $this->createMock(SortOrderConfig::class);
+        $this->stubSearchOrderConfig = $this->createMock(SortBy::class);
 
         $this->queryOptions = QueryOptions::create(
             $this->testFilterSelection,
@@ -153,8 +153,8 @@ class QueryOptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->testPageNumber, $this->queryOptions->getPageNumber());
     }
 
-    public function testSortOrderConfigIsReturned()
+    public function testSortByIsReturned()
     {
-        $this->assertSame($this->stubSearchOrderConfig, $this->queryOptions->getSortOrderConfig());
+        $this->assertSame($this->stubSearchOrderConfig, $this->queryOptions->getSortBy());
     }
 }

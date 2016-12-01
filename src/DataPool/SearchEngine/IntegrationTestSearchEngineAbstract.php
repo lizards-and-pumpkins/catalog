@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
@@ -52,8 +52,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $allDocuments
         );
 
-        $sortOrderConfig = $queryOptions->getSortOrderConfig();
-        $sortedDocuments = $this->getSortedDocuments($sortOrderConfig, ...array_values($matchingDocuments));
+        $sortBy = $queryOptions->getSortBy();
+        $sortedDocuments = $this->getSortedDocuments($sortBy, ...array_values($matchingDocuments));
 
         $rowsPerPage = $queryOptions->getRowsPerPage();
         $pageNumber = $queryOptions->getPageNumber();
@@ -469,15 +469,15 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param SortOrderConfig $sortOrderConfig
+     * @param SortBy $sortBy
      * @param SearchDocument[] $unsortedDocuments
      * @return SearchDocument[]
      */
-    private function getSortedDocuments(SortOrderConfig $sortOrderConfig, SearchDocument ...$unsortedDocuments) : array
+    private function getSortedDocuments(SortBy $sortBy, SearchDocument ...$unsortedDocuments) : array
     {
         $result = $unsortedDocuments;
-        $field = $sortOrderConfig->getAttributeCode();
-        $direction = (string) $sortOrderConfig->getSelectedDirection();
+        $field = $sortBy->getAttributeCode();
+        $direction = (string) $sortBy->getSelectedDirection();
 
         usort($result, function (SearchDocument $documentA, SearchDocument $documentB) use ($field, $direction) {
             $fieldA = $this->getSortableSearchDocumentFieldValue($documentA, $field);
@@ -487,8 +487,8 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
                 return 0;
             }
 
-            if (SortOrderDirection::ASC === $direction && $fieldA < $fieldB ||
-                SortOrderDirection::DESC === $direction && $fieldA > $fieldB
+            if (SortDirection::ASC === $direction && $fieldA < $fieldB ||
+                SortDirection::DESC === $direction && $fieldA > $fieldB
             ) {
                 return -1;
             }

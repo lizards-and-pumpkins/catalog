@@ -13,7 +13,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
@@ -61,8 +61,8 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method string[] getSearchableAttributeCodes
  * @method FacetFiltersToIncludeInResult createProductListingFacetFiltersToIncludeInResult
  * @method ProductsPerPage getProductsPerPageConfig
- * @method SortOrderConfig[] getProductListingSortOrderConfig
- * @method SortOrderConfig[] getProductSearchSortOrderConfig
+ * @method SortBy[] getProductListingSortBy
+ * @method SortBy[] getProductSearchSortBy
  * @method ProductListingRequestHandler createProductListingRequestHandler
  * @method ProductSearchRequestHandler createProductSearchRequestHandler
  * @method TaxableCountries createTaxableCountries

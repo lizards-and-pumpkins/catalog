@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -80,11 +80,11 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
 
-        $stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
+        $stubSortBy = $this->createMock(SortBy::class);
 
         $stubProductListingPageRequest = $this->createMock(ProductListingPageRequest::class);
         $stubProductListingPageRequest->method('getProductsPerPage')->willReturn($stubProductsPerPage);
-        $stubProductListingPageRequest->method('getSelectedSortOrderConfig')->willReturn($stubSortOrderConfig);
+        $stubProductListingPageRequest->method('getSelectedSortBy')->willReturn($stubSortBy);
         $stubProductListingPageRequest->method('getSelectedFilterValues')->willReturn([]);
         $stubProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
 
@@ -203,11 +203,10 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCookieProcessingIsTriggered(HttpRequest $stubRequest)
     {
-        $stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
+        $stubSortBy = $this->createMock(SortBy::class);
 
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
-        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
-            ->willReturn($stubSortOrderConfig);
+        $this->mockProductListingPageRequest->method('createSortByForRequest')->willReturn($stubSortBy);
 
         $this->requestHandler->process($stubRequest);
     }
@@ -217,9 +216,8 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testHttpResponseIsReturned(HttpRequest $stubRequest)
     {
-        $stubSortOrderConfig = $this->createMock(SortOrderConfig::class);
-        $this->mockProductListingPageRequest->method('createSortOrderConfigForRequest')
-            ->willReturn($stubSortOrderConfig);
+        $stubSortBy = $this->createMock(SortBy::class);
+        $this->mockProductListingPageRequest->method('createSortByForRequest')->willReturn($stubSortBy);
 
         $result = $this->requestHandler->process($stubRequest);
 
@@ -229,10 +227,10 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testTrueIsReturnedIfRequestCanBeProcessed
      */
-    public function testSortOrderConfigAttributeCodesAreMappedBeforePassedToSearchEngine(HttpRequest $stubRequest)
+    public function testSortByAttributeCodesAreMappedBeforePassedToSearchEngine(HttpRequest $stubRequest)
     {
-        $this->mockProductListingPageRequest->expects($this->once())->method('createSortOrderConfigForRequest')
-            ->willReturn($this->createMock(SortOrderConfig::class));
+        $this->mockProductListingPageRequest->expects($this->once())->method('createSortByForRequest')
+            ->willReturn($this->createMock(SortBy::class));
 
         $this->requestHandler->process($stubRequest);
     }

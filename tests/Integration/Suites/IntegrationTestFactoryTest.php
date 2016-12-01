@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -184,21 +184,21 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_dir($fileStorageBasePath));
     }
 
-    public function testSameInstanceOfProductListingSortOrderConfigIsReturnedOnMultipleCalls()
+    public function testSameInstanceOfProductListingSortByIsReturnedOnMultipleCalls()
     {
-        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductListingSortOrderConfig());
+        $this->assertContainsOnly(SortBy::class, $this->factory->getProductListingSortBy());
         $this->assertSame(
-            $this->factory->getProductListingSortOrderConfig(),
-            $this->factory->getProductListingSortOrderConfig()
+            $this->factory->getProductListingSortBy(),
+            $this->factory->getProductListingSortBy()
         );
     }
 
-    public function testSameInstanceOfProductSearchSortOrderConfigIsReturnedOnMultipleCalls()
+    public function testSameInstanceOfProductSearchSortByIsReturnedOnMultipleCalls()
     {
-        $this->assertContainsOnly(SortOrderConfig::class, $this->factory->getProductSearchSortOrderConfig());
+        $this->assertContainsOnly(SortBy::class, $this->factory->getProductSearchSortBy());
         $this->assertSame(
-            $this->factory->getProductSearchSortOrderConfig(),
-            $this->factory->getProductSearchSortOrderConfig()
+            $this->factory->getProductSearchSortBy(),
+            $this->factory->getProductSearchSortBy()
         );
     }
 
@@ -232,8 +232,8 @@ class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('int', $this->factory->getDefaultNumberOfProductsPerSearchResultsPage());
     }
 
-    public function testReturnsDefaultSearchResultsPageSortOrderConfig()
+    public function testReturnsDefaultSearchResultsPageSortBy()
     {
-        $this->assertInstanceOf(SortOrderConfig::class, $this->factory->getDefaultSearchResultsPageSortOrderConfig());
+        $this->assertInstanceOf(SortBy::class, $this->factory->getDefaultSearchResultsPageSortBy());
     }
 }

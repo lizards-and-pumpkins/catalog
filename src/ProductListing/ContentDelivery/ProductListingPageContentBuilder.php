@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
@@ -32,9 +32,9 @@ class ProductListingPageContentBuilder
     private $translatorRegistry;
 
     /**
-     * @var SortOrderConfig[]
+     * @var SortBy[]
      */
-    private $sortOrderConfigs;
+    private $availableSortBy;
 
     /**
      * @var ProductJsonService
@@ -51,11 +51,11 @@ class ProductListingPageContentBuilder
         PageBuilder $pageBuilder,
         SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
         TranslatorRegistry $translatorRegistry,
-        SortOrderConfig ...$sortOrderConfigs
+        SortBy ...$availableSoryBy
     ) {
         $this->productJsonService = $productJsonService;
         $this->pageBuilder = $pageBuilder;
-        $this->sortOrderConfigs = $sortOrderConfigs;
+        $this->availableSortBy = $availableSoryBy;
         $this->translatorRegistry = $translatorRegistry;
         $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
     }
@@ -66,7 +66,7 @@ class ProductListingPageContentBuilder
      * @param mixed[] $keyGeneratorParams
      * @param SearchEngineResponse $searchEngineResponse
      * @param ProductsPerPage $productsPerPage
-     * @param SortOrderConfig $selectedSortOrderConfig
+     * @param SortBy $selectedSortBy
      * @return HttpResponse
      */
     public function buildPageContent(
@@ -75,7 +75,7 @@ class ProductListingPageContentBuilder
         array $keyGeneratorParams,
         SearchEngineResponse $searchEngineResponse,
         ProductsPerPage $productsPerPage,
-        SortOrderConfig $selectedSortOrderConfig
+        SortBy $selectedSortBy
     ) : HttpResponse {
         $productIds = $searchEngineResponse->getProductIds();
         $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
@@ -83,7 +83,7 @@ class ProductListingPageContentBuilder
         $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
         $this->addProductsInListingToPageBuilder($context, ...$productIds);
         $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
-        $this->addSortOrderSnippetToPageBuilder($selectedSortOrderConfig);
+        $this->addSortOrderSnippetToPageBuilder($selectedSortBy);
         $this->addTranslationsToPageBuilder($context);
         $this->addRobotsMetaTagSnippetToHeadContainer();
 
@@ -130,32 +130,29 @@ class ProductListingPageContentBuilder
         $this->addDynamicSnippetToPageBuilder('products_per_page', json_encode($productsPerPage));
     }
 
-    private function addSortOrderSnippetToPageBuilder(SortOrderConfig $selectedSortOrderConfig)
+    private function addSortOrderSnippetToPageBuilder(SortBy $selectedSortBy)
     {
-        $sortOrderConfig = $this->getSortOrderConfigsWithGivenConfigSelected($selectedSortOrderConfig);
-        $this->addDynamicSnippetToPageBuilder('sort_order_config', json_encode($sortOrderConfig));
+        $listOfSortBy = $this->getSortByListWithGivenConfigSelected($selectedSortBy);
+        $this->addDynamicSnippetToPageBuilder('sort_order_config', json_encode($listOfSortBy));
     }
 
     /**
-     * @param SortOrderConfig $selectedSortOrderConfig
-     * @return SortOrderConfig[]
+     * @param SortBy $selectedSortBy
+     * @return SortBy[]
      */
-    private function getSortOrderConfigsWithGivenConfigSelected(SortOrderConfig $selectedSortOrderConfig) : array
+    private function getSortByListWithGivenConfigSelected(SortBy $selectedSortBy)
     {
-        return array_map(function (SortOrderConfig $sortOrderConfig) use ($selectedSortOrderConfig) {
-            if ($sortOrderConfig->getAttributeCode() == $selectedSortOrderConfig->getAttributeCode()) {
-                return $selectedSortOrderConfig;
+        return array_map(function (SortBy $sortBy) use ($selectedSortBy) {
+            if ($sortBy->getAttributeCode() == $selectedSortBy->getAttributeCode()) {
+                return $selectedSortBy;
             }
 
-            if ($sortOrderConfig->isSelected() === true) {
-                return SortOrderConfig::create(
-                    $sortOrderConfig->getAttributeCode(),
-                    $sortOrderConfig->getSelectedDirection()
-                );
+            if ($sortBy->isSelected() === true) {
+                return SortBy::createUnselected($sortBy->getAttributeCode(), $sortBy->getSelectedDirection());
             }
 
-            return $sortOrderConfig;
-        }, $this->sortOrderConfigs);
+            return $sortBy;
+        }, $this->availableSortBy);
     }
 
     /**

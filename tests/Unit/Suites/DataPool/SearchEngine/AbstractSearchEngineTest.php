@@ -8,8 +8,8 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
@@ -84,11 +84,11 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         return SelfContainedContextBuilder::rehydrateContext($contextDataSet);
     }
 
-    private function createSortOrderConfig(string $sortByFieldCode, string $sortDirection) : SortOrderConfig
+    private function createSortBy(string $sortByFieldCode, string $sortDirection) : SortBy
     {
-        return SortOrderConfig::create(
+        return SortBy::createUnselected(
             AttributeCode::fromString($sortByFieldCode),
-            SortOrderDirection::create($sortDirection)
+            SortDirection::create($sortDirection)
         );
     }
 
@@ -166,7 +166,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createStubQueryOptionsWithGivenContext(Context $context) : QueryOptions
     {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
-        $stubSortOrderConfig = $this->createSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $stubSortBy = $this->createSortBy('product_id', SortDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
@@ -174,7 +174,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($stubFacetFiltersToIncludeInResult);
         $stubQueryOptions->method('getRowsPerPage')->willReturn(100);
         $stubQueryOptions->method('getPageNumber')->willReturn(0);
-        $stubQueryOptions->method('getSortOrderConfig')->willReturn($stubSortOrderConfig);
+        $stubQueryOptions->method('getSortBy')->willReturn($stubSortBy);
 
         return $stubQueryOptions;
     }
@@ -188,7 +188,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         array $selectedFilters
     ) : QueryOptions {
-        $stubSortOrderConfig = $this->createSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $stubSortBy = $this->createSortBy('product_id', SortDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn($selectedFilters);
@@ -196,20 +196,18 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($facetFiltersToIncludeInResult);
         $stubQueryOptions->method('getRowsPerPage')->willReturn(100);
         $stubQueryOptions->method('getPageNumber')->willReturn(0);
-        $stubQueryOptions->method('getSortOrderConfig')->willReturn($stubSortOrderConfig);
+        $stubQueryOptions->method('getSortBy')->willReturn($stubSortBy);
 
         return $stubQueryOptions;
     }
 
     /**
-     * @param SortOrderConfig $sortOrderConfig
+     * @param SortBy $sortBy
      * @param array[] $selectedFilters
      * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubQueryOptionsWithGivenSortOrder(
-        SortOrderConfig $sortOrderConfig,
-        array $selectedFilters
-    ) : QueryOptions {
+    private function createStubQueryOptionsWithGivenSortOrder(SortBy $sortBy, array $selectedFilters) : QueryOptions
+    {
         $stubFacetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
@@ -218,7 +216,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($stubFacetFiltersToIncludeInResult);
         $stubQueryOptions->method('getRowsPerPage')->willReturn(100);
         $stubQueryOptions->method('getPageNumber')->willReturn(0);
-        $stubQueryOptions->method('getSortOrderConfig')->willReturn($sortOrderConfig);
+        $stubQueryOptions->method('getSortBy')->willReturn($sortBy);
 
         return $stubQueryOptions;
     }
@@ -231,7 +229,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     private function createStubQueryOptionsWithGivenPagination(int $rowsPerPage, int $pageNumber) : QueryOptions
     {
         $facetFiltersToIncludeInResult = $this->createStubFacetFiltersToIncludeInResult();
-        $stubSortOrderConfig = $this->createSortOrderConfig('product_id', SortOrderDirection::ASC);
+        $stubSortBy = $this->createSortBy('product_id', SortDirection::ASC);
 
         $stubQueryOptions = $this->createMock(QueryOptions::class);
         $stubQueryOptions->method('getFilterSelection')->willReturn([]);
@@ -239,7 +237,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $stubQueryOptions->method('getFacetFiltersToIncludeInResult')->willReturn($facetFiltersToIncludeInResult);
         $stubQueryOptions->method('getRowsPerPage')->willReturn($rowsPerPage);
         $stubQueryOptions->method('getPageNumber')->willReturn($pageNumber);
-        $stubQueryOptions->method('getSortOrderConfig')->willReturn($stubSortOrderConfig);
+        $stubQueryOptions->method('getSortBy')->willReturn($stubSortBy);
 
         return $stubQueryOptions;
     }
@@ -718,9 +716,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = new SearchCriterionGreaterOrEqualThan($fieldName, $fieldValue);
 
-        $sortOrderConfig = $this->createSortOrderConfig($fieldName, SortOrderDirection::DESC);
+        $sortBy = $this->createSortBy($fieldName, SortDirection::DESC);
         $selectedFilters = [];
-        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
+        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortBy, $selectedFilters);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $expectedOrder = [$productAId, $productCId, $productBId];
@@ -732,9 +730,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
     {
         $criteria = new SearchCriterionAnything();
 
-        $sortOrderConfig = $this->createSortOrderConfig('foo', SortOrderDirection::DESC);
+        $sortBy = $this->createSortBy('foo', SortDirection::DESC);
         $selectedFilters = ['foo' => ['bar']];
-        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
+        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortBy, $selectedFilters);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
 
@@ -750,9 +748,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         
         $criteria = new SearchCriterionAnything();
 
-        $sortOrderConfig = $this->createSortOrderConfig('foo', SortOrderDirection::DESC);
+        $sortBy = $this->createSortBy('foo', SortDirection::DESC);
         $selectedFilters = ['qux' => ['bar']];
-        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortOrderConfig, $selectedFilters);
+        $queryOptions = $this->createStubQueryOptionsWithGivenSortOrder($sortBy, $selectedFilters);
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
 

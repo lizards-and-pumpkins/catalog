@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 
-class SortOrderConfig implements \JsonSerializable
+class SortBy implements \JsonSerializable
 {
     /**
      * @var AttributeCode
@@ -14,7 +14,7 @@ class SortOrderConfig implements \JsonSerializable
     private $attributeCode;
 
     /**
-     * @var SortOrderDirection
+     * @var SortDirection
      */
     private $selectedDirection;
 
@@ -23,22 +23,20 @@ class SortOrderConfig implements \JsonSerializable
      */
     private $isSelected;
 
-    private function __construct(AttributeCode $attributeCode, SortOrderDirection $selectedDirection, bool $isSelected)
+    private function __construct(AttributeCode $attributeCode, SortDirection $selectedDirection, bool $isSelected)
     {
         $this->attributeCode = $attributeCode;
         $this->selectedDirection = $selectedDirection;
         $this->isSelected = $isSelected;
     }
 
-    public static function create(AttributeCode $attributeCode, SortOrderDirection $selectedDirection) : SortOrderConfig
+    public static function createUnselected(AttributeCode $attributeCode, SortDirection $selectedDirection) : SortBy
     {
         return new self($attributeCode, $selectedDirection, false);
     }
 
-    public static function createSelected(
-        AttributeCode $attributeCode,
-        SortOrderDirection $selectedDirection
-    ) : SortOrderConfig {
+    public static function createSelected(AttributeCode $attributeCode, SortDirection $selectedDirection) : SortBy
+    {
         return new self($attributeCode, $selectedDirection, true);
     }
 
@@ -47,7 +45,7 @@ class SortOrderConfig implements \JsonSerializable
         return $this->attributeCode;
     }
 
-    public function getSelectedDirection() : SortOrderDirection
+    public function getSelectedDirection() : SortDirection
     {
         return $this->selectedDirection;
     }

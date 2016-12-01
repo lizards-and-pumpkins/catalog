@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -14,8 +14,8 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderConfig
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortOrderDirection
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
@@ -179,8 +179,8 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         
-        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
-        $stubSortBy = $this->createMock(SortOrderConfig::class);
+        /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
+        $stubSortBy = $this->createMock(SortBy::class);
 
         $rowsPerPage = 1000;
         $pageNumber = 1;
@@ -213,8 +213,8 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         
-        /** @var SortOrderConfig|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
-        $stubSortBy = $this->createMock(SortOrderConfig::class);
+        /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
+        $stubSortBy = $this->createMock(SortBy::class);
 
         $rowsPerPage = 1000;
         $pageNumber = 1;
