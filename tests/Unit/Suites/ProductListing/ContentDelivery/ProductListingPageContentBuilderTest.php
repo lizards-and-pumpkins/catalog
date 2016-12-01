@@ -92,7 +92,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var SortBy[]
      */
-    private $stubAvailableSortBy;
+    private $stubListOfAvailableSortBy;
 
     /**
      * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -176,7 +176,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubContext = $this->createMock(Context::class);
         $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $this->stubSelectedSortBy = $this->createMock(SortBy::class);
-        $this->stubAvailableSortBy = [$this->createMock(SortBy::class)];
+        $this->stubListOfAvailableSortBy = [$this->createMock(SortBy::class)];
         $this->stubSearchEngineResponse = $this->createStubSearchEngineResponse();
     }
 
@@ -193,7 +193,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
     }
 
@@ -209,7 +209,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $productGridSnippetCode = 'product_grid';
@@ -228,7 +228,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $snippetCode = 'filter_navigation';
@@ -257,7 +257,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $snippetCode = 'filter_navigation';
@@ -276,7 +276,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $snippetCode = 'total_number_of_results';
@@ -295,7 +295,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $snippetCode = 'products_per_page';
@@ -314,7 +314,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $snippetCode = 'available_sort_orders';
@@ -341,7 +341,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $snippetCode = 'selected_sort_order';
@@ -363,7 +363,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
 
         $snippetCode = 'translations';
@@ -383,7 +383,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubSearchEngineResponse,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
-            ...$this->stubAvailableSortBy
+            ...$this->stubListOfAvailableSortBy
         );
     }
 }
