@@ -113,7 +113,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $keyGeneratorParams,
             $searchEngineResponse,
             $productsPerPage,
-            $selectedSortBy
+            $selectedSortBy,
+            ...$this->availableSortBy
         );
     }
 
