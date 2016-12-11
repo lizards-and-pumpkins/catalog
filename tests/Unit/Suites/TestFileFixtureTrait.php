@@ -26,7 +26,7 @@ trait TestFileFixtureTrait
         $realFile = $this->___getAbsolutePath($filePath);
         $this->___createMissingDirectories($realFile);
         $this->___createFile($content, $realFile, $mode);
-        $this->fixtureFiles[] = $realFile;
+        $this->addFileToCleanupAfterTest($realFile);
     }
 
     public function addFileToCleanupAfterTest(string $realFile)
