@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\Exception;
 
-class NoCatalogWasImportedDomainEventMessageException extends \OutOfBoundsException
+class NoCatalogWasImportedDomainEventMessageException extends \InvalidArgumentException
 {
 }
