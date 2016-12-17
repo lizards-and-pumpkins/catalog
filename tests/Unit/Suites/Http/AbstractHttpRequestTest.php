@@ -81,23 +81,6 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($path, $httpRequest->getPathWithoutWebsitePrefix());
     }
 
-    public function testGettingUrlPathWithWebsitePrefixIsDelegatedToHttpUrl()
-    {
-        $path = 'foo';
-
-        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->createMock(HttpUrl::class);
-        $stubHttpUrl->method('getPathWithWebsitePrefix')->willReturn($path);
-
-        $httpRequest = HttpRequest::fromParameters(
-            HttpRequest::METHOD_GET,
-            $stubHttpUrl,
-            HttpHeaders::fromArray([]),
-            new HttpRequestBody('')
-        );
-        $this->assertSame($path, $httpRequest->getPathWithWebsitePrefix());
-    }
-
     public function testUnsupportedRequestMethodExceptionIsThrown()
     {
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
