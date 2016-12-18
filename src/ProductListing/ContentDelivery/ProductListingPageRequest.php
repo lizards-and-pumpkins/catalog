@@ -44,7 +44,7 @@ class ProductListingPageRequest
 
     public function getCurrentPageNumber(HttpRequest $request) : int
     {
-        if (! $request->hasQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME )) {
+        if (! $request->hasQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME)) {
             return 0;
         }
 
