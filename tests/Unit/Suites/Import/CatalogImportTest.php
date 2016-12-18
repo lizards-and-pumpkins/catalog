@@ -30,7 +30,6 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
  * @uses   \LizardsAndPumpkins\Import\XPathParser
- * @uses   \LizardsAndPumpkins\Util\UuidGenerator
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class CatalogImportTest extends \PHPUnit_Framework_TestCase
