@@ -4,66 +4,80 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http;
 
-use League\Url\UrlImmutable;
-use League\Url\AbstractUrl;
+use LizardsAndPumpkins\Http\Exception\InvalidUrlStringException;
 use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
 
 class HttpUrl
 {
     /**
-     * @var \League\Url\AbstractUrl
+     * @var string
      */
-    private $url;
+    private $schema;
 
-    private function __construct(AbstractUrl $url)
-    {
-        $this->url = $url;
-    }
+    /**
+     * @var string
+     */
+    private $host;
 
-    public function __toString() : string
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string[]
+     */
+    private $query;
+
+    /**
+     * @param string $schema
+     * @param string $host
+     * @param string $path
+     * @param string[] $query
+     */
+    private function __construct(string $schema, string $host, string $path, array $query)
     {
-        return (string) $this->url;
+        $this->schema = $schema;
+        $this->host = $host;
+        $this->path = $path;
+        $this->query = $query;
     }
 
     public static function fromString(string $urlString) : HttpUrl
     {
-        try {
-            $url = UrlImmutable::createFromUrl($urlString);
-        } catch (\RuntimeException $e) {
-            throw new \InvalidArgumentException($e->getMessage());
+        $components = parse_url($urlString);
+
+        if (false === $components || !isset($components['host'])) {
+            throw new InvalidUrlStringException(sprintf('Can not parse URL from "%s"', $urlString));
         }
 
-        self::validateProtocol($url);
+        $host = idn_to_utf8($components['host']);
 
-        return new self($url);
+        $schema = $components['scheme'] ?? '';
+        self::validateSchema($schema);
+
+        $path = $components['path'] ?? '';
+
+        $queryString = $components['query'] ?? '';
+        parse_str($queryString, $query);
+
+        return new self($schema, $host, $path, $query);
     }
 
-    public function getPath() : string
+    public function __toString() : string
     {
-        /** @var \League\Url\Components\Path $path */
-        $path = $this->url->getPath();
+        $schema = $this->schema . ($this->schema !== '' ? ':' : '');
 
-        return $path->getUriComponent();
+        $queryString = http_build_query($this->query);
+        $query = ('' !== $queryString ? '?' : '') . $queryString;
+
+        return $schema . '//' . $this->host . $this->path . $query;
     }
 
     public function getPathWithoutWebsitePrefix() : string
     {
-        /** @var \League\Url\Components\Path $path */
-        $path = $this->url->getPath();
-        $path->remove($this->getAppEntryPointPath());
-
-        return ltrim($path->getUriComponent(), '/');
-    }
-
-    public function getPathWithWebsitePrefix() : string
-    {
-        $pathToRemove = preg_replace('#/[^/]*$#', '', $this->getAppEntryPointPath());
-        
-        /** @var \League\Url\Components\Path $path */
-        $path = $this->url->getPath();
-        $path->remove($pathToRemove);
-        
-        return ltrim($path->getUriComponent(), '/');
+        $websitePrefix = $this->getAppEntryPointPath();
+        return ltrim(preg_replace('/^' . preg_quote($websitePrefix, '/') . '/', '', $this->path), '/');
     }
 
     private function getAppEntryPointPath() : string
@@ -77,26 +91,23 @@ class HttpUrl
      */
     public function getQueryParameter(string $parameterName)
     {
-        $requestQuery = $this->url->getQuery();
-        return $requestQuery[$parameterName] ?? null;
+        return $this->query[$parameterName] ?? null;
     }
 
     public function hasQueryParameters() : bool
     {
-        /** @var \League\Url\Components\QueryInterface $requestQuery */
-        $requestQuery = $this->url->getQuery();
-        return count($requestQuery->toArray()) > 0;
+        return count($this->query) > 0;
     }
 
     public function getHost() : string
     {
-        return (string) $this->url->getHost();
+        return $this->host;
     }
 
-    private static function validateProtocol(AbstractUrl $url)
+    private static function validateSchema(string $schema)
     {
-        if (! in_array($url->getScheme(), ['http', 'https', ''])) {
-            throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $url->getScheme()));
+        if (! in_array($schema, ['http', 'https', ''])) {
+            throw new UnknownProtocolException(sprintf('Protocol can not be handled "%s"', $schema));
         }
     }
 }

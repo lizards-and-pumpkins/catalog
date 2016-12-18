@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http;
 
+use LizardsAndPumpkins\Http\Exception\InvalidUrlStringException;
 use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
 
 /**
@@ -12,55 +13,43 @@ use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
 class HttpUrlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var HttpUrl
+     * @dataProvider urlStringProvider
      */
-    private $url;
+    public function testReturnsUrlString(string $urlString)
+    {
+        $this->assertSame($urlString, (string) HttpUrl::fromString($urlString));
+    }
 
     /**
-     * @var string
+     * @return array[]
      */
-    private $urlString = 'http://example.com/path';
-
-    public function setUp()
+    public function urlStringProvider() : array
     {
-        $this->url = HttpUrl::fromString($this->urlString);
+        return [
+            ['http://example.com'],
+            ['https://example.com'],
+            ['//example.com'],
+            ['http://example.com/'],
+            ['http://example.com/path'],
+            ['http://example.com/path/path/path/'],
+            ['http://example.com?foo=bar'],
+            ['http://example.com/path/?foo=bar'],
+        ];
     }
 
-    public function testPathIsReturned()
-    {
-        $this->assertEquals('/path', $this->url->getPath());
-    }
-
-    public function testSlashIsReturnedAsPathIfNoPathIsGiven()
-    {
-        $url = HttpUrl::fromString('http://example.com');
-        $this->assertEquals('/', $url->getPath());
-    }
-
-    public function testSlashIsReturnedAsPathIfSlashPathIsGiven()
-    {
-        $url = HttpUrl::fromString('http://example.com/');
-        $this->assertEquals('/', $url->getPath());
-    }
-
-    public function testUrlIsReturned()
-    {
-        $this->assertEquals($this->urlString, (string) $this->url);
-    }
-
-    public function testExceptionIsThrownForNonHttpRequest()
+    public function testThrowsAnExceptionForNonHttpUrls()
     {
         $this->expectException(UnknownProtocolException::class);
         HttpUrl::fromString('ftp://user:pass@example.com');
     }
 
-    public function testExceptionIsThrownIfNotValidUrlIsPassed()
+    public function testThrowsAnExceptionDuringAttemptToCreateUrlFromInvalidString()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidUrlStringException::class);
         HttpUrl::fromString('this is not a valid url');
     }
 
-    public function testDirectoryPathIsExcludedFromUrl()
+    public function testReturnsPathWithoutWebsitePrefix()
     {
         $originalScriptName = $_SERVER['SCRIPT_NAME'];
         $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';
@@ -73,22 +62,10 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('some-page', $result);
     }
 
-    public function testLastTokenOfDirectoryPathIsIncludedIntoPath()
+    public function testNullIsReturnedIfParameterIsAbsentInRequestQuery()
     {
-        $originalScriptName = $_SERVER['SCRIPT_NAME'];
-        $_SERVER['SCRIPT_NAME'] = '/path/to/index.php';
-
-        $url = HttpUrl::fromString('http://www.example.com/path/to/some-page');
-        $result = $url->getPathWithWebsitePrefix();
-
-        $_SERVER['SCRIPT_NAME'] = $originalScriptName;
-
-        $this->assertEquals('to/some-page', $result);
-    }
-
-    public function testEmptyStringIsReturnedIfParameterIsAbsentInRequestQuery()
-    {
-        $this->assertNull($this->url->getQueryParameter('foo'));
+        $url = HttpUrl::fromString('http://example.com/path');
+        $this->assertNull($url->getQueryParameter('foo'));
     }
 
     public function testQueryParameterIsReturned()
@@ -114,7 +91,7 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider requestHostDataProvider
      */
-    public function testItReturnsTheRequestHost(string $host, string $expected)
+    public function testReturnsHost(string $host, string $expected)
     {
         $url = HttpUrl::fromString('http://' . $host . '/path/to/some-page');
         $this->assertSame($expected, $url->getHost());
