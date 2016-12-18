@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
+use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
 use LizardsAndPumpkins\Http\Routing\Exception\UnsupportedRequestMethodException;
 
 abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
@@ -129,17 +130,43 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         $result = HttpRequest::fromGlobalState($testRequestBody);
         $this->assertSame($testRequestBody, $result->getRawBody());
     }
-    
-    public function testNullIsReturnedIfParameterIsAbsentInRequestQuery()
+
+    public function testDelegatesCheckingOfQueryParameterExistenceToHttpUrl()
     {
-        $result = HttpRequest::fromParameters(
+        $queryParameterName = 'foo';
+
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
+        $stubHttpUrl->method('hasQueryParameter')->with($queryParameterName)->willReturn(false);
+
+        $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
-            HttpUrl::fromString('http://example.com'),
+            $stubHttpUrl,
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
 
-        $this->assertNull($result->getQueryParameter('foo'));
+        $this->assertFalse($request->hasQueryParameter($queryParameterName));
+    }
+
+    public function testThrowsAnExceptionDuringAttemptToRetrieveNonExistingQueryParameterValue()
+    {
+        $this->expectException(QueryParameterDoesNotExistException::class);
+
+        $queryParameterName = 'foo';
+
+        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
+        $stubHttpUrl->method('hasQueryParameter')->with($queryParameterName)->willReturn(false);
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            $stubHttpUrl,
+            HttpHeaders::fromArray([]),
+            new HttpRequestBody('')
+        );
+
+        $request->getQueryParameter($queryParameterName);
     }
 
     public function testQueryParameterRetrievalIsDelegatedToHttpUrl()
@@ -149,6 +176,7 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
 
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
         $stubHttpUrl = $this->createMock(HttpUrl::class);
+        $stubHttpUrl->method('hasQueryParameter')->with($queryParameterName)->willReturn(true);
         $stubHttpUrl->method('getQueryParameter')->with($queryParameterName)->willReturn($queryParameterValue);
 
         $request = HttpRequest::fromParameters(

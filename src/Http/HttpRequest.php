@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
+use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
 use LizardsAndPumpkins\Http\Routing\Exception\UnsupportedRequestMethodException;
 
 abstract class HttpRequest
@@ -96,13 +97,23 @@ abstract class HttpRequest
 
     abstract public function getMethod() : string;
 
+    public function hasQueryParameter(string $parameterName)
+    {
+        return $this->url->hasQueryParameter($parameterName);
+    }
+
     /**
      * @param string $parameterName
      * @return null|string
      */
     public function getQueryParameter(string $parameterName)
     {
-        // TODO: Once league/url is gone refactor to hasQueryParameter and exception
+        if (! $this->hasQueryParameter($parameterName)) {
+            throw new QueryParameterDoesNotExistException(
+                sprintf('Query parameter "%s" does not exist', $parameterName)
+            );
+        }
+
         return $this->url->getQueryParameter($parameterName);
     }
 

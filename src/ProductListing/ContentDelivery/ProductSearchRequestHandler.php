@@ -130,7 +130,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             return false;
         }
 
-        if (strlen((string) $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1) {
+        if (! $request->hasQueryParameter(self::QUERY_STRING_PARAMETER_NAME) ||
+            strlen((string) $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1
+        ) {
             return false;
         }
 

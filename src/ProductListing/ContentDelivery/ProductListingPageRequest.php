@@ -44,6 +44,10 @@ class ProductListingPageRequest
 
     public function getCurrentPageNumber(HttpRequest $request) : int
     {
+        if (! $request->hasQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME )) {
+            return 0;
+        }
+
         return max(0, $request->getQueryParameter(self::PAGINATION_QUERY_PARAMETER_NAME) - 1);
     }
 
@@ -59,23 +63,37 @@ class ProductListingPageRequest
         $facetFilterAttributeCodeStrings = $facetFilterRequest->getAttributeCodeStrings();
         return array_reduce($facetFilterAttributeCodeStrings, function (array $carry, $filterName) use ($request) {
             $queryParameterName = $this->searchFieldToRequestParamMap->getQueryParameterName($filterName);
-            $carry[$filterName] = array_filter(explode(',', (string) $request->getQueryParameter($queryParameterName)));
+            $carry[$filterName] = $this->getFilterValuesFromRequest($request, $queryParameterName);
             return $carry;
         }, []);
     }
 
+    /**
+     * @param HttpRequest $request
+     * @param string $queryParameterName
+     * @return string[]
+     */
+    private function getFilterValuesFromRequest(HttpRequest $request, string $queryParameterName) : array
+    {
+        if (! $request->hasQueryParameter($queryParameterName)) {
+            return [];
+        }
+
+        return array_filter(explode(',', (string) $request->getQueryParameter($queryParameterName)));
+    }
+
     public function getProductsPerPage(HttpRequest $request) : ProductsPerPage
     {
-        $productsPerPageQueryStringValue = $this->getProductsPerPageQueryStringValue($request);
-        if (null !== $productsPerPageQueryStringValue) {
-            $numbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
-            return ProductsPerPage::create($numbersOfProductsPerPage, (int) $productsPerPageQueryStringValue);
+        if ($request->hasQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)) {
+            $availableNumbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
+            $numberOfProductsPerPage = $request->getQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME);
+            return ProductsPerPage::create($availableNumbersOfProductsPerPage, (int) $numberOfProductsPerPage);
         }
 
         if ($request->hasCookie(self::PRODUCTS_PER_PAGE_COOKIE_NAME)) {
-            $numbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
+            $availableNumbersOfProductsPerPage = $this->productsPerPage->getNumbersOfProductsPerPage();
             $selected = (int) $request->getCookieValue(self::PRODUCTS_PER_PAGE_COOKIE_NAME);
-            return ProductsPerPage::create($numbersOfProductsPerPage, $selected);
+            return ProductsPerPage::create($availableNumbersOfProductsPerPage, $selected);
         }
 
         return $this->productsPerPage;
@@ -83,21 +101,23 @@ class ProductListingPageRequest
 
     public function getSelectedSortBy(HttpRequest $request, SortBy $defaultSortBy, SortBy ...$availableSortBy) : SortBy
     {
-        $sortOrderQueryStringValue = $this->getSortOrderQueryStringValue($request);
-        $sortDirectionQueryStringValue = $this->getSortDirectionQueryStringValue($request);
+        if ($this->sortingIsPresentInQuery($request)) {
+            $queryStringSortOrder = $request->getQueryParameter(self::SORT_ORDER_QUERY_PARAMETER_NAME);
+            $queryStringSortDirection = $request->getQueryParameter(self::SORT_DIRECTION_QUERY_PARAMETER_NAME);
 
-        if ($this->isValidSortOrder($sortOrderQueryStringValue, $sortDirectionQueryStringValue, ...$availableSortBy)) {
-            return $this->createSortBy($sortOrderQueryStringValue, $sortDirectionQueryStringValue);
+            if ($this->isValidSortOrder($queryStringSortOrder, $queryStringSortDirection, ...$availableSortBy)) {
+                return $this->createSortBy($queryStringSortOrder, $queryStringSortDirection);
+            }
         }
 
         if ($request->hasCookie(self::SORT_ORDER_COOKIE_NAME) &&
             $request->hasCookie(self::SORT_DIRECTION_COOKIE_NAME)
         ) {
-            $sortOrder = $request->getCookieValue(self::SORT_ORDER_COOKIE_NAME);
-            $direction = $request->getCookieValue(self::SORT_DIRECTION_COOKIE_NAME);
+            $cookieSortOrder = $request->getCookieValue(self::SORT_ORDER_COOKIE_NAME);
+            $cookieDirection = $request->getCookieValue(self::SORT_DIRECTION_COOKIE_NAME);
 
-            if ($this->isValidSortOrder($sortOrder, $direction, ...$availableSortBy)) {
-                return $this->createSortBy($sortOrder, $direction);
+            if ($this->isValidSortOrder($cookieSortOrder, $cookieDirection, ...$availableSortBy)) {
+                return $this->createSortBy($cookieSortOrder, $cookieDirection);
             }
         }
 
@@ -106,22 +126,23 @@ class ProductListingPageRequest
 
     public function processCookies(HttpRequest $request, SortBy ...$availableSortBy)
     {
-        $productsPerPage = $this->getProductsPerPageQueryStringValue($request);
-
-        if ($productsPerPage !== null) {
+        if ($request->hasQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)) {
             setcookie(
                 self::PRODUCTS_PER_PAGE_COOKIE_NAME,
-                $productsPerPage,
+                $request->getQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME),
                 time() + self::PRODUCTS_PER_PAGE_COOKIE_TTL
             );
         }
 
-        $sortOrder = $this->getSortOrderQueryStringValue($request);
-        $sortDirection = $this->getSortDirectionQueryStringValue($request);
+        if ($this->sortingIsPresentInQuery($request)) {
 
-        if ($this->isValidSortOrder($sortOrder, $sortDirection, ...$availableSortBy)) {
-            setcookie(self::SORT_ORDER_COOKIE_NAME, $sortOrder, time() + self::SORT_ORDER_COOKIE_TTL);
-            setcookie(self::SORT_DIRECTION_COOKIE_NAME, $sortDirection, time() + self::SORT_DIRECTION_COOKIE_TTL);
+            $sortOrder = $request->getQueryParameter(self::SORT_ORDER_QUERY_PARAMETER_NAME);
+            $sortDirection = $request->getQueryParameter(self::SORT_DIRECTION_QUERY_PARAMETER_NAME);
+
+            if ($this->isValidSortOrder($sortOrder, $sortDirection, ...$availableSortBy)) {
+                setcookie(self::SORT_ORDER_COOKIE_NAME, $sortOrder, time() + self::SORT_ORDER_COOKIE_TTL);
+                setcookie(self::SORT_DIRECTION_COOKIE_NAME, $sortDirection, time() + self::SORT_DIRECTION_COOKIE_TTL);
+            }
         }
     }
 
@@ -134,50 +155,19 @@ class ProductListingPageRequest
         return new SortBy($attributeCode, $sortBy->getSelectedDirection());
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return null|string
-     */
-    private function getProductsPerPageQueryStringValue(HttpRequest $request)
-    {
-        return $request->getQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME);
-    }
-
     private function createSortBy(string $attributeCode, string $direction) : SortBy
     {
         return new SortBy(AttributeCode::fromString($attributeCode), SortDirection::create($direction));
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return null|string
-     */
-    private function getSortOrderQueryStringValue(HttpRequest $request)
+    private function sortingIsPresentInQuery(HttpRequest $request) : bool
     {
-        return $request->getQueryParameter(self::SORT_ORDER_QUERY_PARAMETER_NAME);
+        return $request->hasQueryParameter(self::SORT_ORDER_QUERY_PARAMETER_NAME) &&
+               $request->hasQueryParameter(self::SORT_DIRECTION_QUERY_PARAMETER_NAME);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return null|string
-     */
-    private function getSortDirectionQueryStringValue(HttpRequest $request)
+    private function isValidSortOrder(string $sortOrder, string $direction, SortBy ...$availableSortBy) : bool
     {
-        return $request->getQueryParameter(self::SORT_DIRECTION_QUERY_PARAMETER_NAME);
-    }
-
-    /**
-     * @param string|null $sortOrder
-     * @param string|null $direction
-     * @param SortBy[] $availableSortBy
-     * @return bool
-     */
-    private function isValidSortOrder($sortOrder, $direction, SortBy ...$availableSortBy) : bool
-    {
-        if (null === $sortOrder || null === $direction) {
-            return false;
-        }
-
         foreach ($availableSortBy as $config) {
             if ($config->getAttributeCode()->isEqualTo($sortOrder) && SortDirection::isValid($direction)) {
                 return true;

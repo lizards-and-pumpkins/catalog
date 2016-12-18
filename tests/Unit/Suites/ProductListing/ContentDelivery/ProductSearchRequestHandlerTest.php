@@ -160,6 +160,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, false],
+        ]);
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
     }
@@ -171,6 +174,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, true],
+        ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, $queryString],
         ]);
@@ -192,6 +198,9 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest->method('getPathWithoutWebsitePrefix')
             ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, true],
+        ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, 'foo'],
         ]);

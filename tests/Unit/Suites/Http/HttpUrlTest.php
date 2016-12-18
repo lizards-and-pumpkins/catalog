@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\InvalidUrlStringException;
+use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
 use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
 
 /**
@@ -62,18 +63,28 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('some-page', $result);
     }
 
-    public function testNullIsReturnedIfParameterIsAbsentInRequestQuery()
+    public function testReturnsFalseIfQueryParameterIsNotSet()
     {
-        $url = HttpUrl::fromString('http://example.com/path');
-        $this->assertNull($url->getQueryParameter('foo'));
+        $url = HttpUrl::fromString('http://example.com');
+        $this->assertFalse($url->hasQueryParameter('foo'));
+    }
+
+    public function testReturnsTrueIfQueryParameterIsSet()
+    {
+        $url = HttpUrl::fromString('http://example.com?foo=bar');
+        $this->assertTrue($url->hasQueryParameter('foo'));
+    }
+
+    public function testThrowsAnExceptionDuringAttemptToRetrieveNonExistingQueryParameterValue()
+    {
+        $this->expectException(QueryParameterDoesNotExistException::class);
+        HttpUrl::fromString('http://example.com/path')->getQueryParameter('foo');
     }
 
     public function testQueryParameterIsReturned()
     {
         $url = HttpUrl::fromString('http://example.com/?foo=bar&baz=qux');
-        $result = $url->getQueryParameter('foo');
-
-        $this->assertEquals('bar', $result);
+        $this->assertEquals('bar', $url->getQueryParameter('foo'));
     }
 
     public function testReturnsTrueIfThereAreQueryParameters()

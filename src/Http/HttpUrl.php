@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\InvalidUrlStringException;
+use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
 use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
 
 class HttpUrl
@@ -85,13 +86,20 @@ class HttpUrl
         return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
     }
 
-    /**
-     * @param string $parameterName
-     * @return string|null
-     */
+    public function hasQueryParameter(string $queryParameter) : bool
+    {
+        return isset($this->query[$queryParameter]);
+    }
+
     public function getQueryParameter(string $parameterName)
     {
-        return $this->query[$parameterName] ?? null;
+        if (! $this->hasQueryParameter($parameterName)) {
+            throw new QueryParameterDoesNotExistException(
+                sprintf('Query parameter "%s" does not exist', $parameterName)
+            );
+        }
+
+        return $this->query[$parameterName];
     }
 
     public function hasQueryParameters() : bool
