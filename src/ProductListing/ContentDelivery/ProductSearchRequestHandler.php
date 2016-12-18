@@ -37,9 +37,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $metaInfoSnippetKeyGenerator;
 
     /**
-     * @var string[]
+     * @var FacetFiltersToIncludeInResult
      */
-    private $facetFilterRequest;
+    private $facetFiltersToIncludeInResult;
 
     /**
      * @var ProductListingPageContentBuilder
@@ -65,7 +65,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
-        FacetFiltersToIncludeInResult $facetFilterRequest,
+        FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
         SortBy $defaultSortBy,
@@ -74,7 +74,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
         $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
-        $this->facetFilterRequest = $facetFilterRequest;
+        $this->facetFiltersToIncludeInResult = $facetFiltersToIncludeInResult;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->defaultSortBy = $defaultSortBy;
@@ -147,9 +147,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $requestSortOrder = $this->productListingPageRequest->createSortByForRequest($selectedSortBy);
 
         $queryOptions = QueryOptions::create(
-            $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFilterRequest),
+            $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFiltersToIncludeInResult),
             $this->context,
-            $this->facetFilterRequest,
+            $this->facetFiltersToIncludeInResult,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $this->productListingPageRequest->getCurrentPageNumber($request),
             $requestSortOrder
