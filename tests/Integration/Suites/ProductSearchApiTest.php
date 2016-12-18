@@ -23,7 +23,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
-        $this->importCatalogFixture($factory);
 
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
