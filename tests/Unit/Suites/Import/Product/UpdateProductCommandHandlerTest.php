@@ -10,7 +10,6 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Queue;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler

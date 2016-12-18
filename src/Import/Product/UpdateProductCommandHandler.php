@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\Product;
 
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
-use LizardsAndPumpkins\Import\Product\Exception\NoUpdateProductCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class UpdateProductCommandHandler implements CommandHandler

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import;
 
-use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 

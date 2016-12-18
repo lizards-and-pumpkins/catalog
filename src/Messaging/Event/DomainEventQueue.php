@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class DomainEventQueue
 {

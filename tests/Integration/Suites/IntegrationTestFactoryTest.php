@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;

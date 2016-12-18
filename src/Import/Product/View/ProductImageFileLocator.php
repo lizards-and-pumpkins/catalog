@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\Import\Product\View;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\FileStorage\File;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
-use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 
 interface ProductImageFileLocator
 {
