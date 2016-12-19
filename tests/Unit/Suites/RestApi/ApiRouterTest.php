@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -45,6 +46,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
 
     public function testNullIsReturnedIfVersionFormatIsInvalid()
     {
+        $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/json');
         $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
@@ -52,8 +54,19 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($result);
     }
 
+    public function testReturnsNullIfRequestHasNoAcceptHeader()
+    {
+        $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(false);
+        $this->stubHttpRequest->method('getHeader')->with('Accept')->willThrowException(new HeaderNotPresentException);
+        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api');
+        $result = $this->apiRouter->route($this->stubHttpRequest);
+
+        $this->assertNull($result);
+    }
+
     public function testNullIsReturnedIfEndpointCodeIsNotSpecified()
     {
+        $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')
             ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
         $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api');
@@ -72,6 +85,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->willReturn($stubApiRequestHandler);
 
         $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api/foo');
+        $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')
             ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
         $result = $this->apiRouter->route($this->stubHttpRequest);
@@ -88,6 +102,7 @@ class ApiRouterTest extends \PHPUnit_Framework_TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
+        $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')
             ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
         $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api/foo');

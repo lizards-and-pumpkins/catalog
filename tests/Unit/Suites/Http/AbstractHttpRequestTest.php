@@ -264,4 +264,23 @@ abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertSame('example.com', $request->getHost());
     }
+
+    public function testDelegatesCheckingIfHeaderExistsToHttpHeaders()
+    {
+        $headerName = 'foo';
+
+        $stubHttpUrl = $this->createMock(HttpUrl::class);
+
+        $stubHttpHeaders = $this->createMock(HttpHeaders::class);
+        $stubHttpHeaders->method('has')->with($headerName)->willReturn(true);
+
+        $httpRequest = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            $stubHttpUrl,
+            $stubHttpHeaders,
+            new HttpRequestBody('')
+        );
+
+        $this->assertTrue($httpRequest->hasHeader($headerName));
+    }
 }
