@@ -34,10 +34,9 @@ class ApiRouter implements HttpRouter
             return null;
         }
 
-        $acceptHeader = $request->getHeader('Accept');
-        if (!preg_match(
+        if (! $request->hasHeader('Accept') || ! preg_match(
             '/^application\/vnd\.lizards-and-pumpkins\.\w+\.v(\d+)\+(?:json|xml)$/',
-            $acceptHeader,
+            $request->getHeader('Accept'),
             $matchedVersion
         )) {
             return null;
