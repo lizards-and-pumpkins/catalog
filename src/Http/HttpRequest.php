@@ -30,7 +30,7 @@ abstract class HttpRequest
      */
     private $body;
 
-    final public function __construct(HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
+    private function __construct(HttpUrl $url, HttpHeaders $headers, HttpRequestBody $body)
     {
         $this->url = $url;
         $this->headers = $headers;
@@ -87,6 +87,11 @@ abstract class HttpRequest
     public function getPathWithWebsitePrefix() : string
     {
         return $this->getUrl()->getPathWithWebsitePrefix();
+    }
+
+    public function hasHeader(string $headerName) : bool
+    {
+        return $this->headers->has($headerName);
     }
 
     public function getHeader(string $headerName) : string
