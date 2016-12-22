@@ -83,13 +83,12 @@ class RestApiFactory implements Factory
     {
         /** @var ConfigReader $configReader */
         $configReader = $this->getMasterFactory()->createConfigReader();
-        $catalogImportDirectory = $configReader->get('catalog_import_directory');
 
-        if (null === $catalogImportDirectory) {
-            return __DIR__ . '/../../tests/shared-fixture';
+        if ($configReader->has('catalog_import_directory')) {
+            return $configReader->get('catalog_import_directory');
         }
 
-        return $catalogImportDirectory;
+        return __DIR__ . '/../../tests/shared-fixture';
     }
 
     public function getApiRequestHandlerLocator() : ApiRequestHandlerLocator
