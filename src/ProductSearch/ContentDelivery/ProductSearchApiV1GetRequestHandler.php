@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -12,6 +13,9 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnableToProcessProductSearchRequestException;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
+use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
 class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
@@ -44,20 +48,34 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private $defaultNumberOfProductPerPage;
 
     /**
+     * @var int
+     */
+    private $maxAllowedProductsPerPage;
+
+    /**
      * @var SortBy
      */
     private $defaultSortBy;
+
+    /**
+     * @var string[]
+     */
+    private $sortableAttributeCodes;
 
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
         int $defaultNumberOfProductPerPage,
-        SortBy $defaultSortBy
+        int $maxAllowedProductsPerPage,
+        SortBy $defaultSortBy,
+        string ...$sortableAttributeCodes
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
         $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
+        $this->maxAllowedProductsPerPage = $maxAllowedProductsPerPage;
         $this->defaultSortBy = $defaultSortBy;
+        $this->sortableAttributeCodes = $sortableAttributeCodes;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -88,15 +106,9 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
-        $context = $this->contextBuilder->createFromRequest($request);
+        $queryOptions = $this->createQueryOptions($request);
 
-        $data = $this->productSearchService->query(
-            $queryString,
-            $context,
-            $this->getNumberOfProductPerPage($request),
-            $this->getPageNumber($request),
-            $this->getSortBy($request)
-        );
+        $data = $this->productSearchService->query($queryString, $queryOptions);
 
         $body = json_encode($data);
         $headers = [];
@@ -111,6 +123,32 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private function getRequestPathParts(HttpRequest $request) : array
     {
         return explode('/', trim($request->getPathWithoutWebsitePrefix(), '/'));
+    }
+
+    private function createQueryOptions(HttpRequest $request) : QueryOptions
+    {
+        $filterSelection = [];
+
+        $context = $this->contextBuilder->createFromRequest($request);
+
+        $facetFiltersToIncludeInResult = new FacetFiltersToIncludeInResult();
+
+        $rowsPerPage = $this->getNumberOfProductPerPage($request);
+        $this->validateRowsPerPage($rowsPerPage);
+
+        $pageNumber = $this->getPageNumber($request);
+
+        $sortBy = $this->getSortBy($request);
+        $this->validateSortBy($sortBy);
+
+        return QueryOptions::create(
+            $filterSelection,
+            $context,
+            $facetFiltersToIncludeInResult,
+            $rowsPerPage,
+            $pageNumber,
+            $sortBy
+        );
     }
 
     private function getNumberOfProductPerPage(HttpRequest $request) : int
@@ -150,5 +188,25 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         return SortDirection::ASC;
+    }
+
+    private function validateSortBy(SortBy $sortBy)
+    {
+        if (!in_array((string) $sortBy->getAttributeCode(), $this->sortableAttributeCodes)) {
+            throw new UnsupportedSortOrderException(
+                sprintf('Sorting by "%s" is not supported', $sortBy->getAttributeCode())
+            );
+        }
+    }
+
+    private function validateRowsPerPage(int $rowsPerPage)
+    {
+        if ($rowsPerPage > $this->maxAllowedProductsPerPage) {
+            throw new InvalidNumberOfProductsPerPageException(sprintf(
+                'Maximum allowed number of products per page is %d, got %d.',
+                $this->maxAllowedProductsPerPage,
+                $rowsPerPage
+            ));
+        }
     }
 }
