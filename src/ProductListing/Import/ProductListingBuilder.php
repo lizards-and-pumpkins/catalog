@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\DuplicateProductListingAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidCriterionOperationXmlAttributeException;
@@ -98,9 +98,9 @@ class ProductListingBuilder
 
     /**
      * @param array[] $criterionNode
-     * @return SearchCriterion
+     * @return SearchCriteria
      */
-    private function createCriterion(array $criterionNode) : SearchCriterion
+    private function createCriterion(array $criterionNode) : SearchCriteria
     {
         $className = $this->getCriterionClassNameForOperation($criterionNode['attributes']['is']);
         return new $className($criterionNode['attributes']['name'], $criterionNode['value']);
@@ -144,7 +144,7 @@ class ProductListingBuilder
 
     private function getCriterionClassNameForOperation(string $operationName) : string
     {
-        return SearchCriterion::class . $operationName;
+        return '\\LizardsAndPumpkins\\DataPool\\SearchEngine\\SearchCriteria\\SearchCriterion' . $operationName;
     }
 
     /**

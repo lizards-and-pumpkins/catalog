@@ -2,12 +2,19 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
@@ -24,6 +31,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessT
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;

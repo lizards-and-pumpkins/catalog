@@ -20,7 +20,8 @@ use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingUrlKeyXmlAttribut
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList

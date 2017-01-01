@@ -6,32 +6,41 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
-class SearchCriterionGreaterThanTest extends AbstractSearchCriterionTest
+class SearchCriterionGreaterThanTest extends \PHPUnit_Framework_TestCase
 {
-    final protected function getOperationName() : string
-    {
-        return 'GreaterThan';
-    }
+    private $testFieldName = 'foo';
+
+    private $testFieldValue = 'bar';
 
     /**
-     * @return array[]
+     * @var SearchCriterionGreaterThan
      */
-    final public function getNonMatchingValues() : array
+    private $criteria;
+
+    final protected function setUp()
     {
-        return [
-            [['1'], '2'],
-        ];
+        $this->criteria = new SearchCriterionGreaterThan($this->testFieldName, $this->testFieldValue);
     }
 
-    /**
-     * @return array[]
-     */
-    final public function getMatchingValues() : array
+    public function testItImplementsTheSearchCriteriaInterface()
     {
-        return[
-            [['2'], '1'],
+        $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
+    }
+
+    public function testItImplementsJsonSerializable()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
+    }
+
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'GreaterThan'
         ];
+
+        $this->assertSame($expectation, $this->criteria->jsonSerialize());
     }
 }

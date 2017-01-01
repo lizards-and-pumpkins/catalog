@@ -16,8 +16,10 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
  * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelations
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  */

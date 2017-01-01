@@ -2,18 +2,30 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperation;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\UnsupportedSearchCriteriaOperationException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\Util\Storage\Clearable;
@@ -39,9 +51,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $selectedFilters = array_filter($queryOptions->getFilterSelection());
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
-        $allDocuments = $this->getSearchDocuments();
+        $allDocuments = array_values($this->getSearchDocuments());
         $context = $queryOptions->getContext();
-        $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
+        $matchingDocuments = $this->filterDocumentsMatchingCriteria($criteria, $context, ...$allDocuments);
 
         $facetFieldCollection = $this->createFacetFieldCollection(
             $originalCriteria,
@@ -165,7 +177,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $selectedFiltersExceptCurrentOne = array_diff_key($selectedFilters, [$filterCode => []]);
 
             $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFiltersExceptCurrentOne);
-            $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
+            $matchingDocuments = $this->filterDocumentsMatchingCriteria($criteria, $context, ...$allDocuments);
 
             $facetFields = $this->createFacetFieldsFromSearchDocuments(
                 [$filterCode],
@@ -453,24 +465,91 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     }
 
     /**
-     * @param SearchDocument[] $documents
      * @param SearchCriteria $criteria
      * @param Context $context
+     * @param SearchDocument[] ...$documents
      * @return SearchDocument[]
      */
     private function filterDocumentsMatchingCriteria(
-        array $documents,
         SearchCriteria $criteria,
-        Context $context
+        Context $context,
+        SearchDocument ...$documents
     ) : array {
         return array_filter($documents, function (SearchDocument $document) use ($criteria, $context) {
-            return $criteria->matches($document) && $context->contains($document->getContext());
+            $criteriaJson = json_encode($criteria);
+            $criteriaArray = json_decode($criteriaJson, true);
+
+            return $this->isSearchDocumentMatchesCriteria($document, $criteriaArray) &&
+                   $context->contains($document->getContext());
         });
     }
 
     /**
+     * @param SearchDocument $document
+     * @param mixed[] $criteriaArray
+     * @return bool
+     */
+    private function isSearchDocumentMatchesCriteria(SearchDocument $document, array $criteriaArray) : bool
+    {
+        if (isset($criteriaArray['condition'])) {
+            $subOperationResults = array_map(function (array $subCriteriaArray) use ($document) {
+                return $this->isSearchDocumentMatchesCriteria($document, $subCriteriaArray);
+            }, $criteriaArray['criteria']);
+
+            return $this->computeCompositeCriterion($criteriaArray['condition'], ...$subOperationResults);
+        }
+
+        $operation = $this->getOperation($criteriaArray['operation'], $criteriaArray);
+
+        return $operation->matches($document);
+    }
+
+    private function computeCompositeCriterion(string $condition, bool ...$subOperationResults) : bool
+    {
+        if (strcasecmp($condition, CompositeSearchCriterion::AND_CONDITION) === 0) {
+            return array_reduce($subOperationResults, function ($carry, $operationResult) {
+                if (null === $carry) {
+                    return $operationResult;
+                }
+
+                return $carry && $operationResult;
+            }, null);
+        }
+
+        if (strcasecmp($condition, CompositeSearchCriterion::OR_CONDITION) === 0) {
+            return array_reduce($subOperationResults, function ($carry, $operationResult) {
+                if (null === $carry) {
+                    return $operationResult;
+                }
+
+                return $carry || $operationResult;
+            }, null);
+        }
+
+        throw new InvalidCriterionConditionException(sprintf('Unknown search criteria condition "%s".', $condition));
+    }
+
+    /**
+     * @param string $operation
+     * @param string[] $data
+     * @return IntegrationTestSearchEngineOperation
+     */
+    private function getOperation(string $operation, array $data) : IntegrationTestSearchEngineOperation
+    {
+        $className = __NAMESPACE__ . '\\Operation\\IntegrationTestSearchEngineOperation' . $operation;
+
+        if (! class_exists($className)) {
+            throw new UnsupportedSearchCriteriaOperationException(
+                sprintf('Unsupported integration test search engine criterion operation "%s".', $operation)
+            );
+        }
+
+        return new $className($data);
+    }
+
+    /**
      * @param SortBy $sortBy
-     * @param SearchDocument[] $unsortedDocuments
+     * @param SearchDocument[] ...$unsortedDocuments
      * @return SearchDocument[]
      */
     private function getSortedDocuments(SortBy $sortBy, SearchDocument ...$unsortedDocuments) : array
