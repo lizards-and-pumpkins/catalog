@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -106,9 +107,10 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
+        $searchCriteria = new SearchCriterionFullText($queryString);
         $queryOptions = $this->createQueryOptions($request);
 
-        $data = $this->productSearchService->query($queryString, $queryOptions);
+        $data = $this->productSearchService->query($searchCriteria, $queryOptions);
 
         $body = json_encode($data);
         $headers = [];

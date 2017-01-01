@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -16,7 +15,6 @@ use LizardsAndPumpkins\ProductSearch\QueryOptions;
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  */
 class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,6 +39,11 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
     private $service;
 
     /**
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSearchCriteria;
+
+    /**
      * @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubQueryOptions;
@@ -57,27 +60,24 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
             $this->stubProductJsonService
         );
 
+        $this->stubSearchCriteria = $this->createMock(SearchCriteria::class);
         $this->stubQueryOptions = $this->createMock(QueryOptions::class);
     }
 
     public function testReturnsAnEmptyResultIfNoProductsMatchQueryString()
     {
-        $queryString = 'foo';
-
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([]);
 
         $this->stubDataPoolReader->method('getProductIdsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
-        $result = $this->service->query($queryString, $this->stubQueryOptions);
+        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
 
         $this->assertSame(['total' => 0, 'data' => []], $result);
     }
 
     public function testReturnsSetOfMatchingProductsData()
     {
-        $queryString = 'foo';
-
         $stubProductIds = [$this->createMock(ProductId::class), $this->createMock(ProductId::class)];
         $dummyProductDataArray = [['Dummy product A data'], ['Dummy product B data']];
 
@@ -88,23 +88,21 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
         $this->stubProductJsonService->method('get')->willReturn($dummyProductDataArray);
 
-        $result = $this->service->query($queryString, $this->stubQueryOptions);
+        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
 
         $this->assertSame(['total' => count($dummyProductDataArray), 'data' => $dummyProductDataArray], $result);
     }
 
     public function testAppliesGlobalProductListingCriteriaToCriteriaSentToDataPool()
     {
-        $queryString = 'foo';
-
         $expectedCriteria = CompositeSearchCriterion::createAnd(
-            new SearchCriterionFullText('foo'),
+            $this->stubSearchCriteria,
             $this->stubGlobalProductListingCriteria
         );
 
         $this->stubDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria')
             ->with($expectedCriteria);
 
-        $this->service->query($queryString, $this->stubQueryOptions);
+        $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
     }
 }

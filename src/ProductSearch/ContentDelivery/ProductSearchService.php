@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
@@ -39,16 +38,13 @@ class ProductSearchService
     }
 
     /**
-     * @param string $queryString
+     * @param SearchCriteria $searchCriteria
      * @param QueryOptions $queryOptions
      * @return array[]
      */
-    public function query(string $queryString, QueryOptions $queryOptions) : array
+    public function query(SearchCriteria $searchCriteria, QueryOptions $queryOptions) : array
     {
-        $criteria = CompositeSearchCriterion::createAnd(
-            new SearchCriterionFullText($queryString),
-            $this->globalProductListingCriteria
-        );
+        $criteria = CompositeSearchCriterion::createAnd($searchCriteria, $this->globalProductListingCriteria);
         $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
 
         $productIds = $searchEngineResponse->getProductIds();
