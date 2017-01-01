@@ -24,6 +24,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
@@ -337,7 +338,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $searchEngineResponse = $this->searchEngine->queryFullText('bar', $this->createStubQueryOptions());
+        $criteria = new SearchCriterionFullText('bar');
+
+        $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productAId, $result, '', false, false);

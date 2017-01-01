@@ -73,15 +73,6 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         return $this->createSearchEngineResponse($facetFieldCollection, $sortedDocuments, $rowsPerPage, $pageNumber);
     }
 
-    final public function queryFullText(string $searchString, QueryOptions $queryOptions) : SearchEngineResponse
-    {
-        $criteriaBuilder = $this->getSearchCriteriaBuilder();
-        $searchableFields = $this->getSearchableFields();
-        $criteria = $criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString($searchableFields, $searchString);
-
-        return $this->query($criteria, $queryOptions);
-    }
-
     /**
      * @param SearchCriteria $originalCriteria
      * @param array[] $filters

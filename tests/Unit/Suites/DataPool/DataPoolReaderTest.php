@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\DataPool;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
@@ -157,9 +158,10 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $stubQueryOptions = $this->createMock(QueryOptions::class);
 
         $testQueryString = 'foo';
+        $expectedCriteria = new SearchCriterionFullText($testQueryString);
 
-        $this->getMockSearchEngine()->expects($this->once())->method('queryFullText')
-            ->with($testQueryString, $stubQueryOptions);
+        $this->getMockSearchEngine()->expects($this->once())->method('query')
+            ->with($expectedCriteria, $stubQueryOptions);
 
         $this->dataPoolReader->getSearchResultsMatchingString($testQueryString, $stubQueryOptions);
     }
