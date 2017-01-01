@@ -152,20 +152,6 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->dataPoolReader->getSearchResultsMatchingCriteria($mockCriteria, $stubQueryOptions);
     }
 
-    public function testFullTextQueriesAreDelegatedToSearchEngine()
-    {
-        /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
-        $stubQueryOptions = $this->createMock(QueryOptions::class);
-
-        $testQueryString = 'foo';
-        $expectedCriteria = new SearchCriterionFullText($testQueryString);
-
-        $this->getMockSearchEngine()->expects($this->once())->method('query')
-            ->with($expectedCriteria, $stubQueryOptions);
-
-        $this->dataPoolReader->getSearchResultsMatchingString($testQueryString, $stubQueryOptions);
-    }
-
     public function testItDelegatesUrlKeyReadsToUrlKeyStorage()
     {
         $expected = ['test.html'];

@@ -65,7 +65,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $stubSearchEngineResponse->method('getProductIds')->willReturn($stubProductIds);
         $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn(count($dummyProductDataArray));
 
-        $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
         $this->stubProductJsonService->method('get')->willReturn($dummyProductDataArray);
 
         $result = $this->service->query($queryString, $stubQueryOptions);

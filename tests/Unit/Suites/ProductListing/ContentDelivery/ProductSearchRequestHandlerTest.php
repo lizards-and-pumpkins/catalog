@@ -64,7 +64,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
 
         $mockDataPoolReader = $this->createMock(DataPoolReader::class);
-        $mockDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
+        $mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
         $mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
         ]);

@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -156,8 +157,9 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $criteria = new SearchCriterionFullText($queryString);
 
-        return $this->dataPoolReader->getSearchResultsMatchingString($queryString, $queryOptions);
+        return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
     }
 
     private function getPageMetaInfo() : ProductSearchResultMetaSnippetContent

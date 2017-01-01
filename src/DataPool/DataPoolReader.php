@@ -8,7 +8,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -174,14 +173,5 @@ class DataPoolReader
         $searchResult = $this->searchEngine->query($criteria, $queryOptions);
 
         return array_values($searchResult->getProductIds());
-    }
-
-    public function getSearchResultsMatchingString(
-        string $queryString,
-        QueryOptions $queryOptions
-    ) : SearchEngineResponse {
-
-        $criteria = new SearchCriterionFullText($queryString);
-        return $this->searchEngine->query($criteria, $queryOptions);
     }
 }

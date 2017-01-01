@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
@@ -33,7 +34,9 @@ class ProductSearchService
      */
     public function query(string $queryString, QueryOptions $queryOptions) : array
     {
-        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingString($queryString, $queryOptions);
+        $criteria = new SearchCriterionFullText($queryString);
+        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
+
         $productIds = $searchEngineResponse->getProductIds();
 
         if ([] === $productIds) {
