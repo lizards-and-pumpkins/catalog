@@ -127,6 +127,15 @@ class IntegrationTestSearchEngineOperationLikeTest extends \PHPUnit_Framework_Te
         $this->assertTrue($this->operation->matches($stubSearchDocument));
     }
 
+    public function testIgnoresDocumentFieldsWithNonStringValues()
+    {
+        $stubSearchDocumentIntegerField = $this->createStubSearchDocumentField($this->testFieldName, [100]);
+
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentIntegerField);
+
+        $this->assertFalse($this->operation->matches($stubSearchDocument));
+    }
+
     /**
      * @return array[]
      */

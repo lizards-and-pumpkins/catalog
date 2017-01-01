@@ -8,6 +8,8 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
@@ -53,6 +55,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $productListingPageRequest;
 
     /**
+     * @var SearchCriteria
+     */
+    private $globalProductListingCriteria;
+
+    /**
      * @var SortBy
      */
     private $defaultSortBy;
@@ -69,6 +76,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
+        SearchCriteria $globalProductListingCriteria,
         SortBy $defaultSortBy,
         SortBy ...$availableSortBy
     ) {
@@ -78,6 +86,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->facetFiltersToIncludeInResult = $facetFiltersToIncludeInResult;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
+        $this->globalProductListingCriteria = $globalProductListingCriteria;
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
     }
@@ -157,7 +166,10 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $criteria = new SearchCriterionFullText($queryString);
+        $criteria = CompositeSearchCriterion::createAnd(
+            new SearchCriterionFullText($queryString),
+            $this->globalProductListingCriteria
+        );
 
         return $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
     }

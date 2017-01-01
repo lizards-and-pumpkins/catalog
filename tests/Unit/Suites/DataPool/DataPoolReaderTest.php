@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\DataPool;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
@@ -144,12 +143,12 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
         $stubQueryOptions = $this->createMock(QueryOptions::class);
 
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
-        $mockCriteria = $this->createMock(SearchCriteria::class);
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
+        $stubCriteria = $this->createMock(SearchCriteria::class);
 
-        $this->getMockSearchEngine()->expects($this->once())->method('query')->with($mockCriteria, $stubQueryOptions);
+        $this->getMockSearchEngine()->expects($this->once())->method('query')->with($stubCriteria, $stubQueryOptions);
 
-        $this->dataPoolReader->getSearchResultsMatchingCriteria($mockCriteria, $stubQueryOptions);
+        $this->dataPoolReader->getSearchResultsMatchingCriteria($stubCriteria, $stubQueryOptions);
     }
 
     public function testItDelegatesUrlKeyReadsToUrlKeyStorage()

@@ -97,9 +97,11 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
 
         $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
+        $outOfStockProductName = 'Adilette Out Of Stock';
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
+        $this->assertNotContains($outOfStockProductName, $body);
 
         return $page;
     }

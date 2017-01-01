@@ -43,6 +43,7 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
     {
         return new ProductSearchService(
             $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createGlobalProductListingCriteria(),
             $this->getMasterFactory()->createProductJsonService()
         );
     }

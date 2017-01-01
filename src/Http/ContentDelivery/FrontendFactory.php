@@ -323,6 +323,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest(),
+            $this->getMasterFactory()->createGlobalProductListingCriteria(),
             $this->getMasterFactory()->getProductSearchDefaultSortBy(),
             ...$this->getMasterFactory()->getProductSearchAvailableSortBy()
         );

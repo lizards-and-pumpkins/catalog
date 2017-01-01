@@ -40,7 +40,7 @@ class IntegrationTestSearchEngineOperationFullText implements IntegrationTestSea
     private function hasValueMatchingOneOfFieldValues(SearchDocumentField $searchDocumentField) : bool
     {
         foreach ($searchDocumentField->getValues() as $value) {
-            if (stripos($value, $this->fieldValue) !== false) {
+            if (is_string($value) && stripos($value, $this->fieldValue) !== false) {
                 return true;
             }
         }

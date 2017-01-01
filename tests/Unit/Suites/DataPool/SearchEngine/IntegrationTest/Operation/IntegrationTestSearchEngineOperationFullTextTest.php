@@ -104,6 +104,19 @@ class IntegrationTestSearchEngineOperationFullTextTest extends \PHPUnit_Framewor
         $this->assertTrue($this->operation->matches($stubSearchDocument));
     }
 
+    public function testIgnoresDocumentFieldsWithNonStringValues()
+    {
+        $stubSearchDocumentIntegerField = $this->createStubSearchDocumentField('bar', [100]);
+        $stubSearchDocumentStringField = $this->createStubSearchDocumentField('foo', [$this->testFiledValue]);
+
+        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields(
+            $stubSearchDocumentIntegerField,
+            $stubSearchDocumentStringField
+        );
+
+        $this->assertTrue($this->operation->matches($stubSearchDocument));
+    }
+
     /**
      * @return array[]
      */
