@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
@@ -40,7 +41,7 @@ class ProductSearchService
     /**
      * @param SearchCriteria $searchCriteria
      * @param QueryOptions $queryOptions
-     * @return array[]
+     * @return mixed[]
      */
     public function query(SearchCriteria $searchCriteria, QueryOptions $queryOptions) : array
     {
@@ -50,12 +51,13 @@ class ProductSearchService
         $productIds = $searchEngineResponse->getProductIds();
 
         if ([] === $productIds) {
-            return ['total' => 0, 'data' => []];
+            return ['total' => 0, 'data' => [], 'facets' => []];
         }
 
         return [
             'total' => $searchEngineResponse->getTotalNumberOfResults(),
-            'data' => $this->productJsonService->get($queryOptions->getContext(), ...$productIds)
+            'data' => $this->productJsonService->get($queryOptions->getContext(), ...$productIds),
+            'facets' => $searchEngineResponse->getFacetFieldCollection()->jsonSerialize(),
         ];
     }
 }
