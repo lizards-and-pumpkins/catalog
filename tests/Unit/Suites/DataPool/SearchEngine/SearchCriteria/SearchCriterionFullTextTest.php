@@ -9,9 +9,42 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
  */
 class SearchCriterionFullTextTest extends \PHPUnit_Framework_TestCase
 {
-    public function testImplementsSearchCriteriaInterface()
+    private $testFieldValue = 'bar';
+
+    /**
+     * @var SearchCriterionFullText
+     */
+    private $criteria;
+
+    protected function setUp()
     {
-        $this->assertInstanceOf(SearchCriteria::class, new SearchCriterionFullText());
+        $this->criteria = new SearchCriterionFullText($this->testFieldValue);
     }
 
+    public function testImplementsSearchCriteriaInterface()
+    {
+        $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
+    }
+
+    public function testItImplementsJsonSerializable()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
+    }
+
+    public function testThrowsAnExceptionIfFieldValueIsNonString()
+    {
+        $this->expectException(\TypeError::class);
+        new SearchCriterionFullText(1);
+    }
+
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    {
+        $expectation = [
+            'fieldName'  => '',
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'FullText'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->jsonSerialize());
+    }
 }
