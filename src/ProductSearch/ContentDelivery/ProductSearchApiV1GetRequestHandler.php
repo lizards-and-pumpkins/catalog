@@ -116,7 +116,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private function getNumberOfProductPerPage(HttpRequest $request) : int
     {
         if ($request->hasQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER)) {
-            return (int) ($request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER));
+            return (int) $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
         }
 
         return $this->defaultNumberOfProductPerPage;
@@ -125,7 +125,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private function getPageNumber(HttpRequest $request) : int
     {
         if ($request->hasQueryParameter(self::PAGE_NUMBER_PARAMETER)) {
-            return (int) ($request->getQueryParameter(self::PAGE_NUMBER_PARAMETER));
+            return (int) $request->getQueryParameter(self::PAGE_NUMBER_PARAMETER);
         }
 
         return 0;
