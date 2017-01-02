@@ -21,7 +21,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\UnsupportedSearchCriteriaOperationException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
@@ -36,8 +38,6 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @return SearchDocument[]
      */
     abstract protected function getSearchDocuments() : array;
-
-    abstract protected function getSearchCriteriaBuilder() : SearchCriteriaBuilder;
 
     abstract protected function getFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry;
 
@@ -190,8 +190,25 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createOptionValuesCriteriaArray(string $filterCode, array $filterOptionValues) : array
     {
         return array_map(function ($filterOptionValue) use ($filterCode) {
-            return $this->getSearchCriteriaBuilder()->fromFieldNameAndValue($filterCode, $filterOptionValue);
+            return $this->fromFieldNameAndValue($filterCode, $filterOptionValue);
         }, $filterOptionValues);
+    }
+
+    private function fromFieldNameAndValue(string $fieldName, string $fieldValue) : SearchCriteria
+    {
+        $facetFieldTransformationRegistry = $this->getFacetFieldTransformationRegistry();
+
+        if ($facetFieldTransformationRegistry->hasTransformationForCode($fieldName)) {
+            $transformation = $facetFieldTransformationRegistry->getTransformationByCode($fieldName);
+            $range = $transformation->decode($fieldValue);
+
+            $criterionFrom = new SearchCriterionGreaterOrEqualThan($fieldName, $range->from());
+            $criterionTo = new SearchCriterionLessOrEqualThan($fieldName, $range->to());
+
+            return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
+        }
+
+        return new SearchCriterionEqual($fieldName, $fieldValue);
     }
 
     final protected function getSearchDocumentIdentifier(SearchDocument $searchDocument) : string
@@ -442,15 +459,15 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     private function getRangedFilterCode(FacetFilterRange $range, string $attributeCode) : string
     {
-        $transformationRegistry = $this->getFacetFieldTransformationRegistry();
+        $facetFieldTransformationRegistry = $this->getFacetFieldTransformationRegistry();
 
-        if (!$transformationRegistry->hasTransformationForCode($attributeCode)) {
+        if (! $facetFieldTransformationRegistry->hasTransformationForCode($attributeCode)) {
             throw new NoFacetFieldTransformationRegisteredException(
                 sprintf('No facet field transformation is registered for "%s" attribute.', $attributeCode)
             );
         }
 
-        $transformation = $transformationRegistry->getTransformationByCode($attributeCode);
+        $transformation = $facetFieldTransformationRegistry->getTransformationByCode($attributeCode);
 
         return $transformation->encode($range);
     }

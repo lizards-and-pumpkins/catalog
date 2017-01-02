@@ -804,4 +804,26 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedValues, $facetFields[0]->getValues());
     }
+
+    public function testAppliesFacetFieldTransformationsToSelectedFilters()
+    {
+        $fieldCode = 'price';
+        $fieldValue = '10-20';
+
+        $mockFacetFieldTransformation = $this->createMock(FacetFieldTransformation::class);
+        $mockFacetFieldTransformation->expects($this->once())->method('decode')
+            ->willReturn(FacetFilterRange::create(10, 20));
+
+        $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(true);
+        $this->stubFacetFieldTransformationRegistry->method('getTransformationByCode')
+            ->willReturn($mockFacetFieldTransformation);
+
+        $criteria = new SearchCriterionAnything();
+
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult();
+        $selectedFilters = [$fieldCode => [$fieldValue]];
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
+
+        $this->searchEngine->query($criteria, $queryOptions);
+    }
 }

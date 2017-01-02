@@ -40,7 +40,6 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\UnitTestFactory
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder

@@ -27,7 +27,6 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
@@ -1018,14 +1017,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             ProductSearchResultMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
-        );
-    }
-
-    public function createSearchCriteriaBuilder() : SearchCriteriaBuilder
-    {
-        return new SearchCriteriaBuilder(
-            $this->getMasterFactory()->getFacetFieldTransformationRegistry(),
-            $this->getMasterFactory()->createGlobalProductListingCriteria()
         );
     }
 

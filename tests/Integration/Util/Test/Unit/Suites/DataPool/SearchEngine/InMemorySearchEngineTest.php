@@ -6,8 +6,6 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\AbstractSearchEngineTest;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\InMemorySearchEngine
@@ -25,7 +23,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnyth
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperationLessThan
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperationNotEqual
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan
@@ -34,7 +32,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnyth
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessThan
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLike
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
@@ -57,19 +54,7 @@ class InMemorySearchEngineTest extends AbstractSearchEngineTest
     final protected function createSearchEngineInstance(
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry
     ) : SearchEngine {
-        $testGlobalProductListingCriteria = new SearchCriterionAnything();
-
-        $searchCriteriaBuilder = new SearchCriteriaBuilder(
-            $facetFieldTransformationRegistry,
-            $testGlobalProductListingCriteria
-        );
-
         $testSearchableFields = ['baz'];
-
-        return new InMemorySearchEngine(
-            $searchCriteriaBuilder,
-            $facetFieldTransformationRegistry,
-            ...$testSearchableFields
-        );
+        return new InMemorySearchEngine($facetFieldTransformationRegistry, ...$testSearchableFields);
     }
 }
