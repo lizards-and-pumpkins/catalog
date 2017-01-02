@@ -6,15 +6,12 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
@@ -32,22 +29,15 @@ class ProductListingPageContentBuilder
     private $translatorRegistry;
 
     /**
-     * @var ProductJsonService
-     */
-    private $productJsonService;
-
-    /**
      * @var SearchFieldToRequestParamMap
      */
     private $searchFieldToRequestParamMap;
 
     public function __construct(
-        ProductJsonService $productJsonService,
         PageBuilder $pageBuilder,
         SearchFieldToRequestParamMap $searchFieldToRequestParamMap,
         TranslatorRegistry $translatorRegistry
     ) {
-        $this->productJsonService = $productJsonService;
         $this->pageBuilder = $pageBuilder;
         $this->translatorRegistry = $translatorRegistry;
         $this->searchFieldToRequestParamMap = $searchFieldToRequestParamMap;
@@ -57,7 +47,7 @@ class ProductListingPageContentBuilder
      * @param PageMetaInfoSnippetContent $metaInfo
      * @param Context $context
      * @param mixed[] $keyGeneratorParams
-     * @param SearchEngineResponse $searchEngineResponse
+     * @param ProductSearchResult $productSearchResult
      * @param ProductsPerPage $productsPerPage
      * @param SortBy $selectedSortBy
      * @param SortBy[] $availableSortBy
@@ -67,17 +57,14 @@ class ProductListingPageContentBuilder
         PageMetaInfoSnippetContent $metaInfo,
         Context $context,
         array $keyGeneratorParams,
-        SearchEngineResponse $searchEngineResponse,
+        ProductSearchResult $productSearchResult,
         ProductsPerPage $productsPerPage,
         SortBy $selectedSortBy,
         SortBy ...$availableSortBy
     ) : HttpResponse {
-        $productIds = $searchEngineResponse->getProductIds();
-        $facetFieldCollection = $searchEngineResponse->getFacetFieldCollection();
-
-        $this->addFilterNavigationSnippetToPageBuilder($facetFieldCollection);
-        $this->addProductsInListingToPageBuilder($context, ...$productIds);
-        $this->addPaginationSnippetsToPageBuilder($searchEngineResponse, $productsPerPage);
+        $this->addFilterNavigationSnippetToPageBuilder($productSearchResult);
+        $this->addProductsInListingToPageBuilder($productSearchResult);
+        $this->addPaginationSnippetsToPageBuilder($productSearchResult, $productsPerPage);
         $this->addSortOrderSnippetsToPageBuilder($selectedSortBy, ...$availableSortBy);
         $this->addTranslationsToPageBuilder($context);
         $this->addRobotsMetaTagSnippetToHeadContainer();
@@ -85,9 +72,9 @@ class ProductListingPageContentBuilder
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
     }
 
-    private function addFilterNavigationSnippetToPageBuilder(FacetFieldCollection $facetFieldCollection)
+    private function addFilterNavigationSnippetToPageBuilder(ProductSearchResult $productSearchResult)
     {
-        $facetFields = $facetFieldCollection->jsonSerialize();
+        $facetFields = $productSearchResult->getFacetFieldsCollection()->jsonSerialize();
         $externalFacetFields = count($facetFields) > 0 ?
             $this->replaceInternalWithExternalFieldNames($facetFields) :
             [];
@@ -108,19 +95,18 @@ class ProductListingPageContentBuilder
         }, []);
     }
 
-    private function addProductsInListingToPageBuilder(Context $context, ProductId ...$productIds)
+    private function addProductsInListingToPageBuilder(ProductSearchResult $productSearchResult)
     {
-        $productData = $this->productJsonService->get($context, ...$productIds);
-        $this->addDynamicSnippetToPageBuilder('product_grid', json_encode($productData));
+        $this->addDynamicSnippetToPageBuilder('product_grid', json_encode($productSearchResult->getData()));
     }
 
     private function addPaginationSnippetsToPageBuilder(
-        SearchEngineResponse $searchEngineResponse,
+        ProductSearchResult $productSearchResult,
         ProductsPerPage $productsPerPage
     ) {
         $this->addDynamicSnippetToPageBuilder(
             'total_number_of_results',
-            $searchEngineResponse->getTotalNumberOfResults()
+            $productSearchResult->getTotalNumberOfResults()
         );
         $this->addDynamicSnippetToPageBuilder('products_per_page', json_encode($productsPerPage));
     }

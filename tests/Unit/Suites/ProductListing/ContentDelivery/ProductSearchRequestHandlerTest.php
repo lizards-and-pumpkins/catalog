@@ -9,19 +9,16 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
@@ -31,11 +28,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @var ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductListingPageRequest;
-
-    /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubGlobalProductListingCriteria;
 
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
@@ -62,10 +54,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubDataPoolReader() : DataPoolReader
     {
-        /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
-        $stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
-        $stubSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
         $pageSnippetCodes = ['child-snippet1'];
 
         $testMetaInfoSnippetJson = json_encode(ProductSearchResultMetaSnippetContent::create(
@@ -132,7 +120,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
-        $this->stubGlobalProductListingCriteria = $this->createMock(SearchCriteria::class);
+        $stubProductSearchService = $this->createMock(ProductSearchService::class);
 
         $stubDefaultSortBy = $this->createMock(SortBy::class);
 
@@ -143,7 +131,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubFacetFilterRequest,
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest,
-            $this->stubGlobalProductListingCriteria,
+            $stubProductSearchService,
             $stubDefaultSortBy
         );
 
@@ -248,22 +236,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockProductListingPageRequest->expects($this->once())->method('createSortByForRequest')
             ->willReturn($this->createMock(SortBy::class));
-
-        $this->requestHandler->process($stubRequest);
-    }
-
-    /**
-     * @depends testTrueIsReturnedIfRequestCanBeProcessed
-     */
-    public function testAppliesGlobalProductListingCriteriaToCriteriaSentToDataPool(HttpRequest $stubRequest)
-    {
-        $expectedCriteria = CompositeSearchCriterion::createAnd(
-            new SearchCriterionFullText('foo'),
-            $this->stubGlobalProductListingCriteria
-        );
-
-        $this->stubDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria')
-            ->with($expectedCriteria);
 
         $this->requestHandler->process($stubRequest);
     }

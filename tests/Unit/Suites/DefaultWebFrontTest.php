@@ -11,7 +11,6 @@ use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 
 /**
  * @covers \LizardsAndPumpkins\DefaultWebFront
@@ -134,18 +133,5 @@ class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockHttpResponse->expects($this->once())->method('send');
         $this->webFront->run();
-    }
-
-    public function testSampleMasterFactoryIsReturned()
-    {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
-        $stubHttpRequest = $this->createMock(HttpRequest::class);
-        $stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('foo');
-
-        $webFront = new DefaultWebFront($stubHttpRequest, new UnitTestFactory($this));
-        $webFront->registerFactory(new UnitTestFactory($this));
-        $webFront->processRequest();
-
-        $this->assertInstanceOf(SampleMasterFactory::class, $webFront->getMasterFactory());
     }
 }

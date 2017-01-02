@@ -30,6 +30,8 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRender
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
+use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
@@ -85,6 +87,11 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
  * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -98,6 +105,8 @@ class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new UnitTestFactory($this));
+        $masterFactory->register(new RestApiFactory());
+        $masterFactory->register(new ProductSearchFactory());
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,

@@ -188,7 +188,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $masterFactory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($masterFactory);
 
-        $website = new DefaultWebFront($request, $implementationSpecificFactory);
+        $website = new InjectableDefaultWebFront($request, $masterFactory, $implementationSpecificFactory);
 
         $response = $website->processRequest();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);

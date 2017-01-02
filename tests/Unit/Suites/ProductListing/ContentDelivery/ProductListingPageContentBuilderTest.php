@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
-use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
@@ -50,9 +48,9 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     private $stubKeyGeneratorParams = [];
 
     /**
-     * @var SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSearchResult|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubSearchEngineResponse;
+    private $stubProductSearchResult;
 
     /**
      * @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject
@@ -78,11 +76,6 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
      * @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubFacetFieldCollection;
-
-    /**
-     * @var ProductJsonService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubProductJsonService;
 
     /**
      * @var SearchFieldToRequestParamMap|\PHPUnit_Framework_MockObject_MockObject
@@ -137,23 +130,20 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductSearchResult|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubSearchEngineResponse() : SearchEngineResponse
+    private function createStubProductSearchResult() : ProductSearchResult
     {
-        $stubProductId = $this->createMock(ProductId::class);
         $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
 
-        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
-        $stubSearchEngineResponse->method('getProductIds')->willReturn([$stubProductId]);
-        $stubSearchEngineResponse->method('getFacetFieldCollection')->willReturn($this->stubFacetFieldCollection);
+        $stubSearchEngineResponse = $this->createMock(ProductSearchResult::class);
+        $stubSearchEngineResponse->method('getFacetFieldsCollection')->willReturn($this->stubFacetFieldCollection);
 
         return $stubSearchEngineResponse;
     }
 
     protected function setUp()
     {
-        $this->stubProductJsonService = $this->createMock(ProductJsonService::class);
         $this->mockPageBuilder = $this->createMockPageBuilder();
 
         $class = SearchFieldToRequestParamMap::class;
@@ -166,7 +156,6 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
         $this->pageContentBuilder = new ProductListingPageContentBuilder(
-            $this->stubProductJsonService,
             $this->mockPageBuilder,
             $this->stubSearchFieldToRequestParamMap,
             $stubTranslatorRegistry
@@ -177,20 +166,18 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $this->stubSelectedSortBy = $this->createMock(SortBy::class);
         $this->stubListOfAvailableSortBy = [$this->createMock(SortBy::class)];
-        $this->stubSearchEngineResponse = $this->createStubSearchEngineResponse();
+        $this->stubProductSearchResult = $this->createStubProductSearchResult();
     }
 
     public function testPageIsBuilt()
     {
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
         $this->mockPageBuilder->expects($this->once())->method('buildPage');
 
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -199,14 +186,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductsInListingAreAddedToPageBuilder()
     {
-        $this->stubProductJsonService->method('get')->willReturn([]);
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -219,13 +203,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterNavigationSnippetIsAddedToPageBuilder()
     {
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -245,7 +227,6 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             'price' => ['a', 'b', 'c']
         ];
         
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
         $this->stubFacetFieldCollection->method('jsonSerialize')->willReturn($dummyFacetData);
         $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')
             ->with('price_with_tax')->willReturn('price');
@@ -254,7 +235,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -267,13 +248,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testTotalNumberOfResultsSnippetIsAddedToPageBuilder()
     {
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -286,13 +265,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProductPerPageSnippetIsAddedToPageBuilder()
     {
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -305,13 +282,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testAddsAvailableSortByListSnippetToPageBuilder()
     {
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -331,14 +306,11 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
         $this->stubSelectedSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
         $this->stubSelectedSortBy->method('jsonSerialize')->willReturn($selectedSortByRepresentation);
 
-        $this->stubProductJsonService->method('get')->willReturn([]);
-        $this->stubFacetFieldCollection->method('getFacetFields')->willReturn([]);
-
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -360,7 +332,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
@@ -380,7 +352,7 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
             $this->stubKeyGeneratorParams,
-            $this->stubSearchEngineResponse,
+            $this->stubProductSearchResult,
             $this->stubProductsPerPage,
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
