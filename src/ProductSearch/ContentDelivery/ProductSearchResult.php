@@ -60,7 +60,7 @@ class ProductSearchResult implements \JsonSerializable
         return $this->productsData;
     }
 
-    public function getFacetFieldsCollection() : FacetFieldCollection
+    public function getFacetFieldCollection() : FacetFieldCollection
     {
         return $this->facetFieldCollection;
     }

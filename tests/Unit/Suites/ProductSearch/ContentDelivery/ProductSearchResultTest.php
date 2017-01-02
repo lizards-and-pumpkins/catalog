@@ -67,6 +67,6 @@ class ProductSearchResultTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsFacetFieldCollection()
     {
-        $this->assertSame($this->stubFacetFieldCollection, $this->searchResult->getFacetFieldsCollection());
+        $this->assertSame($this->stubFacetFieldCollection, $this->searchResult->getFacetFieldCollection());
     }
 }

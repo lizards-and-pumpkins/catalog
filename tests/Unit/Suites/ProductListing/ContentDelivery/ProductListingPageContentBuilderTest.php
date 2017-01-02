@@ -136,10 +136,10 @@ class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
 
-        $stubSearchEngineResponse = $this->createMock(ProductSearchResult::class);
-        $stubSearchEngineResponse->method('getFacetFieldsCollection')->willReturn($this->stubFacetFieldCollection);
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
+        $stubProductSearchResult->method('getFacetFieldCollection')->willReturn($this->stubFacetFieldCollection);
 
-        return $stubSearchEngineResponse;
+        return $stubProductSearchResult;
     }
 
     protected function setUp()

@@ -74,7 +74,7 @@ class ProductListingPageContentBuilder
 
     private function addFilterNavigationSnippetToPageBuilder(ProductSearchResult $productSearchResult)
     {
-        $facetFields = $productSearchResult->getFacetFieldsCollection()->jsonSerialize();
+        $facetFields = $productSearchResult->getFacetFieldCollection()->jsonSerialize();
         $externalFacetFields = count($facetFields) > 0 ?
             $this->replaceInternalWithExternalFieldNames($facetFields) :
             [];
