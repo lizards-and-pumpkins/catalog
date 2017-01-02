@@ -216,8 +216,6 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testDelegatesFetchingProductsToTheProductSearchService()
     {
-        $testProductData = ['total' => 1, 'data' => ['Dummy data']];
-
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
@@ -229,14 +227,15 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, 'bar'],
         ]);
 
-        $this->mockProductSearchService->expects($this->once())->method('query')->willReturn($testProductData);
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
+        $this->mockProductSearchService->expects($this->once())->method('query')->willReturn($stubProductSearchResult);
 
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
         $response = $this->requestHandler->process($this->stubRequest);
 
-        $this->assertSame(json_encode($testProductData), $response->getBody());
+        $this->assertSame(json_encode($stubProductSearchResult), $response->getBody());
         $this->assertSame(HttpResponse::STATUS_OK, $response->getStatusCode());
     }
 
@@ -263,8 +262,10 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->stubDefaultSorBy
         );
 
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)->willReturn([]);
+            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -296,8 +297,10 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->stubDefaultSorBy
         );
 
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)->willReturn([]);
+            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -329,8 +332,10 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->stubDefaultSorBy
         );
 
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)->willReturn([]);
+            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -364,8 +369,10 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $expectedSortBy
         );
 
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)->willReturn([]);
+            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -395,8 +402,10 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $this->stubDefaultSorBy
         );
 
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)->willReturn([]);
+            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -433,8 +442,10 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $expectedSortBy
         );
 
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)->willReturn([]);
+            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
     }

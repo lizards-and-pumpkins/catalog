@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
@@ -38,26 +37,18 @@ class ProductSearchService
         $this->productJsonService = $productJsonService;
     }
 
-    /**
-     * @param SearchCriteria $searchCriteria
-     * @param QueryOptions $queryOptions
-     * @return mixed[]
-     */
-    public function query(SearchCriteria $searchCriteria, QueryOptions $queryOptions) : array
+    public function query(SearchCriteria $searchCriteria, QueryOptions $queryOptions) : ProductSearchResult
     {
         $criteria = CompositeSearchCriterion::createAnd($searchCriteria, $this->globalProductListingCriteria);
         $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
 
         $productIds = $searchEngineResponse->getProductIds();
+        $productData = $this->productJsonService->get($queryOptions->getContext(), ...$productIds);
 
-        if ([] === $productIds) {
-            return ['total' => 0, 'data' => [], 'facets' => []];
-        }
-
-        return [
-            'total' => $searchEngineResponse->getTotalNumberOfResults(),
-            'data' => $this->productJsonService->get($queryOptions->getContext(), ...$productIds),
-            'facets' => $searchEngineResponse->getFacetFieldCollection()->jsonSerialize(),
-        ];
+        return new ProductSearchResult(
+            $searchEngineResponse->getTotalNumberOfResults(),
+            $productData,
+            $searchEngineResponse->getFacetFieldCollection()
+        );
     }
 }

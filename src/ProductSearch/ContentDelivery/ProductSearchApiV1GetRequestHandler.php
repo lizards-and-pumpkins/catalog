@@ -110,9 +110,9 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         $searchCriteria = new SearchCriterionFullText($queryString);
         $queryOptions = $this->createQueryOptions($request);
 
-        $data = $this->productSearchService->query($searchCriteria, $queryOptions);
+        $searchResult = $this->productSearchService->query($searchCriteria, $queryOptions);
 
-        $body = json_encode($data);
+        $body = json_encode($searchResult);
         $headers = [];
 
         return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);

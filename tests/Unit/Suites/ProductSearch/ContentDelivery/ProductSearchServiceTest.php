@@ -16,6 +16,7 @@ use LizardsAndPumpkins\ProductSearch\QueryOptions;
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult
  */
 class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -74,17 +75,15 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
 
-        $this->assertSame(['total' => 0, 'data' => [], 'facets' => []], $result);
+        $this->assertSame(0, $result->getTotalNumberOfResults());
     }
 
     public function testReturnsSetOfMatchingProductsData()
     {
         $stubProductIds = [$this->createMock(ProductId::class), $this->createMock(ProductId::class)];
         $dummyProductDataArray = [['Dummy product A data'], ['Dummy product B data']];
-        $dummyFacetsArray = ['attribute-name' => ['value' => 'attribute-value', 'count' => 5]];
 
         $stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
-        $stubFacetFieldCollection->method('jsonSerialize')->willReturn($dummyFacetsArray);
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn($stubProductIds);
@@ -95,13 +94,13 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $this->stubProductJsonService->method('get')->willReturn($dummyProductDataArray);
 
         $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
-        $expectedResult = [
-            'total' => count($dummyProductDataArray),
-            'data' => $dummyProductDataArray,
-            'facets' => $dummyFacetsArray,
-        ];
+        $expectedResult = new ProductSearchResult(
+            count($dummyProductDataArray),
+            $dummyProductDataArray,
+            $stubFacetFieldCollection
+        );
 
-        $this->assertSame($expectedResult, $result);
+        $this->assertEquals($expectedResult, $result);
     }
 
     public function testAppliesGlobalProductListingCriteriaToCriteriaSentToDataPool()
