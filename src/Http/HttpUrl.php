@@ -23,6 +23,11 @@ class HttpUrl
     /**
      * @var string
      */
+    private $port;
+
+    /**
+     * @var string
+     */
     private $path;
 
     /**
@@ -33,13 +38,15 @@ class HttpUrl
     /**
      * @param string $schema
      * @param string $host
+     * @param string $port
      * @param string $path
      * @param string[] $query
      */
-    private function __construct(string $schema, string $host, string $path, array $query)
+    private function __construct(string $schema, string $host, string $port, string $path, array $query)
     {
         $this->schema = $schema;
         $this->host = $host;
+        $this->port = $port;
         $this->path = $path;
         $this->query = $query;
     }
@@ -49,7 +56,7 @@ class HttpUrl
         $components = parse_url($urlString);
 
         if (false === $components || !isset($components['host'])) {
-            throw new InvalidUrlStringException(sprintf('Can not parse URL from "%s"', $urlString));
+            throw new InvalidUrlStringException(sprintf('Host name can not be parsed from "%s" URL.', $urlString));
         }
 
         $host = idn_to_utf8($components['host']);
@@ -57,22 +64,24 @@ class HttpUrl
         $schema = $components['scheme'] ?? '';
         self::validateSchema($schema);
 
+        $port = (string) ($components['port'] ?? '');
         $path = $components['path'] ?? '';
 
         $queryString = $components['query'] ?? '';
         parse_str($queryString, $query);
 
-        return new self($schema, $host, $path, $query);
+        return new self($schema, $host, $port, $path, $query);
     }
 
     public function __toString() : string
     {
         $schema = $this->schema . ($this->schema !== '' ? ':' : '');
+        $port = '' === $this->port ? '' : ':' . $this->port;
 
         $queryString = http_build_query($this->query);
         $query = ('' !== $queryString ? '?' : '') . $queryString;
 
-        return $schema . '//' . $this->host . $this->path . $query;
+        return $schema . '//' . $this->host . $port . $this->path . $query;
     }
 
     public function getPathWithoutWebsitePrefix() : string
