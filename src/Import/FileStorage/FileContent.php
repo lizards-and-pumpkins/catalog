@@ -47,7 +47,7 @@ class FileContent
      * @param mixed $variable
      * @return bool
      */
-    private static function isCastableToString($variable): bool
+    private static function isCastableToString($variable) : bool
     {
         if (is_array($variable)) {
             return false;

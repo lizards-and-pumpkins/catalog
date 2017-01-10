@@ -24,6 +24,8 @@ use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
@@ -116,6 +118,8 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
+ * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -197,5 +201,12 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $testEvent = new CatalogWasImportedDomainEvent(DataVersion::fromVersionString('foo'));
         $result = $this->factory->createCatalogWasImportedDomainEventHandler($testEvent->toMessage());
         $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
+    }
+
+    public function testReturnsADecoratedShutdownWorkerDomainEventHandler()
+    {
+        $testEvent = new ShutdownWorkerDomainEvent('*');
+        $result = $this->factory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
+        $this->assertDecoratedDomainEventHandlerInstanceOf(ShutdownWorkerDomainEventHandler::class, $result);
     }
 }

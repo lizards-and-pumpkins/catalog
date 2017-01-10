@@ -99,4 +99,18 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
     }
+
+    public function testReturnsShutdownWorkerDomainEventHandler()
+    {
+        $stubEventHandler = $this->createMock(ShutdownWorkerDomainEventHandler::class);
+        $this->factory->method('createShutdownWorkerDomainEventHandler')->willReturn($stubEventHandler);
+
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->createMock(Message::class);
+        $stubDomainEvent->method('getName')->willReturn('shutdown_worker');
+
+        $result = $this->locator->getHandlerFor($stubDomainEvent);
+
+        $this->assertInstanceOf(ShutdownWorkerDomainEventHandler::class, $result);
+    }
 }

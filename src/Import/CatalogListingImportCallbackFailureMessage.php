@@ -43,7 +43,7 @@ class CatalogListingImportCallbackFailureMessage implements LogMessage
         ];
     }
 
-    public function getContextSynopsis(): string
+    public function getContextSynopsis() : string
     {
         return sprintf('File %s:%d', $this->exception->getFile(), $this->exception->getLine());
     }

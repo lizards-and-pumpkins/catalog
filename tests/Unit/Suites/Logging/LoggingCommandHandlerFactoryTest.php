@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
+use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -54,6 +55,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
+ * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand
+ * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -118,6 +121,13 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $message = (new AddImageCommand(__FILE__, DataVersion::fromVersionString('buz')))->toMessage();
         $commandHandler = $this->loggingCommandHandlerFactory->createAddImageCommandHandler($message);
+        $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
+    }
+
+    public function testReturnsADecoratedShutdownWorkerCommandHandler()
+    {
+        $message = (new ShutdownWorkerCommand('4321'))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createShutdownWorkerCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 }
