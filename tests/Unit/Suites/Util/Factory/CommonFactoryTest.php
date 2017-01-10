@@ -63,6 +63,8 @@ use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand;
+use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
@@ -204,6 +206,8 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand
+ * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -523,6 +527,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createAddImageCommandHandler($sourceCommand->toMessage());
 
         $this->assertInstanceOf(AddImageCommandHandler::class, $result);
+    }
+
+    public function testReturnsShutdownWorkerCommandHandler()
+    {
+        $sourceCommand = new ShutdownWorkerCommand('*');
+        $result = $this->commonFactory->createShutdownWorkerCommandHandler($sourceCommand->toMessage());
+
+        $this->assertInstanceOf(ShutdownWorkerCommandHandler::class, $result);
     }
 
     public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()

@@ -23,3 +23,8 @@ function typeof($var) : string
         get_class($var) :
         gettype($var);
 }
+
+function shutdown(int $exitCode = null)
+{
+    exit($exitCode);
+}

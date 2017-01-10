@@ -60,4 +60,12 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
             $commandFactoryDelegate->createAddImageCommandHandler($message)
         );
     }
+
+    public function createShutdownWorkerCommandHandler(Message $message): CommandHandler
+    {
+        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
+        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
+            $commandFactoryDelegate->createShutdownWorkerCommandHandler($message)
+        );
+    }
 }

@@ -39,6 +39,8 @@ use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand;
+use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
@@ -982,6 +984,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $message,
             $this->getMasterFactory()->getEventQueue()
         );
+    }
+
+    public function createShutdownWorkerCommandHandler(Message $message) : CommandHandler
+    {
+        return new ShutdownWorkerCommandHandler($message, $this->getMasterFactory()->getCommandQueue());
     }
 
     /**
