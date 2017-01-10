@@ -68,6 +68,8 @@ use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
@@ -208,6 +210,8 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
  * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand
  * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler
+ * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -622,6 +626,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $testEvent = new CatalogWasImportedDomainEvent(DataVersion::fromVersionString('foo'));
         $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler($testEvent->toMessage());
         $this->assertInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
+    }
+
+    public function testReturnsAShutdownWorkerDomainEventHandler()
+    {
+        $testEvent = new ShutdownWorkerDomainEvent('*');
+        $result = $this->commonFactory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
+        $this->assertInstanceOf(ShutdownWorkerDomainEventHandler::class, $result);
     }
 
     public function testItReturnsAProductJsonSnippetRenderer()

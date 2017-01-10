@@ -38,11 +38,14 @@ class ShutdownWorkerCommandHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(CommandHandler::class, $this->createHandler($message));
     }
 
-    public function testRetriesCommandIfMessagePidValueDoesNotMatch()
+    public function testRetriesCommandIfMessagePidValueDoesNotMatchWithIncrementedRetryCount()
     {
-        $this->mockCommandQueue->expects($this->once())->method('add');
-        $message = (new ShutdownWorkerCommand(strval(getmypid() - 1)))->toMessage();
-        $this->createHandler($message)->process();
+        $sourceCommand = new ShutdownWorkerCommand(strval(getmypid() - 1), 42);
+        $this->mockCommandQueue->expects($this->once())->method('add')
+            ->willReturnCallback(function(ShutdownWorkerCommand $retryCommand) use ($sourceCommand) {
+                $this->assertSame($sourceCommand->getRetryCount() + 1, $retryCommand->getRetryCount());
+            });
+        $this->createHandler($sourceCommand->toMessage())->process();
     }
 
     public function testRetriesCommandUpToMaxRetryBoundary()

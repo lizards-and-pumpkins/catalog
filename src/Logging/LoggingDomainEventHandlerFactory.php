@@ -76,4 +76,12 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
             $domainEventFactory->createCatalogWasImportedDomainEventHandler($event)
         );
     }
+
+    public function createShutdownWorkerDomainEventHandler(Message $event): DomainEventHandler
+    {
+        $domainEventFactory = $this->getDomainEventFactoryDelegate();
+        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $domainEventFactory->createShutdownWorkerDomainEventHandler($event)
+        );
+    }
 }

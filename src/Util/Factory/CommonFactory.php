@@ -46,6 +46,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
@@ -1117,6 +1118,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createCatalogWasImportedDomainEventHandler(Message $event) : DomainEventHandler
     {
         return new CatalogWasImportedDomainEventHandler($event);
+    }
+
+    public function createShutdownWorkerDomainEventHandler(Message $event) : DomainEventHandler
+    {
+        return new ShutdownWorkerDomainEventHandler($event, $this->getMasterFactory()->getEventQueue());
     }
 
     public function createBaseUrlBuilder() : BaseUrlBuilder

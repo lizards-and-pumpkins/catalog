@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ShutdownWorkerDomainEvent implements DomainEvent
 {
     const CODE = 'shutdown_worker';
-
+    
     /**
      * @var string
      */
