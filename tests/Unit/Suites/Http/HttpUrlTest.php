@@ -34,7 +34,17 @@ class HttpUrlTest extends \PHPUnit_Framework_TestCase
             ['http://example.com/path'],
             ['http://example.com/path/path/path/'],
             ['http://example.com?foo=bar'],
+            ['http://example.com/?foo=bar'],
             ['http://example.com/path/?foo=bar'],
+            ['http://example.com:123'],
+            ['https://example.com:123'],
+            ['//example.com:123'],
+            ['http://example.com:123/'],
+            ['http://example.com:123/path'],
+            ['http://example.com:321/path/path/path/'],
+            ['http://example.com:321?foo=bar'],
+            ['http://example.com:321/?foo=bar'],
+            ['http://example.com:321/path/?foo=bar'],
         ];
     }
 

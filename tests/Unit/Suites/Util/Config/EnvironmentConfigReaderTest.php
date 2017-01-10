@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Util\Config;
 
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
+use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotSetException;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
@@ -42,6 +43,12 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(EnvironmentConfigReader::fromArray($environmentConfig)->has('test'));
     }
 
+    public function testGetMethodThrowsAnExceptionIfAGivenKeyIsNotSet()
+    {
+        $this->expectException(EnvironmentConfigKeyIsNotSetException::class);
+        EnvironmentConfigReader::fromArray([])->get('not-here');
+    }
+
     /**
      * @dataProvider emptyConfigKeyProvider
      */
@@ -61,11 +68,6 @@ class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
             [''],
             ['  '],
         ];
-    }
-
-    public function testTheGetMethodReturnsANullValueIfAGivenConfigKeyIsNotSet()
-    {
-        $this->assertNull(EnvironmentConfigReader::fromArray([])->get('not-here'));
     }
 
     public function testTheGetMethodReturnsTheValueFromTheEnvironmentMethodIfPresent()

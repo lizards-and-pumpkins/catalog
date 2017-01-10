@@ -1127,10 +1127,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         /** @var ConfigReader $configReader */
         $configReader = $this->getMasterFactory()->createConfigReader();
-        $mediaBasePath = $configReader->get('media_base_path');
-        return null === $mediaBasePath ?
-            __DIR__ . '/../pub/media' :
-            $mediaBasePath;
+
+        return $configReader->has('media_base_path') ?
+            $configReader->get('media_base_path') :
+            __DIR__ . '/../pub/media';
     }
 
     public function createMediaBaseUrlBuilder() : MediaBaseUrlBuilder

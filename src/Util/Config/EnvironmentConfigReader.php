@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Util\Config;
 
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
+use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotSetException;
 
 class EnvironmentConfigReader implements ConfigReader
 {
@@ -44,15 +45,16 @@ class EnvironmentConfigReader implements ConfigReader
         return isset($this->environmentConfig[$normalizedKey]);
     }
 
-    /**
-     * @param string $configKey
-     * @return null|string
-     */
-    public function get(string $configKey)
+    public function get(string $configKey) : string
     {
         $this->validateConfigKey($configKey);
         $normalizedKey = $this->normalizeConfigKey($configKey);
-        return $this->environmentConfig[$normalizedKey] ?? null;
+
+        if (! isset($this->environmentConfig[$normalizedKey])) {
+            throw new EnvironmentConfigKeyIsNotSetException(sprintf('Environment variable "%s" not set', $configKey));
+        }
+
+        return $this->environmentConfig[$normalizedKey];
     }
 
     private function validateConfigKey(string $configKey)
