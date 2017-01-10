@@ -42,7 +42,7 @@ class ShutdownWorkerCommandHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $sourceCommand = new ShutdownWorkerCommand(strval(getmypid() - 1), 42);
         $this->mockCommandQueue->expects($this->once())->method('add')
-            ->willReturnCallback(function(ShutdownWorkerCommand $retryCommand) use ($sourceCommand) {
+            ->willReturnCallback(function (ShutdownWorkerCommand $retryCommand) use ($sourceCommand) {
                 $this->assertSame($sourceCommand->getRetryCount() + 1, $retryCommand->getRetryCount());
             });
         $this->createHandler($sourceCommand->toMessage())->process();
