@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Command\Exception\InvalidCommandConsumerPidException;
-use LizardsAndPumpkins\Messaging\Command\Exception\NoShutdownWorkerCommandMessageException;
+use LizardsAndPumpkins\Messaging\Command\Exception\NotShutdownWorkerCommandMessageException;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
@@ -39,7 +39,7 @@ class ShutdownWorkerCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowsExceptionIfMessageCodeDoesNotMatchShutdownWorkerCode()
     {
-        $this->expectException(NoShutdownWorkerCommandMessageException::class);
+        $this->expectException(NotShutdownWorkerCommandMessageException::class);
         $message = 'Unable to rehydrate command from "foo" queue message, expected "shutdown_worker"';
         $this->expectExceptionMessage($message);
 

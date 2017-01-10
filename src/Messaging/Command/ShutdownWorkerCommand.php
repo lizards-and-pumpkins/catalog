@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Command\Exception\InvalidCommandConsumerPidException;
-use LizardsAndPumpkins\Messaging\Command\Exception\NoShutdownWorkerCommandMessageException;
+use LizardsAndPumpkins\Messaging\Command\Exception\NotShutdownWorkerCommandMessageException;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class ShutdownWorkerCommand implements Command
@@ -41,7 +41,7 @@ class ShutdownWorkerCommand implements Command
     {
         if ($message->getName() !== self::CODE) {
             $format = 'Unable to rehydrate command from "%s" queue message, expected "%s"';
-            throw new NoShutdownWorkerCommandMessageException(sprintf($format, $message->getName(), self::CODE));
+            throw new NotShutdownWorkerCommandMessageException(sprintf($format, $message->getName(), self::CODE));
         }
         return new self($message->getPayload()['pid'], $message->getPayload()['retry_count']);
     }
