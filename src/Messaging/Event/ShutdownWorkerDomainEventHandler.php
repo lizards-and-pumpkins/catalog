@@ -44,6 +44,6 @@ class ShutdownWorkerDomainEventHandler implements DomainEventHandler
 
     private function isMatchingCurrentProcess() : bool
     {
-        return '*' === $this->event->getPid() || getmypid() == $this->event->getPid();
+        return $this->event->getPid() === '*' || $this->event->getPid() == getmypid();
     }
 }

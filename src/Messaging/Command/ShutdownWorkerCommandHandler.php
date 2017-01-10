@@ -28,7 +28,7 @@ class ShutdownWorkerCommandHandler implements CommandHandler
 
     public function process()
     {
-        if ($this->isMatchingCurrentProcess($this->command->getPid())) {
+        if ($this->isMatchingCurrentProcess()) {
             shutdown();
         }
         $this->addCommandToQueueAgain();
@@ -42,8 +42,8 @@ class ShutdownWorkerCommandHandler implements CommandHandler
         }
     }
 
-    private function isMatchingCurrentProcess(string $pid) : bool
+    private function isMatchingCurrentProcess() : bool
     {
-        return $pid === '*' || $pid == getmypid();
+        return '*' === $this->command->getPid() || getmypid() == $this->command->getPid();
     }
 }
