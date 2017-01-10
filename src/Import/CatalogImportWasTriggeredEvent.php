@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogImportWasTriggeredEvent implements DomainEvent
 {
-    const CODE = 'catalog_import_was_triggered_event';
+    const CODE = 'catalog_import_was_triggered';
 
     /**
      * @var DataVersion
