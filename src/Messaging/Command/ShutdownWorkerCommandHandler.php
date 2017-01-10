@@ -42,7 +42,7 @@ class ShutdownWorkerCommandHandler implements CommandHandler
         }
     }
 
-    private function isMatchingCurrentProcess(string $pid): bool
+    private function isMatchingCurrentProcess(string $pid) : bool
     {
         return $pid === '*' || $pid == getmypid();
     }

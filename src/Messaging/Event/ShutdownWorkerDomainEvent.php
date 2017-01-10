@@ -32,7 +32,7 @@ class ShutdownWorkerDomainEvent implements DomainEvent
         $this->retryCount = $retryCount;
     }
 
-    public function toMessage(): Message
+    public function toMessage() : Message
     {
         $payload = ['pid' => $this->pid, 'retry_count' => $this->retryCount];
         $metadata = [];
@@ -40,7 +40,7 @@ class ShutdownWorkerDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, $payload, $metadata);
     }
 
-    public static function fromMessage(Message $message): ShutdownWorkerDomainEvent
+    public static function fromMessage(Message $message) : ShutdownWorkerDomainEvent
     {
         if ($message->getName() !== self::CODE) {
             $format = 'Unable to rehydrate event from "%s" queue message, expected "%s"';
@@ -49,12 +49,12 @@ class ShutdownWorkerDomainEvent implements DomainEvent
         return new self($message->getPayload()['pid'], $message->getPayload()['retry_count']);
     }
 
-    public function getPid(): string
+    public function getPid() : string
     {
         return $this->pid;
     }
 
-    public function getRetryCount(): int
+    public function getRetryCount() : int
     {
         return $this->retryCount;
     }

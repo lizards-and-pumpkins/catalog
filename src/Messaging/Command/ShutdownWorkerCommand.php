@@ -29,7 +29,7 @@ class ShutdownWorkerCommand implements Command
         $this->retryCount = $retryCount;
     }
 
-    public function toMessage(): Message
+    public function toMessage() : Message
     {
         $name = self::CODE;
         $payload = ['pid' => $this->pid, 'retry_count' => $this->retryCount];
@@ -46,12 +46,12 @@ class ShutdownWorkerCommand implements Command
         return new self($message->getPayload()['pid'], $message->getPayload()['retry_count']);
     }
 
-    public function getPid(): string
+    public function getPid() : string
     {
         return $this->pid;
     }
 
-    public function getRetryCount(): int
+    public function getRetryCount() : int
     {
         return $this->retryCount;
     }
