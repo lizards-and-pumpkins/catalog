@@ -29,6 +29,7 @@ use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\SnippetRenderer;
@@ -991,6 +992,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             Queue\EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue()),
             $this->getMasterFactory()->getLogger()
         );
+    }
+    
+    public function createImportCatalogCommandHandler(Message $message) : CommandHandler
+    {
+        return new ImportCatalogCommandHandler($message, $this->getMasterFactory()->getEventQueue());
     }
 
     /**

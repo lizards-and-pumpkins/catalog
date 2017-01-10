@@ -17,4 +17,6 @@ interface CommandHandlerFactory
     public function createAddImageCommandHandler(Message $message) : CommandHandler;
     
     public function createShutdownWorkerCommandHandler(Message $message) : CommandHandler;
+
+    public function createImportCatalogCommandHandler(Message $message) : CommandHandler;
 }

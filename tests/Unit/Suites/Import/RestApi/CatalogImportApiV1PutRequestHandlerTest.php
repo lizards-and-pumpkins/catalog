@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
+use LizardsAndPumpkins\Import\ImportCatalogCommand;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
@@ -44,22 +46,22 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     private $mockRequest;
 
     /**
-     * @var CatalogImport|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockCatalogImport;
+    private $mockCommandQueue;
 
     protected function setUp()
     {
         $this->testImportDirectoryPath = $this->getUniqueTempDir() . '/test/catalog-import-directory';
         $this->createFixtureDirectory($this->testImportDirectoryPath);
         
-        $this->mockCatalogImport = $this->createMock(CatalogImport::class);
+        $this->mockCommandQueue = $this->createMock(CommandQueue::class);
 
         $this->logger = $this->createMock(Logger::class);
 
         $this->requestHandler = CatalogImportApiV1PutRequestHandler::create(
-            $this->mockCatalogImport,
             $this->testImportDirectoryPath,
+            $this->mockCommandQueue,
             $this->logger
         );
 
@@ -87,8 +89,8 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $this->expectException(CatalogImportApiDirectoryNotReadableException::class);
         CatalogImportApiV1PutRequestHandler::create(
-            $this->mockCatalogImport,
             '/some-not-existing-directory',
+            $this->mockCommandQueue,
             $this->logger
         );
     }
@@ -99,13 +101,14 @@ class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testItDelegatesTheCatalogImport()
+    public function testAddsImportCatalogCommandToCommandQueue()
     {
         $importFileName = 'import-file.xml';
+        $this->createFixtureFile($this->testImportDirectoryPath . '/' . $importFileName, '');
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $importFileName]));
 
-        $this->mockCatalogImport->expects($this->once())->method('importFile')
-            ->with($this->stringEndsWith('/' . $importFileName));
+        $this->mockCommandQueue->expects($this->once())->method('add')
+            ->with($this->isInstanceOf(ImportCatalogCommand::class));
 
         $response = $this->requestHandler->process($this->mockRequest);
         

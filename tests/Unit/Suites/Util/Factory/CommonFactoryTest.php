@@ -35,6 +35,8 @@ use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Import\ImportCatalogCommand;
+use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
@@ -534,6 +536,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createShutdownWorkerCommandHandler($sourceCommand->toMessage());
 
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
+    }
+    
+    public function testReturnsAnImportCatalogCommandHandler()
+    {
+        $command = new ImportCatalogCommand(DataVersion::fromVersionString('foo bar'), __FILE__);
+        $result = $this->commonFactory->createImportCatalogCommandHandler($command->toMessage());
+
+        $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
     }
 
     public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()

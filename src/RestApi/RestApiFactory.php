@@ -59,8 +59,8 @@ class RestApiFactory implements Factory
     public function createCatalogImportApiV1PutRequestHandler() : CatalogImportApiV1PutRequestHandler
     {
         return CatalogImportApiV1PutRequestHandler::create(
-            $this->getMasterFactory()->createCatalogImport(),
             $this->getCatalogImportDirectoryConfig(),
+            $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->getLogger()
         );
     }
