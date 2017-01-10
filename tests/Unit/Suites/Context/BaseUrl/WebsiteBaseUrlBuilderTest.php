@@ -33,14 +33,19 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     private $stubConfigReader;
 
     /**
-     * @param mixed $baseUrlString
      * @return ConfigReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubConfigReader($baseUrlString) : ConfigReader
+    private function createStubConfigReader() : ConfigReader
     {
         $stubConfigReader = $this->createMock(ConfigReader::class);
         $configKey = WebsiteBaseUrlBuilder::CONFIG_PREFIX . 'test_website';
-        $stubConfigReader->method('get')->with($configKey)->willReturn($baseUrlString);
+
+        $stubConfigReader->method('has')->willReturnCallback(function (string $requestedConfigKey) use ($configKey) {
+            return $configKey === $requestedConfigKey;
+        });
+
+        $stubConfigReader->method('get')->with($configKey)->willReturn($this->testBaseUrl);
+
         return $stubConfigReader;
     }
 
@@ -56,7 +61,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubConfigReader = $this->createStubConfigReader($this->testBaseUrl);
+        $this->stubConfigReader = $this->createStubConfigReader();
         $this->websiteBaseUrlBuilder = new WebsiteBaseUrlBuilder($this->stubConfigReader);
 
         $this->stubContext = $this->createStubContext();
@@ -81,8 +86,10 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(NoConfiguredBaseUrlException::class);
         $this->expectExceptionMessage('No base URL configuration found for the website "test_website"');
-        $emptyBaseUrl = null;
-        $emptyStubConfigReader = $this->createStubConfigReader($emptyBaseUrl);
+
+        $emptyStubConfigReader = $this->createMock(ConfigReader::class);
+        $emptyStubConfigReader->method('has')->willReturn(false);
+
         (new WebsiteBaseUrlBuilder($emptyStubConfigReader))->create($this->stubContext);
     }
 }

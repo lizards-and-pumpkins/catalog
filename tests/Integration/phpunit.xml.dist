@@ -32,4 +32,7 @@
             <directory>../../src</directory>
         </whitelist>
     </filter>
+    <php>
+        <server name="LP_CATALOG_IMPORT_DIRECTORY" value="tests/shared-fixture"/>
+    </php>
 </phpunit>

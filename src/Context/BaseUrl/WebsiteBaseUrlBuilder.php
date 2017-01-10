@@ -25,11 +25,12 @@ class WebsiteBaseUrlBuilder implements BaseUrlBuilder
 
     public function create(Context $context) : BaseUrl
     {
-        $baseUrlString = $this->configReader->get($this->getBaseUrlConfigKey($context));
-        if (! $baseUrlString) {
-            throw $this->createConfigMissingException($context);
+        if ($this->configReader->has($this->getBaseUrlConfigKey($context))) {
+            $baseUrlString = $this->configReader->get($this->getBaseUrlConfigKey($context));
+            return new HttpBaseUrl($baseUrlString);
         }
-        return new HttpBaseUrl($baseUrlString);
+
+        throw $this->createConfigMissingException($context);
     }
 
     private function getBaseUrlConfigKey(Context $context) : string
