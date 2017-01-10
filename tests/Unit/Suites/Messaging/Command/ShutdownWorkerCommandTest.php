@@ -40,7 +40,7 @@ class ShutdownWorkerCommandTest extends \PHPUnit\Framework\TestCase
     public function testThrowsExceptionIfMessageCodeDoesNotMatchShutdownWorkerCode()
     {
         $this->expectException(NoShutdownWorkerCommandMessageException::class);
-        $message = 'Unable to rehydrate from "foo" queue message, expected "shutdown_worker"';
+        $message = 'Unable to rehydrate command from "foo" queue message, expected "shutdown_worker"';
         $this->expectExceptionMessage($message);
 
         ShutdownWorkerCommand::fromMessage(Message::withCurrentTime('foo', [], []));
@@ -81,6 +81,7 @@ class ShutdownWorkerCommandTest extends \PHPUnit\Framework\TestCase
             ['1^2'],
             [' 1'],
             ['1 '],
+            ['0'],
         ];
     }
 }

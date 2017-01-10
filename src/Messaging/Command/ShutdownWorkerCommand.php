@@ -40,11 +40,8 @@ class ShutdownWorkerCommand implements Command
     public static function fromMessage(Message $message) : ShutdownWorkerCommand
     {
         if ($message->getName() !== self::CODE) {
-            throw new NoShutdownWorkerCommandMessageException(sprintf(
-                'Unable to rehydrate from "%s" queue message, expected "%s"',
-                $message->getName(),
-                self::CODE
-            ));
+            $format = 'Unable to rehydrate command from "%s" queue message, expected "%s"';
+            throw new NoShutdownWorkerCommandMessageException(sprintf($format, $message->getName(), self::CODE));
         }
         return new self($message->getPayload()['pid'], $message->getPayload()['retry_count']);
     }
@@ -61,7 +58,7 @@ class ShutdownWorkerCommand implements Command
 
     private function validateCommandConsumerPid(string $commandConsumerPid)
     {
-        if (!preg_match('/^(?:\d+|\*)$/', $commandConsumerPid)) {
+        if (!preg_match('/^(?:[1-9]\d*|\*)$/', $commandConsumerPid)) {
             $msg = sprintf('The command consumer PID has to be digits or "*" for any, got "%s"', $commandConsumerPid);
             throw new InvalidCommandConsumerPidException($msg);
         }
