@@ -72,9 +72,9 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return false;
         }
 
-        $query = $request->getQueryParameter(self::QUERY_PARAMETER);
-
-        if (null === $query || '' === trim($query)) {
+        if (! $request->hasQueryParameter(self::QUERY_PARAMETER) ||
+            '' === trim($request->getQueryParameter(self::QUERY_PARAMETER))
+        ) {
             return false;
         }
 
@@ -115,10 +115,8 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function getNumberOfProductPerPage(HttpRequest $request) : int
     {
-        $requestedNumberOfProductsPerPage = $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
-
-        if (null !== $requestedNumberOfProductsPerPage) {
-            return (int) $requestedNumberOfProductsPerPage;
+        if ($request->hasQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER)) {
+            return (int) $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
         }
 
         return $this->defaultNumberOfProductPerPage;
@@ -126,10 +124,8 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function getPageNumber(HttpRequest $request) : int
     {
-        $requestedPageNumber = $request->getQueryParameter(self::PAGE_NUMBER_PARAMETER);
-
-        if (null !== $requestedPageNumber) {
-            return (int) $requestedPageNumber;
+        if ($request->hasQueryParameter(self::PAGE_NUMBER_PARAMETER)) {
+            return (int) $request->getQueryParameter(self::PAGE_NUMBER_PARAMETER);
         }
 
         return 0;
@@ -137,11 +133,11 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function getSortBy(HttpRequest $request) : SortBy
     {
-        $requestedSortOrder = $request->getQueryParameter(self::SORT_ORDER_PARAMETER);
-
-        if (null !== $requestedSortOrder) {
-            $sortDirection = $this->getSortDirectionString($request);
-            return new SortBy(AttributeCode::fromString($requestedSortOrder), SortDirection::create($sortDirection));
+        if ($request->hasQueryParameter(self::SORT_ORDER_PARAMETER)) {
+            return new SortBy(
+                AttributeCode::fromString($request->getQueryParameter(self::SORT_ORDER_PARAMETER)),
+                SortDirection::create($this->getSortDirectionString($request))
+            );
         }
 
         return $this->defaultSortBy;
@@ -149,10 +145,8 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function getSortDirectionString(HttpRequest $request) : string
     {
-        $requestedSortDirection = $request->getQueryParameter(self::SORT_DIRECTION_PARAMETER);
-
-        if (null !== $requestedSortDirection) {
-            return $requestedSortDirection;
+        if ($request->hasQueryParameter(self::SORT_DIRECTION_PARAMETER)) {
+            return $request->getQueryParameter(self::SORT_DIRECTION_PARAMETER);
         }
 
         return SortDirection::ASC;

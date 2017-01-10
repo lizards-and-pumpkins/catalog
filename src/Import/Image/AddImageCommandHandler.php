@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\Image;
 
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Import\Image\Exception\NoAddImageCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class AddImageCommandHandler implements CommandHandler

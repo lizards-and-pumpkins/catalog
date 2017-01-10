@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 

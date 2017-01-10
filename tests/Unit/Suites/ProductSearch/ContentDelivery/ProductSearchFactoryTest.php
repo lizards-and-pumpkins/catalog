@@ -43,7 +43,6 @@ class ProductSearchFactoryTest extends \PHPUnit_Framework_TestCase
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new RestApiFactory());
         $masterFactory->register(new UnitTestFactory($this));
-        $masterFactory->register(new UnitTestFactory($this));
 
         $this->factory = new ProductSearchFactory();
 

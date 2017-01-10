@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
 use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;

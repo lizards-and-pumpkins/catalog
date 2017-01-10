@@ -10,7 +10,6 @@ use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\Messaging\Queue;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\QueueImportCommands

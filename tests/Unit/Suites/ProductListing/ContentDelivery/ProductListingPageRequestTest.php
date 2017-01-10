@@ -95,14 +95,33 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testCurrentPageIsZeroByDefault()
     {
+        $this->stubRequest->method('hasQueryParameter')
+            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn(false);
         $this->assertSame(0, $this->pageRequest->getCurrentPageNumber($this->stubRequest));
     }
 
-    public function testCurrentPageNumberIsReturned()
+    public function testCurrentPageIsZeroIfNegativePageNumberIsRequested()
     {
-        $pageNumber = 2;
+        $pageNumber = -2;
+
+        $this->stubRequest->method('hasQueryParameter')
+            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn(true);
         $this->stubRequest->method('getQueryParameter')
             ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn($pageNumber + 1);
+
+        $this->assertSame(0, $this->pageRequest->getCurrentPageNumber($this->stubRequest));
+
+    }
+
+    public function testReturnsCurrentPageNumber()
+    {
+        $pageNumber = 2;
+
+        $this->stubRequest->method('hasQueryParameter')
+            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn(true);
+        $this->stubRequest->method('getQueryParameter')
+            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn($pageNumber + 1);
+
         $this->assertSame($pageNumber, $this->pageRequest->getCurrentPageNumber($this->stubRequest));
     }
 
@@ -117,10 +136,8 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $stubFacetFilterRequest = $this->createMock(FacetFiltersToIncludeInResult::class);
         $stubFacetFilterRequest->method('getAttributeCodeStrings')->willReturn([$filterAName, $filterBName]);
 
-        $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [$filterAName, 'baz,qux'],
-            [$filterBName, null],
-        ]);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([[$filterAName, true], [$filterBName, false]]);
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([[$filterAName, 'baz,qux']]);
 
         $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $stubFacetFilterRequest);
         $expectedFilterValues = ['foo' => ['baz', 'qux'], 'bar' => []];
@@ -130,6 +147,9 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
 
     public function testInitialProductsPerPageConfigurationIsReturned()
     {
+        $this->stubRequest->method('hasQueryParameter')
+            ->with(ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)->willReturn(false);
+
         $this->assertSame($this->stubProductsPerPage, $this->pageRequest->getProductsPerPage($this->stubRequest));
     }
 
@@ -138,6 +158,8 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $selectedNumberOfProductsPerPage = 2;
         $availableNumbersOfProductsPerPage = [1, 2];
 
+        $this->stubRequest->method('hasQueryParameter')
+            ->with(ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)->willReturn(true);
         $this->stubRequest->method('getQueryParameter')
             ->with(ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)
             ->willReturn($selectedNumberOfProductsPerPage);
@@ -176,6 +198,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $stubDefaultSortBy = $this->createMock(SortBy::class);
         $stubAvailableSortBy = [$stubDefaultSortBy, $this->createMock(SortBy::class)];
 
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, false],
+            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, false],
+        ]);
+
         $result = $this->pageRequest->getSelectedSortBy(
             $this->stubRequest,
             $stubDefaultSortBy,
@@ -190,6 +217,10 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
 
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, true],
+            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, true],
+        ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, $sortAttributeName],
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortDirection],
@@ -211,6 +242,11 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
+
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, false],
+            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, false],
+        ]);
 
         $this->stubRequest->method('hasCookie')->willReturnMap([
             [ProductListingPageRequest::SORT_ORDER_COOKIE_NAME, true],
@@ -238,6 +274,9 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
     {
         $selectedNumberOfProductsPerPage = 2;
 
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, true],
+        ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, $selectedNumberOfProductsPerPage],
         ]);
@@ -288,6 +327,10 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
 
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, true],
+            [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, true],
+        ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
             [ProductListingPageRequest::SORT_ORDER_QUERY_PARAMETER_NAME, $sortAttributeName],
             [ProductListingPageRequest::SORT_DIRECTION_QUERY_PARAMETER_NAME, $sortDirection],
@@ -324,9 +367,8 @@ class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
             ['price_with_tax', 'price'],
         ]);
 
-        $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            ['price', '10.00 to 19.99'],
-        ]);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([['price', true]]);
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([['price', '10.00 to 19.99']]);
 
         $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $stubFacetFiltersToIncludeInResult);
 

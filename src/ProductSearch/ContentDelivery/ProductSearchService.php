@@ -81,8 +81,7 @@ class ProductSearchService
         int $rowsPerPage,
         int $pageNumber,
         SortBy $sortBy
-    ) : QueryOptions
-    {
+    ) : QueryOptions {
         $this->validateSortBy($sortBy);
         $this->validateRowsPerPage($rowsPerPage);
 

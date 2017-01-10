@@ -85,8 +85,12 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             $this->getImageAttributeArray('test1.jpg', 'The label A'),
             $this->getImageAttributeArray('test2.jpg', 'The label B')
         ];
-        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId, ...$productImageListArray);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays(
+            $this->testProductId,
+            ...$productImageListArray
+        );
         $imageBuilders = $this->getImageBuilderArrayFromInstance($productImageListBuilder);
+
         $this->assertCount(2, $imageBuilders);
     }
 
@@ -104,8 +108,12 @@ class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
             $this->getImageAttributeArray('test1.jpg', 'The label A'),
             $this->getImageAttributeArray('test2.jpg', 'The label B')
         ];
-        $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId, ...$productImageListArray);
+        $productImageListBuilder = ProductImageListBuilder::fromImageArrays(
+            $this->testProductId,
+            ...$productImageListArray
+        );
         $imageList = $productImageListBuilder->getImageListForContext($this->createMock(Context::class));
+
         $this->assertCount(2, $imageList);
     }
 }

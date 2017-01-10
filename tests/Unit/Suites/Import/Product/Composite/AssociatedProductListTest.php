@@ -61,7 +61,7 @@ class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $productId
-     * @param ProductAttribute[] ...$attributes
+     * @param ProductAttribute[] $attributes
      * @return Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubProduct(string $productId, ProductAttribute ...$attributes) : Product
