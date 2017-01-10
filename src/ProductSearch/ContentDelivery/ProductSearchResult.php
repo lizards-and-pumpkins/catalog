@@ -38,7 +38,7 @@ class ProductSearchResult implements \JsonSerializable
     /**
      * @return mixed[]
      */
-    function jsonSerialize() : array
+    public function jsonSerialize() : array
     {
         return [
             'total' => $this->totalNumber,
