@@ -58,10 +58,10 @@ class ShutdownWorkerDirective implements Command, DomainEvent
         return $this->retryCount;
     }
 
-    private function validateConsumerPid(string $cnsumerPid)
+    private function validateConsumerPid(string $consumerPid)
     {
-        if (!preg_match('/^(?:[1-9]\d*|\*)$/', $cnsumerPid)) {
-            $msg = sprintf('The consumer PID has to be digits or "*" for any, got "%s"', $cnsumerPid);
+        if (!preg_match('/^(?:[1-9]\d*|\*)$/', $consumerPid)) {
+            $msg = sprintf('The consumer PID has to be digits or "*" for any, got "%s"', $consumerPid);
             throw new InvalidMessageConsumerPidException($msg);
         }
     }
