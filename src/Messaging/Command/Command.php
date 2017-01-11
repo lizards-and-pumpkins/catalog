@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\Messaging\Queue\MessageEnvelope;
 
-interface Command
+interface Command extends MessageEnvelope
 {
-    public function toMessage() : Message;
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message);
 }

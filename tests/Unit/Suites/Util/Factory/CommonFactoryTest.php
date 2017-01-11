@@ -63,13 +63,11 @@ use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand;
-use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler;
+use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
+use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent;
-use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
@@ -208,10 +206,9 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
- * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand
- * @uses   \LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler
- * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent
- * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
+ * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -535,10 +532,10 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsShutdownWorkerCommandHandler()
     {
-        $sourceCommand = new ShutdownWorkerCommand('*');
+        $sourceCommand = new ShutdownWorkerDirective('*');
         $result = $this->commonFactory->createShutdownWorkerCommandHandler($sourceCommand->toMessage());
 
-        $this->assertInstanceOf(ShutdownWorkerCommandHandler::class, $result);
+        $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
 
     public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()
@@ -630,9 +627,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsAShutdownWorkerDomainEventHandler()
     {
-        $testEvent = new ShutdownWorkerDomainEvent('*');
+        $testEvent = new ShutdownWorkerDirective('*');
         $result = $this->commonFactory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
-        $this->assertInstanceOf(ShutdownWorkerDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
 
     public function testItReturnsAProductJsonSnippetRenderer()

@@ -23,9 +23,9 @@ use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
+use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent;
-use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
@@ -118,8 +118,9 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
- * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEvent
- * @uses   \LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
+ * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -203,10 +204,10 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
     }
 
-    public function testReturnsADecoratedShutdownWorkerDomainEventHandler()
+    public function testReturnsADecoratedShutdownWorkerDirectiveHandler()
     {
-        $testEvent = new ShutdownWorkerDomainEvent('*');
+        $testEvent = new ShutdownWorkerDirective('*');
         $result = $this->factory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
-        $this->assertDecoratedDomainEventHandlerInstanceOf(ShutdownWorkerDomainEventHandler::class, $result);
+        $this->assertDecoratedDomainEventHandlerInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
 }

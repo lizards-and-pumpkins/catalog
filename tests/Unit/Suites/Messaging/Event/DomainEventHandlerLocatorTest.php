@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
+use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
@@ -102,7 +103,7 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsShutdownWorkerDomainEventHandler()
     {
-        $stubEventHandler = $this->createMock(ShutdownWorkerDomainEventHandler::class);
+        $stubEventHandler = $this->createMock(ShutdownWorkerDirectiveHandler::class);
         $this->factory->method('createShutdownWorkerDomainEventHandler')->willReturn($stubEventHandler);
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
@@ -111,6 +112,6 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
-        $this->assertInstanceOf(ShutdownWorkerDomainEventHandler::class, $result);
+        $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
 }
