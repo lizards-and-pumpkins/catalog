@@ -39,14 +39,13 @@ use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommand;
 use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler;
+use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Event\ShutdownWorkerDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
@@ -989,7 +988,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createShutdownWorkerCommandHandler(Message $message) : CommandHandler
     {
-        return new ShutdownWorkerCommandHandler($message, $this->getMasterFactory()->getCommandQueue());
+        return new ShutdownWorkerDirectiveHandler(
+            $message,
+            Queue\EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue())
+        );
     }
 
     /**
@@ -1122,7 +1124,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createShutdownWorkerDomainEventHandler(Message $event) : DomainEventHandler
     {
-        return new ShutdownWorkerDomainEventHandler($event, $this->getMasterFactory()->getEventQueue());
+        return new ShutdownWorkerDirectiveHandler(
+            $event,
+            Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue())
+        );
     }
 
     public function createBaseUrlBuilder() : BaseUrlBuilder

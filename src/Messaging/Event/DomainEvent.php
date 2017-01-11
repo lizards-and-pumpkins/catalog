@@ -4,15 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
-use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\Messaging\Queue\MessageEnvelope;
 
-interface DomainEvent
+interface DomainEvent extends MessageEnvelope
 {
-    public function toMessage() : Message;
-
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message);
+    
 }
