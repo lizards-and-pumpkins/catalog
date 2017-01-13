@@ -39,7 +39,6 @@ use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\Messaging\Command\ShutdownWorkerCommandHandler;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
@@ -990,7 +989,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new ShutdownWorkerDirectiveHandler(
             $message,
-            Queue\EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue())
+            Queue\EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue()),
+            $this->getMasterFactory()->getLogger()
         );
     }
 
@@ -1126,7 +1126,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new ShutdownWorkerDirectiveHandler(
             $event,
-            Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue())
+            Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue()),
+            $this->getMasterFactory()->getLogger()
         );
     }
 

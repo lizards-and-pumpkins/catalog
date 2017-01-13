@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Messaging\Consumer;
 
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;
@@ -23,15 +25,22 @@ class ShutdownWorkerDirectiveHandler implements CommandHandler, DomainEventHandl
      */
     private $enqueuesMessageEnvelope;
 
-    public function __construct(Message $message, EnqueuesMessageEnvelope $enqueuesMessageEnvelope)
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    public function __construct(Message $message, EnqueuesMessageEnvelope $enqueuesMessageEnvelope, Logger $logger)
     {
         $this->directive = ShutdownWorkerDirective::fromMessage($message);
         $this->enqueuesMessageEnvelope = $enqueuesMessageEnvelope;
+        $this->logger = $logger;
     }
 
     public function process()
     {
         if ($this->isMessageForCurrentProcess()) {
+            $this->logger->log(new ConsumerShutdownRequestedLogMessage(getmypid(), $this->directive));
             shutdown();
         }
         $this->addCommandToQueueAgain();

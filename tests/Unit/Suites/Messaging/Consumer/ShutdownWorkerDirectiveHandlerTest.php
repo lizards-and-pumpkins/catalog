@@ -4,13 +4,15 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Messaging\Consumer;
 
+use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
- * @covers \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
+ * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
+ * @uses   \LizardsAndPumpkins\Messaging\Consumer\ConsumerShutdownRequestedLogMessage
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
@@ -18,22 +20,28 @@ use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;
  */
 class ShutdownWorkerDirectiveHandlerTest extends \PHPUnit\Framework\TestCase
 {
+    public static $shutdownWasCalled = false;
+
     /**
      * @var EnqueuesMessageEnvelope|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockQueue;
 
-    public static $shutdownWasCalled = false;
+    /**
+     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockLogger;
 
     private function createHandler($message): ShutdownWorkerDirectiveHandler
     {
-        return new ShutdownWorkerDirectiveHandler($message, $this->mockQueue);
+        return new ShutdownWorkerDirectiveHandler($message, $this->mockQueue, $this->mockLogger);
     }
 
     protected function setUp()
     {
         self::$shutdownWasCalled = false;
         $this->mockQueue = $this->createMock(EnqueuesMessageEnvelope::class);
+        $this->mockLogger = $this->createMock(Logger::class);
     }
 
     public function testImplementsCommandAndEventHandlerInterfaces()
@@ -87,6 +95,20 @@ class ShutdownWorkerDirectiveHandlerTest extends \PHPUnit\Framework\TestCase
         $command = new ShutdownWorkerDirective('*');
         $this->createHandler($command->toMessage())->process();
         $this->assertTrue(self::$shutdownWasCalled, "The shutdown() function was not called");
+    }
+
+    public function testDoesNotLogNonMatchingShutdownDirectives()
+    {
+        $this->mockLogger->expects($this->never())->method('log');
+        $command = new ShutdownWorkerDirective(strval(getmygid() -1));
+        $this->createHandler($command->toMessage())->process();
+    }
+
+    public function testLogsMatchingShutdownDirective()
+    {
+        $this->mockLogger->expects($this->once())->method('log');
+        $command = new ShutdownWorkerDirective('*');
+        $this->createHandler($command->toMessage())->process();
     }
 }
 
