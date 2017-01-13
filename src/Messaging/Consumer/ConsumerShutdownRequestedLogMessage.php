@@ -24,7 +24,7 @@ class ConsumerShutdownRequestedLogMessage implements LogMessage
         $this->directive = $directive;
     }
 
-    public function __toString(): string
+    public function __toString() : string
     {
         return sprintf('Shutting down consumer PID %s', $this->currentPid);
     }
@@ -32,7 +32,7 @@ class ConsumerShutdownRequestedLogMessage implements LogMessage
     /**
      * @return mixed[]
      */
-    public function getContext(): array
+    public function getContext() : array
     {
         return [
             'current_pid' => $this->currentPid,
@@ -40,7 +40,7 @@ class ConsumerShutdownRequestedLogMessage implements LogMessage
         ];
     }
 
-    public function getContextSynopsis(): string
+    public function getContextSynopsis() : string
     {
         $format = 'Shutdown Directive PID: %s, Consumer Process PID: %s';
 
