@@ -504,7 +504,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             return $this->computeCompositeCriterion($criteriaArray['condition'], ...$subOperationResults);
         }
 
-        $operation = $this->getOperation($criteriaArray['operation'], $criteriaArray);
+        $operation = $this->createOperation($criteriaArray['operation'], $criteriaArray);
 
         return $operation->matches($document);
     }
@@ -513,22 +513,14 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     {
         if (strcasecmp($condition, CompositeSearchCriterion::AND_CONDITION) === 0) {
             return array_reduce($subOperationResults, function ($carry, $operationResult) {
-                if (null === $carry) {
-                    return $operationResult;
-                }
-
                 return $carry && $operationResult;
-            }, null);
+            }, true);
         }
 
         if (strcasecmp($condition, CompositeSearchCriterion::OR_CONDITION) === 0) {
             return array_reduce($subOperationResults, function ($carry, $operationResult) {
-                if (null === $carry) {
-                    return $operationResult;
-                }
-
                 return $carry || $operationResult;
-            }, null);
+            }, false);
         }
 
         throw new InvalidCriterionConditionException(sprintf('Unknown search criteria condition "%s".', $condition));
@@ -539,7 +531,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @param string[] $data
      * @return IntegrationTestSearchEngineOperation
      */
-    private function getOperation(string $operation, array $data) : IntegrationTestSearchEngineOperation
+    private function createOperation(string $operation, array $data) : IntegrationTestSearchEngineOperation
     {
         $className = __NAMESPACE__ . '\\Operation\\IntegrationTestSearchEngineOperation' . $operation;
 
