@@ -47,4 +47,15 @@ class SearchCriterionFullTextTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($expectation, $this->criteria->jsonSerialize());
     }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => '',
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'FullText'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
+    }
 }

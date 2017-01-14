@@ -43,4 +43,15 @@ class SearchCriterionNotEqualTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($expectation, $this->criteria->jsonSerialize());
     }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'NotEqual'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
+    }
 }

@@ -484,10 +484,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         SearchDocument ...$documents
     ) : array {
         return array_filter($documents, function (SearchDocument $document) use ($criteria, $context) {
-            $criteriaJson = json_encode($criteria);
-            $criteriaArray = json_decode($criteriaJson, true);
-
-            return $this->isSearchDocumentMatchesCriteria($document, $criteriaArray) &&
+            return $this->isSearchDocumentMatchesCriteria($document, $criteria->toArray()) &&
                    $context->contains($document->getContext());
         });
     }

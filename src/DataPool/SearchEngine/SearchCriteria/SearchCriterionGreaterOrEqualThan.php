@@ -31,6 +31,14 @@ class SearchCriterionGreaterOrEqualThan implements SearchCriteria
      */
     public function jsonSerialize() : array
     {
+        return $this->toArray();
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function toArray(): array
+    {
         return [
             'fieldName' => $this->fieldName,
             'fieldValue' => $this->fieldValue,

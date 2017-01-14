@@ -6,5 +6,8 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 interface SearchCriteria extends \JsonSerializable
 {
-
+    /**
+     * @return mixed[]
+     */
+    public function toArray() : array;
 }

@@ -60,4 +60,17 @@ class CompositeSearchCriterion implements SearchCriteria
             'criteria'  => $this->criteria
         ];
     }
+
+    /**
+     * @return mixed[]
+     */
+    public function toArray(): array
+    {
+        return [
+            'condition' => $this->condition,
+            'criteria' => array_map(function (SearchCriteria $criteria) {
+                return $criteria->toArray();
+            }, $this->criteria)
+        ];
+    }
 }

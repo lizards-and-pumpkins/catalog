@@ -21,6 +21,14 @@ class SearchCriterionFullText implements SearchCriteria
      */
     function jsonSerialize() : array
     {
+        return $this->toArray();
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function toArray(): array
+    {
         return [
             'fieldName' => '',
             'fieldValue' => $this->fieldValue,

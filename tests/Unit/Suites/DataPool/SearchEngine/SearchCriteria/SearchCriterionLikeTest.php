@@ -43,4 +43,15 @@ class SearchCriterionLikeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($expectation, $this->criteria->jsonSerialize());
     }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'Like'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
+    }
 }

@@ -11,6 +11,14 @@ class SearchCriterionAnything implements SearchCriteria
      */
     public function jsonSerialize() : array
     {
+        return $this->toArray();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function toArray(): array
+    {
         return [
             'fieldName'  => '',
             'fieldValue' => '',

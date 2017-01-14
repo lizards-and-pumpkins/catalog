@@ -66,4 +66,21 @@ class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
             [CompositeSearchCriterion::OR_CONDITION],
         ];
     }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $dummyCriteriaArrayRepresentation = ['Dummy criteria array representation'];
+
+        $stubSubCriteria = $this->createMock(SearchCriteria::class);
+        $stubSubCriteria->method('toArray')->willReturn($dummyCriteriaArrayRepresentation);
+
+        $criteria = CompositeSearchCriterion::createAnd($stubSubCriteria);
+
+        $expectation = [
+            'condition' => CompositeSearchCriterion::AND_CONDITION,
+            'criteria' => [$dummyCriteriaArrayRepresentation]
+        ];
+
+        $this->assertSame($expectation, $criteria->toArray());
+    }
 }

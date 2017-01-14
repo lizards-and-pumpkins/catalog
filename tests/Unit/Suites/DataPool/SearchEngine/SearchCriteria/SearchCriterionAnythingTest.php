@@ -9,26 +9,45 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
  */
 class SearchCriterionAnythingTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var SearchCriterionAnything
+     */
+    private $criteria;
+
+    protected function setUp()
+    {
+        $this->criteria = new SearchCriterionAnything();
+    }
+
     public function testItImplementsTheSearchCriteriaInterface()
     {
-        $this->assertInstanceOf(SearchCriteria::class, new SearchCriterionAnything());
+        $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
     }
 
     public function testItImplementsJsonSerializable()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, new SearchCriterionAnything());
+        $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
     }
 
     public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
     {
-        $result = (new SearchCriterionAnything())->jsonSerialize();
-        
         $expectation = [
             'fieldName'  => '',
             'fieldValue' => '',
             'operation'  => 'Anything'
         ];
 
-        $this->assertSame($expectation, $result);
+        $this->assertSame($expectation, $this->criteria->jsonSerialize());
+    }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => '',
+            'fieldValue' => '',
+            'operation'  => 'Anything'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
     }
 }
