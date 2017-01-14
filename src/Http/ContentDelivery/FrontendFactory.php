@@ -89,6 +89,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createSelectProductListingRobotsMetaTagContent(),
             $this->getMasterFactory()->createProductListingPageRequest(),
+            $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->getProductListingDefaultSortBy(),
             ...$this->getMasterFactory()->getProductListingAvailableSortBy()
         );
@@ -114,7 +115,6 @@ class FrontendFactory implements Factory
     public function createProductListingPageContentBuilder() : ProductListingPageContentBuilder
     {
         return new ProductListingPageContentBuilder(
-            $this->getMasterFactory()->createProductJsonService(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->createSearchFieldToRequestParamMap($this->createContext()),
             $this->getMasterFactory()->getTranslatorRegistry()
@@ -323,6 +323,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest(),
+            $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->getProductSearchDefaultSortBy(),
             ...$this->getMasterFactory()->getProductSearchAvailableSortBy()
         );

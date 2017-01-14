@@ -27,7 +27,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
-        $this->assertEquals(json_encode(['total' => 0, 'data' => []]), $response->getBody());
+        $this->assertEquals(json_encode(['total' => 0, 'data' => [], 'facets' => []]), $response->getBody());
     }
 
     public function testProductDetailsMatchingRequestSortedDescendingByStockQuantityAreReturned()

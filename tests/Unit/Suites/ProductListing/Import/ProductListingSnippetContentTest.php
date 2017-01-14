@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */

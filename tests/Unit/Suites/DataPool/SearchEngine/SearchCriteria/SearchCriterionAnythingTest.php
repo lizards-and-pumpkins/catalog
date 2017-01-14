@@ -4,39 +4,50 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything
  */
 class SearchCriterionAnythingTest extends \PHPUnit_Framework_TestCase
 {
-    public function testItImplementsTheSearchCriteriaInterface()
+    /**
+     * @var SearchCriterionAnything
+     */
+    private $criteria;
+
+    protected function setUp()
     {
-        $this->assertInstanceOf(SearchCriteria::class, new SearchCriterionAnything());
+        $this->criteria = new SearchCriterionAnything();
     }
 
-    public function testItMatchesAnySearchDocument()
+    public function testItImplementsTheSearchCriteriaInterface()
     {
-        $mockSearchDocument = $this->createMock(SearchDocument::class);
-        $this->assertTrue((new SearchCriterionAnything())->matches($mockSearchDocument));
+        $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
     }
 
     public function testItImplementsJsonSerializable()
     {
-        $this->assertInstanceOf(\JsonSerializable::class, new SearchCriterionAnything());
+        $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
     }
 
     public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
     {
-        $result = (new SearchCriterionAnything())->jsonSerialize();
-        
         $expectation = [
             'fieldName'  => '',
             'fieldValue' => '',
             'operation'  => 'Anything'
         ];
 
-        $this->assertSame($expectation, $result);
+        $this->assertSame($expectation, $this->criteria->jsonSerialize());
+    }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => '',
+            'fieldValue' => '',
+            'operation'  => 'Anything'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
     }
 }

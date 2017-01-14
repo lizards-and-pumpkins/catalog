@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
@@ -35,6 +36,11 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDataPoolReader;
+
+    /**
+     * @var ProductSearchService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockProductSearchService;
 
     /**
      * @var ProductListingRequestHandler
@@ -69,7 +75,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn($numberOfResults);
 
-        $this->mockDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $this->mockDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
             [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
         ]);
@@ -128,6 +134,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
 
         $stubDefaultSortBy = $this->createMock(SortBy::class);
+        $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
 
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
@@ -137,6 +144,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
             $stubProductListingPageContentBuilder,
             $stubSelectRobotsMetaTagContent,
             $this->mockProductListingPageRequest,
+            $this->mockProductSearchService,
             $stubDefaultSortBy
         );
     }
@@ -216,7 +224,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockProductListingPageRequest->method('createSortByForRequest')->willReturn($stubSortBy);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(2);
-        $this->mockDataPoolReader->expects($this->exactly(2))->method('getSearchResultsMatchingCriteria');
+        $this->mockProductSearchService->expects($this->exactly(2))->method('query');
         $this->requestHandler->process($this->stubRequest);
     }
 
@@ -229,7 +237,7 @@ class ProductListingRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->mockProductListingPageRequest->method('createSortByForRequest')->willReturn($stubSortBy);
 
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
-        $this->mockDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria');
+        $this->mockProductSearchService->expects($this->once())->method('query');
         $this->requestHandler->process($this->stubRequest);
     }
 

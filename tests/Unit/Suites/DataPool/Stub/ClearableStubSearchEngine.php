@@ -27,9 +27,4 @@ class ClearableStubSearchEngine implements SearchEngine, Clearable
     {
         // Intentionally left empty
     }
-
-    public function queryFullText(string $searchString, QueryOptions $queryOptions) : SearchEngineResponse
-    {
-        // Intentionally left empty
-    }
 }

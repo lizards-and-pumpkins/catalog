@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-
-class SearchCriterionAnything implements SearchCriteria, \JsonSerializable
+class SearchCriterionAnything implements SearchCriteria
 {
-    public function matches(SearchDocument $searchDocument) : bool
+    /**
+     * @return string[]
+     */
+    public function jsonSerialize() : array
     {
-        return true;
+        return $this->toArray();
     }
 
     /**
      * @return string[]
      */
-    public function jsonSerialize() : array
+    public function toArray(): array
     {
         return [
             'fieldName'  => '',

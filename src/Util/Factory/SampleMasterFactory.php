@@ -14,7 +14,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
@@ -57,7 +56,6 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method string[] getRequiredContextParts
  * @method ProductXmlToProductBuilderLocator createProductXmlToProductBuilderLocator
  * @method Context createContext
- * @method SearchCriteriaBuilder createSearchCriteriaBuilder
  * @method string[] getSearchableAttributeCodes
  * @method FacetFiltersToIncludeInResult createProductListingFacetFiltersToIncludeInResult
  * @method ProductsPerPage getProductsPerPageConfig

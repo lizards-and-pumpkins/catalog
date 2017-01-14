@@ -6,33 +6,52 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
-class SearchCriterionLessOrEqualThanTest extends AbstractSearchCriterionTest
+class SearchCriterionLessOrEqualThanTest extends \PHPUnit_Framework_TestCase
 {
-    final protected function getOperationName() : string
-    {
-        return 'LessOrEqualThan';
-    }
+    private $testFieldName = 'foo';
+
+    private $testFieldValue = 'bar';
 
     /**
-     * @return array[]
+     * @var SearchCriterionLessOrEqualThan
      */
-    final public function getNonMatchingValues() : array
+    private $criteria;
+
+    final protected function setUp()
     {
-        return [
-            [['2'], '1'],
-        ];
+        $this->criteria = new SearchCriterionLessOrEqualThan($this->testFieldName, $this->testFieldValue);
     }
 
-    /**
-     * @return array[]
-     */
-    final public function getMatchingValues() : array
+    public function testItImplementsTheSearchCriteriaInterface()
     {
-        return[
-            [['1'], '2'],
-            [['1'], '1'],
+        $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
+    }
+
+    public function testItImplementsJsonSerializable()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
+    }
+
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'LessOrEqualThan'
         ];
+
+        $this->assertSame($expectation, $this->criteria->jsonSerialize());
+    }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'LessOrEqualThan'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
     }
 }

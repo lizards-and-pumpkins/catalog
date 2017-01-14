@@ -129,7 +129,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $pageNumber,
             $sortBy
         );
-        $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
+        $searchResults = $dataPoolReader->getSearchResults($criteria, $queryOptions);
 
         $this->assertContains($productId, $searchResults->getProductIds(), '', false, false);
     }
@@ -188,7 +188,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $masterFactory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($masterFactory);
 
-        $website = new DefaultWebFront($request, $implementationSpecificFactory);
+        $website = new InjectableDefaultWebFront($request, $masterFactory, $implementationSpecificFactory);
 
         $response = $website->processRequest();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);

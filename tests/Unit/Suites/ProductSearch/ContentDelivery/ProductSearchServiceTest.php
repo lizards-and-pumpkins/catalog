@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
-use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
+use LizardsAndPumpkins\ProductSearch\QueryOptions;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
- * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult
  */
 class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,16 +26,14 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
     private $stubDataPoolReader;
 
     /**
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubGlobalProductListingCriteria;
+
+    /**
      * @var ProductJsonService|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubProductJsonService;
-
-    private $maxAllowedProductsPerPage = 10;
-
-    /**
-     * @var string[]
-     */
-    private $sortableAttributeCodes = ['foo', 'bar'];
 
     /**
      * @var ProductSearchService
@@ -48,125 +41,79 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
     private $service;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubContext;
+    private $stubSearchCriteria;
 
-    private function createSortByWithAttributeCode(string $attributeCode) : SortBy
-    {
-        return new SortBy(AttributeCode::fromString($attributeCode), SortDirection::create(SortDirection::ASC));
-    }
+    /**
+     * @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubQueryOptions;
 
     final protected function setUp()
     {
         $this->stubDataPoolReader = $this->createMock(DataPoolReader::class);
+        $this->stubGlobalProductListingCriteria = $this->createMock(SearchCriteria::class);
         $this->stubProductJsonService = $this->createMock(ProductJsonService::class);
 
         $this->service = new ProductSearchService(
             $this->stubDataPoolReader,
-            $this->stubProductJsonService,
-            $this->maxAllowedProductsPerPage,
-            ...$this->sortableAttributeCodes
+            $this->stubGlobalProductListingCriteria,
+            $this->stubProductJsonService
         );
 
-        $this->stubContext = $this->createMock(Context::class);
+        $this->stubSearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubQueryOptions = $this->createMock(QueryOptions::class);
     }
 
     public function testReturnsAnEmptyResultIfNoProductsMatchQueryString()
     {
-        $queryString = 'foo';
-
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([]);
 
         $this->stubDataPoolReader->method('getProductIdsMatchingCriteria')->willReturn($stubSearchEngineResponse);
 
-        $rowsPerPage = 10;
-        $pageNumber = 0;
-        $testSortBy = $this->createSortByWithAttributeCode('bar');
+        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
 
-        $result = $this->service->query(
-            $queryString,
-            $this->stubContext,
-            $rowsPerPage,
-            $pageNumber,
-            $testSortBy
-        );
-
-        $this->assertSame(['total' => 0, 'data' => []], $result);
+        $this->assertSame(0, $result->getTotalNumberOfResults());
     }
 
     public function testReturnsSetOfMatchingProductsData()
     {
-        $queryString = 'foo';
-
         $stubProductIds = [$this->createMock(ProductId::class), $this->createMock(ProductId::class)];
         $dummyProductDataArray = [['Dummy product A data'], ['Dummy product B data']];
+
+        /** @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject $stubFacetFieldCollection */
+        $stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn($stubProductIds);
         $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn(count($dummyProductDataArray));
+        $stubSearchEngineResponse->method('getFacetFieldCollection')->willReturn($stubFacetFieldCollection);
 
-        $this->stubDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
         $this->stubProductJsonService->method('get')->willReturn($dummyProductDataArray);
 
-        $rowsPerPage = 10;
-        $pageNumber = 0;
-        $testSortBy = $this->createSortByWithAttributeCode('bar');
-
-        $result = $this->service->query(
-            $queryString,
-            $this->stubContext,
-            $rowsPerPage,
-            $pageNumber,
-            $testSortBy
+        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
+        $expectedResult = new ProductSearchResult(
+            count($dummyProductDataArray),
+            $dummyProductDataArray,
+            $stubFacetFieldCollection
         );
 
-        $this->assertSame(['total' => count($dummyProductDataArray), 'data' => $dummyProductDataArray], $result);
+        $this->assertEquals($expectedResult, $result);
     }
 
-    public function testThrowsAnExceptionIfRequestedSortOrderIsNotAllowed()
+    public function testAppliesGlobalProductListingCriteriaToCriteriaSentToDataPool()
     {
-        $unsupportedSortAttributeCode = 'baz';
+        $expectedCriteria = CompositeSearchCriterion::createAnd(
+            $this->stubSearchCriteria,
+            $this->stubGlobalProductListingCriteria
+        );
 
-        $this->expectException(UnsupportedSortOrderException::class);
-        $this->expectExceptionMessage(sprintf('Sorting by "%s" is not supported', $unsupportedSortAttributeCode));
+        $this->stubDataPoolReader->expects($this->once())->method('getSearchResults')
+            ->with($expectedCriteria);
 
-        $queryString = 'foo';
-        $rowsPerPage = 10;
-        $pageNumber = 0;
-        $testSortBy = $this->createSortByWithAttributeCode($unsupportedSortAttributeCode);
-
-        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortBy);
-    }
-
-    public function testThrowsAnExceptionIfInvalidNumberOfProductsPerPageTypeIsPassed()
-    {
-        $this->expectException(\TypeError::class);
-
-        $queryString = 'foo';
-        $rowsPerPage = [];
-        $pageNumber = 0;
-        $testSortBy = $this->createSortByWithAttributeCode('bar');
-
-        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortBy);
-    }
-
-    public function testThrowsAnExceptionIfRequestedNumberOfProductsIsHigherThanAllowed()
-    {
-        $rowsPerPage = $this->maxAllowedProductsPerPage + 1;
-
-        $this->expectException(InvalidNumberOfProductsPerPageException::class);
-        $this->expectExceptionMessage(sprintf(
-            'Maximum allowed number of products per page is %d, got %d.',
-            $this->maxAllowedProductsPerPage,
-            $rowsPerPage
-        ));
-
-        $queryString = 'foo';
-        $pageNumber = 0;
-        $testSortBy = $this->createSortByWithAttributeCode('bar');
-
-        $this->service->query($queryString, $this->stubContext, $rowsPerPage, $pageNumber, $testSortBy);
+        $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
     }
 }

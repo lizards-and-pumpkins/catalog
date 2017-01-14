@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
@@ -106,8 +106,6 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
@@ -662,10 +660,18 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testSearchCriteriaBuilderIsReturned()
+    public function testReturnsFacetFieldTransformationRegistry()
     {
-        $result = $this->commonFactory->createSearchCriteriaBuilder();
-        $this->assertInstanceOf(SearchCriteriaBuilder::class, $result);
+        $result = $this->commonFactory->getFacetFieldTransformationRegistry();
+        $this->assertInstanceOf(FacetFieldTransformationRegistry::class, $result);
+    }
+
+    public function testMemoizesFacetFieldTransformationRegistry()
+    {
+        $resultA = $this->commonFactory->getFacetFieldTransformationRegistry();
+        $resultB = $this->commonFactory->getFacetFieldTransformationRegistry();
+
+        $this->assertSame($resultA, $resultB);
     }
 
     public function testSnippetKeyGeneratorForContentBlockIsReturned()

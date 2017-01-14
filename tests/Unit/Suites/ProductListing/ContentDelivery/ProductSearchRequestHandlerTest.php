@@ -9,17 +9,17 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
@@ -28,6 +28,11 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      * @var ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductListingPageRequest;
+
+    /**
+     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubDataPoolReader;
 
     /**
      * @var ProductListingRequestHandler
@@ -49,10 +54,6 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function createStubDataPoolReader() : DataPoolReader
     {
-        /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
-        $stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
-        $stubSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
         $pageSnippetCodes = ['child-snippet1'];
 
         $testMetaInfoSnippetJson = json_encode(ProductSearchResultMetaSnippetContent::create(
@@ -63,13 +64,11 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
 
-        $mockDataPoolReader = $this->createMock(DataPoolReader::class);
-        $mockDataPoolReader->method('getSearchResultsMatchingString')->willReturn($stubSearchEngineResponse);
-        $mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
-        ]);
+        $stubDataPoolReader = $this->createMock(DataPoolReader::class);
+        $stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
+        $stubDataPoolReader->method('getSnippet')->willReturnMap([[$this->testMetaInfoKey, $testMetaInfoSnippetJson]]);
 
-        return $mockDataPoolReader;
+        return $stubDataPoolReader;
     }
 
     /**
@@ -108,7 +107,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
 
-        $stubDataPoolReader = $this->createStubDataPoolReader();
+        $this->stubDataPoolReader = $this->createStubDataPoolReader();
 
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
@@ -121,19 +120,22 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
-        $this->stubRequest = $this->createMock(HttpRequest::class);
+        $stubProductSearchService = $this->createMock(ProductSearchService::class);
 
         $stubDefaultSortBy = $this->createMock(SortBy::class);
 
         $this->requestHandler = new ProductSearchRequestHandler(
             $stubContext,
-            $stubDataPoolReader,
+            $this->stubDataPoolReader,
             $stubSnippetKeyGenerator,
             $stubFacetFilterRequest,
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest,
+            $stubProductSearchService,
             $stubDefaultSortBy
         );
+
+        $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl() : HttpRequest
@@ -215,11 +217,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCookieProcessingIsTriggered(HttpRequest $stubRequest)
     {
-        $stubSortBy = $this->createMock(SortBy::class);
-
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
-        $this->mockProductListingPageRequest->method('createSortByForRequest')->willReturn($stubSortBy);
-
         $this->requestHandler->process($stubRequest);
     }
 
@@ -228,12 +226,7 @@ class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testHttpResponseIsReturned(HttpRequest $stubRequest)
     {
-        $stubSortBy = $this->createMock(SortBy::class);
-        $this->mockProductListingPageRequest->method('createSortByForRequest')->willReturn($stubSortBy);
-
-        $result = $this->requestHandler->process($stubRequest);
-
-        $this->assertInstanceOf(HttpResponse::class, $result);
+        $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($stubRequest));
     }
 
     /**

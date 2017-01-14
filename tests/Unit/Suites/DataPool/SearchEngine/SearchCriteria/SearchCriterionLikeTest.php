@@ -6,32 +6,52 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLike
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
-class SearchCriterionLikeTest extends AbstractSearchCriterionTest
+class SearchCriterionLikeTest extends \PHPUnit_Framework_TestCase
 {
-    final protected function getOperationName() : string
-    {
-        return 'Like';
-    }
+    private $testFieldName = 'foo';
+
+    private $testFieldValue = 'bar';
 
     /**
-     * @return array[]
+     * @var SearchCriterionLike
      */
-    final public function getNonMatchingValues() : array
+    private $criteria;
+
+    final protected function setUp()
     {
-        return [
-            [['foo'], 'bar'],
-        ];
+        $this->criteria = new SearchCriterionLike($this->testFieldName, $this->testFieldValue);
     }
 
-    /**
-     * @return array[]
-     */
-    final public function getMatchingValues() : array
+    public function testItImplementsTheSearchCriteriaInterface()
     {
-        return[
-            [['food'], 'foo'],
+        $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
+    }
+
+    public function testItImplementsJsonSerializable()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
+    }
+
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'Like'
         ];
+
+        $this->assertSame($expectation, $this->criteria->jsonSerialize());
+    }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'Like'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
     }
 }

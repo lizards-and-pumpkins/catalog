@@ -239,7 +239,6 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     public function createSearchEngine() : InMemorySearchEngine
     {
         return new InMemorySearchEngine(
-            $this->getMasterFactory()->createSearchCriteriaBuilder(),
             $this->getMasterFactory()->getFacetFieldTransformationRegistry(),
             ...$this->getMasterFactory()->getSearchableAttributeCodes()
         );

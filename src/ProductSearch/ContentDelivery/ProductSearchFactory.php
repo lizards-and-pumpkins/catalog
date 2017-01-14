@@ -33,7 +33,9 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createContextBuilder(),
             $this->getMasterFactory()->getDefaultNumberOfProductsPerSearchResultsPage(),
-            $this->getMasterFactory()->getProductSearchDefaultSortBy()
+            $this->getMasterFactory()->getMaxAllowedProductsPerSearchResultsPage(),
+            $this->getMasterFactory()->getProductSearchDefaultSortBy(),
+            ...$this->getMasterFactory()->getSortableAttributeCodes()
         );
     }
 
@@ -41,9 +43,8 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
     {
         return new ProductSearchService(
             $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductJsonService(),
-            $this->getMasterFactory()->getMaxAllowedProductsPerSearchResultsPage(),
-            ...$this->getMasterFactory()->getSortableAttributeCodes()
+            $this->getMasterFactory()->createGlobalProductListingCriteria(),
+            $this->getMasterFactory()->createProductJsonService()
         );
     }
 }

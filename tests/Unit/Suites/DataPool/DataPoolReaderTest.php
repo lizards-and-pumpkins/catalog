@@ -143,25 +143,12 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
         $stubQueryOptions = $this->createMock(QueryOptions::class);
 
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $mockCriteria */
-        $mockCriteria = $this->createMock(SearchCriteria::class);
+        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
+        $stubCriteria = $this->createMock(SearchCriteria::class);
 
-        $this->getMockSearchEngine()->expects($this->once())->method('query')->with($mockCriteria, $stubQueryOptions);
+        $this->getMockSearchEngine()->expects($this->once())->method('query')->with($stubCriteria, $stubQueryOptions);
 
-        $this->dataPoolReader->getSearchResultsMatchingCriteria($mockCriteria, $stubQueryOptions);
-    }
-
-    public function testFullTextQueriesAreDelegatedToSearchEngine()
-    {
-        /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
-        $stubQueryOptions = $this->createMock(QueryOptions::class);
-
-        $testQueryString = 'foo';
-
-        $this->getMockSearchEngine()->expects($this->once())->method('queryFullText')
-            ->with($testQueryString, $stubQueryOptions);
-
-        $this->dataPoolReader->getSearchResultsMatchingString($testQueryString, $stubQueryOptions);
+        $this->dataPoolReader->getSearchResults($stubCriteria, $stubQueryOptions);
     }
 
     public function testItDelegatesUrlKeyReadsToUrlKeyStorage()

@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -66,6 +67,8 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $factory->register(new NullProductImageImportCommandFactory());
         $factory->register(new UpdatingProductListingImportCommandFactory());
         $this->getIntegrationTestFactory($factory);
+        $factory->register(new ProductSearchFactory());
+
         return $factory;
     }
 

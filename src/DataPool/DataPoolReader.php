@@ -127,10 +127,8 @@ class DataPoolReader
         return $this->keyValueStore->get($this->currentDataVersionKey);
     }
 
-    public function getSearchResultsMatchingCriteria(
-        SearchCriteria $criteria,
-        QueryOptions $queryOptions
-    ) : SearchEngineResponse {
+    public function getSearchResults(SearchCriteria $criteria, QueryOptions $queryOptions) : SearchEngineResponse
+    {
         return $this->searchEngine->query($criteria, $queryOptions);
     }
 
@@ -173,12 +171,5 @@ class DataPoolReader
         $searchResult = $this->searchEngine->query($criteria, $queryOptions);
 
         return array_values($searchResult->getProductIds());
-    }
-
-    public function getSearchResultsMatchingString(
-        string $queryString,
-        QueryOptions $queryOptions
-    ) : SearchEngineResponse {
-        return $this->searchEngine->queryFullText($queryString, $queryOptions);
     }
 }

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
-class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
+class CompositeSearchCriterion implements SearchCriteria
 {
     const AND_CONDITION = 'and';
     const OR_CONDITION = 'or';
@@ -51,30 +50,6 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
         return new self(self::OR_CONDITION, ...$criteria);
     }
 
-    public function matches(SearchDocument $searchDocument) : bool
-    {
-        $isMatching = false;
-
-        foreach ($this->criteria as $criteria) {
-            $isMatching = $criteria->matches($searchDocument);
-            if (($this->hasOrCondition() && $isMatching) || ($this->hasAndCondition() && !$isMatching)) {
-                return $isMatching;
-            }
-        }
-
-        return $isMatching;
-    }
-
-    private function hasAndCondition() : bool
-    {
-        return self::AND_CONDITION === $this->condition;
-    }
-
-    private function hasOrCondition() : bool
-    {
-        return self::OR_CONDITION === $this->condition;
-    }
-
     /**
      * @return mixed[]
      */
@@ -83,6 +58,19 @@ class CompositeSearchCriterion implements SearchCriteria, \JsonSerializable
         return [
             'condition' => $this->condition,
             'criteria'  => $this->criteria
+        ];
+    }
+
+    /**
+     * @return mixed[]
+     */
+    public function toArray(): array
+    {
+        return [
+            'condition' => $this->condition,
+            'criteria' => array_map(function (SearchCriteria $criteria) {
+                return $criteria->toArray();
+            }, $this->criteria)
         ];
     }
 }

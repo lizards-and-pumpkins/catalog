@@ -8,8 +8,10 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -52,6 +54,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $productListingPageRequest;
 
     /**
+     * @var ProductSearchService
+     */
+    private $productSearchService;
+
+    /**
      * @var SortBy
      */
     private $defaultSortBy;
@@ -68,6 +75,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
+        ProductSearchService $productSearchService,
         SortBy $defaultSortBy,
         SortBy ...$availableSortBy
     ) {
@@ -77,6 +85,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->facetFiltersToIncludeInResult = $facetFiltersToIncludeInResult;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
+        $this->productSearchService = $productSearchService;
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
     }
@@ -100,7 +109,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $this->defaultSortBy,
             ...$this->availableSortBy
         );
-        $searchEngineResponse = $this->getSearchResultsMatchingCriteria($request, $productsPerPage, $selectedSortBy);
+        $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
 
         $metaInfoSnippetContent = $this->getPageMetaInfo();
         $keyGeneratorParams = [
@@ -111,7 +120,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
             $metaInfoSnippetContent,
             $this->context,
             $keyGeneratorParams,
-            $searchEngineResponse,
+            $productSearchResult,
             $productsPerPage,
             $selectedSortBy,
             ...$this->availableSortBy
@@ -139,25 +148,24 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         return true;
     }
 
-    private function getSearchResultsMatchingCriteria(
+    private function getSearchResults(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
         SortBy $selectedSortBy
-    ) : SearchEngineResponse {
-        $requestSortOrder = $this->productListingPageRequest->createSortByForRequest($selectedSortBy);
-
+    ) : ProductSearchResult {
         $queryOptions = QueryOptions::create(
             $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFiltersToIncludeInResult),
             $this->context,
             $this->facetFiltersToIncludeInResult,
             $productsPerPage->getSelectedNumberOfProductsPerPage(),
             $this->productListingPageRequest->getCurrentPageNumber($request),
-            $requestSortOrder
+            $this->productListingPageRequest->createSortByForRequest($selectedSortBy)
         );
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
+        $criteria = new SearchCriterionFullText($queryString);
 
-        return $this->dataPoolReader->getSearchResultsMatchingString($queryString, $queryOptions);
+        return $this->productSearchService->query($criteria, $queryOptions);
     }
 
     private function getPageMetaInfo() : ProductSearchResultMetaSnippetContent

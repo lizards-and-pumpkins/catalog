@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
-
-interface SearchCriteria
+interface SearchCriteria extends \JsonSerializable
 {
-    public function matches(SearchDocument $searchDocument) : bool;
+    /**
+     * @return mixed[]
+     */
+    public function toArray() : array;
 }

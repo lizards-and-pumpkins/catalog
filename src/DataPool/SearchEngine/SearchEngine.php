@@ -13,6 +13,4 @@ interface SearchEngine
     public function addDocument(SearchDocument $searchDocument);
 
     public function query(SearchCriteria $criteria, QueryOptions $queryOptions) : SearchEngineResponse;
-
-    public function queryFullText(string $searchString, QueryOptions $queryOptions) : SearchEngineResponse;
 }

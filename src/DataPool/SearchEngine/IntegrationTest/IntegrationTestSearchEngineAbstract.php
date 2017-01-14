@@ -2,18 +2,32 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperation;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\NoFacetFieldTransformationRegisteredException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\UnsupportedSearchCriteriaOperationException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\Util\Storage\Clearable;
@@ -24,8 +38,6 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
      * @return SearchDocument[]
      */
     abstract protected function getSearchDocuments() : array;
-
-    abstract protected function getSearchCriteriaBuilder() : SearchCriteriaBuilder;
 
     abstract protected function getFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry;
 
@@ -39,9 +51,9 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $selectedFilters = array_filter($queryOptions->getFilterSelection());
         $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFilters);
 
-        $allDocuments = $this->getSearchDocuments();
+        $allDocuments = array_values($this->getSearchDocuments());
         $context = $queryOptions->getContext();
-        $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
+        $matchingDocuments = $this->filterDocumentsMatchingCriteria($criteria, $context, ...$allDocuments);
 
         $facetFieldCollection = $this->createFacetFieldCollection(
             $originalCriteria,
@@ -59,15 +71,6 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
         $pageNumber = $queryOptions->getPageNumber();
 
         return $this->createSearchEngineResponse($facetFieldCollection, $sortedDocuments, $rowsPerPage, $pageNumber);
-    }
-
-    final public function queryFullText(string $searchString, QueryOptions $queryOptions) : SearchEngineResponse
-    {
-        $criteriaBuilder = $this->getSearchCriteriaBuilder();
-        $searchableFields = $this->getSearchableFields();
-        $criteria = $criteriaBuilder->createCriteriaForAnyOfGivenFieldsContainsString($searchableFields, $searchString);
-
-        return $this->query($criteria, $queryOptions);
     }
 
     /**
@@ -165,7 +168,7 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
             $selectedFiltersExceptCurrentOne = array_diff_key($selectedFilters, [$filterCode => []]);
 
             $criteria = $this->applyFiltersToSelectionCriteria($originalCriteria, $selectedFiltersExceptCurrentOne);
-            $matchingDocuments = $this->filterDocumentsMatchingCriteria($allDocuments, $criteria, $context);
+            $matchingDocuments = $this->filterDocumentsMatchingCriteria($criteria, $context, ...$allDocuments);
 
             $facetFields = $this->createFacetFieldsFromSearchDocuments(
                 [$filterCode],
@@ -187,8 +190,25 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
     private function createOptionValuesCriteriaArray(string $filterCode, array $filterOptionValues) : array
     {
         return array_map(function ($filterOptionValue) use ($filterCode) {
-            return $this->getSearchCriteriaBuilder()->fromFieldNameAndValue($filterCode, $filterOptionValue);
+            return $this->fromFieldNameAndValue($filterCode, $filterOptionValue);
         }, $filterOptionValues);
+    }
+
+    private function fromFieldNameAndValue(string $fieldName, string $fieldValue) : SearchCriteria
+    {
+        $facetFieldTransformationRegistry = $this->getFacetFieldTransformationRegistry();
+
+        if ($facetFieldTransformationRegistry->hasTransformationForCode($fieldName)) {
+            $transformation = $facetFieldTransformationRegistry->getTransformationByCode($fieldName);
+            $range = $transformation->decode($fieldValue);
+
+            $criterionFrom = new SearchCriterionGreaterOrEqualThan($fieldName, $range->from());
+            $criterionTo = new SearchCriterionLessOrEqualThan($fieldName, $range->to());
+
+            return CompositeSearchCriterion::createAnd($criterionFrom, $criterionTo);
+        }
+
+        return new SearchCriterionEqual($fieldName, $fieldValue);
     }
 
     final protected function getSearchDocumentIdentifier(SearchDocument $searchDocument) : string
@@ -439,38 +459,94 @@ abstract class IntegrationTestSearchEngineAbstract implements SearchEngine, Clea
 
     private function getRangedFilterCode(FacetFilterRange $range, string $attributeCode) : string
     {
-        $transformationRegistry = $this->getFacetFieldTransformationRegistry();
+        $facetFieldTransformationRegistry = $this->getFacetFieldTransformationRegistry();
 
-        if (!$transformationRegistry->hasTransformationForCode($attributeCode)) {
+        if (! $facetFieldTransformationRegistry->hasTransformationForCode($attributeCode)) {
             throw new NoFacetFieldTransformationRegisteredException(
                 sprintf('No facet field transformation is registered for "%s" attribute.', $attributeCode)
             );
         }
 
-        $transformation = $transformationRegistry->getTransformationByCode($attributeCode);
+        $transformation = $facetFieldTransformationRegistry->getTransformationByCode($attributeCode);
 
         return $transformation->encode($range);
     }
 
     /**
-     * @param SearchDocument[] $documents
      * @param SearchCriteria $criteria
      * @param Context $context
+     * @param SearchDocument[] ...$documents
      * @return SearchDocument[]
      */
     private function filterDocumentsMatchingCriteria(
-        array $documents,
         SearchCriteria $criteria,
-        Context $context
+        Context $context,
+        SearchDocument ...$documents
     ) : array {
         return array_filter($documents, function (SearchDocument $document) use ($criteria, $context) {
-            return $criteria->matches($document) && $context->contains($document->getContext());
+            return $this->isSearchDocumentMatchesCriteria($document, $criteria->toArray()) &&
+                   $context->contains($document->getContext());
         });
     }
 
     /**
+     * @param SearchDocument $document
+     * @param mixed[] $criteriaArray
+     * @return bool
+     */
+    private function isSearchDocumentMatchesCriteria(SearchDocument $document, array $criteriaArray) : bool
+    {
+        if (isset($criteriaArray['condition'])) {
+            $subOperationResults = array_map(function (array $subCriteriaArray) use ($document) {
+                return $this->isSearchDocumentMatchesCriteria($document, $subCriteriaArray);
+            }, $criteriaArray['criteria']);
+
+            return $this->computeCompositeCriterion($criteriaArray['condition'], ...$subOperationResults);
+        }
+
+        $operation = $this->createOperation($criteriaArray['operation'], $criteriaArray);
+
+        return $operation->matches($document);
+    }
+
+    private function computeCompositeCriterion(string $condition, bool ...$subOperationResults) : bool
+    {
+        if (strcasecmp($condition, CompositeSearchCriterion::AND_CONDITION) === 0) {
+            return array_reduce($subOperationResults, function ($carry, $operationResult) {
+                return $carry && $operationResult;
+            }, true);
+        }
+
+        if (strcasecmp($condition, CompositeSearchCriterion::OR_CONDITION) === 0) {
+            return array_reduce($subOperationResults, function ($carry, $operationResult) {
+                return $carry || $operationResult;
+            }, false);
+        }
+
+        throw new InvalidCriterionConditionException(sprintf('Unknown search criteria condition "%s".', $condition));
+    }
+
+    /**
+     * @param string $operation
+     * @param string[] $data
+     * @return IntegrationTestSearchEngineOperation
+     */
+    private function createOperation(string $operation, array $data) : IntegrationTestSearchEngineOperation
+    {
+        $className = __NAMESPACE__ . '\\Operation\\IntegrationTestSearchEngineOperation' . $operation;
+
+        if (! class_exists($className)) {
+            throw new UnsupportedSearchCriteriaOperationException(
+                sprintf('Unsupported integration test search engine criterion operation "%s".', $operation)
+            );
+        }
+
+        return new $className($data);
+    }
+
+    /**
      * @param SortBy $sortBy
-     * @param SearchDocument[] $unsortedDocuments
+     * @param SearchDocument[] ...$unsortedDocuments
      * @return SearchDocument[]
      */
     private function getSortedDocuments(SortBy $sortBy, SearchDocument ...$unsortedDocuments) : array

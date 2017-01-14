@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteriaBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\IntegrationTestSearchEngineAbstract;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 
 class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
@@ -21,21 +21,14 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     private $searchableFields;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var FacetFieldTransformationRegistry
      */
     private $facetFieldTransformationRegistry;
 
     public function __construct(
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         FacetFieldTransformationRegistry $facetFieldTransformationRegistry,
         string ...$searchableFields
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->facetFieldTransformationRegistry = $facetFieldTransformationRegistry;
         $this->searchableFields = $searchableFields;
     }
@@ -56,11 +49,6 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
     public function clear()
     {
         $this->index = [];
-    }
-
-    final protected function getSearchCriteriaBuilder() : SearchCriteriaBuilder
-    {
-        return $this->searchCriteriaBuilder;
     }
 
     final protected function getFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry

@@ -2,12 +2,19 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\DataPool\SearchEngine;
+namespace LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestRangedField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\Context\Context;
@@ -17,6 +24,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterOrEqualThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessOrEqualThan;
@@ -24,6 +32,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLessT
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -328,7 +338,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         $this->searchEngine->addDocument($searchDocumentA);
         $this->searchEngine->addDocument($searchDocumentB);
 
-        $searchEngineResponse = $this->searchEngine->queryFullText('bar', $this->createStubQueryOptions());
+        $criteria = new SearchCriterionFullText('bar');
+
+        $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertContains($productAId, $result, '', false, false);
@@ -791,5 +803,27 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expectedValues, $facetFields[0]->getValues());
+    }
+
+    public function testAppliesFacetFieldTransformationsToSelectedFilters()
+    {
+        $fieldCode = 'price';
+        $fieldValue = '10-20';
+
+        $mockFacetFieldTransformation = $this->createMock(FacetFieldTransformation::class);
+        $mockFacetFieldTransformation->expects($this->once())->method('decode')
+            ->willReturn(FacetFilterRange::create(10, 20));
+
+        $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(true);
+        $this->stubFacetFieldTransformationRegistry->method('getTransformationByCode')
+            ->willReturn($mockFacetFieldTransformation);
+
+        $criteria = new SearchCriterionAnything();
+
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult();
+        $selectedFilters = [$fieldCode => [$fieldValue]];
+        $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
+
+        $this->searchEngine->query($criteria, $queryOptions);
     }
 }

@@ -6,32 +6,52 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionNotEqual
- * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion
  */
-class SearchCriterionNotEqualTest extends AbstractSearchCriterionTest
+class SearchCriterionNotEqualTest extends \PHPUnit_Framework_TestCase
 {
-    final protected function getOperationName() : string
-    {
-        return 'NotEqual';
-    }
+    private $testFieldName = 'foo';
+
+    private $testFieldValue = 'bar';
 
     /**
-     * @return array[]
+     * @var SearchCriterionNotEqual
      */
-    final public function getNonMatchingValues() : array
+    private $criteria;
+
+    final protected function setUp()
     {
-        return [
-            [['foo'], 'foo'],
-        ];
+        $this->criteria = new SearchCriterionNotEqual($this->testFieldName, $this->testFieldValue);
     }
 
-    /**
-     * @return array[]
-     */
-    final public function getMatchingValues() : array
+    public function testItImplementsTheSearchCriteriaInterface()
     {
-        return[
-            [['foo'], 'bar'],
+        $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
+    }
+
+    public function testItImplementsJsonSerializable()
+    {
+        $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
+    }
+
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'NotEqual'
         ];
+
+        $this->assertSame($expectation, $this->criteria->jsonSerialize());
+    }
+
+    public function testReturnsArrayRepresentationOfCriteria()
+    {
+        $expectation = [
+            'fieldName'  => $this->testFieldName,
+            'fieldValue' => $this->testFieldValue,
+            'operation'  => 'NotEqual'
+        ];
+
+        $this->assertSame($expectation, $this->criteria->toArray());
     }
 }
