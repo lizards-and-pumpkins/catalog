@@ -27,7 +27,6 @@ class IntegrationTestSearchEngineOperationFullText implements IntegrationTestSea
 
     public function matches(SearchDocument $searchDocument) : bool
     {
-        /** @var SearchDocumentField $searchDocumentField */
         foreach ($searchDocument->getFieldsCollection() as $searchDocumentField) {
             if ($this->hasValueMatchingOneOfFieldValues($searchDocumentField)) {
                 return true;

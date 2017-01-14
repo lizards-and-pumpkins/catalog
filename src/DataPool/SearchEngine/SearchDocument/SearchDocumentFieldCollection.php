@@ -46,7 +46,7 @@ class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
     }
 
     /**
-     * @return \ArrayIterator
+     * @return \ArrayIterator|SearchDocumentField[]
      */
     public function getIterator()
     {
