@@ -31,7 +31,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubQueue;
+    private $mockQueue;
 
     /**
      * @var DomainEventHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
@@ -40,11 +40,11 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubQueue = $this->createMock(Queue::class);
+        $this->mockQueue = $this->createMock(Queue::class);
         $this->mockLocator = $this->createMock(DomainEventHandlerLocator::class);
         $this->mockLogger = $this->createMock(Logger::class);
 
-        $this->domainEventConsumer = new DomainEventConsumer($this->stubQueue, $this->mockLocator, $this->mockLogger);
+        $this->domainEventConsumer = new DomainEventConsumer($this->mockQueue, $this->mockLocator, $this->mockLogger);
     }
 
     public function testItIsAQueueMessageConsumer()
@@ -54,17 +54,33 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testConsumesMessagesFromQueue()
     {
-        $this->stubQueue->expects($this->once())->method('consume')->with($this->domainEventConsumer);
+        $this->mockQueue->expects($this->once())->method('consume')->with($this->domainEventConsumer);
 
         $this->domainEventConsumer->process();
     }
 
+    public function testCallsConsumeWithTheNumberOdMessagesOnTheQueue()
+    {
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(2, 0);
+        $this->mockQueue->expects($this->once())->method('consume')->with($this->domainEventConsumer, 2);
+        $this->domainEventConsumer->processAll();
+    }
+
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
-        $this->stubQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
+        $this->mockQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
         $this->mockLogger->expects($this->once())->method('log');
 
         $this->domainEventConsumer->process();
+    }
+    
+    public function testLogEntryIsWrittenOnQueueReadFailureDuringProcessAll()
+    {
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
+        $this->mockQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
+        $this->mockLogger->expects($this->once())->method('log');
+
+        $this->domainEventConsumer->processAll();
     }
 
     public function testDelegatesProcessingToLocatedEventHandler()
@@ -73,7 +89,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
         $mockEventHandler->expects($this->once())->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($mockEventHandler);
 
-        $this->stubQueue->method('consume')
+        $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
                 $stubMessage = $this->createMock(Message::class);
@@ -87,7 +103,7 @@ class DomainEventConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockLogger->expects($this->once())->method('log');
 
-        $this->stubQueue->method('consume')
+        $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
                 $stubMessage = $this->createMock(Message::class);

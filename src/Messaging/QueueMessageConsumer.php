@@ -10,4 +10,9 @@ interface QueueMessageConsumer
      * @return void
      */
     public function process();
+
+    /**
+     * @return void
+     */
+    public function processAll();
 }
