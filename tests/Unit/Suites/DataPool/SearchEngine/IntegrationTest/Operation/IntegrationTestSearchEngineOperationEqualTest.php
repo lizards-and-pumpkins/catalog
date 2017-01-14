@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\Exception\InvalidSearchEngineOperationDataSetException;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperationEqual
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEnginePrimitiveOperator
  */
 class IntegrationTestSearchEngineOperationEqualTest extends \PHPUnit_Framework_TestCase
 {
@@ -65,49 +65,6 @@ class IntegrationTestSearchEngineOperationEqualTest extends \PHPUnit_Framework_T
         $this->assertInstanceOf(IntegrationTestSearchEngineOperation::class, $this->operation);
     }
 
-    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldName()
-    {
-        $this->expectException(InvalidSearchEngineOperationDataSetException::class);
-        $this->expectExceptionMessage('Search engine operation data set array does not contain "fieldName" element.');
-
-        new IntegrationTestSearchEngineOperationEqual(['fieldValue' => 'bar']);
-    }
-
-    public function testThrowsAnExceptionIfSearchEngineOperationFieldNameIsNonString()
-    {
-        $this->expectException(InvalidSearchEngineOperationDataSetException::class);
-        $this->expectExceptionMessage('Search engine operation field name must be a string.');
-
-        new IntegrationTestSearchEngineOperationEqual(['fieldName' => true, 'fieldValue' => 'bar']);
-    }
-
-    /**
-     * @dataProvider emptyStringProvider
-     */
-    public function testThrowsAnExceptionIfSearchEngineOperationFieldNameIsEmpty(string $emptyString)
-    {
-        $this->expectException(InvalidSearchEngineOperationDataSetException::class);
-        $this->expectExceptionMessage('Search engine operation field name must not be empty.');
-
-        new IntegrationTestSearchEngineOperationEqual(['fieldName' => $emptyString, 'fieldValue' => 'bar']);
-    }
-
-    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldValue()
-    {
-        $this->expectException(InvalidSearchEngineOperationDataSetException::class);
-        $this->expectExceptionMessage('Search engine operation data set array does not contain "fieldValue" element.');
-
-        new IntegrationTestSearchEngineOperationEqual(['fieldName' => 'foo']);
-    }
-
-    public function testReturnsFalseIfDocumentHaveNoFieldInvolvedIntoAnOperation()
-    {
-        $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', ['qux']);
-        $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
-
-        $this->assertFalse($this->operation->matches($stubSearchDocument));
-    }
-
     public function testReturnsFalseIfDocumentFieldValueIsNotMatching()
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField($this->testFieldName, ['qux']);
@@ -122,16 +79,5 @@ class IntegrationTestSearchEngineOperationEqualTest extends \PHPUnit_Framework_T
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
 
         $this->assertTrue($this->operation->matches($stubSearchDocument));
-    }
-
-    /**
-     * @return array[]
-     */
-    public function emptyStringProvider() : array
-    {
-        return [
-            [''],
-            [' '],
-        ];
     }
 }

@@ -28,6 +28,9 @@ class IntegrationTestSearchEngineOperationAnythingTest extends \PHPUnit_Framewor
 
     public function testMatchesAnyDocument()
     {
-        $this->assertTrue($this->operation->matches($this->createMock(SearchDocument::class)));
+        /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocument */
+        $stubSearchDocument = $this->createMock(SearchDocument::class);
+
+        $this->assertTrue($this->operation->matches($stubSearchDocument));
     }
 }
