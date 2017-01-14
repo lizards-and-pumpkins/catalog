@@ -21,7 +21,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubQueue;
+    private $mockQueue;
 
     /**
      * @var CommandHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
@@ -40,11 +40,11 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stubQueue = $this->createMock(Queue::class);
+        $this->mockQueue = $this->createMock(Queue::class);
         $this->mockLocator = $this->createMock(CommandHandlerLocator::class);
         $this->mockLogger = $this->createMock(Logger::class);
 
-        $this->commandConsumer = new CommandConsumer($this->stubQueue, $this->mockLocator, $this->mockLogger);
+        $this->commandConsumer = new CommandConsumer($this->mockQueue, $this->mockLocator, $this->mockLogger);
     }
 
     public function testItIsAQueueMessageConsumer()
@@ -54,17 +54,33 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testConsumesMessagesFromQueue()
     {
-        $this->stubQueue->expects($this->once())->method('consume')->with($this->commandConsumer);
+        $this->mockQueue->expects($this->once())->method('consume')->with($this->commandConsumer);
 
         $this->commandConsumer->process();
+    }
+    
+    public function testCallsConsumeWithTheNumberOdMessagesOnTheQueue()
+    {
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(2, 0);
+        $this->mockQueue->expects($this->once())->method('consume')->with($this->commandConsumer, 2);
+        $this->commandConsumer->processAll();
     }
 
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
-        $this->stubQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
+        $this->mockQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
         $this->mockLogger->expects($this->once())->method('log');
 
         $this->commandConsumer->process();
+    }
+
+    public function testLogEntryIsWrittenOnQueueReadFailureDuringProcessAll()
+    {
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
+        $this->mockQueue->method('consume')->willThrowException(new \UnderflowException);
+        $this->mockLogger->expects($this->once())->method('log');
+
+        $this->commandConsumer->processAll();
     }
 
     public function testDelegatesProcessingToLocatedCommandHandler()
@@ -73,7 +89,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
         $mockCommandHandler->expects($this->once())->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($mockCommandHandler);
 
-        $this->stubQueue->method('consume')
+        $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
                 $stubMessage = $this->createMock(Message::class);
@@ -87,7 +103,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockLogger->expects($this->once())->method('log');
 
-        $this->stubQueue->method('consume')
+        $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
                 $stubMessage = $this->createMock(Message::class);

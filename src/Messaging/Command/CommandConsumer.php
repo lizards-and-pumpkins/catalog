@@ -38,9 +38,21 @@ class CommandConsumer implements QueueMessageConsumer, MessageReceiver
 
     public function process()
     {
+        $this->processNumberOfMessages($this->maxNumberOfMessagesToProcess);
+    }
+
+    public function processAll()
+    {
+        while (($n = $this->commandQueue->count()) > 0) {
+            $this->processNumberOfMessages($n);
+        }
+    }
+    
+    private function processNumberOfMessages(int $numberOfMessagesToProcess)
+    {
         try {
             $messageReceiver = $this;
-            $this->commandQueue->consume($messageReceiver, $this->maxNumberOfMessagesToProcess);
+            $this->commandQueue->consume($messageReceiver, $numberOfMessagesToProcess);
         } catch (\Exception $e) {
             $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
         }

@@ -39,9 +39,21 @@ class DomainEventConsumer implements QueueMessageConsumer, MessageReceiver
 
     public function process()
     {
+        $this->processNumberOfMessags($this->maxNumberOfMessagesToProcess);
+    }
+
+    public function processAll()
+    {
+        if (($n = $this->queue->count()) > 0) {
+            $this->processNumberOfMessags($n);
+        }
+    }
+
+    private function processNumberOfMessags(int $numberOfMessagesToProcess)
+    {
         try {
             $messageReceiver = $this;
-            $this->queue->consume($messageReceiver, $this->maxNumberOfMessagesToProcess);
+            $this->queue->consume($messageReceiver, $numberOfMessagesToProcess);
         } catch (\Exception $e) {
             $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
         }
