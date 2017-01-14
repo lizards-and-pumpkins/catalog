@@ -120,7 +120,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $this->defaultSortBy,
             ...$this->availableSortBy
         );
-        $productSearchResult = $this->getSearchResultsMatchingCriteria($request, $productsPerPage, $selectedSortBy);
+        $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
         
         $metaInfo = $this->getPageMetaInfoSnippet($request);
         $keyGeneratorParams = [
@@ -171,7 +171,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         return $snippet;
     }
 
-    private function getSearchResultsMatchingCriteria(
+    private function getSearchResults(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
         SortBy $selectedSortBy

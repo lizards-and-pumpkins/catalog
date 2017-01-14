@@ -127,10 +127,8 @@ class DataPoolReader
         return $this->keyValueStore->get($this->currentDataVersionKey);
     }
 
-    public function getSearchResultsMatchingCriteria(
-        SearchCriteria $criteria,
-        QueryOptions $queryOptions
-    ) : SearchEngineResponse {
+    public function getSearchResults(SearchCriteria $criteria, QueryOptions $queryOptions) : SearchEngineResponse
+    {
         return $this->searchEngine->query($criteria, $queryOptions);
     }
 

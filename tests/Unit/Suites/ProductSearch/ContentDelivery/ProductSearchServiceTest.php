@@ -83,6 +83,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $stubProductIds = [$this->createMock(ProductId::class), $this->createMock(ProductId::class)];
         $dummyProductDataArray = [['Dummy product A data'], ['Dummy product B data']];
 
+        /** @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject $stubFacetFieldCollection */
         $stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
@@ -90,7 +91,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn(count($dummyProductDataArray));
         $stubSearchEngineResponse->method('getFacetFieldCollection')->willReturn($stubFacetFieldCollection);
 
-        $this->stubDataPoolReader->method('getSearchResultsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
         $this->stubProductJsonService->method('get')->willReturn($dummyProductDataArray);
 
         $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
@@ -110,7 +111,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
             $this->stubGlobalProductListingCriteria
         );
 
-        $this->stubDataPoolReader->expects($this->once())->method('getSearchResultsMatchingCriteria')
+        $this->stubDataPoolReader->expects($this->once())->method('getSearchResults')
             ->with($expectedCriteria);
 
         $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);

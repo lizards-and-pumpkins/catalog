@@ -148,7 +148,7 @@ class DataPoolReaderTest extends AbstractDataPoolTest
 
         $this->getMockSearchEngine()->expects($this->once())->method('query')->with($stubCriteria, $stubQueryOptions);
 
-        $this->dataPoolReader->getSearchResultsMatchingCriteria($stubCriteria, $stubQueryOptions);
+        $this->dataPoolReader->getSearchResults($stubCriteria, $stubQueryOptions);
     }
 
     public function testItDelegatesUrlKeyReadsToUrlKeyStorage()

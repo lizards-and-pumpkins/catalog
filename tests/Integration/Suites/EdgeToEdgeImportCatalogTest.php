@@ -129,7 +129,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $pageNumber,
             $sortBy
         );
-        $searchResults = $dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
+        $searchResults = $dataPoolReader->getSearchResults($criteria, $queryOptions);
 
         $this->assertContains($productId, $searchResults->getProductIds(), '', false, false);
     }

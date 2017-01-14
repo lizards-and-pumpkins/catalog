@@ -40,7 +40,7 @@ class ProductSearchService
     public function query(SearchCriteria $searchCriteria, QueryOptions $queryOptions) : ProductSearchResult
     {
         $criteria = CompositeSearchCriterion::createAnd($searchCriteria, $this->globalProductListingCriteria);
-        $searchEngineResponse = $this->dataPoolReader->getSearchResultsMatchingCriteria($criteria, $queryOptions);
+        $searchEngineResponse = $this->dataPoolReader->getSearchResults($criteria, $queryOptions);
 
         $productIds = $searchEngineResponse->getProductIds();
         $productData = $this->productJsonService->get($queryOptions->getContext(), ...$productIds);
