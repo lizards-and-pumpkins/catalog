@@ -100,7 +100,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends \PHPUnit_Framewor
         new IntegrationTestSearchEngineOperationNotEqual(['fieldName' => 'foo']);
     }
 
-    public function testReturnsTrueIfDocumentHaveNoFieldInvolvedIntoAnOperation()
+    public function testReturnsTrueIfDocumentHasNoFieldInvolvedIntoAnOperation()
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', ['qux']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
