@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -141,18 +142,6 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         ];
     }
 
-    public function testCanNotProcessIfQueryParameterIsMissing()
-    {
-        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
-        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, false]
-        ]);
-
-        $message = 'Request without query parameter should NOT be able to be processed';
-        $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
-    }
-
     /**
      * @dataProvider emptyQueryStringProvider
      */
@@ -186,6 +175,36 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             ->willReturn('foo');
 
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
+    }
+
+    public function testRequestsAllProductsIfQueryParameterIsMissing()
+    {
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, false]
+        ]);
+
+        $this->mockProductSearchService->expects($this->once())->method('query')
+            ->with($this->isInstanceOf(SearchCriterionAnything::class));
+
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testRequestsProductsMatchingStringIfQueryParameterIsPresent()
+    {
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
+        ]);
+        $this->stubRequest->method('getQueryParameter')->with(ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER)
+            ->willReturn('foo');
+
+        $this->mockProductSearchService->expects($this->once())->method('query')
+            ->with($this->isInstanceOf(SearchCriterionFullText::class));
+
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testReturnHttpResponse()
@@ -250,6 +269,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
         ]);
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
@@ -285,6 +305,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, $numberOfProductsPerPage],
         ]);
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
@@ -320,6 +341,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::PAGE_NUMBER_PARAMETER, $pageNumber],
         ]);
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
@@ -355,6 +377,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, $sortOrder],
         ]);
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
@@ -390,6 +413,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::SORT_DIRECTION_PARAMETER, 'desc'],
         ]);
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 
@@ -428,6 +452,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::SORT_DIRECTION_PARAMETER, $sortDirection],
         ]);
 
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
 

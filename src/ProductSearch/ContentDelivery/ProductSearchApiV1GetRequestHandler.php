@@ -8,6 +8,8 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -91,7 +93,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return false;
         }
 
-        if (! $request->hasQueryParameter(self::QUERY_PARAMETER) ||
+        if ($request->hasQueryParameter(self::QUERY_PARAMETER) &&
             '' === trim($request->getQueryParameter(self::QUERY_PARAMETER))
         ) {
             return false;
@@ -106,8 +108,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             throw new UnableToProcessProductSearchRequestException();
         }
 
-        $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
-        $searchCriteria = new SearchCriterionFullText($queryString);
+        $searchCriteria = $this->createSearchCriteria($request);
         $queryOptions = $this->createQueryOptions($request);
 
         $searchResult = $this->productSearchService->query($searchCriteria, $queryOptions);
@@ -210,5 +211,15 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
                 $rowsPerPage
             ));
         }
+    }
+
+    private function createSearchCriteria(HttpRequest $request): SearchCriteria
+    {
+        if ($request->hasQueryParameter(self::QUERY_PARAMETER)) {
+            $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
+            return new SearchCriterionFullText($queryString);
+        }
+
+        return new SearchCriterionAnything();
     }
 }
