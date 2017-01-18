@@ -56,8 +56,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
+        $this->factory->createCommandConsumer()->processAll();
+        $this->factory->createDomainEventConsumer()->processAll();
     }
 
     private function getProductListingPageHtmlByUrlKey(string $urlKey) : string
@@ -96,8 +96,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->assertSame(202, $response->getStatusCode());
         $this->assertEquals(1, $domainCommandQueue->count());
 
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
+        $this->factory->createCommandConsumer()->processAll();
+        $this->factory->createDomainEventConsumer()->processAll();
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);

@@ -46,10 +46,13 @@ class InMemoryQueue implements Queue, Clearable
         $this->queue = [];
     }
 
-    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesBeforeReturn)
+    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsumeBeforeReturn)
     {
-        while ($this->isReadyForNext() && $numberOfMessagesBeforeReturn-- > 0) {
-            $messageReceiver->receive($this->next());
+        while ($numberOfMessagesToConsumeBeforeReturn > 0) {
+            if ($this->isReadyForNext()) {
+                $messageReceiver->receive($this->next());
+                $numberOfMessagesToConsumeBeforeReturn--;
+            }
         }
     }
 }

@@ -35,8 +35,8 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
-        $this->factory->createCommandConsumer()->process();
-        $this->factory->createDomainEventConsumer()->process();
+        $this->factory->createCommandConsumer()->processAll();
+        $this->factory->createDomainEventConsumer()->processAll();
         
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
