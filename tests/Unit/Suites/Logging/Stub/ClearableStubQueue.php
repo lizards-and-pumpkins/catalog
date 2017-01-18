@@ -26,7 +26,7 @@ class ClearableStubQueue implements Queue, Clearable
         // Intentionally left empty
     }
 
-    public function consume(MessageReceiver $messageReceiver, int $maxNumberOfMessagesToConsume)
+    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsume)
     {
         // Intentionally left empty
     }
