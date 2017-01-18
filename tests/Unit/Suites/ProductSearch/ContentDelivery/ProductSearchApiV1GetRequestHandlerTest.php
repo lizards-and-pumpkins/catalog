@@ -45,6 +45,11 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
     private $stubContextBuilder;
 
     /**
+     * @var SelectedFiltersParser|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSelectedFiltersParser;
+
+    /**
      * @var int
      */
     private $defaultNumberOfProductPerPage = 10;
@@ -78,6 +83,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $this->stubSelectedFiltersParser = $this->createMock(SelectedFiltersParser::class);
 
         $this->stubDefaultSorBy = $this->createMock(SortBy::class);
         $this->stubDefaultSorBy->method('getAttributeCode')->willReturn(AttributeCode::fromString('bar'));
@@ -85,6 +91,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->requestHandler = new ProductSearchApiV1GetRequestHandler(
             $this->mockProductSearchService,
             $this->stubContextBuilder,
+            $this->stubSelectedFiltersParser,
             $this->defaultNumberOfProductPerPage,
             $this->maxAllowedProductsPerPage,
             $this->stubDefaultSorBy,
@@ -143,7 +150,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
     }
 
     /**
-     * @dataProvider emptyQueryStringProvider
+     * @dataProvider emptyStringProvider
      */
     public function testCanNotProcessEmptyQuery(string $emptyQuery)
     {
@@ -159,7 +166,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
     }
 
-    public function emptyQueryStringProvider() : array
+    public function emptyStringProvider() : array
     {
         return [[''], [' '], ["\n"], ["\t"], ["\r"], ["\0"], ["\x0B"], [" \n\t"]];
     }
@@ -517,6 +524,73 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, $rowsPerPage],
         ]);
+
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testAddsEmptySelectedFiltersArrayToQueryOptionsIfNoParameterIsPresent()
+    {
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::SELECTED_FILTERS_PARAMETER, false],
+        ]);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->createMock(Context::class);
+        $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
+
+        $expectedQueryOptions = QueryOptions::create(
+            $filterSelection = [],
+            $stubContext,
+            new FacetFiltersToIncludeInResult(),
+            $this->defaultNumberOfProductPerPage,
+            $pageNumber = 0,
+            $this->stubDefaultSorBy
+        );
+
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
+        $this->mockProductSearchService->expects($this->once())->method('query')
+            ->with($this->isInstanceOf(SearchCriterionAnything::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
+
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testAddsParsedSelectedFiltersArrayToQueryOptionsIfParameterIsPresent()
+    {
+        $encodedSelectedFiltersString = 'dummy selected filters string';
+        $decodedSelectedFilters = ['dummy-filter-key' => ['dummy filter value']];
+
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::SELECTED_FILTERS_PARAMETER, true],
+        ]);
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::SELECTED_FILTERS_PARAMETER, $encodedSelectedFiltersString],
+        ]);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->createMock(Context::class);
+        $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
+
+        $this->stubSelectedFiltersParser->method('parse')->with($encodedSelectedFiltersString)
+            ->willReturn($decodedSelectedFilters);
+
+        $expectedQueryOptions = QueryOptions::create(
+            $filterSelection = $decodedSelectedFilters,
+            $stubContext,
+            new FacetFiltersToIncludeInResult(),
+            $this->defaultNumberOfProductPerPage,
+            $pageNumber = 0,
+            $this->stubDefaultSorBy
+        );
+
+        $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
+        $this->mockProductSearchService->expects($this->once())->method('query')
+            ->with($this->isInstanceOf(SearchCriterionAnything::class), $expectedQueryOptions)
+            ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
     }

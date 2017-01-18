@@ -35,6 +35,8 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     const SORT_DIRECTION_PARAMETER = 'sort';
 
+    const SELECTED_FILTERS_PARAMETER = 'filters';
+
     /**
      * @var ProductSearchService
      */
@@ -44,6 +46,11 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
      * @var ContextBuilder
      */
     private $contextBuilder;
+
+    /**
+     * @var SelectedFiltersParser
+     */
+    private $selectedFiltersParser;
 
     /**
      * @var int
@@ -68,6 +75,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
+        SelectedFiltersParser $selectedFiltersParser,
         int $defaultNumberOfProductPerPage,
         int $maxAllowedProductsPerPage,
         SortBy $defaultSortBy,
@@ -75,6 +83,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
+        $this->selectedFiltersParser = $selectedFiltersParser;
         $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
         $this->maxAllowedProductsPerPage = $maxAllowedProductsPerPage;
         $this->defaultSortBy = $defaultSortBy;
@@ -130,7 +139,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function createQueryOptions(HttpRequest $request) : QueryOptions
     {
-        $filterSelection = [];
+        $filterSelection = $this->getSelectedFilters($request);
 
         $context = $this->contextBuilder->createFromRequest($request);
 
@@ -221,5 +230,18 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         return new SearchCriterionAnything();
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return array|\array[]
+     */
+    private function getSelectedFilters(HttpRequest $request): array
+    {
+        if (! $request->hasQueryParameter(self::SELECTED_FILTERS_PARAMETER)) {
+            return [];
+        }
+
+        return $this->selectedFiltersParser->parse($request->getQueryParameter(self::SELECTED_FILTERS_PARAMETER));
     }
 }
