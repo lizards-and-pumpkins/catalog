@@ -53,7 +53,7 @@ class ImageImportTest extends AbstractIntegrationTest
             $queue->add(new ImageWasAddedDomainEvent($imageFilePath, $dataVersion));
         }
 
-        $factory->createDomainEventConsumer()->process();
+        $factory->createDomainEventConsumer()->processAll();
 
         $logger = $factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);

@@ -16,5 +16,5 @@ interface Queue extends \Countable
      */
     public function add(Message $message);
 
-    public function consume(MessageReceiver $messageReceiver, int $maxNumberOfMessagesToConsume);
+    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsume);
 }
