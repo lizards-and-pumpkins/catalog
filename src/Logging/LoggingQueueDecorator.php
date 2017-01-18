@@ -45,8 +45,8 @@ class LoggingQueueDecorator implements Queue, Clearable
         }
     }
 
-    public function consume(MessageReceiver $messageReceiver, int $maxNumberOfMessagesToConsume)
+    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsume)
     {
-        $this->decoratedQueue->consume($messageReceiver, $maxNumberOfMessagesToConsume);
+        $this->decoratedQueue->consume($messageReceiver, $numberOfMessagesToConsume);
     }
 }
