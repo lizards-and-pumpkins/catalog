@@ -234,7 +234,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     /**
      * @param HttpRequest $request
-     * @return array|\array[]
+     * @return array[]
      */
     private function getSelectedFilters(HttpRequest $request): array
     {
