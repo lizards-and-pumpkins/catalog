@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\MalformedSelectedFiltersQueryStringException;
+
 class DefaultSelectedFiltersParser implements SelectedFiltersParser
 {
     /**
@@ -18,12 +20,15 @@ class DefaultSelectedFiltersParser implements SelectedFiltersParser
 
         $filters = $this->separateFilters($filtersString);
 
-        return array_reduce($filters, function ($carry, string $filterString) {
-            preg_match('/[^:]+:/', $filterString, $matches);
+        return array_reduce($filters, function ($carry, string $filterString) use ($filtersString) {
+            $this->validateFilterString($filterString, $filtersString);
 
-            list($key, $values) = explode(':', $filterString);
+            list($key, $valuesString) = explode(':', $filterString);
 
-            return array_merge($carry, [$key => $this->getValues($values)]);
+            $values = $this->getValues($valuesString);
+            $this->validateValues($filtersString, ...$values);
+
+            return array_merge($carry, [$key => $values]);
         }, []);
     }
 
@@ -68,5 +73,28 @@ class DefaultSelectedFiltersParser implements SelectedFiltersParser
         $result[] = substr($string, $start, $currentPosition - $start);
 
         return $result;
+    }
+
+    private function validateFilterString(string $filterString, string $filtersString)
+    {
+        if (! preg_match('/^[^:]+:\[?[^\[\]]+\]?$/', $filterString)) {
+            $this->throwMalformedFiltersStringException($filtersString);
+        }
+    }
+
+    private function validateValues(string $filtersString, string ...$values)
+    {
+        every($values, function (string $value) use ($filtersString) {
+            if ('' === trim($value)) {
+                $this->throwMalformedFiltersStringException($filtersString);
+            }
+        });
+    }
+
+    private function throwMalformedFiltersStringException(string $filtersString)
+    {
+        throw new MalformedSelectedFiltersQueryStringException(
+            sprintf('Selected filters query string %s is malformed.', $filtersString)
+        );
     }
 }

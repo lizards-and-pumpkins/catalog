@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\MalformedSelectedFiltersQueryStringException;
+
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\DefaultSelectedFiltersParser
  */
@@ -22,7 +24,7 @@ class DefaultSelectedFiltersParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider emptyStringProvider
      */
-    public function testReturnsAnEmptyArrayForAnEmptyString($emptyString)
+    public function testReturnsAnEmptyArrayForAnEmptyString(string $emptyString)
     {
         $this->assertSame([], $this->parser->parse($emptyString));
     }
@@ -30,11 +32,6 @@ class DefaultSelectedFiltersParserTest extends \PHPUnit_Framework_TestCase
     public function testCanParseSingleValue()
     {
         $this->assertSame(['foo' => ['bar']], $this->parser->parse('foo:bar'));
-    }
-
-    public function testCanParseAnEmptyValue()
-    {
-        $this->assertSame(['foo' => ['']], $this->parser->parse('foo:'));
     }
 
     public function testCanParseMultipleValuesFilter()
@@ -58,10 +55,37 @@ class DefaultSelectedFiltersParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider malformedFiltersStringProvider
+     */
+    public function testExceptionIsThrownIfFiltersQueryStringIsMalformed(string $malformedFiltersString)
+    {
+        $this->expectException(MalformedSelectedFiltersQueryStringException::class);
+        $this->parser->parse($malformedFiltersString);
+    }
+
+    /**
      * @return array[]
      */
     public function emptyStringProvider() : array
     {
         return [[''], [' '], ["\n"], ["\t"], ["\r"], ["\0"], ["\x0B"], [" \n\t"]];
+    }
+
+    /**
+     * @return array[]
+     */
+    public function malformedFiltersStringProvider(): array
+    {
+        return [
+            ['foo'],
+            ['foo:'],
+            ['foo:bar,baz'],
+            ['foo:[]'],
+            ['foo:[[]]'],
+            ['foo: '],
+            ['foo:[ ]'],
+            ['foo: ,bar'],
+            ['foo:[ ,bar]']
+        ];
     }
 }
