@@ -30,7 +30,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $this->assertEquals(json_encode(['total' => 0, 'data' => [], 'facets' => []]), $response->getBody());
     }
 
-    public function testReturnsProductsMatchingRequestSortedDescendingByStockQuantityAreReturned()
+    public function testReturnsProductsMatchingRequestSortedDescendingByStockQuantity()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=adi');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
