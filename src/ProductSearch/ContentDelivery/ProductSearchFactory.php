@@ -27,11 +27,12 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
         );
     }
 
-    public function createProductSearchApiV1GetRequestHandler() : ProductSearchApiV1GetRequestHandler
+    public function createProductSearchApiV1GetRequestHandler(): ProductSearchApiV1GetRequestHandler
     {
         return new ProductSearchApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createContextBuilder(),
+            $this->getMasterFactory()->createSelectedFiltersParser(),
             $this->getMasterFactory()->getDefaultNumberOfProductsPerSearchResultsPage(),
             $this->getMasterFactory()->getMaxAllowedProductsPerSearchResultsPage(),
             $this->getMasterFactory()->getProductSearchDefaultSortBy(),
@@ -39,12 +40,17 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
         );
     }
 
-    public function createProductSearchService() : ProductSearchService
+    public function createProductSearchService(): ProductSearchService
     {
         return new ProductSearchService(
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createGlobalProductListingCriteria(),
             $this->getMasterFactory()->createProductJsonService()
         );
+    }
+
+    public function createSelectedFiltersParser(): SelectedFiltersParser
+    {
+        return new DefaultSelectedFiltersParser();
     }
 }

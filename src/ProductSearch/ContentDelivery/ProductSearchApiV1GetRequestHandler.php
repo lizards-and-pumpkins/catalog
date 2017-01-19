@@ -8,6 +8,8 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -33,6 +35,8 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     const SORT_DIRECTION_PARAMETER = 'sort';
 
+    const SELECTED_FILTERS_PARAMETER = 'filters';
+
     /**
      * @var ProductSearchService
      */
@@ -42,6 +46,11 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
      * @var ContextBuilder
      */
     private $contextBuilder;
+
+    /**
+     * @var SelectedFiltersParser
+     */
+    private $selectedFiltersParser;
 
     /**
      * @var int
@@ -66,6 +75,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
+        SelectedFiltersParser $selectedFiltersParser,
         int $defaultNumberOfProductPerPage,
         int $maxAllowedProductsPerPage,
         SortBy $defaultSortBy,
@@ -73,6 +83,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
+        $this->selectedFiltersParser = $selectedFiltersParser;
         $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
         $this->maxAllowedProductsPerPage = $maxAllowedProductsPerPage;
         $this->defaultSortBy = $defaultSortBy;
@@ -91,7 +102,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return false;
         }
 
-        if (! $request->hasQueryParameter(self::QUERY_PARAMETER) ||
+        if ($request->hasQueryParameter(self::QUERY_PARAMETER) &&
             '' === trim($request->getQueryParameter(self::QUERY_PARAMETER))
         ) {
             return false;
@@ -106,8 +117,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             throw new UnableToProcessProductSearchRequestException();
         }
 
-        $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
-        $searchCriteria = new SearchCriterionFullText($queryString);
+        $searchCriteria = $this->createSearchCriteria($request);
         $queryOptions = $this->createQueryOptions($request);
 
         $searchResult = $this->productSearchService->query($searchCriteria, $queryOptions);
@@ -129,7 +139,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function createQueryOptions(HttpRequest $request) : QueryOptions
     {
-        $filterSelection = [];
+        $filterSelection = $this->getSelectedFilters($request);
 
         $context = $this->contextBuilder->createFromRequest($request);
 
@@ -210,5 +220,28 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
                 $rowsPerPage
             ));
         }
+    }
+
+    private function createSearchCriteria(HttpRequest $request): SearchCriteria
+    {
+        if ($request->hasQueryParameter(self::QUERY_PARAMETER)) {
+            $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
+            return new SearchCriterionFullText($queryString);
+        }
+
+        return new SearchCriterionAnything();
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return array[]
+     */
+    private function getSelectedFilters(HttpRequest $request): array
+    {
+        if (! $request->hasQueryParameter(self::SELECTED_FILTERS_PARAMETER)) {
+            return [];
+        }
+
+        return $this->selectedFiltersParser->parse($request->getQueryParameter(self::SELECTED_FILTERS_PARAMETER));
     }
 }
