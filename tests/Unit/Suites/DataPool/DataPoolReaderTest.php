@@ -4,22 +4,13 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
-use LizardsAndPumpkins\Import\Product\ProductId;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
- * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  */
 class DataPoolReaderTest extends AbstractDataPoolTest
@@ -156,73 +147,5 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $expected = ['test.html'];
         $this->getMockUrlKeyStore()->expects($this->once())->method('getForDataVersion')->willReturn($expected);
         $this->assertSame($expected, $this->dataPoolReader->getUrlKeysForVersion('1.0'));
-    }
-
-    public function testItDelegatesQueriesForProductIdsToTheSearchEngine()
-    {
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
-        $stubCriteria = $this->createMock(SearchCriteria::class);
-
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->createMock(Context::class);
-        
-        /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
-        $stubSortBy = $this->createMock(SortBy::class);
-
-        $rowsPerPage = 1000;
-        $pageNumber = 1;
-        
-        /** @var ProductId[]|\PHPUnit_Framework_MockObject_MockObject[] $matchingProductIds */
-        $matchingProductIds = [$this->createMock(ProductId::class)];
-
-        /** @var SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject $stubSearchResponse */
-        $stubSearchResponse = $this->createMock(SearchEngineResponse::class);
-        $stubSearchResponse->method('getProductIds')->willReturn($matchingProductIds);
-
-        $this->getMockSearchEngine()->expects($this->once())
-            ->method('query')->willReturn($stubSearchResponse);
-
-        $result = $this->dataPoolReader->getProductIdsMatchingCriteria(
-            $stubCriteria,
-            $stubContext,
-            $stubSortBy,
-            $rowsPerPage,
-            $pageNumber
-        );
-        $this->assertSame($matchingProductIds, $result);
-    }
-
-    public function testTheReturnedProductIdArrayIsNumericallyIndexed()
-    {
-        /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $stubCriteria */
-        $stubCriteria = $this->createMock(SearchCriteria::class);
-
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->createMock(Context::class);
-        
-        /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
-        $stubSortBy = $this->createMock(SortBy::class);
-
-        $rowsPerPage = 1000;
-        $pageNumber = 1;
-        
-        /** @var ProductId[]|\PHPUnit_Framework_MockObject_MockObject[] $matchingProductIds */
-        $matchingProductIds = ['non-numeric-key' => $this->createMock(ProductId::class)];
-
-        /** @var SearchEngineResponse|\PHPUnit_Framework_MockObject_MockObject $stubSearchResponse */
-        $stubSearchResponse = $this->createMock(SearchEngineResponse::class);
-        $stubSearchResponse->method('getProductIds')->willReturn($matchingProductIds);
-
-        $this->getMockSearchEngine()->expects($this->once())
-            ->method('query')->willReturn($stubSearchResponse);
-
-        $result = $this->dataPoolReader->getProductIdsMatchingCriteria(
-            $stubCriteria,
-            $stubContext,
-            $stubSortBy,
-            $rowsPerPage,
-            $pageNumber
-        );
-        $this->assertSame([0], array_keys($result));
     }
 }
