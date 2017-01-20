@@ -33,6 +33,10 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService
+ * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\UnitTestFactory
