@@ -33,6 +33,7 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createContextBuilder(),
             $this->getMasterFactory()->createSelectedFiltersParser(),
+            $this->getMasterFactory()->createCriteriaParser(),
             $this->getMasterFactory()->getDefaultNumberOfProductsPerSearchResultsPage(),
             $this->getMasterFactory()->getMaxAllowedProductsPerSearchResultsPage(),
             $this->getMasterFactory()->getProductSearchDefaultSortBy(),
@@ -52,5 +53,10 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
     public function createSelectedFiltersParser(): SelectedFiltersParser
     {
         return new DefaultSelectedFiltersParser();
+    }
+
+    public function createCriteriaParser(): CriteriaParser
+    {
+        return new DefaultCriteriaParser();
     }
 }
