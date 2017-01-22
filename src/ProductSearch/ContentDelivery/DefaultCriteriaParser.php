@@ -70,10 +70,9 @@ class DefaultCriteriaParser implements CriteriaParser
         $result = [];
         $start = 0;
         $nestingLevel = 0;
-        $groupingLevel = 0;
 
         for ($currentPosition = 0; $currentPosition < strlen($string); $currentPosition++) {
-            if (',' === $string[$currentPosition] && 0 === $nestingLevel && 0 === $groupingLevel) {
+            if (',' === $string[$currentPosition] && 0 === $nestingLevel) {
                 $result[] = substr($string, $start, $currentPosition - $start);
                 $start = $currentPosition + 1;
             }
@@ -84,14 +83,6 @@ class DefaultCriteriaParser implements CriteriaParser
 
             if ('}' === $string[$currentPosition]) {
                 $nestingLevel--;
-            }
-
-            if ('{' === $string[$currentPosition]) {
-                $groupingLevel++;
-            }
-
-            if ('}' === $string[$currentPosition]) {
-                $groupingLevel--;
             }
         }
 
