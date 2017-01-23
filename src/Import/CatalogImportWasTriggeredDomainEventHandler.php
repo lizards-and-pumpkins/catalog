@@ -17,10 +17,7 @@ class CatalogImportWasTriggeredDomainEventHandler implements DomainEventHandler
      */
     private $catalogImportWasTriggeredEvent;
 
-    public function __construct(
-        CatalogImport $catalogImport,
-        Message $eventMessage
-    ) {
+    public function __construct(CatalogImport $catalogImport, Message $eventMessage) {
         $this->catalogImport = $catalogImport;
         $this->catalogImportWasTriggeredEvent = CatalogImportWasTriggeredDomainEvent::fromMessage($eventMessage);
     }
