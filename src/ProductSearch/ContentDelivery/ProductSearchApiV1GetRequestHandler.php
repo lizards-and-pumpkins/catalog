@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
@@ -37,6 +38,8 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     const SELECTED_FILTERS_PARAMETER = 'filters';
 
+    const INITIAL_CRITERIA_PARAMETER = 'criteria';
+
     /**
      * @var ProductSearchService
      */
@@ -51,6 +54,11 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
      * @var SelectedFiltersParser
      */
     private $selectedFiltersParser;
+
+    /**
+     * @var CriteriaParser
+     */
+    private $criteriaParser;
 
     /**
      * @var int
@@ -76,6 +84,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
         SelectedFiltersParser $selectedFiltersParser,
+        CriteriaParser $criteriaParser,
         int $defaultNumberOfProductPerPage,
         int $maxAllowedProductsPerPage,
         SortBy $defaultSortBy,
@@ -84,6 +93,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
         $this->selectedFiltersParser = $selectedFiltersParser;
+        $this->criteriaParser = $criteriaParser;
         $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
         $this->maxAllowedProductsPerPage = $maxAllowedProductsPerPage;
         $this->defaultSortBy = $defaultSortBy;
@@ -224,9 +234,26 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function createSearchCriteria(HttpRequest $request): SearchCriteria
     {
+        if ($request->hasQueryParameter(self::QUERY_PARAMETER) &&
+            $request->hasQueryParameter(self::INITIAL_CRITERIA_PARAMETER)
+        ) {
+            $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
+            $criteriaString = $request->getQueryParameter(self::INITIAL_CRITERIA_PARAMETER);
+
+            return CompositeSearchCriterion::createAnd(
+                new SearchCriterionFullText($queryString),
+                $this->criteriaParser->createCriteriaFromString($criteriaString)
+            );
+        }
+
         if ($request->hasQueryParameter(self::QUERY_PARAMETER)) {
             $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
             return new SearchCriterionFullText($queryString);
+        }
+
+        if ($request->hasQueryParameter(self::INITIAL_CRITERIA_PARAMETER)) {
+            $criteriaString = $request->getQueryParameter(self::INITIAL_CRITERIA_PARAMETER);
+            return $this->criteriaParser->createCriteriaFromString($criteriaString);
         }
 
         return new SearchCriterionAnything();
