@@ -4,8 +4,9 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileIsNotAFileException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
-use LizardsAndPumpkins\Import\Exception\NoImportCatalogCommandMessageException;
+use LizardsAndPumpkins\Import\Exception\NotImportCatalogCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\TestFileFixtureTrait;
@@ -60,7 +61,7 @@ class ImportCatalogCommandTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowsExceptionIfMessageNameDoesNotMatch()
     {
-        $this->expectException(NoImportCatalogCommandMessageException::class);
+        $this->expectException(NotImportCatalogCommandMessageException::class);
         $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "import_catalog"');
 
         $message = Message::withCurrentTime('foo', [], []);
@@ -82,6 +83,15 @@ class ImportCatalogCommandTest extends \PHPUnit\Framework\TestCase
         $this->createFixtureFile($tmpFilePath, '', 0000);
         $this->expectException(CatalogImportFileNotReadableException::class);
         $this->expectExceptionMessage("Catalog import file \"{$tmpFilePath}\" is not readable");
+        $this->createCommand('another bogus name', $tmpFilePath);
+    }
+
+    public function testThrowsExceptionIfImportFileIsDirectory()
+    {
+        $tmpFilePath = $this->getUniqueTempDir();
+        mkdir($tmpFilePath, 0777, true);
+        $this->expectException(CatalogImportFileIsNotAFileException::class);
+        $this->expectExceptionMessage("Catalog import file \"{$tmpFilePath}\" is not a file");
         $this->createCommand('another bogus name', $tmpFilePath);
     }
 }

@@ -4,8 +4,9 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileIsNotAFileException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
-use LizardsAndPumpkins\Import\Exception\NoImportCatalogCommandMessageException;
+use LizardsAndPumpkins\Import\Exception\NotImportCatalogCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
@@ -54,7 +55,7 @@ class ImportCatalogCommand implements Command
     private static function validateMessage(Message $message)
     {
         if ($message->getName() !== self::CODE) {
-            throw new NoImportCatalogCommandMessageException(
+            throw new NotImportCatalogCommandMessageException(
                 sprintf('Unable to rehydrate from "%s" queue message, expected "%s"', $message->getName(), self::CODE)
             );
         }
@@ -63,6 +64,7 @@ class ImportCatalogCommand implements Command
     private function validateImportFile(string $catalogDataFile)
     {
         $this->validateFileExists($catalogDataFile);
+        $this->validateFileToImportIsFile($catalogDataFile);
         $this->validateFileIsReadable($catalogDataFile);
     }
 
@@ -71,6 +73,14 @@ class ImportCatalogCommand implements Command
         if (!file_exists($catalogDataFile)) {
             $message = sprintf('Catalog import file "%s" does not exist', $catalogDataFile);
             throw new CatalogImportFileDoesNotExistException($message);
+        }
+    }
+
+    private function validateFileToImportIsFile(string $catalogDataFile)
+    {
+        if (! is_file($catalogDataFile)) {
+            $message = sprintf('Catalog import file "%s" is not a file', $catalogDataFile);
+            throw new CatalogImportFileIsNotAFileException($message);
         }
     }
 
