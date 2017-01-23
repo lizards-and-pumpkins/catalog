@@ -8,15 +8,15 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 interface CommandHandlerFactory
 {
-    public function createUpdateContentBlockCommandHandler(Message $message) : CommandHandler;
+    public function createUpdateContentBlockCommandHandler(Message $message): CommandHandler;
 
-    public function createUpdateProductCommandHandler(Message $message) : CommandHandler;
+    public function createUpdateProductCommandHandler(Message $message): CommandHandler;
 
-    public function createAddProductListingCommandHandler(Message $message) : CommandHandler;
+    public function createAddProductListingCommandHandler(Message $message): CommandHandler;
 
-    public function createAddImageCommandHandler(Message $message) : CommandHandler;
+    public function createAddImageCommandHandler(Message $message): CommandHandler;
     
-    public function createShutdownWorkerCommandHandler(Message $message) : CommandHandler;
+    public function createShutdownWorkerCommandHandler(Message $message): CommandHandler;
 
-    public function createImportCatalogCommandHandler(Message $message) : CommandHandler;
+    public function createImportCatalogCommandHandler(Message $message): CommandHandler;
 }

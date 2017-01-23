@@ -996,7 +996,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
     
-    public function createImportCatalogCommandHandler(Message $message) : CommandHandler
+    public function createImportCatalogCommandHandler(Message $message): CommandHandler
     {
         return new ImportCatalogCommandHandler($message, $this->getMasterFactory()->getEventQueue());
     }
