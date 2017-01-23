@@ -55,7 +55,7 @@ class ImportCatalogCommand implements Command
     private static function validateMessage(Message $message)
     {
         if ($message->getName() !== self::CODE) {
-            throw new NoImportCatalogCommandMessageException(
+            throw new NotImportCatalogCommandMessageException(
                 sprintf('Unable to rehydrate from "%s" queue message, expected "%s"', $message->getName(), self::CODE)
             );
         }
