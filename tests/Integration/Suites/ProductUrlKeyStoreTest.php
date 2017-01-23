@@ -33,8 +33,7 @@ class ProductUrlKeyStoreTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
-        $this->factory->createCommandConsumer()->processAll();
-        $this->factory->createDomainEventConsumer()->processAll();
+        $this->processAllMessages($this->factory);
     }
 
     public function testUrlKeysAreWrittenToStore()

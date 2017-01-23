@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Messaging\Event;
 
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Messaging\Event\Exception\UnableToFindDomainEventHandlerException;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
@@ -113,5 +115,19 @@ class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($stubDomainEvent);
 
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
+    }
+
+    public function testReturnsCatalogImportWasTriggeredDomainEventHandler()
+    {
+        $stubEventHandler = $this->createMock(CatalogImportWasTriggeredDomainEventHandler::class);
+        $this->factory->method('createCatalogImportWasTriggeredDomainEventHandler')->willReturn($stubEventHandler);
+
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubDomainEvent */
+        $stubDomainEvent = $this->createMock(Message::class);
+        $stubDomainEvent->method('getName')->willReturn(CatalogImportWasTriggeredDomainEvent::CODE);
+
+        $result = $this->locator->getHandlerFor($stubDomainEvent);
+
+        $this->assertInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
     }
 }

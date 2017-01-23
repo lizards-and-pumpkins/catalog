@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
+use LizardsAndPumpkins\Import\ImportCatalogCommand;
+use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -56,10 +59,27 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
 
         /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
         $stubCommand = $this->createMock(Message::class);
-        $stubCommand->method('getName')->willReturn('update_content_block');
+        $stubCommand->method('getName')->willReturn(UpdateContentBlockCommand::CODE);
 
         $result = $this->locator->getHandlerFor($stubCommand);
 
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
+    }
+
+    public function testReturnsImportCatalogCommandHandler()
+    {
+        $stubHandler = $this->createMock(ImportCatalogCommandHandler::class);
+
+        $this->factory->expects($this->once())
+            ->method('createImportCatalogCommandHandler')
+            ->willReturn($stubHandler);
+
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->createMock(Message::class);
+        $stubCommand->method('getName')->willReturn(ImportCatalogCommand::CODE);
+
+        $result = $this->locator->getHandlerFor($stubCommand);
+
+        $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
     }
 }

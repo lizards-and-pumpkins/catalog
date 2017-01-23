@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
@@ -58,6 +59,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -129,6 +132,13 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $message = (new ShutdownWorkerDirective('4321'))->toMessage();
         $commandHandler = $this->loggingCommandHandlerFactory->createShutdownWorkerCommandHandler($message);
+        $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
+    }
+
+    public function testReturnsADecoratedImportCatalogCommandHandler()
+    {
+        $message = (new ImportCatalogCommand(DataVersion::fromVersionString('buz'), __FILE__))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createImportCatalogCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 }

@@ -55,4 +55,14 @@ class SnippetContainerTest extends \PHPUnit_Framework_TestCase
         
         $this->assertSame(['test' => ['foo', 'bar']], $jsonData);
     }
+
+    public function testCanBeRehydrated()
+    {
+        $source = $this->createInstance('test', ['foo', 'bar']);
+        $rehydrated = SnippetContainer::rehydrate($source->getCode(), $source->getSnippetCodes());
+        
+        $this->assertInstanceOf(SnippetContainer::class, $rehydrated);
+        $this->assertSame($source->getCode(), $rehydrated->getCode());
+        $this->assertSame($source->getSnippetCodes(), $rehydrated->getSnippetCodes());
+    }
 }

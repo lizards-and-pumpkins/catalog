@@ -20,6 +20,8 @@ use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServic
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
@@ -35,6 +37,8 @@ use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Import\ImportCatalogCommand;
+use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
@@ -207,6 +211,10 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -535,6 +543,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
+    
+    public function testReturnsAnImportCatalogCommandHandler()
+    {
+        $command = new ImportCatalogCommand(DataVersion::fromVersionString('foo bar'), __FILE__);
+        $result = $this->commonFactory->createImportCatalogCommandHandler($command->toMessage());
+
+        $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
+    }
 
     public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()
     {
@@ -628,6 +644,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $testEvent = new ShutdownWorkerDirective('*');
         $result = $this->commonFactory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
+    }
+
+    public function testReturnsACatalogImportWasTriggeredDomainEventHandler()
+    {
+        $testEvent = new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), 'test.xml');
+        $result = $this->commonFactory->createCatalogImportWasTriggeredDomainEventHandler($testEvent->toMessage());
+        $this->assertInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
     }
 
     public function testItReturnsAProductJsonSnippetRenderer()

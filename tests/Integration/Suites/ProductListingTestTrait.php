@@ -72,8 +72,15 @@ trait ProductListingTestTrait
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
-        $this->factory->createCommandConsumer()->processAll();
-        $this->factory->createDomainEventConsumer()->processAll();
+        $this->processAllMessages();
+    }
+    
+    private function processAllMessages()
+    {
+        while ($this->factory->getCommandMessageQueue()->count() > 0 || $this->factory->getEventMessageQueue()->count() > 0) {
+            $this->factory->createCommandConsumer()->processAll();
+            $this->factory->createDomainEventConsumer()->processAll();
+        }
     }
 
     private function prepareProductListingFixture()
@@ -91,8 +98,7 @@ trait ProductListingTestTrait
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
-        $this->factory->createCommandConsumer()->processAll();
-        $this->factory->createDomainEventConsumer()->processAll();
+        $this->processAllMessages();
     }
 
     private function registerProductListingSnippetKeyGenerator()

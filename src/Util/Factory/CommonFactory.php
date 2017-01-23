@@ -15,6 +15,8 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
@@ -29,6 +31,7 @@ use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\SnippetRenderer;
@@ -992,6 +995,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->getLogger()
         );
     }
+    
+    public function createImportCatalogCommandHandler(Message $message): CommandHandler
+    {
+        return new ImportCatalogCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+    }
 
     /**
      * @return string[]
@@ -1119,6 +1127,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $event,
             Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue()),
             $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    public function createCatalogImportWasTriggeredDomainEventHandler(Message $event): DomainEventHandler
+    {
+        return new CatalogImportWasTriggeredDomainEventHandler(
+            $this->getMasterFactory()->createCatalogImport(),
+            $event
         );
     }
 

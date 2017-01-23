@@ -6,6 +6,8 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
@@ -120,6 +122,15 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
+ * @uses   \LizardsAndPumpkins\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
+ * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
+ * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -208,5 +219,12 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $testEvent = new ShutdownWorkerDirective('*');
         $result = $this->factory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
         $this->assertDecoratedDomainEventHandlerInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
+    }
+
+    public function testReturnsADecoratedCatalogImportWasTriggeredDomainEventHandler()
+    {
+        $testEvent = new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), 'test.xml');
+        $result = $this->factory->createCatalogImportWasTriggeredDomainEventHandler($testEvent->toMessage());
+        $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
     }
 }

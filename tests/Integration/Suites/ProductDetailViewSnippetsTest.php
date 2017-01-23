@@ -35,8 +35,7 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
-        $this->factory->createCommandConsumer()->processAll();
-        $this->factory->createDomainEventConsumer()->processAll();
+        $this->processAllMessages($this->factory);
     }
 
     private function getSkuOfFirstSimpleProductInFixture() : string
