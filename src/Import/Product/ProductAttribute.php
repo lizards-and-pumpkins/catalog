@@ -58,21 +58,10 @@ class ProductAttribute implements \JsonSerializable
     private function validateValue($value, AttributeCode $code)
     {
         if (!is_scalar($value)) {
-            $type = $this->getType($value);
+            $type = typeof($value);
             $message = sprintf('The product attribute "%s" has to have a scalar value, got "%s"', $code, $type);
             throw new InvalidProductAttributeValueException($message);
         }
-    }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getType($variable)
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
     }
 
     /**

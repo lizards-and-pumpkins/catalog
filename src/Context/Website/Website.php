@@ -31,7 +31,7 @@ class Website
         }
 
         if (! is_string($websiteCode)) {
-            $message = sprintf('The website code must be a string, got "%s"', self::getType($websiteCode));
+            $message = sprintf('The website code must be a string, got "%s"', typeof($websiteCode));
             throw new InvalidWebsiteCodeException($message);
         }
 
@@ -42,18 +42,7 @@ class Website
 
         return new Website($trimmedWebsiteCode);
     }
-
-    /**
-     * @param mixed $variable
-     * @return string
-     */
-    private static function getType($variable) : string
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
-    }
-
+    
     /**
      * @return string
      */
