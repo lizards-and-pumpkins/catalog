@@ -44,7 +44,7 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
-    public static function fromMessage(Message $message) : TemplateWasUpdatedDomainEvent
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             $message = sprintf('Expected "%s" domain event, got "%s"', self::CODE, $message->getName());

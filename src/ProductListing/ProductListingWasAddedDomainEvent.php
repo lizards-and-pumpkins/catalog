@@ -36,7 +36,7 @@ class ProductListingWasAddedDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, $payload, ['data_version' => (string) $version]);
     }
 
-    public static function fromMessage(Message $message) : ProductListingWasAddedDomainEvent
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             throw new NoProductListingWasAddedDomainEventMessage(

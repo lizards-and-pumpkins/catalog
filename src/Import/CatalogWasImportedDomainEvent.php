@@ -33,7 +33,7 @@ class CatalogWasImportedDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, [], ['data_version' => (string) $this->dataVersion]);
     }
 
-    public static function fromMessage(Message $message) : CatalogWasImportedDomainEvent
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             throw new NoCatalogWasImportedDomainEventMessageException(
