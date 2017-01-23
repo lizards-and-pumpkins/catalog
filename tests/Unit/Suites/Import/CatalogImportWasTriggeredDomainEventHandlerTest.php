@@ -1,11 +1,20 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins\Import;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
 class CatalogImportWasTriggeredDomainEventHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,11 +26,6 @@ class CatalogImportWasTriggeredDomainEventHandlerTest extends \PHPUnit\Framework
     private $mockCatalogImport;
 
     /**
-     * @var CatalogImportWasTriggeredEvent|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockImportWasTriggeredDomainEvent;
-
-    /**
      * @var CatalogImportWasTriggeredDomainEventHandler
      */
     private $domainEventHandler;
@@ -29,11 +33,9 @@ class CatalogImportWasTriggeredDomainEventHandlerTest extends \PHPUnit\Framework
     protected function setUp()
     {
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
-        $this->mockImportWasTriggeredDomainEvent = $this->createMock(CatalogImportWasTriggeredEvent::class);
-        $this->mockImportWasTriggeredDomainEvent->method('getCatalogImportFilePath')->willReturn($this->testFile);
         $this->domainEventHandler = new CatalogImportWasTriggeredDomainEventHandler(
             $this->mockCatalogImport,
-            $this->mockImportWasTriggeredDomainEvent
+            (new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), $this->testFile))->toMessage()
         );
     }
     

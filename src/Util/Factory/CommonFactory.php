@@ -15,6 +15,8 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
@@ -1125,6 +1127,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $event,
             Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue()),
             $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    public function createCatalogImportWasTriggeredDomainEventHandler(Message $event): DomainEventHandler
+    {
+        return new CatalogImportWasTriggeredDomainEventHandler(
+            $this->getMasterFactory()->createCatalogImport(),
+            $event
         );
     }
 

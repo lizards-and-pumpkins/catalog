@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessagePayload
- * @uses \LizardsAndPumpkins\Import\CatalogImportWasTriggeredEvent
+ * @uses \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
  */
 class ImportCatalogCommandHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -43,7 +43,7 @@ class ImportCatalogCommandHandlerTest extends \PHPUnit\Framework\TestCase
     public function testEmitsCatalogImportWasTriggeredEvent()
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add')
-            ->with($this->isInstanceOf(CatalogImportWasTriggeredEvent::class));
+            ->with($this->isInstanceOf(CatalogImportWasTriggeredDomainEvent::class));
         $this->commandHandler->process();
     }
 }

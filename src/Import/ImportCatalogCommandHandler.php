@@ -26,7 +26,7 @@ class ImportCatalogCommandHandler implements CommandHandler
 
     public function process()
     {
-        $domainEvent = new CatalogImportWasTriggeredEvent(
+        $domainEvent = new CatalogImportWasTriggeredDomainEvent(
             $this->importCatalogCommand->getDataVersion(),
             $this->importCatalogCommand->getCatalogDataFile()
         );

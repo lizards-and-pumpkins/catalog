@@ -7,7 +7,7 @@ use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageEx
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
-class CatalogImportWasTriggeredEvent implements DomainEvent
+class CatalogImportWasTriggeredDomainEvent implements DomainEvent
 {
     const CODE = 'catalog_import_was_triggered';
 

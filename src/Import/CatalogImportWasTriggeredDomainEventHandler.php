@@ -3,6 +3,7 @@
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogImportWasTriggeredDomainEventHandler implements DomainEventHandler
 {
@@ -12,16 +13,16 @@ class CatalogImportWasTriggeredDomainEventHandler implements DomainEventHandler
     private $catalogImport;
 
     /**
-     * @var CatalogImportWasTriggeredEvent
+     * @var CatalogImportWasTriggeredDomainEvent
      */
     private $catalogImportWasTriggeredEvent;
 
     public function __construct(
         CatalogImport $catalogImport,
-        CatalogImportWasTriggeredEvent $catalogImportWasTriggeredEvent
+        Message $eventMessage
     ) {
         $this->catalogImport = $catalogImport;
-        $this->catalogImportWasTriggeredEvent = $catalogImportWasTriggeredEvent;
+        $this->catalogImportWasTriggeredEvent = CatalogImportWasTriggeredDomainEvent::fromMessage($eventMessage);
     }
 
     public function process()

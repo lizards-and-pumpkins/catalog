@@ -8,17 +8,17 @@ use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
- * @covers \LizardsAndPumpkins\Import\CatalogImportWasTriggeredEvent
+ * @covers \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
  * @uses \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class CatalogImportWasTriggeredEventTest extends \PHPUnit_Framework_TestCase
+class CatalogImportWasTriggeredDomainEventTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CatalogImportWasTriggeredEvent
+     * @var CatalogImportWasTriggeredDomainEvent
      */
     private $domainEvent;
 
@@ -29,7 +29,7 @@ class CatalogImportWasTriggeredEventTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $dataVersion = DataVersion::fromVersionString($this->testDataVersionString);
-        $this->domainEvent = new CatalogImportWasTriggeredEvent($dataVersion, $this->testImportFilePath);
+        $this->domainEvent = new CatalogImportWasTriggeredDomainEvent($dataVersion, $this->testImportFilePath);
     }
     
     public function testImplementsDomainEvent()
@@ -51,7 +51,7 @@ class CatalogImportWasTriggeredEventTest extends \PHPUnit_Framework_TestCase
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);
-        $this->assertSame(CatalogImportWasTriggeredEvent::CODE, $message->getName());
+        $this->assertSame(CatalogImportWasTriggeredDomainEvent::CODE, $message->getName());
         $this->assertSame($this->testDataVersionString, $message->getMetadata()['data_version']);
         $this->assertSame($this->testImportFilePath, $message->getPayload()['import_file_path']);
     }
@@ -59,13 +59,13 @@ class CatalogImportWasTriggeredEventTest extends \PHPUnit_Framework_TestCase
     public function testThrowsExceptionIfMessageCodeDoesNotMatch()
     {
         $this->expectException(NoCatalogWasImportedDomainEventMessageException::class);
-        $this->expectExceptionMessage('Invalid domain event "foo", expected "' . CatalogImportWasTriggeredEvent::CODE);
-        CatalogImportWasTriggeredEvent::fromMessage(Message::withCurrentTime('foo', [], []));
+        $this->expectExceptionMessage('Invalid domain event "foo", expected "' . CatalogImportWasTriggeredDomainEvent::CODE);
+        CatalogImportWasTriggeredDomainEvent::fromMessage(Message::withCurrentTime('foo', [], []));
     }
 
     public function testCanBeRehydratedFromMessage()
     {
-        $rehydratedDomainEvent = CatalogImportWasTriggeredEvent::fromMessage($this->domainEvent->toMessage());
-        $this->assertInstanceOf(CatalogImportWasTriggeredEvent::class, $rehydratedDomainEvent);
+        $rehydratedDomainEvent = CatalogImportWasTriggeredDomainEvent::fromMessage($this->domainEvent->toMessage());
+        $this->assertInstanceOf(CatalogImportWasTriggeredDomainEvent::class, $rehydratedDomainEvent);
     }
 }

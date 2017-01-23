@@ -59,6 +59,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
