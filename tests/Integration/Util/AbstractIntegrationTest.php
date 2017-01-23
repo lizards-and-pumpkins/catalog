@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Logging\LogMessage;
+use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
@@ -132,17 +133,15 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $import = $factory->createCatalogImport();
         $import->importFile(__DIR__ . '/../../shared-fixture/catalog.xml');
 
-        $this->processQueueWhileMessagesPending($factory->getCommandMessageQueue(), $factory->createCommandConsumer());
-        $this->processQueueWhileMessagesPending(
-            $factory->getEventMessageQueue(),
-            $factory->createDomainEventConsumer()
-        );
+        $this->processAllMessages($factory);
     }
     
-    final protected function processQueueWhileMessagesPending(Queue $queue, QueueMessageConsumer $consumer)
+    final protected function processAllMessages(MasterFactory $factory)
     {
-        while ($queue->count()) {
-            $consumer->processAll();
+        while ($factory->getCommandMessageQueue()->count() > 0 ||
+               $factory->getEventMessageQueue()->count() > 0) {
+            $factory->createCommandConsumer()->processAll();
+            $factory->createDomainEventConsumer()->processAll();
         }
     }
 }
