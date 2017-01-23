@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
-use LizardsAndPumpkins\Import\Product\ProductId;
 
 class DataPoolReader
 {
@@ -139,37 +135,5 @@ class DataPoolReader
     public function getUrlKeysForVersion(string $dataVersionString) : array
     {
         return $this->urlKeyStore->getForDataVersion($dataVersionString);
-    }
-
-    /**
-     * @param SearchCriteria $criteria
-     * @param Context $context
-     * @param SortBy $sortBy
-     * @param int $rowsPerPage
-     * @param int $pageNumber
-     * @return ProductId[]
-     */
-    public function getProductIdsMatchingCriteria(
-        SearchCriteria $criteria,
-        Context $context,
-        SortBy $sortBy,
-        int $rowsPerPage,
-        int $pageNumber
-    ) : array {
-        $emptyFilterSelection = [];
-        $includeNoFacetFiltersInResult = new FacetFiltersToIncludeInResult();
-
-        $queryOptions = QueryOptions::create(
-            $emptyFilterSelection,
-            $context,
-            $includeNoFacetFiltersInResult,
-            $rowsPerPage,
-            $pageNumber,
-            $sortBy
-        );
-
-        $searchResult = $this->searchEngine->query($criteria, $queryOptions);
-
-        return array_values($searchResult->getProductIds());
     }
 }

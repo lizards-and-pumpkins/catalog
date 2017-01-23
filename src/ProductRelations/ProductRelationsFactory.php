@@ -7,8 +7,6 @@ namespace LizardsAndPumpkins\ProductRelations;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode;
-use LizardsAndPumpkins\ProductRelations\ContentDelivery\SameSeriesProductRelations;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
@@ -19,7 +17,7 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
 {
     use FactoryTrait;
 
-    public function createProductRelationsService() : ProductRelationsService
+    public function createProductRelationsService(): ProductRelationsService
     {
         return new ProductRelationsService(
             $this->getMasterFactory()->createProductRelationsLocator(),
@@ -27,25 +25,12 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
         );
     }
 
-    public function createSameSeriesProductRelations() : SameSeriesProductRelations
+    public function createProductRelationsLocator(): ProductRelationsLocator
     {
-        return new SameSeriesProductRelations(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductJsonSnippetKeyGenerator()
-        );
+        return new ProductRelationsLocator();
     }
 
-    public function createProductRelationsLocator() : ProductRelationsLocator
-    {
-        $productRelationsLocator = new ProductRelationsLocator();
-        $productRelationsLocator->register(
-            ProductRelationTypeCode::fromString('related-models'),
-            [$this->getMasterFactory(), 'createSameSeriesProductRelations']
-        );
-        return $productRelationsLocator;
-    }
-
-    public function createProductRelationsApiV1GetRequestHandler() : ProductRelationsApiV1GetRequestHandler
+    public function createProductRelationsApiV1GetRequestHandler(): ProductRelationsApiV1GetRequestHandler
     {
         return new ProductRelationsApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductRelationsService(),

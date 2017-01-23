@@ -87,4 +87,14 @@ class ShutdownWorkerDirectiveTest extends \PHPUnit\Framework\TestCase
             ['0'],
         ];
     }
+
+    public function testRetriesWithIncreasedRetryCount()
+    {
+        $directive0 = new ShutdownWorkerDirective('111');
+        $directive1 = $directive0->retry();
+        $directive2 = $directive1->retry();
+        $this->assertSame(0, $directive0->getRetryCount());
+        $this->assertSame(1, $directive1->getRetryCount());
+        $this->assertSame(2, $directive2->getRetryCount());
+    }
 }

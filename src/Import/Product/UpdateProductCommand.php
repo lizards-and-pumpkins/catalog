@@ -39,7 +39,7 @@ class UpdateProductCommand implements Command
 
     public static function fromMessage(Message $message) : UpdateProductCommand
     {
-        if ($message->getName() !== 'update_product') {
+        if ($message->getName() !== self::CODE) {
             throw self::createInvalidMessageException($message->getName());
         }
         

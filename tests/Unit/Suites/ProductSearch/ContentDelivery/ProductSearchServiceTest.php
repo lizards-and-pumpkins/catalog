@@ -71,7 +71,7 @@ class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([]);
 
-        $this->stubDataPoolReader->method('getProductIdsMatchingCriteria')->willReturn($stubSearchEngineResponse);
+        $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
 
         $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
 
