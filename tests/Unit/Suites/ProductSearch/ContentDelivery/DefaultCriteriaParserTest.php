@@ -36,13 +36,13 @@ class DefaultCriteriaParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testReturnsAnythingCriteriaForEmptyString(string $emptyString)
     {
-        $this->assertInstanceOf(SearchCriterionAnything::class, $this->parser->parse($emptyString));
+        $this->assertInstanceOf(SearchCriterionAnything::class, $this->parser->createCriteriaFromString($emptyString));
     }
 
     public function testCanParseSingleValue()
     {
         $expectedCriteria = new SearchCriterionEqual('foo', 'bar');
-        $this->assertEquals($expectedCriteria, $this->parser->parse('foo:bar'));
+        $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:bar'));
     }
 
     public function testCanParseMultipleValuesFilterWithAndCriteria()
@@ -51,7 +51,7 @@ class DefaultCriteriaParserTest extends \PHPUnit_Framework_TestCase
             new SearchCriterionEqual('foo', 'bar'),
             new SearchCriterionEqual('foo', 'baz')
         );
-        $this->assertEquals($expectedCriteria, $this->parser->parse('foo:{and:[bar,baz]}'));
+        $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:{and:[bar,baz]}'));
     }
 
     public function testCanParseMultipleValuesFilterWithOrCriteria()
@@ -60,7 +60,7 @@ class DefaultCriteriaParserTest extends \PHPUnit_Framework_TestCase
             new SearchCriterionEqual('foo', 'bar'),
             new SearchCriterionEqual('foo', 'baz')
         );
-        $this->assertEquals($expectedCriteria, $this->parser->parse('foo:{or:[bar,baz]}'));
+        $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:{or:[bar,baz]}'));
     }
 
     public function testCanParseMultipleCriteriaWithSingleValues()
@@ -69,7 +69,7 @@ class DefaultCriteriaParserTest extends \PHPUnit_Framework_TestCase
             new SearchCriterionEqual('foo', 'bar'),
             new SearchCriterionEqual('baz', 'qux')
         );
-        $this->assertEquals($expectedCriteria, $this->parser->parse('or:[foo:bar,baz:qux]'));
+        $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('or:[foo:bar,baz:qux]'));
     }
 
     public function testCanParseMultipleCriteriaWithCompositeValues()
@@ -85,7 +85,7 @@ class DefaultCriteriaParserTest extends \PHPUnit_Framework_TestCase
                 new SearchCriterionEqual('color', 'blue')
             )
         );
-        $this->assertEquals($expectedCriteria, $this->parser->parse($criteriaString));
+        $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString($criteriaString));
     }
 
     /**
@@ -94,7 +94,7 @@ class DefaultCriteriaParserTest extends \PHPUnit_Framework_TestCase
     public function testExceptionIsThrownIfFiltersQueryStringIsMalformed(string $malformedFiltersString)
     {
         $this->expectException(MalformedCriteriaQueryStringException::class);
-        $this->parser->parse($malformedFiltersString);
+        $this->parser->createCriteriaFromString($malformedFiltersString);
     }
 
     /**
@@ -103,25 +103,25 @@ class DefaultCriteriaParserTest extends \PHPUnit_Framework_TestCase
     public function malformedFiltersStringProvider(): array
     {
         return [
-            ['foo'],
-            ['foo:'],
-            ['foo:{}'],
-            ['foo:{bar}'],
-            ['foo:{bar:baz}'],
-            ['foo:{or:baz}'],
-            ['foo:{and:[]}'],
-            ['foo:{and:[bar]}'],
-            ['foo:bar,baz'],
-            ['foo:[]'],
-            ['foo:['],
-            ['foo:[}'],
-            ['or:[foo:bar]'],
-            ['or:[foo:bar,baz:{}]'],
-            ['foo:[[]]'],
-            ['foo: '],
-            ['foo:[ ]'],
-            ['foo: ,bar'],
-            ['foo:[ ,bar]'],
+            'no-separator' => ['foo'],
+            'no-value' => ['foo:'],
+            'empty-value' => ['foo: '],
+            'empty-condition' => ['foo:{}'],
+            'incomplete-operation' => ['foo:{bar}'],
+            'invalid-condition-operator' => ['foo:{bar:baz}'],
+            'invalid-operation' => ['foo:{or:baz}'],
+            'empty-operation' => ['foo:{and:[]}'],
+            'too-few-operands' => ['foo:{and:[bar]}'],
+            'completely-invalid-format' => ['foo:bar,baz'],
+            'invalid-operator' => ['foo:[]'],
+            'invalid-operator-no-operands' => ['foo:[ ]'],
+            'no-closing-bracket' => ['foo:['],
+            'non-matching-brackets' => ['foo:[}'],
+            'too-few-conditions' => ['or:[foo:bar]'],
+            'no-nested-operands' => ['or:[foo:bar,baz:{}]'],
+            'invalid-nesting' => ['foo:[[]]'],
+            'fuzz-test' => ['foo: ,bar'],
+            'another-fuzz-test' => ['foo:[ ,bar]'],
         ];
     }
 

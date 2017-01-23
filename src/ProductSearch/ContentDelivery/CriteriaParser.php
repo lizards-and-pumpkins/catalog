@@ -8,5 +8,5 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 
 interface CriteriaParser
 {
-    public function parse(string $criteriaString): SearchCriteria;
+    public function createCriteriaFromString(string $criteriaString): SearchCriteria;
 }

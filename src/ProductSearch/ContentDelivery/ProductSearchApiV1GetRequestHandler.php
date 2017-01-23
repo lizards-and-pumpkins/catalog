@@ -242,7 +242,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
             return CompositeSearchCriterion::createAnd(
                 new SearchCriterionFullText($queryString),
-                $this->criteriaParser->parse($criteriaString)
+                $this->criteriaParser->createCriteriaFromString($criteriaString)
             );
         }
 
@@ -253,7 +253,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
         if ($request->hasQueryParameter(self::INITIAL_CRITERIA_PARAMETER)) {
             $criteriaString = $request->getQueryParameter(self::INITIAL_CRITERIA_PARAMETER);
-            return $this->criteriaParser->parse($criteriaString);
+            return $this->criteriaParser->createCriteriaFromString($criteriaString);
         }
 
         return new SearchCriterionAnything();

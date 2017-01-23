@@ -12,7 +12,7 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\MalformedCriteria
 
 class DefaultCriteriaParser implements CriteriaParser
 {
-    public function parse(string $criteriaString): SearchCriteria
+    public function createCriteriaFromString(string $criteriaString): SearchCriteria
     {
         if ('' === trim($criteriaString)) {
             return new SearchCriterionAnything();
@@ -31,11 +31,11 @@ class DefaultCriteriaParser implements CriteriaParser
     {
         if (preg_match('/^(?P<condition>and|or):\[(?P<subCriteria>.+,.+)\]$/', $criteriaString, $matches)) {
             $subCriteriaStrings = $this->explodeCriteriaString($matches['subCriteria']);
-            $criteria = array_map(function (string $subCriteriaString) {
+            $subCriteria = array_map(function (string $subCriteriaString): SearchCriteria {
                 return $this->parseCriteriaString($subCriteriaString);
             }, $subCriteriaStrings);
 
-            return CompositeSearchCriterion::create($matches['condition'], ...$criteria);
+            return CompositeSearchCriterion::create($matches['condition'], ...$subCriteria);
         }
 
         return $this->parseSingleCriteria($criteriaString);
@@ -49,11 +49,11 @@ class DefaultCriteriaParser implements CriteriaParser
 
         if (preg_match('/^\{(?P<condition>and|or):\[(?P<values>.+,.+)\]\}$/', $valuesString, $matches)) {
             $values = explode(',', $matches['values']);
-            $criteria = array_map(function (string $value) use ($fieldName) {
+            $subCriteria = array_map(function (string $value) use ($fieldName) {
                 return new SearchCriterionEqual($fieldName, $value);
             }, $values);
 
-            return CompositeSearchCriterion::create($matches['condition'], ...$criteria);
+            return CompositeSearchCriterion::create($matches['condition'], ...$subCriteria);
         }
 
         $this->validateSingleValue($valuesString);
@@ -94,14 +94,18 @@ class DefaultCriteriaParser implements CriteriaParser
     private function validateCriteriaString(string $criteriaString)
     {
         if (! preg_match('/^.+:.+$/', $criteriaString)) {
-            throw new MalformedCriteriaQueryStringException();
+            throw new MalformedCriteriaQueryStringException(
+                sprintf('Criteria query string %s is malformed.', $criteriaString)
+            );
         }
     }
 
     private function validateSingleValue(string $valuesString)
     {
         if (! preg_match('/^[^\[\]\{\}: ,]+$/', $valuesString)) {
-            throw new MalformedCriteriaQueryStringException();
+            throw new MalformedCriteriaQueryStringException(
+                sprintf('Criteria value string %s is malformed.', $valuesString)
+            );
         }
     }
 }

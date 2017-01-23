@@ -620,7 +620,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, $encodedInitialCriteriaString],
         ]);
 
-        $this->stubCriteriaParser->method('parse')->with($encodedInitialCriteriaString)
+        $this->stubCriteriaParser->method('createCriteriaFromString')->with($encodedInitialCriteriaString)
             ->willReturn($stubInitialCriteria);
 
         $this->mockProductSearchService->expects($this->once())->method('query')->with($stubInitialCriteria);
@@ -645,7 +645,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, $encodedInitialCriteriaString],
         ]);
 
-        $this->stubCriteriaParser->method('parse')->with($encodedInitialCriteriaString)
+        $this->stubCriteriaParser->method('createCriteriaFromString')->with($encodedInitialCriteriaString)
             ->willReturn($stubInitialCriteria);
 
         $expectedCriteria = CompositeSearchCriterion::createAnd(
