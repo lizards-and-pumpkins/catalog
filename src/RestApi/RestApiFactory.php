@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Factory\Factory;
@@ -33,25 +34,29 @@ class RestApiFactory implements Factory
         $this->registerApiV1RequestHandlers($requestHandlerLocator);
     }
 
-    private function registerApiV1RequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
+    final protected function registerApiV1RequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
     {
-        $version = 1;
-
         $requestHandlerLocator->register(
             'put_catalog_import',
-            $version,
+            $version = 1,
             $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
+        );
+        
+        $requestHandlerLocator->register(
+            'put_catalog_import',
+            $version = 2,
+            $this->getMasterFactory()->createCatalogImportApiV2PutRequestHandler()
         );
 
         $requestHandlerLocator->register(
             'put_content_blocks',
-            $version,
+            $version = 1,
             $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
         );
 
         $requestHandlerLocator->register(
             'put_templates',
-            $version,
+            $version = 1,
             $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
         );
     }
@@ -59,6 +64,15 @@ class RestApiFactory implements Factory
     public function createCatalogImportApiV1PutRequestHandler() : CatalogImportApiV1PutRequestHandler
     {
         return CatalogImportApiV1PutRequestHandler::create(
+            $this->getCatalogImportDirectoryConfig(),
+            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->getLogger()
+        );
+    }
+
+    public function createCatalogImportApiV2PutRequestHandler(): CatalogImportApiV2PutRequestHandler
+    {
+        return CatalogImportApiV2PutRequestHandler::create(
             $this->getCatalogImportDirectoryConfig(),
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->getLogger()
