@@ -57,13 +57,13 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      */
     public function rangeDataProvider() : array
     {
-        $conv = function ($price) {
+        $convert = function ($price) {
             return Price::fromDecimalValue($price)->getAmount();
         };
         return [
-            [$conv('0.01'), $conv('0.02'), '0,01 € - 0,02 €'],
-            [$conv('0.01'), $conv('0.20'), '0,01 € - 0,20 €'],
-            [$conv('10'), $conv('19.00'), '10,00 € - 19,00 €'],
+            [$convert('0.01'), $convert('0.02'), '0,01 € - 0,02 €'],
+            [$convert('0.01'), $convert('0.20'), '0,01 € - 0,20 €'],
+            [$convert('10'), $convert('19.00'), '10,00 € - 19,00 €'],
         ];
     }
 
@@ -114,13 +114,13 @@ class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
      */
     public function matchingEncodedInputDataProvider() : array
     {
-        $conv = function ($price) {
+        $convert = function ($price) {
             return Price::fromDecimalValue($price)->getAmount();
         };
         return [
-            ['0.01-0.02', $conv('0.01'), $conv('0.02')],
-            ['0.01-0.20', $conv('0.01'), $conv('0.20')],
-            ['10.00-19.99', $conv('10'), $conv('19.99')],
+            ['0.01-0.02', $convert('0.01'), $convert('0.02')],
+            ['0.01-0.20', $convert('0.01'), $convert('0.20')],
+            ['10.00-19.99', $convert('10'), $convert('19.99')],
         ];
     }
 }

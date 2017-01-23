@@ -814,7 +814,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ProductListingImportCommandLocator::class, $result);
     }
 
-    public function testItCreatesAcreateProductListingTitleSnippetRenderer()
+    public function testItCreatesACreateProductListingTitleSnippetRenderer()
     {
         $result = $this->commonFactory->createProductListingTitleSnippetRenderer();
         $this->assertInstanceOf(ProductListingTitleSnippetRenderer::class, $result);

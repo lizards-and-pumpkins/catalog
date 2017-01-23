@@ -6,20 +6,18 @@ namespace LizardsAndPumpkins\Import\RestApi;
 
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
-use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
- * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit\Framework\TestCase
 {

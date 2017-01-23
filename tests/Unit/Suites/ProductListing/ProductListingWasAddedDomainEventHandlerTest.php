@@ -15,7 +15,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
- * @uses   \LizardsAndPumpkins\Messaging\Queue\Messagename
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */

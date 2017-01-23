@@ -37,7 +37,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
 
     private $testMatchingRequestPath = '/api/products/test-sku/relations/test-relation';
 
-    private $testNonMatchingRequstPaths = [
+    private $testNonMatchingRequestPaths = [
         '/api/products/test-sku',
         '/api/products/test-sku/relations/',
         '/api/products/relations/test-relation',
@@ -108,7 +108,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
     {
         return array_map(function ($path) {
             return [$path];
-        }, $this->testNonMatchingRequstPaths);
+        }, $this->testNonMatchingRequestPaths);
     }
 
     public function testItCanProcessMatchingGetRequests()

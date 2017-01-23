@@ -75,7 +75,7 @@ class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
         $this->decorator->consume($stubMessageReceiver, $maxNumberOfMessagesToConsume);
     }
 
-    public function testItLoggsAddedMessages()
+    public function testItLogsAddedMessages()
     {
         $testData = $this->createMockMessage();
         $this->mockLogger->expects($this->once())->method('log')->with($this->isInstanceOf(QueueAddLogMessage::class));

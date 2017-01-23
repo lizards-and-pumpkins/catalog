@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
@@ -55,13 +56,14 @@ class CatalogImportApiTest extends AbstractIntegrationTest
     
     public function testV2CatalogImportHandlerPlacesImportCommandsIntoQueue()
     {
+        $testDataVersionString = 'foo-123';
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([
             'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v2+json'
         ]);
         $httpRequestBodyString = json_encode([
             'fileName' => 'catalog.xml',
-            'dataVersion' => 'foo-123'
+            'dataVersion' => $testDataVersionString
         ]);
         $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -76,8 +78,8 @@ class CatalogImportApiTest extends AbstractIntegrationTest
         $response = $website->processRequest();
 
         $message = $this->getNextMessageFromQueue($commandQueue);
-        $this->assertSame('import_catalog', $message->getName());
-        $this->assertSame('foo-123', $message->getMetadata()['data_version']);
+        $this->assertSame(ImportCatalogCommand::CODE, $message->getName());
+        $this->assertSame($testDataVersionString, $message->getMetadata()['data_version']);
         
         $this->assertSame(202, $response->getStatusCode());
         $this->assertSame('', $response->getBody());

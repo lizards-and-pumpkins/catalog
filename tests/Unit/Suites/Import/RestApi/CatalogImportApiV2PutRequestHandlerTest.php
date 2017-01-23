@@ -12,7 +12,6 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
-use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**

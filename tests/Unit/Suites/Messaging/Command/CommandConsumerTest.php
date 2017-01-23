@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
+use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\MessageReceiver;
@@ -85,7 +86,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testDelegatesProcessingToLocatedCommandHandler()
     {
-        $mockCommandHandler = $this->createMock(\LizardsAndPumpkins\Messaging\Command\CommandHandler::class);
+        $mockCommandHandler = $this->createMock(CommandHandler::class);
         $mockCommandHandler->expects($this->once())->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($mockCommandHandler);
 

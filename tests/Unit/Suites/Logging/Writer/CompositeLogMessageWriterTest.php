@@ -28,7 +28,7 @@ class CompositeLogMessageWriterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(LogMessageWriter::class, new CompositeLogMessageWriter());
     }
 
-    public function testItDelegatesToLogMessagWriterComponents()
+    public function testItDelegatesToLogMessageWriterComponents()
     {
         /** @var LogMessage|\PHPUnit_Framework_MockObject_MockObject $stubLogMessage */
         $stubLogMessage = $this->createMock(LogMessage::class);

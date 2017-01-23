@@ -72,8 +72,8 @@ class FilesystemFileUriTest extends \PHPUnit_Framework_TestCase
     {
         $fileURIString = 'test';
         $sourceFilesystemFileURI = FilesystemFileUri::fromString($fileURIString);
-        $newFilesysteFileURI = FilesystemFileUri::fromString($sourceFilesystemFileURI);
+        $newFilesystemFileURI = FilesystemFileUri::fromString($sourceFilesystemFileURI);
         
-        $this->assertSame($fileURIString, (string) $newFilesysteFileURI);
+        $this->assertSame($fileURIString, (string) $newFilesystemFileURI);
     }
 }

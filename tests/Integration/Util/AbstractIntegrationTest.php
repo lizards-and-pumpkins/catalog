@@ -13,7 +13,6 @@ use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Logging\LogMessage;
-use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;

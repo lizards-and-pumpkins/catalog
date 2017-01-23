@@ -170,7 +170,7 @@ class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testFillsConainerSnippets()
+    public function testFillsContainerSnippets()
     {
         $testSnippetKey = 'listing';
         $htmlHeadMetaKey = 'dummy_meta_key';
