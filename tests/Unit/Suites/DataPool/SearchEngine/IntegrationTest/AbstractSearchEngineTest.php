@@ -812,7 +812,7 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $mockFacetFieldTransformation = $this->createMock(FacetFieldTransformation::class);
         $mockFacetFieldTransformation->expects($this->once())->method('decode')
-            ->willReturn(FacetFilterRange::create(10, 20));
+            ->willReturn(FacetFilterRange::create('10', '20'));
 
         $this->stubFacetFieldTransformationRegistry->method('hasTransformationForCode')->willReturn(true);
         $this->stubFacetFieldTransformationRegistry->method('getTransformationByCode')
@@ -820,7 +820,9 @@ abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
 
         $criteria = new SearchCriterionAnything();
 
-        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult();
+        $filtersToIncludeInResult = new FacetFiltersToIncludeInResult(
+            new FacetFilterRequestRangedField(AttributeCode::fromString($fieldCode))
+        );
         $selectedFilters = [$fieldCode => [$fieldValue]];
         $queryOptions = $this->createStubQueryOptionsWithGivenFacetFilters($filtersToIncludeInResult, $selectedFilters);
 

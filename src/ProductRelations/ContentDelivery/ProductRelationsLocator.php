@@ -37,17 +37,6 @@ class ProductRelationsLocator
     }
 
     /**
-     * @param mixed $variable
-     * @return string
-     */
-    private function getVariableType($variable) : string
-    {
-        return is_object($variable) ?
-            get_class($variable) :
-            gettype($variable);
-    }
-
-    /**
      * @param ProductRelations $productRelationType
      */
     private function validateProductRelationType($productRelationType)
@@ -55,7 +44,7 @@ class ProductRelationsLocator
         if (!is_object($productRelationType) || !$productRelationType instanceof ProductRelations) {
             $message = sprintf(
                 'Product Relation Type "%s" has to implement the ProductRelationType interface',
-                $this->getVariableType($productRelationType)
+                typeof($productRelationType)
             );
             throw new InvalidProductRelationTypeException($message);
         }
