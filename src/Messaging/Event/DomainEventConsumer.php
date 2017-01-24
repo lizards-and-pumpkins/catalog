@@ -39,17 +39,17 @@ class DomainEventConsumer implements QueueMessageConsumer, MessageReceiver
 
     public function process()
     {
-        $this->processNumberOfMessags($this->maxNumberOfMessagesToProcess);
+        $this->processNumberOfMessages($this->maxNumberOfMessagesToProcess);
     }
 
     public function processAll()
     {
         if (($n = $this->queue->count()) > 0) {
-            $this->processNumberOfMessags($n);
+            $this->processNumberOfMessages($n);
         }
     }
 
-    private function processNumberOfMessags(int $numberOfMessagesToProcess)
+    private function processNumberOfMessages(int $numberOfMessagesToProcess)
     {
         try {
             $messageReceiver = $this;
