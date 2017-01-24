@@ -82,4 +82,9 @@ class DataPoolWriter implements Clearable
             $this->urlKeyStorage->addUrlKeyForVersion($version, $urlKey, $context, $urlKeyType);
         }, $urlKeysForContextsCollection->getUrlKeys());
     }
+
+    public function setCurrentDataVersion(string $dataVersionString)
+    {
+        $this->keyValueStore->set(CurrentDataVersion::SNIPPET_KEY, $dataVersionString);
+    }
 }
