@@ -26,7 +26,7 @@ class SearchEngineTest extends AbstractIntegrationTest
     public function testItMatchesVariationAttributes()
     {
         $this->factory = $this->prepareIntegrationTestMasterFactory();
-        $this->importCatalogFixture($this->factory, 'catalog.xml');
+        $this->importCatalogFixture($this->factory, 'configurable_product_adipure.xml');
 
         $context = $this->factory->createContextBuilder()->createContext([
             Locale::CONTEXT_CODE => 'en_US',

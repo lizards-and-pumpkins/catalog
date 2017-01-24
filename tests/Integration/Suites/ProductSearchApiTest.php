@@ -41,7 +41,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
-        $this->importCatalogFixture($factory, 'catalog.xml');
+        $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
 
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
@@ -67,7 +67,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
-        $this->importCatalogFixture($factory, 'catalog.xml');
+        $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
 
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();

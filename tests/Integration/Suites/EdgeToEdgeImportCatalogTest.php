@@ -315,8 +315,8 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
     public function testProductImportedWithDifferentDataVersionsAreBothAccessibleFromFrontend()
     {
-        $fixtureFileV1 = 'simple_product-v1.xml';
-        $fixtureFileV2 = 'simple_product-v2.xml';
+        $fixtureFileV1 = 'simple_product_armflasher-v1.xml';
+        $fixtureFileV2 = 'simple_product_armflasher-v2.xml';
         $dataVersion1 = 'data-version-1';
         $dataVersion2 = 'data-version-2';
         
@@ -338,8 +338,8 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
     public function testProductPriceIsProjectedWithoutDataVersion()
     {
-        $fixtureFileV1 = 'simple_product-v1.xml';
-        $fixtureFileV2 = 'simple_product-v2.xml';
+        $fixtureFileV1 = 'simple_product_armflasher-v1.xml';
+        $fixtureFileV2 = 'simple_product_armflasher-v2.xml';
         $dataVersion1 = 'data-version-1';
         $dataVersion2 = 'data-version-2';
 

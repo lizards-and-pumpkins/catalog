@@ -18,37 +18,18 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
      * @var SampleMasterFactory|CommonFactory
      */
     private $factory;
-
-    private function importCatalog()
+    
+    private function getSkuOfFirstSimpleProductInFixture(string $fixtureFile) : string
     {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
-        ]);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
-
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->processRequest();
-
-        $this->processAllMessages($this->factory);
-    }
-
-    private function getSkuOfFirstSimpleProductInFixture() : string
-    {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/' . $fixtureFile);
         $parser = new XPathParser($xml);
         $skuNode = $parser->getXmlNodesArrayByXPath('//catalog/products/product[@type="simple"][1]/@sku');
         return $skuNode[0]['value'];
     }
 
-    private function getSkuOfFirstConfigurableProductInFixture() : string
+    private function getSkuOfFirstConfigurableProductInFixture(string $fixtureFile) : string
     {
-        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $xml = file_get_contents(__DIR__ . '/../../shared-fixture/' . $fixtureFile);
         $parser = new XPathParser($xml);
         $skuNode = $parser->getXmlNodesArrayByXPath('//catalog/products/product[@type="configurable"][1]/@sku');
         return $skuNode[0]['value'];
@@ -80,30 +61,34 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
     private function getProductJsonSnippetKeyForId(string $productIdString) : string
     {
         $keyGenerator = $this->factory->createProductJsonSnippetKeyGenerator();
-        $context = $this->factory->createContext();
+        $context = $this->factory->createContextBuilder()->createContext([]);
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
     private function getConfigurableProductVariationAttributesJsonSnippetKeyForId(string $productIdString) : string
     {
         $keyGenerator = $this->factory->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
-        $context = $this->factory->createContext();
+        $context = $this->factory->createContextBuilder()->createContext([]);
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
     private function getConfigurableProductAssociatedProductsJsonSnippetKeyForId(string $productIdString) : string
     {
         $keyGenerator = $this->factory->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
-        $context = $this->factory->createContext();
+        $context = $this->factory->createContextBuilder()->createContext([]);
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
     public function testProductJsonSnippetsAreWrittenToDataPool()
     {
-        $this->importCatalog();
+        $simpleProductFixture = 'simple_product_adilette.xml';
+        $configurableProductFixture = 'configurable_product_adipure.xml';
+        
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importCatalogFixture($this->factory, $simpleProductFixture, $configurableProductFixture);
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
         
-        $simpleProductIdString = $this->getSkuOfFirstSimpleProductInFixture();
+        $simpleProductIdString = $this->getSkuOfFirstSimpleProductInFixture($simpleProductFixture);
 
         $simpleProductSnippet = $this->getProductJsonSnippetForId($simpleProductIdString);
 
@@ -112,7 +97,7 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         $this->assertEquals('simple', $simpleProductData['type_code']);
 
 
-        $configProductIdString = $this->getSkuOfFirstConfigurableProductInFixture();
+        $configProductIdString = $this->getSkuOfFirstConfigurableProductInFixture($configurableProductFixture);
         $variationAttributes = $this->getConfigurableProductVariationAttributesJsonSnippetForId($configProductIdString);
         $associatedProducts = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($configProductIdString);
 
@@ -122,10 +107,13 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
 
     public function testConfigurableProductJsonSnippetsAreAlsoWrittenForSimpleProducts()
     {
-        $this->importCatalog();
+        $fixtureCatalogFile = 'simple_product_adilette.xml';
+
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importCatalogFixture($this->factory, $fixtureCatalogFile);
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
 
-        $productIdString = $this->getSkuOfFirstSimpleProductInFixture();
+        $productIdString = $this->getSkuOfFirstSimpleProductInFixture($fixtureCatalogFile);
         $variationsSnippet = $this->getConfigurableProductVariationAttributesJsonSnippetForId($productIdString);
         $associatedProductSnippet = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($productIdString);
         $this->assertEmpty(json_decode($variationsSnippet, true));

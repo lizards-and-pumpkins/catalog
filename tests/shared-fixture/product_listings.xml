@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
+    <listings>
+        <listing url_key="adidas-sale" website="ru" locale="de_DE">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
+                <attribute name="brand" is="Equal">Adidas</attribute>
+            </criteria>
+            <attributes>
+                <attribute name="meta_title">Adidas Rausverkauf!</attribute>
+                <attribute name="meta_description">Adidas Rausverkauf! Greifen Sie jetzt zu!</attribute>
+            </attributes>
+        </listing>
+        <listing url_key="sale" website="ru" locale="de_DE">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
+            </criteria>
+            <attributes>
+                <attribute name="title">Sale</attribute>
+                <attribute name="description">Special Offers!!</attribute>
+                <attribute name="meta_description">Besondere Angebote!!</attribute>
+            </attributes>
+        </listing>
+        <listing url_key="sale" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="category" is="Equal">sale</attribute>
+            </criteria>
+            <attributes>
+                <attribute name="meta_title">Vendre</attribute>
+                <attribute name="meta_description">Acheter des chaussures de sport moins chères ? C’est possible grâce à
+                    nos offres à prix discount. Commandez très simplement vos futures chaussures de course qui vous
+                    seront expédiées rapidement.
+                </attribute>
+                <attribute name="meta_keywords">vendre, offre, proposition</attribute>
+            </attributes>
+        </listing>
+        <listing url_key="asics" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+                <attribute name="brand" is="Equal">Asics</attribute>
+            </criteria>
+        </listing>
+    </listings>
+</catalog>

@@ -86,7 +86,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
             new HttpRequestBody('')
         );
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $this->importCatalogFixture($this->factory, 'catalog.xml');
+        $this->importCatalogFixture($this->factory, 'simple_product_armflasher-v1.xml', 'simple_product_adilette.xml');
 
         $this->registerProductSearchResultMetaSnippetKeyGenerator();
         
