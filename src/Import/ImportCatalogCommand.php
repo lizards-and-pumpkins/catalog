@@ -40,16 +40,12 @@ class ImportCatalogCommand implements Command
         return Message::withCurrentTime(self::CODE, $payload, $metadata);
     }
 
-    /**
-     * @param Message $message
-     * @return static
-     */
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message): self
     {
         self::validateMessage($message);
         $dataVersion = DataVersion::fromVersionString($message->getMetadata()['data_version']);
 
-        return new static($dataVersion, $message->getPayload()['catalog_data_file']);
+        return new self($dataVersion, $message->getPayload()['catalog_data_file']);
     }
 
     private static function validateMessage(Message $message)

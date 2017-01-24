@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
@@ -47,7 +49,7 @@ class CatalogImportWasTriggeredDomainEventTest extends \PHPUnit_Framework_TestCa
         $this->assertSame($this->testImportFilePath, $this->domainEvent->getCatalogImportFilePath());
     }
 
-    public function testSerializesItselfAsAMessge()
+    public function testSerializesItselfAsAMessage()
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);

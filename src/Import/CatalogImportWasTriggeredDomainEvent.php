@@ -35,7 +35,7 @@ class CatalogImportWasTriggeredDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, $payload, $metadata);
     }
 
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             throw self::createNoCatalogWasImportedDomainEventMessageException($message->getName());

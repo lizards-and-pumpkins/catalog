@@ -114,7 +114,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame("$integerAttributeValue", $this->productView->getFirstValueOfAttribute($attributeCode));
     }
 
-    public function testGettingTheFirstValueOfANonExistantAttributeReturnsAnEmptyString()
+    public function testGettingTheFirstValueOfANonExistentAttributeReturnsAnEmptyString()
     {
         /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
@@ -160,7 +160,7 @@ class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['test1', 'test2'], $this->productView->getAllValuesOfAttribute($attributeCode));
     }
 
-    public function testGettingAllValuesOfANonExistantAttributeReturnsAnEmptyArray()
+    public function testGettingAllValuesOfANonExistentAttributeReturnsAnEmptyArray()
     {
         /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();

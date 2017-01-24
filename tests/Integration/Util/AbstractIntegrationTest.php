@@ -125,11 +125,11 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $factory->setUrlKeyStore($this->urlKeyStore);
     }
 
-    final protected function importCatalogFixture(MasterFactory $factory)
+    final protected function importCatalogFixture(MasterFactory $factory, string $fixtureCatalogFile)
     {
         /** @var CatalogImport $import */
         $import = $factory->createCatalogImport();
-        $import->importFile(__DIR__ . '/../../shared-fixture/catalog.xml');
+        $import->importFile(__DIR__ . '/../../shared-fixture/' . $fixtureCatalogFile);
 
         $this->processAllMessages($factory);
     }

@@ -24,7 +24,7 @@ class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestC
      */
     private $dummyRootSnippetCode = 'foo';
 
-    private $containerSnippets = ['additonal-info' => []];
+    private $containerSnippets = ['additional-info' => []];
 
     protected function setUp()
     {

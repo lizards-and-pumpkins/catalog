@@ -45,7 +45,7 @@ class ImageWasAddedDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, $payload, ['data_version' => (string) $this->getDataVersion()]);
     }
 
-    public static function fromMessage(Message $message) : ImageWasAddedDomainEvent
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             throw new NoImageWasAddedDomainEventMessageException(

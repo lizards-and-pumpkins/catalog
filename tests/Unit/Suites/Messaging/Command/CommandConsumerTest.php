@@ -85,7 +85,7 @@ class CommandConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testDelegatesProcessingToLocatedCommandHandler()
     {
-        $mockCommandHandler = $this->createMock(\LizardsAndPumpkins\Messaging\Command\CommandHandler::class);
+        $mockCommandHandler = $this->createMock(CommandHandler::class);
         $mockCommandHandler->expects($this->once())->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($mockCommandHandler);
 

@@ -56,8 +56,8 @@ class ShutdownWorkerDirectiveHandlerTest extends \PHPUnit\Framework\TestCase
     {
         $sourceDirective = new ShutdownWorkerDirective(strval(getmypid() - 1), 42);
         $this->mockQueue->expects($this->once())->method('add')
-            ->willReturnCallback(function (ShutdownWorkerDirective $retryDirctive) use ($sourceDirective) {
-                $this->assertSame($sourceDirective->getRetryCount() + 1, $retryDirctive->getRetryCount());
+            ->willReturnCallback(function (ShutdownWorkerDirective $retryDirective) use ($sourceDirective) {
+                $this->assertSame($sourceDirective->getRetryCount() + 1, $retryDirective->getRetryCount());
             });
         $this->createHandler($sourceDirective->toMessage())->process();
     }

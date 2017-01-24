@@ -16,7 +16,7 @@ class TestDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, [], []);
     }
 
-    public static function fromMessage(Message $message) : self
+    public static function fromMessage(Message $message): self
     {
         return new self();
     }

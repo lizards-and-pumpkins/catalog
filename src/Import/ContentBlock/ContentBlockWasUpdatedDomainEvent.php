@@ -39,7 +39,7 @@ class ContentBlockWasUpdatedDomainEvent implements DomainEvent
         return Message::withCurrentTime(self::CODE, $payload, []);
     }
 
-    public static function fromMessage(Message $message) : ContentBlockWasUpdatedDomainEvent
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             throw new NoContentBlockWasUpdatedDomainEventMessageException(
@@ -47,6 +47,6 @@ class ContentBlockWasUpdatedDomainEvent implements DomainEvent
             );
         }
 
-        return new static(ContentBlockSource::rehydrate($message->getPayload()['source']));
+        return new self(ContentBlockSource::rehydrate($message->getPayload()['source']));
     }
 }

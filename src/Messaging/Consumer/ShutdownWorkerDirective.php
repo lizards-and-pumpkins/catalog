@@ -39,7 +39,7 @@ class ShutdownWorkerDirective implements Command, DomainEvent
         return Message::withCurrentTime($name, $payload, $metadata);
     }
 
-    public static function fromMessage(Message $message) : ShutdownWorkerDirective
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             $format = 'Unable to rehydrate from "%s" queue message, expected "%s"';

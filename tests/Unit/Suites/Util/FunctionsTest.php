@@ -56,7 +56,7 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(array_keys($items), $receivedIndexes);
     }
 
-    public function testEveryWorksWithTraversables()
+    public function testEveryWorksWithTraversable()
     {
         $array = ['foo', 'bar', 'baz'];
         $items = new \ArrayIterator($array);

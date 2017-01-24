@@ -219,7 +219,7 @@ class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->testFileContent, $content);
     }
 
-    public function testReadThrowsAnExceptionForNonExistantFiles()
+    public function testReadThrowsAnExceptionForNonExistentFiles()
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/file-to-read');
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;

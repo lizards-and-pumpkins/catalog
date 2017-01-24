@@ -61,7 +61,7 @@ class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(ContentBlockWasUpdatedDomainEvent::CODE, $message->getName());
     }
 
-    public function testReturnsMessagWithContentBlockPayload()
+    public function testReturnsMessageWithContentBlockPayload()
     {
         $payload = $this->domainEvent->toMessage()->getPayload();
         $this->assertArrayHasKey('id', $payload);

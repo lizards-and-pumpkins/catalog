@@ -35,7 +35,7 @@ class UpdateContentBlockCommand implements Command
         return Message::withCurrentTime($name, $payload, $metadata);
     }
 
-    public static function fromMessage(Message $message) : UpdateContentBlockCommand
+    public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
             throw new NoUpdateContentBlockCommandMessageException(sprintf(
