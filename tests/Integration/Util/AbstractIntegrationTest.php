@@ -132,7 +132,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
         $import = $factory->createCatalogImport();
         $dataVersion = DataVersion::fromVersionString('-1'); 
         if (count($fixtureCatalogFiles) === 0) {
-            throw new \RuntimeException('No catalog fixture fil specified.');
+            throw new \RuntimeException('No catalog fixture file specified.');
         }
         every($fixtureCatalogFiles, function(string $fixtureCatalogFile) use ($import, $dataVersion) {
             $import->importFile(__DIR__ . '/../../shared-fixture/' . $fixtureCatalogFile, $dataVersion);
