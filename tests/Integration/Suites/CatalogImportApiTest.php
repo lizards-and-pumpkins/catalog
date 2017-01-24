@@ -10,11 +10,12 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Messaging\MessageReceiver;
+use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogImportApiTest extends AbstractIntegrationTest
 {
-    private function getNextMessageFromQueue(Messaging\Queue $queue): Message
+    private function getNextMessageFromQueue(Queue $queue): Message
     {
         $receiver = new class implements MessageReceiver {
             public $message;
