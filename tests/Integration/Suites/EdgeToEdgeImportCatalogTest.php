@@ -213,8 +213,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
         $searchResults = $dataPoolReader->getSearchResults($criteria, $queryOptions);
 
-        $productIds = $searchResults->getProductIds();
-        $this->assertContains($productId, $productIds, '', false, false);
+        $this->assertContains($productId, $searchResults->getProductIds(), '', false, false);
     }
 
     public function testImportedProductIsAccessibleFromTheFrontend()
