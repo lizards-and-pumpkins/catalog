@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
+    <products>
+        <product type="simple" sku="118235-251" tax_class="19%">
+            <images>
+                <image>
+                    <file>2013_pro_touch_118235-251.jpg</file>
+                    <label>The main image label</label>
+                </image>
+                <image>
+                    <file>2013_pro_touch_118235-251.jpg</file>
+                    <label locale="de_DE">Der Text zum zweiten Bild</label>
+                    <label locale="en_US">A secondary image label</label>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="category" website="ru" locale="de_DE">sale</attribute>
+                <attribute name="category" website="ru" locale="de_DE">men</attribute>
+                <attribute name="category" website="ru" locale="de_DE">women</attribute>
+                <attribute name="category" website="ru" locale="de_DE">women-accessories</attribute>
+                <attribute name="category" website="ru" locale="en_US">sale</attribute>
+                <attribute name="category" website="ru" locale="en_US">women-accessories</attribute>
+                <attribute name="category" website="fr" locale="fr_FR">sale</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">sale/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">men/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">women/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="de_DE">women-accessories/led-arm-signallampe</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="en_US">women/led-armflasher</attribute>
+                <attribute name="non_canonical_url_key" website="ru" locale="en_US">women-accessories/led-armflasher</attribute>
+                <attribute name="non_canonical_url_key" website="fr" locale="fr_FR">sale/armer-conduit</attribute>
+                <attribute name="stock_qty">5</attribute>
+                <attribute name="backorders">true</attribute>
+                <attribute name="url_key" locale="de_DE">led-arm-signallampe</attribute>
+                <attribute name="url_key" locale="en_US">led-armflasher</attribute>
+                <attribute name="url_key" locale="fr_FR">armer-conduit</attribute>
+                <attribute name="name" locale="de_DE">LED Arm-Signallampe (2)</attribute>
+                <attribute name="name" locale="en_US">LED Armflasher (2)</attribute>
+                <attribute name="name" locale="fr_FR">Armer Conduit (2)</attribute>
+                <attribute name="price" website="ru">1.45</attribute>
+                <attribute name="price" website="fr">22.22</attribute>
+                <attribute name="special_price" website="ru">0.95</attribute>
+                <attribute name="weight">11.2</attribute>
+                <attribute name="description" locale="de_DE"><![CDATA[LED Arm-Signallampe<br />
+<br />
+LED Arm-Signallampe mit elastischem Band und Flasher mit variabler Blinkfolge,
+Flasher abnehmbar.]]></attribute>
+                <attribute name="description" locale="en_US"><![CDATA[Pro Touch LED Armflasher<br />
+<br />
+LED Armflasher with elastic Band and Flasher]]></attribute>
+                <attribute name="brand">Pro Touch</attribute>
+                <attribute name="style">Leuchten</attribute>
+                <attribute name="gender">Damen</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="color">d90000</attribute>
+                <attribute name="color">000000</attribute>
+            </attributes>
+        </product>
+    </products>
+</catalog>
