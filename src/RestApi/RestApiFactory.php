@@ -23,42 +23,7 @@ class RestApiFactory implements Factory
 
     public function createApiRouter() : ApiRouter
     {
-        $requestHandlerLocator = $this->getApiRequestHandlerLocator();
-        $this->registerApiRequestHandlers($requestHandlerLocator);
-
-        return new ApiRouter($requestHandlerLocator);
-    }
-
-    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
-    {
-        $this->registerApiV1RequestHandlers($requestHandlerLocator);
-    }
-
-    final protected function registerApiV1RequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
-    {
-        $requestHandlerLocator->register(
-            'put_catalog_import',
-            $version = 1,
-            $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
-        );
-        
-        $requestHandlerLocator->register(
-            'put_catalog_import',
-            $version = 2,
-            $this->getMasterFactory()->createCatalogImportApiV2PutRequestHandler()
-        );
-
-        $requestHandlerLocator->register(
-            'put_content_blocks',
-            $version = 1,
-            $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
-        );
-
-        $requestHandlerLocator->register(
-            'put_templates',
-            $version = 1,
-            $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
-        );
+        return new ApiRouter($this->getApiRequestHandlerLocator());
     }
 
     public function createCatalogImportApiV1PutRequestHandler() : CatalogImportApiV1PutRequestHandler
@@ -105,8 +70,36 @@ class RestApiFactory implements Factory
     {
         if (null === $this->memoizedApiRequestHandlerLocator) {
             $this->memoizedApiRequestHandlerLocator = new ApiRequestHandlerLocator();
+            $this->registerApiRequestHandlers($this->memoizedApiRequestHandlerLocator);
         }
 
         return $this->memoizedApiRequestHandlerLocator;
+    }
+    
+    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
+    {
+        $requestHandlerLocator->register(
+            'put_catalog_import',
+            $version = 1,
+            $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler()
+        );
+
+        $requestHandlerLocator->register(
+            'put_catalog_import',
+            $version = 2,
+            $this->getMasterFactory()->createCatalogImportApiV2PutRequestHandler()
+        );
+
+        $requestHandlerLocator->register(
+            'put_content_blocks',
+            $version = 1,
+            $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler()
+        );
+
+        $requestHandlerLocator->register(
+            'put_templates',
+            $version = 1,
+            $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
+        );
     }
 }

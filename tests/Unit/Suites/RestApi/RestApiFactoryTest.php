@@ -79,12 +79,6 @@ class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
     public function testRegistersExpectedHandlersWithApiRouter()
     {
         $locator = $this->factory->getApiRequestHandlerLocator();
-        (new class extends RestApiFactory {
-            public function testApiRequestHandlerRegistration(RestApiFactory $f, ApiRequestHandlerLocator $locator)
-            {
-                $f->registerApiV1RequestHandlers($locator);
-            }
-        })->testApiRequestHandlerRegistration($this->factory, $locator);
         
         $this->assertApiRequestHandlerIsRegistered($locator, 'put_catalog_import', 1);
         $this->assertApiRequestHandlerIsRegistered($locator, 'put_catalog_import', 2);
