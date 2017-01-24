@@ -95,7 +95,7 @@ class CatalogImportApiV2PutRequestHandler extends ApiRequestHandler
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 
-        if (!is_array($requestArguments) || !isset($requestArguments['fileName']) || !$requestArguments['fileName']) {
+        if (!is_array($requestArguments) || !$this->hasArgument($requestArguments, 'fileName')) {
             throw new CatalogImportFileNameNotFoundInRequestBodyException(
                 'Import file name is not found in request body.'
             );
@@ -115,15 +115,17 @@ class CatalogImportApiV2PutRequestHandler extends ApiRequestHandler
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 
-        if (!is_array($requestArguments) ||
-            !isset($requestArguments['dataVersion']) ||
-            !$requestArguments['dataVersion']
-        ) {
+        if (!is_array($requestArguments) || !$this->hasArgument($requestArguments, 'dataVersion')) {
             throw new DataVersionNotFoundInRequestBodyException(
                 'The catalog import data version is not found in request body.'
             );
         }
 
         return $requestArguments['dataVersion'];
+    }
+    
+    private function hasArgument(array $requestArguments, string $argument): bool
+    {
+        return isset($requestArguments[$argument]) && $requestArguments[$argument];
     }
 }
