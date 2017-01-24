@@ -137,10 +137,10 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
     public function testCatalogImportApiPutsProductIntoKeyValueStoreAndSearchIndex()
     {
         $productId = new ProductId('118235-251');
-        $productName = 'LED Arm-Signallampe';
+        $productName = 'LED Arm-Signallampe (1)';
         $expectedProductPrice = Price::fromDecimalValue(11.45)->getAmount();
 
-        $this->importCatalogFixtureWithApiV1('catalog.xml');
+        $this->importCatalogFixtureWithApiV1('simple_product_armflasher-v1.xml');
 
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
@@ -197,7 +197,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $this->assertEquals($expectedProductPrice, $priceSnippetContents);
         }
 
-        $criteria = new SearchCriterionEqual('name', 'LED Arm-Signallampe');
+        $criteria = new SearchCriterionEqual('name', $productName);
         $selectedFilters = [];
         $facetFilterRequest = new FacetFiltersToIncludeInResult;
         $rowsPerPage = 100;
@@ -213,12 +213,13 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
         $searchResults = $dataPoolReader->getSearchResults($criteria, $queryOptions);
 
-        $this->assertContains($productId, $searchResults->getProductIds(), '', false, false);
+        $productIds = $searchResults->getProductIds();
+        $this->assertContains($productId, $productIds, '', false, false);
     }
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
-        $fixtureFile = 'catalog.xml';
+        $fixtureFile = 'simple_product_armflasher-v1.xml';
         $this->importCatalogFixtureWithApiV1($fixtureFile);
         
         $this->assertProductCanBeAccessedOnFrontend(
@@ -230,7 +231,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleViaNonCanonicalUrlFromTheFrontend()
     {
-        $fixtureFile = 'catalog.xml';
+        $fixtureFile = 'simple_product_armflasher-v1.xml';
         $this->importCatalogFixtureWithApiV1($fixtureFile);
 
         $xml = file_get_contents(__DIR__ . '/../../shared-fixture/' . $fixtureFile);

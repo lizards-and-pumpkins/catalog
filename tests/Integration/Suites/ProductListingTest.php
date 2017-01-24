@@ -12,37 +12,38 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
-class ProductListingTest extends \PHPUnit_Framework_TestCase
+class ProductListingTest extends AbstractIntegrationTest
 {
-    use ProductListingTestTrait;
+    /**
+     * @var MasterFactory
+     */
+    private $factory;
 
-    private function failIfMessagesWhereLogged(Logger $logger)
+    protected function importProductListingTemplateFixture()
     {
-        $messages = $logger->getMessages();
+        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
+        ]);
+        $httpRequestBody = new HttpRequestBody('');
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
-        if (count($messages) > 0) {
-            $failMessages = array_map(function (LogMessage $logMessage) {
-                $messageContext = $logMessage->getContext();
-                if (isset($messageContext['exception'])) {
-                    /** @var \Exception $exception */
-                    $exception = $messageContext['exception'];
-                    return (string)$logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
-                }
-                return (string)$logMessage;
-            }, $messages);
-            $failMessageString = implode(PHP_EOL, $failMessages);
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
-            $this->fail($failMessageString);
-        }
+        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $website->processRequest();
+
+        $this->processAllMessages($this->factory);
     }
-
+    
     public function testProductListingSnippetIsWrittenIntoDataPool()
     {
-        $this->importCatalog();
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importCatalogFixture($this->factory, 'product_listings.xml');
 
         $urlKey = 'adidas-sale';
 
@@ -79,10 +80,10 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingPageHtmlIsReturned()
     {
-        $this->importCatalog();
-        $this->prepareProductListingFixture();
-        $this->registerProductListingSnippetKeyGenerator();
-
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importProductListingTemplateFixture();
+        $this->importCatalogFixture($this->factory, 'simple_product_adilette.xml', 'product_listings.xml');
+        
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/sale'),
@@ -90,13 +91,13 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
             new HttpRequestBody('')
         );
 
-        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->createProductListingRequestHandler();
+        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 
-        $expectedProductName = 'Gel-Noosa';
+        $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
 
         $expectedMetaDescription = 'Acheter des chaussures de sport moins chères ? C’est possible grâce à
