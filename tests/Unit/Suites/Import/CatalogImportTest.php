@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
@@ -79,6 +80,11 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     private $contextSource;
 
     /**
+     * @var DataVersion
+     */
+    private $testDataVersion;
+
+    /**
      * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createMockProductXmlToProductBuilder() : ProductXmlToProductBuilderLocator
@@ -132,6 +138,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
             [$this->createMock(Context::class)]
         );
         $this->mockLogger = $this->createMock(Logger::class);
+        $this->testDataVersion = DataVersion::fromVersionString('test');
 
         $this->catalogImport = new CatalogImport(
             $this->mockQueueImportCommands,
@@ -147,7 +154,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
     {
         $this->expectException(CatalogImportFileDoesNotExistException::class);
         $this->expectExceptionMessage('Catalog import file not found');
-        $this->catalogImport->importFile('/some-not-existing-file.xml');
+        $this->catalogImport->importFile('/some-not-existing-file.xml', $this->testDataVersion);
     }
 
     public function testExceptionIsThrownIfImportFileIsNotReadable()
@@ -158,42 +165,42 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $importFilePath = $this->testDirectoryPath . '/some-not-readable-file.xml';
         $this->createFixtureFile($importFilePath, '', 0000);
 
-        $this->catalogImport->importFile($importFilePath);
+        $this->catalogImport->importFile($importFilePath, $this->testDataVersion);
     }
 
     public function testItAddsCommandsForTheProductToQueue()
     {
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(true);
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
     public function testItAddsNoProductCommandsToTheQueueIfTheProductDoesNotMatchAGivenContext()
     {
         $this->mockQueueImportCommands->expects($this->never())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(false);
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
     public function testAddsCommandsForTheProductListingToTheQueue()
     {
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forListing');
         $this->setProductIsAvailableForContextFixture(true);
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
     public function testItAddsCommandsForTheProductImageToTheQueue()
     {
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forImage');
         $this->setProductIsAvailableForContextFixture(true);
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
     public function testItAddsNoCommandsForImagesIfTheProductDoesNotMatchAGivenContext()
     {
         $this->mockQueueImportCommands->expects($this->never())->method('forImage');
         $this->setProductIsAvailableForContextFixture(false);
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
     public function testItAddsACatalogWasImportedDomainEventToTheEventQueue()
@@ -201,7 +208,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->mockEventQueue->expects($this->once())->method('add')
             ->with($this->isInstanceOf(CatalogWasImportedDomainEvent::class));
 
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
     public function testItLogsExceptionsThrownWhileProcessingListingXml()
@@ -215,7 +222,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $onlyListingXml = (new XPathParser($fullXml))->getXmlNodesRawXmlArrayByXPath('/catalog/listings')[0];
         $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
         $this->createFixtureFile($fixtureFile, '<catalog>' . $onlyListingXml . '</catalog>');
-        $this->catalogImport->importFile($fixtureFile);
+        $this->catalogImport->importFile($fixtureFile, $this->testDataVersion);
     }
 
     public function testItLogsExceptionsThrownDuringProductImport()
@@ -242,7 +249,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
             $this->mockLogger
         );
         
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
     public function testItLogsExceptionsThrownDuringProductImageImport()
@@ -253,6 +260,6 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
 
         $this->mockQueueImportCommands->method('forImage')->willThrowException(new \Exception('dummy'));
 
-        $this->catalogImport->importFile($this->sharedFixtureFilePath);
+        $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 }

@@ -76,10 +76,9 @@ class CatalogImport
         $this->logger = $logger;
     }
 
-    public function importFile(string $importFilePath)
+    public function importFile(string $importFilePath, DataVersion $dataVersion)
     {
-        // Todo: once all projectors support using the passed data version of context data sets, use the UUID version
-        $this->dataVersion = DataVersion::fromVersionString('-1');
+        $this->dataVersion = $dataVersion;
         $this->validateImportFilePath($importFilePath);
         $parser = CatalogXmlParser::fromFilePath($importFilePath, $this->logger);
         $parser->registerProductCallback($this->createClosureForMethod('processProductXml'));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
@@ -129,7 +130,10 @@ abstract class AbstractIntegrationTest extends \PHPUnit_Framework_TestCase
     {
         /** @var CatalogImport $import */
         $import = $factory->createCatalogImport();
-        $import->importFile(__DIR__ . '/../../shared-fixture/' . $fixtureCatalogFile);
+        $import->importFile(
+            __DIR__ . '/../../shared-fixture/' . $fixtureCatalogFile,
+            DataVersion::fromVersionString('-1')
+        );
 
         $this->processAllMessages($factory);
     }
