@@ -24,6 +24,9 @@ class CatalogImportWasTriggeredDomainEventHandler implements DomainEventHandler
 
     public function process()
     {
-        $this->catalogImport->importFile($this->catalogImportWasTriggeredEvent->getCatalogImportFilePath());
+        $this->catalogImport->importFile(
+            $this->catalogImportWasTriggeredEvent->getCatalogImportFilePath(),
+            $this->catalogImportWasTriggeredEvent->getDataVersion()
+        );
     }
 }

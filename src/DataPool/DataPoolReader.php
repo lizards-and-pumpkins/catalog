@@ -17,11 +17,6 @@ class DataPoolReader
     /**
      * @var string
      */
-    private $currentDataVersionKey = 'current_version';
-
-    /**
-     * @var string
-     */
     private $currentDataVersionDefault = '-1';
 
     /**
@@ -117,10 +112,10 @@ class DataPoolReader
 
     public function getCurrentDataVersion() : string
     {
-        if (! $this->keyValueStore->has($this->currentDataVersionKey)) {
+        if (! $this->keyValueStore->has(CurrentDataVersion::SNIPPET_KEY)) {
             return $this->currentDataVersionDefault;
         }
-        return $this->keyValueStore->get($this->currentDataVersionKey);
+        return $this->keyValueStore->get(CurrentDataVersion::SNIPPET_KEY);
     }
 
     public function getSearchResults(SearchCriteria $criteria, QueryOptions $queryOptions) : SearchEngineResponse

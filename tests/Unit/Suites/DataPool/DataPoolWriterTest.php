@@ -118,4 +118,12 @@ class DataPoolWriterTest extends AbstractDataPoolTest
         $writer = new DataPoolWriter($mockKeyValueStore, $mockSearchEngine, $mockUrlKeyStorage);
         $writer->writeUrlKeyCollection($stubUrlKeysForContextsCollection);
     }
+
+    public function testWritesCurrentVersionToKeyValueStore()
+    {
+        $dataVersionString = 'abc';
+        $this->getMockKeyValueStore()->expects($this->once())->method('set')
+            ->with(CurrentDataVersion::SNIPPET_KEY, $dataVersionString);
+        $this->dataPoolWriter->setCurrentDataVersion($dataVersionString);
+    }
 }

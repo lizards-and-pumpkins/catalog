@@ -21,6 +21,11 @@ class CatalogImportWasTriggeredDomainEventHandlerTest extends \PHPUnit\Framework
     private $testFile = '/test.xml';
 
     /**
+     * @var DataVersion
+     */
+    private $testDataVersion;
+
+    /**
      * @var CatalogImport|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockCatalogImport;
@@ -33,9 +38,10 @@ class CatalogImportWasTriggeredDomainEventHandlerTest extends \PHPUnit\Framework
     protected function setUp()
     {
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
+        $this->testDataVersion = DataVersion::fromVersionString('foo');
         $this->domainEventHandler = new CatalogImportWasTriggeredDomainEventHandler(
             $this->mockCatalogImport,
-            (new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), $this->testFile))->toMessage()
+            (new CatalogImportWasTriggeredDomainEvent($this->testDataVersion, $this->testFile))->toMessage()
         );
     }
     
@@ -46,7 +52,8 @@ class CatalogImportWasTriggeredDomainEventHandlerTest extends \PHPUnit\Framework
 
     public function testDelegatesProcessingTheImportFileToCatalogImport()
     {
-        $this->mockCatalogImport->expects($this->once())->method('importFile')->with($this->testFile);
+        $this->mockCatalogImport->expects($this->once())->method('importFile')
+            ->with($this->testFile, $this->testDataVersion);
         $this->domainEventHandler->process();
     }
 }

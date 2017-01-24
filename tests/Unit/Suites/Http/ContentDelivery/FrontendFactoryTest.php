@@ -91,6 +91,9 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
  */
 class FrontendFactoryTest extends \PHPUnit_Framework_TestCase
 {
