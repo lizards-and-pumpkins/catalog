@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 class CatalogImportApiV1PutRequestHandler extends CatalogImportApiV2PutRequestHandler
 {
-    protected function createDataVersion(HttpRequest $request): DataVersion
+    final protected function createDataVersion(HttpRequest $request): DataVersion
     {
         return DataVersion::fromVersionString('-1');
     }
