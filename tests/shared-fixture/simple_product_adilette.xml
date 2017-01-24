@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd">
+    <products>
+        <product type="simple" sku="288193NEU" tax_class="19%">
+            <images>
+                <image>
+                    <file>288193_14.jpg</file>
+                    <label/>
+                </image>
+            </images>
+            <attributes>
+                <attribute name="url_key">adilette</attribute>
+                <attribute name="name">Adilette</attribute>
+                <attribute name="category">sale</attribute>
+                <attribute name="price">14.92</attribute>
+                <attribute name="brand">Adidas</attribute>
+                <attribute name="gender">Herren</attribute>
+                <attribute name="stock_qty">1</attribute>
+                <attribute name="backorders">false</attribute>
+                <attribute name="color">d90000</attribute>
+                <attribute name="series">Adilette</attribute>
+                <attribute name="news_from_date">2015-02-25 00:00:00</attribute>
+            </attributes>
+        </product>
+    </products>
+</catalog>

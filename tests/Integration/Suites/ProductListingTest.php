@@ -12,37 +12,22 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
-class ProductListingTest extends \PHPUnit_Framework_TestCase
+class ProductListingTest extends AbstractIntegrationTest
 {
-    use ProductListingTestTrait;
-
-    private function failIfMessagesWhereLogged(Logger $logger)
-    {
-        $messages = $logger->getMessages();
-
-        if (count($messages) > 0) {
-            $failMessages = array_map(function (LogMessage $logMessage) {
-                $messageContext = $logMessage->getContext();
-                if (isset($messageContext['exception'])) {
-                    /** @var \Exception $exception */
-                    $exception = $messageContext['exception'];
-                    return (string)$logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
-                }
-                return (string)$logMessage;
-            }, $messages);
-            $failMessageString = implode(PHP_EOL, $failMessages);
-
-            $this->fail($failMessageString);
-        }
-    }
-
+    use ProductListingTemplateIntegrationTestTrait;
+    
+    /**
+     * @var MasterFactory
+     */
+    private $factory;
+    
     public function testProductListingSnippetIsWrittenIntoDataPool()
     {
-        $this->importCatalog();
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importCatalogFixture($this->factory, 'product_listings.xml');
 
         $urlKey = 'adidas-sale';
 
@@ -79,10 +64,10 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
 
     public function testProductListingPageHtmlIsReturned()
     {
-        $this->importCatalog();
-        $this->prepareProductListingFixture();
-        $this->registerProductListingSnippetKeyGenerator();
-
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importProductListingTemplateFixtureViaApi();
+        $this->importCatalogFixture($this->factory, 'simple_product_adilette.xml', 'product_listings.xml');
+        
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/sale'),
@@ -90,13 +75,13 @@ class ProductListingTest extends \PHPUnit_Framework_TestCase
             new HttpRequestBody('')
         );
 
-        $this->factory = $this->createIntegrationTestMasterFactoryForRequest($request);
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->createProductListingRequestHandler();
+        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 
-        $expectedProductName = 'Gel-Noosa';
+        $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
 
         $expectedMetaDescription = 'Acheter des chaussures de sport moins chères ? C’est possible grâce à

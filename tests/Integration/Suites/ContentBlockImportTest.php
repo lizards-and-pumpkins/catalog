@@ -16,25 +16,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
      * @var SampleMasterFactory
      */
     private $factory;
-
-    private function importCatalog()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.catalog_import.v1+json'
-        ]);
-        $httpRequestBodyString = json_encode(['fileName' => 'catalog.xml']);
-        $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
-
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->processRequest();
-
-        $this->processAllMessages($this->factory);
-    }
-
+    
     private function renderProductListingTemplate()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
@@ -178,7 +160,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
         $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString);
         $this->renderProductListingTemplate();
-        $this->importCatalog();
+        $this->importCatalogFixture($this->factory, 'product_listings.xml');
         
         $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));
         $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics'));
