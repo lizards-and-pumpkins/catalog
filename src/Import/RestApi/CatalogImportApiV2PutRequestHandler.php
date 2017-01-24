@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
+use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryIsNotDirectoryException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -46,13 +47,23 @@ class CatalogImportApiV2PutRequestHandler extends ApiRequestHandler
         CommandQueue $commandQueue,
         Logger $logger
     ): ApiRequestHandler {
+        self::validateImportDirectoryPath($importDirectoryPath);
+        
+        return new static($importDirectoryPath, $commandQueue, $logger);
+    }
+    
+    private static function validateImportDirectoryPath(string $importDirectoryPath)
+    {
         if (!is_readable($importDirectoryPath)) {
             throw new CatalogImportApiDirectoryNotReadableException(
-                sprintf('%s is not readable.', $importDirectoryPath)
+                sprintf('The API catalog import directory "%s" is not readable.', $importDirectoryPath)
             );
         }
-
-        return new static($importDirectoryPath, $commandQueue, $logger);
+        if (! is_dir($importDirectoryPath)) {
+            throw new CatalogImportApiDirectoryIsNotDirectoryException(
+                sprintf('The API catalog import directory "%s" is not a directory', $importDirectoryPath)
+            );
+        }
     }
 
     final public function canProcess(HttpRequest $request): bool

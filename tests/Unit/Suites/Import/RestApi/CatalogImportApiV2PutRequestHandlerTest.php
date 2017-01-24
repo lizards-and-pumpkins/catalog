@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\RestApi;
 
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
+use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryIsNotDirectoryException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -92,6 +93,16 @@ class CatalogImportApiV2PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
         $this->expectException(CatalogImportApiDirectoryNotReadableException::class);
         CatalogImportApiV1PutRequestHandler::create(
             '/some-not-existing-directory',
+            $this->mockCommandQueue,
+            $this->logger
+        );
+    }
+
+    public function testExceptionIsThrownIfImportDirectoryIsNotDirectory()
+    {
+        $this->expectException(CatalogImportApiDirectoryIsNotDirectoryException::class);
+        CatalogImportApiV1PutRequestHandler::create(
+            __FILE__,
             $this->mockCommandQueue,
             $this->logger
         );
