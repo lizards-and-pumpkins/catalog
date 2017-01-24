@@ -17,28 +17,12 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class ProductListingTest extends AbstractIntegrationTest
 {
+    use ProductListingTemplateIntegrationTestTrait;
+    
     /**
      * @var MasterFactory
      */
     private $factory;
-
-    protected function importProductListingTemplateFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
-        ]);
-        $httpRequestBody = new HttpRequestBody('');
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
-
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->processRequest();
-
-        $this->processAllMessages($this->factory);
-    }
     
     public function testProductListingSnippetIsWrittenIntoDataPool()
     {
@@ -81,7 +65,7 @@ class ProductListingTest extends AbstractIntegrationTest
     public function testProductListingPageHtmlIsReturned()
     {
         $this->factory = $this->prepareIntegrationTestMasterFactory();
-        $this->importProductListingTemplateFixture();
+        $this->importProductListingTemplateFixtureViaApi();
         $this->importCatalogFixture($this->factory, 'simple_product_adilette.xml', 'product_listings.xml');
         
         $request = HttpRequest::fromParameters(

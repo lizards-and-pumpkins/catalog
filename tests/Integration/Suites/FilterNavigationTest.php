@@ -12,31 +12,15 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class FilterNavigationTest extends AbstractIntegrationTest
 {
+    use ProductListingTemplateIntegrationTestTrait;
+    
     private $testUrl = 'http://example.com/sale';
 
     /**
      * @var MasterFactory
      */
     private $factory;
-
-    protected function importProductListingTemplateFixture()
-    {
-        $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
-        $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
-        ]);
-        $httpRequestBody = new HttpRequestBody('');
-        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
-
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
-
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
-        $website->processRequest();
-
-        $this->processAllMessages($this->factory);
-    }
-
+    
     /**
      * @param string $html
      * @return mixed[]
@@ -59,7 +43,7 @@ class FilterNavigationTest extends AbstractIntegrationTest
         $factory = $this->prepareIntegrationTestMasterFactory();
         $fixtures = ['product_listings.xml', 'simple_product_adilette.xml', 'simple_product_armflasher-v1.xml'];
         $this->importCatalogFixture($factory, ...$fixtures);
-        $this->importProductListingTemplateFixture();
+        $this->importProductListingTemplateFixtureViaApi();
     }
 
     /**
