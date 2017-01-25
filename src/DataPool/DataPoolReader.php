@@ -118,6 +118,13 @@ class DataPoolReader
         return $this->keyValueStore->get(CurrentDataVersion::SNIPPET_KEY);
     }
 
+    public function getPreviousDataVersion(): string
+    {
+        return $this->keyValueStore->has(CurrentDataVersion::PREVIOUS_VERSION_SNIPPET_KEY) ?
+            $this->keyValueStore->get(CurrentDataVersion::PREVIOUS_VERSION_SNIPPET_KEY) :
+            '';
+    }
+
     public function getSearchResults(SearchCriteria $criteria, QueryOptions $queryOptions) : SearchEngineResponse
     {
         return $this->searchEngine->query($criteria, $queryOptions);

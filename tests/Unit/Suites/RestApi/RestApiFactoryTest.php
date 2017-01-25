@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
@@ -31,6 +32,8 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
  */
 class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,6 +87,7 @@ class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertApiRequestHandlerIsRegistered($locator, 'put_catalog_import', 2);
         $this->assertApiRequestHandlerIsRegistered($locator, 'put_content_blocks', 1);
         $this->assertApiRequestHandlerIsRegistered($locator, 'put_templates', 1);
+        $this->assertApiRequestHandlerIsRegistered($locator, 'get_current_version', 1);
     }
 
     public function testCatalogImportV1ApiRequestHandlerIsReturned()
@@ -102,5 +106,11 @@ class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->factory->createContentBlocksApiV1PutRequestHandler();
         $this->assertInstanceOf(ContentBlocksApiV1PutRequestHandler::class, $result);
+    }
+
+    public function testReturnsCurrentVersionApiV1GetRequestHandler()
+    {
+        $result = $this->factory->createCurrentVersionApiV1GetRequestHandler();
+        $this->assertInstanceOf(CurrentVersionApiV1GetRequestHandler::class, $result);
     }
 }

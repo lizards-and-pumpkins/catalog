@@ -129,6 +129,19 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->assertSame($currentDataVersion, $this->dataPoolReader->getCurrentDataVersion());
     }
 
+    public function testReturnsEmptyStringIfPreviousVersionIsNotPresent()
+    {
+        $this->getMockKeyValueStore()->method('has')->with('previous_version')->willReturn(false);
+        $this->assertSame('', $this->dataPoolReader->getPreviousDataVersion());
+    }
+
+    public function testReturnsPreviousVersionIfPresent()
+    {
+        $this->getMockKeyValueStore()->method('has')->with('previous_version')->willReturn(true);
+        $this->getMockKeyValueStore()->method('get')->with('previous_version')->willReturn('foo');
+        $this->assertSame('foo', $this->dataPoolReader->getPreviousDataVersion());
+    }
+
     public function testCriteriaQueriesAreDelegatedToSearchEngine()
     {
         /** @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject $stubQueryOptions */
