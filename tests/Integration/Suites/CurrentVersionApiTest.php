@@ -16,16 +16,15 @@ class CurrentVersionApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('https://example.com/api/current_version'),
-            HttpHeaders::fromArray([
-                'Accept' => 'application/vnd.lizards-and-pumpkins.current_version.v1+json',
-            ]),
+            HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.current_version.v1+json']),
             new HttpRequestBody('')
         );
+        
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableDefaultWebFront($request, $factory, $this->getIntegrationTestFactory($factory));
         $response = $website->processRequest();
         $body = json_decode($response->getBody(), true);
+        
         $this->assertInternalType('array', $body);
         $this->assertArrayHasKey('data', $body);
         $this->assertArrayHasKey('current_version', $body['data']);
