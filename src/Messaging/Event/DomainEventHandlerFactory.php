@@ -23,4 +23,6 @@ interface DomainEventHandlerFactory
     public function createShutdownWorkerDomainEventHandler(Message $event): DomainEventHandler;
 
     public function createCatalogImportWasTriggeredDomainEventHandler(Message $event): DomainEventHandler;
+    
+    public function createCurrentDataVersionWasSetDomainEventHandler(Message $event): DomainEventHandler;
 }

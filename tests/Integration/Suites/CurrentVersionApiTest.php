@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 
 class CurrentVersionApiTest extends AbstractIntegrationTest
 {
-    private function createReadRequest(): HttpRequest
+    private function createReadCurrentVersionRequest(): HttpRequest
     {
         return HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -22,7 +22,7 @@ class CurrentVersionApiTest extends AbstractIntegrationTest
         );
     }
 
-    private function createWriteRequest(string $targetVersion): HttpRequest
+    private function createUpdateCurrentVersionRequest(string $targetVersion): HttpRequest
     {
         return HttpRequest::fromParameters(
             HttpRequest::METHOD_PUT,
@@ -47,7 +47,7 @@ class CurrentVersionApiTest extends AbstractIntegrationTest
 
     public function testReturnsDefaultCurrentVersionAndEmptyPreviousVersion()
     {
-        $request = $this->createReadRequest();
+        $request = $this->createReadCurrentVersionRequest();
 
         $responseData = json_decode($this->getResponseBody($request), true);
         
@@ -58,18 +58,20 @@ class CurrentVersionApiTest extends AbstractIntegrationTest
 
     public function testSetAndReadCurrentDataVersion()
     {
-        $readRequest = $this->createReadRequest();
+        $readRequest = $this->createReadCurrentVersionRequest();
         $firstResponseData = json_decode($this->getResponseBody($readRequest), true);
         $originalVersion = $firstResponseData['data']['current_version'];
         
         $targetVersion = uniqid('test-');
-        $response = $this->processRequest($this->createWriteRequest($targetVersion));
-        $this->assertSame(HttpResponse::STATUS_ACCEPTED, $response);
+        $response = $this->processRequest($this->createUpdateCurrentVersionRequest($targetVersion));
+        $this->assertSame(HttpResponse::STATUS_ACCEPTED, $response->getStatusCode());
+
+        $factory = $this->prepareIntegrationTestMasterFactory();
+        $this->processAllMessages($factory);
+        $this->failIfMessagesWhereLogged($factory->getLogger());
 
         $secondResponseData = json_decode($this->getResponseBody($readRequest), true);
         $this->assertSame($targetVersion, $secondResponseData['data']['current_version']);
         $this->assertSame($originalVersion, $secondResponseData['data']['previous_version']);
-        
-        
     }
 }

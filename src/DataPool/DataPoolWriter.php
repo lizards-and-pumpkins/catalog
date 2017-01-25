@@ -87,4 +87,9 @@ class DataPoolWriter implements Clearable
     {
         $this->keyValueStore->set(CurrentDataVersion::SNIPPET_KEY, $dataVersionString);
     }
+
+    public function setPreviousDataVersion(string $dataVersionString)
+    {
+        $this->keyValueStore->set(CurrentDataVersion::PREVIOUS_VERSION_SNIPPET_KEY, $dataVersionString);
+    }
 }

@@ -11,6 +11,8 @@ use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
@@ -1000,6 +1002,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new ImportCatalogCommandHandler($message, $this->getMasterFactory()->getEventQueue());
     }
+    
+    public function createSetCurrentDataVersionCommandHandler(Message $message): CommandHandler
+    {
+        return new SetCurrentDataVersionCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+    }
 
     /**
      * @return string[]
@@ -1135,6 +1142,15 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new CatalogImportWasTriggeredDomainEventHandler(
             $this->getMasterFactory()->createCatalogImport(),
             $event
+        );
+    }
+
+    public function createCurrentDataVersionWasSetDomainEventHandler(Message $event): DomainEventHandler
+    {
+        return new CurrentDataVersionWasSetDomainEventHandler(
+            $event,
+            $this->getMasterFactory()->createDataPoolWriter(),
+            $this->getMasterFactory()->createDataPoolReader()
         );
     }
 

@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
@@ -61,6 +62,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -139,6 +142,13 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $message = (new ImportCatalogCommand(DataVersion::fromVersionString('buz'), __FILE__))->toMessage();
         $commandHandler = $this->loggingCommandHandlerFactory->createImportCatalogCommandHandler($message);
+        $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
+    }
+
+    public function testReturnsADecoratedSetCurrentDataVersionCommandHandler()
+    {
+        $message = (new SetCurrentDataVersionCommand(DataVersion::fromVersionString('qux')))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createSetCurrentDataVersionCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 }
