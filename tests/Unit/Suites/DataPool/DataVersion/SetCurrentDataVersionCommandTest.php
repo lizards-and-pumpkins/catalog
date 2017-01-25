@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\Exception\NotSetCurrentDataVersionCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
@@ -17,7 +18,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class SetCurrentDataVersionCommandTest extends \PHPUnit\Framework\TestCase
+class SetCurrentDataVersionCommandTest extends TestCase
 {
     public function testImplementsCommandInterface()
     {

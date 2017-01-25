@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class ShutdownWorkerDirectiveHandlerTest extends \PHPUnit\Framework\TestCase
+class ShutdownWorkerDirectiveHandlerTest extends TestCase
 {
     public static $shutdownWasCalled = false;
 

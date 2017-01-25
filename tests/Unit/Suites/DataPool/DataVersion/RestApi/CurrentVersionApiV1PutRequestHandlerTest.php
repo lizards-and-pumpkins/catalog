@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler
@@ -29,7 +30,7 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
-class CurrentVersionApiV1PutRequestHandlerTest extends \PHPUnit\Framework\TestCase
+class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
 {
     /**
      * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject

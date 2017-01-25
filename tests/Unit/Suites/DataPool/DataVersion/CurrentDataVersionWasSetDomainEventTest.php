@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataPool\DataVersion\Exception\NotCurrentDataVersionWasSe
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class CurrentDataVersionWasSetDomainEventTest extends \PHPUnit\Framework\TestCase
+class CurrentDataVersionWasSetDomainEventTest extends TestCase
 {
     public function testImplementDomainEvent()
     {

@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\DataPool\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
  */
-class SetCurrentDataVersionCommandHandlerTest extends \PHPUnit\Framework\TestCase
+class SetCurrentDataVersionCommandHandlerTest extends TestCase
 {
     /**
      * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
