@@ -35,7 +35,7 @@ class CurrentVersionApiV1GetRequestHandlerTest extends \PHPUnit\Framework\TestCa
         return new CurrentVersionApiV1GetRequestHandler($this->mockDataPoolReader);
     }
 
-    private function createHttpRequest($requestMethod): HttpRequest
+    private function createHttpRequest(string $requestMethod): HttpRequest
     {
         return HttpRequest::fromParameters(
             $requestMethod,
