@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
+use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
@@ -66,6 +67,13 @@ class RestApiFactory implements Factory
         );
     }
 
+    public function createCurrentVersionApiV1PutRequestHandler(): CurrentVersionApiV1PutRequestHandler
+    {
+        return new CurrentVersionApiV1PutRequestHandler(
+            $this->getMasterFactory()->createCommandQueue()
+        );
+    }
+
     private function getCatalogImportDirectoryConfig(): string
     {
         /** @var ConfigReader $configReader */
@@ -114,6 +122,12 @@ class RestApiFactory implements Factory
             'get_current_version',
             $version = 1,
             $this->getMasterFactory()->createCurrentVersionApiV1GetRequestHandler()
+        );
+
+        $requestHandlerLocator->register(
+            'put_current_version',
+            $version = 1,
+            $this->getMasterFactory()->createCurrentVersionApiV1PutRequestHandler()
         );
     }
 }

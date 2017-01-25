@@ -44,6 +44,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler
  */
 class ProductRelationsFactoryTest extends \PHPUnit_Framework_TestCase
 {
