@@ -7,26 +7,69 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 
 class CurrentVersionApiTest extends AbstractIntegrationTest
 {
-    public function testReturnsDefaultCurrentVersionAndEmptyPreviousVersion()
+    private function createReadRequest(): HttpRequest
     {
-        $request = HttpRequest::fromParameters(
+        return HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('https://example.com/api/current_version'),
             HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.current_version.v1+json']),
             new HttpRequestBody('')
         );
-        
+    }
+
+    private function createWriteRequest(string $targetVersion): HttpRequest
+    {
+        return HttpRequest::fromParameters(
+            HttpRequest::METHOD_PUT,
+            HttpUrl::fromString('https://example.com/api/current_version'),
+            HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.current_version.v1+json']),
+            new HttpRequestBody(json_encode(['current_version' => $targetVersion]))
+        );
+    }
+
+    private function processRequest($request): HttpResponse
+    {
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $website = new InjectableDefaultWebFront($request, $factory, $this->getIntegrationTestFactory($factory));
-        $response = $website->processRequest();
-        $body = json_decode($response->getBody(), true);
+
+        return $website->processRequest();
+    }
+
+    private function getResponseBody($request): string
+    {
+        return $this->processRequest($request)->getBody();
+    }
+
+    public function testReturnsDefaultCurrentVersionAndEmptyPreviousVersion()
+    {
+        $request = $this->createReadRequest();
+
+        $responseData = json_decode($this->getResponseBody($request), true);
         
-        $this->assertInternalType('array', $body);
-        $this->assertNotEmpty($body['data']['current_version']);
-        $this->assertSame('', $body['data']['previous_version']);
+        $this->assertInternalType('array', $responseData);
+        $this->assertNotEmpty($responseData['data']['current_version']);
+        $this->assertSame('', $responseData['data']['previous_version']);
+    }
+
+    public function testSetAndReadCurrentDataVersion()
+    {
+        $readRequest = $this->createReadRequest();
+        $firstResponseData = json_decode($this->getResponseBody($readRequest), true);
+        $originalVersion = $firstResponseData['data']['current_version'];
+        
+        $targetVersion = uniqid('test-');
+        $response = $this->processRequest($this->createWriteRequest($targetVersion));
+        $this->assertSame(HttpResponse::STATUS_ACCEPTED, $response);
+
+        $secondResponseData = json_decode($this->getResponseBody($readRequest), true);
+        $this->assertSame($targetVersion, $secondResponseData['data']['current_version']);
+        $this->assertSame($originalVersion, $secondResponseData['data']['previous_version']);
+        
+        
     }
 }
