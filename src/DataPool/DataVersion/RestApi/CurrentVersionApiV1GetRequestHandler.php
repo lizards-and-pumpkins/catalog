@@ -22,7 +22,7 @@ class CurrentVersionApiV1GetRequestHandler extends ApiRequestHandler
         $this->dataPoolReader = $dataPoolReader;
     }
 
-    protected function getResponse(HttpRequest $request): HttpResponse
+    final protected function getResponse(HttpRequest $request): HttpResponse
     {
         return GenericHttpResponse::create($this->getResponseBody(), [], HttpResponse::STATUS_OK);
     }
