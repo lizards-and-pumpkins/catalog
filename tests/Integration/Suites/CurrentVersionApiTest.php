@@ -26,8 +26,6 @@ class CurrentVersionApiTest extends AbstractIntegrationTest
         $body = json_decode($response->getBody(), true);
         
         $this->assertInternalType('array', $body);
-        $this->assertArrayHasKey('data', $body);
-        $this->assertArrayHasKey('current_version', $body['data']);
         $this->assertNotEmpty($body['data']['current_version']);
         $this->assertSame('', $body['data']['previous_version']);
     }

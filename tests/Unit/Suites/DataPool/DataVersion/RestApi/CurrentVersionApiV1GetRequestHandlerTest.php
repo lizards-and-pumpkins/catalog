@@ -49,7 +49,7 @@ class CurrentVersionApiV1GetRequestHandlerTest extends \PHPUnit\Framework\TestCa
     {
         $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
     }
-    
+
     public function testInheritsFromApiRequestHandler()
     {
         $this->assertInstanceOf(ApiRequestHandler::class, $this->createHandler());
@@ -67,8 +67,8 @@ class CurrentVersionApiV1GetRequestHandlerTest extends \PHPUnit\Framework\TestCa
     public function nonGetHttpRequestMethodProvider(): array
     {
         return [
-            'post'   => [HttpRequest::METHOD_POST],
-            'put'    => [HttpRequest::METHOD_PUT],
+            'post' => [HttpRequest::METHOD_POST],
+            'put'  => [HttpRequest::METHOD_PUT],
         ];
     }
 
@@ -82,12 +82,12 @@ class CurrentVersionApiV1GetRequestHandlerTest extends \PHPUnit\Framework\TestCa
     {
         $this->mockDataPoolReader->method('getCurrentDataVersion')->willReturn('foo');
         $this->mockDataPoolReader->method('getPreviousDataVersion')->willReturn('bar');
-        
+
         $expected = json_encode([
             'data' => [
-                'current_version' => 'foo',
+                'current_version'  => 'foo',
                 'previous_version' => 'bar',
-            ]
+            ],
         ]);
 
         $request = $this->createHttpRequest(HttpRequest::METHOD_GET);
