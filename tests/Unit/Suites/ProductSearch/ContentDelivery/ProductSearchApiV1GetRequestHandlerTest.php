@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
@@ -25,6 +26,7 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
@@ -653,6 +655,44 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             $stubInitialCriteria
         );
         $this->mockProductSearchService->expects($this->once())->method('query')->with($expectedCriteria);
+
+        $this->requestHandler->process($this->stubRequest);
+    }
+
+    public function testRequestsFacets()
+    {
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, false],
+            [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, false],
+            [ProductSearchApiV1GetRequestHandler::FACETS_PARAMETER, true]
+        ]);
+
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::FACETS_PARAMETER, 'foo,bar']
+        ]);
+
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $this->createMock(Context::class);
+        $this->stubContextBuilder->method('createFromRequest')->with($this->stubRequest)->willReturn($stubContext);
+
+        $expectedFacetFiltersToIncludeInResult = new FacetFiltersToIncludeInResult(
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('foo')),
+            new FacetFilterRequestSimpleField(AttributeCode::fromString('bar'))
+        );
+
+        $expectedQueryOptions = QueryOptions::create(
+            $filterSelection = [],
+            $stubContext,
+            $expectedFacetFiltersToIncludeInResult,
+            $this->defaultNumberOfProductPerPage,
+            $pageNumber = 0,
+            $this->stubDefaultSorBy
+        );
+
+        $this->mockProductSearchService->expects($this->once())->method('query')
+            ->with($this->isInstanceOf(SearchCriterionAnything::class), $expectedQueryOptions);
 
         $this->requestHandler->process($this->stubRequest);
     }

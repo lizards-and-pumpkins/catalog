@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
@@ -39,6 +40,8 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     const SELECTED_FILTERS_PARAMETER = 'filters';
 
     const INITIAL_CRITERIA_PARAMETER = 'criteria';
+
+    const FACETS_PARAMETER = 'facets';
 
     /**
      * @var ProductSearchService
@@ -153,7 +156,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
         $context = $this->contextBuilder->createFromRequest($request);
 
-        $facetFiltersToIncludeInResult = new FacetFiltersToIncludeInResult();
+        $facetFiltersToIncludeInResult = $this->createFacetFiltersToIncludeInResult($request);
 
         $rowsPerPage = $this->getNumberOfProductPerPage($request);
         $this->validateRowsPerPage($rowsPerPage);
@@ -270,5 +273,19 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         return $this->selectedFiltersParser->parse($request->getQueryParameter(self::SELECTED_FILTERS_PARAMETER));
+    }
+
+    private function createFacetFiltersToIncludeInResult(HttpRequest $request): FacetFiltersToIncludeInResult
+    {
+        if (! $request->hasQueryParameter(self::FACETS_PARAMETER)) {
+            return new FacetFiltersToIncludeInResult();
+        }
+
+        $attributeCodes = explode(',', $request->getQueryParameter(self::FACETS_PARAMETER));
+        $facetFields = array_map(function (string $attributeCode) {
+            return new FacetFilterRequestSimpleField(AttributeCode::fromString($attributeCode));
+        }, $attributeCodes);
+
+        return new FacetFiltersToIncludeInResult(...$facetFields);
     }
 }
