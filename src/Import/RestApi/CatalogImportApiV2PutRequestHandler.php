@@ -46,7 +46,7 @@ class CatalogImportApiV2PutRequestHandler extends ApiRequestHandler
         string $importDirectoryPath,
         CommandQueue $commandQueue,
         Logger $logger
-    ): ApiRequestHandler {
+    ): self {
         self::validateImportDirectoryPath($importDirectoryPath);
         
         return new static($importDirectoryPath, $commandQueue, $logger);

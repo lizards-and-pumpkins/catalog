@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\DataPool\DataVersion\RestApi;
 
-use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\TargetDataVersionMissingException;
+use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\TargetDataVersionMissingInRequestException;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\UnableToDeserializeRequestBodyJsonException;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -95,7 +95,7 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
      */
     public function testThrowsExceptionIfTargetDataVersionIsMissing($missingTargetVersionRequestData)
     {
-        $this->expectException(TargetDataVersionMissingException::class);
+        $this->expectException(TargetDataVersionMissingInRequestException::class);
         $this->expectExceptionMessage('The target data version is missing in the request body');
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_PUT,
