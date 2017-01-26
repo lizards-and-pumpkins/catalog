@@ -28,14 +28,14 @@ class CurrentVersionApiV1PutRequestHandler extends ApiRequestHandler
         $this->commandQueue = $commandQueue;
     }
 
-    protected function processRequest(HttpRequest $request)
+    final protected function processRequest(HttpRequest $request)
     {
         $versionString = $this->getTargetDataVersion($request);
         $dataVersion = DataVersion::fromVersionString($versionString);
         $this->commandQueue->add(new SetCurrentDataVersionCommand($dataVersion));
     }
 
-    protected function getResponse(HttpRequest $request): HttpResponse
+    final protected function getResponse(HttpRequest $request): HttpResponse
     {
         return GenericHttpResponse::create('', [], HttpResponse::STATUS_ACCEPTED);
     }
