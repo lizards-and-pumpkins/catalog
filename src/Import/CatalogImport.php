@@ -125,7 +125,7 @@ class CatalogImport
     public function addProductsAndProductImagesToQueue(string $productXml)
     {
         $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
-        $contexts = $this->contextSource->getAllAvailableContextsWithVersion($this->dataVersion);
+        $contexts = $this->contextSource->getAllAvailableContextsWithVersionApplied($this->dataVersion);
         every($contexts, function (Context $context) use ($productBuilder, $productXml) {
             if ($productBuilder->isAvailableForContext($context)) {
                 $product = $productBuilder->getProductForContext($context);

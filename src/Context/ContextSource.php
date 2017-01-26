@@ -100,7 +100,7 @@ abstract class ContextSource
      * @param DataVersion $version
      * @return Context[]
      */
-    public function getAllAvailableContextsWithVersion(DataVersion $version) : array
+    public function getAllAvailableContextsWithVersionApplied(DataVersion $version) : array
     {
         return $this->contextBuilder->createContextsFromDataSets(
             array_map(function (array $dataSet) use ($version) {

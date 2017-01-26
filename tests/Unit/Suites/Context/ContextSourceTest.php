@@ -107,6 +107,6 @@ class ContextSourceTest extends \PHPUnit_Framework_TestCase
                 }, $dataSets);
                 return [];
             });
-        $this->contextSource->getAllAvailableContextsWithVersion($testVersion);
+        $this->contextSource->getAllAvailableContextsWithVersionApplied($testVersion);
     }
 }

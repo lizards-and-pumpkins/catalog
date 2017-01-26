@@ -54,7 +54,7 @@ class ProductListingTemplateSnippetRenderer implements SnippetRenderer
     {
         return array_map(function (Context $context) use ($dataToRender) {
             return $this->renderProductListingPageSnippetForContext($dataToRender, $context);
-        }, $this->contextSource->getAllAvailableContextsWithVersion($dataToRender->getDataVersion()));
+        }, $this->contextSource->getAllAvailableContextsWithVersionApplied($dataToRender->getDataVersion()));
     }
 
     private function renderProductListingPageSnippetForContext(
