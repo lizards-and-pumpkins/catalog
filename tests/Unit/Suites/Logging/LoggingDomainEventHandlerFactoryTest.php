@@ -175,7 +175,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedTemplateWasUpdatedDomainEventHandler()
     {
-        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar');
+        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar', DataVersion::fromVersionString('baz'));
         $result = $this->factory->createTemplateWasUpdatedDomainEventHandler($testEvent->toMessage());
         $this->assertDecoratedDomainEventHandlerInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }

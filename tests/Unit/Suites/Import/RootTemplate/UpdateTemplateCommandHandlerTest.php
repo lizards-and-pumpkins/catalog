@@ -56,7 +56,7 @@ class UpdateTemplateCommandHandlerTest extends TestCase
             ->willReturnCallback(function(TemplateWasUpdatedDomainEvent $event) {
                 $this->assertSame($this->testTemplateId, $event->getTemplateId());
                 $this->assertSame($this->testContent, $event->getTemplateContent());
-                // TODO: check for data version once it's implemented!
+                $this->assertSame((string) $this->testDataVersion, (string) $event->getDataVersion());
             });
         $this->createCommandHandler()->process();
     }

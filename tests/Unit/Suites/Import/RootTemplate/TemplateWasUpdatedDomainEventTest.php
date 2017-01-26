@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 /**
@@ -14,6 +16,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,9 +35,19 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
      */
     private $domainEvent;
 
+    /**
+     * @var DataVersion
+     */
+    private $dummyDataVersion;
+
     protected function setUp()
     {
-        $this->domainEvent = new TemplateWasUpdatedDomainEvent($this->dummyTemplateId, $this->dummyTemplateContent);
+        $this->dummyDataVersion = DataVersion::fromVersionString('foo');
+        $this->domainEvent = new TemplateWasUpdatedDomainEvent(
+            $this->dummyTemplateId,
+            $this->dummyTemplateContent,
+            $this->dummyDataVersion
+        );
     }
 
     public function testDomainEventInterfaceIsImplemented()
@@ -44,14 +57,17 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateContentIsReturned()
     {
-        $result = $this->domainEvent->getTemplateContent();
-        $this->assertSame($this->dummyTemplateContent, $result);
+        $this->assertSame($this->dummyTemplateContent, $this->domainEvent->getTemplateContent());
     }
 
     public function testTemplateIdIsReturned()
     {
-        $result = $this->domainEvent->getTemplateId();
-        $this->assertSame($this->dummyTemplateId, $result);
+        $this->assertSame($this->dummyTemplateId, $this->domainEvent->getTemplateId());
+    }
+
+    public function testReturnsDataVersion()
+    {
+        $this->assertSame($this->dummyDataVersion, $this->domainEvent->getDataVersion());
     }
 
     public function testReturnsTemplateWasUpdatedEventMessage()
@@ -64,10 +80,14 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
     public function testReturnsMessageWithTemplatePayload()
     {
         $payload = $this->domainEvent->toMessage()->getPayload();
-        $this->assertArrayHasKey('id', $payload);
         $this->assertSame($this->dummyTemplateId, $payload['id']);
-        $this->assertArrayHasKey('template', $payload);
         $this->assertSame($this->dummyTemplateContent, $payload['template']);
+    }
+
+    public function testReturnsMessageWithMetadata()
+    {
+        $metadata = $this->domainEvent->toMessage()->getMetadata();
+        $this->assertSame((string) $this->dummyDataVersion, $metadata[DomainEventQueue::VERSION_KEY]);
     }
 
     public function testCanBeRehydratedFromMessage()
@@ -76,6 +96,7 @@ class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(TemplateWasUpdatedDomainEvent::class, $rehydratedEvent);
         $this->assertSame($this->dummyTemplateId, $rehydratedEvent->getTemplateId());
         $this->assertSame($this->dummyTemplateContent, $rehydratedEvent->getTemplateContent());
+        $this->assertEquals((string) $this->dummyDataVersion, $rehydratedEvent->getDataVersion());
     }
 
     public function testThrowsExceptionIfMessageNameDoesNotMatch()

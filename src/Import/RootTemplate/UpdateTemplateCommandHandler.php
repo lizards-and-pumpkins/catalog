@@ -30,6 +30,7 @@ class UpdateTemplateCommandHandler implements CommandHandler
     {
         $templateId = $this->command->getTemplateId();
         $templateContent = $this->command->getTemplateContent();
-        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $templateContent));
+        $dataVersion = $this->command->getDataVersion();
+        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $templateContent, $dataVersion));
     }
 }

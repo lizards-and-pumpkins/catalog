@@ -266,7 +266,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
-        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar');
+        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar', DataVersion::fromVersionString('baz'));
         $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler($testEvent->toMessage());
 
         $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
