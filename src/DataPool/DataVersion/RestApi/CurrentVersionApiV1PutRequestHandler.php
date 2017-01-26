@@ -30,7 +30,7 @@ class CurrentVersionApiV1PutRequestHandler extends ApiRequestHandler
 
     final protected function processRequest(HttpRequest $request)
     {
-        $versionString = $this->getTargetDataVersion($request);
+        $versionString = $this->getTargetDataVersionFromRequest($request);
         $dataVersion = DataVersion::fromVersionString($versionString);
         $this->commandQueue->add(new SetCurrentDataVersionCommand($dataVersion));
     }
@@ -45,7 +45,7 @@ class CurrentVersionApiV1PutRequestHandler extends ApiRequestHandler
         return $request->getMethod() === HttpRequest::METHOD_PUT;
     }
 
-    private function getTargetDataVersion(HttpRequest $request): string
+    private function getTargetDataVersionFromRequest(HttpRequest $request): string
     {
         $data = $this->getRequestData($request);
         if (!is_array($data) || !isset($data[self::TARGET_VERSION_PARAM])) {
