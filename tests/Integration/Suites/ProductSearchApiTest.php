@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 
 class ProductSearchApiTest extends AbstractIntegrationTest
 {
@@ -20,7 +19,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
 
@@ -38,7 +36,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
@@ -64,7 +61,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
@@ -80,5 +76,35 @@ class ProductSearchApiTest extends AbstractIntegrationTest
 
         $this->assertEquals($responseJson['data'][0]['product_id'], $expectedProductIds['Adipure']);
         $this->assertEquals($responseJson['data'][1]['product_id'], $expectedProductIds['Adilette']);
+    }
+
+    public function testReturnsFacets()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/product/?facets=brand,gender');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
+        $httpRequestBody = new HttpRequestBody('');
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
+        $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
+
+        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $response = $website->processRequest();
+
+        $expectedFacets = [
+            'brand' => [
+                ['value' => 'Adidas', 'count' => 2],
+            ],
+            'gender' => [
+                ['value' => 'Damen', 'count' => 1],
+                ['value' => 'Herren', 'count' => 1],
+            ],
+        ];
+
+        $responseJson = json_decode($response->getBody(), true);
+
+        $this->assertEquals($expectedFacets, $responseJson['facets']);
     }
 }
