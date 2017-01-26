@@ -8,11 +8,12 @@ use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  */
-class EnqueuesMessageEnvelopeTest extends \PHPUnit\Framework\TestCase
+class EnqueuesMessageEnvelopeTest extends TestCase
 {
     public function testCanBeCreatedWithACommandQueue()
     {

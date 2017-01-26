@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Messaging\Consumer\Exception\InvalidMessageConsumerPidExc
 use LizardsAndPumpkins\Messaging\Consumer\Exception\NotShutdownWorkerDirectiveMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
@@ -17,7 +18,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class ShutdownWorkerDirectiveTest extends \PHPUnit\Framework\TestCase
+class ShutdownWorkerDirectiveTest extends TestCase
 {
     public function testImplementsCommandAndEventInterface()
     {

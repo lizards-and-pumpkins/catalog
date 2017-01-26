@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
@@ -19,7 +20,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
-class CatalogImportApiV1PutRequestHandlerTest extends \PHPUnit\Framework\TestCase
+class CatalogImportApiV1PutRequestHandlerTest extends TestCase
 {
     use TestFileFixtureTrait;
 

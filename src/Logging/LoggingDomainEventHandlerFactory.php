@@ -92,4 +92,12 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
             $domainEventFactory->createCatalogImportWasTriggeredDomainEventHandler($event)
         );
     }
+
+    public function createCurrentDataVersionWasSetDomainEventHandler(Message $event): DomainEventHandler
+    {
+        $domainEventFactory = $this->getDomainEventFactoryDelegate();
+        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $domainEventFactory->createCurrentDataVersionWasSetDomainEventHandler($event)
+        );
+    }
 }

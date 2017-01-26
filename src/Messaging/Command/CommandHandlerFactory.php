@@ -19,4 +19,6 @@ interface CommandHandlerFactory
     public function createShutdownWorkerCommandHandler(Message $message): CommandHandler;
 
     public function createImportCatalogCommandHandler(Message $message): CommandHandler;
+    
+    public function createSetCurrentDataVersionCommandHandler(Message $message): CommandHandler;
 }

@@ -6,6 +6,8 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
@@ -131,6 +133,8 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
  * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler
  */
 class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -226,5 +230,12 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $testEvent = new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), 'test.xml');
         $result = $this->factory->createCatalogImportWasTriggeredDomainEventHandler($testEvent->toMessage());
         $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
+    }
+
+    public function testReturnsADecoratedCurrentDataVersionWasSetDomainEventHandler()
+    {
+        $testEvent = new CurrentDataVersionWasSetDomainEvent(DataVersion::fromVersionString('foo'));
+        $result = $this->factory->createCurrentDataVersionWasSetDomainEventHandler($testEvent->toMessage());
+        $this->assertDecoratedDomainEventHandlerInstanceOf(CurrentDataVersionWasSetDomainEventHandler::class, $result);
     }
 }

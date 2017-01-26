@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
@@ -23,7 +24,7 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  */
-class CurrentVersionApiV1GetRequestHandlerTest extends \PHPUnit\Framework\TestCase
+class CurrentVersionApiV1GetRequestHandlerTest extends TestCase
 {
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject

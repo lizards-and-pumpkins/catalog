@@ -12,6 +12,10 @@ use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -215,6 +219,10 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
  * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -551,6 +559,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
     }
+    
+    public function testReturnsASetCurrentDataVersionCommandHandler()
+    {
+        $command = new SetCurrentDataVersionCommand(DataVersion::fromVersionString('bar baz'));
+        $result = $this->commonFactory->createSetCurrentDataVersionCommandHandler($command->toMessage());
+
+        $this->assertInstanceOf(SetCurrentDataVersionCommandHandler::class, $result);
+    }
 
     public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()
     {
@@ -651,6 +667,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $testEvent = new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), 'test.xml');
         $result = $this->commonFactory->createCatalogImportWasTriggeredDomainEventHandler($testEvent->toMessage());
         $this->assertInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
+    }
+
+    public function testReturnsACurrentDataVersionWasSetDomainEventHandler()
+    {
+        $testEvent = new CurrentDataVersionWasSetDomainEvent(DataVersion::fromVersionString('bar'));
+        $result = $this->commonFactory->createCurrentDataVersionWasSetDomainEventHandler($testEvent->toMessage());
+        $this->assertInstanceOf(CurrentDataVersionWasSetDomainEventHandler::class, $result);
     }
 
     public function testItReturnsAProductJsonSnippetRenderer()
