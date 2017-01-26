@@ -741,7 +741,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->countryContextPartBuilder;
     }
 
-    private function getCurrentDataVersion() : string
+    public function getCurrentDataVersion() : string
     {
         if (null === $this->currentDataVersion) {
             /** @var DataPoolReader $dataPoolReader */

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
@@ -56,7 +57,8 @@ class RestApiFactory implements Factory
     public function createTemplatesApiV1PutRequestHandler(): TemplatesApiV1PutRequestHandler
     {
         return new TemplatesApiV1PutRequestHandler(
-            $this->getMasterFactory()->getEventQueue()
+            $this->getMasterFactory()->getCommandQueue(),
+            DataVersion::fromVersionString($this->getMasterFactory()->getCurrentDataVersion())
         );
     }
 
