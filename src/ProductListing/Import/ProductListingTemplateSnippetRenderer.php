@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
@@ -10,6 +10,7 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlo
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 class ProductListingTemplateSnippetRenderer implements SnippetRenderer
 {
@@ -41,26 +42,26 @@ class ProductListingTemplateSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param mixed $dataObject
+     * @param TemplateProjectionData $dataToRender
      * @return Snippet[]
      */
-    public function render($dataObject) : array
+    public function render($dataToRender): array
     {
-        // todo: important! Use data version from $dataObject
-        return array_map(function (Context $context) use ($dataObject) {
-            return $this->renderProductListingPageSnippetForContext($dataObject, $context);
-        }, $this->contextSource->getAllAvailableContexts());
-
+        return $this->projectDataForAllContexts($dataToRender);
     }
 
-    /**
-     * @param mixed $dataObject
-     * @param Context $context
-     * @return Snippet
-     */
-    private function renderProductListingPageSnippetForContext($dataObject, Context $context) : Snippet
+    private function projectDataForAllContexts(TemplateProjectionData $dataToRender): array
     {
-        $content = $this->blockRenderer->render($dataObject, $context);
+        return array_map(function (Context $context) use ($dataToRender) {
+            return $this->renderProductListingPageSnippetForContext($dataToRender, $context);
+        }, $this->contextSource->getAllAvailableContextsWithVersion($dataToRender->getDataVersion()));
+    }
+
+    private function renderProductListingPageSnippetForContext(
+        TemplateProjectionData $dataToRender,
+        Context $context
+    ): Snippet {
+        $content = $this->blockRenderer->render($dataToRender, $context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, []);
 
         return Snippet::create($key, $content);

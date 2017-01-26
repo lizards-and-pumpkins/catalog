@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 {
@@ -32,6 +33,6 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     public function process()
     {
         $projector = $this->projectorLocator->getTemplateProjectorForCode($this->domainEvent->getTemplateId());
-        $projector->project($this->domainEvent->getTemplateContent());
+        $projector->project(TemplateProjectionData::fromEvent($this->domainEvent));
     }
 }

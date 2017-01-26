@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
@@ -18,6 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +62,8 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
 
     public function testProjectionIsTriggered()
     {
-        $this->mockProjector->expects($this->once())->method('project');
+        $this->mockProjector->expects($this->once())->method('project')
+            ->with($this->isInstanceOf(TemplateProjectionData::class));
         $this->domainEventHandler->process();
     }
 }

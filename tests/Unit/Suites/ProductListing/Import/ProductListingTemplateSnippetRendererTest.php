@@ -10,6 +10,7 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlo
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
@@ -54,7 +55,8 @@ class ProductListingTemplateSnippetRendererTest extends \PHPUnit_Framework_TestC
 
     public function testArrayOfSnippetsIsReturned()
     {
-        $dataObject = new \stdClass();
+        /** @var TemplateProjectionData|\PHPUnit_Framework_MockObject_MockObject $dataObject */
+        $dataObject = $this->createMock(TemplateProjectionData::class);
         $result = $this->renderer->render($dataObject);
 
         $this->assertContainsOnly(Snippet::class, $result);

@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 class TemplateProjectionData
 {
@@ -32,5 +34,10 @@ class TemplateProjectionData
     public function getDataVersion(): DataVersion
     {
         return $this->dataVersion;
+    }
+
+    public static function fromEvent(TemplateWasUpdatedDomainEvent $event): self
+    {
+        return new self($event->getTemplateContent(), $event->getDataVersion());
     }
 }
