@@ -34,12 +34,22 @@ class CurrentDataVersionWasSetDomainEventTest extends TestCase
         $this->assertSame($testDataVersion, $currentDataVersionWasSetDomainEvent->getDataVersion());
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatch()
+    /**
+     * @dataProvider nonMatchingMessageNameProvider
+     */
+    public function testThrowsExceptionIfMessageNameDoesNotMatch(string $nonMatchingMessageName)
     {
+        $expectedName = CurrentDataVersionWasSetDomainEvent::CODE;
+        $message = sprintf('Message name "%s" does not match %s', $nonMatchingMessageName, $expectedName);
         $this->expectException(NotCurrentDataVersionWasSetMessageException::class);
-        $this->expectExceptionMessage('Message name "foo" does not match ' . CurrentDataVersionWasSetDomainEvent::CODE);
+        $this->expectExceptionMessage($message);
 
-        CurrentDataVersionWasSetDomainEvent::fromMessage(Message::withCurrentTime('foo', [], []));
+        CurrentDataVersionWasSetDomainEvent::fromMessage(Message::withCurrentTime($nonMatchingMessageName, [], []));
+    }
+
+    public function nonMatchingMessageNameProvider(): array
+    {
+        return [['foo'], ['bar']];
     }
 
     public function testReturnsMessageWithDataVersion()

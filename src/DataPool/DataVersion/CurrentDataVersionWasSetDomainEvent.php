@@ -34,7 +34,7 @@ class CurrentDataVersionWasSetDomainEvent implements DomainEvent
     public static function fromMessage(Message $message): self
     {
         if ($message->getName() !== self::CODE) {
-            $message = sprintf('Message name "foo" does not match %s', CurrentDataVersionWasSetDomainEvent::CODE);
+            $message = sprintf('Message name "%s" does not match %s', $message->getName(), CurrentDataVersionWasSetDomainEvent::CODE);
             throw new NotCurrentDataVersionWasSetMessageException($message);
         }
 
