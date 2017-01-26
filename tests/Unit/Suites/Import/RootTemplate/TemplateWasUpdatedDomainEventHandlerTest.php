@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
-use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
@@ -40,17 +39,8 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
 
         return new TemplateWasUpdatedDomainEventHandler(
             $message,
-            $this->createStubContextSource(),
             $stubTemplateProjectorLocator
         );
-    }
-
-    /**
-     * @return ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubContextSource() : ContextSource
-    {
-        return $this->createMock(ContextSource::class);
     }
 
     protected function setUp()

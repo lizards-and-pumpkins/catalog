@@ -17,23 +17,16 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
     private $domainEvent;
 
     /**
-     * @var ContextSource
-     */
-    private $contextSource;
-
-    /**
      * @var TemplateProjectorLocator
      */
     private $projectorLocator;
 
     public function __construct(
         Message $message,
-        ContextSource $contextSource,
         TemplateProjectorLocator $projectorLocator
     ) {
         $this->domainEvent = TemplateWasUpdatedDomainEvent::fromMessage($message);
         $this->projectorLocator = $projectorLocator;
-        $this->contextSource = $contextSource;
     }
 
     public function process()

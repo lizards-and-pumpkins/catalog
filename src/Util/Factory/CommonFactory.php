@@ -220,7 +220,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new TemplateWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->getContextSource(),
             $this->getMasterFactory()->createTemplateProjectorLocator()
         );
     }
