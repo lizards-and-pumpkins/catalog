@@ -1005,7 +1005,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     
     public function createSetCurrentDataVersionCommandHandler(Message $message): CommandHandler
     {
-        return new SetCurrentDataVersionCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+        return new SetCurrentDataVersionCommandHandler(
+            $message,
+            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
     }
 
     /**
@@ -1147,11 +1152,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createCurrentDataVersionWasSetDomainEventHandler(Message $event): DomainEventHandler
     {
-        return new CurrentDataVersionWasSetDomainEventHandler(
-            $event,
-            $this->getMasterFactory()->createDataPoolWriter(),
-            $this->getMasterFactory()->createDataPoolReader()
-        );
+        return new CurrentDataVersionWasSetDomainEventHandler($event);
     }
 
     public function createBaseUrlBuilder() : BaseUrlBuilder

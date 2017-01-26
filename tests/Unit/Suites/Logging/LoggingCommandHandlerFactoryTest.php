@@ -64,6 +64,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
