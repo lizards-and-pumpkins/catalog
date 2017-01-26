@@ -84,4 +84,12 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
             $commandFactoryDelegate->createSetCurrentDataVersionCommandHandler($message)
         );
     }
+
+    public function createUpdateTemplateCommandHandler(Message $message): CommandHandler
+    {
+        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
+        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
+            $commandFactoryDelegate->createUpdateTemplateCommandHandler($message)
+        );
+    }
 }

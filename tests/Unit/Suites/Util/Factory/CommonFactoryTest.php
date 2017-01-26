@@ -63,6 +63,8 @@ use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Logging\Logger;
@@ -223,6 +225,8 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -490,6 +494,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createUpdateContentBlockCommandHandler($message);
 
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
+    }
+
+    public function testReturnsAnUpdateTemplateCommandHandler()
+    {
+        $message = (new UpdateTemplateCommand('foo', 'bar', DataVersion::fromVersionString('baz')))->toMessage();
+        $result = $this->commonFactory->createUpdateTemplateCommandHandler($message);
+        
+        $this->assertInstanceOf(UpdateTemplateCommandHandler::class, $result);
     }
 
     public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()

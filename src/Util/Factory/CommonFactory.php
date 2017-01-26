@@ -36,6 +36,7 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
@@ -920,10 +921,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createUpdateContentBlockCommandHandler(Message $message) : CommandHandler
     {
-        return new UpdateContentBlockCommandHandler(
-            $message,
-            $this->getMasterFactory()->getEventQueue()
-        );
+        return new UpdateContentBlockCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+    }
+
+    public function createUpdateTemplateCommandHandler(Message $message): CommandHandler
+    {
+        return new UpdateTemplateCommandHandler($message, $this->getMasterFactory()->getEventQueue());
     }
 
     public function createContentBlockWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler

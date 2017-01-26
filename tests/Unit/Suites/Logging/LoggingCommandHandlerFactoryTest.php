@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
@@ -66,6 +67,8 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
 class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -151,6 +154,13 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $message = (new SetCurrentDataVersionCommand(DataVersion::fromVersionString('qux')))->toMessage();
         $commandHandler = $this->loggingCommandHandlerFactory->createSetCurrentDataVersionCommandHandler($message);
+        $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
+    }
+
+    public function testReturnsADecoratedUpdateTemplateCommandHandler()
+    {
+        $message = (new UpdateTemplateCommand('foo', 'bar', DataVersion::fromVersionString('baz')))->toMessage();
+        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateTemplateCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 }
