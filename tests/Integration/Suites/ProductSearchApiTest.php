@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 
 class ProductSearchApiTest extends AbstractIntegrationTest
 {
@@ -20,7 +19,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
 
@@ -38,7 +36,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
@@ -64,7 +61,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
@@ -90,7 +86,6 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $factory->register(new ProductSearchFactory());
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
