@@ -8,10 +8,10 @@ class ApiRequestHandlerLocator
 {
     private $requestHandlers = [];
 
-    public function register(string $code, int $version, ApiRequestHandler $requestHandler)
+    public function register(string $code, int $version, callable $requestHandlerFactory)
     {
         $key = $this->getRequestProcessorLocatorKey($code, $version);
-        $this->requestHandlers[$key] = $requestHandler;
+        $this->requestHandlers[$key] = $requestHandlerFactory;
     }
 
     public function getApiRequestHandler(string $code, int $version) : ApiRequestHandler
@@ -22,7 +22,7 @@ class ApiRequestHandlerLocator
             return new NullApiRequestHandler;
         }
 
-        return $this->requestHandlers[$key];
+        return ($this->requestHandlers[$key])();
     }
 
     private function getRequestProcessorLocatorKey(string $code, int $version) : string

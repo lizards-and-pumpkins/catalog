@@ -26,9 +26,9 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 'bar';
 
-        /** @var ApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubApiRequestHandler */
-        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
-        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
+        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, function () {
+            return $this->createMock(ApiRequestHandler::class);
+        });
     }
 
     public function testExceptionIsThrownDuringAttemptToLocateRequestHandlerWithNonIntVersion()
@@ -56,12 +56,14 @@ class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 1;
 
-        /** @var ApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubApiRequestHandler */
-        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
-        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $stubApiRequestHandler);
+        $dummyApiRequestHandler = $this->createMock(ApiRequestHandler::class);
+        $apiRequestHandlerFactory = function () use ($dummyApiRequestHandler) {
+            return $dummyApiRequestHandler;
+        };
+        $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $apiRequestHandlerFactory);
 
         $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
 
-        $this->assertSame($stubApiRequestHandler, $result);
+        $this->assertSame($dummyApiRequestHandler, $result);
     }
 }

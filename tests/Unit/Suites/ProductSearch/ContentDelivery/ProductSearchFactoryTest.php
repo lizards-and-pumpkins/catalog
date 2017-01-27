@@ -32,6 +32,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler
@@ -72,7 +73,7 @@ class ProductSearchFactoryTest extends \PHPUnit_Framework_TestCase
 
         $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
-            ->with($endpointKey, $apiVersion, $this->isInstanceOf(ProductSearchApiV1GetRequestHandler::class));
+            ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
             ['register', 'getApiRequestHandlerLocator']

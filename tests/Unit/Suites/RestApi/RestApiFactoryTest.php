@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\RestApi;
 
@@ -9,6 +9,8 @@ use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutReques
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
@@ -27,6 +29,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\ApiRouter
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
@@ -47,11 +50,9 @@ class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function assertApiRequestHandlerIsRegistered(ApiRequestHandlerLocator $locator, string $code, int $version)
     {
-        $this->assertNotInstanceOf(
-            NullApiRequestHandler::class,
-            $locator->getApiRequestHandler($code, $version),
-            sprintf('No API request handler "%s" for version "%s" registered', $code, $version)
-        );
+        $handler = $locator->getApiRequestHandler($code, $version);
+        $message = sprintf('No API request handler "%s" for version "%s" registered', $code, $version);
+        $this->assertNotInstanceOf(NullApiRequestHandler::class, $handler, $message);
     }
 
     public function setUp()
@@ -82,16 +83,27 @@ class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ApiRouter::class, $result);
     }
 
-    public function testRegistersExpectedHandlersWithApiRouter()
+    /**
+     * @dataProvider registeredRequestHandlerProvider
+     */
+    public function testRegistersExpectedHandlersWithApiRouter($code, $version)
     {
         $locator = $this->factory->getApiRequestHandlerLocator();
-        
-        $this->assertApiRequestHandlerIsRegistered($locator, 'put_catalog_import', 1);
-        $this->assertApiRequestHandlerIsRegistered($locator, 'put_catalog_import', 2);
-        $this->assertApiRequestHandlerIsRegistered($locator, 'put_content_blocks', 1);
-        $this->assertApiRequestHandlerIsRegistered($locator, 'put_templates', 1);
-        $this->assertApiRequestHandlerIsRegistered($locator, 'get_current_version', 1);
-        $this->assertApiRequestHandlerIsRegistered($locator, 'put_current_version', 1);
+
+        $this->assertApiRequestHandlerIsRegistered($locator, $code, $version);
+    }
+
+    public function registeredRequestHandlerProvider(): array
+    {
+        return [
+            'put_catalog_import v1'  => ['put_catalog_import', 1],
+            'put_catalog_import v2'  => ['put_catalog_import', 2],
+            'put_content_blocks v1'  => ['put_content_blocks', 1],
+            'put_templates v1'       => ['put_templates', 1],
+            'put_templates v2'       => ['put_templates', 2],
+            'get_current_version v1' => ['get_current_version', 1],
+            'get_current_version v2' => ['put_current_version', 1],
+        ];
     }
 
     public function testCatalogImportV1ApiRequestHandlerIsReturned()
@@ -122,5 +134,17 @@ class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->factory->createCurrentVersionApiV1PutRequestHandler();
         $this->assertInstanceOf(CurrentVersionApiV1PutRequestHandler::class, $result);
+    }
+
+    public function testReturnsTemplatesApiV1PutRequestHandler()
+    {
+        $result = $this->factory->createTemplatesApiV1PutRequestHandler();
+        $this->assertInstanceOf(TemplatesApiV1PutRequestHandler::class, $result);
+    }
+
+    public function testReturnsTemplatesApiV2PutRequestHandler()
+    {
+        $result = $this->factory->createTemplatesApiV2PutRequestHandler();
+        $this->assertInstanceOf(TemplatesApiV2PutRequestHandler::class, $result);
     }
 }
