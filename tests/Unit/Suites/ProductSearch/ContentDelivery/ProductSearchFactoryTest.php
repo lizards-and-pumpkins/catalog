@@ -73,7 +73,7 @@ class ProductSearchFactoryTest extends \PHPUnit_Framework_TestCase
 
         $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
-            ->with($endpointKey, $apiVersion, $this->isInstanceOf(ProductSearchApiV1GetRequestHandler::class));
+            ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
             ['register', 'getApiRequestHandlerLocator']

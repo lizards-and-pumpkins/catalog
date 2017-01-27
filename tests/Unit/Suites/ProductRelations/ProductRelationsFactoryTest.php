@@ -105,7 +105,7 @@ class ProductRelationsFactoryTest extends \PHPUnit_Framework_TestCase
 
         $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
-            ->with($endpointKey, $apiVersion, $this->isInstanceOf(ProductRelationsApiV1GetRequestHandler::class));
+            ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
         /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(

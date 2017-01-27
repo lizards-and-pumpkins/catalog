@@ -20,11 +20,9 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
 
         /** @var ApiRequestHandlerLocator $apiRequestHandlerLocator */
         $apiRequestHandlerLocator = $masterFactory->getApiRequestHandlerLocator();
-        $apiRequestHandlerLocator->register(
-            'get_product',
-            $apiVersion,
-            $this->getMasterFactory()->createProductSearchApiV1GetRequestHandler()
-        );
+        $apiRequestHandlerLocator->register('get_product', $apiVersion, function () {
+            return $this->getMasterFactory()->createProductSearchApiV1GetRequestHandler();
+        });
     }
 
     public function createProductSearchApiV1GetRequestHandler(): ProductSearchApiV1GetRequestHandler
