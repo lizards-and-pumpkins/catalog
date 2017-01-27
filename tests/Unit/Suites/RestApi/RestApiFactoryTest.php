@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\RestApi;
 
@@ -89,18 +89,18 @@ class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
     public function testRegistersExpectedHandlersWithApiRouter($code, $version)
     {
         $locator = $this->factory->getApiRequestHandlerLocator();
-        
+
         $this->assertApiRequestHandlerIsRegistered($locator, $code, $version);
     }
 
     public function registeredRequestHandlerProvider(): array
     {
         return [
-            'put_catalog_import v1' => ['put_catalog_import', 1],
-            'put_catalog_import v2' => ['put_catalog_import', 2],
-            'put_content_blocks v1' => ['put_content_blocks', 1],
-            'put_templates v1' => ['put_templates', 1],
-            'put_templates v2' => ['put_templates', 2],
+            'put_catalog_import v1'  => ['put_catalog_import', 1],
+            'put_catalog_import v2'  => ['put_catalog_import', 2],
+            'put_content_blocks v1'  => ['put_content_blocks', 1],
+            'put_templates v1'       => ['put_templates', 1],
+            'put_templates v2'       => ['put_templates', 2],
             'get_current_version v1' => ['get_current_version', 1],
             'get_current_version v2' => ['put_current_version', 1],
         ];
