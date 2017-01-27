@@ -81,7 +81,7 @@ class UpdateTemplateCommand implements Command
         if ('' === $templateId) {
             throw new InvalidTemplateIdException('Invalid template ID: empty string');
         }
-        if (preg_match('/[ \'""]/', $templateId)) {
+        if (preg_match('/[ \'"\n\r]/', $templateId)) {
             throw new InvalidTemplateIdException('Invalid template ID: no spaces or quotes allowed');
         }
     }

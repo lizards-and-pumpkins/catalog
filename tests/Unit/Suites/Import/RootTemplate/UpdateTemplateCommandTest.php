@@ -61,6 +61,8 @@ class UpdateTemplateCommandTest extends TestCase
             'only space'          => [' '],
             'single quote'        => ["xx'xx'"],
             'double quote'        => ['yy"yy'],
+            'newline'             => ["xx\n"],
+            'carriage return'     => ["xx\r"],
         ];
     }
 
@@ -83,7 +85,7 @@ class UpdateTemplateCommandTest extends TestCase
     {
         $updateTemplateCommand = $this->createCommand('foo', 'bar');
         $message = $updateTemplateCommand->toMessage();
-        
+
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(UpdateTemplateCommand::CODE, $message->getName());
         $this->assertSame($updateTemplateCommand->getTemplateId(), $message->getPayload()['template_id']);
@@ -95,7 +97,7 @@ class UpdateTemplateCommandTest extends TestCase
     {
         $this->expectException(NotUpdateTemplateCommandMessageException::class);
         $this->expectExceptionMessage('Invalid message code "foo", expected ' . UpdateTemplateCommand::CODE);
-        
+
         UpdateTemplateCommand::fromMessage(Message::withCurrentTime('foo', [], []));
     }
 
@@ -103,7 +105,7 @@ class UpdateTemplateCommandTest extends TestCase
     {
         $sourceCommand = $this->createCommand('foo', 'bar');
         $rehydratedCommand = UpdateTemplateCommand::fromMessage($sourceCommand->toMessage());
-        
+
         $this->assertInstanceOf(UpdateTemplateCommand::class, $rehydratedCommand);
         $this->assertSame($sourceCommand->getTemplateId(), $rehydratedCommand->getTemplateId());
         $this->assertSame($sourceCommand->getTemplateContent(), $rehydratedCommand->getTemplateContent());
