@@ -12,13 +12,8 @@ use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
-class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
+class TemplatesApiV1PutRequestHandler extends TemplatesApiV2PutRequestHandler
 {
-    /**
-     * @var CommandQueue
-     */
-    private $commandQueue;
-
     /**
      * @var DataVersion
      */
@@ -26,49 +21,18 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 
     public function __construct(CommandQueue $commandQueue, DataVersion $dataVersion)
     {
-        $this->commandQueue = $commandQueue;
+        parent::__construct($commandQueue);
         $this->dataVersion = $dataVersion;
     }
 
-    public function canProcess(HttpRequest $request) : bool
+    final protected function getDataVersion(HttpRequest $request): DataVersion
     {
-        if (HttpRequest::METHOD_PUT !== $request->getMethod()) {
-            return false;
-        }
-
-        if (null === $this->extractTemplateIdFromRequest($request)) {
-            return false;
-        }
-
-        return true;
+        return $this->dataVersion;
     }
 
-    final protected function processRequest(HttpRequest $request)
+    final protected function getContent(HttpRequest $request): string
     {
-        $templateId = $this->extractTemplateIdFromRequest($request);
-        $this->commandQueue->add(new UpdateTemplateCommand($templateId, $request->getRawBody(), $this->dataVersion));
+        return $request->getRawBody();
     }
 
-    final protected function getResponse(HttpRequest $request) : HttpResponse
-    {
-        $headers = [];
-        $body = '';
-
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
-    }
-
-    /**
-     * @param HttpRequest $request
-     * @return string|null
-     */
-    private function extractTemplateIdFromRequest(HttpRequest $request)
-    {
-        preg_match('#/templates/([^/]+)#i', (string) $request->getUrl(), $urlTokens);
-
-        if (count($urlTokens) < 2) {
-            return null;
-        }
-
-        return $urlTokens[1];
-    }
 }

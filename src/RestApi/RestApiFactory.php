@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestH
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
@@ -59,6 +60,13 @@ class RestApiFactory implements Factory
         return new TemplatesApiV1PutRequestHandler(
             $this->getMasterFactory()->getCommandQueue(),
             DataVersion::fromVersionString($this->getMasterFactory()->getCurrentDataVersion())
+        );
+    }
+
+    public function createTemplatesApiV2PutRequestHandler(): TemplatesApiV2PutRequestHandler
+    {
+        return new TemplatesApiV2PutRequestHandler(
+            $this->getMasterFactory()->getCommandQueue()
         );
     }
 
@@ -118,6 +126,12 @@ class RestApiFactory implements Factory
             'put_templates',
             $version = 1,
             $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler()
+        );
+
+        $requestHandlerLocator->register(
+            'put_templates',
+            $version = 2,
+            $this->getMasterFactory()->createTemplatesApiV2PutRequestHandler()
         );
 
         $requestHandlerLocator->register(
