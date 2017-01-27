@@ -42,7 +42,7 @@ class UpdateTemplateCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider InvalidTemplateIdProvider
+     * @dataProvider invalidTemplateIdProvider
      */
     public function testThrowsExceptionIfTheTemplateIdIsInvalid(string $invalidTemplateId)
     {
@@ -51,7 +51,7 @@ class UpdateTemplateCommandTest extends TestCase
         new UpdateTemplateCommand($invalidTemplateId, 'example content', $this->testDataVersion);
     }
 
-    public function InvalidTemplateIdProvider(): array
+    public function invalidTemplateIdProvider(): array
     {
         return [
             'empty'               => [''],
