@@ -33,11 +33,11 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
 /**
  * @method DataPoolWriter createDataPoolWriter
  * @method DataPoolReader createDataPoolReader
+ * @method Context createContext
  * @method CommandQueue getCommandQueue
  * @method Queue getCommandMessageQueue
  * @method DomainEventQueue getEventQueue
  * @method Queue getEventMessageQueue
- * @method Context getContext
  * @method ContextSource createContextSource
  * @method ContextBuilder createContextBuilder
  * @method DomainEventConsumer createDomainEventConsumer
