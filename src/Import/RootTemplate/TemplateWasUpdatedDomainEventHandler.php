@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
@@ -21,10 +21,8 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
      */
     private $projectorLocator;
 
-    public function __construct(
-        Message $message,
-        TemplateProjectorLocator $projectorLocator
-    ) {
+    public function __construct(Message $message, TemplateProjectorLocator $projectorLocator)
+    {
         $this->domainEvent = TemplateWasUpdatedDomainEvent::fromMessage($message);
         $this->projectorLocator = $projectorLocator;
     }
