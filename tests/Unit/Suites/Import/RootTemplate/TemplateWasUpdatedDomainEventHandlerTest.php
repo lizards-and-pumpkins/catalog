@@ -39,10 +39,7 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
         $stubTemplateProjectorLocator = $this->createMock(TemplateProjectorLocator::class);
         $stubTemplateProjectorLocator->method('getTemplateProjectorForCode')->willReturn($this->mockProjector);
 
-        return new TemplateWasUpdatedDomainEventHandler(
-            $message,
-            $stubTemplateProjectorLocator
-        );
+        return new TemplateWasUpdatedDomainEventHandler($message, $stubTemplateProjectorLocator);
     }
 
     protected function setUp()
