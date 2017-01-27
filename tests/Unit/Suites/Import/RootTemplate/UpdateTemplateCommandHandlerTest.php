@@ -25,6 +25,9 @@ class UpdateTemplateCommandHandlerTest extends TestCase
 
     private $testContent = 'test';
 
+    /**
+     * @var DataVersion
+     */
     private $testDataVersion;
 
     /**
