@@ -4,23 +4,30 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
-     * @var DomainEventQueue
+     * @var CommandQueue
      */
-    private $domainEventQueue;
+    private $commandQueue;
 
-    public function __construct(DomainEventQueue $domainEventQueue)
+    /**
+     * @var DataVersion
+     */
+    private $dataVersion;
+
+    public function __construct(CommandQueue $commandQueue, DataVersion $dataVersion)
     {
-        $this->domainEventQueue = $domainEventQueue;
+        $this->commandQueue = $commandQueue;
+        $this->dataVersion = $dataVersion;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -39,8 +46,7 @@ class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
     final protected function processRequest(HttpRequest $request)
     {
         $templateId = $this->extractTemplateIdFromRequest($request);
-        // todo: add command which validates input data to command queue, the have the command handler create the event
-        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody()));
+        $this->commandQueue->add(new UpdateTemplateCommand($templateId, $request->getRawBody(), $this->dataVersion));
     }
 
     final protected function getResponse(HttpRequest $request) : HttpResponse

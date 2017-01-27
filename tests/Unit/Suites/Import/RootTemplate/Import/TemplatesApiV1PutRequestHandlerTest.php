@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
@@ -15,14 +17,14 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
 class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockDomainEventQueue;
+    private $mockCommandQueue;
 
     /**
      * @var TemplatesApiV1PutRequestHandler
@@ -34,10 +36,16 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $mockRequest;
 
+    /**
+     * @var DataVersion
+     */
+    private $dummyDataVersion;
+
     protected function setUp()
     {
-        $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
-        $this->requestHandler = new TemplatesApiV1PutRequestHandler($this->mockDomainEventQueue);
+        $this->dummyDataVersion = $this->createMock(DataVersion::class);
+        $this->mockCommandQueue = $this->createMock(CommandQueue::class);
+        $this->requestHandler = new TemplatesApiV1PutRequestHandler($this->mockCommandQueue, $this->dummyDataVersion);
 
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
@@ -69,12 +77,13 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testTemplateWasUpdatedDomainEventIsEmitted()
+    public function testEmitsUpdateTemplateCommand()
     {
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn('Raw Request Body');
 
-        $this->mockDomainEventQueue->expects($this->once())->method('add');
+        $this->mockCommandQueue->expects($this->once())->method('add')
+            ->with($this->isInstanceOf(UpdateTemplateCommand::class));
 
         $response = $this->requestHandler->process($this->mockRequest);
         

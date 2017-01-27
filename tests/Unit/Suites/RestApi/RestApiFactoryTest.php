@@ -36,6 +36,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
 {
