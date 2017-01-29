@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
 /**
@@ -67,5 +68,14 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedBodyContent = StubApiRequestHandler::DUMMY_BODY_CONTENT;
 
         $this->assertSame($expectedBodyContent, $result);
+    }
+
+    public function testReturnsJsonErrorResponseInCaseOfExceptions()
+    {
+        $response = (new StubFailingApiRequestHandler())->process($this->stubRequest);
+        $expectedBody = json_encode(['error' => StubFailingApiRequestHandler::EXCEPTION_MESSAGE]);
+
+        $this->assertSame(HttpResponse::STATUS_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame($expectedBody, $response->getBody());
     }
 }
