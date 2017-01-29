@@ -6,13 +6,11 @@ namespace LizardsAndPumpkins\Import\RestApi;
 
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryIsNotDirectoryException;
-use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
-use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 
 /**
@@ -110,18 +108,24 @@ class CatalogImportApiV2PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
     {
-        $this->expectException(CatalogImportFileNameNotFoundInRequestBodyException::class);
-        $this->requestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
+        $expectedResponseBody = json_encode(['error' => 'Import file name is not found in request body.']);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testExceptionIsThrownIfDataVersionIsNotFoundInRequestBody()
     {
-        $this->expectException(DataVersionNotFoundInRequestBodyException::class);
-        
         $importFileName = 'import-file.xml';
         $this->createFixtureFile($this->testImportDirectoryPath . '/' . $importFileName, '');
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $importFileName]));
-        $this->requestHandler->process($this->mockRequest);
+
+        $response = $this->requestHandler->process($this->mockRequest);
+        $expectedResponseBody = json_encode(
+            ['error' => 'The catalog import data version is not found in request body.']
+        );
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testAddsImportCatalogCommandToCommandQueue()

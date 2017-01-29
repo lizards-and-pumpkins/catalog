@@ -127,7 +127,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     final protected function getResponse(HttpRequest $request) : HttpResponse
     {
         if (! $this->canProcess($request)) {
-            throw new UnableToProcessProductSearchRequestException();
+            throw new UnableToProcessProductSearchRequestException('Invalid product search API request.');
         }
 
         $searchCriteria = $this->createSearchCriteria($request);

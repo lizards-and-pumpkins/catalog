@@ -17,9 +17,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullT
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnableToProcessProductSearchRequestException;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
-use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
@@ -245,12 +242,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testThrowsAnExceptionDuringAttemptToProcessInvalidRequest()
     {
-        $this->expectException(UnableToProcessProductSearchRequestException::class);
-
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
 
-        $this->requestHandler->process($this->stubRequest);
+        $response = $this->requestHandler->process($this->stubRequest);
+        $expectedResponseBody = json_encode(['error' => 'Invalid product search API request.']);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testDelegatesFetchingProductsToTheProductSearchService()
@@ -499,9 +497,6 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $unsupportedSortAttributeCode = 'baz';
 
-        $this->expectException(UnsupportedSortOrderException::class);
-        $this->expectExceptionMessage(sprintf('Sorting by "%s" is not supported', $unsupportedSortAttributeCode));
-
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
@@ -513,19 +508,17 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, $unsupportedSortAttributeCode],
         ]);
 
-        $this->requestHandler->process($this->stubRequest);
+        $response = $this->requestHandler->process($this->stubRequest);
+        $expectedResponseBody = json_encode(
+            ['error' => sprintf('Sorting by "%s" is not supported', $unsupportedSortAttributeCode)]
+        );
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testThrowsAnExceptionIfRequestedNumberOfProductsIsHigherThanAllowed()
     {
         $rowsPerPage = $this->maxAllowedProductsPerPage + 1;
-
-        $this->expectException(InvalidNumberOfProductsPerPageException::class);
-        $this->expectExceptionMessage(sprintf(
-            'Maximum allowed number of products per page is %d, got %d.',
-            $this->maxAllowedProductsPerPage,
-            $rowsPerPage
-        ));
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
@@ -538,7 +531,16 @@ class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCas
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, $rowsPerPage],
         ]);
 
-        $this->requestHandler->process($this->stubRequest);
+        $response = $this->requestHandler->process($this->stubRequest);
+        $expectedResponseBody = json_encode(
+            ['error' => sprintf(
+                'Maximum allowed number of products per page is %d, got %d.',
+                $this->maxAllowedProductsPerPage,
+                $rowsPerPage
+            )]
+        );
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testAddsEmptySelectedFiltersArrayToQueryOptionsIfNoParameterIsPresent()

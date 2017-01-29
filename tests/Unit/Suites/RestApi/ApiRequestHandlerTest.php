@@ -49,7 +49,7 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetsCorsHeaders()
     {
-        $response = $this->apiRequestHandler->process($this->stubRequest);
+        $response = (new StubEmptyApiRequestHandler())->process($this->stubRequest);
         $response->send();
 
         $expectedHeaders = [
