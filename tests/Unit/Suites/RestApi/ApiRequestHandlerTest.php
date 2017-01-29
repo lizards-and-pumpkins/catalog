@@ -42,17 +42,22 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(GenericHttpResponse::class, $result);
     }
 
-    public function testApiSpecificHeadersAreSet()
+    /**
+     * @runInSeparateProcess
+     * @requires extension xdebug
+     */
+    public function testSetsCorsHeaders()
     {
         $response = $this->apiRequestHandler->process($this->stubRequest);
-        $headers = $this->getPrivateFieldValue($response, 'headers');
+        $response->send();
+
         $expectedHeaders = [
-            'access-control-allow-origin' => '*',
-            'access-control-allow-methods' => '*',
-            'content-type' => 'application/json',
+            'access-control-allow-origin: *',
+            'access-control-allow-methods: *',
+            'content-type: application/json',
         ];
 
-        $this->assertArraySubset($expectedHeaders, $headers->getAll());
+        $this->assertArraySubset($expectedHeaders, xdebug_get_headers());
     }
 
     public function testDummyBodyContentIsReturned()
@@ -62,17 +67,5 @@ class ApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $expectedBodyContent = StubApiRequestHandler::DUMMY_BODY_CONTENT;
 
         $this->assertSame($expectedBodyContent, $result);
-    }
-
-    /**
-     * @param mixed $object
-     * @param string $field
-     * @return mixed
-     */
-    private function getPrivateFieldValue($object, string $field)
-    {
-        $property = new \ReflectionProperty($object, $field);
-        $property->setAccessible(true);
-        return $property->getValue($object);
     }
 }
