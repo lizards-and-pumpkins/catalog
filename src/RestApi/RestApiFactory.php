@@ -51,7 +51,9 @@ class RestApiFactory implements Factory
     public function createContentBlocksApiV1PutRequestHandler(): ContentBlocksApiV1PutRequestHandler
     {
         return new ContentBlocksApiV1PutRequestHandler(
-            $this->getMasterFactory()->getCommandQueue()
+            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->createContextBuilder(),
+            $this->getMasterFactory()->createDataPoolReader()
         );
     }
 

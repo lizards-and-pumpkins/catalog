@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
@@ -24,9 +27,24 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
      */
     private $commandQueue;
 
-    public function __construct(CommandQueue $commandQueue)
-    {
+    /**
+     * @var ContextBuilder
+     */
+    private $contextBuilder;
+
+    /**
+     * @var DataPoolReader
+     */
+    private $dataPoolReader;
+
+    public function __construct(
+        CommandQueue $commandQueue,
+        ContextBuilder $contextBuilder,
+        DataPoolReader $dataPoolReader
+    ) {
         $this->commandQueue = $commandQueue;
+        $this->contextBuilder = $contextBuilder;
+        $this->dataPoolReader = $dataPoolReader;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -63,11 +81,15 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         if (isset($requestBody['url_key'])) {
             $keyGeneratorParams['url_key'] = $requestBody['url_key'];
         }
-
+        
+        $context = $this->contextBuilder->createContext(array_merge(
+            $requestBody['context'],
+            [DataVersion::CONTEXT_CODE => $this->dataPoolReader->getCurrentDataVersion()]
+        ));
         $contentBlockSource = new ContentBlockSource(
             $contentBlockId,
             $requestBody['content'],
-            $requestBody['context'],
+            $context,
             $keyGeneratorParams
         );
 

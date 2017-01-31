@@ -95,7 +95,9 @@ class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItReturnsADecoratedUpdateContentBlockCommandHandler()
     {
-        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('qux'), '', [], []);
+        $dummyContext = $this->createMock(Context::class); 
+        $dummyContext->method('jsonSerialize')->willReturn([]);
+        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('qux'), '', $dummyContext, []);
         $message = (new UpdateContentBlockCommand($contentBlockSource))->toMessage();
         $commandHandler = $this->loggingCommandHandlerFactory->createUpdateContentBlockCommandHandler($message);
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);

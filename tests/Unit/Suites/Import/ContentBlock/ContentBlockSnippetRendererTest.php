@@ -47,7 +47,7 @@ class ContentBlockSnippetRendererTest extends \PHPUnit_Framework_TestCase
     {
         $stubContentBlockSource = $this->createMock(ContentBlockSource::class);
         $stubContentBlockSource->method('getContent')->willReturn($contentBlockContent);
-        $stubContentBlockSource->method('getContextData')->willReturn([]);
+        $stubContentBlockSource->method('getContext')->willReturn($this->createMock(Context::class));
         $stubContentBlockSource->method('getKeyGeneratorParams')->willReturn([]);
 
         return $stubContentBlockSource;

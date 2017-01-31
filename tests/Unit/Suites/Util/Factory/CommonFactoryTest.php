@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
@@ -488,7 +489,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateContentBlockCommandHandlerIsReturned()
     {
-        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', [], []);
+        $dummyContext = $this->createMock(Context::class);
+        $dummyContext->method('jsonSerialize')->willReturn([]);
+        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', $dummyContext, []);
         $sourceCommand = new UpdateContentBlockCommand($contentBlockSource);
         $message = $sourceCommand->toMessage();
         $result = $this->commonFactory->createUpdateContentBlockCommandHandler($message);
@@ -509,7 +512,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $testContentBlockSource = new ContentBlockSource(
             ContentBlockId::fromString('foo'),
             '',
-            [],
+            SelfContainedContextBuilder::rehydrateContext([]),
             []
         );
         $testEvent = new ContentBlockWasUpdatedDomainEvent($testContentBlockSource);

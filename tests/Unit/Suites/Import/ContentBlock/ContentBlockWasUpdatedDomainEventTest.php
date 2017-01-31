@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Import\ContentBlock\Exception\NoContentBlockWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
@@ -16,6 +17,8 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  */
 class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
 {
@@ -73,7 +76,7 @@ class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
         $sourceContentBlock = new ContentBlockSource(
             ContentBlockId::fromString('test'),
             '',
-            [],
+            SelfContainedContextBuilder::rehydrateContext([]),
             []
         );
         $message = (new ContentBlockWasUpdatedDomainEvent($sourceContentBlock))->toMessage();

@@ -15,18 +15,11 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
      * @var SnippetKeyGeneratorLocator
      */
     private $snippetKeyGeneratorLocator;
-
-    /**
-     * @var ContextBuilder
-     */
-    private $contextBuilder;
-
+    
     public function __construct(
-        SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator,
-        ContextBuilder $contextBuilder
+        SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
     ) {
         $this->snippetKeyGeneratorLocator = $snippetKeyGeneratorLocator;
-        $this->contextBuilder = $contextBuilder;
     }
 
     /**
@@ -38,10 +31,9 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
         $snippetCode = (string) $contentBlockSource->getContentBlockId();
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
-        $context = $this->contextBuilder->createContext($contentBlockSource->getContextData());
         $keyGeneratorParameters = $contentBlockSource->getKeyGeneratorParams();
 
-        $key = $keyGenerator->getKeyForContext($context, $keyGeneratorParameters);
+        $key = $keyGenerator->getKeyForContext($contentBlockSource->getContext(), $keyGeneratorParameters);
         $content = $contentBlockSource->getContent();
 
         return [Snippet::create($key, $content)];

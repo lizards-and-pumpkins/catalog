@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
@@ -203,7 +204,7 @@ class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $testContentBlockSource = new ContentBlockSource(
             ContentBlockId::fromString('foo'),
             '',
-            [],
+            SelfContainedContextBuilder::rehydrateContext([]),
             []
         );
         $testEvent = new ContentBlockWasUpdatedDomainEvent($testContentBlockSource);
