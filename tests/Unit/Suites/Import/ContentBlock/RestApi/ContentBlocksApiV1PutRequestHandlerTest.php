@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
@@ -29,6 +30,8 @@ use LizardsAndPumpkins\Http\HttpRequest;
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    private $testVersion = 'current data version';
+
     /**
      * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -58,8 +61,17 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
-        $this->stubContextBuilder->method('createContext')->willReturn($this->createMock(Context::class));
+        $this->stubContextBuilder->method('createContext')->willReturnCallback(function (array $parts) {
+            $stubContext = $this->getMockBuilder(Context::class)
+                ->disableOriginalConstructor()
+                ->setMethods(array_merge(get_class_methods(Context::class), ['debug']))
+                ->getMock();
+            $stubContext->method('debug')->willReturn($parts);
+            return $stubContext;
+
+        });
         $this->dummyDataPoolReader = $this->createMock(DataPoolReader::class);
+        $this->dummyDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testVersion);
         $this->requestHandler = new ContentBlocksApiV1PutRequestHandler(
             $this->mockCommandQueue,
             $this->stubContextBuilder,
@@ -142,7 +154,10 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 $this->assertEquals('foo_bar', $command->getContentBlockSource()->getContentBlockId());
                 $this->assertSame(['url_key' => 'foo'], $command->getContentBlockSource()->getKeyGeneratorParams());
                 $this->assertSame('bar', $command->getContentBlockSource()->getContent());
-                $this->assertInstanceOf(Context::class, $command->getContentBlockSource()->getContext());
+                $context = $command->getContentBlockSource()->getContext();
+                $this->assertInstanceOf(Context::class, $context);
+                $this->assertArrayHasKey(DataVersion::CONTEXT_CODE, $context->debug());
+                $this->assertSame($this->testVersion, $context->debug()[DataVersion::CONTEXT_CODE]);
             });
 
         $response = $this->requestHandler->process($this->mockRequest);
