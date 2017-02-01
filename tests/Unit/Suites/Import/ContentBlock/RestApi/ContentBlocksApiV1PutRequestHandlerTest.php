@@ -68,7 +68,6 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
                 ->getMock();
             $stubContext->method('debug')->willReturn($parts);
             return $stubContext;
-
         });
         $this->dummyDataPoolReader = $this->createMock(DataPoolReader::class);
         $this->dummyDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testVersion);
