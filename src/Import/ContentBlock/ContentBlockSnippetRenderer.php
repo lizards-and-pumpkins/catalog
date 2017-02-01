@@ -15,9 +15,8 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
      */
     private $snippetKeyGeneratorLocator;
     
-    public function __construct(
-        SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator
-    ) {
+    public function __construct(SnippetKeyGeneratorLocator $snippetKeyGeneratorLocator)
+    {
         $this->snippetKeyGeneratorLocator = $snippetKeyGeneratorLocator;
     }
 
