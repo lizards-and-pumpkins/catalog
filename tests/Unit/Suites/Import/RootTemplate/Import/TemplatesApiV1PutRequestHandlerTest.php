@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
@@ -8,7 +8,6 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
@@ -62,13 +61,13 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $this->stubDataVersion->method('__toString')->willReturn('foo');
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn($testContent);
-        
+
         $this->mockCommandQueue->expects($this->once())->method('add')
             ->willReturnCallback(function (UpdateTemplateCommand $command) use ($testContent) {
                 $this->assertEquals((string) $this->stubDataVersion, $command->getDataVersion());
                 $this->assertEquals($testContent, $command->getTemplateContent());
             });
-        
+
         $this->requestHandler->process($this->mockRequest);
     }
 }

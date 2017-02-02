@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
@@ -26,6 +30,8 @@ use LizardsAndPumpkins\Http\HttpRequest;
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    private $testVersion = 'current data version';
+
     /**
      * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -41,10 +47,35 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
      */
     private $mockRequest;
 
+    /**
+     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubContextBuilder;
+
+    /**
+     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dummyDataPoolReader;
+
     protected function setUp()
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
-        $this->requestHandler = new ContentBlocksApiV1PutRequestHandler($this->mockCommandQueue);
+        $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $this->stubContextBuilder->method('createContext')->willReturnCallback(function (array $parts) {
+            $stubContext = $this->getMockBuilder(Context::class)
+                ->disableOriginalConstructor()
+                ->setMethods(array_merge(get_class_methods(Context::class), ['debug']))
+                ->getMock();
+            $stubContext->method('debug')->willReturn($parts);
+            return $stubContext;
+        });
+        $this->dummyDataPoolReader = $this->createMock(DataPoolReader::class);
+        $this->dummyDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testVersion);
+        $this->requestHandler = new ContentBlocksApiV1PutRequestHandler(
+            $this->mockCommandQueue,
+            $this->stubContextBuilder,
+            $this->dummyDataPoolReader
+        );
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
@@ -110,15 +141,23 @@ class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCas
 
     public function testUpdateContentBlockCommandIsEmitted()
     {
-        $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux']];
+        $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux'], 'url_key' => 'foo'];
         $this->mockRequest->method('getRawBody')->willReturn(json_encode($requestBody));
 
-        $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo');
+        $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
         $this->mockRequest->method('getUrl')->willReturn($url);
 
         $this->mockCommandQueue->expects($this->once())
             ->method('add')
-            ->with($this->isInstanceOf(UpdateContentBlockCommand::class));
+            ->willReturnCallback(function (UpdateContentBlockCommand $command) {
+                $this->assertEquals('foo_bar', $command->getContentBlockSource()->getContentBlockId());
+                $this->assertSame(['url_key' => 'foo'], $command->getContentBlockSource()->getKeyGeneratorParams());
+                $this->assertSame('bar', $command->getContentBlockSource()->getContent());
+                $context = $command->getContentBlockSource()->getContext();
+                $this->assertInstanceOf(Context::class, $context);
+                $this->assertArrayHasKey(DataVersion::CONTEXT_CODE, $context->debug());
+                $this->assertSame($this->testVersion, $context->debug()[DataVersion::CONTEXT_CODE]);
+            });
 
         $response = $this->requestHandler->process($this->mockRequest);
 

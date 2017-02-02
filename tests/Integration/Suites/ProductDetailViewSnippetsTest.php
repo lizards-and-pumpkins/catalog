@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Http\HttpHeaders;
-use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\XPathParser;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;

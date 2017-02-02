@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
+
 class ContentBlockSource
 {
     /**
@@ -17,9 +20,9 @@ class ContentBlockSource
     private $content;
 
     /**
-     * @var string[]
+     * @var Context
      */
-    private $contextData;
+    private $context;
 
     /**
      * @var mixed[]
@@ -29,18 +32,18 @@ class ContentBlockSource
     /**
      * @param ContentBlockId $contentBlockId
      * @param string $content
-     * @param string[] $contextData
+     * @param Context $context
      * @param string[] $keyGeneratorParams
      */
     public function __construct(
         ContentBlockId $contentBlockId,
         $content,
-        array $contextData,
+        Context $context,
         array $keyGeneratorParams
     ) {
         $this->contentBlockId = $contentBlockId;
         $this->content = $content;
-        $this->contextData = $contextData;
+        $this->context = $context;
         $this->keyGeneratorParams = $keyGeneratorParams;
     }
 
@@ -54,12 +57,9 @@ class ContentBlockSource
         return $this->content;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getContextData() : array
+    public function getContext() : Context
     {
-        return $this->contextData;
+        return $this->context;
     }
 
     /**
@@ -75,7 +75,7 @@ class ContentBlockSource
         return json_encode([
             'id' => (string) $this->contentBlockId,
             'content' => $this->content,
-            'context_data' => $this->contextData,
+            'context' => $this->context->jsonSerialize(),
             'key_generator_params' => $this->keyGeneratorParams
         ]);
     }
@@ -86,7 +86,7 @@ class ContentBlockSource
         return new self(
             ContentBlockId::fromString($data['id']),
             $data['content'],
-            $data['context_data'],
+            SelfContainedContextBuilder::rehydrateContext($data['context']),
             $data['key_generator_params']
         );
     }

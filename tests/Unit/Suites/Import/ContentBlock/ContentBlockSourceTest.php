@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
+
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  */
 class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,9 +26,9 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
     private $testContentBlockContent = 'bar';
 
     /**
-     * @var string[]
+     * @var Context
      */
-    private $testContextData = ['baz' => 'qux'];
+    private $testContext;
 
     /**
      * @var mixed[]
@@ -38,10 +43,11 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->testContentBlockId = ContentBlockId::fromString('foo');
+        $this->testContext = SelfContainedContextBuilder::rehydrateContext(['baz' => 'qux']);
         $this->contentBlockSource = new ContentBlockSource(
             $this->testContentBlockId,
             $this->testContentBlockContent,
-            $this->testContextData,
+            $this->testContext,
             $this->testKeyGeneratorParams
         );
     }
@@ -56,9 +62,9 @@ class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->testContentBlockContent, $this->contentBlockSource->getContent());
     }
 
-    public function testContextDataIsReturned()
+    public function testContextIsReturned()
     {
-        $this->assertSame($this->testContextData, $this->contentBlockSource->getContextData());
+        $this->assertSame($this->testContext, $this->contentBlockSource->getContext());
     }
 
     public function testKeyGeneratorParamsAreReturned()
