@@ -126,7 +126,9 @@ class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_Test
         $response = $this->requestHandler->process($this->stubRequest);
         $expectedResponseBody = json_encode([
             'error' => sprintf(
-                'Unable to process a %s request to "%s"', HttpRequest::METHOD_POST, $this->testMatchingRequestPath
+                'Unable to process a %s request to "%s"',
+                HttpRequest::METHOD_POST,
+                $this->testMatchingRequestPath
             )
         ]);
 
