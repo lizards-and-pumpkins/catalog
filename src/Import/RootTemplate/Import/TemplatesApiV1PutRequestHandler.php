@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
-use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 class TemplatesApiV1PutRequestHandler extends TemplatesApiV2PutRequestHandler

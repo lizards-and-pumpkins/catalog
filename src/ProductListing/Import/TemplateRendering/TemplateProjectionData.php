@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 
 class TemplateProjectionData
 {
