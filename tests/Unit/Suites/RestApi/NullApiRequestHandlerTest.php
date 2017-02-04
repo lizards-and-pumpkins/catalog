@@ -8,6 +8,8 @@ use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\NullApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class NullApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
