@@ -21,7 +21,6 @@
         timeoutForMediumTests="10"
         timeoutForLargeTests="60"
         beStrictAboutCoversAnnotation="true"
-        beStrictAboutTestsThatDoNotTestAnything="true"
         beStrictAboutOutputDuringTests="true"
         verbose="false">
     <testsuite name="Lizards and Pumpkins Unit Tests">
