@@ -37,6 +37,7 @@ use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
@@ -137,7 +138,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler
  */
-class LoggingDomainEventHandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class LoggingDomainEventHandlerFactoryTest extends TestCase
 {
     /**
      * @var LoggingDomainEventHandlerFactory

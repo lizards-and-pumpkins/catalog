@@ -7,11 +7,12 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
  */
-class ProductListingTemplateProjectorTest extends \PHPUnit_Framework_TestCase
+class ProductListingTemplateProjectorTest extends TestCase
 {
     /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject

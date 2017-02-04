@@ -18,6 +18,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
@@ -28,7 +29,7 @@ use LizardsAndPumpkins\Import\Tax\TaxableCountries;
  * @uses   \LizardsAndPumpkins\Context\Website\Website
  * @uses   \LizardsAndPumpkins\Context\Country\Country
  */
-class PriceSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class PriceSnippetRendererTest extends TestCase
 {
     private $testCountries = ['DE', 'UK'];
 

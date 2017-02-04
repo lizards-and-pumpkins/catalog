@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\FailedToReadFromDomainEventQueueMessage
  */
-class FailedToReadFromDomainEventQueueMessageTest extends \PHPUnit_Framework_TestCase
+class FailedToReadFromDomainEventQueueMessageTest extends TestCase
 {
     /**
      * @var FailedToReadFromDomainEventQueueMessage

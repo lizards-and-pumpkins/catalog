@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http\Routing;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\HttpResourceNotFoundResponse
  */
-class HttpResourceNotFoundResponseTest extends \PHPUnit_Framework_TestCase
+class HttpResourceNotFoundResponseTest extends TestCase
 {
     public function test404ResponseCodeIsSet()
     {

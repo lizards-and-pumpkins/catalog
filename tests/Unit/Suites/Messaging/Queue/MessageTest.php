@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Queue;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends TestCase
 {
     public function testReturnsTheInjectedTimestamp()
     {

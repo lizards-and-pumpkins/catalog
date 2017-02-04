@@ -8,11 +8,12 @@ use League\CLImate\Argument\Manager as ArgumentManager;
 use League\CLImate\CLImate;
 use League\CLImate\Util\Output as CliOutput;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\BaseCliCommand
  */
-class BaseCliCommandTest extends \PHPUnit_Framework_TestCase
+class BaseCliCommandTest extends TestCase
 {
     /**
      * @var CLImate|\PHPUnit_Framework_MockObject_MockObject

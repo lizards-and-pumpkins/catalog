@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class AddProductListingCommandHandlerTest extends \PHPUnit_Framework_TestCase
+class AddProductListingCommandHandlerTest extends TestCase
 {
     /**
      * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject

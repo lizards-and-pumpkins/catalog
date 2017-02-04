@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
  */
-class PageBuilderSnippetsTest extends \PHPUnit_Framework_TestCase
+class PageBuilderSnippetsTest extends TestCase
 {
     private $testKey = 'a-key';
 

@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileIsNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser
@@ -17,7 +18,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @covers \LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
-class CatalogXmlParserTest extends \PHPUnit_Framework_TestCase
+class CatalogXmlParserTest extends TestCase
 {
     use TestFileFixtureTrait;
 

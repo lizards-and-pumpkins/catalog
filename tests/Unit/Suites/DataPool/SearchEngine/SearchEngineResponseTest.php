@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\ProductId;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse
  */
-class SearchEngineResponseTest extends \PHPUnit_Framework_TestCase
+class SearchEngineResponseTest extends TestCase
 {
     /**
      * @var ProductId|\PHPUnit_Framework_MockObject_MockObject

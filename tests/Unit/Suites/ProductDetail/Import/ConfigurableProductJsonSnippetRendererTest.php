@@ -10,12 +10,13 @@ use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class ConfigurableProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductJsonSnippetRendererTest extends TestCase
 {
     private $testVariationAttributesSnippetKey = 'variations';
     private $testAssociatedProductsSnippetKey = 'associated_products';

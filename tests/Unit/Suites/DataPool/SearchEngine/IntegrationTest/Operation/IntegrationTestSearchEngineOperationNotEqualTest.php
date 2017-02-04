@@ -8,11 +8,12 @@ use LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\Exception
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperationNotEqual
  */
-class IntegrationTestSearchEngineOperationNotEqualTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
 {
     private $testFieldName = 'foo';
 

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Logging\LogMessage;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage
  */
-class CatalogListingImportCallbackFailureMessageTest extends \PHPUnit_Framework_TestCase
+class CatalogListingImportCallbackFailureMessageTest extends TestCase
 {
     /**
      * @var CatalogListingImportCallbackFailureMessage

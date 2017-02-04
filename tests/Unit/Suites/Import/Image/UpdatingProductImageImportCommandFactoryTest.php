@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
  */
-class UpdatingProductImageImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
+class UpdatingProductImageImportCommandFactoryTest extends TestCase
 {
     use TestFileFixtureTrait;
 

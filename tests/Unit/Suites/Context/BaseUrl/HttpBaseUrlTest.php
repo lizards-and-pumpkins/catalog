@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context\BaseUrl;
 
 use LizardsAndPumpkins\Context\BaseUrl\Exception\InvalidBaseUrlSourceDataException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
-class HttpBaseUrlTest extends \PHPUnit_Framework_TestCase
+class HttpBaseUrlTest extends TestCase
 {
     public function testItShouldThrowAnExceptionIfTheSourceIsNotAString()
     {

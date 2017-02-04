@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationCodeException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\UnableToFindTransformationException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry
  */
-class FacetFieldTransformationRegistryTest extends \PHPUnit_Framework_TestCase
+class FacetFieldTransformationRegistryTest extends TestCase
 {
     /**
      * @var FacetFieldTransformationRegistry

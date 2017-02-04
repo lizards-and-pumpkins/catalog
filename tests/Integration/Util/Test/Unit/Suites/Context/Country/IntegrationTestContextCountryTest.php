@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context\Country;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\Country\IntegrationTestContextCountry
  */
-class IntegrationTestContextCountryTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestContextCountryTest extends TestCase
 {
     /**
      * @var IntegrationTestContextCountry

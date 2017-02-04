@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Exception\NoCatalogWasImportedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
@@ -17,7 +18,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class CatalogImportWasTriggeredDomainEventTest extends \PHPUnit_Framework_TestCase
+class CatalogImportWasTriggeredDomainEventTest extends TestCase
 {
     /**
      * @var CatalogImportWasTriggeredDomainEvent

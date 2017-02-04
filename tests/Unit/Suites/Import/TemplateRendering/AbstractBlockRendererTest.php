@@ -9,8 +9,9 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractBlockRendererTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractBlockRendererTest extends TestCase
 {
     use TestFileFixtureTrait;
 

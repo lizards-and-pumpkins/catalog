@@ -8,11 +8,12 @@ use LizardsAndPumpkins\Import\Image\ProductImageImportCommandFactory;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
  */
-class ProductImageImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
+class ProductImageImportCommandLocatorTest extends TestCase
 {
     /**
      * @var ProductImageImportCommandFactory|MasterFactory|\PHPUnit_Framework_MockObject_MockObject

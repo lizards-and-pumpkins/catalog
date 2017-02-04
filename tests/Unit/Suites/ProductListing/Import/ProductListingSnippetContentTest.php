@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
@@ -17,7 +18,7 @@ use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductListingSnippetContentTest extends \PHPUnit_Framework_TestCase
+class ProductListingSnippetContentTest extends TestCase
 {
     /**
      * @var ProductListingSnippetContent

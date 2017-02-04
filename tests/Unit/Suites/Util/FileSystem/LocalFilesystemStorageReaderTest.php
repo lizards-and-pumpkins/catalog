@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotReadableException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */
-class LocalFilesystemStorageReaderTest extends \PHPUnit_Framework_TestCase
+class LocalFilesystemStorageReaderTest extends TestCase
 {
     /**
      * @var LocalFilesystemStorageReader

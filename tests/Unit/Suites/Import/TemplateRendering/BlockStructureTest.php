@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockDoesNotExistException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockIsNotAChildOfParentBlockException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\BlockStructure
  */
-class BlockStructureTest extends \PHPUnit_Framework_TestCase
+class BlockStructureTest extends TestCase
 {
     /**
      * @var BlockStructure

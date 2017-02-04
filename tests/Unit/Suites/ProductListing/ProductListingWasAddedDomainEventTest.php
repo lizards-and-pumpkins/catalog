@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Exception\NoProductListingWasAddedDomainEventMessage;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
@@ -19,7 +20,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  */
-class ProductListingWasAddedDomainEventTest extends \PHPUnit_Framework_TestCase
+class ProductListingWasAddedDomainEventTest extends TestCase
 {
     private $testDataVersion = '321';
 

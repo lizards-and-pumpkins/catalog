@@ -8,11 +8,12 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  */
-class ProductListingRobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingRobotsMetaTagSnippetRendererTest extends TestCase
 {
     /**
      * @var ProductListingRobotsMetaTagSnippetRenderer

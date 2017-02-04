@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainE
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class TemplateWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
+class TemplateWasUpdatedDomainEventTest extends TestCase
 {
     /**
      * @var string

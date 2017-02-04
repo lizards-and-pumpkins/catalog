@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetField
  */
-class FacetFieldTest extends \PHPUnit_Framework_TestCase
+class FacetFieldTest extends TestCase
 {
     public function testFacetFieldAttributeCodeIsReturned()
     {

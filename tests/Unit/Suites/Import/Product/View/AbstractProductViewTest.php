@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 use LizardsAndPumpkins\Import\Product\View\Stub\StubProductView;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\View\AbstractProductView
@@ -25,7 +26,7 @@ use LizardsAndPumpkins\Import\Product\View\Stub\StubProductView;
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  */
-class AbstractProductViewTest extends \PHPUnit_Framework_TestCase
+class AbstractProductViewTest extends TestCase
 {
     private $expectedPlaceholderImageLabel = '';
 

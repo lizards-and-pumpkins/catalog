@@ -7,12 +7,13 @@ namespace LizardsAndPumpkins\Context\Website;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteMapConfigRecordException;
 use LizardsAndPumpkins\Context\Website\Exception\UnknownWebsiteUrlException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\Website\ConfigurableUrlToWebsiteMap
  * @uses   \LizardsAndPumpkins\Context\Website\Website
  */
-class ConfigurableUrlToWebsiteMapTest extends \PHPUnit_Framework_TestCase
+class ConfigurableUrlToWebsiteMapTest extends TestCase
 {
     /**
      * @var ConfigReader|\PHPUnit_Framework_MockObject_MockObject

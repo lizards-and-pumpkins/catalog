@@ -38,8 +38,9 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\Util\Storage\Clearable;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractSearchEngineTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractSearchEngineTest extends TestCase
 {
     /**
      * @var FacetFieldTransformationRegistry|\PHPUnit_Framework_MockObject_MockObject

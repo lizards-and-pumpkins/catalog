@@ -17,13 +17,14 @@ use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductDetailViewRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewRequestHandlerTest extends TestCase
 {
     /**
      * @var ProductDetailViewRequestHandler

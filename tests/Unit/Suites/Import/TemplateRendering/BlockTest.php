@@ -7,12 +7,13 @@ namespace LizardsAndPumpkins\Import\TemplateRendering;
 use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\TemplateFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\Block
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
-class BlockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends TestCase
 {
     use TestFileFixtureTrait;
 

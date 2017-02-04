@@ -6,13 +6,14 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\ConflictingContextDataForProductAttributeListException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeNotFoundException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductAttributeListTest extends \PHPUnit_Framework_TestCase
+class ProductAttributeListTest extends TestCase
 {
     public function testCountableInterfaceIsImplemented()
     {

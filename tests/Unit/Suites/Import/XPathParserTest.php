@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Import\XPathParser
  */
-class XPathParserTest extends \PHPUnit_Framework_TestCase
+class XPathParserTest extends TestCase
 {
     public function testRequestedDomNodeArrayIsReturnedFromXmlWithNoNamespace()
     {

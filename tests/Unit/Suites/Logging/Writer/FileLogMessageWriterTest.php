@@ -10,11 +10,12 @@ use LizardsAndPumpkins\Logging\Writer\Exception\UnableToCreateLogDirectoryExcept
 use LizardsAndPumpkins\Logging\Writer\Exception\UnableToCreateLogFileException;
 use LizardsAndPumpkins\Logging\Writer\Exception\UnableToWriteToLogFileException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\Writer\FileLogMessageWriter
  */
-class FileLogMessageWriterTest extends \PHPUnit_Framework_TestCase
+class FileLogMessageWriterTest extends TestCase
 {
     use TestFileFixtureTrait;
 

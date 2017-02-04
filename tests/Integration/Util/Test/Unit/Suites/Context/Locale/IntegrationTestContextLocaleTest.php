@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Context\Locale;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\Locale\IntegrationTestContextLocale
  */
-class IntegrationTestContextLocaleTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestContextLocaleTest extends TestCase
 {
     /**
      * @var IntegrationTestContextLocale

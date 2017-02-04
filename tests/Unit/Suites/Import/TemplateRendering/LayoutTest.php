@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\RootElementOfLayoutMustBeAnArrayException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\Layout
  */
-class LayoutTest extends \PHPUnit_Framework_TestCase
+class LayoutTest extends TestCase
 {
     public function testLayoutIsCreatedFromArray()
     {

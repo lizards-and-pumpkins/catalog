@@ -9,11 +9,12 @@ use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector
  */
-class ContentBlockProjectorTest extends \PHPUnit_Framework_TestCase
+class ContentBlockProjectorTest extends TestCase
 {
     /**
      * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject

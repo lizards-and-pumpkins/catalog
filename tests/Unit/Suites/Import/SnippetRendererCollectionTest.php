@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\SnippetRendererCollection
  */
-class SnippetRendererCollectionTest extends \PHPUnit_Framework_TestCase
+class SnippetRendererCollectionTest extends TestCase
 {
     /**
      * @var SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject

@@ -7,12 +7,13 @@ namespace LizardsAndPumpkins\Import\Product\Composite;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesEmptyException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ProductVariationAttributesNotUniqueException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductVariationAttributeListTest extends \PHPUnit_Framework_TestCase
+class ProductVariationAttributeListTest extends TestCase
 {
     /**
      * @param string[] $attributeCodeStrings

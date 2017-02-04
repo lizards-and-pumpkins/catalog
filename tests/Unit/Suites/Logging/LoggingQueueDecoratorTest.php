@@ -9,12 +9,13 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Logging\Stub\ClearableStubQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Storage\Clearable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\LoggingQueueDecorator
  * @uses   \LizardsAndPumpkins\Logging\QueueAddLogMessage
  */
-class LoggingQueueDecoratorTest extends \PHPUnit_Framework_TestCase
+class LoggingQueueDecoratorTest extends TestCase
 {
     /**
      * @var LoggingQueueDecorator;

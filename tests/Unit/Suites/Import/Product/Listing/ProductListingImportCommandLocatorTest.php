@@ -8,11 +8,12 @@ use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingImportCommandFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
  */
-class ProductListingImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
+class ProductListingImportCommandLocatorTest extends TestCase
 {
     /**
      * @var ProductListingImportCommandFactory|MasterFactory|\PHPUnit_Framework_MockObject_MockObject

@@ -20,6 +20,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
 use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogImport
@@ -33,7 +34,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class CatalogImportTest extends \PHPUnit_Framework_TestCase
+class CatalogImportTest extends TestCase
 {
     use TestFileFixtureTrait;
     

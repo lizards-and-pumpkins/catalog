@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
  */
-class ImageProcessingStrategySequenceTest extends \PHPUnit_Framework_TestCase
+class ImageProcessingStrategySequenceTest extends TestCase
 {
     /**
      * @var ImageProcessingStrategySequence

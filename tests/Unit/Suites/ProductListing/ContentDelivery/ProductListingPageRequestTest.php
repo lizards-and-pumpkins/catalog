@@ -10,6 +10,7 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMa
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -19,7 +20,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductListingPageRequestTest extends \PHPUnit_Framework_TestCase
+class ProductListingPageRequestTest extends TestCase
 {
     /**
      * @var ProductsPerPage|MockObject

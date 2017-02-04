@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
@@ -21,7 +22,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
  */
-class AddImageCommandHandlerTest extends \PHPUnit_Framework_TestCase
+class AddImageCommandHandlerTest extends TestCase
 {
     use TestFileFixtureTrait;
 

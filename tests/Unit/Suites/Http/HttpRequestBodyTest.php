@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Http\HttpRequestBody
  */
-class HttpRequestBodyTest extends \PHPUnit_Framework_TestCase
+class HttpRequestBodyTest extends TestCase
 {
     public function testItReturnsTheRequestBodyAsString()
     {

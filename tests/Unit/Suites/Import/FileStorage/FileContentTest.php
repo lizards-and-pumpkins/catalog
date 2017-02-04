@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Import\FileStorage;
 
 use LizardsAndPumpkins\Import\FileStorage\Exception\InvalidFileContentTypeException;
 use LizardsAndPumpkins\Import\FileStorage\Stub\CastableToStringStub;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\FileStorage\FileContent
  */
-class FileContentTest extends \PHPUnit_Framework_TestCase
+class FileContentTest extends TestCase
 {
     /**
      * @dataProvider invalidStringContentProvider

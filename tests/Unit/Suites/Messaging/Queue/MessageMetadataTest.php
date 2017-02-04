@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidMessageMetadataException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  */
-class MessageMetadataTest extends \PHPUnit_Framework_TestCase
+class MessageMetadataTest extends TestCase
 {
     public function testThrowsExceptionForNonStringKeys()
     {

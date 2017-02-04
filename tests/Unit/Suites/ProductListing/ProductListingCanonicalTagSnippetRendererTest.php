@@ -13,6 +13,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
-class ProductListingCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingCanonicalTagSnippetRendererTest extends TestCase
 {
     /**
      * @var ProductListingCanonicalTagSnippetRenderer

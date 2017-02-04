@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\LoggingQueueFactory
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  */
-class LoggingQueueFactoryTest extends \PHPUnit_Framework_TestCase
+class LoggingQueueFactoryTest extends TestCase
 {
     /**
      * @var LoggingQueueFactory

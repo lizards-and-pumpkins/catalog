@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
 use LizardsAndPumpkins\Import\XPathParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToAssociatedProductListBuilder
@@ -13,7 +14,7 @@ use LizardsAndPumpkins\Import\XPathParser;
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
-class ConfigurableProductXmlToAssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductXmlToAssociatedProductListBuilderTest extends TestCase
 {
     private $testXml = '
 <product type="configurable" sku="config">

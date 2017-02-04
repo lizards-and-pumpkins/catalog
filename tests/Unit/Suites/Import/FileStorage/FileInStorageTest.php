@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\FileStorage;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Import\FileStorage\FileInStorage
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent
  */
-class FileInStorageTest extends \PHPUnit_Framework_TestCase
+class FileInStorageTest extends TestCase
 {
     /**
      * @var FileToFileStorage|\PHPUnit_Framework_MockObject_MockObject

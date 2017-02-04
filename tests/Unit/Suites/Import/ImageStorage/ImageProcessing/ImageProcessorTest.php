@@ -8,11 +8,12 @@ use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\UnableToCreateTargetDirectoryForProcessedImagesException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
  */
-class ImageProcessorTest extends \PHPUnit_Framework_TestCase
+class ImageProcessorTest extends TestCase
 {
     use TestFileFixtureTrait;
 

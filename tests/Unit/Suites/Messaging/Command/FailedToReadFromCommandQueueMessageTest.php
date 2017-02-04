@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\FailedToReadFromCommandQueueMessage
  */
-class FailedToReadFromCommandQueueMessageTest extends \PHPUnit_Framework_TestCase
+class FailedToReadFromCommandQueueMessageTest extends TestCase
 {
     /**
      * @var FailedToReadFromCommandQueueMessage

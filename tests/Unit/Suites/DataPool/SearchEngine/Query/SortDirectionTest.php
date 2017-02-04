@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSortDirectionException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  */
-class SortDirectionTest extends \PHPUnit_Framework_TestCase
+class SortDirectionTest extends TestCase
 {
     public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified()
     {

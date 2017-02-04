@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
@@ -19,7 +20,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
-class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class TemplatesApiV1PutRequestHandlerTest extends TestCase
 {
     /**
      * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject

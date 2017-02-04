@@ -7,11 +7,12 @@ namespace LizardsAndPumpkins\Util\FileSystem;
 use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryDoesNotExistException;
 use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryNotWritableException;
 use LizardsAndPumpkins\Util\FileSystem\Exception\NotADirectoryException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */
-class LocalFilesystemTest extends \PHPUnit_Framework_TestCase
+class LocalFilesystemTest extends TestCase
 {
     /**
      * @var LocalFilesystem

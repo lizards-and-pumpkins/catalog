@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\Exception\InvalidTransformationInputException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange;
 use LizardsAndPumpkins\Import\Price\Price;
+use PHPUnit\Framework\TestCase;
 use SebastianBergmann\Money\Currency;
 
 /**
@@ -14,7 +15,7 @@ use SebastianBergmann\Money\Currency;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
  * @uses   \LizardsAndPumpkins\Import\Price\Price
  */
-class CurrencyPriceRangeTransformationTest extends \PHPUnit_Framework_TestCase
+class CurrencyPriceRangeTransformationTest extends TestCase
 {
     /**
      * @var CurrencyPriceRangeTransformation

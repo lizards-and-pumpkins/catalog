@@ -5,11 +5,12 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\MalformedSelectedFiltersQueryStringException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\DefaultSelectedFiltersParser
  */
-class DefaultSelectedFiltersParserTest extends \PHPUnit_Framework_TestCase
+class DefaultSelectedFiltersParserTest extends TestCase
 {
     /**
      * @var DefaultSelectedFiltersParser

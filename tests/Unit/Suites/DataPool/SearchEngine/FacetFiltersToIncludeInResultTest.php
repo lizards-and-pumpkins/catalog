@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  */
-class FacetFiltersToIncludeInResultTest extends \PHPUnit_Framework_TestCase
+class FacetFiltersToIncludeInResultTest extends TestCase
 {
     /**
      * @var FacetFilterRequestField|\PHPUnit_Framework_MockObject_MockObject

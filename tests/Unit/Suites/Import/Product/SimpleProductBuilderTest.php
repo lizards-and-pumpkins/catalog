@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\SimpleProductBuilder
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
  * @uses   \LizardsAndPumpkins\Import\Price\Price
  */
-class SimpleProductBuilderTest extends \PHPUnit_Framework_TestCase
+class SimpleProductBuilderTest extends TestCase
 {
     /**
      * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject

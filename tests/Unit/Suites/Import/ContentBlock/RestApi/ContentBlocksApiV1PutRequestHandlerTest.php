@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockContext
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockContextException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
@@ -28,7 +29,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
-class ContentBlocksApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
 {
     private $testVersion = 'current data version';
 

@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
@@ -22,7 +23,7 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductSearchRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductSearchRequestHandlerTest extends TestCase
 {
     /**
      * @var ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject

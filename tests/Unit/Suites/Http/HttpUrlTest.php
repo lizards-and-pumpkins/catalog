@@ -7,11 +7,12 @@ namespace LizardsAndPumpkins\Http;
 use LizardsAndPumpkins\Http\Exception\InvalidUrlStringException;
 use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
 use LizardsAndPumpkins\Http\Exception\UnknownProtocolException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\HttpUrl
  */
-class HttpUrlTest extends \PHPUnit_Framework_TestCase
+class HttpUrlTest extends TestCase
 {
     /**
      * @dataProvider urlStringProvider

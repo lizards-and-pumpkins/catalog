@@ -6,13 +6,14 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductAttributeValueException;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeDoesNotContainContextPartException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductAttributeTest extends \PHPUnit_Framework_TestCase
+class ProductAttributeTest extends TestCase
 {
     public function testTrueIsReturnedIfAttributeHasGivenCode()
     {

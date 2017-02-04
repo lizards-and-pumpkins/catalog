@@ -11,6 +11,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSni
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductSearchResultMetaSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductSearchResultMetaSnippetRendererTest extends TestCase
 {
     /**
      * @var string

@@ -4,10 +4,12 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  */
-class SearchCriterionFullTextTest extends \PHPUnit_Framework_TestCase
+class SearchCriterionFullTextTest extends TestCase
 {
     private $testFieldValue = 'bar';
 

@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
  */
-class UpdatingProductImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
+class UpdatingProductImportCommandFactoryTest extends TestCase
 {
     /**
      * @var UpdatingProductImportCommandFactory

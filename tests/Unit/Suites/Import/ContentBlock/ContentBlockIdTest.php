@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  */
-class ContentBlockIdTest extends \PHPUnit_Framework_TestCase
+class ContentBlockIdTest extends TestCase
 {
     public function testStringRepresentationOfContentBlockIdIsReturned()
     {

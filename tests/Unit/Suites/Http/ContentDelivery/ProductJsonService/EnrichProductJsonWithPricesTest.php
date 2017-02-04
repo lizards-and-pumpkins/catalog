@@ -7,12 +7,13 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Price\Price;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices
  * @uses   \LizardsAndPumpkins\Import\Price\Price
  */
-class EnrichProductJsonWithPricesTest extends \PHPUnit_Framework_TestCase
+class EnrichProductJsonWithPricesTest extends TestCase
 {
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject

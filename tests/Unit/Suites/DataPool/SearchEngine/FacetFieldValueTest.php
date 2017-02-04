@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldValue
  */
-class FacetFieldValueTest extends \PHPUnit_Framework_TestCase
+class FacetFieldValueTest extends TestCase
 {
     private $testFieldValue = 'foo';
 

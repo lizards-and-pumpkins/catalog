@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Logging\LogMessage;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage
  */
-class CommandProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
+class CommandProcessedLogMessageTest extends TestCase
 {
     /**
      * @var CommandHandler|\PHPUnit_Framework_MockObject_MockObject

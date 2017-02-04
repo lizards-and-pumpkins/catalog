@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Import\ContentBlock;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
-class ContentBlockWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ContentBlockWasUpdatedDomainEventHandlerTest extends TestCase
 {
     /**
      * @var ContentBlockProjector|\PHPUnit_Framework_MockObject_MockObject

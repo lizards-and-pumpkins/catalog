@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandQueue
@@ -13,7 +14,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  */
-class CommandQueueTest extends \PHPUnit_Framework_TestCase
+class CommandQueueTest extends TestCase
 {
     /**
      * @var CommandQueue

@@ -9,11 +9,12 @@ use LizardsAndPumpkins\Translation\Exception\LocaleDirectoryNotReadableException
 use LizardsAndPumpkins\Translation\Exception\MalformedTranslationFileException;
 use LizardsAndPumpkins\Translation\Exception\TranslationFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Translation\CsvTranslator
  */
-class CsvTranslatorTest extends \PHPUnit_Framework_TestCase
+class CsvTranslatorTest extends TestCase
 {
     use TestFileFixtureTrait;
 

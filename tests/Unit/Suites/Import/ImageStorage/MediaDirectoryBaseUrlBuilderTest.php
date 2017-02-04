@@ -8,12 +8,13 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\ImageStorage\Exception\InvalidMediaBaseUrlPathException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
-class MediaDirectoryBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
+class MediaDirectoryBaseUrlBuilderTest extends TestCase
 {
     private $testMediaBaseUrlPath = 'test-media/';
 

@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Import\Product\Image;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductId;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder
@@ -19,7 +20,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImage
  */
-class ProductImageListBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductImageListBuilderTest extends TestCase
 {
     /**
      * @var ProductId

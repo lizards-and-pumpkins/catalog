@@ -8,12 +8,13 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class RobotsMetaTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class RobotsMetaTagSnippetRendererTest extends TestCase
 {
     /**
      * @var RobotsMetaTagSnippetRenderer

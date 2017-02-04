@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\FileStorage\FileInStorage;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri;
 use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage
@@ -22,7 +23,7 @@ use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
-class FilesystemImageStorageTest extends \PHPUnit_Framework_TestCase
+class FilesystemImageStorageTest extends TestCase
 {
     use TestFileFixtureTrait;
     

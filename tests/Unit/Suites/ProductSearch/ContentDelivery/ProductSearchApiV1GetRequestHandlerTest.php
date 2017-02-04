@@ -22,6 +22,7 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOr
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
@@ -37,7 +38,7 @@ use LizardsAndPumpkins\RestApi\ApiRequestHandler;
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
-class ProductSearchApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 {
     /**
      * @var ProductSearchService|\PHPUnit_Framework_MockObject_MockObject

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Event;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage
  */
-class DomainEventProcessedLogMessageTest extends \PHPUnit_Framework_TestCase
+class DomainEventProcessedLogMessageTest extends TestCase
 {
     private $testMessage = 'Test message';
     

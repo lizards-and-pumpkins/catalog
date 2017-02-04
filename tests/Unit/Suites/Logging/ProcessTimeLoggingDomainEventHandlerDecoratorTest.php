@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage
  */
-class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends \PHPUnit_Framework_TestCase
+class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends TestCase
 {
     /**
      * @var DomainEventHandler|\PHPUnit_Framework_MockObject_MockObject

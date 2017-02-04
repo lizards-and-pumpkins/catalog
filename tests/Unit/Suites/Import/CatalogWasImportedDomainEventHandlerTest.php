@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Import;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
  */
-class CatalogWasImportedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class CatalogWasImportedDomainEventHandlerTest extends TestCase
 {
     /**
      * @var CatalogWasImportedDomainEventHandler

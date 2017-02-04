@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Logging;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Logging\DebugLogMessage
  */
-class DebugLogMessageTest extends \PHPUnit_Framework_TestCase
+class DebugLogMessageTest extends TestCase
 {
     public function testItIsALogMessage()
     {

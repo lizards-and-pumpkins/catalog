@@ -36,6 +36,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use PHPUnit\Framework\TestCase;
 
 class UnitTestFactory implements Factory, MessageQueueFactory
 {
@@ -67,11 +68,11 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     private $urlKeyStore;
 
     /**
-     * @var \PHPUnit_Framework_TestCase
+     * @var TestCase
      */
     private $testCase;
 
-    public function __construct(\PHPUnit_Framework_TestCase $testCase)
+    public function __construct(TestCase $testCase)
     {
         $this->testCase = $testCase;
     }

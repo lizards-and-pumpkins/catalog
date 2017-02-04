@@ -7,13 +7,14 @@ namespace LizardsAndPumpkins\ProductSearch\Import;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Product;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class AttributeValueCollectorLocatorTest extends \PHPUnit_Framework_TestCase
+class AttributeValueCollectorLocatorTest extends TestCase
 {
     /**
      * @var AttributeValueCollectorLocator

@@ -7,12 +7,13 @@ namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeException;
 use LizardsAndPumpkins\ProductRelations\Exception\UnknownProductRelationTypeException;
 use LizardsAndPumpkins\ProductRelations\ProductRelations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
  */
-class ProductRelationsLocatorTest extends \PHPUnit_Framework_TestCase
+class ProductRelationsLocatorTest extends TestCase
 {
     /**
      * @var ProductRelationsLocator

@@ -12,13 +12,14 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult
  */
-class ProductSearchServiceTest extends \PHPUnit_Framework_TestCase
+class ProductSearchServiceTest extends TestCase
 {
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject

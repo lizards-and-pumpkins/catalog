@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Util;
 
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class SnippetCodeValidatorTest extends \PHPUnit_Framework_TestCase
+class SnippetCodeValidatorTest extends TestCase
 {
     public function testExceptionIsThrownIfSnippetCodeIsNonString()
     {

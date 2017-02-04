@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\Util\Storage\Clearable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore
  */
-class InMemoryKeyValueStoreTest extends \PHPUnit_Framework_TestCase
+class InMemoryKeyValueStoreTest extends TestCase
 {
     /**
      * @var InMemoryKeyValueStore

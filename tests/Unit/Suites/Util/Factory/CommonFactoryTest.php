@@ -104,6 +104,7 @@ use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\CommonFactory
@@ -229,7 +230,7 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
-class CommonFactoryTest extends \PHPUnit_Framework_TestCase
+class CommonFactoryTest extends TestCase
 {
     /**
      * @var CommonFactory

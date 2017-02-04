@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Tax\TaxService;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
@@ -27,7 +28,7 @@ use LizardsAndPumpkins\Import\Tax\TaxableCountries;
  * @uses   \LizardsAndPumpkins\Import\Price\Price
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductSearchDocumentBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductSearchDocumentBuilderTest extends TestCase
 {
     private $dummyTaxableCountries = ['DE', 'UK'];
 

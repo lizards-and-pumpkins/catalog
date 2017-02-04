@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage
  */
-class ProcessTimeLoggingCommandHandlerDecoratorTest extends \PHPUnit_Framework_TestCase
+class ProcessTimeLoggingCommandHandlerDecoratorTest extends TestCase
 {
     /**
      * @var ProcessTimeLoggingCommandHandlerDecorator

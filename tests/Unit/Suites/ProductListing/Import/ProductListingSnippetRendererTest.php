@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
@@ -24,7 +25,7 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlo
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductListingSnippetRendererTest extends TestCase
 {
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject

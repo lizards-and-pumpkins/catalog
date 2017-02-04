@@ -5,11 +5,12 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult
  */
-class ProductSearchResultTest extends \PHPUnit_Framework_TestCase
+class ProductSearchResultTest extends TestCase
 {
     private $testTotalNumber = 200;
 

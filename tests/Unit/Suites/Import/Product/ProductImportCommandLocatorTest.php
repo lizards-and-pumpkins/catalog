@@ -7,11 +7,12 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\ProductDetail\Import\ProductImportCommandFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
  */
-class ProductImportCommandLocatorTest extends \PHPUnit_Framework_TestCase
+class ProductImportCommandLocatorTest extends TestCase
 {
     /**
      * @var ProductImportCommandFactory|MasterFactory|\PHPUnit_Framework_MockObject_MockObject

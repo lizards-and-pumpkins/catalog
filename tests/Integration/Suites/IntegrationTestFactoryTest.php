@@ -25,8 +25,9 @@ use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
+use PHPUnit\Framework\TestCase;
 
-class IntegrationTestFactoryTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestFactoryTest extends TestCase
 {
     /**
      * @var IntegrationTestFactory

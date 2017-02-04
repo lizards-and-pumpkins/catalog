@@ -17,6 +17,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
@@ -31,7 +32,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
-class AssociatedProductListTest extends \PHPUnit_Framework_TestCase
+class AssociatedProductListTest extends TestCase
 {
     /**
      * @param int $numberOfAssociatedProducts

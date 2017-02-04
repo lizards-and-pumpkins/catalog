@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListing
  */
-class ProductListingTest extends \PHPUnit_Framework_TestCase
+class ProductListingTest extends TestCase
 {
     /**
      * @var UrlKey|\PHPUnit_Framework_MockObject_MockObject

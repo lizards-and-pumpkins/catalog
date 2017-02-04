@@ -8,12 +8,13 @@ use LizardsAndPumpkins\Context\Website\Exception\NoConfiguredBaseUrlException;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Context\Context;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  */
-class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
+class WebsiteBaseUrlBuilderTest extends TestCase
 {
     private $testBaseUrl = 'http://example.com/';
     
@@ -87,6 +88,7 @@ class WebsiteBaseUrlBuilderTest extends \PHPUnit_Framework_TestCase
         $this->expectException(NoConfiguredBaseUrlException::class);
         $this->expectExceptionMessage('No base URL configuration found for the website "test_website"');
 
+        /** @var ConfigReader|\PHPUnit_Framework_MockObject_MockObject $emptyStubConfigReader */
         $emptyStubConfigReader = $this->createMock(ConfigReader::class);
         $emptyStubConfigReader->method('has')->willReturn(false);
 

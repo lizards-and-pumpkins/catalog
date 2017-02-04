@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Import\ContentBlock\Exception\NoUpdateContentBlockCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  */
-class UpdateContentBlockCommandTest extends \PHPUnit_Framework_TestCase
+class UpdateContentBlockCommandTest extends TestCase
 {
     /**
      * @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject

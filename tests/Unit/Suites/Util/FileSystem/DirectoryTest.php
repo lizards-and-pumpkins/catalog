@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Util\FileSystem\Exception\FileAlreadyExistsWithinGivenPathException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\Directory
  */
-class DirectoryTest extends \PHPUnit_Framework_TestCase
+class DirectoryTest extends TestCase
 {
     use TestFileFixtureTrait;
 

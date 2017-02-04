@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine\Query;
 
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
  */
-class SortByTest extends \PHPUnit_Framework_TestCase
+class SortByTest extends TestCase
 {
     /**
      * @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode

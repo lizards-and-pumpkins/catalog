@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory
  */
-class NullProductImageImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
+class NullProductImageImportCommandFactoryTest extends TestCase
 {
     /**
      * @var NullProductImageImportCommandFactory

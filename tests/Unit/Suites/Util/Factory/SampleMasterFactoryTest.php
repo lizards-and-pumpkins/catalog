@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\SampleMasterFactory
  * @covers \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\StubFactory
  */
-class SampleMasterFactoryTest extends \PHPUnit_Framework_TestCase
+class SampleMasterFactoryTest extends TestCase
 {
     /**
      * @var SampleMasterFactory

@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
  * @covers \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class RegistrySnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
+class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
     /**
      * @var RegistrySnippetKeyGeneratorLocatorStrategy

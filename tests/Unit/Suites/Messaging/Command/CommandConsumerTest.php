@@ -10,13 +10,14 @@ use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandConsumer
  * @uses   \LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage
  * @uses   \LizardsAndPumpkins\Messaging\Command\FailedToReadFromCommandQueueMessage
  */
-class CommandConsumerTest extends \PHPUnit_Framework_TestCase
+class CommandConsumerTest extends TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject

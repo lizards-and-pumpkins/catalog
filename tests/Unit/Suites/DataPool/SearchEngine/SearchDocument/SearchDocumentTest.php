@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductId;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument
@@ -14,7 +15,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Context\ContextBuilder
  */
-class SearchDocumentTest extends \PHPUnit_Framework_TestCase
+class SearchDocumentTest extends TestCase
 {
     public function testSearchDocumentIsCreated()
     {

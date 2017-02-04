@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidQueueMessageNameException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Queue\MessageName
  */
-class MessageNameTest extends \PHPUnit_Framework_TestCase
+class MessageNameTest extends TestCase
 {
     /**
      * @dataProvider emptyMessageNameProvider

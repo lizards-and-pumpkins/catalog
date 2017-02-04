@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Import\FileStorage;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Import\FileStorage\Exception\FileDoesNotExistException;
 use LizardsAndPumpkins\Import\FileStorage\Exception\FileStorageTypeMismatchException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
@@ -15,7 +16,7 @@ use LizardsAndPumpkins\Import\FileStorage\Exception\FileStorageTypeMismatchExcep
  * @uses   \LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent
  */
-class FilesystemFileStorageTest extends \PHPUnit_Framework_TestCase
+class FilesystemFileStorageTest extends TestCase
 {
     use TestFileFixtureTrait;
 

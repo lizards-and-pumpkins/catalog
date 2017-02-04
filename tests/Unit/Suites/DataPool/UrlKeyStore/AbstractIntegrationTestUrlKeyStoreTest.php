@@ -7,8 +7,9 @@ namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionToWriteIsEmptyStringException;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyToWriteIsEmptyStringException;
 use LizardsAndPumpkins\Util\Storage\Clearable;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractIntegrationTestUrlKeyStoreTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractIntegrationTestUrlKeyStoreTest extends TestCase
 {
     /**
      * @var UrlKeyStore|Clearable

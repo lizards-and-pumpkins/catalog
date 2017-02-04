@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context\Country;
 
 use LizardsAndPumpkins\Context\Country\Exception\InvalidCountrySpecificationException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\Country\Country
  */
-class CountryTest extends \PHPUnit_Framework_TestCase
+class CountryTest extends TestCase
 {
     public function testReturnsACountryInstance()
     {

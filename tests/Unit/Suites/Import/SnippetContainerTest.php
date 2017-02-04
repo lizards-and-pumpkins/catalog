@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\Import\Exception\InvalidSnippetContainerCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\SnippetContainer
  */
-class SnippetContainerTest extends \PHPUnit_Framework_TestCase
+class SnippetContainerTest extends TestCase
 {
     /**
      * @param string $code

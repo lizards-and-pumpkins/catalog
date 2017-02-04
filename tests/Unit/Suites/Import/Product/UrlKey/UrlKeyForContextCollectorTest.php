@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
@@ -15,7 +16,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
-class UrlKeyForContextCollectorTest extends \PHPUnit_Framework_TestCase
+class UrlKeyForContextCollectorTest extends TestCase
 {
     /**
      * @var UrlKeyForContextCollector
