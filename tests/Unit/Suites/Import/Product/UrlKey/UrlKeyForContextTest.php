@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
 use LizardsAndPumpkins\Context\Context;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContext
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
-class UrlKeyForContextTest extends \PHPUnit_Framework_TestCase
+class UrlKeyForContextTest extends TestCase
 {
     private $urlKeyType = 'the-type';
     

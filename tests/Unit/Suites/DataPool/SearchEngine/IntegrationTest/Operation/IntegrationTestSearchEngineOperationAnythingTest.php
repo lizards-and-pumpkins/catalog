@@ -5,11 +5,12 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperationAnything
  */
-class IntegrationTestSearchEngineOperationAnythingTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestSearchEngineOperationAnythingTest extends TestCase
 {
     /**
      * @var IntegrationTestSearchEngineOperationAnything

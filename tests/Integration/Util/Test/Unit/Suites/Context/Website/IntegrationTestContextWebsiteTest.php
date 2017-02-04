@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\Website\IntegrationTestContextWebsite
  */
-class IntegrationTestContextWebsiteTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestContextWebsiteTest extends TestCase
 {
     /**
      * @var IntegrationTestContextWebsite

@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\XPathParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
@@ -26,7 +27,7 @@ use LizardsAndPumpkins\Import\XPathParser;
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
-class ConfigurableProductXmlToProductBuilderTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductXmlToProductBuilderTest extends TestCase
 {
     /**
      * @var ConfigurableProductXmlToProductBuilder

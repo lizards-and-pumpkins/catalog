@@ -7,12 +7,13 @@ namespace LizardsAndPumpkins\Import\Product\Composite;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
  */
-class AssociatedProductListBuilderTest extends \PHPUnit_Framework_TestCase
+class AssociatedProductListBuilderTest extends TestCase
 {
     /**
      * @var AssociatedProductListBuilder

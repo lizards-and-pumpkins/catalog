@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Exception\InvalidAttributeCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class AttributeCodeTest extends \PHPUnit_Framework_TestCase
+class AttributeCodeTest extends TestCase
 {
     public function testItReturnsAnAttributeCodeInstance()
     {

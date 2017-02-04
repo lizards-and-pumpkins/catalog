@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
@@ -26,7 +27,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class ProductWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductWasUpdatedDomainEventHandlerTest extends TestCase
 {
     /**
      * @var ProductProjector|\PHPUnit_Framework_MockObject_MockObject

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\Price;
 
 use LizardsAndPumpkins\Import\Price\Exception\InvalidNumberOfDecimalPointsForPriceException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Price\Price
  */
-class PriceTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends TestCase
 {
     public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger()
     {

@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Logging\Writer;
 
 use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Logging\LogMessageWriter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\Writer\CompositeLogMessageWriter
  */
-class CompositeLogMessageWriterTest extends \PHPUnit_Framework_TestCase
+class CompositeLogMessageWriterTest extends TestCase
 {
     /**
      * @var CompositeLogMessageWriter

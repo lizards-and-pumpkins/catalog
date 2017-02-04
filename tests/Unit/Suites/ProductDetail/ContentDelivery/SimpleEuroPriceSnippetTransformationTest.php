@@ -7,11 +7,12 @@ namespace LizardsAndPumpkins\ProductDetail\ContentDelivery;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\SnippetTransformation;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation
  */
-class SimpleEuroPriceSnippetTransformationTest extends \PHPUnit_Framework_TestCase
+class SimpleEuroPriceSnippetTransformationTest extends TestCase
 {
     /**
      * @var SimpleEuroPriceSnippetTransformation

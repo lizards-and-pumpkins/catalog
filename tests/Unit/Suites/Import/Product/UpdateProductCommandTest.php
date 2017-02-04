@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UpdateProductCommand
@@ -28,7 +29,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  */
-class UpdateProductCommandTest extends \PHPUnit_Framework_TestCase
+class UpdateProductCommandTest extends TestCase
 {
     /**
      * @var Product

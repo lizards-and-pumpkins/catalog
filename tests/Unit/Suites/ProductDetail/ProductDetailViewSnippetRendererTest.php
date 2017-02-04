@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRen
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  * @uses \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductDetailViewSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductDetailViewSnippetRendererTest extends TestCase
 {
     /**
      * @var ProductDetailViewSnippetRenderer

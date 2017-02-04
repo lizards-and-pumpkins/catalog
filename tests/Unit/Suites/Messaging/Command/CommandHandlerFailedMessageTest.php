@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandHandlerFailedMessage
  */
-class CommandHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
+class CommandHandlerFailedMessageTest extends TestCase
 {
     /**
      * @var \Exception

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Logging;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Logging\WritingLoggerDecorator
  */
-class WritingLoggerDecoratorTest extends \PHPUnit_Framework_TestCase
+class WritingLoggerDecoratorTest extends TestCase
 {
     private $stubLogMessage;
     

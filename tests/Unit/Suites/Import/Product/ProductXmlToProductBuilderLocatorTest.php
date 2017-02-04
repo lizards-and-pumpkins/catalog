@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Import\Product\Exception\InvalidNumberOfSkusForImportedPr
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeForImportedProductException;
 use LizardsAndPumpkins\Import\Product\Exception\NoMatchingProductTypeBuilderFactoryFoundException;
 use LizardsAndPumpkins\Import\Product\Exception\TaxClassAttributeMissingForImportedProductException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
@@ -31,7 +32,7 @@ use LizardsAndPumpkins\Import\Product\Exception\TaxClassAttributeMissingForImpor
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
-class ProductXmlToProductBuilderLocatorTest extends \PHPUnit_Framework_TestCase
+class ProductXmlToProductBuilderLocatorTest extends TestCase
 {
     /**
      * @var ProductXmlToProductBuilderLocator

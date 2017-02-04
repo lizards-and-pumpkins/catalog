@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Exception\NoAddProductListingCommandMessageException;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\AddProductListingCommand
@@ -17,7 +18,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListing;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
  */
-class AddProductListingCommandTest extends \PHPUnit_Framework_TestCase
+class AddProductListingCommandTest extends TestCase
 {
     /**
      * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject

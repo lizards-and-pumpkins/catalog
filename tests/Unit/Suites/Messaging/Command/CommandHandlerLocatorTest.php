@@ -13,12 +13,13 @@ use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
  */
-class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
+class CommandHandlerLocatorTest extends TestCase
 {
     /**
      * @var CommandHandlerLocator

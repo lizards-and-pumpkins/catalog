@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\AddImageCommand
@@ -19,7 +20,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class AddImageCommandTest extends \PHPUnit_Framework_TestCase
+class AddImageCommandTest extends TestCase
 {
     use TestFileFixtureTrait;
 

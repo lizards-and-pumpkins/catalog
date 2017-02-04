@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent
  */
-class SelectProductListingRobotsMetaTagContentTest extends \PHPUnit_Framework_TestCase
+class SelectProductListingRobotsMetaTagContentTest extends TestCase
 {
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject

@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
 use LizardsAndPumpkins\Http\Exception\InvalidHttpHeadersException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\HttpHeaders
  */
-class HttpHeadersTest extends \PHPUnit_Framework_TestCase
+class HttpHeadersTest extends TestCase
 {
     public function testItThrowsAnExceptionIfAnInvalidHeaderIsRequested()
     {

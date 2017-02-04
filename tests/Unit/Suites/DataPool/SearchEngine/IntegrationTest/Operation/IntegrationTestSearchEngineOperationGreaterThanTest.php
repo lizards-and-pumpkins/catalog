@@ -7,12 +7,13 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEngineOperationGreaterThan
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\IntegrationTest\Operation\IntegrationTestSearchEnginePrimitiveOperator
  */
-class IntegrationTestSearchEngineOperationGreaterThanTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestSearchEngineOperationGreaterThanTest extends TestCase
 {
     /**
      * @param string $fieldKey

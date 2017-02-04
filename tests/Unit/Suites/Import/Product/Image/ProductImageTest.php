@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImage
@@ -13,7 +14,7 @@ use LizardsAndPumpkins\Import\Product\ProductAttributeList;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductImageTest extends \PHPUnit_Framework_TestCase
+class ProductImageTest extends TestCase
 {
     /**
      * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject

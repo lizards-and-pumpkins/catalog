@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\ProductListing\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductListing\Exception\InvalidSelectedNumberOfProductsPerPageException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage
  */
-class ProductsPerPageTest extends \PHPUnit_Framework_TestCase
+class ProductsPerPageTest extends TestCase
 {
     /**
      * @var int[]

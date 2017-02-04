@@ -27,6 +27,7 @@ use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
 use LizardsAndPumpkins\UnitTestFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory
@@ -70,7 +71,7 @@ use LizardsAndPumpkins\UnitTestFactory;
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
-class LoggingCommandHandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class LoggingCommandHandlerFactoryTest extends TestCase
 {
     /**
      * @var LoggingCommandHandlerFactory

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context\Website;
 
 use LizardsAndPumpkins\Context\Website\Exception\InvalidWebsiteCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\Website\Website
  */
-class WebsiteTest extends \PHPUnit_Framework_TestCase
+class WebsiteTest extends TestCase
 {
     public function testItThrowsAnExceptionIfTheInputIsNotAString()
     {

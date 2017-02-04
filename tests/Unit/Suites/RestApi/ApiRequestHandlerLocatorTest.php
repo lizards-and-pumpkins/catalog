@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  */
-class ApiRequestHandlerLocatorTest extends \PHPUnit_Framework_TestCase
+class ApiRequestHandlerLocatorTest extends TestCase
 {
     /**
      * @var ApiRequestHandlerLocator

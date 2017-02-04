@@ -14,6 +14,7 @@ use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
@@ -24,7 +25,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
  */
-class CatalogImportApiV2PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class CatalogImportApiV2PutRequestHandlerTest extends TestCase
 {
     use TestFileFixtureTrait;
     

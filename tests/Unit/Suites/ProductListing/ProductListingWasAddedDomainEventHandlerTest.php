@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
@@ -19,7 +20,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class ProductListingWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductListingWasAddedDomainEventHandlerTest extends TestCase
 {
     /**
      * @var ProductListingSnippetProjector|\PHPUnit_Framework_MockObject_MockObject

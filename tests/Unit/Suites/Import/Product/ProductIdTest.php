@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\Product;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductId
  */
-class ProductIdTest extends \PHPUnit_Framework_TestCase
+class ProductIdTest extends TestCase
 {
     public function testExceptionIsThrownDuringAttemptToCreateProductIdFromNonString()
     {

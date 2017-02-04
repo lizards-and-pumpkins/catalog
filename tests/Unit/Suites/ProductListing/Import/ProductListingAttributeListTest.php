@@ -7,11 +7,12 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeCodeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeValueException;
 use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingAttributeList
  */
-class ProductListingAttributeListTest extends \PHPUnit_Framework_TestCase
+class ProductListingAttributeListTest extends TestCase
 {
     public function testExceptionIsThrownIfAttributeCodeIsNotAString()
     {

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler
  */
-class ResourceNotFoundRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ResourceNotFoundRequestHandlerTest extends TestCase
 {
     /**
      * @var ResourceNotFoundRequestHandler

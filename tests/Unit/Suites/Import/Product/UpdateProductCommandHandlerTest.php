@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
@@ -29,7 +30,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class UpdateProductCommandHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateProductCommandHandlerTest extends TestCase
 {
     /**
      * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject

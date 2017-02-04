@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection
  */
-class UrlKeyForContextCollectionTest extends \PHPUnit_Framework_TestCase
+class UrlKeyForContextCollectionTest extends TestCase
 {
     /**
      * @var UrlKeyForContext|\PHPUnit_Framework_MockObject_MockObject

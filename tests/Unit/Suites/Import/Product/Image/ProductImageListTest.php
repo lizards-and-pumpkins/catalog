@@ -6,13 +6,14 @@ namespace LizardsAndPumpkins\Import\Product\Image;
 
 use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\Image\Exception\ProductImageListNotMutableException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageList
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImage
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  */
-class ProductImageListTest extends \PHPUnit_Framework_TestCase
+class ProductImageListTest extends TestCase
 {
     /**
      * @param int $numberOfImages

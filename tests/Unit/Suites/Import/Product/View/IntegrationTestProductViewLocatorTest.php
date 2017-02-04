@@ -6,13 +6,14 @@ namespace LizardsAndPumpkins\Import\Product\View;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Product;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductViewLocator
  * @uses   \LizardsAndPumpkins\Import\Product\View\IntegrationTestProductView
  * @uses   \LizardsAndPumpkins\Import\Product\View\IntegrationTestConfigurableProductView
  */
-class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestProductViewLocatorTest extends TestCase
 {
     /**
      * @var IntegrationTestProductViewLocator
@@ -21,6 +22,7 @@ class IntegrationTestProductViewLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $stubProductImageFileLocator */
         $stubProductImageFileLocator = $this->createMock(ProductImageFileLocator::class);
         $this->locator = new IntegrationTestProductViewLocator($stubProductImageFileLocator);
     }

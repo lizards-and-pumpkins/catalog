@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Messaging\Event\Exception;
 
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\Exception\DomainEventHandlerFailedMessage
  */
-class DomainEventHandlerFailedMessageTest extends \PHPUnit_Framework_TestCase
+class DomainEventHandlerFailedMessageTest extends TestCase
 {
     /**
      * @var \Exception

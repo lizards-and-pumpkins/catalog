@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Util\Config;
 
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsEmptyException;
 use LizardsAndPumpkins\Util\Config\Exception\EnvironmentConfigKeyIsNotSetException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  */
-class EnvironmentConfigReaderTest extends \PHPUnit_Framework_TestCase
+class EnvironmentConfigReaderTest extends TestCase
 {
     public function testItReturnsAnEnvironmentConfigReaderInstance()
     {

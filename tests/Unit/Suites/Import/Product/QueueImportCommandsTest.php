@@ -10,11 +10,12 @@ use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\QueueImportCommands
  */
-class QueueImportCommandsTest extends \PHPUnit_Framework_TestCase
+class QueueImportCommandsTest extends TestCase
 {
     /**
      * @var QueueImportCommands

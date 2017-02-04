@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\ApiRouter
  * @uses   \LizardsAndPumpkins\Http\Routing\HttpRequestHandler
  */
-class ApiRouterTest extends \PHPUnit_Framework_TestCase
+class ApiRouterTest extends TestCase
 {
     /**
      * @var ApiRouter

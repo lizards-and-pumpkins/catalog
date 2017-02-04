@@ -15,12 +15,13 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
  */
-class ProductListingPageContentBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductListingPageContentBuilderTest extends TestCase
 {
     /**
      * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject

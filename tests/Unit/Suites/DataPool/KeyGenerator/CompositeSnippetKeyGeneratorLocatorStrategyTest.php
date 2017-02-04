@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
  */
-class CompositeSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
+class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
     private $supportedSnippetCode = 'bar';
 

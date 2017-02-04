@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidFacetFilterRangeBoundariesException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
  */
-class FacetFilterRangeTest extends \PHPUnit_Framework_TestCase
+class FacetFilterRangeTest extends TestCase
 {
     /**
      * @dataProvider invalidRangeBoundariesDataProvider

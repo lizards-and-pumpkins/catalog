@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Image\Exception\InvalidProductImageAttributeListException;
 use LizardsAndPumpkins\Import\Product\ProductAttribute;
 use LizardsAndPumpkins\Import\Product\ProductId;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Image\ProductImageBuilder
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductImageBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductImageBuilderTest extends TestCase
 {
     /**
      * @var ProductId

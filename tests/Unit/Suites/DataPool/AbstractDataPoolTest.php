@@ -9,8 +9,9 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Product\ProductId;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractDataPoolTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractDataPoolTest extends TestCase
 {
     /**
      * @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject

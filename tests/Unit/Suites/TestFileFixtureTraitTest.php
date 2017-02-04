@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\TestFileFixtureTrait
  */
-class TestFileFixtureTraitTest extends \PHPUnit_Framework_TestCase
+class TestFileFixtureTraitTest extends TestCase
 {
     use TestFileFixtureTrait;
 

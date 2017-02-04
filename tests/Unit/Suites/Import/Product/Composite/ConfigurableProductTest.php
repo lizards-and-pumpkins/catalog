@@ -19,6 +19,7 @@ use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\AssociatedProductIsMissingRequiredAttributesException;
 use LizardsAndPumpkins\Import\Product\Composite\Exception\ConfigurableProductAssociatedProductListInvariantViolationException;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
@@ -35,7 +36,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
-class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductTest extends TestCase
 {
     /**
      * @var ConfigurableProduct

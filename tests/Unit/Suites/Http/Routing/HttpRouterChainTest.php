@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToRouteRequestException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\HttpRouterChain
  */
-class HttpRouterChainTest extends \PHPUnit_Framework_TestCase
+class HttpRouterChainTest extends TestCase
 {
     /**
      * @var HttpRouterChain

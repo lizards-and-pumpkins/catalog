@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DefaultWebFront
@@ -73,7 +74,7 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\FileSystem\Directory
  */
-class DefaultWebFrontTest extends \PHPUnit_Framework_TestCase
+class DefaultWebFrontTest extends TestCase
 {
     /**
      * @var DefaultWebFront

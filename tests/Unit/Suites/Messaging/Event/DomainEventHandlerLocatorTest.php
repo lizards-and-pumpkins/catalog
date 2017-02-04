@@ -14,11 +14,12 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator
  */
-class DomainEventHandlerLocatorTest extends \PHPUnit_Framework_TestCase
+class DomainEventHandlerLocatorTest extends TestCase
 {
     /**
      * @var DomainEventHandlerLocator

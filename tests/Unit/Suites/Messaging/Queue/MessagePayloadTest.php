@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\Queue\Exception\InvalidQueueMessagePayloadException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class MessagePayloadTest extends \PHPUnit_Framework_TestCase
+class MessagePayloadTest extends TestCase
 {
     /**
      * @param string[] $testPayload

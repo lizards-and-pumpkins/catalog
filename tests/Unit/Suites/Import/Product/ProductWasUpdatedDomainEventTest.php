@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
@@ -28,7 +29,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class ProductWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
+class ProductWasUpdatedDomainEventTest extends TestCase
 {
     private $testDataVersionString = '123';
 

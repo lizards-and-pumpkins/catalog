@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingProductListingAtt
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingTypeXmlAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingCriterionOperationXmlAttributeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingUrlKeyXmlAttributeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
@@ -28,7 +29,7 @@ use LizardsAndPumpkins\Import\Product\Listing\Exception\MissingUrlKeyXmlAttribut
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
-class ProductListingBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductListingBuilderTest extends TestCase
 {
     /**
      * @var ProductListingBuilder

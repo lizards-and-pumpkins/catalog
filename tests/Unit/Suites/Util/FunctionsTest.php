@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Util;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \every
  */
-class FunctionsTest extends \PHPUnit_Framework_TestCase
+class FunctionsTest extends TestCase
 {
     private static $callbackArguments = [];
 

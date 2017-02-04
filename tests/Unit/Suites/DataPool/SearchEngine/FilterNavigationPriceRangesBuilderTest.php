@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\FilterNavigationPriceRangesBuilder
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRange
  */
-class FilterNavigationPriceRangesBuilderTest extends \PHPUnit_Framework_TestCase
+class FilterNavigationPriceRangesBuilderTest extends TestCase
 {
     public function testFacetFilterRangesAreReturned()
     {

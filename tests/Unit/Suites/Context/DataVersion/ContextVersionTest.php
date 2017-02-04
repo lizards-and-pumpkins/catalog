@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\ContextPartBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  */
-class ContextVersionTest extends \PHPUnit_Framework_TestCase
+class ContextVersionTest extends TestCase
 {
     private $testVersionString = '1234';
     

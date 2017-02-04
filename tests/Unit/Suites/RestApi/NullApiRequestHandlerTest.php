@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\NullApiRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
-class NullApiRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class NullApiRequestHandlerTest extends TestCase
 {
     /**
      * @var NullApiRequestHandler

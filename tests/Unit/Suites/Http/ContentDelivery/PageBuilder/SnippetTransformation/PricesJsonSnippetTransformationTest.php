@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformat
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation
  */
-class PricesJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
+class PricesJsonSnippetTransformationTest extends TestCase
 {
     /**
      * @var PricesJsonSnippetTransformation

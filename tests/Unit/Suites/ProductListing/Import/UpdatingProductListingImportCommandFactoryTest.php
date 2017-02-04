@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
  */
-class UpdatingProductListingImportCommandFactoryTest extends \PHPUnit_Framework_TestCase
+class UpdatingProductListingImportCommandFactoryTest extends TestCase
 {
     /**
      * @var UpdatingProductListingImportCommandFactory

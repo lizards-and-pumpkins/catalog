@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context\DataVersion;
 
 use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class DataVersionTest extends \PHPUnit_Framework_TestCase
+class DataVersionTest extends TestCase
 {
     /**
      * @dataProvider emptyVersionProvider

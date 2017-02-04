@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\Product\UrlKey;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  */
-class UrlKeyTest extends \PHPUnit_Framework_TestCase
+class UrlKeyTest extends TestCase
 {
     public function testExceptionIsThrownDuringAttemptToCreateUrlKeyFromNonString()
     {

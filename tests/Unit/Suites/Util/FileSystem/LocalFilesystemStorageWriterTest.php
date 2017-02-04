@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Util\FileSystem;
 
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotWritableException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  */
-class LocalFilesystemStorageWriterTest extends \PHPUnit_Framework_TestCase
+class LocalFilesystemStorageWriterTest extends TestCase
 {
     /**
      * @var LocalFilesystemStorageWriter

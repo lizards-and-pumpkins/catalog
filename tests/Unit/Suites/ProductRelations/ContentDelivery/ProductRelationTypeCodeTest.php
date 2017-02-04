@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\ProductRelations\Exception\InvalidProductRelationTypeCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
  */
-class ProductRelationTypeCodeTest extends \PHPUnit_Framework_TestCase
+class ProductRelationTypeCodeTest extends TestCase
 {
     public function testItReturnsAProductRelationTypeCodeInstance()
     {

@@ -7,8 +7,9 @@ namespace LizardsAndPumpkins\Http;
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
 use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
 use LizardsAndPumpkins\Http\Routing\Exception\UnsupportedRequestMethodException;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractHttpRequestTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractHttpRequestTest extends TestCase
 {
     private $testRequestHost = 'example.com';
 

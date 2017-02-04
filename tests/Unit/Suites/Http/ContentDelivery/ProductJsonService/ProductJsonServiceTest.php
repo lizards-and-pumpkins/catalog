@@ -9,11 +9,12 @@ use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
  */
-class ProductJsonServiceTest extends \PHPUnit_Framework_TestCase
+class ProductJsonServiceTest extends TestCase
 {
     private $dummyProductData = ['attributes' => []];
 

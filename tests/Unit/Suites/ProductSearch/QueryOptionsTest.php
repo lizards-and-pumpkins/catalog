@@ -8,11 +8,12 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\QueryOptions
  */
-class QueryOptionsTest extends \PHPUnit_Framework_TestCase
+class QueryOptionsTest extends TestCase
 {
     private $testFilterSelection = ['foo' => ['bar', 'baz']];
 

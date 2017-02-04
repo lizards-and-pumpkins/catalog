@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
@@ -21,7 +22,7 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectio
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData
  */
-class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class TemplateWasUpdatedDomainEventHandlerTest extends TestCase
 {
     /**
      * @var Projector|\PHPUnit_Framework_MockObject_MockObject

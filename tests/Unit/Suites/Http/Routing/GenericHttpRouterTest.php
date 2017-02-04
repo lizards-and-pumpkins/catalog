@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpUrl;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
-class GenericHttpRouterTest extends \PHPUnit_Framework_TestCase
+class GenericHttpRouterTest extends TestCase
 {
     /**
      * @var HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject

@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidSearchFieldToQueryParameterMapException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap
  */
-class SearchFieldToRequestParamMapTest extends \PHPUnit_Framework_TestCase
+class SearchFieldToRequestParamMapTest extends TestCase
 {
     /**
      * @var SearchFieldToRequestParamMap

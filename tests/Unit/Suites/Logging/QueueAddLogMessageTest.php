@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Queue;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\QueueAddLogMessage
  */
-class QueueAddLogMessageTest extends \PHPUnit_Framework_TestCase
+class QueueAddLogMessageTest extends TestCase
 {
     /**
      * @var Queue|\PHPUnit_Framework_MockObject_MockObject

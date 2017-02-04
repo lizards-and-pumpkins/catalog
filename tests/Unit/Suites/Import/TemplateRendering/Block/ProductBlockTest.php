@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\TemplateRendering\Block;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock
@@ -19,7 +20,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\Block
  */
-class ProductBlockTest extends \PHPUnit_Framework_TestCase
+class ProductBlockTest extends TestCase
 {
     use TestFileFixtureTrait;
 

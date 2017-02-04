@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator
@@ -12,7 +13,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\LayoutReader
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  */
-class ThemeLocatorTest extends \PHPUnit_Framework_TestCase
+class ThemeLocatorTest extends TestCase
 {
     use TestFileFixtureTrait;
     

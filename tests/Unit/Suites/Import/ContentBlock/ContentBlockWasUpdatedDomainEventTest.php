@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Import\ContentBlock\Exception\NoContentBlockWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
@@ -20,7 +21,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  */
-class ContentBlockWasUpdatedDomainEventTest extends \PHPUnit_Framework_TestCase
+class ContentBlockWasUpdatedDomainEventTest extends TestCase
 {
     /**
      * @var ContentBlockId|\PHPUnit_Framework_MockObject_MockObject

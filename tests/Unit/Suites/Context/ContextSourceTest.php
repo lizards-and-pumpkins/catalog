@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Stub\StubContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\ContextSource
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class ContextSourceTest extends \PHPUnit_Framework_TestCase
+class ContextSourceTest extends TestCase
 {
     /**
      * @var ContextSource

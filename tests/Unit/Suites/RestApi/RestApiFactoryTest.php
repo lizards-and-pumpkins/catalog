@@ -15,6 +15,7 @@ use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\RestApiFactory
@@ -44,7 +45,7 @@ use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  */
-class RestApiFactoryTest extends \PHPUnit_Framework_TestCase
+class RestApiFactoryTest extends TestCase
 {
     /**
      * @var RestApiFactory

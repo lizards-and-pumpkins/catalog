@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Translation;
 
 use LizardsAndPumpkins\Translation\Exception\UndefinedTranslatorException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Translation\TranslatorRegistry
  */
-class TranslatorRegistryTest extends \PHPUnit_Framework_TestCase
+class TranslatorRegistryTest extends TestCase
 {
     /**
      * @var TranslatorRegistry

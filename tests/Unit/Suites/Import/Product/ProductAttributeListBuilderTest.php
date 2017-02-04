@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeContextPartsMismatchException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductAttributeListBuilder
@@ -13,7 +14,7 @@ use LizardsAndPumpkins\Import\Product\Exception\ProductAttributeContextPartsMism
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
-class ProductAttributeListBuilderTest extends \PHPUnit_Framework_TestCase
+class ProductAttributeListBuilderTest extends TestCase
 {
     /**
      * @param mixed[] $contextDataSet

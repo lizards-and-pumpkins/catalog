@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\SimpleProduct
@@ -25,7 +26,7 @@ use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
-class SimpleProductTest extends \PHPUnit_Framework_TestCase
+class SimpleProductTest extends TestCase
 {
     /**
      * @var Product

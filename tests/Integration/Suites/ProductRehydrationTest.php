@@ -18,8 +18,9 @@ use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use PHPUnit\Framework\TestCase;
 
-class ProductRehydrationTest extends \PHPUnit_Framework_TestCase
+class ProductRehydrationTest extends TestCase
 {
     private function assertBasicProductPropertyEqual(Product $sourceProduct, Product $rehydratedProduct)
     {

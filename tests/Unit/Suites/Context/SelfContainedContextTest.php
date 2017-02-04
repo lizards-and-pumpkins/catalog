@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Exception\ContextCodeNotFoundException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\SelfContainedContext
  */
-class SelfContainedContextTest extends \PHPUnit_Framework_TestCase
+class SelfContainedContextTest extends TestCase
 {
     /**
      * @param string[] $data

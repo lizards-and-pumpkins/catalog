@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\IntegrationTestContextSource
  * @uses   \LizardsAndPumpkins\Context\ContextSource
  */
-class IntegrationTestContextSourceTest extends \PHPUnit_Framework_TestCase
+class IntegrationTestContextSourceTest extends TestCase
 {
     public function testExpectedContextMatrixIsReturned()
     {

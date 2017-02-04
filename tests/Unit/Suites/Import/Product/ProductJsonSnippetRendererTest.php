@@ -8,12 +8,13 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class ProductJsonSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductJsonSnippetRendererTest extends TestCase
 {
     /**
      * @var ProductJsonSnippetRenderer

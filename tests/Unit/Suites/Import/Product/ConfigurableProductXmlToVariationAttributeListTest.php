@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\XPathParser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToVariationAttributeList
@@ -13,7 +14,7 @@ use LizardsAndPumpkins\Import\XPathParser;
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList
  */
-class ConfigurableProductXmlToVariationAttributeListTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductXmlToVariationAttributeListTest extends TestCase
 {
     private $testXml = '
 <product>

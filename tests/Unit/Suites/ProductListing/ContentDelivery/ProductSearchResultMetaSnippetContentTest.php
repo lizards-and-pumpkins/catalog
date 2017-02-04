@@ -6,13 +6,14 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @covers   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses     \LizardsAndPumpkins\Import\SnippetContainer
  */
-class ProductSearchResultMetaSnippetContentTest extends \PHPUnit_Framework_TestCase
+class ProductSearchResultMetaSnippetContentTest extends TestCase
 {
     /**
      * @var ProductSearchResultMetaSnippetContent

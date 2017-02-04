@@ -12,12 +12,13 @@ use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class ProductInListingSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductInListingSnippetRendererTest extends TestCase
 {
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject

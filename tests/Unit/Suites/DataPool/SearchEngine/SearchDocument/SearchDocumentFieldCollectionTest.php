@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentFieldCollection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  */
-class SearchDocumentFieldCollectionTest extends \PHPUnit_Framework_TestCase
+class SearchDocumentFieldCollectionTest extends TestCase
 {
     public function testCountableInterfaceIsImplemented()
     {

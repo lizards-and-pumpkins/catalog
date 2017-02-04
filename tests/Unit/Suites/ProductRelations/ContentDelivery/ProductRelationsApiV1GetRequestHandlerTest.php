@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  */
-class ProductRelationsApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
 {
     /**
      * @var ProductRelationsApiV1GetRequestHandler

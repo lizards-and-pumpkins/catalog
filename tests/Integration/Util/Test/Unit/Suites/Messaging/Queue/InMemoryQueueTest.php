@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Messaging\Queue;
 
 use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Util\Storage\Clearable;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Queue\InMemoryQueue
@@ -15,7 +16,7 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class InMemoryQueueTest extends \PHPUnit_Framework_TestCase
+class InMemoryQueueTest extends TestCase
 {
     /**
      * @var InMemoryQueue

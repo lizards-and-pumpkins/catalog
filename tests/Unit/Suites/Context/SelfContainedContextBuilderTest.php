@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Context;
 
 use LizardsAndPumpkins\Context\Stub\FromInputCopyingTestContextPartBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
-class SelfContainedContextBuilderTest extends \PHPUnit_Framework_TestCase
+class SelfContainedContextBuilderTest extends TestCase
 {
     /**
      * @var SelfContainedContextBuilder

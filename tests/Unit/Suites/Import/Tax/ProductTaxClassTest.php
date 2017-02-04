@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\Tax;
 
 use LizardsAndPumpkins\Import\Tax\Exception\InvalidTaxClassNameException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Tax\ProductTaxClass
  */
-class ProductTaxClassTest extends \PHPUnit_Framework_TestCase
+class ProductTaxClassTest extends TestCase
 {
     public function testItReturnsTheInjectedTaxClassValue()
     {

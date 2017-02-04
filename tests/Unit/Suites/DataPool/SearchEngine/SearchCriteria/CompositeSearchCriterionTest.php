@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\Exception\InvalidCriterionConditionException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  */
-class CompositeSearchCriterionTest extends \PHPUnit_Framework_TestCase
+class CompositeSearchCriterionTest extends TestCase
 {
     public function testSearchCriteriaInterfaceIsImplemented()
     {

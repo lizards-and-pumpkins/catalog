@@ -10,11 +10,12 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
  */
-class ProductListingSnippetProjectorTest extends \PHPUnit_Framework_TestCase
+class ProductListingSnippetProjectorTest extends TestCase
 {
     /**
      * @var Snippet|\PHPUnit_Framework_MockObject_MockObject

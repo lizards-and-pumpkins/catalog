@@ -6,12 +6,13 @@ namespace LizardsAndPumpkins\Http\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidStatusCodeException;
 use LizardsAndPumpkins\Http\HttpResponse;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
-class GenericHttpResponseTest extends \PHPUnit_Framework_TestCase
+class GenericHttpResponseTest extends TestCase
 {
     public function testHttpResponseInterfaceIsImplemented()
     {

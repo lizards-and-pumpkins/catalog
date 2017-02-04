@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Exception\InvalidProductTypeCodeException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductTypeCode
  */
-class ProductTypeCodeTest extends \PHPUnit_Framework_TestCase
+class ProductTypeCodeTest extends TestCase
 {
     public function testItThrowsAnExceptionIfTheTypeIsNotAString()
     {

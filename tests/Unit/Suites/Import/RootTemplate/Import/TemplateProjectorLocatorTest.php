@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\Exception\UnableToLocateTemplateProjectorException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
  */
-class TemplateProjectorLocatorTest extends \PHPUnit_Framework_TestCase
+class TemplateProjectorLocatorTest extends TestCase
 {
     /**
      * @var TemplateProjectorLocator

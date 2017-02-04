@@ -8,11 +8,12 @@ use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJson
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
  */
-class ProductJsonSnippetTransformationTest extends \PHPUnit_Framework_TestCase
+class ProductJsonSnippetTransformationTest extends TestCase
 {
     /**
      * @var ProductJsonSnippetTransformation

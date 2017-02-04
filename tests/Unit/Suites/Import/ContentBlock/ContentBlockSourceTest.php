@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
@@ -13,7 +14,7 @@ use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  */
-class ContentBlockSourceTest extends \PHPUnit_Framework_TestCase
+class ContentBlockSourceTest extends TestCase
 {
     /**
      * @var ContentBlockId

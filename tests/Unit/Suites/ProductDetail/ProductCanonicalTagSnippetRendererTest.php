@@ -11,13 +11,14 @@ use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class ProductCanonicalTagSnippetRendererTest extends \PHPUnit_Framework_TestCase
+class ProductCanonicalTagSnippetRendererTest extends TestCase
 {
     /**
      * @var ProductCanonicalTagSnippetRenderer

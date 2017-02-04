@@ -8,11 +8,12 @@ use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonServic
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductRelations\ProductRelations;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService
  */
-class ProductRelationsServiceTest extends \PHPUnit_Framework_TestCase
+class ProductRelationsServiceTest extends TestCase
 {
     /**
      * @var ProductRelations|\PHPUnit_Framework_MockObject_MockObject

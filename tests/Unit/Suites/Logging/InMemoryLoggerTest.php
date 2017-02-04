@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Logging;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Logging\InMemoryLogger
  */
-class InMemoryLoggerTest extends \PHPUnit_Framework_TestCase
+class InMemoryLoggerTest extends TestCase
 {
     /**
      * @var InMemoryLogger

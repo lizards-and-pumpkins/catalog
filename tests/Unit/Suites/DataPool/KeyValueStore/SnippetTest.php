@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\KeyValueStore;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class SnippetTest extends \PHPUnit_Framework_TestCase
+class SnippetTest extends TestCase
 {
     public function testExceptionIsThrownOnNonStringKey()
     {

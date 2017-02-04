@@ -6,13 +6,14 @@ namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductDetailPageMetaInfoSnippetContentTest extends \PHPUnit_Framework_TestCase
+class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 {
     /**
      * @var ProductDetailPageMetaInfoSnippetContent

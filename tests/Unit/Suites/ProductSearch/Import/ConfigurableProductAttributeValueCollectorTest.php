@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\Product\Product;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector
@@ -16,7 +17,7 @@ use LizardsAndPumpkins\Import\Product\Product;
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
  */
-class ConfigurableProductAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductAttributeValueCollectorTest extends TestCase
 {
     /**
      * @var ConfigurableProductAttributeValueCollector

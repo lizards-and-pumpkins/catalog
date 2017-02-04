@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Logging;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\Logging\NullLogMessageWriter
  */
-class NullLogMessageWriterTest extends \PHPUnit_Framework_TestCase
+class NullLogMessageWriterTest extends TestCase
 {
     /**
      * @var NullLogMessageWriter

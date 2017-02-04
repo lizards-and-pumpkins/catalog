@@ -8,12 +8,13 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\Import\TemplateRendering\Block;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlock
  * @uses \LizardsAndPumpkins\Import\TemplateRendering\Block
  */
-class ProductListingDescriptionBlockTest extends \PHPUnit_Framework_TestCase
+class ProductListingDescriptionBlockTest extends TestCase
 {
     /**
      * @var ProductListingDescriptionBlock

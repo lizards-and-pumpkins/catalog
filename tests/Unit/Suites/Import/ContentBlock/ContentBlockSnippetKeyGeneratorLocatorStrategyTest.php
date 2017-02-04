@@ -7,11 +7,12 @@ namespace LizardsAndPumpkins\Import\ContentBlock;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  */
-class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends \PHPUnit_Framework_TestCase
+class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject

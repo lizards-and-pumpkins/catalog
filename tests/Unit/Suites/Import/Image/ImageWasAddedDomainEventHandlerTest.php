@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
@@ -16,7 +17,7 @@ use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollect
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class ImageWasAddedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
+class ImageWasAddedDomainEventHandlerTest extends TestCase
 {
     /**
      * @var ImageWasAddedDomainEventHandler

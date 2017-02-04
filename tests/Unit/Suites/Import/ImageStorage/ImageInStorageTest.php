@@ -8,13 +8,14 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;
 use LizardsAndPumpkins\Import\FileStorage\StorageSpecificFileUri;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImageStorage\ImageInStorage
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FileContent
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
-class ImageInStorageTest extends \PHPUnit_Framework_TestCase
+class ImageInStorageTest extends TestCase
 {
     /**
      * @var StorageSpecificFileUri|\PHPUnit_Framework_MockObject_MockObject

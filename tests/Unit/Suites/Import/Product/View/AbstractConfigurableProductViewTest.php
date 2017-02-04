@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Import\Product\ProductAttributeList;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 use LizardsAndPumpkins\Import\Product\View\Stub\StubConfigurableProductView;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\View\AbstractConfigurableProductView
@@ -23,7 +24,7 @@ use LizardsAndPumpkins\Import\Product\View\Stub\StubConfigurableProductView;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
  * @uses   \LizardsAndPumpkins\Import\Product\ProductAttribute
  */
-class AbstractConfigurableProductViewTest extends \PHPUnit_Framework_TestCase
+class AbstractConfigurableProductViewTest extends TestCase
 {
     /**
      * @var AbstractConfigurableProductView

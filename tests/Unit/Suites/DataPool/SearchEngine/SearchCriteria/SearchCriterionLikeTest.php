@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionLike
  */
-class SearchCriterionLikeTest extends \PHPUnit_Framework_TestCase
+class SearchCriterionLikeTest extends TestCase
 {
     private $testFieldName = 'foo';
 

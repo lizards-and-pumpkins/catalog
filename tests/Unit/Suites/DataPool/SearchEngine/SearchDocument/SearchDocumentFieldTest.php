@@ -6,11 +6,12 @@ namespace LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidSearchDocumentFieldKeyException;
 use LizardsAndPumpkins\DataPool\SearchEngine\Exception\InvalidSearchDocumentFieldValueException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentField
  */
-class SearchDocumentFieldTest extends \PHPUnit_Framework_TestCase
+class SearchDocumentFieldTest extends TestCase
 {
     public function testDocumentFieldKeyAndValueAreSetAndReturned()
     {

@@ -13,11 +13,12 @@ use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductProjector
  */
-class ProductProjectorTest extends \PHPUnit_Framework_TestCase
+class ProductProjectorTest extends TestCase
 {
     /**
      * @var ProductProjector

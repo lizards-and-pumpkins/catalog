@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList;
 use LizardsAndPumpkins\Import\Product\Composite\AssociatedProductListBuilder;
 use LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductBuilder
@@ -17,7 +18,7 @@ use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\AssociatedProductList
  * @uses   \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
  */
-class ConfigurableProductBuilderTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductBuilderTest extends TestCase
 {
     /**
      * @var SimpleProductBuilder|\PHPUnit_Framework_MockObject_MockObject
