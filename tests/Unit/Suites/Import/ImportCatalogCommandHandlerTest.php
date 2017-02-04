@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Import;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
@@ -18,7 +19,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
  */
-class ImportCatalogCommandHandlerTest extends \PHPUnit\Framework\TestCase
+class ImportCatalogCommandHandlerTest extends TestCase
 {
     /**
      * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject

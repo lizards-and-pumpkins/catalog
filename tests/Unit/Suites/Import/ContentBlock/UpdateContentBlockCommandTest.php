@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Import\ContentBlock\Exception\NoUpdateContentBlockCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
@@ -16,6 +17,8 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  */
 class UpdateContentBlockCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,7 +69,9 @@ class UpdateContentBlockCommandTest extends \PHPUnit_Framework_TestCase
     public function testCanBeRehydratedFromMessage()
     {
         $testContent = 'some empty content';
-        $testContentBlockSource = new ContentBlockSource(ContentBlockId::fromString('test'), $testContent, [], []);
+        $testContext = SelfContainedContextBuilder::rehydrateContext([]);
+        $contentBlockId = ContentBlockId::fromString('test');
+        $testContentBlockSource = new ContentBlockSource($contentBlockId, $testContent, $testContext, []);
         $message = (new UpdateContentBlockCommand($testContentBlockSource))->toMessage();
 
         $rehydratedCommand = UpdateContentBlockCommand::fromMessage($message);

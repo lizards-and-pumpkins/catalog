@@ -4,65 +4,35 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
-class TemplatesApiV1PutRequestHandler extends ApiRequestHandler
+class TemplatesApiV1PutRequestHandler extends TemplatesApiV2PutRequestHandler
 {
     /**
-     * @var DomainEventQueue
+     * @var DataVersion
      */
-    private $domainEventQueue;
+    private $dataVersion;
 
-    public function __construct(DomainEventQueue $domainEventQueue)
+    public function __construct(CommandQueue $commandQueue, DataVersion $dataVersion)
     {
-        $this->domainEventQueue = $domainEventQueue;
+        parent::__construct($commandQueue);
+        $this->dataVersion = $dataVersion;
     }
 
-    public function canProcess(HttpRequest $request) : bool
+    final protected function getDataVersion(HttpRequest $request): DataVersion
     {
-        if (HttpRequest::METHOD_PUT !== $request->getMethod()) {
-            return false;
-        }
-
-        if (null === $this->extractTemplateIdFromRequest($request)) {
-            return false;
-        }
-
-        return true;
+        return $this->dataVersion;
     }
 
-    final protected function processRequest(HttpRequest $request)
+    final protected function getContent(HttpRequest $request): string
     {
-        $templateId = $this->extractTemplateIdFromRequest($request);
-        // todo: add command which validates input data to command queue, the have the command handler create the event
-        $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $request->getRawBody()));
+        return $request->getRawBody();
     }
 
-    final protected function getResponse(HttpRequest $request) : HttpResponse
-    {
-        $headers = [];
-        $body = '';
-
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
-    }
-
-    /**
-     * @param HttpRequest $request
-     * @return string|null
-     */
-    private function extractTemplateIdFromRequest(HttpRequest $request)
-    {
-        preg_match('#/templates/([^/]+)#i', (string) $request->getUrl(), $urlTokens);
-
-        if (count($urlTokens) < 2) {
-            return null;
-        }
-
-        return $urlTokens[1];
-    }
 }

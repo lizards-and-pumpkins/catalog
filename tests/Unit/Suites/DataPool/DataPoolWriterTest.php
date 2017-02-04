@@ -126,4 +126,12 @@ class DataPoolWriterTest extends AbstractDataPoolTest
             ->with(CurrentDataVersion::SNIPPET_KEY, $dataVersionString);
         $this->dataPoolWriter->setCurrentDataVersion($dataVersionString);
     }
+
+    public function testWritesPreviousVersionToKeyValueStore()
+    {
+        $dataVersionString = 'foo';
+        $this->getMockKeyValueStore()->expects($this->once())->method('set')
+            ->with(CurrentDataVersion::PREVIOUS_VERSION_SNIPPET_KEY, $dataVersionString);
+        $this->dataPoolWriter->setPreviousDataVersion($dataVersionString);
+    }
 }

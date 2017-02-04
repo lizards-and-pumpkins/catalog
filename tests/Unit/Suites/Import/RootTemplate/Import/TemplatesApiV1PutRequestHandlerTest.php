@@ -1,28 +1,30 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
 class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $mockDomainEventQueue;
+    private $mockCommandQueue;
 
     /**
      * @var TemplatesApiV1PutRequestHandler
@@ -34,51 +36,38 @@ class TemplatesApiV1PutRequestHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $mockRequest;
 
+    /**
+     * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubDataVersion;
+
     protected function setUp()
     {
-        $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
-        $this->requestHandler = new TemplatesApiV1PutRequestHandler($this->mockDomainEventQueue);
+        $this->stubDataVersion = $this->createMock(DataVersion::class);
+        $this->mockCommandQueue = $this->createMock(CommandQueue::class);
+        $this->requestHandler = new TemplatesApiV1PutRequestHandler($this->mockCommandQueue, $this->stubDataVersion);
 
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testApiRequestHandlerInterfaceIsImplemented()
+    public function testInheritsTheV2RequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+        $this->assertInstanceOf(TemplatesApiV2PutRequestHandler::class, $this->requestHandler);
     }
 
-    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
+    public function testEmitsUpdateTemplateCommandWithInjectedDataVersion()
     {
-        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
-    }
-
-    public function testRequestCanNotBeProcessedIfUrlDoesNotContainTemplateId()
-    {
-        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
-        $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates'));
-
-        $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
-    }
-
-    public function testRequestCanBeProcessedIfValid()
-    {
-        $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
+        $testContent = 'Raw Request Body';
+        $this->stubDataVersion->method('__toString')->willReturn('foo');
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
+        $this->mockRequest->method('getRawBody')->willReturn($testContent);
 
-        $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
-    }
+        $this->mockCommandQueue->expects($this->once())->method('add')
+            ->willReturnCallback(function (UpdateTemplateCommand $command) use ($testContent) {
+                $this->assertEquals((string) $this->stubDataVersion, $command->getDataVersion());
+                $this->assertEquals($testContent, $command->getTemplateContent());
+            });
 
-    public function testTemplateWasUpdatedDomainEventIsEmitted()
-    {
-        $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
-        $this->mockRequest->method('getRawBody')->willReturn('Raw Request Body');
-
-        $this->mockDomainEventQueue->expects($this->once())->method('add');
-
-        $response = $this->requestHandler->process($this->mockRequest);
-        
-        $this->assertSame(202, $response->getStatusCode());
-        $this->assertSame('', $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 }

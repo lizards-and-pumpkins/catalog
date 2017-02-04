@@ -44,10 +44,8 @@ class ProductRelationsFactory implements Factory, FactoryWithCallback
 
         /** @var ApiRequestHandlerLocator $apiRequestHandlerLocator */
         $apiRequestHandlerLocator = $masterFactory->getApiRequestHandlerLocator();
-        $apiRequestHandlerLocator->register(
-            'get_products',
-            $apiVersion,
-            $this->getMasterFactory()->createProductRelationsApiV1GetRequestHandler()
-        );
+        $apiRequestHandlerLocator->register('get_products', $apiVersion, function () {
+            return $this->getMasterFactory()->createProductRelationsApiV1GetRequestHandler();
+        });
     }
 }

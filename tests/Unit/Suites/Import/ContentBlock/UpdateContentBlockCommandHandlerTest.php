@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 
@@ -17,6 +18,8 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  */
 class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,10 +33,21 @@ class UpdateContentBlockCommandHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $commandHandler;
 
+    /**
+     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createDummyContext()
+    {
+        $dummyContext = $this->createMock(Context::class);
+        $dummyContext->method('jsonSerialize')->willReturn([]);
+
+        return $dummyContext;
+    }
+
     protected function setUp()
     {
         $testContentBlockId = ContentBlockId::fromString('foo bar');
-        $testContentBlockSource = new ContentBlockSource($testContentBlockId, '', [], []);
+        $testContentBlockSource = new ContentBlockSource($testContentBlockId, '', $this->createDummyContext(), []);
         $testMessage = (new UpdateContentBlockCommand($testContentBlockSource))->toMessage();
 
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);

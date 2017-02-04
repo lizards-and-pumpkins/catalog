@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\Exception\NotImportCatalogCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ImportCatalogCommand
@@ -21,7 +22,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  */
-class ImportCatalogCommandTest extends \PHPUnit\Framework\TestCase
+class ImportCatalogCommandTest extends TestCase
 {
     use TestFileFixtureTrait;
     

@@ -29,11 +29,10 @@ class ProductListingTemplateProjector implements Projector
     }
 
     /**
-     * @param mixed $productsPerPageSourceData
+     * @param mixed $projectionData
      */
-    public function project($productsPerPageSourceData)
+    public function project($projectionData)
     {
-        $projectionData = [];
         $snippets = $this->snippetRendererCollection->render($projectionData);
         $this->dataPoolWriter->writeSnippets(...$snippets);
     }

@@ -8,6 +8,8 @@ use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Messaging\Command\Exception\UnableToFindCommandHandlerException;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -81,5 +83,22 @@ class CommandHandlerLocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->getHandlerFor($stubCommand);
 
         $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
+    }
+
+    public function testReturnsUpdateTemplateCommandHandler()
+    {
+        $stubHandler = $this->createMock(UpdateTemplateCommandHandler::class);
+
+        $this->factory->expects($this->once())
+            ->method('createUpdateTemplateCommandHandler')
+            ->willReturn($stubHandler);
+
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubCommand */
+        $stubCommand = $this->createMock(Message::class);
+        $stubCommand->method('getName')->willReturn(UpdateTemplateCommand::CODE);
+
+        $result = $this->locator->getHandlerFor($stubCommand);
+
+        $this->assertInstanceOf(UpdateTemplateCommandHandler::class, $result);
     }
 }

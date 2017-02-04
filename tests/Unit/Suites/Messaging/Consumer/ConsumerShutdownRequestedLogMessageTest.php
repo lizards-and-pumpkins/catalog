@@ -5,11 +5,12 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\Messaging\Consumer;
 
 use LizardsAndPumpkins\Logging\LogMessage;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Messaging\Consumer\ConsumerShutdownRequestedLogMessage
  */
-class ConsumerShutdownRequestedLogMessageTest extends \PHPUnit\Framework\TestCase
+class ConsumerShutdownRequestedLogMessageTest extends TestCase
 {
     public function testIsALogMessage()
     {

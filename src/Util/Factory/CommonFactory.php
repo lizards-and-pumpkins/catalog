@@ -11,6 +11,8 @@ use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
@@ -34,6 +36,7 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
@@ -217,7 +220,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new TemplateWasUpdatedDomainEventHandler(
             $event,
-            $this->getMasterFactory()->getContextSource(),
             $this->getMasterFactory()->createTemplateProjectorLocator()
         );
     }
@@ -738,7 +740,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->countryContextPartBuilder;
     }
 
-    private function getCurrentDataVersion() : string
+    public function getCurrentDataVersion() : string
     {
         if (null === $this->currentDataVersion) {
             /** @var DataPoolReader $dataPoolReader */
@@ -918,10 +920,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createUpdateContentBlockCommandHandler(Message $message) : CommandHandler
     {
-        return new UpdateContentBlockCommandHandler(
-            $message,
-            $this->getMasterFactory()->getEventQueue()
-        );
+        return new UpdateContentBlockCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+    }
+
+    public function createUpdateTemplateCommandHandler(Message $message): CommandHandler
+    {
+        return new UpdateTemplateCommandHandler($message, $this->getMasterFactory()->getEventQueue());
     }
 
     public function createContentBlockWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler
@@ -999,6 +1003,16 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createImportCatalogCommandHandler(Message $message): CommandHandler
     {
         return new ImportCatalogCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+    }
+    
+    public function createSetCurrentDataVersionCommandHandler(Message $message): CommandHandler
+    {
+        return new SetCurrentDataVersionCommandHandler(
+            $message,
+            $this->getMasterFactory()->getEventQueue(),
+            $this->getMasterFactory()->createDataPoolReader(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
     }
 
     /**
@@ -1136,6 +1150,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createCatalogImport(),
             $event
         );
+    }
+
+    public function createCurrentDataVersionWasSetDomainEventHandler(Message $event): DomainEventHandler
+    {
+        return new CurrentDataVersionWasSetDomainEventHandler($event);
     }
 
     public function createBaseUrlBuilder() : BaseUrlBuilder

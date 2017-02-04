@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
-use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
@@ -17,6 +18,8 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,24 +39,13 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
         $stubTemplateProjectorLocator = $this->createMock(TemplateProjectorLocator::class);
         $stubTemplateProjectorLocator->method('getTemplateProjectorForCode')->willReturn($this->mockProjector);
 
-        return new TemplateWasUpdatedDomainEventHandler(
-            $message,
-            $this->createStubContextSource(),
-            $stubTemplateProjectorLocator
-        );
-    }
-
-    /**
-     * @return ContextSource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubContextSource() : ContextSource
-    {
-        return $this->createMock(ContextSource::class);
+        return new TemplateWasUpdatedDomainEventHandler($message, $stubTemplateProjectorLocator);
     }
 
     protected function setUp()
     {
-        $testEvent = new TemplateWasUpdatedDomainEvent('foo template id', 'bar template content');
+        $dummyDataVersion = DataVersion::fromVersionString('foo');
+        $testEvent = new TemplateWasUpdatedDomainEvent('foo template id', 'bar template content', $dummyDataVersion);
 
         $this->mockProjector = $this->createMock(Projector::class);
 
@@ -67,7 +59,8 @@ class TemplateWasUpdatedDomainEventHandlerTest extends \PHPUnit_Framework_TestCa
 
     public function testProjectionIsTriggered()
     {
-        $this->mockProjector->expects($this->once())->method('project');
+        $this->mockProjector->expects($this->once())->method('project')
+            ->with($this->isInstanceOf(TemplateProjectionData::class));
         $this->domainEventHandler->process();
     }
 }

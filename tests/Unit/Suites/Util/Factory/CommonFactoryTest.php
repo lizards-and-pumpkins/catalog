@@ -11,7 +11,12 @@ use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\SelfContainedContext;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -59,6 +64,8 @@ use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Logging\Logger;
@@ -215,6 +222,12 @@ use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
  * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
  */
 class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -254,7 +267,7 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
-        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar');
+        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar', DataVersion::fromVersionString('baz'));
         $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler($testEvent->toMessage());
 
         $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
@@ -476,7 +489,9 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateContentBlockCommandHandlerIsReturned()
     {
-        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', [], []);
+        $dummyContext = $this->createMock(Context::class);
+        $dummyContext->method('jsonSerialize')->willReturn([]);
+        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', $dummyContext, []);
         $sourceCommand = new UpdateContentBlockCommand($contentBlockSource);
         $message = $sourceCommand->toMessage();
         $result = $this->commonFactory->createUpdateContentBlockCommandHandler($message);
@@ -484,12 +499,20 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
     }
 
+    public function testReturnsAnUpdateTemplateCommandHandler()
+    {
+        $message = (new UpdateTemplateCommand('foo', 'bar', DataVersion::fromVersionString('baz')))->toMessage();
+        $result = $this->commonFactory->createUpdateTemplateCommandHandler($message);
+        
+        $this->assertInstanceOf(UpdateTemplateCommandHandler::class, $result);
+    }
+
     public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()
     {
         $testContentBlockSource = new ContentBlockSource(
             ContentBlockId::fromString('foo'),
             '',
-            [],
+            SelfContainedContextBuilder::rehydrateContext([]),
             []
         );
         $testEvent = new ContentBlockWasUpdatedDomainEvent($testContentBlockSource);
@@ -550,6 +573,14 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $result = $this->commonFactory->createImportCatalogCommandHandler($command->toMessage());
 
         $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
+    }
+    
+    public function testReturnsASetCurrentDataVersionCommandHandler()
+    {
+        $command = new SetCurrentDataVersionCommand(DataVersion::fromVersionString('bar baz'));
+        $result = $this->commonFactory->createSetCurrentDataVersionCommandHandler($command->toMessage());
+
+        $this->assertInstanceOf(SetCurrentDataVersionCommandHandler::class, $result);
     }
 
     public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()
@@ -651,6 +682,13 @@ class CommonFactoryTest extends \PHPUnit_Framework_TestCase
         $testEvent = new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), 'test.xml');
         $result = $this->commonFactory->createCatalogImportWasTriggeredDomainEventHandler($testEvent->toMessage());
         $this->assertInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
+    }
+
+    public function testReturnsACurrentDataVersionWasSetDomainEventHandler()
+    {
+        $testEvent = new CurrentDataVersionWasSetDomainEvent(DataVersion::fromVersionString('bar'));
+        $result = $this->commonFactory->createCurrentDataVersionWasSetDomainEventHandler($testEvent->toMessage());
+        $this->assertInstanceOf(CurrentDataVersionWasSetDomainEventHandler::class, $result);
     }
 
     public function testItReturnsAProductJsonSnippetRenderer()

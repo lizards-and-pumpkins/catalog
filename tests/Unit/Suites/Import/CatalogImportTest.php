@@ -134,7 +134,7 @@ class CatalogImportTest extends \PHPUnit_Framework_TestCase
         $this->stubProductListingBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->mockEventQueue = $this->createMock(DomainEventQueue::class);
         $this->contextSource = $this->createMock(ContextSource::class);
-        $this->contextSource->method('getAllAvailableContextsWithVersion')->willReturn(
+        $this->contextSource->method('getAllAvailableContextsWithVersionApplied')->willReturn(
             [$this->createMock(Context::class)]
         );
         $this->mockLogger = $this->createMock(Logger::class);

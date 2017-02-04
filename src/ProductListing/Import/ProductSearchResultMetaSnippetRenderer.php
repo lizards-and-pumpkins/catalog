@@ -47,7 +47,7 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
      */
     public function render($dataObject) : array
     {
-        // todo: important! Use data version from $dataObject
+        // todo: (DATA_VERSION) important! Use data version from $dataObject
         return array_map(function (Context $context) use ($dataObject) {
             return $this->renderMetaInfoSnippetForContext($dataObject, $context);
         }, $this->contextSource->getAllAvailableContexts());
