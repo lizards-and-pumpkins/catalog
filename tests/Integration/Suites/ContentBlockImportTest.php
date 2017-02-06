@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -16,12 +17,12 @@ class ContentBlockImportTest extends AbstractIntegrationTest
      * @var SampleMasterFactory
      */
     private $factory;
-    
+
     private function renderProductListingTemplate()
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
         $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json'
+            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v1+json',
         ]);
         $httpRequestBody = new HttpRequestBody('');
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -34,7 +35,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->processAllMessages($this->factory);
     }
 
-    private function getProductListingPageHtmlByUrlKey(string $urlKey) : string
+    private function getProductListingPageHtmlByUrlKey(string $urlKey): string
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -49,11 +50,21 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         return $page->getBody();
     }
 
-    private function importContentBlockViaApi(string $snippetCode, string $httpRequestBodyString)
+    private function importContentBlockViaApiV1(string $snippetCode, string $httpRequestBodyString)
+    {
+        $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString, 'v1');
+    }
+
+    private function importContentBlockViaApiV2(string $snippetCode, string $httpRequestBodyString)
+    {
+        $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString, 'v2');
+    }
+
+    private function importContentBlockViaApi(string $snippetCode, string $httpRequestBodyString, string $version)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/' . $snippetCode);
         $httpHeaders = HttpHeaders::fromArray([
-            'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.v1+json'
+            'Accept' => 'application/vnd.lizards-and-pumpkins.content_blocks.' . $version . '+json',
         ]);
         $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
@@ -81,20 +92,47 @@ class ContentBlockImportTest extends AbstractIntegrationTest
      * @param mixed[] $keyGeneratorParameters
      * @return string
      */
-    private function getContentBlockSnippetContent(string $snippetCode, array $keyGeneratorParameters) : string
-    {
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[1];
+    private function getContentBlockSnippetCodeForCurrentDataVersion(
+        string $snippetCode,
+        array $keyGeneratorParameters
+    ): string {
+        $dataPoolReader = $this->factory->createDataPoolReader();
+        $currentDataVersion = DataVersion::fromVersionString($dataPoolReader->getCurrentDataVersion());
 
-        $snippetKeyGeneratorLocator = $this->factory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
-        $snippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
-        $snippetKey = $snippetKeyGenerator->getKeyForContext($context, $keyGeneratorParameters);
+        return $this->getContentBlockSnippetContent($snippetCode, $keyGeneratorParameters, $currentDataVersion);
+    }
+
+    /**
+     * @param string $snippetCode
+     * @param mixed[] $keyGeneratorParameters
+     * @param DataVersion $version
+     * @return string
+     */
+    private function getContentBlockSnippetContent(
+        string $snippetCode,
+        array $keyGeneratorParameters,
+        DataVersion $version
+    ): string {
+            
+        $snippetKey = $this->getContentBlockSnippetKey($snippetCode, $keyGeneratorParameters, $version);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
 
-        $snippetContent = $dataPoolReader->getSnippet($snippetKey);
+        return $dataPoolReader->getSnippet($snippetKey);
+    }
 
-        return $snippetContent;
+    private function getContentBlockSnippetKey(
+        string $snippetCode,
+        array $keyGeneratorParameters,
+        DataVersion $version
+    ): string {
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContextsWithVersionApplied($version)[1];
+
+        $snippetKeyGeneratorLocator = $this->factory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
+        $snippetKeyGenerator = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+
+        return $snippetKeyGenerator->getKeyForContext($context, $keyGeneratorParameters);
     }
 
     protected function setUp()
@@ -118,10 +156,10 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             'context' => ['website' => 'ru', 'locale' => 'en_US'],
         ]);
 
-        $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString);
+        $this->importContentBlockViaApiV1($snippetCode, $httpRequestBodyString);
 
         $keyGeneratorParameters = [];
-        $snippetContent = $this->getContentBlockSnippetContent($snippetCode, $keyGeneratorParameters);
+        $snippetContent = $this->getContentBlockSnippetCodeForCurrentDataVersion($snippetCode, $keyGeneratorParameters);
 
         $this->assertEquals($contentBlockContent, $snippetContent);
     }
@@ -135,13 +173,13 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
             'context' => ['website' => 'ru', 'locale' => 'en_US'],
-            'url_key' => $productListingUrlKey
+            'url_key' => $productListingUrlKey,
         ]);
 
-        $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString);
+        $this->importContentBlockViaApiV1($snippetCode, $httpRequestBodyString);
 
         $keyGeneratorParameters = ['url_key' => $productListingUrlKey];
-        $snippetContent = $this->getContentBlockSnippetContent($snippetCode, $keyGeneratorParameters);
+        $snippetContent = $this->getContentBlockSnippetCodeForCurrentDataVersion($snippetCode, $keyGeneratorParameters);
 
         $this->assertEquals($contentBlockContent, $snippetContent);
     }
@@ -154,15 +192,49 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
-            'context' => ['version' => -1, 'website' => 'fr', 'locale' => 'fr_FR'],
-            'url_key' => $productListingUrlKey
+            'context' => ['website' => 'fr', 'locale' => 'fr_FR'],
+            'url_key' => $productListingUrlKey,
         ]);
 
-        $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString);
+        $this->importContentBlockViaApiV1($snippetCode, $httpRequestBodyString);
         $this->renderProductListingTemplate();
         $this->importCatalogFixture($this->factory, 'product_listings.xml');
-        
+
         $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));
         $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics'));
+    }
+
+    public function testContentBlockSnippetIsWrittenIntoDataPoolWithTheSpecifiedDataVersion()
+    {
+        $currentDataVersion = DataVersion::fromVersionString('foo');
+        $targetDataVersion = DataVersion::fromVersionString('baz');
+
+        $factory = $this->prepareIntegrationTestMasterFactory();
+        $factory->createDataPoolWriter()->setCurrentDataVersion((string) $currentDataVersion);
+
+        $snippetCode = 'content_block_foo';
+        
+        $httpRequestBodyString = json_encode([
+            'content'      => 'bar',
+            'data_version' => (string) $targetDataVersion,
+            'context'      => ['website' => 'ru', 'locale' => 'en_US'],
+        ]);
+
+        $this->importContentBlockViaApiV2($snippetCode, $httpRequestBodyString);
+        
+        $keyGeneratorParameters = [];
+        
+        $keyForCurrentDataVersion = $this->getContentBlockSnippetKey(
+            $snippetCode,
+            $keyGeneratorParameters,
+            $currentDataVersion
+        );
+        $keyForTargetDataVersion = $this->getContentBlockSnippetKey(
+            $snippetCode,
+            $keyGeneratorParameters,
+            $targetDataVersion
+        );
+        $this->assertFalse($this->factory->createDataPoolReader()->hasSnippet($keyForCurrentDataVersion));
+        $this->assertTrue($this->factory->createDataPoolReader()->hasSnippet($keyForTargetDataVersion));
     }
 }
