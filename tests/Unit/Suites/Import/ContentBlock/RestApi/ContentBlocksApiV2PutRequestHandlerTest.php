@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\MissingContentBlockDataVersionException;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -24,11 +25,10 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
 {
-    private $testVersion = 'current data version';
-
     /**
      * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -48,46 +48,37 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
      * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubContextBuilder;
-
-    /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $dummyDataPoolReader;
-
+    
     protected function setUp()
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
         $this->stubContextBuilder->method('createContext')->willReturnCallback(function (array $parts) {
             $stubContext = $this->getMockBuilder(Context::class)
-                ->disableOriginalConstructor()
                 ->setMethods(array_merge(get_class_methods(Context::class), ['debug']))
                 ->getMock();
             $stubContext->method('debug')->willReturn($parts);
             return $stubContext;
         });
-        $this->dummyDataPoolReader = $this->createMock(DataPoolReader::class);
-        $this->dummyDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testVersion);
         $this->requestHandler = new ContentBlocksApiV2PutRequestHandler(
             $this->mockCommandQueue,
-            $this->stubContextBuilder,
-            $this->dummyDataPoolReader
+            $this->stubContextBuilder
         );
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testApiRequestHandlerIsExtended()
+    public function testExtendsApiRequestHandler()
     {
         $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
     }
 
-    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
+    public function testCanNotProcessRequestIfMethodIsNotPut()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanNotBeProcessedIfUrlDoesNotContainContentBlockId()
+    public function testCanNotProcessRequestIfUrlDoesNotContainContentBlockId()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
 
@@ -97,7 +88,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanBeProcessedIfValid()
+    public function testCanProcessRequestIfValid()
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
 
@@ -107,7 +98,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testExceptionIsThrownIfContentBlockContentIsMissingInRequestBody()
+    public function testThrowsExceptionIfContentBlockContentIsMissingInRequestBody()
     {
         $this->mockRequest->method('getRawBody')->willReturn(json_encode([]));
 
@@ -117,7 +108,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
-    public function testExceptionIsThrownIfContentBlockContextIsMissingInRequestBody()
+    public function testThrowsExceptionIfContentBlockContextIsMissingInRequestBody()
     {
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '']));
 
@@ -127,7 +118,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
-    public function testExceptionIsThrownIfContentBlockContextIsNotAnArray()
+    public function testThrowsExceptionIfContentBlockContextIsNotAnArray()
     {
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '', 'context' => '']));
 
@@ -137,7 +128,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
-    public function testExceptionIsThrownIfContentBlockUrlKeyIsInvalid()
+    public function testThrowsExceptionIfContentBlockUrlKeyIsInvalid()
     {
         $this->mockRequest->method('getRawBody')
             ->willReturn(json_encode(['content' => '', 'context' => [], 'url_key' => 1]));
@@ -148,9 +139,37 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
-    public function testUpdateContentBlockCommandIsEmitted()
+    public function testThrowsExceptionIfDataVersionIsMissing()
     {
-        $requestBody = ['content' => 'bar', 'context' => ['baz' => 'qux'], 'url_key' => 'foo'];
+        $this->expectException(MissingContentBlockDataVersionException::class);
+
+        $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
+        $this->mockRequest->method('getUrl')->willReturn($url);
+        $this->mockRequest->method('getRawBody')
+            ->willReturn(json_encode(['content' => '', 'context' => []]));
+        $this->requestHandler->process($this->mockRequest);
+    }
+
+    public function testValidatesTheDataVersion()
+    {
+        $this->expectException(\RuntimeException::class);
+        
+        $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
+        $this->mockRequest->method('getUrl')->willReturn($url);
+        $this->mockRequest->method('getRawBody')
+            ->willReturn(json_encode(['content' => '', 'context' => [], 'data_version' => '']));
+        $this->requestHandler->process($this->mockRequest);
+    }
+
+    public function testEmitsUpdateContentBlockCommand()
+    {
+        $testVersion = 'foo-bar';
+        $requestBody = [
+            'content' => 'bar',
+            'context' => ['baz' => 'qux'],
+            'url_key' => 'foo',
+            'data_version' => $testVersion
+        ];
         $this->mockRequest->method('getRawBody')->willReturn(json_encode($requestBody));
 
         $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
@@ -158,14 +177,14 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
 
         $this->mockCommandQueue->expects($this->once())
             ->method('add')
-            ->willReturnCallback(function (UpdateContentBlockCommand $command) {
+            ->willReturnCallback(function (UpdateContentBlockCommand $command) use ($testVersion) {
                 $this->assertEquals('foo_bar', $command->getContentBlockSource()->getContentBlockId());
                 $this->assertSame(['url_key' => 'foo'], $command->getContentBlockSource()->getKeyGeneratorParams());
                 $this->assertSame('bar', $command->getContentBlockSource()->getContent());
                 $context = $command->getContentBlockSource()->getContext();
                 $this->assertInstanceOf(Context::class, $context);
                 $this->assertArrayHasKey(DataVersion::CONTEXT_CODE, $context->debug());
-                $this->assertSame($this->testVersion, $context->debug()[DataVersion::CONTEXT_CODE]);
+                $this->assertSame($testVersion, $context->debug()[DataVersion::CONTEXT_CODE]);
             });
 
         $response = $this->requestHandler->process($this->mockRequest);

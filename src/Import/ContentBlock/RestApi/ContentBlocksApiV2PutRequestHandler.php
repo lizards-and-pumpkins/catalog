@@ -1,16 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\MissingContentBlockDataVersionException;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -32,22 +33,13 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
      */
     private $contextBuilder;
 
-    /**
-     * @var DataPoolReader
-     */
-    private $dataPoolReader;
-
-    public function __construct(
-        CommandQueue $commandQueue,
-        ContextBuilder $contextBuilder,
-        DataPoolReader $dataPoolReader
-    ) {
+    public function __construct(CommandQueue $commandQueue, ContextBuilder $contextBuilder)
+    {
         $this->commandQueue = $commandQueue;
         $this->contextBuilder = $contextBuilder;
-        $this->dataPoolReader = $dataPoolReader;
     }
 
-    public function canProcess(HttpRequest $request) : bool
+    public function canProcess(HttpRequest $request): bool
     {
         if (HttpRequest::METHOD_PUT !== $request->getMethod()) {
             return false;
@@ -60,7 +52,7 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
         return true;
     }
 
-    final protected function getResponse(HttpRequest $request) : HttpResponse
+    final protected function getResponse(HttpRequest $request): HttpResponse
     {
         $headers = [];
         $body = '';
@@ -73,24 +65,11 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
         $requestBody = json_decode($request->getRawBody(), true);
         $this->validateRequestBody($requestBody);
 
-        $contentBlockIdString = $this->extractContentBlockIdFromUrl($request);
-        $contentBlockId = ContentBlockId::fromString($contentBlockIdString);
-
-        $keyGeneratorParams = [];
-
-        if (isset($requestBody['url_key'])) {
-            $keyGeneratorParams['url_key'] = $requestBody['url_key'];
-        }
-        
-        $context = $this->contextBuilder->createContext(array_merge(
-            $requestBody['context'],
-            [DataVersion::CONTEXT_CODE => $this->getDataVersion($requestBody)]
-        ));
         $contentBlockSource = new ContentBlockSource(
-            $contentBlockId,
+            $this->getContentBlockIdFromRequest($request),
             $requestBody['content'],
-            $context,
-            $keyGeneratorParams
+            $this->buildContextFromRequest($requestBody),
+            $this->buildKeyGeneratorParamsFromRequest($requestBody)
         );
 
         $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
@@ -101,12 +80,49 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
      */
     private function validateRequestBody(array $requestBody)
     {
-        if (!isset($requestBody['content'])) {
-            throw new ContentBlockBodyIsMissingInRequestBodyException(
-                'Content block content is missing in request body.'
+        $this->validateContent($requestBody);
+
+        $this->validateContext($requestBody);
+
+        $this->validateUrlKey($requestBody);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string|null
+     */
+    private function extractContentBlockIdFromUrl(HttpRequest $request)
+    {
+        if (! preg_match('#/content_blocks/(?<content_block_id>[^/]+)#i', (string) $request->getUrl(), $urlTokens)) {
+            return null;
+        }
+
+        return $urlTokens['content_block_id'];
+    }
+
+    /**
+     * @param string[] $requestBody
+     * @return string
+     */
+    protected function getDataVersion(array $requestBody): string
+    {
+        $this->validateDataVersion($requestBody);
+        return $requestBody['data_version'];
+    }
+
+    private function validateDataVersion(array $requestBody)
+    {
+        if (!isset($requestBody['data_version'])) {
+            throw new MissingContentBlockDataVersionException(
+                sprintf('The content block data version must be specified.')
             );
         }
 
+        DataVersion::fromVersionString($requestBody['data_version']);
+    }
+
+    private function validateContext(array $requestBody)
+    {
         if (!isset($requestBody['context'])) {
             throw new ContentBlockContextIsMissingInRequestBodyException(
                 'Content block context is missing in request body.'
@@ -118,7 +134,19 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
                 sprintf('Content block context supposed to be an array, got %s.', gettype($requestBody['context']))
             );
         }
+    }
 
+    private function validateContent(array $requestBody)
+    {
+        if (!isset($requestBody['content'])) {
+            throw new ContentBlockBodyIsMissingInRequestBodyException(
+                'Content block content is missing in request body.'
+            );
+        }
+    }
+
+    private function validateUrlKey(array $requestBody)
+    {
         if (isset($requestBody['url_key']) && !is_string($requestBody['url_key'])) {
             throw new InvalidContentBlockUrlKey(
                 sprintf('Content block URL key must be a string, got %s.', gettype($requestBody['url_key']))
@@ -126,27 +154,29 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
         }
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string|null
-     */
-    private function extractContentBlockIdFromUrl(HttpRequest $request)
+    protected function getContentBlockIdFromRequest(HttpRequest $request): ContentBlockId
     {
-        preg_match('#/content_blocks/([^/]+)#i', (string) $request->getUrl(), $urlTokens);
+        $contentBlockIdString = $this->extractContentBlockIdFromUrl($request);
 
-        if (count($urlTokens) < 2) {
-            return null;
-        }
-
-        return $urlTokens[1];
+        return ContentBlockId::fromString($contentBlockIdString);
     }
 
-    /**
-     * @param string[] $requestBody
-     * @return string
-     */
-    protected function getDataVersion(array $requestBody): string
+    private function buildKeyGeneratorParamsFromRequest($requestBody): array
     {
-        return $this->dataPoolReader->getCurrentDataVersion();
+        $keyGeneratorParams = [];
+
+        if (isset($requestBody['url_key'])) {
+            $keyGeneratorParams['url_key'] = $requestBody['url_key'];
+        }
+
+        return $keyGeneratorParams;
+    }
+
+    private function buildContextFromRequest($requestBody): Context
+    {
+        return $this->contextBuilder->createContext(array_merge(
+            $requestBody['context'],
+            [DataVersion::CONTEXT_CODE => $this->getDataVersion($requestBody)]
+        ));
     }
 }
