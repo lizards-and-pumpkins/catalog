@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use PHPUnit\Framework\TestCase;
 
@@ -43,17 +44,22 @@ class ApiRequestHandlerTest extends TestCase
         $this->assertInstanceOf(GenericHttpResponse::class, $result);
     }
 
-    public function testApiSpecificHeadersAreSet()
+    /**
+     * @runInSeparateProcess
+     * @requires extension xdebug
+     */
+    public function testSetsCorsHeaders()
     {
-        $response = $this->apiRequestHandler->process($this->stubRequest);
-        $headers = $this->getPrivateFieldValue($response, 'headers');
+        $response = (new StubEmptyApiRequestHandler())->process($this->stubRequest);
+        $response->send();
+
         $expectedHeaders = [
-            'access-control-allow-origin' => '*',
-            'access-control-allow-methods' => '*',
-            'content-type' => 'application/json',
+            'access-control-allow-origin: *',
+            'access-control-allow-methods: *',
+            'content-type: application/json',
         ];
 
-        $this->assertArraySubset($expectedHeaders, $headers->getAll());
+        $this->assertArraySubset($expectedHeaders, xdebug_get_headers());
     }
 
     public function testDummyBodyContentIsReturned()
@@ -65,15 +71,12 @@ class ApiRequestHandlerTest extends TestCase
         $this->assertSame($expectedBodyContent, $result);
     }
 
-    /**
-     * @param mixed $object
-     * @param string $field
-     * @return mixed
-     */
-    private function getPrivateFieldValue($object, string $field)
+    public function testReturnsJsonErrorResponseInCaseOfExceptions()
     {
-        $property = new \ReflectionProperty($object, $field);
-        $property->setAccessible(true);
-        return $property->getValue($object);
+        $response = (new StubFailingApiRequestHandler())->process($this->stubRequest);
+        $expectedBody = json_encode(['error' => StubFailingApiRequestHandler::EXCEPTION_MESSAGE]);
+
+        $this->assertSame(HttpResponse::STATUS_BAD_REQUEST, $response->getStatusCode());
+        $this->assertSame($expectedBody, $response->getBody());
     }
 }

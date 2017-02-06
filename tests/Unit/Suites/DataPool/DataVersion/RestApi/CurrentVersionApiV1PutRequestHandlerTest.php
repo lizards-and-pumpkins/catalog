@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\DataPool\DataVersion\RestApi;
 
-use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\TargetDataVersionMissingInRequestException;
-use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\UnableToDeserializeRequestBodyJsonException;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -95,15 +93,17 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
      */
     public function testThrowsExceptionIfTargetDataVersionIsMissing($missingTargetVersionRequestData)
     {
-        $this->expectException(TargetDataVersionMissingInRequestException::class);
-        $this->expectExceptionMessage('The target data version is missing in the request body');
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_PUT,
             HttpUrl::fromString('https://example.com/api/current_version'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody(json_encode($missingTargetVersionRequestData))
         );
-        $this->createHandler()->process($request);
+        $response = $this->createHandler()->process($request);
+
+        $expectedResponseBody = json_encode(['error' => 'The target data version is missing in the request body']);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function requestDataWithoutTargetVersionDataProvider(): array
@@ -118,15 +118,17 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
 
     public function testThrowsExceptionIfRequestBodyIsNotJson()
     {
-        $this->expectException(UnableToDeserializeRequestBodyJsonException::class);
-        $this->expectExceptionMessage('Unable to deserialize request body JSON: ');
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_PUT,
             HttpUrl::fromString('https://example.com/api/current_version'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody('???')
         );
-        $this->createHandler()->process($request);
+        $response = $this->createHandler()->process($request);
+
+        $expectedResponseBody = json_encode(['error' => 'Unable to deserialize request body JSON: Syntax error']);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testAddsSetCurrentDataVersionCommandToCommandQueue()

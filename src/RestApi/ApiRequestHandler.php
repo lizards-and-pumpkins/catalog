@@ -17,11 +17,14 @@ abstract class ApiRequestHandler implements HttpRequestHandler
             $this->processRequest($request);
             $response = $this->getResponse($request);
 
-            return $this->createJsonResponse($response);
+            $body = $response->getBody();
+            $statusCode = $response->getStatusCode();
         } catch (\Exception $e) {
-            /* TODO: Implement error handling */
-            throw $e;
+            $body = json_encode(['error' => $e->getMessage()]);
+            $statusCode = HttpResponse::STATUS_BAD_REQUEST;
         }
+
+        return $this->createJsonResponse($body, $statusCode);
     }
 
     abstract protected function getResponse(HttpRequest $request) : HttpResponse;
@@ -31,7 +34,7 @@ abstract class ApiRequestHandler implements HttpRequestHandler
         // Intentionally empty hook method
     }
 
-    private function createJsonResponse(HttpResponse $response): HttpResponse
+    private function createJsonResponse(string $body, int $statusCode): HttpResponse
     {
         $headers = [
             'Access-Control-Allow-Origin'  => '*',
@@ -39,6 +42,6 @@ abstract class ApiRequestHandler implements HttpRequestHandler
             'Content-Type'                 => 'application/json',
         ];
 
-        return GenericHttpResponse::create($response->getBody(), $headers, $response->getStatusCode());
+        return GenericHttpResponse::create($body, $headers, $statusCode);
     }
 }

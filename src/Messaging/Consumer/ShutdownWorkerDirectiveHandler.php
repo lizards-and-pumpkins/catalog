@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\Messaging\Consumer;
 
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;

@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\NullApiRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class NullApiRequestHandlerTest extends TestCase
@@ -41,7 +43,11 @@ class NullApiRequestHandlerTest extends TestCase
 
     public function testExceptionIsThrownDuringAttemptToProcess()
     {
-        $this->expectException(\RuntimeException::class);
         $this->requestHandler->process($this->stubRequest);
+
+        $response = $this->requestHandler->process($this->stubRequest);
+        $expectedResponseBody = json_encode(['error' => 'NullApiRequestHandler should never be processed.']);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 }

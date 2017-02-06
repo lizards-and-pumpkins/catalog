@@ -18,7 +18,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
-use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;

@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
-use LizardsAndPumpkins\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -122,14 +121,19 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
 
     public function testItThrowsAnExceptionIfANonProcessableRequestIsPassed()
     {
-        $this->expectException(UnableToProcessProductRelationsRequestException::class);
-        $this->expectExceptionMessage(
-            sprintf('Unable to process a %s request to "%s"', HttpRequest::METHOD_POST, $this->testMatchingRequestPath)
-        );
-
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
-        $this->requestHandler->process($this->stubRequest);
+
+        $response = $this->requestHandler->process($this->stubRequest);
+        $expectedResponseBody = json_encode([
+            'error' => sprintf(
+                'Unable to process a %s request to "%s"',
+                HttpRequest::METHOD_POST,
+                $this->testMatchingRequestPath
+            )
+        ]);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testItDelegatesToTheProductRelationsServiceToFetchRelatedProducts()

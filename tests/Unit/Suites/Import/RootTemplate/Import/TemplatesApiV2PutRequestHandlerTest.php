@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\InvalidTemplateApiRequestBodyException;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
@@ -75,24 +74,26 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
 
     public function testThrowsExceptionIfRequestBodyIsNotValidJson()
     {
-        $this->expectException(InvalidTemplateApiRequestBodyException::class);
-        $this->expectExceptionMessage('The request body is not valid JSON: ');
-        
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn('this is not JSON!');
         
-        $this->requestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
+
+        $expectedResponseBody = json_encode(['error' => 'The request body is not valid JSON: Syntax error']);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testThrowsExceptionIfRequestDoesNotContainADataVersion()
     {
-        $this->expectException(InvalidTemplateApiRequestBodyException::class);
-        $this->expectExceptionMessage('The API request is missing the target data_version.');
-        
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => 'foo']));
 
-        $this->requestHandler->process($this->mockRequest);
+        $response = $this->requestHandler->process($this->mockRequest);
+
+        $expectedResponseBody = json_encode(['error' => 'The API request is missing the target data_version.']);
+
+        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 
     public function testDoesNotThrowExceptionIfRequestDoesNotContainContent()
