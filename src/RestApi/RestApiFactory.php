@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\RestApi;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
-use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
@@ -48,9 +48,9 @@ class RestApiFactory implements Factory
         );
     }
 
-    public function createContentBlocksApiV1PutRequestHandler(): ContentBlocksApiV1PutRequestHandler
+    public function createContentBlocksApiV1PutRequestHandler(): ContentBlocksApiV2PutRequestHandler
     {
-        return new ContentBlocksApiV1PutRequestHandler(
+        return new ContentBlocksApiV2PutRequestHandler(
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->createContextBuilder(),
             $this->getMasterFactory()->createDataPoolReader()

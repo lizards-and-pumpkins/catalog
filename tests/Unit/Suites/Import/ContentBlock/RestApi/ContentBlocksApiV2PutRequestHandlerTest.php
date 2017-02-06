@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
+ * @covers \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
@@ -35,7 +35,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
     private $mockCommandQueue;
 
     /**
-     * @var ContentBlocksApiV1PutRequestHandler
+     * @var ContentBlocksApiV2PutRequestHandler
      */
     private $requestHandler;
 
@@ -68,7 +68,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         });
         $this->dummyDataPoolReader = $this->createMock(DataPoolReader::class);
         $this->dummyDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testVersion);
-        $this->requestHandler = new ContentBlocksApiV1PutRequestHandler(
+        $this->requestHandler = new ContentBlocksApiV2PutRequestHandler(
             $this->mockCommandQueue,
             $this->stubContextBuilder,
             $this->dummyDataPoolReader

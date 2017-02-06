@@ -20,7 +20,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlock
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
 
-class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
+class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var CommandQueue
@@ -84,7 +84,7 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         
         $context = $this->contextBuilder->createContext(array_merge(
             $requestBody['context'],
-            [DataVersion::CONTEXT_CODE => $this->dataPoolReader->getCurrentDataVersion()]
+            [DataVersion::CONTEXT_CODE => $this->getDataVersion($requestBody)]
         ));
         $contentBlockSource = new ContentBlockSource(
             $contentBlockId,
@@ -139,5 +139,14 @@ class ContentBlocksApiV1PutRequestHandler extends ApiRequestHandler
         }
 
         return $urlTokens[1];
+    }
+
+    /**
+     * @param string[] $requestBody
+     * @return string
+     */
+    protected function getDataVersion(array $requestBody): string
+    {
+        return $this->dataPoolReader->getCurrentDataVersion();
     }
 }
