@@ -32,11 +32,11 @@ function shutdown(int $exitCode = null)
 /**
  * @experimental Please tell us if you use this function. Otherwise we might remove it again, should we not use it.
  */
-function pipeline(callable $f, callable ...$fs): callable
+function pipeline(callable $initialFunction, callable ...$otherFunctions): callable
 {
-    return array_reduce($fs, function (callable $acc, callable $f): callable {
-        return function (...$args) use ($acc, $f) {
-            return $f($acc(...$args));
+    return array_reduce($otherFunctions, function (callable $previousFunctions, callable $nextFunction): callable {
+        return function (...$args) use ($previousFunctions, $nextFunction) {
+            return $nextFunction($previousFunctions(...$args));
         };
-    }, $f);
+    }, $initialFunction);
 }
