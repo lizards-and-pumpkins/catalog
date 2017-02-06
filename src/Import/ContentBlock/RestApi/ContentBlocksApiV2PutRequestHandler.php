@@ -113,9 +113,7 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
     private function validateDataVersion(array $requestBody)
     {
         if (!isset($requestBody['data_version'])) {
-            throw new MissingContentBlockDataVersionException(
-                sprintf('The content block data version must be specified.')
-            );
+            throw new MissingContentBlockDataVersionException('The content block data version must be specified.');
         }
 
         DataVersion::fromVersionString($requestBody['data_version']);
