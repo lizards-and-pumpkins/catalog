@@ -161,13 +161,9 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
 
     private function buildKeyGeneratorParamsFromRequest($requestBody): array
     {
-        $keyGeneratorParams = [];
-
-        if (isset($requestBody['url_key'])) {
-            $keyGeneratorParams['url_key'] = $requestBody['url_key'];
-        }
-
-        return $keyGeneratorParams;
+        return isset($requestBody['url_key']) ?
+            ['url_key' => $requestBody['url_key']] :
+            [];
     }
 
     private function buildContextFromRequest($requestBody): Context
