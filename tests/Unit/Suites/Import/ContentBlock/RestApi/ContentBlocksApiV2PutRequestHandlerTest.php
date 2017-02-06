@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
+class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
 {
     /**
      * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
@@ -141,24 +141,25 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
 
     public function testThrowsExceptionIfDataVersionIsMissing()
     {
-        $this->expectException(MissingContentBlockDataVersionException::class);
-
         $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
         $this->mockRequest->method('getUrl')->willReturn($url);
         $this->mockRequest->method('getRawBody')
             ->willReturn(json_encode(['content' => '', 'context' => []]));
-        $this->requestHandler->process($this->mockRequest);
+        $httpResponse = $this->requestHandler->process($this->mockRequest);
+        $response = json_decode($httpResponse->getBody(), true);
+        $this->assertSame('The content block data version must be specified.', $response['error']);
     }
 
     public function testValidatesTheDataVersion()
     {
-        $this->expectException(\RuntimeException::class);
-        
         $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
         $this->mockRequest->method('getUrl')->willReturn($url);
         $this->mockRequest->method('getRawBody')
             ->willReturn(json_encode(['content' => '', 'context' => [], 'data_version' => '']));
-        $this->requestHandler->process($this->mockRequest);
+        $httpResponse = $this->requestHandler->process($this->mockRequest);
+        $response = json_decode($httpResponse->getBody(), true);
+        $this->assertSame('The specified version is empty.', $response['error']);
+        
     }
 
     public function testEmitsUpdateContentBlockCommand()
