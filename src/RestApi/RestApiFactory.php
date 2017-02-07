@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
@@ -54,6 +55,14 @@ class RestApiFactory implements Factory
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->createContextBuilder(),
             $this->getMasterFactory()->createDataPoolReader()
+        );
+    }
+
+    public function createContentBlocksApiV2PutRequestHandler(): ContentBlocksApiV2PutRequestHandler
+    {
+        return new ContentBlocksApiV2PutRequestHandler(
+            $this->getMasterFactory()->getCommandQueue(),
+            $this->getMasterFactory()->createContextBuilder()
         );
     }
 
@@ -117,6 +126,10 @@ class RestApiFactory implements Factory
 
         $requestHandlerLocator->register('put_content_blocks', $version = 1, function () {
             return $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_content_blocks', $version = 2, function () {
+            return $this->getMasterFactory()->createContentBlocksApiV2PutRequestHandler();
         });
 
         $requestHandlerLocator->register('put_templates', $version = 1, function () {

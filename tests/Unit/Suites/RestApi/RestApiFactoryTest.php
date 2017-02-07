@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\RestApi;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \LizardsAndPumpkins\RestApi\RestApiFactory
  * @uses   \LizardsAndPumpkins\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
  * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
@@ -103,6 +105,7 @@ class RestApiFactoryTest extends TestCase
             'put_catalog_import v1'  => ['put_catalog_import', 1],
             'put_catalog_import v2'  => ['put_catalog_import', 2],
             'put_content_blocks v1'  => ['put_content_blocks', 1],
+            'put_content_blocks v2'  => ['put_content_blocks', 2],
             'put_templates v1'       => ['put_templates', 1],
             'put_templates v2'       => ['put_templates', 2],
             'get_current_version v1' => ['get_current_version', 1],
@@ -122,10 +125,16 @@ class RestApiFactoryTest extends TestCase
         $this->assertInstanceOf(CatalogImportApiV2PutRequestHandler::class, $result);
     }
 
-    public function testContentBlocksApiRequestHandlerIsReturned()
+    public function testContentBlocksApiV1RequestHandlerIsReturned()
     {
         $result = $this->factory->createContentBlocksApiV1PutRequestHandler();
         $this->assertInstanceOf(ContentBlocksApiV1PutRequestHandler::class, $result);
+    }
+
+    public function testContentBlocksApiV2RequestHandlerIsReturned()
+    {
+        $result = $this->factory->createContentBlocksApiV2PutRequestHandler();
+        $this->assertInstanceOf(ContentBlocksApiV2PutRequestHandler::class, $result);
     }
 
     public function testReturnsCurrentVersionApiV1GetRequestHandler()

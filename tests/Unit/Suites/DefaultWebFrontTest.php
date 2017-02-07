@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest

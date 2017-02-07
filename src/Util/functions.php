@@ -28,3 +28,15 @@ function shutdown(int $exitCode = null)
 {
     exit($exitCode);
 }
+
+/**
+ * @experimental Please tell us if you use this function. Otherwise we might remove it again, should we not use it.
+ */
+function pipeline(callable $initialFunction, callable ...$otherFunctions): callable
+{
+    return array_reduce($otherFunctions, function (callable $previousFunctions, callable $nextFunction): callable {
+        return function (...$args) use ($previousFunctions, $nextFunction) {
+            return $nextFunction($previousFunctions(...$args));
+        };
+    }, $initialFunction);
+}
