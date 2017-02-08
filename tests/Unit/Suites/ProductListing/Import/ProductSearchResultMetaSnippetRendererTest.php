@@ -6,11 +6,13 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -50,7 +52,7 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
         $stubContext = $this->createMock(Context::class);
         /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
         $stubContextSource = $this->createMock(ContextSource::class);
-        $stubContextSource->method('getAllAvailableContexts')->willReturn([$stubContext]);
+        $stubContextSource->method('getAllAvailableContextsWithVersionApplied')->willReturn([$stubContext]);
 
         $this->renderer = new ProductSearchResultMetaSnippetRenderer(
             $stubSnippetKeyGenerator,
@@ -66,9 +68,10 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
 
     public function testArrayOfSnippetsIsReturned()
     {
-        $dataObject = new \stdClass();
-        $result = $this->renderer->render($dataObject);
+        $dummyDataObject = $this->createMock(TemplateProjectionData::class);
+        $result = $this->renderer->render($dummyDataObject);
 
+        $this->assertNotEmpty($result);
         $this->assertContainsOnly(Snippet::class, $result);
     }
 
@@ -81,8 +84,8 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 
-        $dataObject = new \stdClass();
-        $result = $this->renderer->render($dataObject);
+        $stubDataObject = $this->createMock(TemplateProjectionData::class);
+        $result = $this->renderer->render($stubDataObject);
 
         $this->assertEquals([$expectedSnippet], $result);
     }

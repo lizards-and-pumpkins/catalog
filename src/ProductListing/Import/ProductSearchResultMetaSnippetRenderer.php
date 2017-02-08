@@ -11,6 +11,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
 {
@@ -45,20 +46,19 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
      * @param mixed $dataObject
      * @return Snippet[]
      */
-    public function render($dataObject) : array
+    public function render($dataObject): array
     {
-        // todo: (DATA_VERSION) important! Use data version from $dataObject
-        return array_map(function (Context $context) use ($dataObject) {
-            return $this->renderMetaInfoSnippetForContext($dataObject, $context);
-        }, $this->contextSource->getAllAvailableContexts());
+        return $this->renderMetaInfoSnippetForContexts($dataObject);
     }
 
-    /**
-     * @param mixed $dataObject
-     * @param Context $context
-     * @return Snippet
-     */
-    private function renderMetaInfoSnippetForContext($dataObject, Context $context) : Snippet
+    public function renderMetaInfoSnippetForContexts(TemplateProjectionData $dataObject): array
+    {
+        return array_map(function (Context $context) use ($dataObject) {
+            return $this->renderMetaInfoSnippetForContext($dataObject, $context);
+        }, $this->contextSource->getAllAvailableContextsWithVersionApplied($dataObject->getDataVersion()));
+    }
+
+    private function renderMetaInfoSnippetForContext(TemplateProjectionData $dataObject, Context $context): Snippet
     {
         $this->blockRenderer->render($dataObject, $context);
 
