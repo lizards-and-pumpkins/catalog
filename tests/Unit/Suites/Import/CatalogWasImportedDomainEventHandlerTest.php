@@ -50,10 +50,4 @@ class CatalogWasImportedDomainEventHandlerTest extends TestCase
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->eventHandler);
     }
-
-    public function testItTriggersTheProductListingProjection()
-    {
-        $this->markTestIncomplete('This event handler is currently not doing anything.');
-        $this->eventHandler->process();
-    }
 }
