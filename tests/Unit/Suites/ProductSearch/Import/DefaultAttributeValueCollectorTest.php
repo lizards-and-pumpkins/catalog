@@ -83,22 +83,4 @@ class DefaultAttributeValueCollectorTest extends \PHPUnit_Framework_TestCase
             ->willReturn([1.99]);
         $this->attributeValueCollector->getValues($this->mockProduct, $priceAttributeCode);
     }
-
-    public function testProductPriceIsReturnedIfSpecialPriceEqualsToEmptyString()
-    {
-        $testPrice = 2.99;
-        $priceAttributeCode = AttributeCode::fromString(PriceSnippetRenderer::PRICE);
-        $specialPriceAttributeCode = AttributeCode::fromString(PriceSnippetRenderer::SPECIAL_PRICE);
-
-        $this->mockProduct->method('hasAttribute')->with($specialPriceAttributeCode)->willReturn(true);
-
-        $this->mockProduct->method('getAllValuesOfAttribute')->willReturnMap([
-            [PriceSnippetRenderer::PRICE, [$testPrice]],
-            [PriceSnippetRenderer::SPECIAL_PRICE, ['']],
-        ]);
-
-        $result = $this->attributeValueCollector->getValues($this->mockProduct, $priceAttributeCode);
-
-        $this->assertSame([$testPrice], $result);
-    }
 }

@@ -63,8 +63,7 @@ class DefaultAttributeValueCollector implements AttributeValueCollector
 
     private function hasSpecialPrice(Product $product) : bool
     {
-        return $product->hasAttribute($this->specialPriceAttribute) &&
-               $product->getAllValuesOfAttribute((string) $this->specialPriceAttribute) !== [''];
+        return $product->hasAttribute($this->specialPriceAttribute);
     }
 
     /**
