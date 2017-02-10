@@ -33,7 +33,7 @@ class LoggingQueueFactoryTest extends TestCase
         $masterFactory = new SampleMasterFactory();
         $masterFactory->register(new CommonFactory());
         $masterFactory->register($implementationFactory);
-        $this->factory = new LoggingQueueFactory($implementationFactory);
+        $this->factory = new LoggingQueueFactory($masterFactory);
         $masterFactory->register($this->factory);
     }
 
