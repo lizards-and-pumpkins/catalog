@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ConsoleCommand;
 
+use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
+use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\Logging\LoggingQueueFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -24,6 +27,13 @@ class CliFactoryBootstrap
         return $masterFactory;
     }
 
+//    public static function createLoggingFactory(Factory ...$factoriesToRegister): MasterFactory
+//    {
+//        $masterFactory = self::createFactory(...$factoriesToRegister);
+//        self::registerLoggingFactories($masterFactory);
+//        return $masterFactory;
+//    }
+    
     /**
      * @param MasterFactory $masterFactory
      * @param Factory[] $otherFactories
@@ -67,5 +77,12 @@ class CliFactoryBootstrap
         every($factoriesToRegister, function (Factory $factory) use ($masterFactory) {
             $masterFactory->register($factory);
         });
+    }
+
+    private static function registerLoggingFactories(MasterFactory $factory)
+    {
+        $factory->register(new LoggingDomainEventHandlerFactory($factory));
+        $factory->register(new LoggingCommandHandlerFactory($factory));
+        $factory->register(new LoggingQueueFactory($factory));
     }
 }
