@@ -32,6 +32,9 @@
             ]
         }
     },
+    "bin": [
+        "bin/runImport.php"
+    ],
     "scripts": {
         "test": [
             "vendor/bin/phpunit -c tests/Unit/phpunit.xml.dist",
