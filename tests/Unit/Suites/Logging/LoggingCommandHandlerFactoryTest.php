@@ -4,25 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
-use LizardsAndPumpkins\Import\ImportCatalogCommand;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
-use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
-use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
-use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
