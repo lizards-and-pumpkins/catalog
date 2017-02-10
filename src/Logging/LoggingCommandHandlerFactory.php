@@ -1,95 +1,110 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
 {
     use FactoryTrait;
 
     /**
-     * @var CommandHandlerFactory
+     * @var CommandHandler[]
      */
-    private $commandFactoryDelegate;
+    private $nonDecoratedCommandHandlerDelegates;
 
-    public function __construct(CommandHandlerFactory $commandFactoryDelegate)
-    {
-        $this->commandFactoryDelegate = $commandFactoryDelegate;
-    }
+    /**
+     * @var MasterFactory
+     */
+    private $masterFactory;
 
-    private function getCommandFactoryDelegate() : CommandHandlerFactory
+    public function __construct(MasterFactory $masterFactory)
     {
-        return $this->commandFactoryDelegate;
-    }
-
-    public function createUpdateContentBlockCommandHandler() : CommandHandler
-    {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateContentBlockCommandHandler()
-        );
-    }
-
-    public function createUpdateProductCommandHandler() : CommandHandler
-    {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateProductCommandHandler()
-        );
-    }
-
-    public function createAddProductListingCommandHandler() : CommandHandler
-    {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createAddProductListingCommandHandler()
-        );
-    }
-
-    public function createAddImageCommandHandler() : CommandHandler
-    {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createAddImageCommandHandler()
-        );
-    }
-
-    public function createShutdownWorkerCommandHandler() : CommandHandler
-    {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createShutdownWorkerCommandHandler()
-        );
+        /** @var CommandHandlerFactory $masterFactory */
+        $this->nonDecoratedCommandHandlerDelegates = [
+            'UpdateContentBlockCommandHandler' => $masterFactory->createUpdateContentBlockCommandHandler(),
+            'UpdateProductCommandHandler' => $masterFactory->createUpdateProductCommandHandler(),
+            'AddProductListingCommandHandler' => $masterFactory->createAddProductListingCommandHandler(),
+            'AddImageCommandHandler' => $masterFactory->createAddImageCommandHandler(),
+            'ShutdownWorkerCommandHandler' => $masterFactory->createShutdownWorkerCommandHandler(),
+            'ImportCatalogCommandHandler' => $masterFactory->createImportCatalogCommandHandler(),
+            'SetCurrentDataVersionCommandHandler' => $masterFactory->createSetCurrentDataVersionCommandHandler(),
+            'UpdateTemplateCommandHandler' => $masterFactory->createUpdateTemplateCommandHandler(),
+        ];
+        $this->masterFactory = $masterFactory;
     }
     
+    private function getDelegate(string $method): CommandHandler
+    {
+        $key = $this->getClassToInstantiateFromCreateMethod($method);
+
+        return $this->nonDecoratedCommandHandlerDelegates[$key];
+    }
+
+    private function getClassToInstantiateFromCreateMethod(string $method): string
+    {
+        return substr($method, 6);
+    }
+    
+    public function createUpdateContentBlockCommandHandler(): CommandHandler
+    {
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
+        );
+    }
+
+    public function createUpdateProductCommandHandler(): CommandHandler
+    {
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
+        );
+    }
+
+    public function createAddProductListingCommandHandler(): CommandHandler
+    {
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
+        );
+    }
+
+    public function createAddImageCommandHandler(): CommandHandler
+    {
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
+        );
+    }
+
+    public function createShutdownWorkerCommandHandler(): CommandHandler
+    {
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
+        );
+    }
+
     public function createImportCatalogCommandHandler(): CommandHandler
     {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createImportCatalogCommandHandler()
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
     public function createSetCurrentDataVersionCommandHandler(): CommandHandler
     {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createSetCurrentDataVersionCommandHandler()
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
     public function createUpdateTemplateCommandHandler(): CommandHandler
     {
-        $commandFactoryDelegate = $this->getCommandFactoryDelegate();
-        return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateTemplateCommandHandler()
+        return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 }

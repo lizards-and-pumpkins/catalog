@@ -1,28 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
-use LizardsAndPumpkins\Import\ImportCatalogCommand;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
-use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
-use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
-use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
@@ -34,42 +16,19 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
- * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
- * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
- * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
- * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
- * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
- * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
- * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
- * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
- * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
- * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Import\Product\ProductId
- * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
- * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommand
- * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
- * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommand
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
- * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommand
- * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
+ * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
- * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
- * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommandHandler
- * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
- * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler
- * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
+ * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand
+ * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
  */
 class LoggingCommandHandlerFactoryTest extends TestCase
 {
@@ -84,7 +43,7 @@ class LoggingCommandHandlerFactoryTest extends TestCase
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
         $masterFactory->register(new UnitTestFactory($this));
-        $this->loggingCommandHandlerFactory = new LoggingCommandHandlerFactory($commonFactory);
+        $this->loggingCommandHandlerFactory = new LoggingCommandHandlerFactory($masterFactory);
         $masterFactory->register($this->loggingCommandHandlerFactory);
     }
 
@@ -96,74 +55,49 @@ class LoggingCommandHandlerFactoryTest extends TestCase
 
     public function testItReturnsADecoratedUpdateContentBlockCommandHandler()
     {
-        $dummyContext = $this->createMock(Context::class); 
-        $dummyContext->method('jsonSerialize')->willReturn([]);
-        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('qux'), '', $dummyContext, []);
-        $message = (new UpdateContentBlockCommand($contentBlockSource))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateContentBlockCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateContentBlockCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedUpdateProductCommandHandler()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->createMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
-        $stubContext->method('getValue')->willReturn('123');
-        $product = new SimpleProduct(
-            new ProductId('foo'),
-            ProductTaxClass::fromString('bar'),
-            new ProductAttributeList(),
-            new ProductImageList(),
-            $stubContext
-        );
-        $message = (new UpdateProductCommand($product))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateProductCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateProductCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedAddProductListingCommandHandler()
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->createMock(ProductListing::class);
-        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
-        $message = (new AddProductListingCommand($stubProductListing))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createAddProductListingCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createAddProductListingCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testItReturnsADecoratedAddProductImageCommandHandler()
     {
-        $message = (new AddImageCommand(__FILE__, DataVersion::fromVersionString('buz')))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createAddImageCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createAddImageCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testReturnsADecoratedShutdownWorkerDirectiveHandler()
     {
-        $message = (new ShutdownWorkerDirective('4321'))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createShutdownWorkerCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createShutdownWorkerCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testReturnsADecoratedImportCatalogCommandHandler()
     {
-        $message = (new ImportCatalogCommand(DataVersion::fromVersionString('buz'), __FILE__))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createImportCatalogCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createImportCatalogCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testReturnsADecoratedSetCurrentDataVersionCommandHandler()
     {
-        $message = (new SetCurrentDataVersionCommand(DataVersion::fromVersionString('qux')))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createSetCurrentDataVersionCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createSetCurrentDataVersionCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 
     public function testReturnsADecoratedUpdateTemplateCommandHandler()
     {
-        $message = (new UpdateTemplateCommand('foo', 'bar', DataVersion::fromVersionString('baz')))->toMessage();
-        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateTemplateCommandHandler($message);
+        $commandHandler = $this->loggingCommandHandlerFactory->createUpdateTemplateCommandHandler();
         $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
     }
 }
