@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\Util;
+namespace LizardsAndPumpkins\ConsoleCommand;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;

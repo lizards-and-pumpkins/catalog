@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\Util;
+namespace LizardsAndPumpkins\ConsoleCommand\TestDouble;
 
 use League\CLImate\CLImate;
+use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 
 class StubCliCommand extends BaseCliCommand
 {

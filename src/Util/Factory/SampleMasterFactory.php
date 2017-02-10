@@ -55,7 +55,6 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
  * @method string[] getRequiredContextParts
  * @method ProductXmlToProductBuilderLocator createProductXmlToProductBuilderLocator
- * @method Context createContext
  * @method string[] getSearchableAttributeCodes
  * @method FacetFiltersToIncludeInResult createProductListingFacetFiltersToIncludeInResult
  * @method ProductsPerPage getProductsPerPageConfig
