@@ -52,7 +52,8 @@ class SimpleProductBuilder implements ProductBuilder
     public function getProductForContext(Context $context) : Product
     {
         $sourceAttributeList = $this->attributeListBuilder->getAttributeListForContext($context);
-        $attributesWithProperTypes = $this->ensureAttributeTypes($sourceAttributeList);
+        $validSourceAttributes = $this->filterAttributesWithInvalidValues($sourceAttributeList);
+        $attributesWithProperTypes = $this->ensureAttributeTypes($validSourceAttributes);
         $images = $this->imageListBuilder->getImageListForContext($context);
         return new SimpleProduct($this->id, $this->taxClass, $attributesWithProperTypes, $images, $context);
     }
@@ -78,5 +79,20 @@ class SimpleProductBuilder implements ProductBuilder
         }
         $price = Price::fromDecimalValue($attribute->getValue());
         return new ProductAttribute($attribute->getCode(), $price->getAmount(), $attribute->getContextDataSet());
+    }
+
+    private function filterAttributesWithInvalidValues(ProductAttributeList $sourceAttributeList): ProductAttributeList
+    {
+        $attributes = array_filter($sourceAttributeList->getAllAttributes(), [$this, 'validateAttributeValue']);
+        return new ProductAttributeList(...$attributes);
+    }
+
+    private function validateAttributeValue(ProductAttribute $attribute): bool
+    {
+        if ($attribute->isCodeEqualTo('special_price') && '' === $attribute->getValue()) {
+            return false;
+        }
+
+        return true;
     }
 }
