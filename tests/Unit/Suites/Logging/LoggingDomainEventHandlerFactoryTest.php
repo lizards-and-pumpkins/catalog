@@ -4,35 +4,15 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Context\SelfContainedContext;
-use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
-use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
-use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
-use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
-use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -41,102 +21,63 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
- * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
- * @uses   \LizardsAndPumpkins\Import\Product\ProductProjector
- * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
- * @uses   \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
- * @uses   \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
- * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
- * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
- * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
- * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
- * @uses   \LizardsAndPumpkins\Context\ContextSource
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector
- * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
- * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
- * @uses   \LizardsAndPumpkins\UnitTestFactory
- * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
- * @uses   \LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator
- * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
- * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader
- * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\Import\SnippetRendererCollection
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
- * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
- * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
- * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
- * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
- * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
- * @uses   \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
- * @uses   \LizardsAndPumpkins\Import\Product\Composite\ConfigurableProduct
- * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageList
- * @uses   \LizardsAndPumpkins\Import\Product\ProductAttributeList
- * @uses   \LizardsAndPumpkins\Import\Product\ProductId
- * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\Product\SimpleProduct
- * @uses   \LizardsAndPumpkins\Import\Tax\ProductTaxClass
- * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
- * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
- * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
- * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
- * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
- * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent
- * @uses   \LizardsAndPumpkins\Import\Product\RehydrateableProductTrait
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListing
- * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective
- * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
- * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
- * @uses   \LizardsAndPumpkins\Import\CatalogImport
- * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler
- * @uses   \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent
- * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
- * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
- * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
- * @uses   \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
- * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
- * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent
- * @uses   \LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler
+ * @uses \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses \LizardsAndPumpkins\DataPool\DataPoolWriter
+ * @uses \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses \LizardsAndPumpkins\Import\CatalogImport
+ * @uses \LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler
+ * @uses \LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector
+ * @uses \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
+ * @uses \LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler
+ * @uses \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
+ * @uses \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
+ * @uses \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
+ * @uses \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
+ * @uses \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
+ * @uses \LizardsAndPumpkins\Import\Product\ProductImportCommandLocator
+ * @uses \LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer
+ * @uses \LizardsAndPumpkins\Import\Product\ProductProjector
+ * @uses \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
+ * @uses \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
+ * @uses \LizardsAndPumpkins\Import\Product\QueueImportCommands
+ * @uses \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
+ * @uses \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
+ * @uses \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
+ * @uses \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
+ * @uses \LizardsAndPumpkins\Import\SnippetRendererCollection
+ * @uses \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
+ * @uses \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
+ * @uses \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
+ * @uses \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
+ * @uses \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
+ * @uses \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
+ * @uses \LizardsAndPumpkins\Translation\TranslatorRegistry
+ * @uses \LizardsAndPumpkins\Util\Factory\CommonFactory
+ * @uses \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class LoggingDomainEventHandlerFactoryTest extends TestCase
 {
@@ -157,87 +98,61 @@ class LoggingDomainEventHandlerFactoryTest extends TestCase
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
         $masterFactory->register(new UnitTestFactory($this));
-        $this->factory = new LoggingDomainEventHandlerFactory($commonFactory);
+        $this->factory = new LoggingDomainEventHandlerFactory($masterFactory);
         $masterFactory->register($this->factory);
     }
 
     public function testItReturnsADecoratedProductWasUpdatedDomainEventHandler()
     {
-        $testProduct = new SimpleProduct(
-            new ProductId('foo'),
-            ProductTaxClass::fromString('bar'),
-            new ProductAttributeList(),
-            new ProductImageList(),
-            new SelfContainedContext([DataVersion::CONTEXT_CODE => 'buz'])
-        );
-        $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
-        $result = $this->factory->createProductWasUpdatedDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createProductWasUpdatedDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedTemplateWasUpdatedDomainEventHandler()
     {
-        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar', DataVersion::fromVersionString('baz'));
-        $result = $this->factory->createTemplateWasUpdatedDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createTemplateWasUpdatedDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedImageWasAddedDomainEventHandler()
     {
-        $testEvent = new ImageWasAddedDomainEvent('foo', DataVersion::fromVersionString('foo'));
-        $result = $this->factory->createImageWasAddedDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createImageWasAddedDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedProductListingWasAddedDomainEventHandler()
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->createMock(ProductListing::class);
-        $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => 'foo']);
-        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
-        $testEvent = new ProductListingWasAddedDomainEvent($stubProductListing);
-        $result = $this->factory->createProductListingWasAddedDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createProductListingWasAddedDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedContentBlockWasUpdatedDomainEventHandler()
     {
-        $testContentBlockSource = new ContentBlockSource(
-            ContentBlockId::fromString('foo'),
-            '',
-            SelfContainedContextBuilder::rehydrateContext([]),
-            []
-        );
-        $testEvent = new ContentBlockWasUpdatedDomainEvent($testContentBlockSource);
-        $result = $this->factory->createContentBlockWasUpdatedDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createContentBlockWasUpdatedDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testItReturnsADecoratedCatalogWasImportedDomainEventHandler()
     {
-        $testEvent = new CatalogWasImportedDomainEvent(DataVersion::fromVersionString('foo'));
-        $result = $this->factory->createCatalogWasImportedDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createCatalogWasImportedDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
     }
 
     public function testReturnsADecoratedShutdownWorkerDirectiveHandler()
     {
-        $testEvent = new ShutdownWorkerDirective('*');
-        $result = $this->factory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createShutdownWorkerDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
 
     public function testReturnsADecoratedCatalogImportWasTriggeredDomainEventHandler()
     {
-        $testEvent = new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), 'test.xml');
-        $result = $this->factory->createCatalogImportWasTriggeredDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createCatalogImportWasTriggeredDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
     }
 
     public function testReturnsADecoratedCurrentDataVersionWasSetDomainEventHandler()
     {
-        $testEvent = new CurrentDataVersionWasSetDomainEvent(DataVersion::fromVersionString('foo'));
-        $result = $this->factory->createCurrentDataVersionWasSetDomainEventHandler($testEvent->toMessage());
+        $result = $this->factory->createCurrentDataVersionWasSetDomainEventHandler();
         $this->assertDecoratedDomainEventHandlerInstanceOf(CurrentDataVersionWasSetDomainEventHandler::class, $result);
     }
 }

@@ -1,103 +1,126 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
-use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFactory
 {
     use FactoryTrait;
 
     /**
-     * @var DomainEventHandlerFactory
+     * @var MasterFactory
      */
-    private $domainEventFactoryDelegate;
+    private $masterFactory;
 
-    public function __construct(DomainEventHandlerFactory $domainEventFactoryDelegate)
+    /**
+     * @var DomainEventHandler[]
+     */
+    private $nonDecoratedEventHandlers;
+
+    public function __construct(MasterFactory $masterFactory)
     {
-        $this->domainEventFactoryDelegate = $domainEventFactoryDelegate;
+        $this->nonDecoratedEventHandlers = [
+            'ProductWasUpdatedDomainEventHandler'         =>
+                $masterFactory->createProductWasUpdatedDomainEventHandler(),
+            'TemplateWasUpdatedDomainEventHandler'        =>
+                $masterFactory->createTemplateWasUpdatedDomainEventHandler(),
+            'ImageWasAddedDomainEventHandler'             =>
+                $masterFactory->createImageWasAddedDomainEventHandler(),
+            'ProductListingWasAddedDomainEventHandler'    =>
+                $masterFactory->createProductListingWasAddedDomainEventHandler(),
+            'ContentBlockWasUpdatedDomainEventHandler'    => 
+                $masterFactory->createContentBlockWasUpdatedDomainEventHandler(),
+            'CatalogWasImportedDomainEventHandler'        =>
+                $masterFactory->createCatalogWasImportedDomainEventHandler(),
+            'ShutdownWorkerDomainEventHandler'            =>
+                $masterFactory->createShutdownWorkerDomainEventHandler(),
+            'CatalogImportWasTriggeredDomainEventHandler' =>
+                $masterFactory->createCatalogImportWasTriggeredDomainEventHandler(),
+            'CurrentDataVersionWasSetDomainEventHandler'  =>
+                $masterFactory->createCurrentDataVersionWasSetDomainEventHandler(),
+        ];
+        $this->masterFactory = $masterFactory;
+    }
+    
+    private function getDelegate(string $method): DomainEventHandler
+    {
+        $key = $this->getClassToInstantiateFromCreateMethod($method);
+
+        return $this->nonDecoratedEventHandlers[$key];
     }
 
-    private function getDomainEventFactoryDelegate() : DomainEventHandlerFactory
+    private function getClassToInstantiateFromCreateMethod(string $method): string
     {
-        return $this->domainEventFactoryDelegate;
+        return substr($method, 6);
     }
-
-    public function createProductWasUpdatedDomainEventHandler() : DomainEventHandler
+    
+    public function createProductWasUpdatedDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createProductWasUpdatedDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
-    public function createTemplateWasUpdatedDomainEventHandler() : DomainEventHandler
+    public function createTemplateWasUpdatedDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createTemplateWasUpdatedDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
-    public function createImageWasAddedDomainEventHandler() : DomainEventHandler
+    public function createImageWasAddedDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createImageWasAddedDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
-    public function createProductListingWasAddedDomainEventHandler() : DomainEventHandler
+    public function createProductListingWasAddedDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createProductListingWasAddedDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
-    public function createContentBlockWasUpdatedDomainEventHandler() : DomainEventHandler
+    public function createContentBlockWasUpdatedDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createContentBlockWasUpdatedDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
-    public function createCatalogWasImportedDomainEventHandler() : DomainEventHandler
+    public function createCatalogWasImportedDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createCatalogWasImportedDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
-    public function createShutdownWorkerDomainEventHandler() : DomainEventHandler
+    public function createShutdownWorkerDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createShutdownWorkerDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
     public function createCatalogImportWasTriggeredDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createCatalogImportWasTriggeredDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 
     public function createCurrentDataVersionWasSetDomainEventHandler(): DomainEventHandler
     {
-        $domainEventFactory = $this->getDomainEventFactoryDelegate();
-        return $domainEventFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
-            $domainEventFactory->createCurrentDataVersionWasSetDomainEventHandler()
+        return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
+            $this->getDelegate(__FUNCTION__)
         );
     }
 }
