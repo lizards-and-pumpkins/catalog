@@ -6,11 +6,28 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class CliBootstrap
 {
+    const ENV_DEBUG_VAR = 'LP_DEBUG_LOG';
+
     public static function create(string $cliCommandClass, Factory ...$factoriesToRegister): BaseCliCommand
     {
-        return new $cliCommandClass(CliFactoryBootstrap::createMasterFactory(...$factoriesToRegister), new CLImate());
+        $masterFactory = self::createMasterFactory($factoriesToRegister);
+
+        return new $cliCommandClass($masterFactory, new CLImate());
+    }
+
+    private static function createMasterFactory(array $factoriesToRegister): MasterFactory
+    {
+        return self::isLoggingActive() ?
+            CliFactoryBootstrap::createLoggingMasterFactory(...$factoriesToRegister) :
+            CliFactoryBootstrap::createMasterFactory(...$factoriesToRegister);
+    }
+
+    private static function isLoggingActive(): bool
+    {
+        return ($_SERVER[self::ENV_DEBUG_VAR] ?? false) || ($_ENV[self::ENV_DEBUG_VAR] ?? false);
     }
 }

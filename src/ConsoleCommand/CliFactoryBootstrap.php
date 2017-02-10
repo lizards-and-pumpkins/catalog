@@ -38,9 +38,25 @@ class CliFactoryBootstrap
     {
         $masterFactory = self::createMasterFactory(...$factoriesToRegister);
         
-        self::registerLoggingFactories($masterFactory, $factoriesToRegister);
+        self::registerLoggingFactories($masterFactory);
         
         return $masterFactory;
+    }
+
+    public static function registerLoggingFactories(MasterFactory $masterFactory)
+    {
+        self::registerSpecifiedFactories($masterFactory, self::createLoggingFactories($masterFactory));
+    }
+
+    /**
+     * @param MasterFactory $masterFactory
+     * @return Factory[]
+     */
+    private static function createLoggingFactories(MasterFactory $masterFactory): array
+    {
+        return array_map(function (string $class) use ($masterFactory) {
+            return new $class($masterFactory);
+        }, self::$loggingFactories);
     }
 
     /**
@@ -64,19 +80,6 @@ class CliFactoryBootstrap
     {
         every($factoriesToRegister, function (Factory $factory) use ($masterFactory) {
             $masterFactory->register($factory);
-        });
-    }
-
-    /**
-     * @param MasterFactory $masterFactory
-     * @param Factory[] $otherFactories
-     */
-    private static function registerLoggingFactories(MasterFactory $masterFactory, array $otherFactories)
-    {
-        every(self::$loggingFactories, function (string $class) use ($masterFactory, $otherFactories) {
-            if (class_exists($class) && !self::arrayContainsInstanceOfClass($otherFactories, $class)) {
-                $masterFactory->register(new $class($masterFactory));
-            }
         });
     }
     
