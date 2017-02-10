@@ -13,22 +13,17 @@ class ImportCatalogCommandHandler implements CommandHandler
      */
     private $domainEventQueue;
 
-    /**
-     * @var ImportCatalogCommand
-     */
-    private $importCatalogCommand;
-
-    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
+    public function __construct(DomainEventQueue $domainEventQueue)
     {
-        $this->importCatalogCommand = ImportCatalogCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process()
+    public function process(Message $message)
     {
+        $importCatalogCommand = ImportCatalogCommand::fromMessage($message);
         $domainEvent = new CatalogImportWasTriggeredDomainEvent(
-            $this->importCatalogCommand->getDataVersion(),
-            $this->importCatalogCommand->getCatalogDataFile()
+            $importCatalogCommand->getDataVersion(),
+            $importCatalogCommand->getCatalogDataFile()
         );
         $this->domainEventQueue->add($domainEvent);
     }

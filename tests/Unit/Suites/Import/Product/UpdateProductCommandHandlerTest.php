@@ -57,11 +57,9 @@ class UpdateProductCommandHandlerTest extends TestCase
             new SelfContainedContext([DataVersion::CONTEXT_CODE => 'buz'])
         );
         
-        $testCommand = new UpdateProductCommand($this->testProduct);
-
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
-        $this->commandHandler = new UpdateProductCommandHandler($testCommand->toMessage(), $this->mockDomainEventQueue);
+        $this->commandHandler = new UpdateProductCommandHandler($this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
@@ -73,6 +71,6 @@ class UpdateProductCommandHandlerTest extends TestCase
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 
-        $this->commandHandler->process();
+        $this->commandHandler->process((new UpdateProductCommand($this->testProduct))->toMessage());
     }
 }

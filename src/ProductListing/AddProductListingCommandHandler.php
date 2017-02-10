@@ -11,23 +11,18 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class AddProductListingCommandHandler implements CommandHandler
 {
     /**
-     * @var AddProductListingCommand
-     */
-    private $command;
-
-    /**
      * @var DomainEventQueue
      */
     private $eventQueue;
 
-    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
+    public function __construct(DomainEventQueue $domainEventQueue)
     {
-        $this->command = AddProductListingCommand::fromMessage($message);
         $this->eventQueue = $domainEventQueue;
     }
     
-    public function process()
+    public function process(Message $message)
     {
-        $this->eventQueue->add(new ProductListingWasAddedDomainEvent($this->command->getProductListing()));
+        $command = AddProductListingCommand::fromMessage($message);
+        $this->eventQueue->add(new ProductListingWasAddedDomainEvent($command->getProductListing()));
     }
 }

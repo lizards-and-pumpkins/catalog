@@ -9,19 +9,10 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogWasImportedDomainEventHandler implements DomainEventHandler
 {
-    /**
-     * @var CatalogWasImportedDomainEvent
-     */
-    private $event;
-    
-    public function __construct(Message $message)
+    public function process(Message $message)
     {
-        $this->event = CatalogWasImportedDomainEvent::fromMessage($message);
-    }
-
-    public function process()
-    {
-        // Left empty till data versioning is implemented.
-        // Version is already present in event and can be get by $this->event->getDataVersion()
+        // Left empty till data versioning and event sourcing is implemented.
+        // Version is already present in event and can be get by $event->getDataVersion()
+        $event = CatalogWasImportedDomainEvent::fromMessage($message);
     }
 }

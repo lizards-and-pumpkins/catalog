@@ -47,10 +47,7 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends TestCase
         $this->testMessage = (new ContentBlockWasUpdatedDomainEvent($testContentBlockSource))->toMessage();
         $this->mockProjector = $this->createMock(ContentBlockProjector::class);
 
-        $this->domainEventHandler = new ContentBlockWasUpdatedDomainEventHandler(
-            $this->testMessage,
-            $this->mockProjector
-        );
+        $this->domainEventHandler = new ContentBlockWasUpdatedDomainEventHandler($this->mockProjector);
     }
 
     public function testDomainEventHandlerInterfaceIsImplemented()
@@ -61,6 +58,6 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends TestCase
     public function testContentBlockProjectorIsTriggered()
     {
         $this->mockProjector->expects($this->once())->method('project');
-        $this->domainEventHandler->process();
+        $this->domainEventHandler->process($this->testMessage);
     }
 }

@@ -31,13 +31,9 @@ class ImageWasAddedDomainEventHandlerTest extends TestCase
 
     protected function setUp()
     {
-        $testEvent = new ImageWasAddedDomainEvent(__FILE__, DataVersion::fromVersionString('foo'));
         $this->mockImageProcessorCollection = $this->createMock(ImageProcessorCollection::class);
 
-        $this->handler = new ImageWasAddedDomainEventHandler(
-            $testEvent->toMessage(),
-            $this->mockImageProcessorCollection
-        );
+        $this->handler = new ImageWasAddedDomainEventHandler($this->mockImageProcessorCollection);
     }
 
     public function testImageDomainEventHandlerIsReturned()
@@ -48,6 +44,7 @@ class ImageWasAddedDomainEventHandlerTest extends TestCase
     public function testAllImagesArePassedThroughImageProcessor()
     {
         $this->mockImageProcessorCollection->expects($this->once())->method('process');
-        $this->handler->process();
+        $testEvent = new ImageWasAddedDomainEvent(__FILE__, DataVersion::fromVersionString('foo'));
+        $this->handler->process($testEvent->toMessage());
     }
 }

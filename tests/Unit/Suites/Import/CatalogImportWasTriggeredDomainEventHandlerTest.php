@@ -40,10 +40,7 @@ class CatalogImportWasTriggeredDomainEventHandlerTest extends TestCase
     {
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
         $this->testDataVersion = DataVersion::fromVersionString('foo');
-        $this->domainEventHandler = new CatalogImportWasTriggeredDomainEventHandler(
-            $this->mockCatalogImport,
-            (new CatalogImportWasTriggeredDomainEvent($this->testDataVersion, $this->testFile))->toMessage()
-        );
+        $this->domainEventHandler = new CatalogImportWasTriggeredDomainEventHandler($this->mockCatalogImport);
     }
     
     public function testImplementsDomainEventHandler()
@@ -53,8 +50,11 @@ class CatalogImportWasTriggeredDomainEventHandlerTest extends TestCase
 
     public function testDelegatesProcessingTheImportFileToCatalogImport()
     {
+
+        $testMessage = (new CatalogImportWasTriggeredDomainEvent($this->testDataVersion, $this->testFile))->toMessage();
+            
         $this->mockCatalogImport->expects($this->once())->method('importFile')
             ->with($this->testFile, $this->testDataVersion);
-        $this->domainEventHandler->process();
+        $this->domainEventHandler->process($testMessage);
     }
 }

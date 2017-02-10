@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandProcessedLogMessage;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class ProcessTimeLoggingCommandHandlerDecorator implements CommandHandler
 {
@@ -25,10 +26,10 @@ class ProcessTimeLoggingCommandHandlerDecorator implements CommandHandler
         $this->logger = $logger;
     }
     
-    public function process()
+    public function process(Message $message)
     {
         $startTime = microtime(true);
-        $this->decoratedCommandHandler->process();
+        $this->decoratedCommandHandler->process($message);
         $processTime = microtime(true) - $startTime;
         $msg = sprintf('CommandHandler::process %s %f', get_class($this->decoratedCommandHandler), $processTime);
         $this->logger->log(new CommandProcessedLogMessage($msg, $this));

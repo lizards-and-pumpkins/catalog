@@ -62,7 +62,7 @@ class CommandConsumer implements QueueMessageConsumer, MessageReceiver
     {
         try {
             $commandHandler = $this->commandHandlerLocator->getHandlerFor($message);
-            $commandHandler->process();
+            $commandHandler->process($message);
         } catch (\Exception $e) {
             $this->logger->log(new CommandHandlerFailedMessage($message, $e));
         }

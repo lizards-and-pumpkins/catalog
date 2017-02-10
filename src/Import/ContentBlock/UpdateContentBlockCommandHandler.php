@@ -11,24 +11,19 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class UpdateContentBlockCommandHandler implements CommandHandler
 {
     /**
-     * @var UpdateContentBlockCommand
-     */
-    private $command;
-
-    /**
      * @var DomainEventQueue
      */
     private $domainEventQueue;
 
-    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
+    public function __construct(DomainEventQueue $domainEventQueue)
     {
-        $this->command = UpdateContentBlockCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $contentBlockSource = $this->command->getContentBlockSource();
+        $command = UpdateContentBlockCommand::fromMessage($message);
+        $contentBlockSource = $command->getContentBlockSource();
 
         $this->domainEventQueue->add(new ContentBlockWasUpdatedDomainEvent($contentBlockSource));
     }

@@ -38,10 +38,9 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
      */
     private $mockDataPoolReader;
 
-    private function createCommandHandler(Message $message): SetCurrentDataVersionCommandHandler
+    private function createCommandHandler(): SetCurrentDataVersionCommandHandler
     {
         return new SetCurrentDataVersionCommandHandler(
-            $message,
             $this->mockDomainEventQueue,
             $this->mockDataPoolReader,
             $this->mockDataPoolWriter
@@ -71,14 +70,14 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
     public function testAddsCurrentDataVersionWasSetDomainEventToQueue()
     {
         $sourceMessage = $this->createMessage();
-        $handler = $this->createCommandHandler($sourceMessage);
+        $handler = $this->createCommandHandler();
 
         $this->mockDomainEventQueue->expects($this->once())->method('add')
             ->willReturnCallback(function (CurrentDataVersionWasSetDomainEvent $event) use ($sourceMessage) {
                 $this->assertEquals((string) $sourceMessage->getMetadata()['data_version'], $event->getDataVersion());
             });
 
-        $handler->process();
+        $handler->process($sourceMessage);
     }
 
     public function testSetsTheDataVersionFromTheCommandViaTheDataPoolWriter()
@@ -86,7 +85,7 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
         $sourceMessage = $this->createMessage();
         $dataVersionString = $sourceMessage->getMetadata()['data_version'];
         $this->mockDataPoolWriter->expects($this->once())->method('setCurrentDataVersion')->with($dataVersionString);
-        $this->createCommandHandler($sourceMessage)->process();
+        $this->createCommandHandler()->process($sourceMessage);
     }
 
     public function testSetsThePreviousDataVersionFromTheDataPoolReaderViaTheDataPoolWriter()
@@ -94,6 +93,6 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
         $previousVersion = '-1';
         $this->mockDataPoolReader->method('getCurrentDataVersion')->willReturn($previousVersion);
         $this->mockDataPoolWriter->expects($this->once())->method('setPreviousDataVersion')->with($previousVersion);
-        $this->createCommandHandler($this->createMessage())->process();
+        $this->createCommandHandler()->process($this->createMessage());
     }
 }

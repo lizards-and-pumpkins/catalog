@@ -10,23 +10,18 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ContentBlockWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ContentBlockWasUpdatedDomainEvent
-     */
-    private $domainEvent;
-
-    /**
      * @var ContentBlockProjector
      */
     private $projector;
 
-    public function __construct(Message $message, ContentBlockProjector $projector)
+    public function __construct(ContentBlockProjector $projector)
     {
-        $this->domainEvent = ContentBlockWasUpdatedDomainEvent::fromMessage($message);
         $this->projector = $projector;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $this->projector->project($this->domainEvent->getContentBlockSource());
+        $domainEvent = ContentBlockWasUpdatedDomainEvent::fromMessage($message);
+        $this->projector->project($domainEvent->getContentBlockSource());
     }
 }

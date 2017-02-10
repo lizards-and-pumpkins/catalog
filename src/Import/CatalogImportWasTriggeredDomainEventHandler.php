@@ -11,22 +11,17 @@ class CatalogImportWasTriggeredDomainEventHandler implements DomainEventHandler
      * @var CatalogImport
      */
     private $catalogImport;
-
-    /**
-     * @var CatalogImportWasTriggeredDomainEvent
-     */
-    private $catalogImportWasTriggeredEvent;
-
-    public function __construct(CatalogImport $catalogImport, Message $eventMessage) {
+    
+    public function __construct(CatalogImport $catalogImport) {
         $this->catalogImport = $catalogImport;
-        $this->catalogImportWasTriggeredEvent = CatalogImportWasTriggeredDomainEvent::fromMessage($eventMessage);
     }
 
-    public function process()
+    public function process(Message $message)
     {
+        $catalogImportWasTriggeredEvent = CatalogImportWasTriggeredDomainEvent::fromMessage($message);
         $this->catalogImport->importFile(
-            $this->catalogImportWasTriggeredEvent->getCatalogImportFilePath(),
-            $this->catalogImportWasTriggeredEvent->getDataVersion()
+            $catalogImportWasTriggeredEvent->getCatalogImportFilePath(),
+            $catalogImportWasTriggeredEvent->getDataVersion()
         );
     }
 }

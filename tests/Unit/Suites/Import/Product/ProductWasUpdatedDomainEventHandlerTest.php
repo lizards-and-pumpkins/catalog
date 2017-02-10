@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Context\SelfContainedContext;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,7 +40,7 @@ class ProductWasUpdatedDomainEventHandlerTest extends TestCase
      */
     private $domainEventHandler;
 
-    protected function setUp()
+    private function createTestMessage(): Message
     {
         $testProduct = new SimpleProduct(
             new ProductId('foo'),
@@ -49,13 +50,14 @@ class ProductWasUpdatedDomainEventHandlerTest extends TestCase
             new SelfContainedContext([DataVersion::CONTEXT_CODE => '123'])
         );
 
-        $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
+        return (new ProductWasUpdatedDomainEvent($testProduct))->toMessage();
+    }
+
+    protected function setUp()
+    {
         $this->mockProductProjector = $this->createMock(ProductProjector::class);
 
-        $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler(
-            $testEvent->toMessage(),
-            $this->mockProductProjector
-        );
+        $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler($this->mockProductProjector);
     }
 
     public function testDomainEventHandlerInterfaceIsImplemented()
@@ -66,6 +68,6 @@ class ProductWasUpdatedDomainEventHandlerTest extends TestCase
     public function testProductProjectionIsTriggered()
     {
         $this->mockProductProjector->expects($this->once())->method('project');
-        $this->domainEventHandler->process();
+        $this->domainEventHandler->process($this->createTestMessage());
     }
 }

@@ -9,18 +9,8 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CurrentDataVersionWasSetDomainEventHandler implements DomainEventHandler
 {
-    /**
-     * @var CurrentDataVersionWasSetDomainEvent
-     */
-    private $event;
-    
-    public function __construct(Message $message)
+    public function process(Message $message)
     {
-        $this->event = CurrentDataVersionWasSetDomainEvent::fromMessage($message);
-    }
-
-    public function process()
-    {
-        
+        CurrentDataVersionWasSetDomainEvent::fromMessage($message);
     }
 }

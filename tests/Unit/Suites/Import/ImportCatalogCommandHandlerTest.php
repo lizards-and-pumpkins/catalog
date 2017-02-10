@@ -33,9 +33,8 @@ class ImportCatalogCommandHandlerTest extends TestCase
 
     protected function setUp()
     {
-        $testCommand = new ImportCatalogCommand(DataVersion::fromVersionString('123'), __FILE__);
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
-        $this->commandHandler = new ImportCatalogCommandHandler($testCommand->toMessage(), $this->mockDomainEventQueue);
+        $this->commandHandler = new ImportCatalogCommandHandler($this->mockDomainEventQueue);
     }
     
     public function testImplementsCommandHandlerInterface()
@@ -47,6 +46,7 @@ class ImportCatalogCommandHandlerTest extends TestCase
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add')
             ->with($this->isInstanceOf(CatalogImportWasTriggeredDomainEvent::class));
-        $this->commandHandler->process();
+        $testCommand = new ImportCatalogCommand(DataVersion::fromVersionString('123'), __FILE__);
+        $this->commandHandler->process($testCommand->toMessage());
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,8 +29,14 @@ class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends TestCase
      */
     private $decorator;
 
+    /**
+     * @var Message
+     */
+    private $dummyMessage;
+
     protected function setUp()
     {
+        $this->dummyMessage = $this->createMock(Message::class);
         $this->mockDecoratedEventHandler = $this->createMock(DomainEventHandler::class);
         $this->mockLogger = $this->createMock(Logger::class);
         $this->decorator = new ProcessTimeLoggingDomainEventHandlerDecorator(
@@ -46,13 +53,13 @@ class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends TestCase
     public function testItDelegatesProcessingToComponent()
     {
         $this->mockDecoratedEventHandler->expects($this->once())->method('process');
-        $this->decorator->process();
+        $this->decorator->process($this->dummyMessage);
     }
 
     public function testItLogsEachCallToProcess()
     {
         $this->mockLogger->expects($this->once())->method('log');
-        $this->decorator->process();
+        $this->decorator->process($this->dummyMessage);
     }
 
     public function testTheMessageFormat()
@@ -64,6 +71,6 @@ class ProcessTimeLoggingDomainEventHandlerDecoratorTest extends TestCase
                     $this->fail($message);
                 }
             });
-        $this->decorator->process();
+        $this->decorator->process($this->dummyMessage);
     }
 }
