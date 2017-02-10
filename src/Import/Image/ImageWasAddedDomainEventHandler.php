@@ -11,24 +11,19 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ImageWasAddedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ImageWasAddedDomainEvent
-     */
-    private $event;
-
-    /**
      * @var ImageProcessorCollection
      */
     private $imageProcessorCollection;
 
-    public function __construct(Message $message, ImageProcessorCollection $imageProcessorCollection)
+    public function __construct(ImageProcessorCollection $imageProcessorCollection)
     {
-        $this->event = ImageWasAddedDomainEvent::fromMessage($message);
         $this->imageProcessorCollection = $imageProcessorCollection;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        // todo: use $this->event->getDataVersion() and use it while processing...!
-        $this->imageProcessorCollection->process($this->event->getImageFilePath());
+        // todo: should we use $this->event->getDataVersion() and use it while processing...?
+        $event = ImageWasAddedDomainEvent::fromMessage($message);
+        $this->imageProcessorCollection->process($event->getImageFilePath());
     }
 }

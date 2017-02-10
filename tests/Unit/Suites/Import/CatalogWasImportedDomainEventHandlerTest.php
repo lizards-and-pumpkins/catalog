@@ -25,25 +25,10 @@ class CatalogWasImportedDomainEventHandlerTest extends TestCase
      * @var CatalogWasImportedDomainEventHandler
      */
     private $eventHandler;
-
-    /**
-     * @var Message|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubEvent;
-
-    /**
-     * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $testVersion;
-
+    
     protected function setUp()
     {
-        $this->testVersion = DataVersion::fromVersionString('foo');
-        $this->stubEvent = $this->createMock(Message::class);
-        $this->stubEvent->method('getName')->willReturn('catalog_was_imported');
-        $this->stubEvent->method('getMetadata')->willReturn(['data_version' => (string)$this->testVersion]);
-
-        $this->eventHandler = new CatalogWasImportedDomainEventHandler($this->stubEvent);
+        $this->eventHandler = new CatalogWasImportedDomainEventHandler();
     }
 
     public function testItIsAnDomainEventHandler()

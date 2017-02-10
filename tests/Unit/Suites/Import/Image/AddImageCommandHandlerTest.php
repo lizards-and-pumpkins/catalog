@@ -41,6 +41,15 @@ class AddImageCommandHandlerTest extends TestCase
      */
     private $commandHandler;
 
+    private function createStubMessage(): Message
+    {
+        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+        $stubMessage = $this->createMock(Message::class);
+        $stubMessage->method('getName')->willReturn('add_image');
+        $stubMessage->method('getPayload')->willReturn(['file_path' => $this->imageFilePath, 'data_version' => 'defg']);
+        return $stubMessage;
+    }
+    
     protected function setUp()
     {
         $fixtureDirectoryPath = $this->getUniqueTempDir();
@@ -48,14 +57,9 @@ class AddImageCommandHandlerTest extends TestCase
         $this->createFixtureDirectory($fixtureDirectoryPath);
         $this->createFixtureFile($this->imageFilePath, '');
 
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
-        $stubMessage = $this->createMock(Message::class);
-        $stubMessage->method('getName')->willReturn('add_image');
-        $stubMessage->method('getPayload')->willReturn(['file_path' => $this->imageFilePath, 'data_version' => 'defg']);
-
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
-        $this->commandHandler = new AddImageCommandHandler($stubMessage, $this->mockDomainEventQueue);
+        $this->commandHandler = new AddImageCommandHandler($this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
@@ -67,6 +71,6 @@ class AddImageCommandHandlerTest extends TestCase
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 
-        $this->commandHandler->process();
+        $this->commandHandler->process($this->createStubMessage());
     }
 }

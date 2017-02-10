@@ -15,11 +15,6 @@ class ShutdownWorkerDirectiveHandler implements CommandHandler, DomainEventHandl
     const MAX_RETRIES = 100;
 
     /**
-     * @var ShutdownWorkerDirective
-     */
-    private $directive;
-    
-    /**
      * @var EnqueuesMessageEnvelope
      */
     private $enqueuesMessageEnvelope;
@@ -29,32 +24,32 @@ class ShutdownWorkerDirectiveHandler implements CommandHandler, DomainEventHandl
      */
     private $logger;
 
-    public function __construct(Message $message, EnqueuesMessageEnvelope $enqueuesMessageEnvelope, Logger $logger)
+    public function __construct(EnqueuesMessageEnvelope $enqueuesMessageEnvelope, Logger $logger)
     {
-        $this->directive = ShutdownWorkerDirective::fromMessage($message);
         $this->enqueuesMessageEnvelope = $enqueuesMessageEnvelope;
         $this->logger = $logger;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        if ($this->isMessageForCurrentProcess()) {
-            $this->logger->log(new ConsumerShutdownRequestedLogMessage(getmypid(), $this->directive));
+        $directive = ShutdownWorkerDirective::fromMessage($message);
+        if ($this->isMessageForCurrentProcess($directive)) {
+            $this->logger->log(new ConsumerShutdownRequestedLogMessage(getmypid(), $directive));
             shutdown();
         }
-        $this->addCommandToQueueAgain();
+        $this->addCommandToQueueAgain($directive);
     }
 
-    private function addCommandToQueueAgain()
+    private function addCommandToQueueAgain(ShutdownWorkerDirective $directive)
     {
-        $retryCount = $this->directive->getRetryCount() + 1;
+        $retryCount = $directive->getRetryCount() + 1;
         if ($retryCount <= self::MAX_RETRIES) {
-            $this->enqueuesMessageEnvelope->add($this->directive->retry());
+            $this->enqueuesMessageEnvelope->add($directive->retry());
         }
     }
 
-    private function isMessageForCurrentProcess() : bool
+    private function isMessageForCurrentProcess(ShutdownWorkerDirective $directive) : bool
     {
-        return '*' === $this->directive->getPid() || getmypid() == $this->directive->getPid();
+        return '*' === $directive->getPid() || getmypid() == $directive->getPid();
     }
 }

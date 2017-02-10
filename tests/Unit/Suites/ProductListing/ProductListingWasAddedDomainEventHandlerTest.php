@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
 use PHPUnit\Framework\TestCase;
@@ -32,17 +33,21 @@ class ProductListingWasAddedDomainEventHandlerTest extends TestCase
      */
     private $domainEventHandler;
 
-    protected function setUp()
+    private function createTestMessage(): Message
     {
         /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
         $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => 'foo']);
+        return (new ProductListingWasAddedDomainEvent($stubProductListing))->toMessage();
+    }
+
+    protected function setUp()
+    {
         
         $this->mockProjector = $this->createMock(ProductListingSnippetProjector::class);
 
-        $message = (new ProductListingWasAddedDomainEvent($stubProductListing))->toMessage();
-        $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler($message, $this->mockProjector);
+        $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler($this->mockProjector);
     }
 
     public function testDomainHandlerInterfaceIsImplemented()
@@ -53,6 +58,7 @@ class ProductListingWasAddedDomainEventHandlerTest extends TestCase
     public function testProductListingProjectionIsTriggered()
     {
         $this->mockProjector->expects($this->once())->method('project');
-        $this->domainEventHandler->process();
+        
+        $this->domainEventHandler->process($this->createTestMessage());
     }
 }

@@ -12,24 +12,19 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectio
 class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var Message
-     */
-    private $domainEvent;
-
-    /**
      * @var TemplateProjectorLocator
      */
     private $projectorLocator;
 
-    public function __construct(Message $message, TemplateProjectorLocator $projectorLocator)
+    public function __construct(TemplateProjectorLocator $projectorLocator)
     {
-        $this->domainEvent = TemplateWasUpdatedDomainEvent::fromMessage($message);
         $this->projectorLocator = $projectorLocator;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $projector = $this->projectorLocator->getTemplateProjectorForCode($this->domainEvent->getTemplateId());
-        $projector->project(TemplateProjectionData::fromEvent($this->domainEvent));
+        $domainEvent = TemplateWasUpdatedDomainEvent::fromMessage($message);
+        $projector = $this->projectorLocator->getTemplateProjectorForCode($domainEvent->getTemplateId());
+        $projector->project(TemplateProjectionData::fromEvent($domainEvent));
     }
 }

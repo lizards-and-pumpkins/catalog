@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Import\ContentBlock;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,15 +45,18 @@ class UpdateContentBlockCommandHandlerTest extends TestCase
 
         return $dummyContext;
     }
-
-    protected function setUp()
+    
+    public function createTestMessage(): Message
     {
         $testContentBlockId = ContentBlockId::fromString('foo bar');
         $testContentBlockSource = new ContentBlockSource($testContentBlockId, '', $this->createDummyContext(), []);
-        $testMessage = (new UpdateContentBlockCommand($testContentBlockSource))->toMessage();
+        return (new UpdateContentBlockCommand($testContentBlockSource))->toMessage();
+    }
 
+    protected function setUp()
+    {
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
-        $this->commandHandler = new UpdateContentBlockCommandHandler($testMessage, $this->mockDomainEventQueue);
+        $this->commandHandler = new UpdateContentBlockCommandHandler($this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
@@ -64,6 +68,6 @@ class UpdateContentBlockCommandHandlerTest extends TestCase
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 
-        $this->commandHandler->process();
+        $this->commandHandler->process($this->createTestMessage());
     }
 }

@@ -10,23 +10,18 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ProductWasUpdatedDomainEvent
-     */
-    private $event;
-
-    /**
      * @var ProductProjector
      */
     private $projector;
 
-    public function __construct(Message $message, ProductProjector $projector)
+    public function __construct(ProductProjector $projector)
     {
-        $this->event = ProductWasUpdatedDomainEvent::fromMessage($message);
         $this->projector = $projector;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $this->projector->project($this->event->getProduct());
+        $event = ProductWasUpdatedDomainEvent::fromMessage($message);
+        $this->projector->project($event->getProduct());
     }
 }

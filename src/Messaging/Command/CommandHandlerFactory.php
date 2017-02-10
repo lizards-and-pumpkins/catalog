@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Command;
 
-use LizardsAndPumpkins\Messaging\Queue\Message;
-
 interface CommandHandlerFactory
 {
-    public function createUpdateContentBlockCommandHandler(Message $message): CommandHandler;
+    public function createUpdateContentBlockCommandHandler(): CommandHandler;
 
-    public function createUpdateProductCommandHandler(Message $message): CommandHandler;
+    public function createUpdateProductCommandHandler(): CommandHandler;
 
-    public function createAddProductListingCommandHandler(Message $message): CommandHandler;
+    public function createAddProductListingCommandHandler(): CommandHandler;
 
-    public function createAddImageCommandHandler(Message $message): CommandHandler;
+    public function createAddImageCommandHandler(): CommandHandler;
     
-    public function createShutdownWorkerCommandHandler(Message $message): CommandHandler;
+    public function createShutdownWorkerCommandHandler(): CommandHandler;
 
-    public function createImportCatalogCommandHandler(Message $message): CommandHandler;
+    public function createImportCatalogCommandHandler(): CommandHandler;
     
-    public function createSetCurrentDataVersionCommandHandler(Message $message): CommandHandler;
+    public function createSetCurrentDataVersionCommandHandler(): CommandHandler;
     
-    public function createUpdateTemplateCommandHandler(Message $message): CommandHandler;
+    public function createUpdateTemplateCommandHandler(): CommandHandler;
 }

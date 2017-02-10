@@ -34,23 +34,27 @@ class TemplateWasUpdatedDomainEventHandlerTest extends TestCase
      */
     private $domainEventHandler;
 
-    private function createDomainEventHandler(Message $message) : TemplateWasUpdatedDomainEventHandler
+    private function createTestMessage(): Message
+    {
+        $dummyDataVersion = DataVersion::fromVersionString('foo');
+        $testEvent = new TemplateWasUpdatedDomainEvent('foo template id', 'bar template content', $dummyDataVersion);
+        return $testEvent->toMessage();
+    }
+
+    private function createDomainEventHandler() : TemplateWasUpdatedDomainEventHandler
     {
         /** @var TemplateProjectorLocator|\PHPUnit_Framework_MockObject_MockObject $stubTemplateProjectorLocator */
         $stubTemplateProjectorLocator = $this->createMock(TemplateProjectorLocator::class);
         $stubTemplateProjectorLocator->method('getTemplateProjectorForCode')->willReturn($this->mockProjector);
 
-        return new TemplateWasUpdatedDomainEventHandler($message, $stubTemplateProjectorLocator);
+        return new TemplateWasUpdatedDomainEventHandler($stubTemplateProjectorLocator);
     }
 
     protected function setUp()
     {
-        $dummyDataVersion = DataVersion::fromVersionString('foo');
-        $testEvent = new TemplateWasUpdatedDomainEvent('foo template id', 'bar template content', $dummyDataVersion);
-
         $this->mockProjector = $this->createMock(Projector::class);
 
-        $this->domainEventHandler = $this->createDomainEventHandler($testEvent->toMessage());
+        $this->domainEventHandler = $this->createDomainEventHandler();
     }
 
     public function testDomainEventHandlerInterfaceIsImplemented()
@@ -62,6 +66,6 @@ class TemplateWasUpdatedDomainEventHandlerTest extends TestCase
     {
         $this->mockProjector->expects($this->once())->method('project')
             ->with($this->isInstanceOf(TemplateProjectionData::class));
-        $this->domainEventHandler->process();
+        $this->domainEventHandler->process($this->createTestMessage());
     }
 }

@@ -11,24 +11,19 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class AddImageCommandHandler implements CommandHandler
 {
     /**
-     * @var AddImageCommand
-     */
-    private $command;
-
-    /**
      * @var DomainEventQueue
      */
     private $domainEventQueue;
 
-    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
+    public function __construct(DomainEventQueue $domainEventQueue)
     {
-        $this->command = AddImageCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $event = new ImageWasAddedDomainEvent($this->command->getImageFilePath(), $this->command->getDataVersion());
+        $command = AddImageCommand::fromMessage($message);
+        $event = new ImageWasAddedDomainEvent($command->getImageFilePath(), $command->getDataVersion());
         $this->domainEventQueue->add($event);
     }
 }

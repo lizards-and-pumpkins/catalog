@@ -11,26 +11,21 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class UpdateTemplateCommandHandler implements CommandHandler
 {
     /**
-     * @var UpdateTemplateCommand
-     */
-    private $command;
-
-    /**
      * @var DomainEventQueue
      */
     private $domainEventQueue;
 
-    public function __construct(Message $message, DomainEventQueue $domainEventQueue)
+    public function __construct(DomainEventQueue $domainEventQueue)
     {
-        $this->command = UpdateTemplateCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $templateId = $this->command->getTemplateId();
-        $templateContent = $this->command->getTemplateContent();
-        $dataVersion = $this->command->getDataVersion();
+        $command = UpdateTemplateCommand::fromMessage($message);
+        $templateId = $command->getTemplateId();
+        $templateContent = $command->getTemplateContent();
+        $dataVersion = $command->getDataVersion();
         $this->domainEventQueue->add(new TemplateWasUpdatedDomainEvent($templateId, $templateContent, $dataVersion));
     }
 }

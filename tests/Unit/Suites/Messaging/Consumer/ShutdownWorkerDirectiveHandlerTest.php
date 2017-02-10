@@ -33,9 +33,9 @@ class ShutdownWorkerDirectiveHandlerTest extends TestCase
      */
     private $mockLogger;
 
-    private function createHandler($message): ShutdownWorkerDirectiveHandler
+    private function createHandler(): ShutdownWorkerDirectiveHandler
     {
-        return new ShutdownWorkerDirectiveHandler($message, $this->mockQueue, $this->mockLogger);
+        return new ShutdownWorkerDirectiveHandler($this->mockQueue, $this->mockLogger);
     }
 
     protected function setUp()
@@ -47,8 +47,7 @@ class ShutdownWorkerDirectiveHandlerTest extends TestCase
 
     public function testImplementsCommandAndEventHandlerInterfaces()
     {
-        $directive = new ShutdownWorkerDirective('*');
-        $handler = $this->createHandler($directive->toMessage());
+        $handler = $this->createHandler();
         $this->assertInstanceOf(CommandHandler::class, $handler);
         $this->assertInstanceOf(DomainEventHandler::class, $handler);
     }
@@ -60,41 +59,41 @@ class ShutdownWorkerDirectiveHandlerTest extends TestCase
             ->willReturnCallback(function (ShutdownWorkerDirective $retryDirective) use ($sourceDirective) {
                 $this->assertSame($sourceDirective->getRetryCount() + 1, $retryDirective->getRetryCount());
             });
-        $this->createHandler($sourceDirective->toMessage())->process();
+        $this->createHandler()->process($sourceDirective->toMessage());
     }
 
     public function testRetriesCommandUpToMaxRetryBoundary()
     {
         $this->mockQueue->expects($this->once())->method('add');
         $retry = new ShutdownWorkerDirective(strval(getmypid() - 1), ShutdownWorkerDirectiveHandler::MAX_RETRIES - 1);
-        $this->createHandler($retry->toMessage())->process();
+        $this->createHandler()->process($retry->toMessage());
     }
 
     public function testDoesNotRetryCommandIfTheMaxRetryBoundaryIsReached()
     {
         $this->mockQueue->expects($this->never())->method('add');
         $retry = new ShutdownWorkerDirective(strval(getmypid() - 1), ShutdownWorkerDirectiveHandler::MAX_RETRIES);
-        $this->createHandler($retry->toMessage())->process();
+        $this->createHandler()->process($retry->toMessage());
     }
 
     public function testDoesNotCallExitIfMessagePidDoesNotMatchCurrentPid()
     {
         $command = new ShutdownWorkerDirective(strval(getmypid() - 1));
-        $this->createHandler($command->toMessage())->process();
+        $this->createHandler()->process($command->toMessage());
         $this->assertFalse(self::$shutdownWasCalled, "The shutdown() function was unexpectedly called");
     }
 
     public function testCallsExitIfNumericMessagePidMatchesCurrentPid()
     {
         $command = new ShutdownWorkerDirective((string) getmypid());
-        $this->createHandler($command->toMessage())->process();
+        $this->createHandler()->process($command->toMessage());
         $this->assertTrue(self::$shutdownWasCalled, "The shutdown() function was not called");
     }
 
     public function testCallsExitForWildcardPidInMessage()
     {
         $command = new ShutdownWorkerDirective('*');
-        $this->createHandler($command->toMessage())->process();
+        $this->createHandler()->process($command->toMessage());
         $this->assertTrue(self::$shutdownWasCalled, "The shutdown() function was not called");
     }
 
@@ -102,14 +101,14 @@ class ShutdownWorkerDirectiveHandlerTest extends TestCase
     {
         $this->mockLogger->expects($this->never())->method('log');
         $command = new ShutdownWorkerDirective(strval(getmygid() -1));
-        $this->createHandler($command->toMessage())->process();
+        $this->createHandler()->process($command->toMessage());
     }
 
     public function testLogsMatchingShutdownDirective()
     {
         $this->mockLogger->expects($this->once())->method('log');
         $command = new ShutdownWorkerDirective('*');
-        $this->createHandler($command->toMessage())->process();
+        $this->createHandler()->process($command->toMessage());
     }
 }
 

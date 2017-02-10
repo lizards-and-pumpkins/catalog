@@ -63,7 +63,7 @@ class DomainEventConsumer implements QueueMessageConsumer, MessageReceiver
     {
         try {
             $domainEventHandler = $this->handlerLocator->getHandlerFor($message);
-            $domainEventHandler->process();
+            $domainEventHandler->process($message);
         } catch (\Exception $e) {
             $this->logger->log(new DomainEventHandlerFailedMessage($message, $e));
         }

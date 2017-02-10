@@ -29,67 +29,67 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
         return $this->commandFactoryDelegate;
     }
 
-    public function createUpdateContentBlockCommandHandler(Message $message) : CommandHandler
+    public function createUpdateContentBlockCommandHandler() : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateContentBlockCommandHandler($message)
+            $commandFactoryDelegate->createUpdateContentBlockCommandHandler()
         );
     }
 
-    public function createUpdateProductCommandHandler(Message $message) : CommandHandler
+    public function createUpdateProductCommandHandler() : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateProductCommandHandler($message)
+            $commandFactoryDelegate->createUpdateProductCommandHandler()
         );
     }
 
-    public function createAddProductListingCommandHandler(Message $message) : CommandHandler
+    public function createAddProductListingCommandHandler() : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createAddProductListingCommandHandler($message)
+            $commandFactoryDelegate->createAddProductListingCommandHandler()
         );
     }
 
-    public function createAddImageCommandHandler(Message $message) : CommandHandler
+    public function createAddImageCommandHandler() : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createAddImageCommandHandler($message)
+            $commandFactoryDelegate->createAddImageCommandHandler()
         );
     }
 
-    public function createShutdownWorkerCommandHandler(Message $message) : CommandHandler
+    public function createShutdownWorkerCommandHandler() : CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createShutdownWorkerCommandHandler($message)
+            $commandFactoryDelegate->createShutdownWorkerCommandHandler()
         );
     }
     
-    public function createImportCatalogCommandHandler(Message $message): CommandHandler
+    public function createImportCatalogCommandHandler(): CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createImportCatalogCommandHandler($message)
+            $commandFactoryDelegate->createImportCatalogCommandHandler()
         );
     }
 
-    public function createSetCurrentDataVersionCommandHandler(Message $message): CommandHandler
+    public function createSetCurrentDataVersionCommandHandler(): CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createSetCurrentDataVersionCommandHandler($message)
+            $commandFactoryDelegate->createSetCurrentDataVersionCommandHandler()
         );
     }
 
-    public function createUpdateTemplateCommandHandler(Message $message): CommandHandler
+    public function createUpdateTemplateCommandHandler(): CommandHandler
     {
         $commandFactoryDelegate = $this->getCommandFactoryDelegate();
         return $commandFactoryDelegate->createProcessTimeLoggingCommandHandlerDecorator(
-            $commandFactoryDelegate->createUpdateTemplateCommandHandler($message)
+            $commandFactoryDelegate->createUpdateTemplateCommandHandler()
         );
     }
 }

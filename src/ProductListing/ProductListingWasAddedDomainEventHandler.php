@@ -11,23 +11,18 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
 class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ProductListingWasAddedDomainEvent
-     */
-    private $domainEvent;
-
-    /**
      * @var ProductListingSnippetProjector
      */
     private $projector;
 
-    public function __construct(Message $message, ProductListingSnippetProjector $projector)
+    public function __construct(ProductListingSnippetProjector $projector)
     {
-        $this->domainEvent = ProductListingWasAddedDomainEvent::fromMessage($message);
         $this->projector = $projector;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $this->projector->project($this->domainEvent->getListingCriteria());
+        $domainEvent = ProductListingWasAddedDomainEvent::fromMessage($message);
+        $this->projector->project($domainEvent->getListingCriteria());
     }
 }

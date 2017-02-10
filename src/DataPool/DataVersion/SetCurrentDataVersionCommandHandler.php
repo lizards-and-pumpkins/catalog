@@ -13,11 +13,6 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 class SetCurrentDataVersionCommandHandler implements CommandHandler
 {
     /**
-     * @var SetCurrentDataVersionCommand
-     */
-    private $command;
-
-    /**
      * @var DomainEventQueue
      */
     private $domainEventQueue;
@@ -33,20 +28,19 @@ class SetCurrentDataVersionCommandHandler implements CommandHandler
     private $dataPoolWriter;
 
     public function __construct(
-        Message $message,
         DomainEventQueue $domainEventQueue,
         DataPoolReader $dataPoolReader,
         DataPoolWriter $dataPoolWriter
     ) {
-        $this->command = SetCurrentDataVersionCommand::fromMessage($message);
         $this->domainEventQueue = $domainEventQueue;
         $this->dataPoolReader = $dataPoolReader;
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
-    public function process()
+    public function process(Message $message)
     {
-        $newDataVersion = $this->command->getDataVersion();
+        $command = SetCurrentDataVersionCommand::fromMessage($message);
+        $newDataVersion = $command->getDataVersion();
         
         // Note: NON ATOMIC UPDATE! TEMPORARY SOLUTION UNTIL EVENT SOURCING IS IMPLEMENTED!
         $this->dataPoolWriter->setPreviousDataVersion((string) $this->dataPoolReader->getCurrentDataVersion());

@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventProcessedLogMessage;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class ProcessTimeLoggingDomainEventHandlerDecorator implements DomainEventHandler
 {
@@ -25,10 +26,10 @@ class ProcessTimeLoggingDomainEventHandlerDecorator implements DomainEventHandle
         $this->logger = $logger;
     }
     
-    public function process()
+    public function process(Message $message)
     {
         $start = microtime(true);
-        $this->component->process();
+        $this->component->process($message);
         $this->logger->log(new DomainEventProcessedLogMessage(
             $this->formatMessageString(microtime(true) - $start),
             $this->component

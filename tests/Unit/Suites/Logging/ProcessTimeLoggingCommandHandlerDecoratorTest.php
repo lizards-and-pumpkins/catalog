@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,6 +29,11 @@ class ProcessTimeLoggingCommandHandlerDecoratorTest extends TestCase
      */
     private $mockDecoratedCommandHandler;
 
+    /**
+     * @var Message|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dummyMessage;
+
     protected function setUp()
     {
         $this->mockLogger = $this->createMock(Logger::class);
@@ -36,6 +42,7 @@ class ProcessTimeLoggingCommandHandlerDecoratorTest extends TestCase
             $this->mockDecoratedCommandHandler,
             $this->mockLogger
         );
+        $this->dummyMessage = $this->createMock(Message::class);
     }
 
     public function testItIsACommandHandler()
@@ -46,13 +53,13 @@ class ProcessTimeLoggingCommandHandlerDecoratorTest extends TestCase
     public function testItDelegatesToTheDecoratedSubjectForProcessing()
     {
         $this->mockDecoratedCommandHandler->expects($this->once())->method('process');
-        $this->handlerDecorator->process();
+        $this->handlerDecorator->process($this->dummyMessage);
     }
 
     public function testItLogsEachCallToProcess()
     {
         $this->mockLogger->expects($this->once())->method('log');
-        $this->handlerDecorator->process();
+        $this->handlerDecorator->process($this->dummyMessage);
     }
 
     public function testTheMessageFormat()
@@ -64,6 +71,6 @@ class ProcessTimeLoggingCommandHandlerDecoratorTest extends TestCase
                     $this->fail($message);
                 }
             });
-        $this->handlerDecorator->process();
+        $this->handlerDecorator->process($this->dummyMessage);
     }
 }

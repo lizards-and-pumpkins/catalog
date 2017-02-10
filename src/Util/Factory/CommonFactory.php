@@ -207,18 +207,16 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     private $websiteContextPartBuilder;
 
-    public function createProductWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler
+    public function createProductWasUpdatedDomainEventHandler() : DomainEventHandler
     {
         return new ProductWasUpdatedDomainEventHandler(
-            $event,
             $this->getMasterFactory()->createProductProjector()
         );
     }
 
-    public function createTemplateWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler
+    public function createTemplateWasUpdatedDomainEventHandler() : DomainEventHandler
     {
         return new TemplateWasUpdatedDomainEventHandler(
-            $event,
             $this->getMasterFactory()->createTemplateProjectorLocator()
         );
     }
@@ -234,10 +232,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $templateProjectorLocator;
     }
 
-    public function createProductListingWasAddedDomainEventHandler(Message $event) : DomainEventHandler
+    public function createProductListingWasAddedDomainEventHandler() : DomainEventHandler
     {
         return new ProductListingWasAddedDomainEventHandler(
-            $event,
             $this->getMasterFactory()->createProductListingSnippetProjector()
         );
     }
@@ -869,10 +866,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->searchEngine;
     }
 
-    public function createImageWasAddedDomainEventHandler(Message $event) : DomainEventHandler
+    public function createImageWasAddedDomainEventHandler() : DomainEventHandler
     {
         return new ImageWasAddedDomainEventHandler(
-            $event,
             $this->getMasterFactory()->createImageProcessorCollection()
         );
     }
@@ -917,20 +913,19 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new CommandHandlerLocator($this->getMasterFactory());
     }
 
-    public function createUpdateContentBlockCommandHandler(Message $message) : CommandHandler
+    public function createUpdateContentBlockCommandHandler() : CommandHandler
     {
-        return new UpdateContentBlockCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+        return new UpdateContentBlockCommandHandler($this->getMasterFactory()->getEventQueue());
     }
 
-    public function createUpdateTemplateCommandHandler(Message $message): CommandHandler
+    public function createUpdateTemplateCommandHandler(): CommandHandler
     {
-        return new UpdateTemplateCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+        return new UpdateTemplateCommandHandler($this->getMasterFactory()->getEventQueue());
     }
 
-    public function createContentBlockWasUpdatedDomainEventHandler(Message $event) : DomainEventHandler
+    public function createContentBlockWasUpdatedDomainEventHandler() : DomainEventHandler
     {
         return new ContentBlockWasUpdatedDomainEventHandler(
-            $event,
             $this->getMasterFactory()->createContentBlockProjector()
         );
     }
@@ -966,48 +961,45 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createUpdateProductCommandHandler(Message $message) : CommandHandler
+    public function createUpdateProductCommandHandler() : CommandHandler
     {
         return new UpdateProductCommandHandler(
-            $message,
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
-    public function createAddProductListingCommandHandler(Message $message) : CommandHandler
+    public function createAddProductListingCommandHandler() : CommandHandler
     {
         return new AddProductListingCommandHandler(
-            $message,
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
-    public function createAddImageCommandHandler(Message $message) : CommandHandler
+    public function createAddImageCommandHandler() : CommandHandler
     {
         return new AddImageCommandHandler(
-            $message,
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
-    public function createShutdownWorkerCommandHandler(Message $message) : CommandHandler
+    public function createShutdownWorkerCommandHandler() : CommandHandler
     {
         return new ShutdownWorkerDirectiveHandler(
-            $message,
             Queue\EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue()),
             $this->getMasterFactory()->getLogger()
         );
     }
     
-    public function createImportCatalogCommandHandler(Message $message): CommandHandler
+    public function createImportCatalogCommandHandler(): CommandHandler
     {
-        return new ImportCatalogCommandHandler($message, $this->getMasterFactory()->getEventQueue());
+        return new ImportCatalogCommandHandler(
+            $this->getMasterFactory()->getEventQueue()
+        );
     }
     
-    public function createSetCurrentDataVersionCommandHandler(Message $message): CommandHandler
+    public function createSetCurrentDataVersionCommandHandler(): CommandHandler
     {
         return new SetCurrentDataVersionCommandHandler(
-            $message,
             $this->getMasterFactory()->getEventQueue(),
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createDataPoolWriter()
@@ -1129,31 +1121,29 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return EnvironmentConfigReader::fromGlobalState();
     }
 
-    public function createCatalogWasImportedDomainEventHandler(Message $event) : DomainEventHandler
+    public function createCatalogWasImportedDomainEventHandler() : DomainEventHandler
     {
-        return new CatalogWasImportedDomainEventHandler($event);
+        return new CatalogWasImportedDomainEventHandler();
     }
 
-    public function createShutdownWorkerDomainEventHandler(Message $event) : DomainEventHandler
+    public function createShutdownWorkerDomainEventHandler() : DomainEventHandler
     {
         return new ShutdownWorkerDirectiveHandler(
-            $event,
             Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue()),
             $this->getMasterFactory()->getLogger()
         );
     }
 
-    public function createCatalogImportWasTriggeredDomainEventHandler(Message $event): DomainEventHandler
+    public function createCatalogImportWasTriggeredDomainEventHandler(): DomainEventHandler
     {
         return new CatalogImportWasTriggeredDomainEventHandler(
-            $this->getMasterFactory()->createCatalogImport(),
-            $event
+            $this->getMasterFactory()->createCatalogImport()
         );
     }
 
-    public function createCurrentDataVersionWasSetDomainEventHandler(Message $event): DomainEventHandler
+    public function createCurrentDataVersionWasSetDomainEventHandler(): DomainEventHandler
     {
-        return new CurrentDataVersionWasSetDomainEventHandler($event);
+        return new CurrentDataVersionWasSetDomainEventHandler();
     }
 
     public function createBaseUrlBuilder() : BaseUrlBuilder

@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\ProductListing;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use PHPUnit\Framework\TestCase;
 
@@ -33,20 +34,21 @@ class AddProductListingCommandHandlerTest extends TestCase
      */
     private $commandHandler;
 
-    protected function setUp()
+    private function createTestMessage(): Message
     {
-        /**
-         * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing
-         */
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
         $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
 
-        $message = (new AddProductListingCommand($stubProductListing))->toMessage();
-
+        return (new AddProductListingCommand($stubProductListing))->toMessage();
+    }
+    
+    protected function setUp()
+    {
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
-        $this->commandHandler = new AddProductListingCommandHandler($message, $this->mockDomainEventQueue);
+        $this->commandHandler = new AddProductListingCommandHandler($this->mockDomainEventQueue);
     }
 
     public function testCommandHandlerInterfaceIsImplemented()
@@ -58,6 +60,6 @@ class AddProductListingCommandHandlerTest extends TestCase
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 
-        $this->commandHandler->process();
+        $this->commandHandler->process($this->createTestMessage());
     }
 }

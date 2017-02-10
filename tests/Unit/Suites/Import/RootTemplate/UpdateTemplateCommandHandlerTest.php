@@ -43,9 +43,7 @@ class UpdateTemplateCommandHandlerTest extends TestCase
 
     private function createCommandHandler(): UpdateTemplateCommandHandler
     {
-        $command = new UpdateTemplateCommand($this->testTemplateId, $this->testContent, $this->testDataVersion);
-        $message = $command->toMessage();
-        return new UpdateTemplateCommandHandler($message, $this->mockEventQueue);
+        return new UpdateTemplateCommandHandler($this->mockEventQueue);
     }
 
     public function testIsACommandHandler()
@@ -61,6 +59,8 @@ class UpdateTemplateCommandHandlerTest extends TestCase
                 $this->assertSame($this->testContent, $event->getTemplateContent());
                 $this->assertSame((string) $this->testDataVersion, (string) $event->getDataVersion());
             });
-        $this->createCommandHandler()->process();
+
+        $command = new UpdateTemplateCommand($this->testTemplateId, $this->testContent, $this->testDataVersion);
+        $this->createCommandHandler()->process($command->toMessage());
     }
 }
