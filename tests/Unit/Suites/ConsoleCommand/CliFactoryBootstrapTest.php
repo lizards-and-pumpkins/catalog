@@ -4,6 +4,10 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ConsoleCommand;
 
+use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
+use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
@@ -59,54 +63,84 @@ class CliFactoryBootstrapTest extends TestCase
         return $spyCommonFactory;
     }
 
+    private function createTestCliFactoryBootstrap(): CliFactoryBootstrap
+    {
+        return new class extends CliFactoryBootstrap
+        {
+            private static $originalCommonFactory;
+            
+            public function setCommonFactoryClass(string $commonFactoryClass)
+            {
+                if (is_null(static::$originalCommonFactory)) {
+                    static::$originalCommonFactory = static::$commonFactoryClass;
+                }
+                static::$commonFactoryClass = $commonFactoryClass;
+            }
+            
+            public function __destruct()
+            {
+                if (! is_null(static::$originalCommonFactory)) {
+                    static::$commonFactoryClass = static::$originalCommonFactory;
+                }
+            }
+        };
+    }
+    
     public function testReturnsMasterFactoryInstance()
     {
-        $this->assertInstanceOf(MasterFactory::class, (CliFactoryBootstrap::createFactory()));
+        $this->assertInstanceOf(MasterFactory::class, (CliFactoryBootstrap::createMasterFactory()));
     }
 
     public function testRegistersAnySpecifiedFactories()
     {
         $spyFactoryA = $this->createSpyFactory();
         $spyFactoryB = $this->createSpyFactory();
-        CliFactoryBootstrap::createFactory($spyFactoryA, $spyFactoryB);
+        CliFactoryBootstrap::createMasterFactory($spyFactoryA, $spyFactoryB);
         $this->assertTrue($spyFactoryA->wasRegistered);
         $this->assertTrue($spyFactoryB->wasRegistered);
     }
 
     public function testRegistersCommonFactoryWithoutItBeingSpecified()
     {
-        /** @var CliFactoryBootstrap $testCliBootstrap */
-        $testCliBootstrap = new class extends CliFactoryBootstrap {
-            public function setCommonFactoryClass(string $commonFactoryClass)
-            {
-                static::$commonFactoryClass = $commonFactoryClass;
-            }
-        };
+        $testCliBootstrap = $this->createTestCliFactoryBootstrap();
         
         $spyCommonFactory = $this->createSpyCommonFactory();
         $testCliBootstrap->setCommonFactoryClass(get_class($spyCommonFactory));
 
-        $testCliBootstrap->createFactory();
+        $testCliBootstrap->createMasterFactory();
 
         $this->assertSame(1, $spyCommonFactory->getRegistrationCount());
     }
 
     public function testDoesNotRegisterDefaultFactoryIfAlsoSpecifiedAsArgument()
     {
-        /** @var CliFactoryBootstrap $testCliBootstrap */
-        $testCliBootstrap = new class extends CliFactoryBootstrap {
-            public function setCommonFactoryClass(string $commonFactoryClass)
-            {
-                static::$commonFactoryClass = $commonFactoryClass;
-            }
-        };
+        $testCliBootstrap = $this->createTestCliFactoryBootstrap();
 
         $spyCommonFactory = $this->createSpyCommonFactory();
         $testCliBootstrap->setCommonFactoryClass(get_class($spyCommonFactory));
         
-        $testCliBootstrap->createFactory($spyCommonFactory);
+        $testCliBootstrap->createMasterFactory($spyCommonFactory);
         
         $this->assertSame(1, $spyCommonFactory->getRegistrationCount());
+    }
+
+    public function testReturnsAMasterFactoryWhenALoggingFactoryIsRequested()
+    {
+        $factory = CliFactoryBootstrap::createLoggingMasterFactory(new UnitTestFactory($this));
+        $this->assertInstanceOf(MasterFactory::class, $factory);
+    }
+
+    public function testLoggingFactoriesAreRegistered()
+    {
+        $factory = CliFactoryBootstrap::createLoggingMasterFactory(new UnitTestFactory($this));
+        
+        $queue = $factory->createEventMessageQueue();
+        $commandHandler = $factory->createUpdateContentBlockCommandHandler();
+        $eventHandler = $factory->createTemplateWasUpdatedDomainEventHandler();
+        
+        $this->assertInstanceOf(LoggingQueueDecorator::class, $queue);
+        $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $commandHandler);
+        $this->assertInstanceOf(ProcessTimeLoggingDomainEventHandlerDecorator::class, $eventHandler);
     }
 }
 

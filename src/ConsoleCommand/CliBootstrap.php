@@ -11,6 +11,6 @@ class CliBootstrap
 {
     public static function create(string $cliCommandClass, Factory ...$factoriesToRegister): BaseCliCommand
     {
-        return new $cliCommandClass(CliFactoryBootstrap::createFactory(...$factoriesToRegister), new CLImate());
+        return new $cliCommandClass(CliFactoryBootstrap::createMasterFactory(...$factoriesToRegister), new CLImate());
     }
 }

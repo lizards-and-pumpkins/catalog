@@ -15,25 +15,34 @@ use LizardsAndPumpkins\Util\Factory\ProjectFactory;
 class CliFactoryBootstrap
 {
     protected static $projectFactoryClass = ProjectFactory::class;
+
     protected static $commonFactoryClass = CommonFactory::class;
-    
-    public static function createFactory(Factory ...$factoriesToRegister): MasterFactory
+
+    protected static $loggingFactories = [
+        LoggingDomainEventHandlerFactory::class,
+        LoggingCommandHandlerFactory::class,
+        LoggingQueueFactory::class,
+    ];
+
+    public static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
     {
         $masterFactory = new \LizardsAndPumpkins\Util\Factory\SampleMasterFactory();
-        
+
         self::registerDefaultFactories($masterFactory, $factoriesToRegister);
         self::registerSpecifiedFactories($masterFactory, $factoriesToRegister);
 
         return $masterFactory;
     }
 
-//    public static function createLoggingFactory(Factory ...$factoriesToRegister): MasterFactory
-//    {
-//        $masterFactory = self::createFactory(...$factoriesToRegister);
-//        self::registerLoggingFactories($masterFactory);
-//        return $masterFactory;
-//    }
-    
+    public static function createLoggingMasterFactory(Factory ...$factoriesToRegister): MasterFactory
+    {
+        $masterFactory = self::createMasterFactory(...$factoriesToRegister);
+        
+        self::registerLoggingFactories($masterFactory, $factoriesToRegister);
+        
+        return $masterFactory;
+    }
+
     /**
      * @param MasterFactory $masterFactory
      * @param Factory[] $otherFactories
@@ -47,6 +56,30 @@ class CliFactoryBootstrap
         });
     }
 
+    /**
+     * @param MasterFactory $masterFactory
+     * @param Factory[] $factoriesToRegister
+     */
+    private static function registerSpecifiedFactories(MasterFactory $masterFactory, array $factoriesToRegister)
+    {
+        every($factoriesToRegister, function (Factory $factory) use ($masterFactory) {
+            $masterFactory->register($factory);
+        });
+    }
+
+    /**
+     * @param MasterFactory $masterFactory
+     * @param Factory[] $otherFactories
+     */
+    private static function registerLoggingFactories(MasterFactory $masterFactory, array $otherFactories)
+    {
+        every(self::$loggingFactories, function (string $class) use ($masterFactory, $otherFactories) {
+            if (class_exists($class) && !self::arrayContainsInstanceOfClass($otherFactories, $class)) {
+                $masterFactory->register(new $class($masterFactory));
+            }
+        });
+    }
+    
     /**
      * @return string[]
      */
@@ -65,24 +98,7 @@ class CliFactoryBootstrap
                 return true;
             }
         }
+
         return false;
-    }
-
-    /**
-     * @param MasterFactory $masterFactory
-     * @param Factory[] $factoriesToRegister
-     */
-    private static function registerSpecifiedFactories(MasterFactory $masterFactory, array $factoriesToRegister)
-    {
-        every($factoriesToRegister, function (Factory $factory) use ($masterFactory) {
-            $masterFactory->register($factory);
-        });
-    }
-
-    private static function registerLoggingFactories(MasterFactory $factory)
-    {
-        $factory->register(new LoggingDomainEventHandlerFactory($factory));
-        $factory->register(new LoggingCommandHandlerFactory($factory));
-        $factory->register(new LoggingQueueFactory($factory));
     }
 }
