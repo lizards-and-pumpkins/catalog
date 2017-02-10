@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\DataPool\DataVersion;
 
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use PHPUnit\Framework\TestCase;
 
