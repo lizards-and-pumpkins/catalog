@@ -57,7 +57,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     /**
      * @var string
      */
-    private $fullTextSearchCondition;
+    private $fullTextSearchTermCombinationOperator;
 
     /**
      * @var SelectedFiltersParser
@@ -77,14 +77,14 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
-        string $fullTextSearchCondition,
+        string $fullTextSearchTermCombinationOperator,
         SelectedFiltersParser $selectedFiltersParser,
         CriteriaParser $criteriaParser,
         SearchEngineConfiguration $searchEngineConfiguration
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
-        $this->fullTextSearchCondition = $fullTextSearchCondition;
+        $this->fullTextSearchTermCombinationOperator = $fullTextSearchTermCombinationOperator;
         $this->selectedFiltersParser = $selectedFiltersParser;
         $this->criteriaParser = $criteriaParser;
         $this->searchEngineConfiguration = $searchEngineConfiguration;
@@ -260,7 +260,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return new SearchCriterionFullText($value);
         }, $values);
 
-        return CompositeSearchCriterion::create($this->fullTextSearchCondition, ...$criteria);
+        return CompositeSearchCriterion::create($this->fullTextSearchTermCombinationOperator, ...$criteria);
     }
 
     /**
