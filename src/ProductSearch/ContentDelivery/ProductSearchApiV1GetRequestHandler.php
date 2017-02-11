@@ -204,16 +204,11 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function validateSortBy(SortBy $sortBy)
     {
-        if (! $this->isSortingByAttributeAllowed($sortBy->getAttributeCode())) {
+        if (! $this->searchEngineConfiguration->isSortingByAttributeAllowed($sortBy->getAttributeCode())) {
             throw new UnsupportedSortOrderException(
                 sprintf('Sorting by "%s" is not supported', $sortBy->getAttributeCode())
             );
         }
-    }
-
-    private function isSortingByAttributeAllowed(AttributeCode $attributeCode): bool
-    {
-        return in_array((string) $attributeCode, $this->searchEngineConfiguration->getSortableAttributeCodes());
     }
 
     private function validateRowsPerPage(int $rowsPerPage)

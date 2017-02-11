@@ -5,10 +5,12 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration
+ * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  */
 class SearchEngineConfigurationTest extends TestCase
 {
@@ -102,8 +104,19 @@ class SearchEngineConfigurationTest extends TestCase
         new SearchEngineConfiguration($this->testProductsPerPage, $this->testMaxProductsPerPage, $this->dummySortBy, 1);
     }
 
-    public function testReturnsSortableAttributeCodes()
+    public function testThrowsAnErrorIfNonAttributeCodeIsTestedToBeAmongAllowedToBeSortedBy()
     {
-        $this->assertSame($this->testSortableAttributeCodes, $this->configuration->getSortableAttributeCodes());
+        $this->expectException(\TypeError::class);
+        $this->configuration->isSortingByAttributeAllowed('foo');
+    }
+
+    public function testReturnsFalseIfGivenAttributeCodeIsNotAmongSortableAttributes()
+    {
+        $this->assertFalse($this->configuration->isSortingByAttributeAllowed(AttributeCode::fromString('baz')));
+    }
+
+    public function testReturnsTrueIfGivenAttributeCodeIsAmongSortableAttributes()
+    {
+        $this->assertTrue($this->configuration->isSortingByAttributeAllowed(AttributeCode::fromString('foo')));
     }
 }

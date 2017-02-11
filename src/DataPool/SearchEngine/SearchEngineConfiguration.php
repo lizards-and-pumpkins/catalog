@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\SearchEngine;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\Import\Product\AttributeCode;
 
 class SearchEngineConfiguration
 {
@@ -60,11 +61,8 @@ class SearchEngineConfiguration
         return $this->sortBy;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getSortableAttributeCodes(): array
+    public function isSortingByAttributeAllowed(AttributeCode $attributeCode): bool
     {
-        return $this->sortableAttributeCodes;
+        return in_array((string) $attributeCode, $this->sortableAttributeCodes);
     }
 }
