@@ -54,6 +54,11 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private $contextBuilder;
 
     /**
+     * @var string
+     */
+    private $fullTextSearchCondition;
+
+    /**
      * @var SelectedFiltersParser
      */
     private $selectedFiltersParser;
@@ -86,6 +91,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
+        string $fullTextSearchCondition,
         SelectedFiltersParser $selectedFiltersParser,
         CriteriaParser $criteriaParser,
         int $defaultNumberOfProductPerPage,
@@ -95,6 +101,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
+        $this->fullTextSearchCondition = $fullTextSearchCondition;
         $this->selectedFiltersParser = $selectedFiltersParser;
         $this->criteriaParser = $criteriaParser;
         $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
@@ -244,14 +251,14 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             $criteriaString = $request->getQueryParameter(self::INITIAL_CRITERIA_PARAMETER);
 
             return CompositeSearchCriterion::createAnd(
-                new SearchCriterionFullText($queryString),
+                $this->createFullTextSearchCriteria($queryString),
                 $this->criteriaParser->createCriteriaFromString($criteriaString)
             );
         }
 
         if ($request->hasQueryParameter(self::QUERY_PARAMETER)) {
             $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
-            return new SearchCriterionFullText($queryString);
+            return $this->createFullTextSearchCriteria($queryString);
         }
 
         if ($request->hasQueryParameter(self::INITIAL_CRITERIA_PARAMETER)) {
@@ -260,6 +267,20 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         return new SearchCriterionAnything();
+    }
+
+    private function createFullTextSearchCriteria(string $queryString): SearchCriteria
+    {
+        if (strpos($queryString, ' ') === false) {
+            return new SearchCriterionFullText($queryString);
+        }
+
+        $values = array_filter(explode(' ', $queryString));
+        $criteria = array_map(function (string $value) {
+            return new SearchCriterionFullText($value);
+        }, $values);
+
+        return CompositeSearchCriterion::create($this->fullTextSearchCondition, ...$criteria);
     }
 
     /**

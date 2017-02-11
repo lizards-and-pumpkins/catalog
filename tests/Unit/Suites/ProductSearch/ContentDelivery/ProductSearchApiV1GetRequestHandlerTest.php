@@ -91,6 +91,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     {
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $testFullTextSearchCondition = CompositeSearchCriterion::OR_CONDITION;
         $this->stubSelectedFiltersParser = $this->createMock(SelectedFiltersParser::class);
         $this->stubCriteriaParser = $this->createMock(CriteriaParser::class);
 
@@ -100,6 +101,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $this->requestHandler = new ProductSearchApiV1GetRequestHandler(
             $this->mockProductSearchService,
             $this->stubContextBuilder,
+            $testFullTextSearchCondition,
             $this->stubSelectedFiltersParser,
             $this->stubCriteriaParser,
             $this->defaultNumberOfProductPerPage,
@@ -192,6 +194,50 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             ->willReturn('foo');
 
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
+    }
+
+    /**
+     * @dataProvider fullTextSearchConditionProvider
+     */
+    public function testCreatesACombinedCriteriaIfQueryStringContainsOfMultipleWords(string $fullTextSearchCondition)
+    {
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
+        ]);
+        $this->stubRequest->method('getQueryParameter')->with(ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER)
+            ->willReturn('foo bar');
+
+        $expectedCriteria = CompositeSearchCriterion::create(
+            $fullTextSearchCondition,
+            new SearchCriterionFullText('foo'),
+            new SearchCriterionFullText('bar')
+        );
+
+        $this->mockProductSearchService->expects($this->once())->method('query')->with($expectedCriteria);
+
+        $requestHandler = new ProductSearchApiV1GetRequestHandler(
+            $this->mockProductSearchService,
+            $this->stubContextBuilder,
+            $fullTextSearchCondition,
+            $this->stubSelectedFiltersParser,
+            $this->stubCriteriaParser,
+            $this->defaultNumberOfProductPerPage,
+            $this->maxAllowedProductsPerPage,
+            $this->stubDefaultSorBy,
+            ...$this->sortableAttributeCodes
+        );
+
+        $requestHandler->process($this->stubRequest);
+    }
+
+    public function fullTextSearchConditionProvider(): array
+    {
+        return [
+            [CompositeSearchCriterion::OR_CONDITION],
+            [CompositeSearchCriterion::AND_CONDITION],
+        ];
     }
 
     public function testRequestsAllProductsIfNeitherQueryStringNorInitialCriteriaParameterIsSet()
