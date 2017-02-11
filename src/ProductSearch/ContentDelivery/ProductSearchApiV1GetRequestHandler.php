@@ -218,7 +218,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function validateRowsPerPage(int $rowsPerPage)
     {
-        if ($rowsPerPage > $this->searchEngineConfiguration->getMaxProductsPerPage()) {
+        if ($this->searchEngineConfiguration->isExceedingMaxProductsPerPage($rowsPerPage)) {
             throw new InvalidNumberOfProductsPerPageException(sprintf(
                 'Maximum allowed number of products per page is %d, got %d.',
                 $this->searchEngineConfiguration->getMaxProductsPerPage(),

@@ -50,6 +50,11 @@ class SearchEngineConfiguration
         return $this->maxProductsPerPage;
     }
 
+    public function isExceedingMaxProductsPerPage(int $productsPerPage): bool
+    {
+        return $productsPerPage > $this->maxProductsPerPage;
+    }
+
     public function getSortBy(): SortBy
     {
         return $this->sortBy;

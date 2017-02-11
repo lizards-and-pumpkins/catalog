@@ -64,7 +64,27 @@ class SearchEngineConfigurationTest extends TestCase
     {
         $this->assertSame($this->testMaxProductsPerPage, $this->configuration->getMaxProductsPerPage());
     }
-    
+    public function testThrowsAnExceptionIfNonIntegerIsTestedAgainstMaxProductsPerPage()
+    {
+        $this->expectException(\TypeError::class);
+        $this->configuration->isExceedingMaxProductsPerPage('1');
+    }
+
+    public function testReturnsTrueIfGivenNumberExceedsAllowedNumberOfProductsPerPage()
+    {
+        $this->assertTrue($this->configuration->isExceedingMaxProductsPerPage($this->testMaxProductsPerPage + 1));
+    }
+
+    public function testReturnsFalseIfGivenNumberIsLessThenAllowedNumberOfProductsPerPage()
+    {
+        $this->assertFalse($this->configuration->isExceedingMaxProductsPerPage($this->testMaxProductsPerPage - 1));
+    }
+
+    public function testReturnsFalseIfGivenNumberEqualsAllowedNumberOfProductsPerPage()
+    {
+        $this->assertFalse($this->configuration->isExceedingMaxProductsPerPage($this->testMaxProductsPerPage));
+    }
+
     public function testThrowsAnErrorIfSortByTypeIsInvalid()
     {
         $this->expectException(\TypeError::class);
