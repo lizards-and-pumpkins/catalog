@@ -7,19 +7,21 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 use League\CLImate\Argument\Manager as CliMateArgumentManager;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\AbstractIntegrationTest;
+use LizardsAndPumpkins\CatalogFixtureFileQuery;
 use LizardsAndPumpkins\ConsoleCommand\Command\RunImport;
-use LizardsAndPumpkins\Import\XPathParser;
+use LizardsAndPumpkins\TestDataPoolQuery;
 
 class RunImportIntegrationTest extends AbstractIntegrationTest
 {
-    private $fixtureFile = __DIR__ . '/../../shared-fixture/simple_product_adilette.xml';
+    private $fixtureFile = 'simple_product_adilette.xml';
 
     private function getCommandArgumentMap($overRideDefaults = []): array
     {
+        $fixtureFile = CatalogFixtureFileQuery::getPathToFixtureFile($this->fixtureFile);
         $arguments = [
             'clearStorage'      => ['clearStorage', false],
             'importImages'      => ['importImages', false],
-            'importFile'        => ['importFile', $this->fixtureFile],
+            'importFile'        => ['importFile', $fixtureFile],
             'processQueues'     => ['processQueues', true],
             'environmentConfig' => ['environmentConfig', ''],
             'help'              => ['help', null],
@@ -28,33 +30,6 @@ class RunImportIntegrationTest extends AbstractIntegrationTest
             $arguments[$name] = [$name, $value];
         }
         return array_values($arguments);
-    }
-
-    private function getSkuOfFirstSimpleProductInFixture(string $fixtureFile) : string
-    {
-        $xml = file_get_contents($fixtureFile);
-        $parser = new XPathParser($xml);
-        $skuNode = $parser->getXmlNodesArrayByXPath('//catalog/products/product[@type="simple"][1]/@sku');
-        return $skuNode[0]['value'];
-    }
-
-    private function getProductJsonSnippetForId(string $productIdString) : string
-    {
-        $key = $this->getProductJsonSnippetKeyForId($productIdString);
-
-        return $this->getSnippetFromDataPool($key);
-    }
-
-    private function getSnippetFromDataPool(string $key) : string
-    {
-        return $this->factory->createDataPoolReader()->getSnippet($key);
-    }
-
-    private function getProductJsonSnippetKeyForId(string $productIdString) : string
-    {
-        $keyGenerator = $this->factory->createProductJsonSnippetKeyGenerator();
-        $context = $this->factory->createContextBuilder()->createContext([]);
-        return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
     private function createTestCliMate(array $argumentMap): CLImate
@@ -68,20 +43,16 @@ class RunImportIntegrationTest extends AbstractIntegrationTest
     
     public function testRunImportsCommand()
     {
-        
-        
         $factory = $this->prepareIntegrationTestMasterFactory();
         $command = new RunImport($factory, $this->createTestCliMate($this->getCommandArgumentMap()));
         $command->run();
         
-        $sku = $this->getSkuOfFirstSimpleProductInFixture($this->fixtureFile);
+        $simpleProductIdString = CatalogFixtureFileQuery::getSkuOfFirstSimpleProductInFixture($this->fixtureFile);
 
-        $simpleProductSnippet = $this->getProductJsonSnippetForId($simpleProductIdString);
+        $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($factory, $simpleProductIdString);
 
         $simpleProductData = json_decode($simpleProductSnippet, true);
         $this->assertEquals($simpleProductIdString, $simpleProductData['product_id']);
         $this->assertEquals('simple', $simpleProductData['type_code']);
-        
-        
     }
 }
