@@ -69,8 +69,6 @@ use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
@@ -167,8 +165,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategySequence
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
  * @uses   \LizardsAndPumpkins\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
@@ -609,24 +605,7 @@ class CommonFactoryTest extends TestCase
 
         $this->assertSame($resultA, $resultB);
     }
-
-    public function testItReturnsAProcessTimeLoggingDomainEventHandlerDecorator()
-    {
-        $testEvent = new ImageWasAddedDomainEvent('foo', DataVersion::fromVersionString('foo'));
-        $eventHandlerToDecorate = $this->commonFactory->createImageWasAddedDomainEventHandler($testEvent->toMessage());
-        $result = $this->commonFactory->createProcessTimeLoggingDomainEventHandlerDecorator($eventHandlerToDecorate);
-        $this->assertInstanceOf(ProcessTimeLoggingDomainEventHandlerDecorator::class, $result);
-    }
-
-    public function testItReturnsAProcessTimeLoggingCommandHandlerDecorator()
-    {
-        $sourceCommand = new AddImageCommand(__FILE__, DataVersion::fromVersionString('123'));
-        
-        $commandHandlerToDecorate = $this->commonFactory->createAddImageCommandHandler($sourceCommand->toMessage());
-        $result = $this->commonFactory->createProcessTimeLoggingCommandHandlerDecorator($commandHandlerToDecorate);
-        $this->assertInstanceOf(ProcessTimeLoggingCommandHandlerDecorator::class, $result);
-    }
-
+    
     public function testCatalogImportIsReturned()
     {
         $result = $this->commonFactory->createCatalogImport();

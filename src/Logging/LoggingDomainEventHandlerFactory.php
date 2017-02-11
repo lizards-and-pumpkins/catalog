@@ -35,7 +35,7 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
                 $masterFactory->createImageWasAddedDomainEventHandler(),
             'ProductListingWasAddedDomainEventHandler'    =>
                 $masterFactory->createProductListingWasAddedDomainEventHandler(),
-            'ContentBlockWasUpdatedDomainEventHandler'    => 
+            'ContentBlockWasUpdatedDomainEventHandler'    =>
                 $masterFactory->createContentBlockWasUpdatedDomainEventHandler(),
             'CatalogWasImportedDomainEventHandler'        =>
                 $masterFactory->createCatalogWasImportedDomainEventHandler(),
@@ -48,7 +48,7 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
         ];
         $this->masterFactory = $masterFactory;
     }
-    
+
     private function getDelegate(string $method): DomainEventHandler
     {
         $key = $this->getClassToInstantiateFromCreateMethod($method);
@@ -60,7 +60,16 @@ class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFac
     {
         return substr($method, 6);
     }
-    
+
+    public function createProcessTimeLoggingDomainEventHandlerDecorator(
+        DomainEventHandler $eventHandlerToDecorate
+    ): ProcessTimeLoggingDomainEventHandlerDecorator {
+        return new ProcessTimeLoggingDomainEventHandlerDecorator(
+            $eventHandlerToDecorate,
+            $this->masterFactory->getLogger()
+        );
+    }
+
     public function createProductWasUpdatedDomainEventHandler(): DomainEventHandler
     {
         return $this->masterFactory->createProcessTimeLoggingDomainEventHandlerDecorator(
