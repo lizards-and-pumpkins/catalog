@@ -28,18 +28,18 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
     {
         /** @var CommandHandlerFactory $masterFactory */
         $this->nonDecoratedCommandHandlerDelegates = [
-            'UpdateContentBlockCommandHandler' => $masterFactory->createUpdateContentBlockCommandHandler(),
-            'UpdateProductCommandHandler' => $masterFactory->createUpdateProductCommandHandler(),
-            'AddProductListingCommandHandler' => $masterFactory->createAddProductListingCommandHandler(),
-            'AddImageCommandHandler' => $masterFactory->createAddImageCommandHandler(),
-            'ShutdownWorkerCommandHandler' => $masterFactory->createShutdownWorkerCommandHandler(),
-            'ImportCatalogCommandHandler' => $masterFactory->createImportCatalogCommandHandler(),
+            'UpdateContentBlockCommandHandler'    => $masterFactory->createUpdateContentBlockCommandHandler(),
+            'UpdateProductCommandHandler'         => $masterFactory->createUpdateProductCommandHandler(),
+            'AddProductListingCommandHandler'     => $masterFactory->createAddProductListingCommandHandler(),
+            'AddImageCommandHandler'              => $masterFactory->createAddImageCommandHandler(),
+            'ShutdownWorkerCommandHandler'        => $masterFactory->createShutdownWorkerCommandHandler(),
+            'ImportCatalogCommandHandler'         => $masterFactory->createImportCatalogCommandHandler(),
             'SetCurrentDataVersionCommandHandler' => $masterFactory->createSetCurrentDataVersionCommandHandler(),
-            'UpdateTemplateCommandHandler' => $masterFactory->createUpdateTemplateCommandHandler(),
+            'UpdateTemplateCommandHandler'        => $masterFactory->createUpdateTemplateCommandHandler(),
         ];
         $this->masterFactory = $masterFactory;
     }
-    
+
     private function getDelegate(string $method): CommandHandler
     {
         $key = $this->getClassToInstantiateFromCreateMethod($method);
@@ -51,7 +51,16 @@ class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
     {
         return substr($method, 6);
     }
-    
+
+    public function createProcessTimeLoggingCommandHandlerDecorator(
+        CommandHandler $commandHandlerToDecorate
+    ): ProcessTimeLoggingCommandHandlerDecorator {
+        return new ProcessTimeLoggingCommandHandlerDecorator(
+            $commandHandlerToDecorate,
+            $this->masterFactory->getLogger()
+        );
+    }
+
     public function createUpdateContentBlockCommandHandler(): CommandHandler
     {
         return $this->masterFactory->createProcessTimeLoggingCommandHandlerDecorator(

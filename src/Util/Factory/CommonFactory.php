@@ -100,8 +100,6 @@ use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Import\CatalogImport;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
@@ -1040,24 +1038,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             ProductSearchResultMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
-        );
-    }
-
-    public function createProcessTimeLoggingDomainEventHandlerDecorator(
-        DomainEventHandler $eventHandlerToDecorate
-    ) : ProcessTimeLoggingDomainEventHandlerDecorator {
-        return new ProcessTimeLoggingDomainEventHandlerDecorator(
-            $eventHandlerToDecorate,
-            $this->getMasterFactory()->getLogger()
-        );
-    }
-
-    public function createProcessTimeLoggingCommandHandlerDecorator(
-        CommandHandler $commandHandlerToDecorate
-    ) : ProcessTimeLoggingCommandHandlerDecorator {
-        return new ProcessTimeLoggingCommandHandlerDecorator(
-            $commandHandlerToDecorate,
-            $this->getMasterFactory()->getLogger()
         );
     }
 
