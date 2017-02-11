@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService

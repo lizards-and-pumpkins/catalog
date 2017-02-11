@@ -13,6 +13,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -69,24 +70,9 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private $criteriaParser;
 
     /**
-     * @var int
+     * @var SearchEngineConfiguration
      */
-    private $defaultNumberOfProductPerPage;
-
-    /**
-     * @var int
-     */
-    private $maxAllowedProductsPerPage;
-
-    /**
-     * @var SortBy
-     */
-    private $defaultSortBy;
-
-    /**
-     * @var string[]
-     */
-    private $sortableAttributeCodes;
+    private $defaultConfiguration;
 
     public function __construct(
         ProductSearchService $productSearchService,
@@ -94,20 +80,14 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         string $fullTextSearchCondition,
         SelectedFiltersParser $selectedFiltersParser,
         CriteriaParser $criteriaParser,
-        int $defaultNumberOfProductPerPage,
-        int $maxAllowedProductsPerPage,
-        SortBy $defaultSortBy,
-        string ...$sortableAttributeCodes
+        SearchEngineConfiguration $defaultConfiguration
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
         $this->fullTextSearchCondition = $fullTextSearchCondition;
         $this->selectedFiltersParser = $selectedFiltersParser;
         $this->criteriaParser = $criteriaParser;
-        $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
-        $this->maxAllowedProductsPerPage = $maxAllowedProductsPerPage;
-        $this->defaultSortBy = $defaultSortBy;
-        $this->sortableAttributeCodes = $sortableAttributeCodes;
+        $this->defaultConfiguration = $defaultConfiguration;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -189,7 +169,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return (int) $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
         }
 
-        return $this->defaultNumberOfProductPerPage;
+        return $this->defaultConfiguration->getProductsPerPage();
     }
 
     private function getPageNumber(HttpRequest $request) : int
@@ -210,7 +190,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             );
         }
 
-        return $this->defaultSortBy;
+        return $this->defaultConfiguration->getSortBy();
     }
 
     private function getSortDirectionString(HttpRequest $request) : string
@@ -224,7 +204,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function validateSortBy(SortBy $sortBy)
     {
-        if (!in_array((string) $sortBy->getAttributeCode(), $this->sortableAttributeCodes)) {
+        if (!in_array((string) $sortBy->getAttributeCode(), $this->defaultConfiguration->getSortableAttributeCodes())) {
             throw new UnsupportedSortOrderException(
                 sprintf('Sorting by "%s" is not supported', $sortBy->getAttributeCode())
             );
@@ -233,10 +213,10 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function validateRowsPerPage(int $rowsPerPage)
     {
-        if ($rowsPerPage > $this->maxAllowedProductsPerPage) {
+        if ($rowsPerPage > $this->defaultConfiguration->getMaxProductsPerPage()) {
             throw new InvalidNumberOfProductsPerPageException(sprintf(
                 'Maximum allowed number of products per page is %d, got %d.',
-                $this->maxAllowedProductsPerPage,
+                $this->defaultConfiguration->getMaxProductsPerPage(),
                 $rowsPerPage
             ));
         }
