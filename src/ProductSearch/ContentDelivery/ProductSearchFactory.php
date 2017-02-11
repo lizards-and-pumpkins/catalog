@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
@@ -30,6 +31,7 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
         return new ProductSearchApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createContextBuilder(),
+            $this->getMasterFactory()->createFullTextSearchCondition(),
             $this->getMasterFactory()->createSelectedFiltersParser(),
             $this->getMasterFactory()->createCriteriaParser(),
             $this->getMasterFactory()->getDefaultNumberOfProductsPerSearchResultsPage(),
@@ -56,5 +58,10 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
     public function createCriteriaParser(): CriteriaParser
     {
         return new DefaultCriteriaParser();
+    }
+
+    public function createFullTextSearchCondition()
+    {
+        return CompositeSearchCriterion::OR_CONDITION;
     }
 }

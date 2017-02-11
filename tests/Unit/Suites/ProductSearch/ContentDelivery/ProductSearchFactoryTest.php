@@ -76,11 +76,18 @@ class ProductSearchFactoryTest extends TestCase
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
             ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
+        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
             ['register', 'getApiRequestHandlerLocator']
         )->getMock();
         $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
 
         $this->factory->factoryRegistrationCallback($stubMasterFactory);
+    }
+
+    public function testReturnsProductSearchApiV1GetRequestHandler()
+    {
+        $result = $this->factory->createProductSearchApiV1GetRequestHandler();
+        $this->assertInstanceOf(ProductSearchApiV1GetRequestHandler::class, $result);
     }
 }
