@@ -208,7 +208,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     }
 
     /**
-     * @dataProvider fullTextSearchConditionProvider
+     * @dataProvider fullTextSearchTermCombinationOperatorProvider
      */
     public function testCreatesACombinedCriteriaIfQueryStringContainsOfMultipleWords(string $fullTextSearchCondition)
     {
@@ -240,7 +240,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $requestHandler->process($this->stubRequest);
     }
 
-    public function fullTextSearchConditionProvider(): array
+    public function fullTextSearchTermCombinationOperatorProvider(): array
     {
         return [
             [CompositeSearchCriterion::OR_CONDITION],
