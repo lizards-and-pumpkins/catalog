@@ -98,7 +98,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     {
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
-        $testFullTextSearchCondition = CompositeSearchCriterion::OR_CONDITION;
+        $fullTextSearchTermCombinationOperator = CompositeSearchCriterion::OR_CONDITION;
         $this->stubSelectedFiltersParser = $this->createMock(SelectedFiltersParser::class);
         $this->stubCriteriaParser = $this->createMock(CriteriaParser::class);
 
@@ -115,7 +115,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $this->requestHandler = new ProductSearchApiV1GetRequestHandler(
             $this->mockProductSearchService,
             $this->stubContextBuilder,
-            $testFullTextSearchCondition,
+            $fullTextSearchTermCombinationOperator,
             $this->stubSelectedFiltersParser,
             $this->stubCriteriaParser,
             $this->stubSearchEngineConfiguration
