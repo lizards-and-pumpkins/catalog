@@ -72,7 +72,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     /**
      * @var SearchEngineConfiguration
      */
-    private $defaultConfiguration;
+    private $searchEngineConfiguration;
 
     public function __construct(
         ProductSearchService $productSearchService,
@@ -80,14 +80,14 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         string $fullTextSearchCondition,
         SelectedFiltersParser $selectedFiltersParser,
         CriteriaParser $criteriaParser,
-        SearchEngineConfiguration $defaultConfiguration
+        SearchEngineConfiguration $searchEngineConfiguration
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
         $this->fullTextSearchCondition = $fullTextSearchCondition;
         $this->selectedFiltersParser = $selectedFiltersParser;
         $this->criteriaParser = $criteriaParser;
-        $this->defaultConfiguration = $defaultConfiguration;
+        $this->searchEngineConfiguration = $searchEngineConfiguration;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -169,7 +169,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return (int) $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
         }
 
-        return $this->defaultConfiguration->getProductsPerPage();
+        return $this->searchEngineConfiguration->getProductsPerPage();
     }
 
     private function getPageNumber(HttpRequest $request) : int
@@ -190,7 +190,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             );
         }
 
-        return $this->defaultConfiguration->getSortBy();
+        return $this->searchEngineConfiguration->getSortBy();
     }
 
     private function getSortDirectionString(HttpRequest $request) : string
@@ -204,19 +204,24 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function validateSortBy(SortBy $sortBy)
     {
-        if (!in_array((string) $sortBy->getAttributeCode(), $this->defaultConfiguration->getSortableAttributeCodes())) {
+        if (! $this->isSortingByAttributeAllowed($sortBy->getAttributeCode())) {
             throw new UnsupportedSortOrderException(
                 sprintf('Sorting by "%s" is not supported', $sortBy->getAttributeCode())
             );
         }
     }
 
+    private function isSortingByAttributeAllowed(AttributeCode $attributeCode): bool
+    {
+        return in_array((string) $attributeCode, $this->searchEngineConfiguration->getSortableAttributeCodes());
+    }
+
     private function validateRowsPerPage(int $rowsPerPage)
     {
-        if ($rowsPerPage > $this->defaultConfiguration->getMaxProductsPerPage()) {
+        if ($rowsPerPage > $this->searchEngineConfiguration->getMaxProductsPerPage()) {
             throw new InvalidNumberOfProductsPerPageException(sprintf(
                 'Maximum allowed number of products per page is %d, got %d.',
-                $this->defaultConfiguration->getMaxProductsPerPage(),
+                $this->searchEngineConfiguration->getMaxProductsPerPage(),
                 $rowsPerPage
             ));
         }
