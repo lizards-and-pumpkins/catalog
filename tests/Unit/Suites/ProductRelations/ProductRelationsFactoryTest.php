@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -60,7 +60,7 @@ class ProductRelationsFactoryTest extends TestCase
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
 
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new RestApiFactory());
         $masterFactory->register(new FrontendFactory($stubRequest));

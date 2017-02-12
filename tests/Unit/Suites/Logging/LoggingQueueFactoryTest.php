@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +30,7 @@ class LoggingQueueFactoryTest extends TestCase
     {
         $implementationFactory = new UnitTestFactory($this);
         
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
         $masterFactory->register($implementationFactory);
         $this->factory = new LoggingQueueFactory($masterFactory);

@@ -55,7 +55,6 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method GenericSnippetKeyGenerator createContentBlockInProductListingSnippetKeyGenerator
  * @method string[] getRequiredContextParts
  * @method ProductXmlToProductBuilderLocator createProductXmlToProductBuilderLocator
- * @method Context createContext
  * @method string[] getSearchableAttributeCodes
  * @method FacetFiltersToIncludeInResult createProductListingFacetFiltersToIncludeInResult
  * @method ProductsPerPage getProductsPerPageConfig
@@ -69,7 +68,7 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method TranslatorRegistry getTranslatorRegistry
  * @method SnippetKeyGenerator createProductListingTitleSnippetKeyGenerator
  */
-class SampleMasterFactory implements MasterFactory
+class CatalogMasterFactory implements MasterFactory
 {
     use MasterFactoryTrait;
 }

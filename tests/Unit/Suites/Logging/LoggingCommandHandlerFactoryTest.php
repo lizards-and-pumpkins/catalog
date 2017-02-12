@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\Logging;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -39,7 +39,7 @@ class LoggingCommandHandlerFactoryTest extends TestCase
 
     protected function setUp()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
         $masterFactory->register(new UnitTestFactory($this));

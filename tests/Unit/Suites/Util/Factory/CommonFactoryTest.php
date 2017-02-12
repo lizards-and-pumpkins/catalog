@@ -235,7 +235,7 @@ class CommonFactoryTest extends TestCase
 
     protected function setUp()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new UnitTestFactory($this));
         $this->commonFactory = new CommonFactory();
         $masterFactory->register($this->commonFactory);
@@ -376,7 +376,7 @@ class CommonFactoryTest extends TestCase
 
     public function testExceptionWithHelpfulMessageIsThrownIfNoKeyValueStoreFactoryIsRegistered()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
@@ -388,7 +388,7 @@ class CommonFactoryTest extends TestCase
 
     public function testExceptionWithHelpfulMessageIsThrownIfNoEventQueueFactoryIsRegistered()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 
@@ -400,7 +400,7 @@ class CommonFactoryTest extends TestCase
 
     public function testExceptionWithHelpfulMessageIsThrownIfNoLoggerFactoryIsRegistered()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $commonFactory = new CommonFactory();
         $masterFactory->register($commonFactory);
 

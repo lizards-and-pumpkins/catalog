@@ -22,7 +22,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Messaging\Queue\InMemoryQueue;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 use PHPUnit\Framework\TestCase;
@@ -36,7 +36,7 @@ class IntegrationTestFactoryTest extends TestCase
 
     public function setUp()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $this->factory = new IntegrationTestFactory($masterFactory);
         $masterFactory->register($this->factory);
         $masterFactory->register(new CommonFactory);

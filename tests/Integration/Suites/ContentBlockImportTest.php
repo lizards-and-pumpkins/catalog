@@ -9,12 +9,12 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ContentBlockImportTest extends AbstractIntegrationTest
 {
     /**
-     * @var SampleMasterFactory
+     * @var CatalogMasterFactory
      */
     private $factory;
 

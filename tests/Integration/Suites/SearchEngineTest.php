@@ -14,12 +14,12 @@ use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class SearchEngineTest extends AbstractIntegrationTest
 {
     /**
-     * @var SampleMasterFactory
+     * @var CatalogMasterFactory
      */
     private $factory;
 
