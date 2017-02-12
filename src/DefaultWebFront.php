@@ -16,13 +16,13 @@ use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class DefaultWebFront extends WebFront
 {
     protected function createMasterFactory() : MasterFactory
     {
-        return new SampleMasterFactory();
+        return new CatalogMasterFactory();
     }
 
     protected function registerFactories(MasterFactory $masterFactory)

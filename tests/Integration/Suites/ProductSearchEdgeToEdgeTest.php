@@ -11,12 +11,12 @@ use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
 {
     /**
-     * @var SampleMasterFactory
+     * @var CatalogMasterFactory
      */
     private $factory;
 

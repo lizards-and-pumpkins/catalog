@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandle
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -63,7 +63,7 @@ class RestApiFactoryTest extends TestCase
 
     public function setUp()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new UnitTestFactory($this));
 

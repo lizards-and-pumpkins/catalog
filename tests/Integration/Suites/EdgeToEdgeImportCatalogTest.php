@@ -24,13 +24,13 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\XPathParser;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use SebastianBergmann\Money\Currency;
 
 class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 {
     /**
-     * @var SampleMasterFactory
+     * @var CatalogMasterFactory
      */
     private $factory;
 

@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
 {
@@ -21,7 +21,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         ]);
     }
 
-    private function processRequest(SampleMasterFactory $factory, HttpRequest $request)
+    private function processRequest(CatalogMasterFactory $factory, HttpRequest $request)
     {
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
@@ -58,7 +58,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         return HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $body);
     }
 
-    private function getProductListingTemplateSnippetKey(SampleMasterFactory $factory, string $version): string
+    private function getProductListingTemplateSnippetKey(CatalogMasterFactory $factory, string $version): string
     {
         $context = $this->createContextWithVersion($factory, $version);
         $productListingTemplateSnippetKeyGenerator = $factory->createProductListingTemplateSnippetKeyGenerator();
@@ -66,7 +66,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         return $productListingTemplateSnippetKeyGenerator->getKeyForContext($context, []);
     }
 
-    private function assertHasProductListingTemplateForDataVersion(SampleMasterFactory $factory, string $version)
+    private function assertHasProductListingTemplateForDataVersion(CatalogMasterFactory $factory, string $version)
     {
         $key = $this->getProductListingTemplateSnippetKey($factory, $version);
 
@@ -74,7 +74,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         $this->assertTrue($factory->createDataPoolReader()->hasSnippet($key), $message);
     }
 
-    private function assertNotHasProductListingTemplateForDataVersion(SampleMasterFactory $factory, string $version)
+    private function assertNotHasProductListingTemplateForDataVersion(CatalogMasterFactory $factory, string $version)
     {
         $key = $this->getProductListingTemplateSnippetKey($factory, $version);
 

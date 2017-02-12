@@ -68,7 +68,7 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method TranslatorRegistry getTranslatorRegistry
  * @method SnippetKeyGenerator createProductListingTitleSnippetKeyGenerator
  */
-class SampleMasterFactory implements MasterFactory
+class CatalogMasterFactory implements MasterFactory
 {
     use MasterFactoryTrait;
 }

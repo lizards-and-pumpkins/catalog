@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
 {
     /**
-     * @var SampleMasterFactory|CommonFactory
+     * @var CatalogMasterFactory|CommonFactory
      */
     private $factory;
     

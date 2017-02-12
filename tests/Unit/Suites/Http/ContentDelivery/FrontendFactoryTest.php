@@ -34,7 +34,7 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,7 +42,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\SampleMasterFactory
+ * @uses   \LizardsAndPumpkins\Util\Factory\CatalogMasterFactory
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
@@ -108,7 +108,7 @@ class FrontendFactoryTest extends TestCase
 
     public function setUp()
     {
-        $masterFactory = new SampleMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new UnitTestFactory($this));
         $masterFactory->register(new RestApiFactory());

@@ -21,7 +21,7 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\SampleMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractIntegrationTest extends TestCase
@@ -51,7 +51,7 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     private $urlKeyStore;
     
-    final protected function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request) : SampleMasterFactory
+    final protected function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request) : CatalogMasterFactory
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $factory->register(new FrontendFactory($request));
@@ -59,9 +59,9 @@ abstract class AbstractIntegrationTest extends TestCase
         return $factory;
     }
     
-    final protected function prepareIntegrationTestMasterFactory() : SampleMasterFactory
+    final protected function prepareIntegrationTestMasterFactory() : CatalogMasterFactory
     {
-        $factory = new SampleMasterFactory();
+        $factory = new CatalogMasterFactory();
         $factory->register(new CommonFactory());
         $factory->register(new RestApiFactory());
         $factory->register(new UpdatingProductImportCommandFactory());

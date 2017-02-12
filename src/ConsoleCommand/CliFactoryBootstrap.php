@@ -26,7 +26,7 @@ class CliFactoryBootstrap
 
     public static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
     {
-        $masterFactory = new \LizardsAndPumpkins\Util\Factory\SampleMasterFactory();
+        $masterFactory = new \LizardsAndPumpkins\Util\Factory\CatalogMasterFactory();
 
         self::registerDefaultFactories($masterFactory, $factoriesToRegister);
         self::registerSpecifiedFactories($masterFactory, $factoriesToRegister);
