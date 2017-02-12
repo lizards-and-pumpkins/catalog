@@ -30,7 +30,7 @@ class RunImport extends BaseCliCommand
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate) : array
+    final protected function getCommandLineArgumentsArray(CLImate $climate) : array
     {
         return array_merge(
             parent::getCommandLineArgumentsArray($climate),
@@ -61,7 +61,7 @@ class RunImport extends BaseCliCommand
         );
     }
 
-    protected function execute(CLImate $CLImate)
+    final protected function execute(CLImate $CLImate)
     {
         $this->clearStorageIfRequested();
         $this->enableImageImportIfRequested();
