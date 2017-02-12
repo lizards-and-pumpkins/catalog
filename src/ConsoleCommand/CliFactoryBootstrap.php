@@ -95,6 +95,11 @@ class CliFactoryBootstrap
         ];
     }
 
+    /**
+     * @param mixed[] $objects
+     * @param string $class
+     * @return bool
+     */
     private static function arrayContainsInstanceOfClass(array $objects, string $class): bool
     {
         foreach ($objects as $object) {
