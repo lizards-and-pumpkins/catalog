@@ -13,6 +13,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -54,6 +55,11 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private $contextBuilder;
 
     /**
+     * @var string
+     */
+    private $fullTextSearchTermCombinationOperator;
+
+    /**
      * @var SelectedFiltersParser
      */
     private $selectedFiltersParser;
@@ -64,43 +70,24 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private $criteriaParser;
 
     /**
-     * @var int
+     * @var SearchEngineConfiguration
      */
-    private $defaultNumberOfProductPerPage;
-
-    /**
-     * @var int
-     */
-    private $maxAllowedProductsPerPage;
-
-    /**
-     * @var SortBy
-     */
-    private $defaultSortBy;
-
-    /**
-     * @var string[]
-     */
-    private $sortableAttributeCodes;
+    private $searchEngineConfiguration;
 
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
+        string $fullTextSearchTermCombinationOperator,
         SelectedFiltersParser $selectedFiltersParser,
         CriteriaParser $criteriaParser,
-        int $defaultNumberOfProductPerPage,
-        int $maxAllowedProductsPerPage,
-        SortBy $defaultSortBy,
-        string ...$sortableAttributeCodes
+        SearchEngineConfiguration $searchEngineConfiguration
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
+        $this->fullTextSearchTermCombinationOperator = $fullTextSearchTermCombinationOperator;
         $this->selectedFiltersParser = $selectedFiltersParser;
         $this->criteriaParser = $criteriaParser;
-        $this->defaultNumberOfProductPerPage = $defaultNumberOfProductPerPage;
-        $this->maxAllowedProductsPerPage = $maxAllowedProductsPerPage;
-        $this->defaultSortBy = $defaultSortBy;
-        $this->sortableAttributeCodes = $sortableAttributeCodes;
+        $this->searchEngineConfiguration = $searchEngineConfiguration;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -182,7 +169,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             return (int) $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
         }
 
-        return $this->defaultNumberOfProductPerPage;
+        return $this->searchEngineConfiguration->getProductsPerPage();
     }
 
     private function getPageNumber(HttpRequest $request) : int
@@ -203,7 +190,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             );
         }
 
-        return $this->defaultSortBy;
+        return $this->searchEngineConfiguration->getSortBy();
     }
 
     private function getSortDirectionString(HttpRequest $request) : string
@@ -217,7 +204,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function validateSortBy(SortBy $sortBy)
     {
-        if (!in_array((string) $sortBy->getAttributeCode(), $this->sortableAttributeCodes)) {
+        if (! $this->searchEngineConfiguration->isSortingByAttributeAllowed($sortBy->getAttributeCode())) {
             throw new UnsupportedSortOrderException(
                 sprintf('Sorting by "%s" is not supported', $sortBy->getAttributeCode())
             );
@@ -226,10 +213,10 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
 
     private function validateRowsPerPage(int $rowsPerPage)
     {
-        if ($rowsPerPage > $this->maxAllowedProductsPerPage) {
+        if ($this->searchEngineConfiguration->isExceedingMaxProductsPerPage($rowsPerPage)) {
             throw new InvalidNumberOfProductsPerPageException(sprintf(
                 'Maximum allowed number of products per page is %d, got %d.',
-                $this->maxAllowedProductsPerPage,
+                $this->searchEngineConfiguration->getMaxProductsPerPage(),
                 $rowsPerPage
             ));
         }
@@ -244,14 +231,14 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             $criteriaString = $request->getQueryParameter(self::INITIAL_CRITERIA_PARAMETER);
 
             return CompositeSearchCriterion::createAnd(
-                new SearchCriterionFullText($queryString),
+                $this->createFullTextSearchCriteria($queryString),
                 $this->criteriaParser->createCriteriaFromString($criteriaString)
             );
         }
 
         if ($request->hasQueryParameter(self::QUERY_PARAMETER)) {
             $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
-            return new SearchCriterionFullText($queryString);
+            return $this->createFullTextSearchCriteria($queryString);
         }
 
         if ($request->hasQueryParameter(self::INITIAL_CRITERIA_PARAMETER)) {
@@ -260,6 +247,20 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         return new SearchCriterionAnything();
+    }
+
+    private function createFullTextSearchCriteria(string $queryString): SearchCriteria
+    {
+        if (strpos($queryString, ' ') === false) {
+            return new SearchCriterionFullText($queryString);
+        }
+
+        $values = array_filter(explode(' ', $queryString));
+        $criteria = array_map(function (string $value) {
+            return new SearchCriterionFullText($value);
+        }, $values);
+
+        return CompositeSearchCriterion::create($this->fullTextSearchTermCombinationOperator, ...$criteria);
     }
 
     /**

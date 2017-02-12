@@ -14,6 +14,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
@@ -29,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
@@ -55,12 +57,12 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     /**
      * @var int
      */
-    private $defaultNumberOfProductPerPage = 10;
+    private $testDefaultNumberOfProductPerPage = 10;
 
     /**
      * @var int
      */
-    private $maxAllowedProductsPerPage = 10;
+    private $testMaxAllowedProductsPerPage = 10;
 
     /**
      * @var SortBy|\PHPUnit_Framework_MockObject_MockObject
@@ -70,7 +72,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     /**
      * @var string[]
      */
-    private $sortableAttributeCodes = ['foo', 'bar'];
+    private $testSortableAttributeCodes = ['foo', 'bar'];
 
     /**
      * @var ProductSearchApiV1GetRequestHandler
@@ -87,25 +89,36 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
      */
     private $stubCriteriaParser;
 
+    /**
+     * @var SearchEngineConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubSearchEngineConfiguration;
+
     final protected function setUp()
     {
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $fullTextSearchTermCombinationOperator = CompositeSearchCriterion::OR_CONDITION;
         $this->stubSelectedFiltersParser = $this->createMock(SelectedFiltersParser::class);
         $this->stubCriteriaParser = $this->createMock(CriteriaParser::class);
 
         $this->stubDefaultSorBy = $this->createMock(SortBy::class);
         $this->stubDefaultSorBy->method('getAttributeCode')->willReturn(AttributeCode::fromString('bar'));
 
+        $this->stubSearchEngineConfiguration = new SearchEngineConfiguration(
+            $this->testDefaultNumberOfProductPerPage,
+            $this->testMaxAllowedProductsPerPage,
+            $this->stubDefaultSorBy,
+            ...$this->testSortableAttributeCodes
+        );
+
         $this->requestHandler = new ProductSearchApiV1GetRequestHandler(
             $this->mockProductSearchService,
             $this->stubContextBuilder,
+            $fullTextSearchTermCombinationOperator,
             $this->stubSelectedFiltersParser,
             $this->stubCriteriaParser,
-            $this->defaultNumberOfProductPerPage,
-            $this->maxAllowedProductsPerPage,
-            $this->stubDefaultSorBy,
-            ...$this->sortableAttributeCodes
+            $this->stubSearchEngineConfiguration
         );
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
@@ -192,6 +205,47 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             ->willReturn('foo');
 
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
+    }
+
+    /**
+     * @dataProvider fullTextSearchTermCombinationOperatorProvider
+     */
+    public function testCreatesACombinedCriteriaIfQueryStringContainsOfMultipleWords(string $fullTextSearchCondition)
+    {
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
+        ]);
+        $this->stubRequest->method('getQueryParameter')->with(ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER)
+            ->willReturn('foo bar');
+
+        $expectedCriteria = CompositeSearchCriterion::create(
+            $fullTextSearchCondition,
+            new SearchCriterionFullText('foo'),
+            new SearchCriterionFullText('bar')
+        );
+
+        $this->mockProductSearchService->expects($this->once())->method('query')->with($expectedCriteria);
+
+        $requestHandler = new ProductSearchApiV1GetRequestHandler(
+            $this->mockProductSearchService,
+            $this->stubContextBuilder,
+            $fullTextSearchCondition,
+            $this->stubSelectedFiltersParser,
+            $this->stubCriteriaParser,
+            $this->stubSearchEngineConfiguration
+        );
+
+        $requestHandler->process($this->stubRequest);
+    }
+
+    public function fullTextSearchTermCombinationOperatorProvider(): array
+    {
+        return [
+            [CompositeSearchCriterion::OR_CONDITION],
+            [CompositeSearchCriterion::AND_CONDITION],
+        ];
     }
 
     public function testRequestsAllProductsIfNeitherQueryStringNorInitialCriteriaParameterIsSet()
@@ -296,7 +350,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = [],
             $stubContext,
             new FacetFiltersToIncludeInResult(),
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             $pageNumber = 0,
             $this->stubDefaultSorBy
         );
@@ -368,7 +422,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = [],
             $stubContext,
             new FacetFiltersToIncludeInResult(),
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             (int) $pageNumber,
             $this->stubDefaultSorBy
         );
@@ -406,7 +460,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = [],
             $stubContext,
             new FacetFiltersToIncludeInResult(),
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             $pageNumber = 0,
             $expectedSortBy
         );
@@ -440,7 +494,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = [],
             $stubContext,
             new FacetFiltersToIncludeInResult(),
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             $pageNumber = 0,
             $this->stubDefaultSorBy
         );
@@ -481,7 +535,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = [],
             $stubContext,
             new FacetFiltersToIncludeInResult(),
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             $pageNumber = 0,
             $expectedSortBy
         );
@@ -519,7 +573,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testThrowsAnExceptionIfRequestedNumberOfProductsIsHigherThanAllowed()
     {
-        $rowsPerPage = $this->maxAllowedProductsPerPage + 1;
+        $rowsPerPage = $this->testMaxAllowedProductsPerPage + 1;
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
@@ -536,7 +590,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $expectedResponseBody = json_encode(
             ['error' => sprintf(
                 'Maximum allowed number of products per page is %d, got %d.',
-                $this->maxAllowedProductsPerPage,
+                $this->testMaxAllowedProductsPerPage,
                 $rowsPerPage
             )]
         );
@@ -560,7 +614,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = [],
             $stubContext,
             new FacetFiltersToIncludeInResult(),
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             $pageNumber = 0,
             $this->stubDefaultSorBy
         );
@@ -598,7 +652,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = $decodedSelectedFilters,
             $stubContext,
             new FacetFiltersToIncludeInResult(),
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             $pageNumber = 0,
             $this->stubDefaultSorBy
         );
@@ -689,7 +743,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $filterSelection = [],
             $stubContext,
             $expectedFacetFiltersToIncludeInResult,
-            $this->defaultNumberOfProductPerPage,
+            $this->testDefaultNumberOfProductPerPage,
             $pageNumber = 0,
             $this->stubDefaultSorBy
         );
