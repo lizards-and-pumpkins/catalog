@@ -14,12 +14,12 @@ class CliBootstrap
 
     public static function create(string $cliCommandClass, Factory ...$factoriesToRegister): BaseCliCommand
     {
-        $masterFactory = self::createMasterFactory($factoriesToRegister);
+        $masterFactory = self::createMasterFactory(...$factoriesToRegister);
 
         return new $cliCommandClass($masterFactory, new CLImate());
     }
 
-    private static function createMasterFactory(array $factoriesToRegister): MasterFactory
+    private static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
     {
         return self::isLoggingActive() ?
             CliFactoryBootstrap::createLoggingMasterFactory(...$factoriesToRegister) :
