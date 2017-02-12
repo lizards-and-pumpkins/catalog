@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
 use LizardsAndPumpkins\Logging\LoggingQueueFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -26,7 +27,7 @@ class CliFactoryBootstrap
 
     public static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
     {
-        $masterFactory = new \LizardsAndPumpkins\Util\Factory\CatalogMasterFactory();
+        $masterFactory = new CatalogMasterFactory();
 
         self::registerDefaultFactories($masterFactory, $factoriesToRegister);
         self::registerSpecifiedFactories($masterFactory, $factoriesToRegister);
