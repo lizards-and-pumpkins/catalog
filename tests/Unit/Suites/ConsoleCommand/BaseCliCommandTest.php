@@ -30,12 +30,7 @@ class BaseCliCommandTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
      */
     private $writeOutputSpy;
-
-    private function setEnvironmentConfigArgumentString(string $environmentConfigString)
-    {
-        $this->setArgumentValue('environmentConfig', $environmentConfigString);
-    }
-
+    
     /**
      * @param string $argumentName
      * @param mixed $value
@@ -96,48 +91,7 @@ class BaseCliCommandTest extends TestCase
         ];
         $this->assertSame($expectedCalls, $this->cliCommand->methodCalls);
     }
-
-    public function testItSetsTheEnvironmentConfig()
-    {
-        $this->setEnvironmentConfigArgumentString('foo=bar,baz=qux');
-        $this->cliCommand->run();
-        $this->assertArrayHasKey(EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO', $_SERVER);
-        $this->assertArrayHasKey(EnvironmentConfigReader::ENV_VAR_PREFIX . 'BAZ', $_SERVER);
-        $this->assertSame($_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO'], 'bar');
-        $this->assertSame($_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . 'BAZ'], 'qux');
-    }
-
-    public function testItTrimsTheEnvironmentConfigKeys()
-    {
-        $this->setEnvironmentConfigArgumentString('foo-with-space =bar');
-        $this->cliCommand->run();
-        $key = EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO-WITH-SPACE';
-        $this->assertArrayHasKey($key, $_SERVER);
-    }
-
-    public function testItTrimsTheEnvironmentConfigValues()
-    {
-        $this->setEnvironmentConfigArgumentString('foo= bar with space ');
-        $this->cliCommand->run();
-        $key = EnvironmentConfigReader::ENV_VAR_PREFIX . 'FOO';
-        $this->assertSame($_SERVER[$key], 'bar with space');
-    }
-
-    public function testItThrowsAnExceptionIfEnvironmentSettingIsNoKeyValuePair()
-    {
-        $this->setEnvironmentConfigArgumentString('some-setting');
-        $this->cliCommand->run();
-        $expectedString = 'Environment settings have to be key=value pairs, "=" not found in "some-setting"';
-        $this->assertStringWasOutput($expectedString);
-    }
-
-    public function testItThrowsAnExceptionIfTheEnvironmentKeyIsEmpty()
-    {
-        $this->setEnvironmentConfigArgumentString('=bar');
-        $this->cliCommand->run();
-        $this->assertStringWasOutput('Environment settings have to be key=value pairs, key not found in "=bar"');
-    }
-
+    
     public function testItDelegatesOutputToClimate()
     {
         $testOutputString = 'Please output this string';

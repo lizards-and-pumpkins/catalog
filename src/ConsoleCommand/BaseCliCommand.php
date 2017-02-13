@@ -108,11 +108,6 @@ abstract class BaseCliCommand implements ConsoleCommand
     protected function getCommandLineArgumentsArray(CLImate $climate): array
     {
         return [
-            'environmentConfig' => [
-                'prefix'      => 'e',
-                'longPrefix'  => 'environmentConfig',
-                'description' => 'Environment config settings, comma separated [foo=bar,baz=qux]',
-            ],
             'help'              => [
                 'prefix'      => 'h',
                 'longPrefix'  => 'help',
@@ -124,10 +119,6 @@ abstract class BaseCliCommand implements ConsoleCommand
 
     private function processBeforeExecute()
     {
-        $env = $this->getArg('environmentConfig');
-        if ($env) {
-            $this->applyEnvironmentConfigSettings($env);
-        }
         $this->beforeExecute($this->getCLImate());
     }
 
@@ -168,48 +159,5 @@ abstract class BaseCliCommand implements ConsoleCommand
     final protected function output(string $message)
     {
         return $this->getCLImate()->output($message);
-    }
-
-    private function applyEnvironmentConfigSettings(string $environmentConfigSettingsString)
-    {
-        every(explode(',', $environmentConfigSettingsString), function ($setting) {
-            list($key, $value) = $this->parseSetting($setting);
-            $_SERVER[EnvironmentConfigReader::ENV_VAR_PREFIX . strtoupper($key)] = trim($value);
-        });
-    }
-
-    /**
-     * @param string $setting
-     * @return string[]
-     */
-    private function parseSetting(string $setting): array
-    {
-        $this->validateSettingFormat($setting);
-
-        return [$this->parseSettingKey($setting), $this->parseSettingValue($setting)];
-    }
-
-    private function parseSettingKey(string $setting): string
-    {
-        $key = trim(substr($setting, 0, strpos($setting, '=')));
-        if ('' === $key) {
-            $message = sprintf('Environment settings have to be key=value pairs, key not found in "%s"', $setting);
-            throw new \InvalidArgumentException($message);
-        }
-
-        return $key;
-    }
-
-    private function parseSettingValue(string $setting): string
-    {
-        return substr($setting, strpos($setting, '=') + 1);
-    }
-
-    private function validateSettingFormat(string $setting)
-    {
-        if (false === strpos($setting, '=')) {
-            $message = sprintf('Environment settings have to be key=value pairs, "=" not found in "%s"', $setting);
-            throw new \InvalidArgumentException($message);
-        }
     }
 }
