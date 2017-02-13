@@ -72,7 +72,7 @@ class BaseCliCommandTest extends TestCase
         $this->climate->output = $mockOutput;
 
         $this->climate->arguments = $this->getMockBuilder(ArgumentManager::class)
-            ->setMethods(['get'])
+            ->setMethods(['get', 'parse'])
             ->getMock();
 
         $this->cliCommand = new StubCliCommand($this->climate);
@@ -160,5 +160,14 @@ class BaseCliCommandTest extends TestCase
         $this->cliCommand->run();
         $this->assertStringWasOutput('Usage:');
         $this->assertFalse(in_array('execute', $this->cliCommand->methodCalls));
+    }
+
+    public function testRemovesTheCommandNameFromTheArgumentVectorPassedToClimate()
+    {
+        /** @var \PHPUnit_Framework_MockObject_MockObject $mock */
+        $mock = $this->climate->arguments;
+        $mock->expects($this->once())->method('parse')->with(['foo script', '--bar', 'baz']);
+        $this->cliCommand->publicSetArgumentVector(['foo script', 'qux:command', '--bar', 'baz']);
+        $this->cliCommand->run();
     }
 }

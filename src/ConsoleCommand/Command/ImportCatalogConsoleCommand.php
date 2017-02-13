@@ -10,10 +10,12 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
 use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
+use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
-class RunImport extends BaseCliCommand
+class ImportCatalogConsoleCommand extends BaseCliCommand
 {
     /**
      * @var CatalogMasterFactory
@@ -23,6 +25,8 @@ class RunImport extends BaseCliCommand
     public function __construct(MasterFactory $factory, CLImate $CLImate)
     {
         $this->factory = $factory;
+        $this->factory->register(new UpdatingProductImportCommandFactory());
+        $this->factory->register(new UpdatingProductListingImportCommandFactory());
         $this->setCLImate($CLImate);
     }
     

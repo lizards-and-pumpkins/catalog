@@ -1,30 +1,53 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ConsoleCommand;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 
-abstract class BaseCliCommand
+abstract class BaseCliCommand implements ConsoleCommand
 {
     /**
      * @var CLImate
      */
     private $climate;
-    
+
+    /**
+     * @var string[]
+     */
+    private $argv;
+
     final protected function setCLImate(CLImate $climate)
     {
         $this->climate = $climate;
     }
 
-    final protected function getCLImate() : CLImate
+    final protected function getCLImate(): CLImate
     {
         if (null === $this->climate) {
             $this->setCLImate(new CLImate());
         }
+
         return $this->climate;
+    }
+
+    /**
+     * @param string[] $argv
+     */
+    final protected function setArgumentVector(array $argv)
+    {
+        $this->argv = $argv;
+    }
+
+    private function getArgumentVector(): array
+    {
+        if (null === $this->argv) {
+            global $argv;
+            return $argv;
+        }
+        return $this->argv;
     }
 
     public function run()
@@ -35,7 +58,7 @@ abstract class BaseCliCommand
             $this->handleException($e);
         }
     }
-    
+
     private function handleHookMethodFlow()
     {
         $climate = $this->getCLImate();
@@ -49,7 +72,7 @@ abstract class BaseCliCommand
             $this->processAfterExecute();
         }
     }
-    
+
     private function handleException(\Exception $e)
     {
         $climate = $this->getCLImate();
@@ -62,27 +85,40 @@ abstract class BaseCliCommand
     {
         $arguments = $this->getCommandLineArgumentsArray($climate);
         $climate->arguments->add($arguments);
-        $climate->arguments->parse();
+        
+        $climate->arguments->parse($this->getArgumentVectorWithoutCommandName());
+    }
+
+    private function getArgumentVectorWithoutCommandName()
+    {
+        $argv = $this->getArgumentVector();
+        
+        $argvWithoutCommandName = [];
+        foreach ($argv as $i => $value) {
+            if (1 === $i) continue;
+            $argvWithoutCommandName[] = $value;
+        }
+        return $argvWithoutCommandName;
     }
 
     /**
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate) : array
+    protected function getCommandLineArgumentsArray(CLImate $climate): array
     {
         return [
             'environmentConfig' => [
-                'prefix' => 'e',
-                'longPrefix' => 'environmentConfig',
+                'prefix'      => 'e',
+                'longPrefix'  => 'environmentConfig',
                 'description' => 'Environment config settings, comma separated [foo=bar,baz=qux]',
             ],
-            'help' => [
-                'prefix' => 'h',
-                'longPrefix' => 'help',
+            'help'              => [
+                'prefix'      => 'h',
+                'longPrefix'  => 'help',
                 'description' => 'Usage help',
-                'noValue' => true
-            ]
+                'noValue'     => true,
+            ],
         ];
     }
 
@@ -146,23 +182,25 @@ abstract class BaseCliCommand
      * @param string $setting
      * @return string[]
      */
-    private function parseSetting(string $setting) : array
+    private function parseSetting(string $setting): array
     {
         $this->validateSettingFormat($setting);
+
         return [$this->parseSettingKey($setting), $this->parseSettingValue($setting)];
     }
 
-    private function parseSettingKey(string $setting) : string
+    private function parseSettingKey(string $setting): string
     {
         $key = trim(substr($setting, 0, strpos($setting, '=')));
         if ('' === $key) {
             $message = sprintf('Environment settings have to be key=value pairs, key not found in "%s"', $setting);
             throw new \InvalidArgumentException($message);
         }
+
         return $key;
     }
 
-    private function parseSettingValue(string $setting) : string
+    private function parseSettingValue(string $setting): string
     {
         return substr($setting, strpos($setting, '=') + 1);
     }

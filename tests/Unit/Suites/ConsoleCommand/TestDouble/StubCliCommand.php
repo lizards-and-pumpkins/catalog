@@ -27,6 +27,14 @@ class StubCliCommand extends BaseCliCommand
     }
 
     /**
+     * @param string[] $argv
+     */
+    public function publicSetArgumentVector(array $argv)
+    {
+        $this->setArgumentVector($argv);
+    }
+
+    /**
      * @param CLImate $climate
      * @return array[]
      */

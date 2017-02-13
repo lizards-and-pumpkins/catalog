@@ -14,17 +14,19 @@ use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
 use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
+use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * @covers \LizardsAndPumpkins\ConsoleCommand\Command\RunImport
+ * @covers \LizardsAndPumpkins\ConsoleCommand\Command\ImportCatalogConsoleCommand
  * @uses \LizardsAndPumpkins\ConsoleCommand\BaseCliCommand
  * @uses \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
-class RunImportTest extends TestCase
+class ImportCatalogConsoleCommandTest extends TestCase
 {
     private $dummyImportFile = '/foo/bar.xml';
 
@@ -42,6 +44,11 @@ class RunImportTest extends TestCase
      * @var CatalogImport|MockObject
      */
     private $mockCatalogImport;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder
+     */
+    private $registerFactorySpy;
 
     private function getCommandArgumentMap($overRideDefaults = []): array
     {
@@ -63,7 +70,7 @@ class RunImportTest extends TestCase
     {
         $this->mockDataPoolReader($mockMasterFactory);
         $mockMasterFactory->method('createCatalogImport')->willReturn($this->mockCatalogImport);
-        $command = new RunImport($this->mockMasterFactory, $this->mockCliMate);
+        $command = new ImportCatalogConsoleCommand($this->mockMasterFactory, $this->mockCliMate);
         $command->run();
     }
 
@@ -84,14 +91,45 @@ class RunImportTest extends TestCase
         return $stubDataPoolReader;
     }
 
+    private function getRegisteredFactoryClassNames()
+    {
+        return array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
+            return get_class($invocation->parameters[0]);
+        }, $this->registerFactorySpy->getInvocations());
+    }
+
+    private function assertFactoryRegistered(string $factoryClassName)
+    {
+        $message = sprintf('Factory "%s" was not registered with the master factory', $factoryClassName);
+        $this->assertContains($factoryClassName, $this->getRegisteredFactoryClassNames(), $message);
+    }
+
+    private function assertFactoryNotRegistered(string $factoryClassName)
+    {
+        $message = sprintf('Factory "%s" was not expected to be registered with the master factory', $factoryClassName);
+        $this->assertNotContains($factoryClassName, $this->getRegisteredFactoryClassNames(), $message);
+    }
+
     protected function setUp()
     {
         $this->mockMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(['register'], get_class_methods(CommonFactory::class)))
             ->getMock();
+        $this->registerFactorySpy = $this->any();
+        $this->mockMasterFactory->expects($this->registerFactorySpy)->method('register');
+
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
         $this->mockCliMate = $this->createMock(CLImate::class);
         $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
+    }
+
+    public function testAlwaysRegistersTheImportFactories()
+    {
+        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->runCommand($this->mockMasterFactory);
+        
+        $this->assertFactoryRegistered(UpdatingProductImportCommandFactory::class);
+        $this->assertFactoryRegistered(UpdatingProductListingImportCommandFactory::class);
     }
 
     public function testDoesNotClearStorageIfRequested()
@@ -118,20 +156,20 @@ class RunImportTest extends TestCase
     public function testDoesNotEnableImageImportIfNotRequested()
     {
         $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
-        $this->mockMasterFactory->expects($this->once())->method('register')
-            ->with($this->isInstanceOf(NullProductImageImportCommandFactory::class));
-
         $this->runCommand($this->mockMasterFactory);
+
+        $this->assertFactoryRegistered(NullProductImageImportCommandFactory::class);
+        $this->assertFactoryNotRegistered(UpdatingProductImageImportCommandFactory::class);
     }
 
     public function testEnablesImageImportIfRequested()
     {
         $arguments = $this->getCommandArgumentMap(['importImages' => true]);
         $this->mockCliMate->arguments->method('get')->willReturnMap($arguments);
-        $this->mockMasterFactory->expects($this->once())->method('register')
-            ->with($this->isInstanceOf(UpdatingProductImageImportCommandFactory::class));
-
         $this->runCommand($this->mockMasterFactory);
+        
+        $this->assertFactoryRegistered(UpdatingProductImageImportCommandFactory::class);
+        $this->assertFactoryNotRegistered(NullProductImageImportCommandFactory::class);
     }
 
     public function testImportsSpecifiedFile()

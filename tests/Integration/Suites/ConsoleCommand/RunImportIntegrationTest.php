@@ -8,7 +8,7 @@ use League\CLImate\Argument\Manager as CliMateArgumentManager;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\AbstractIntegrationTest;
 use LizardsAndPumpkins\CatalogFixtureFileQuery;
-use LizardsAndPumpkins\ConsoleCommand\Command\RunImport;
+use LizardsAndPumpkins\ConsoleCommand\Command\ImportCatalogConsoleCommand;
 use LizardsAndPumpkins\TestDataPoolQuery;
 
 class RunImportIntegrationTest extends AbstractIntegrationTest
@@ -44,7 +44,7 @@ class RunImportIntegrationTest extends AbstractIntegrationTest
     public function testRunImportsCommand()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
-        $command = new RunImport($factory, $this->createTestCliMate($this->getCommandArgumentMap()));
+        $command = new ImportCatalogConsoleCommand($factory, $this->createTestCliMate($this->getCommandArgumentMap()));
         $command->run();
         
         $simpleProductIdString = CatalogFixtureFileQuery::getSkuOfFirstSimpleProductInFixture($this->fixtureFile);
