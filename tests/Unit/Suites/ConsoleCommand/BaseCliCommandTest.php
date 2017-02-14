@@ -120,8 +120,8 @@ class BaseCliCommandTest extends TestCase
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject $mock */
         $mock = $this->climate->arguments;
-        $mock->expects($this->once())->method('parse')->with(['foo script', '--bar', 'baz']);
-        $this->cliCommand->publicSetArgumentVector(['foo script', 'qux:command', '--bar', 'baz']);
+        $mock->expects($this->once())->method('parse')->with(['bin/lp qux:command', '--bar', 'baz']);
+        $this->cliCommand->publicSetArgumentVector(['bin/lp', 'qux:command', '--bar', 'baz']);
         $this->cliCommand->run();
     }
 }

@@ -65,7 +65,7 @@ abstract class BaseCliCommand implements ConsoleCommand
         $this->prepareCommandLineArguments($climate);
 
         if ($this->getArg('help')) {
-            $climate->usage();
+            $climate->usage($this->getArgumentVectorWithCommandName());
         } else {
             $this->processBeforeExecute();
             $this->execute($climate);
@@ -78,7 +78,7 @@ abstract class BaseCliCommand implements ConsoleCommand
         $climate = $this->getCLImate();
         $climate->error($e->getMessage());
         $climate->error(sprintf('%s:%d', $e->getFile(), $e->getLine()));
-        $climate->usage();
+        $climate->usage($this->getArgumentVectorWithCommandName());
     }
 
     private function prepareCommandLineArguments(CLImate $climate)
@@ -86,16 +86,19 @@ abstract class BaseCliCommand implements ConsoleCommand
         $arguments = $this->getCommandLineArgumentsArray($climate);
         $climate->arguments->add($arguments);
         
-        $climate->arguments->parse($this->getArgumentVectorWithoutCommandName());
+        $climate->arguments->parse($this->getArgumentVectorWithCommandName());
     }
 
-    private function getArgumentVectorWithoutCommandName()
+    private function getArgumentVectorWithCommandName()
     {
         $argv = $this->getArgumentVector();
         
         $argvWithoutCommandName = [];
         foreach ($argv as $i => $value) {
-            if (1 === $i) continue;
+            if (1 === $i) {
+                $argvWithoutCommandName[0] .= ' ' . $value;
+                continue;
+            }
             $argvWithoutCommandName[] = $value;
         }
         return $argvWithoutCommandName;
