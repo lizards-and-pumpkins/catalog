@@ -38,7 +38,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     /**
      * @var CLImate|MockObject
      */
-    private $mockCliMate;
+    private $stubCliMate;
 
     /**
      * @var CatalogImport|MockObject
@@ -57,7 +57,6 @@ class ImportCatalogConsoleCommandTest extends TestCase
             'importImages'      => ['importImages', false],
             'importFile'        => ['importFile', $this->dummyImportFile],
             'processQueues'     => ['processQueues', false],
-            'environmentConfig' => ['environmentConfig', ''],
             'help'              => ['help', null],
         ];
         foreach ($overRideDefaults as $name => $value) {
@@ -70,7 +69,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     {
         $this->mockDataPoolReader($mockMasterFactory);
         $mockMasterFactory->method('createCatalogImport')->willReturn($this->mockCatalogImport);
-        $command = new ImportCatalogConsoleCommand($this->mockMasterFactory, $this->mockCliMate);
+        $command = new ImportCatalogConsoleCommand($mockMasterFactory, $this->stubCliMate);
         $command->run();
     }
 
@@ -119,13 +118,13 @@ class ImportCatalogConsoleCommandTest extends TestCase
         $this->mockMasterFactory->expects($this->registerFactorySpy)->method('register');
 
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
-        $this->mockCliMate = $this->createMock(CLImate::class);
-        $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
+        $this->stubCliMate = $this->createMock(CLImate::class);
+        $this->stubCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
     }
 
     public function testAlwaysRegistersTheImportFactories()
     {
-        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
         $this->runCommand($this->mockMasterFactory);
         
         $this->assertFactoryRegistered(UpdatingProductImportCommandFactory::class);
@@ -134,7 +133,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
 
     public function testDoesNotClearStorageIfRequested()
     {
-        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
         
         $mockDataPoolWriter = $this->mockDataPoolWriter($this->mockMasterFactory);
         $mockDataPoolWriter->expects($this->never())->method('clear');
@@ -146,7 +145,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     {
         $arguments = $this->getCommandArgumentMap(['clearStorage' => true]);
         
-        $this->mockCliMate->arguments->method('get')->willReturnMap($arguments);
+        $this->stubCliMate->arguments->method('get')->willReturnMap($arguments);
         $mockDataPoolWriter = $this->mockDataPoolWriter($this->mockMasterFactory);
         $mockDataPoolWriter->expects($this->once())->method('clear');
 
@@ -155,7 +154,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
 
     public function testDoesNotEnableImageImportIfNotRequested()
     {
-        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
         $this->runCommand($this->mockMasterFactory);
 
         $this->assertFactoryRegistered(NullProductImageImportCommandFactory::class);
@@ -165,7 +164,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     public function testEnablesImageImportIfRequested()
     {
         $arguments = $this->getCommandArgumentMap(['importImages' => true]);
-        $this->mockCliMate->arguments->method('get')->willReturnMap($arguments);
+        $this->stubCliMate->arguments->method('get')->willReturnMap($arguments);
         $this->runCommand($this->mockMasterFactory);
         
         $this->assertFactoryRegistered(UpdatingProductImageImportCommandFactory::class);
@@ -174,7 +173,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
 
     public function testImportsSpecifiedFile()
     {
-        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
 
         $this->mockCatalogImport->expects($this->once())->method('importFile')
             ->with($this->dummyImportFile, $this->isInstanceOf(DataVersion::class));
@@ -183,7 +182,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
 
     public function testDoesNotProcessesQueuesIfNotRequested()
     {
-        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
 
         $mockCommandConsumer = $this->createMock(CommandConsumer::class);
         $mockCommandConsumer->expects($this->never())->method('processAll');
@@ -199,7 +198,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     public function testProcessesQueuesIfRequested()
     {
         $arguments = $this->getCommandArgumentMap(['processQueues' => true]);
-        $this->mockCliMate->arguments->method('get')->willReturnMap($arguments);
+        $this->stubCliMate->arguments->method('get')->willReturnMap($arguments);
 
         $mockCommandConsumer = $this->createMock(CommandConsumer::class);
         $mockCommandConsumer->expects($this->once())->method('processAll');
