@@ -41,6 +41,9 @@ abstract class BaseCliCommand implements ConsoleCommand
         $this->argv = $argv;
     }
 
+    /**
+     * @return string[]
+     */
     private function getArgumentVector(): array
     {
         if (null === $this->argv) {
