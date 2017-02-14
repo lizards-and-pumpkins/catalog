@@ -11,7 +11,7 @@ use LizardsAndPumpkins\CatalogFixtureFileQuery;
 use LizardsAndPumpkins\ConsoleCommand\Command\ImportCatalogConsoleCommand;
 use LizardsAndPumpkins\TestDataPoolQuery;
 
-class RunImportIntegrationTest extends AbstractIntegrationTest
+class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
 {
     private $fixtureFile = 'simple_product_adilette.xml';
 
