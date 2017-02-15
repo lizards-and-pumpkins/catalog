@@ -33,7 +33,7 @@
         }
     },
     "bin": [
-        "bin/runImport.php"
+        "bin/lp"
     ],
     "scripts": {
         "test": [
