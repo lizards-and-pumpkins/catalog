@@ -12,7 +12,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -55,9 +54,9 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     private $contextBuilder;
 
     /**
-     * @var string
+     * @var FullTextCriteriaBuilder
      */
-    private $fullTextSearchTermCombinationOperator;
+    private $fullTextCriteriaBuilder;
 
     /**
      * @var SelectedFiltersParser
@@ -77,14 +76,14 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
-        string $fullTextSearchTermCombinationOperator,
+        FullTextCriteriaBuilder $fullTextCriteriaBuilder,
         SelectedFiltersParser $selectedFiltersParser,
         CriteriaParser $criteriaParser,
         SearchEngineConfiguration $searchEngineConfiguration
     ) {
         $this->productSearchService = $productSearchService;
         $this->contextBuilder = $contextBuilder;
-        $this->fullTextSearchTermCombinationOperator = $fullTextSearchTermCombinationOperator;
+        $this->fullTextCriteriaBuilder = $fullTextCriteriaBuilder;
         $this->selectedFiltersParser = $selectedFiltersParser;
         $this->criteriaParser = $criteriaParser;
         $this->searchEngineConfiguration = $searchEngineConfiguration;
@@ -231,14 +230,14 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
             $criteriaString = $request->getQueryParameter(self::INITIAL_CRITERIA_PARAMETER);
 
             return CompositeSearchCriterion::createAnd(
-                $this->createFullTextSearchCriteria($queryString),
+                $this->fullTextCriteriaBuilder->createFromString($queryString),
                 $this->criteriaParser->createCriteriaFromString($criteriaString)
             );
         }
 
         if ($request->hasQueryParameter(self::QUERY_PARAMETER)) {
             $queryString = $request->getQueryParameter(self::QUERY_PARAMETER);
-            return $this->createFullTextSearchCriteria($queryString);
+            return $this->fullTextCriteriaBuilder->createFromString($queryString);
         }
 
         if ($request->hasQueryParameter(self::INITIAL_CRITERIA_PARAMETER)) {
@@ -247,20 +246,6 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         }
 
         return new SearchCriterionAnything();
-    }
-
-    private function createFullTextSearchCriteria(string $queryString): SearchCriteria
-    {
-        if (strpos($queryString, ' ') === false) {
-            return new SearchCriterionFullText($queryString);
-        }
-
-        $values = array_filter(explode(' ', $queryString));
-        $criteria = array_map(function (string $value) {
-            return new SearchCriterionFullText($value);
-        }, $values);
-
-        return CompositeSearchCriterion::create($this->fullTextSearchTermCombinationOperator, ...$criteria);
     }
 
     /**

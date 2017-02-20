@@ -13,6 +13,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\FullTextCriteriaBuilder;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,6 @@ use PHPUnit\Framework\TestCase;
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductSearchRequestHandlerTest extends TestCase
@@ -121,8 +121,13 @@ class ProductSearchRequestHandlerTest extends TestCase
 
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
+        /** @var FullTextCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject $stubFullTextCriteriaBuilder */
+        $stubFullTextCriteriaBuilder = $this->createMock(FullTextCriteriaBuilder::class);
+
+        /** @var ProductSearchService|\PHPUnit_Framework_MockObject_MockObject $stubProductSearchService */
         $stubProductSearchService = $this->createMock(ProductSearchService::class);
 
+        /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubDefaultSortBy */
         $stubDefaultSortBy = $this->createMock(SortBy::class);
 
         $this->requestHandler = new ProductSearchRequestHandler(
@@ -133,6 +138,7 @@ class ProductSearchRequestHandlerTest extends TestCase
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest,
             $stubProductSearchService,
+            $stubFullTextCriteriaBuilder,
             $stubDefaultSortBy
         );
 

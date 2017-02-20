@@ -23,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\DefaultFullTextCriteriaBuilder
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator

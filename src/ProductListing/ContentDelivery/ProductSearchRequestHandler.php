@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\FullTextCriteriaBuilder;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -59,6 +59,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $productSearchService;
 
     /**
+     * @var FullTextCriteriaBuilder
+     */
+    private $fullTextCriteriaBuilder;
+
+    /**
      * @var SortBy
      */
     private $defaultSortBy;
@@ -76,6 +81,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
         ProductSearchService $productSearchService,
+        FullTextCriteriaBuilder $fullTextCriteriaBuilder,
         SortBy $defaultSortBy,
         SortBy ...$availableSortBy
     ) {
@@ -86,6 +92,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->productSearchService = $productSearchService;
+        $this->fullTextCriteriaBuilder = $fullTextCriteriaBuilder;
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
     }
@@ -163,7 +170,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
 
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
-        $criteria = new SearchCriterionFullText($queryString);
+        $criteria = $this->fullTextCriteriaBuilder->createFromString($queryString);
 
         return $this->productSearchService->query($criteria, $queryOptions);
     }

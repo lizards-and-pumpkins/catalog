@@ -32,7 +32,7 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
         return new ProductSearchApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createContextBuilder(),
-            $this->getMasterFactory()->getFullTextSearchWordCombinationOperator(),
+            $this->getMasterFactory()->createFullTextCriteriaBuilder(),
             $this->getMasterFactory()->createSelectedFiltersParser(),
             $this->getMasterFactory()->createCriteriaParser(),
             $this->getMasterFactory()->createDefaultSearchEngineConfiguration()
@@ -56,6 +56,13 @@ class ProductSearchFactory implements Factory, FactoryWithCallback
     public function createCriteriaParser(): CriteriaParser
     {
         return new DefaultCriteriaParser();
+    }
+
+    public function createFullTextCriteriaBuilder(): FullTextCriteriaBuilder
+    {
+        return new DefaultFullTextCriteriaBuilder(
+            $this->getMasterFactory()->getFullTextSearchWordCombinationOperator()
+        );
     }
 
     public function getFullTextSearchWordCombinationOperator(): string
