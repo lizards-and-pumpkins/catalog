@@ -13,7 +13,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -29,11 +28,11 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\DefaultFullTextCriteriaBuilder
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
@@ -43,6 +42,11 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
      * @var ProductSearchService|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProductSearchService;
+
+    /**
+     * @var FullTextCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubFullTextCriteriaBuilder;
 
     /**
      * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
@@ -98,7 +102,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     {
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
-        $fullTextSearchTermCombinationOperator = CompositeSearchCriterion::OR_CONDITION;
+        $this->stubFullTextCriteriaBuilder = $this->createMock(FullTextCriteriaBuilder::class);
         $this->stubSelectedFiltersParser = $this->createMock(SelectedFiltersParser::class);
         $this->stubCriteriaParser = $this->createMock(CriteriaParser::class);
 
@@ -115,7 +119,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $this->requestHandler = new ProductSearchApiV1GetRequestHandler(
             $this->mockProductSearchService,
             $this->stubContextBuilder,
-            $fullTextSearchTermCombinationOperator,
+            $this->stubFullTextCriteriaBuilder,
             $this->stubSelectedFiltersParser,
             $this->stubCriteriaParser,
             $this->stubSearchEngineConfiguration
@@ -207,47 +211,6 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
-    /**
-     * @dataProvider fullTextSearchTermCombinationOperatorProvider
-     */
-    public function testCreatesACombinedCriteriaIfQueryStringContainsOfMultipleWords(string $fullTextSearchCondition)
-    {
-        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
-        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
-        ]);
-        $this->stubRequest->method('getQueryParameter')->with(ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER)
-            ->willReturn('foo bar');
-
-        $expectedCriteria = CompositeSearchCriterion::create(
-            $fullTextSearchCondition,
-            new SearchCriterionFullText('foo'),
-            new SearchCriterionFullText('bar')
-        );
-
-        $this->mockProductSearchService->expects($this->once())->method('query')->with($expectedCriteria);
-
-        $requestHandler = new ProductSearchApiV1GetRequestHandler(
-            $this->mockProductSearchService,
-            $this->stubContextBuilder,
-            $fullTextSearchCondition,
-            $this->stubSelectedFiltersParser,
-            $this->stubCriteriaParser,
-            $this->stubSearchEngineConfiguration
-        );
-
-        $requestHandler->process($this->stubRequest);
-    }
-
-    public function fullTextSearchTermCombinationOperatorProvider(): array
-    {
-        return [
-            [CompositeSearchCriterion::OR_CONDITION],
-            [CompositeSearchCriterion::AND_CONDITION],
-        ];
-    }
-
     public function testRequestsAllProductsIfNeitherQueryStringNorInitialCriteriaParameterIsSet()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
@@ -265,16 +228,21 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testRequestsProductsMatchingStringIfQueryParameterIsPresent()
     {
+        $queryString = 'foo';
+
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
         ]);
         $this->stubRequest->method('getQueryParameter')->with(ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER)
-            ->willReturn('foo');
+            ->willReturn($queryString);
 
-        $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class));
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
+        $this->mockProductSearchService->expects($this->once())->method('query')->with($dummySearchCriteria);
 
         $this->requestHandler->process($this->stubRequest);
     }
@@ -333,13 +301,15 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testDefaultValuesArePassedToProductSearchServiceIfNotSpecifiedExplicitly()
     {
+        $queryString = 'foo';
+
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
         ]);
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
@@ -355,9 +325,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $this->stubDefaultSorBy
         );
 
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
         $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->with($dummySearchCriteria, $expectedQueryOptions)
             ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
@@ -365,6 +339,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testPassesRequestedNumberOfProductPerPageToProductSearchService()
     {
+        $queryString = 'foo';
         $numberOfProductsPerPage = '5';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
@@ -374,7 +349,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, $numberOfProductsPerPage],
         ]);
 
@@ -391,9 +366,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $this->stubDefaultSorBy
         );
 
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
         $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->with($dummySearchCriteria, $expectedQueryOptions)
             ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
@@ -401,6 +380,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testPassesRequestedPageNumberToProductSearchService()
     {
+        $queryString = 'foo';
         $pageNumber = '1';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
@@ -410,7 +390,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::PAGE_NUMBER_PARAMETER, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
             [ProductSearchApiV1GetRequestHandler::PAGE_NUMBER_PARAMETER, $pageNumber],
         ]);
 
@@ -427,9 +407,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $this->stubDefaultSorBy
         );
 
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
         $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->with($dummySearchCriteria, $expectedQueryOptions)
             ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
@@ -437,6 +421,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testPassesRequestedSortOrderToProductSearchService()
     {
+        $queryString = 'foo';
         $sortOrder = 'bar';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
@@ -446,7 +431,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, $sortOrder],
         ]);
 
@@ -465,9 +450,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $expectedSortBy
         );
 
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
         $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->with($dummySearchCriteria, $expectedQueryOptions)
             ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
@@ -475,6 +464,8 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testIgnoresRequestedSortDirectionIfNoSortOrderIsSpecified()
     {
+        $queryString = 'foo';
+
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
@@ -482,7 +473,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::SORT_DIRECTION_PARAMETER, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
             [ProductSearchApiV1GetRequestHandler::SORT_DIRECTION_PARAMETER, 'desc'],
         ]);
 
@@ -499,9 +490,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $this->stubDefaultSorBy
         );
 
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
         $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->with($dummySearchCriteria, $expectedQueryOptions)
             ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
@@ -509,6 +504,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testPassesRequestedSortOrderAndDirectionToProductSearchService()
     {
+        $queryString = 'foo';
         $sortOrder = 'bar';
         $sortDirection = 'desc';
 
@@ -520,7 +516,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::SORT_DIRECTION_PARAMETER, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, 'foo'],
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, $sortOrder],
             [ProductSearchApiV1GetRequestHandler::SORT_DIRECTION_PARAMETER, $sortDirection],
         ]);
@@ -540,9 +536,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $expectedSortBy
         );
 
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
         $stubProductSearchResult = $this->createMock(ProductSearchResult::class);
         $this->mockProductSearchService->expects($this->once())->method('query')
-            ->with($this->isInstanceOf(SearchCriterionFullText::class), $expectedQueryOptions)
+            ->with($dummySearchCriteria, $expectedQueryOptions)
             ->willReturn($stubProductSearchResult);
 
         $this->requestHandler->process($this->stubRequest);
@@ -689,7 +689,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testRequestsProductsWithinInitialCriteriaAndQueryStringIfBothParametersAreSpecified()
     {
-        $dummyQueryString = 'foo';
+        $queryString = 'foo';
         $encodedInitialCriteriaString = 'dummy initial criteria string';
         $stubInitialCriteria = $this->createMock(SearchCriteria::class);
 
@@ -700,17 +700,18 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $dummyQueryString],
+            [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, $queryString],
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, $encodedInitialCriteriaString],
         ]);
 
         $this->stubCriteriaParser->method('createCriteriaFromString')->with($encodedInitialCriteriaString)
             ->willReturn($stubInitialCriteria);
 
-        $expectedCriteria = CompositeSearchCriterion::createAnd(
-            new SearchCriterionFullText($dummyQueryString),
-            $stubInitialCriteria
-        );
+        $dummySearchCriteria = $this->createMock(SearchCriteria::class);
+        $this->stubFullTextCriteriaBuilder->method('createFromString')->with($queryString)
+            ->willReturn($dummySearchCriteria);
+
+        $expectedCriteria = CompositeSearchCriterion::createAnd($dummySearchCriteria, $stubInitialCriteria);
         $this->mockProductSearchService->expects($this->once())->method('query')->with($expectedCriteria);
 
         $this->requestHandler->process($this->stubRequest);
