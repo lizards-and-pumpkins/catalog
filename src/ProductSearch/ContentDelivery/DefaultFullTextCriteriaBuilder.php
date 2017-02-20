@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\EmptyQueryStringException;
 
 class DefaultFullTextCriteriaBuilder implements FullTextCriteriaBuilder
 {
@@ -22,6 +23,10 @@ class DefaultFullTextCriteriaBuilder implements FullTextCriteriaBuilder
 
     public function createFromString(string $queryString): SearchCriteria
     {
+        if (trim($queryString) === '') {
+            throw new EmptyQueryStringException('Query string must not be empty.');
+        }
+
         if (strpos($queryString, ' ') === false) {
             return new SearchCriterionFullText($queryString);
         }

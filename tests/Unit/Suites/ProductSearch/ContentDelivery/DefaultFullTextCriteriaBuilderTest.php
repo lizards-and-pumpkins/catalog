@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionFullText;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\EmptyQueryStringException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,6 +34,29 @@ class DefaultFullTextCriteriaBuilderTest extends TestCase
         $this->assertEquals($expectedCriteria, $builder->createFromString('foo'));
     }
 
+    public function testThrowsAnErrorDuringAttemptToCreateACriteriaFromNonString()
+    {
+        $this->expectException(\TypeError::class);
+
+        $fullTextSearchTermCombinationOperator = CompositeSearchCriterion::OR_CONDITION;
+        $builder = new DefaultFullTextCriteriaBuilder($fullTextSearchTermCombinationOperator);
+
+        $builder->createFromString(123);
+    }
+
+    /**
+     * @dataProvider emptyStringProvider
+     */
+    public function testThrowsAnExceptionDuringAttemptToCreateACriteriaFromEmptyString(string $emptyString)
+    {
+        $this->expectException(EmptyQueryStringException::class);
+
+        $fullTextSearchTermCombinationOperator = CompositeSearchCriterion::OR_CONDITION;
+        $builder = new DefaultFullTextCriteriaBuilder($fullTextSearchTermCombinationOperator);
+
+        $builder->createFromString($emptyString);
+    }
+    
     /**
      * @dataProvider fullTextSearchTermCombinationOperatorProvider
      */
@@ -47,6 +71,11 @@ class DefaultFullTextCriteriaBuilderTest extends TestCase
         );
 
         $this->assertEquals($expectedCriteria, $builder->createFromString('foo bar'));
+    }
+
+    public function emptyStringProvider() : array
+    {
+        return [[''], [' '], ["\n"], ["\t"], ["\r"], ["\0"], ["\x0B"], [" \n\t"]];
     }
 
     public function fullTextSearchTermCombinationOperatorProvider(): array
