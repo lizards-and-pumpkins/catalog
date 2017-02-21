@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\Exception\NoConsoleCommandSpecifiedException;
-use LizardsAndPumpkins\Util\Factory\ConsoleCommandFactory;
+use LizardsAndPumpkins\ConsoleCommand\ConsoleCommandFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
@@ -31,10 +31,11 @@ class CliBootstrap
         if (! isset($argv[1])) {
             throw new NoConsoleCommandSpecifiedException('No command name specified.');
         }
-        $masterFactory = self::createMasterFactory(new ConsoleCommandFactory(), ...$factories);
+        $consoleCommandFactory = new ConsoleCommandFactory();
+        $masterFactory = self::createMasterFactory($consoleCommandFactory, ...$factories);
         $commandClass = self::getConsoleCommandLocator($masterFactory)->getClassFromName($argv[1]);
         
-        return self::create($commandClass);
+        return self::create($commandClass, $consoleCommandFactory, ...$factories);
     }
 
     private static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
