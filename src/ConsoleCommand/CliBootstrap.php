@@ -18,6 +18,11 @@ class CliBootstrap
     {
         $masterFactory = self::createMasterFactory(...$factoriesToRegister);
 
+        return self::instantiateCommand($cliCommandClass, $masterFactory);
+    }
+
+    private static function instantiateCommand(string $cliCommandClass, MasterFactory $masterFactory)
+    {
         return new $cliCommandClass($masterFactory, new CLImate());
     }
 
@@ -31,11 +36,10 @@ class CliBootstrap
         if (! isset($argv[1])) {
             throw new NoConsoleCommandSpecifiedException('No command name specified.');
         }
-        $consoleCommandFactory = new ConsoleCommandFactory();
-        $masterFactory = self::createMasterFactory($consoleCommandFactory, ...$factories);
+        $masterFactory = self::createMasterFactory(new ConsoleCommandFactory(), ...$factories);
         $commandClass = self::getConsoleCommandLocator($masterFactory)->getClassFromName($argv[1]);
         
-        return self::create($commandClass, $consoleCommandFactory, ...$factories);
+        return self::instantiateCommand($commandClass, $masterFactory);
     }
 
     private static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
