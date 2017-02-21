@@ -70,7 +70,6 @@ class ImportTemplateConsoleCommandTest extends \PHPUnit_Framework_TestCase
                 'register',
             ])
             ->getMock();
-        $this->stubCliMate = $this->createMock(CLImate::class);
 
         $this->testValidTemplateIds = ['foo', $this->testTemplateId];
         
