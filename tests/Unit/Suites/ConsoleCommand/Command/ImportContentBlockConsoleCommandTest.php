@@ -76,7 +76,7 @@ class ImportContentBlockConsoleCommandTest extends TestCase
         
         $this->mockCliMate = $this->getMockBuilder(CLImate::class)
             ->disableOriginalConstructor()
-            ->setMethods(array_merge(get_class_methods(CLImate::class), ['error']))
+            ->setMethods(array_merge(get_class_methods(CLImate::class), ['error', 'yellow']))
             ->getMock();
         $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
 
@@ -141,6 +141,20 @@ class ImportContentBlockConsoleCommandTest extends TestCase
 
         $this->mockCliMate->expects($this->never())->method('error');
 
+        $command = new ImportContentBlockConsoleCommand($this->stubMasterFactory, $this->mockCliMate);
+        $command->run();
+    }
+
+    public function testDisplaysWarningsIfContentBlockIdsDoNotStartWithAValidPrefix()
+    {
+        $this->createFixtureFile($this->testImportDirectory . '/foobar.html', 'dummy content');
+        $this->stubMasterFactory->method('getCommandQueue')->willReturn($this->createMock(CommandQueue::class));
+        
+        $this->mockCliMate->expects($this->atLeastOnce())->method('yellow');
+        $this->mockCliMate->expects($this->never())->method('error');
+
+        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        
         $command = new ImportContentBlockConsoleCommand($this->stubMasterFactory, $this->mockCliMate);
         $command->run();
     }

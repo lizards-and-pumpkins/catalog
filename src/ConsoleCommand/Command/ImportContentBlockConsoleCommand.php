@@ -90,6 +90,8 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
     {
         $blockIdString = $this->getContentBlockIdFromFileName($fileName);
 
+        $this->validateContentBlockId($blockIdString);
+        
         if ($this->isProductListingContentBlock($blockIdString)) {
             $blockIdStringWithoutLastVariableToken = preg_replace('/[^_]+$/', '', $blockIdString);
 
@@ -157,6 +159,19 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
     private function getDataVersion(): DataVersion
     {
         return DataVersion::fromVersionString($this->createDataPoolReader()->getCurrentDataVersion());
+    }
+
+    private function validateContentBlockId(string $blockId)
+    {
+        if (! preg_match('/^(:?product_listing_|)content_block_/', $blockId)) {
+            $this->warn(sprintf('Warning: the content block "%s" is probably invalid.', $blockId));
+            $this->warn('Content block IDs should start with "content_block_" or "product_listing_content_block_".');
+        }
+    }
+    
+    private function warn(string $message)
+    {
+        $this->getCLImate()->yellow($message);
     }
 
     private function getCommandQueue(): CommandQueue
