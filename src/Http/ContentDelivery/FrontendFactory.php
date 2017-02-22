@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
@@ -267,7 +268,7 @@ class FrontendFactory implements Factory
 
     public function createPageBuilder() : PageBuilder
     {
-        $pageBuilder = new PageBuilder(
+        $pageBuilder = new GenericPageBuilder(
             $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->getSnippetKeyGeneratorLocator()
         );

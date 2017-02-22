@@ -43,7 +43,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Http\Routing\GenericHttpRouter

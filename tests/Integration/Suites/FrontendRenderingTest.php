@@ -11,7 +11,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -140,7 +140,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         return new ProductDetailViewRequestHandler(
             $context,
             $dataPoolReader,
-            new PageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
+            new GenericPageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
             $this->factory->getTranslatorRegistry(),
             $productDetailPageMetaSnippetKeyGenerator
         );
