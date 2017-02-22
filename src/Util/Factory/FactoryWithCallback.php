@@ -11,4 +11,10 @@ interface FactoryWithCallback
      * @return void
      */
     public function factoryRegistrationCallback(MasterFactory $masterFactory);
+
+    /**
+     * @param MasterFactory $masterFactory
+     * @return void
+     */
+    public function beforeFactoryRegistrationCallback(MasterFactory $masterFactory);
 }

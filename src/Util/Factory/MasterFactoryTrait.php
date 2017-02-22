@@ -15,6 +15,10 @@ trait MasterFactoryTrait
 
     final public function register(Factory $factory)
     {
+        if ($factory instanceof FactoryWithCallback) {
+            $factory->beforeFactoryRegistrationCallback($this);
+        }
+        
         foreach ((new \ReflectionObject($factory))->getMethods() as $method) {
             $name = $method->getName();
 
