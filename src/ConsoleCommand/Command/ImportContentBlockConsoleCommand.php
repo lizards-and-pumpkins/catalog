@@ -36,7 +36,7 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate): array
+    final protected function getCommandLineArgumentsArray(CLImate $climate): array
     {
         return array_merge(parent::getCommandLineArgumentsArray($climate), [
             'processQueues'   => [
@@ -52,7 +52,7 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         ]);
     }
 
-    protected function execute(CLImate $CLImate)
+    final protected function execute(CLImate $CLImate)
     {
         $this->addUpdateContentBlockCommands();
         $this->processQueuesIfRequested();
@@ -71,6 +71,11 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         });
     }
 
+    /**
+     * @param ContentBlockId $blockId
+     * @param string $blockContent
+     * @param string[] $keyGeneratorParams
+     */
     private function addCommandsForEachContext(ContentBlockId $blockId, string $blockContent, array $keyGeneratorParams)
     {
         every($this->getAllContexts(), function (Context $context) use ($blockId, $blockContent, $keyGeneratorParams) {

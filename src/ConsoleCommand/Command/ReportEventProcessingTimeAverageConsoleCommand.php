@@ -35,7 +35,7 @@ class ReportEventProcessingTimeAverageConsoleCommand extends BaseCliCommand
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate): array
+    final protected function getCommandLineArgumentsArray(CLImate $climate): array
     {
         $tableColumns = $this->processingTimeTableDataBuilder->getTableColumns();
         $sortDirections = $this->processingTimeTableDataBuilder->getSortDirections();
@@ -63,7 +63,7 @@ class ReportEventProcessingTimeAverageConsoleCommand extends BaseCliCommand
         );
     }
 
-    protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate)
     {
         $eventHandlerProcessingTimes = $this->readEventHandlerProcessingTimes($this->getArg('logfile'));
         $tableData = $this->buildTableData($eventHandlerProcessingTimes);
@@ -93,7 +93,7 @@ class ReportEventProcessingTimeAverageConsoleCommand extends BaseCliCommand
             ->buildSortedTableData($eventHandlerProcessingTimes, $this->getArg('sortBy'), $this->getArg('direction'));
     }
 
-    protected function beforeExecute(CLImate $climate)
+    final protected function beforeExecute(CLImate $climate)
     {
         $this->validateLogFilePath($climate->arguments->get('logfile'));
         $this->validateSortField($climate->arguments->get('sortBy'));

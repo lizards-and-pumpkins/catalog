@@ -6,7 +6,10 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage;
 
 class LogfileReader
 {
-
+    /**
+     * @param string $logFilePath
+     * @return array[]
+     */
     public function getEventHandlerProcessingTimes(string $logFilePath): array
     {
         $eventHandlers = [];
@@ -18,9 +21,9 @@ class LogfileReader
         return $eventHandlers;
     }
 
-    private function readDomainEventHandlerProcessingTimes($logFilePath)
+    private function readDomainEventHandlerProcessingTimes(string $logFilePath): \Generator
     {
-        $f = fopen($logFilePath, 'r');
+        $f = fopen($logFilePath, 'rb');
         $matches = null;
         while (!feof($f)) {
             $pattern = "/^.{25}\tDomainEventHandler::process (?<domainEventHandler>\\S+) (?<time>\\S+)/";

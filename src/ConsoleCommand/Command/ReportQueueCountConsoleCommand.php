@@ -22,7 +22,7 @@ class ReportQueueCountConsoleCommand extends BaseCliCommand
         $this->setCLImate($climate);
     }
 
-    protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate)
     {
         $tableData = $this->formatTableData(
             $this->masterFactory->getCommandMessageQueue(),

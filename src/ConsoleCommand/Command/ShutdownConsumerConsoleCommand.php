@@ -31,7 +31,7 @@ class ShutdownConsumerConsoleCommand extends BaseCliCommand
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate): array
+    final protected function getCommandLineArgumentsArray(CLImate $climate): array
     {
         return array_merge(
             parent::getCommandLineArgumentsArray($climate),
@@ -54,7 +54,7 @@ class ShutdownConsumerConsoleCommand extends BaseCliCommand
         );
     }
 
-    protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate)
     {
         $queue = $this->selectQueue();
         $queue->add($this->createShutdownDirective());

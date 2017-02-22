@@ -41,7 +41,7 @@ class ReportUrlKeysConsoleCommand extends BaseCliCommand
      * @param CLImate $CLImate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $CLImate): array
+    final protected function getCommandLineArgumentsArray(CLImate $CLImate): array
     {
         return merge(
             parent::getCommandLineArgumentsArray($CLImate),
@@ -62,7 +62,7 @@ class ReportUrlKeysConsoleCommand extends BaseCliCommand
         );
     }
 
-    protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate)
     {
         $version = $this->getDataVersionToDisplay();
         $urlKeys = $this->getUrlKeys($version, $this->getArg('type'));
@@ -72,6 +72,11 @@ class ReportUrlKeysConsoleCommand extends BaseCliCommand
         $this->outputArray($formattedUrlKeys);
     }
 
+    /**
+     * @param string $version
+     * @param string $type
+     * @return array[]
+     */
     private function getUrlKeys(string $version, string $type): array
     {
         $allUrlKeyRecords = $this->getDataPoolReader()->getUrlKeysForVersion($version);

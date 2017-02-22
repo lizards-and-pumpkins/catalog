@@ -12,12 +12,18 @@ class ProcessingTimeTableDataBuilder
         'Total Sec'   => 'total',
         'Average Sec' => 'avg',
     ];
-    
+
     private static $sortDirections = [
         -1 => 'asc',
-        1 => 'desc'
+        1  => 'desc',
     ];
 
+    /**
+     * @param array[] $eventHandlerProcessingTimes
+     * @param string $sortBy
+     * @param string $direction
+     * @return array[]
+     */
     public function buildSortedTableData(array $eventHandlerProcessingTimes, string $sortBy, string $direction): array
     {
         return $this->sortTableData($this->buildTableData($eventHandlerProcessingTimes), $sortBy, $direction);
@@ -29,15 +35,12 @@ class ProcessingTimeTableDataBuilder
      */
     private function buildTableData(array $eventHandlerProcessingTimes): array
     {
-        return array_map(
-            function ($handler) use ($eventHandlerProcessingTimes) {
-                $count = count($eventHandlerProcessingTimes[$handler]);
-                $sum = array_sum($eventHandlerProcessingTimes[$handler]);
+        return array_map(function ($handler) use ($eventHandlerProcessingTimes) {
+            $count = count($eventHandlerProcessingTimes[$handler]);
+            $sum = array_sum($eventHandlerProcessingTimes[$handler]);
 
-                return $this->getTableRow($handler, $count, $sum);
-            },
-            array_keys($eventHandlerProcessingTimes)
-        );
+            return $this->getTableRow($handler, $count, $sum);
+        }, array_keys($eventHandlerProcessingTimes));
     }
 
     /**
