@@ -54,9 +54,9 @@ class ApiRequestHandlerTest extends TestCase
         $response->send();
 
         $expectedHeaders = [
-            'access-control-allow-origin: *',
-            'access-control-allow-methods: *',
-            'content-type: application/json',
+            'Access-Control-Allow-Origin: *',
+            'Access-Control-Allow-Methods: *',
+            'Content-Type: application/json',
         ];
 
         $this->assertArraySubset($expectedHeaders, xdebug_get_headers());

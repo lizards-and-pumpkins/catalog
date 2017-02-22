@@ -87,4 +87,9 @@ class GenericHttpResponse implements HttpResponse
                ($code >= 428 && $code <= 429) || $code === 431 || $code === 451 ||
                ($code >= 500 && $code <= 511) || ($code >= 598 && $code <= 599);
     }
+
+    public function getHeaders(): HttpHeaders
+    {
+        return $this->headers;
+    }
 }

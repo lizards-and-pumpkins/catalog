@@ -58,7 +58,7 @@ class HttpHeadersTest extends TestCase
 
     public function testAllHeadersAreReturned()
     {
-        $headersArray = ['header 1 name' => 'header 1 value', 'header 2 name' => 'header 2 value'];
+        $headersArray = ['Header-1-Name' => 'header 1 value', 'Header-2-Name' => 'header 2 value'];
         $headers = HttpHeaders::fromArray($headersArray);
 
         $this->assertEquals($headersArray, $headers->getAll());
@@ -101,7 +101,7 @@ class HttpHeadersTest extends TestCase
 
         unset($_SERVER['HTTP_FOO']);
 
-        $this->assertSame(['foo' => $dummyValue], $result->getAll());
+        $this->assertSame(['Foo' => $dummyValue], $result->getAll());
     }
     
     public function testOnlyHttpGlobalsAreUsedForCreatingHeaders()
@@ -117,13 +117,13 @@ class HttpHeadersTest extends TestCase
     
     public function testHeadersCreatedFromGlobalsAreNormalized()
     {
-        $_SERVER['HTTP_FOO'] = 'bar';
+        $_SERVER['HTTP_FOO_BAR'] = 'bar';
 
         $result = HttpHeaders::fromGlobalRequestHeaders();
 
-        unset($_SERVER['HTTP_FOO']);
+        unset($_SERVER['HTTP_FOO_BAR']);
 
-        $this->assertTrue($result->has('foo'));
+        $this->assertTrue($result->has('Foo-Bar'));
 
     }
 }

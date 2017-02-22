@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\HttpResourceNotFoundResponse
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class HttpResourceNotFoundResponseTest extends TestCase
 {
@@ -18,5 +19,11 @@ class HttpResourceNotFoundResponseTest extends TestCase
         ob_end_clean();
 
         $this->assertEquals(404, http_response_code());
+    }
+
+    public function testReturnsEmptyHeaders()
+    {
+        $headers = (new HttpResourceNotFoundResponse())->getHeaders();
+        $this->assertEmpty($headers->getAll());
     }
 }

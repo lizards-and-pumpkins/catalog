@@ -35,11 +35,16 @@ class HttpHeaders
                 throw new InvalidHttpHeadersException('Can only create HTTP headers from string');
             }
 
-            $normalizedHeaderName = strtolower($headerName);
+            $normalizedHeaderName = self::normalizeHeaderName($headerName);
             $normalizedHeaders[$normalizedHeaderName] = $headerValue;
         }
 
         return new self($normalizedHeaders);
+    }
+
+    private static function normalizeHeaderName(string $headerName): string
+    {
+        return str_replace(' ', '-', ucwords(strtolower(str_replace('-', ' ', $headerName))));
     }
 
     public static function fromGlobalRequestHeaders() : HttpHeaders
@@ -55,7 +60,7 @@ class HttpHeaders
 
     public function get(string $headerName) : string
     {
-        $normalizedHeaderName = strtolower($headerName);
+        $normalizedHeaderName = self::normalizeHeaderName($headerName);
         if (!$this->has($normalizedHeaderName)) {
             throw new HeaderNotPresentException(sprintf('The header "%s" is not present.', $headerName));
         }
@@ -72,6 +77,6 @@ class HttpHeaders
 
     public function has(string $headerName) : bool
     {
-        return array_key_exists(strtolower($headerName), $this->headers);
+        return array_key_exists(self::normalizeHeaderName($headerName), $this->headers);
     }
 }
