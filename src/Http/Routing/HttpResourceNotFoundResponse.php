@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http\Routing;
 
+use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpResponse;
 
 class HttpResourceNotFoundResponse implements HttpResponse
@@ -22,5 +23,10 @@ class HttpResourceNotFoundResponse implements HttpResponse
     {
         http_response_code($this->getStatusCode());
         echo $this->getBody();
+    }
+
+    public function getHeaders(): HttpHeaders
+    {
+        return HttpHeaders::fromArray([]);
     }
 }

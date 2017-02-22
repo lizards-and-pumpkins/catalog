@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Http;
 
@@ -11,9 +11,11 @@ interface HttpResponse
     const STATUS_BAD_REQUEST = 400;
     const STATUS_NOT_FOUND = 404;
 
-    public function getBody() : string;
+    public function getBody(): string;
 
-    public function getStatusCode() : int;
+    public function getHeaders(): HttpHeaders;
+
+    public function getStatusCode(): int;
 
     public function send();
 }

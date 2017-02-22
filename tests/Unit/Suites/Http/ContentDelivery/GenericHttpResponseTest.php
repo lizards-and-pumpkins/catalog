@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\InvalidStatusCodeException;
+use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpResponse;
 use PHPUnit\Framework\TestCase;
 
@@ -89,7 +90,7 @@ class GenericHttpResponseTest extends TestCase
      */
     public function testGivenHeaderIsIncludedIntoResponse()
     {
-        $customHeaderName = 'foo';
+        $customHeaderName = 'Foo';
         $customHeaderValue = 'bar';
 
         $dummyBody = '';
@@ -129,5 +130,18 @@ class GenericHttpResponseTest extends TestCase
         ob_end_clean();
 
         $this->assertEquals($dummyStatusCode, http_response_code());
+    }
+
+    public function testReturnsHeaders()
+    {
+        $dummyBody = 'foo';
+        $dummyHeaders = ['Bar' => 'baz'];
+        $dummyStatusCode = HttpResponse::STATUS_OK;
+
+        $response = GenericHttpResponse::create($dummyBody, $dummyHeaders, $dummyStatusCode);
+        $headers = $response->getHeaders();
+        $this->assertInstanceOf(HttpHeaders::class, $headers);
+        $this->assertTrue($headers->has('Bar'));
+        $this->assertSame('baz', $headers->get('Bar'));
     }
 }
