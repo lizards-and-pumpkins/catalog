@@ -30,17 +30,20 @@ do
     shift
 done
 
+ARGUMENTS="${CONSUMER_SCRIPT#* }"
+COMMAND="${CONSUMER_SCRIPT% *}"
+
 [ -z "$CONSUMER_SCRIPT" ] && {
     echo "ERROR: No script to run specified as an argument" >&2
     exit 2
 }
 
-[ ! -e "$CONSUMER_SCRIPT" ] && {
-    echo "ERROR: Script \"$CONSUMER_SCRIPT\" not found." >&2
+[ ! -e "$COMMAND" ] && {
+    echo "ERROR: Script \"$COMMAND\" not found." >&2
     exit 3
 }
 
-[ ! -x "$CONSUMER_SCRIPT" ] && {
+[ ! -x "$COMMAND" ] && {
     echo "ERROR: script \"$CONSUMER_SCRIPT\" is not executable." >&2
     exit 4
 }
@@ -55,14 +58,16 @@ trap clean_exit TERM
 runmode=1
 until [ $runmode -eq 0 ]; do
     if [ "$LOG" ]; then
-        "$CONSUMER_SCRIPT" 2>"$LOG" 2>&1
+        "$COMMAND" ${ARGUMENTS} 2>"$LOG" 2>&1
     else
-        "$CONSUMER_SCRIPT"
+        "$COMMAND" ${ARGUMENTS}
     fi
     exitCode=$?
     [ "$exitCode" != "0" ] && [ $EXIT_ON_ERROR ] && {
         echo "The script \"$CONSUMER_SCRIPT\" died with the error code $exitCode." >&2
         exit 5
     }
-    sleep $RESTART_INTERVAL
+    if [ $runmode -eq 1 ]; then
+        sleep $RESTART_INTERVAL;
+    fi
 done

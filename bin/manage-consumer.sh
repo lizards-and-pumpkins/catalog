@@ -6,16 +6,19 @@ function init_vars() {
     send_shutdown_message="$dir/lp shutdown:consumer"
     count=1
     get_input_args "$@"
+    worker_command_argument=${worker#* }
+    worker_type=${worker_command_argument#*:}
+    worker_type=${worker_type%s}
     build_pid_list
 }
 
 function get_input_args() {
     case "$1" in
         c|command|commandConsumer)
-            worker="lp comsume:commands"
+            worker="lp consume:commands"
             ;;
         e|event|eventConsumer)
-            worker="lp comsume:events"
+            worker="lp consume:events"
             ;;
         *)
             echo "Invalid consumer"
@@ -50,7 +53,7 @@ function as_numeric_value
 
 function build_pid_list()
 {
-    pids=" "$(get_pids_for_worker ${worker})
+    pids=" "$(get_pids_for_worker ${worker_command_argument})
 }
 
 function get_pids_for_worker()
@@ -76,7 +79,7 @@ function stop_consumer()
         count=$((count -1))
         supervisor_pid="${pids##* }"
         if [ ! -z ${supervisor_pid} ]; then
-            shutdown_worker ${worker} ${supervisor_pid} 
+            shutdown_worker ${worker_type} ${supervisor_pid} 
             pids="${pids% *}"
         fi
     done
@@ -93,7 +96,7 @@ function shutdown_worker()
 
 function send_shutdown_message
 {
-    local type="${1%Consumer.php}"
+    local type=$1
     local consumer_pid=$(pgrep -P $2 php)
     
     if [ ! -z ${consumer_pid} ]; then
@@ -120,7 +123,7 @@ case "$action" in
         ;;
     "stop-all")
         for pid in $pids; do
-            shutdown_worker "$worker" "$pid"
+            shutdown_worker ${worker_type} "$pid"
         done
         ;;
 esac
