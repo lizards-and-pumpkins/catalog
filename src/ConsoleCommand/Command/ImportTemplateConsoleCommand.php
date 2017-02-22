@@ -29,7 +29,7 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
      * @param CLImate $climate
      * @return array[]
      */
-    protected function getCommandLineArgumentsArray(CLImate $climate): array
+    final protected function getCommandLineArgumentsArray(CLImate $climate): array
     {
         return array_merge(
             parent::getCommandLineArgumentsArray($climate),
@@ -54,7 +54,7 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
         );
     }
 
-    protected function execute(CLImate $CLImate)
+    final protected function execute(CLImate $CLImate)
     {
         $this->isTemplateIdListRequested() ?
             $this->outputTemplateIdList() :
@@ -131,12 +131,12 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
         return $templateProjectorLocator->getRegisteredProjectorCodes();
     }
 
-    protected function isTemplateIdListRequested(): bool
+    private function isTemplateIdListRequested(): bool
     {
         return (bool) $this->getArg('list');
     }
 
-    protected function outputTemplateIdList()
+    private function outputTemplateIdList()
     {
         $this->output('Available template IDs:');
         $this->output(implode(PHP_EOL, $this->getValidTemplateIds()));

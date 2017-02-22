@@ -10,6 +10,8 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 
 class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
 {
+    const LISTING_CONTENT_BLOCK_KEY_PREFIX = 'product_listing_content_block_';
+
     /**
      * @var \Closure
      */
@@ -22,7 +24,7 @@ class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy implements Sn
 
     public function canHandle(string $snippetCode) : bool
     {
-        return strpos($snippetCode, 'product_listing_content_block_') === 0;
+        return strpos($snippetCode, self::LISTING_CONTENT_BLOCK_KEY_PREFIX) === 0;
     }
 
     public function getKeyGeneratorForSnippetCode(string $snippetCode) : SnippetKeyGenerator

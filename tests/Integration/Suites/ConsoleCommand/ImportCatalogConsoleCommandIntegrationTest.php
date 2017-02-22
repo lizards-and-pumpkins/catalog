@@ -41,7 +41,7 @@ class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
         return $stubCliMate;
     }
     
-    public function testRunImportsCommand()
+    public function testRunImportsCatalogCommand()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $command = new ImportCatalogConsoleCommand($factory, $this->createTestCliMate($this->getCommandArgumentMap()));
