@@ -112,8 +112,10 @@ class ImportContentBlockConsoleCommandTest extends TestCase
         $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
         $this->mockCliMate->expects($this->never())->method('error');
 
-        $this->createFixtureFile($this->testImportDirectory . '/product_listing_content_block_foobar.html',
-            'dummy content');
+        $this->createFixtureFile(
+            $this->testImportDirectory . '/product_listing_content_block_foobar.html',
+            'dummy content'
+        );
 
         $mockCommandQueue = $this->createMock(CommandQueue::class);
         $mockCommandQueue->expects($this->once())->method('add')
