@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Util\Factory;
 
-trait FactoryCallbackTrait
+trait FactoryWithCallbackTrait
 {
     use FactoryTrait;
     
