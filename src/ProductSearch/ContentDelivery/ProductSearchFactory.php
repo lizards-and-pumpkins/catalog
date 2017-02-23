@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
-class ProductSearchFactory implements Factory, FactoryWithCallback
+class ProductSearchFactory implements FactoryWithCallback
 {
     use FactoryCallbackTrait;
 

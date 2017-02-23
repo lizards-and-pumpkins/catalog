@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\FactoryCallbackTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -83,6 +84,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryCallbackTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
@@ -90,9 +92,9 @@ class CliFactoryBootstrapTest extends TestCase
 {
     private function createSpyFactory(): Factory
     {
-        return new class implements Factory, FactoryWithCallback
+        return new class implements FactoryWithCallback
         {
-            use FactoryTrait;
+            use FactoryCallbackTrait;
 
             public $wasRegistered = false;
 
@@ -105,9 +107,9 @@ class CliFactoryBootstrapTest extends TestCase
 
     private function createSpyCommonFactory()
     {
-        $spyCommonFactory = new class implements Factory, FactoryWithCallback
+        $spyCommonFactory = new class implements FactoryWithCallback
         {
-            use FactoryTrait;
+            use FactoryCallbackTrait;
 
             private static $registrationCount = 0;
 

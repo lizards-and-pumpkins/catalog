@@ -40,6 +40,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
  * @covers \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @covers \LizardsAndPumpkins\Util\Factory\FactoryCallbackTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\CatalogMasterFactory

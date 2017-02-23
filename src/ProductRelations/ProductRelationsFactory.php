@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
-class ProductRelationsFactory implements Factory, FactoryWithCallback
+class ProductRelationsFactory implements FactoryWithCallback
 {
     use FactoryCallbackTrait;
 
