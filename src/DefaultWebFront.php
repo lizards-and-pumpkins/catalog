@@ -13,6 +13,7 @@ use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -29,6 +30,7 @@ class DefaultWebFront extends WebFront
     {
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new RestApiFactory());
+        $masterFactory->register(new ProductSearchFactory());
         $masterFactory->register(new UpdatingProductImportCommandFactory());
         $masterFactory->register(new UpdatingProductImageImportCommandFactory());
         $masterFactory->register(new UpdatingProductListingImportCommandFactory());
