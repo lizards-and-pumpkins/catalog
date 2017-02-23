@@ -81,7 +81,7 @@ class ProductSearchFactoryTest extends TestCase
 
         /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
-            ['register', 'getApiRequestHandlerLocator']
+            array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator'])
         )->getMock();
         $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
 

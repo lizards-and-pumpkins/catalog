@@ -112,7 +112,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     protected function setUp()
     {
         $this->mockMasterFactory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods(array_merge(['register'], get_class_methods(CommonFactory::class)))
+            ->setMethods(array_merge(get_class_methods(MasterFactory::class), get_class_methods(CommonFactory::class)))
             ->getMock();
         $this->registerFactorySpy = $this->any();
         $this->mockMasterFactory->expects($this->registerFactorySpy)->method('register');

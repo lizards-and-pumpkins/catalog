@@ -57,6 +57,19 @@ class CatalogMasterFactoryTest extends TestCase
         $this->assertSame($parameter, $result);
     }
 
+    public function testHasReturnsIfMethodIsKnownOrNot()
+    {
+        $dummyFactory = new class implements Factory
+        {
+            use FactoryTrait;
+
+            public function createFoo() { }
+        };
+        $this->catalogMasterFactory->register($dummyFactory);
+        $this->assertTrue($this->catalogMasterFactory->hasMethod('createFoo'));
+        $this->assertFalse($this->catalogMasterFactory->hasMethod('createBar'));
+    }
+
     public function testCallsFactoryCallbackMethods()
     {
         $factoryWithCallbacks = new class implements FactoryWithCallback

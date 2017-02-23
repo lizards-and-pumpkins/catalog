@@ -55,7 +55,7 @@ class ReportUrlKeysConsoleCommandTest extends TestCase
         $stubDataPoolReader->method('getCurrentDataVersion')->willReturn('xxx');
         $stubDataPoolReader->method('getUrlKeysForVersion')->willReturn($this->testUrlKeyRecords);
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods(['createDataPoolReader', 'register'])
+            ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['createDataPoolReader']))
             ->getMock();
 
         $this->stubMasterFactory->method('createDataPoolReader')->willReturn($stubDataPoolReader);

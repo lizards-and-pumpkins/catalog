@@ -33,8 +33,12 @@ class DomainEventHandlerLocatorTest extends TestCase
 
     protected function setUp()
     {
+        $methods = array_merge(
+            get_class_methods(DomainEventHandlerFactory::class),
+            get_class_methods(MasterFactory::class)
+        );
         $this->factory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods(array_merge(get_class_methods(DomainEventHandlerFactory::class), ['register']))
+            ->setMethods($methods)
             ->getMock();
         $this->locator = new DomainEventHandlerLocator($this->factory);
     }
