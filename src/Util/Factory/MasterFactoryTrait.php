@@ -39,6 +39,11 @@ trait MasterFactoryTrait
             $factory->factoryRegistrationCallback($this);
         }
     }
+    
+    final public function hasMethod(string $method): bool
+    {
+        return isset($this->methods[$method]);
+    }
 
     /**
      * @param string $method

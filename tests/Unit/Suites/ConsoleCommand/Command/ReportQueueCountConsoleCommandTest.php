@@ -30,7 +30,7 @@ class ReportQueueCountConsoleCommandTest extends TestCase
     protected function setUp()
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods(array_merge(['register'], get_class_methods(CommonFactory::class)))
+            ->setMethods(array_merge(get_class_methods(MasterFactory::class), get_class_methods(CommonFactory::class)))
             ->getMock();
 
         $this->stubMasterFactory->method('getCommandMessageQueue')->willReturn($this->createMock(Queue::class));

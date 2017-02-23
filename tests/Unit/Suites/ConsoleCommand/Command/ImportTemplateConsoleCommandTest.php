@@ -61,14 +61,13 @@ class ImportTemplateConsoleCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods([
+            ->setMethods(array_merge([
                 'createDataPoolReader',
                 'getEventQueue',
                 'createTemplateProjectorLocator',
                 'createCommandConsumer',
                 'createDomainEventConsumer',
-                'register',
-            ])
+            ], get_class_methods(MasterFactory::class)))
             ->getMock();
 
         $this->testValidTemplateIds = ['foo', $this->testTemplateId];

@@ -97,7 +97,8 @@ class DefaultWebFrontTest extends TestCase
         ];
 
         $stubFactoryMethods = array_merge(
-            ['getContext', 'createHttpRouterChain', 'register'],
+            get_class_methods(MasterFactory::class),
+            ['getContext', 'createHttpRouterChain'],
             $routerFactoryMethods
         );
 

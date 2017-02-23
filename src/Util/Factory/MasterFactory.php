@@ -11,4 +11,6 @@ interface MasterFactory
      * @return void
      */
     public function register(Factory $factory);
+
+    public function hasMethod(string $method): bool;
 }
