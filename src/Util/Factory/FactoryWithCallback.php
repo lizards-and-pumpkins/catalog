@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Util\Factory;
 
-interface FactoryWithCallback
+interface FactoryWithCallback extends Factory
 {
     /**
      * @param MasterFactory $masterFactory

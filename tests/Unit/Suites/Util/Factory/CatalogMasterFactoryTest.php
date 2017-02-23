@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \LizardsAndPumpkins\Util\Factory\CatalogMasterFactory
  * @covers \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\StubFactory
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
  */
 class CatalogMasterFactoryTest extends TestCase
 {
@@ -54,5 +55,29 @@ class CatalogMasterFactoryTest extends TestCase
         $result = $this->catalogMasterFactory->createSomething($parameter);
 
         $this->assertSame($parameter, $result);
+    }
+
+    public function testCallsFactoryCallbackMethods()
+    {
+        $factoryWithCallbacks = new class implements FactoryWithCallback
+        {
+            use FactoryWithCallbackTrait;
+            
+            public $beforeFactoryRegistrationCallbackWasCalled = false;
+            public $factoryRegistrationCallbackWasCalled = false;
+
+            public function beforeFactoryRegistrationCallback(MasterFactory $masterFactory)
+            {
+                $this->beforeFactoryRegistrationCallbackWasCalled = true;
+            }
+
+            public function factoryRegistrationCallback(MasterFactory $masterFactory)
+            {
+                $this->factoryRegistrationCallbackWasCalled = true;
+            }
+        };
+        $this->catalogMasterFactory->register($factoryWithCallbacks);
+        $this->assertTrue($factoryWithCallbacks->beforeFactoryRegistrationCallbackWasCalled);
+        $this->assertTrue($factoryWithCallbacks->factoryRegistrationCallbackWasCalled);
     }
 }

@@ -26,9 +26,4 @@ trait FactoryTrait
 
         return $this->masterFactory;
     }
-
-    public function beforeFactoryRegistrationCallback(MasterFactory $masterFactory)
-    {
-        // Hook method intentionally left empty
-    }
 }

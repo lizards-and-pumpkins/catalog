@@ -11,6 +11,7 @@ use LizardsAndPumpkins\ConsoleCommand\TestDouble\MockCliCommand;
 use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -86,6 +87,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\ConsoleCommand\ConsoleCommandFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
@@ -112,9 +114,9 @@ class CliBootstrapTest extends TestCase
 
     public function testRegistersSpecifiedFactoriesWithMasterFactory()
     {
-        $spyFactory = new class implements Factory, FactoryWithCallback
+        $spyFactory = new class implements FactoryWithCallback
         {
-            use FactoryTrait;
+            use FactoryWithCallbackTrait;
 
             public $wasRegistered = false;
 
