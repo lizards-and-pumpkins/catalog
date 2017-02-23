@@ -18,7 +18,7 @@ trait MasterFactoryTrait
         if ($factory instanceof FactoryWithCallback) {
             $factory->beforeFactoryRegistrationCallback($this);
         }
-        
+
         foreach ((new \ReflectionObject($factory))->getMethods() as $method) {
             $name = $method->getName();
 
@@ -34,7 +34,7 @@ trait MasterFactoryTrait
         }
 
         $factory->setMasterFactory($this);
-        
+
         if ($factory instanceof FactoryWithCallback) {
             $factory->factoryRegistrationCallback($this);
         }
