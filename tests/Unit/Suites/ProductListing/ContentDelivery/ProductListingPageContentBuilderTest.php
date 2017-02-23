@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
@@ -104,7 +104,7 @@ class ProductListingPageContentBuilderTest extends TestCase
     private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder(string $snippetCode)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function ($invocation) use ($snippetCode) {
-            return intval([$snippetCode => $snippetCode] === $invocation->parameters[0]);
+            return (int) ([$snippetCode => $snippetCode] === $invocation->parameters[0]);
         }, $this->addSnippetsToPageSpy->getInvocations()));
 
         $this->assertEquals(
@@ -118,7 +118,7 @@ class ProductListingPageContentBuilderTest extends TestCase
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {
-                return intval([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
+                return (int) ([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
                               [$snippetCode => $snippetValue] === $invocation->parameters[1]);
             }, $this->addSnippetsToPageSpy->getInvocations())
         );

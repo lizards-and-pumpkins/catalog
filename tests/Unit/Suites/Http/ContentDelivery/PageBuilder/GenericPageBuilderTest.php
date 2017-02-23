@@ -17,12 +17,12 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
+ * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
-class PageBuilderTest extends TestCase
+class GenericPageBuilderTest extends TestCase
 {
     /**
      * @var string
@@ -35,7 +35,7 @@ class PageBuilderTest extends TestCase
     private $testRootSnippetCode = 'root-snippet';
 
     /**
-     * @var PageBuilder
+     * @var GenericPageBuilder
      */
     private $pageBuilder;
 
@@ -154,7 +154,7 @@ class PageBuilderTest extends TestCase
         $this->stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocator($this->stubSnippetKeyGeneratorLocator);
 
-        $this->pageBuilder = new PageBuilder($this->mockDataPoolReader, $this->stubSnippetKeyGeneratorLocator);
+        $this->pageBuilder = new GenericPageBuilder($this->mockDataPoolReader, $this->stubSnippetKeyGeneratorLocator);
     }
 
     public function testHttpResponseIsReturned()
@@ -295,7 +295,7 @@ EOH;
         $stubKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $this->fakeSnippetKeyGeneratorLocatorForRootOnly($stubKeyGeneratorLocator);
 
-        $this->pageBuilder = new PageBuilder($this->mockDataPoolReader, $stubKeyGeneratorLocator);
+        $this->pageBuilder = new GenericPageBuilder($this->mockDataPoolReader, $stubKeyGeneratorLocator);
 
         $childSnippetCodes = ['child1'];
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);

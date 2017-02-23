@@ -73,7 +73,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses   \LizardsAndPumpkins\Util\FileSystem\Directory
  * @uses   \LizardsAndPumpkins\Http\HttpRequest
