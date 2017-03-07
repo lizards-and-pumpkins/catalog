@@ -115,7 +115,7 @@ class Price
      */
     public function multiplyBy($factor) : Price
     {
-        $multipliedAmount = (int) round($this->getAmount() * $factor, 0, PHP_ROUND_HALF_DOWN);
+        $multipliedAmount = (int) round($this->getAmount() * $factor, 0);
         return static::fromFractionsWithDecimalPlaces($multipliedAmount, $this->numDecimalPlaces);
     }
 }
