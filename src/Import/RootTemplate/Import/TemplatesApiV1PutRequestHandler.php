@@ -8,6 +8,9 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;
 
+/**
+ * @deprecated
+ */
 class TemplatesApiV1PutRequestHandler extends TemplatesApiV2PutRequestHandler
 {
     /**

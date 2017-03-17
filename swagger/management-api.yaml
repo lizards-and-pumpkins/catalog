@@ -1,0 +1,219 @@
+swagger: "2.0"
+info:
+  title: "Lizards & Pumpkins Catalog Management API"
+  version: "1.0.0"
+basePath: /rest
+produces: [ application/json ]
+paths:
+  /catalog_import:
+    put:
+      summary: Triggers import of given file.
+      description: |
+        Triggers an import of the specified catalog XML file.
+        Version 1 of the API resource imports the file with the current data version, version 2 of the API imports the file with the given data_version.
+      parameters:
+        - in: header
+          name: accepts
+          description: Selects the catalog_import API version.
+          type: string
+          required: true
+          enum:
+            - application/vnd.lizards-and-pumpkins.catalog_import.v1.json
+            - application/vnd.lizards-and-pumpkins.catalog_import.v2.json
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CatalogImportSpec"
+      responses:
+        "202":
+          description: Import task for the given file successfully queued
+        "400":
+          description: Something went wrong
+
+  "/content_blocks/{content_block_id}":
+    put:
+      summary: Imports the specified content block.
+      description: |
+        Imports the specified content block. Version 1 of the API imports the content block with the current data version, version 2 imports the content block with the specified data version.
+      parameters:
+        - in: header
+          name: accepts
+          description: Selects the content_blocks API version.
+          type: string
+          required: true
+          enum:
+            - application/vnd.lizards-and-pumpkins.content_blocks.v1.json
+            - application/vnd.lizards-and-pumpkins.content_blocks.v2.json
+        - in: path
+          name: content_block_id
+          description: Unique identifier for the content block to import.
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/ContentBlockImportSpec"
+      responses:
+        "202":
+          description: Content block import task successfully queued
+        "400":
+          description: Something went wrong
+
+  "/templates/{template_id}":
+    put:
+      summary: Triggers a template import.
+      description: Triggers an import of the specified template data.
+      parameters:
+        - in: header
+          name: accepts
+          description: Selects the content_blocks API version.
+          type: string
+          required: true
+          enum:
+            - application/vnd.lizards-and-pumpkins.templates.v2.json
+        - in: path
+          name: template_id
+          description: |
+            The template ID for the given template content.
+            The list of valid template IDs is project specific.
+            Please refere to `TemplateProjectorLocator::getRegisteredProjectorCodes()` for more information.
+          required: true
+          type: string
+          minLength: 1
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/TemplateImportSpec"
+      responses:
+        "202":
+          description: Template import successfully queued
+        "400":
+          description: Something went wrong
+          
+  /current_version:
+    get:
+      summary: Returns the current data version.
+      description: Returns the value of the Lizards & Pumpkins property current_version.
+      responses:
+        "202":
+          description: The current_version and (optionally) the previous_version properties.
+          schema:
+            type: object
+            properties:
+              current_version:
+                title: Current Version
+                type: string
+                description: The current data version.
+              previous_version:
+                title: Previous Version
+                type: string
+                description: The previous data version (not reliable).
+        "400":
+          description: Something went wrong
+          
+    put:
+      summary: Set the current data version.
+      description: |
+        Set the value of the Lizards & Pumpkins properties current_version.
+        Also updates the value of the previous_version property.
+      parameters:
+        - in: header
+          name: accepts
+          description: Selects the content_blocks API version.
+          type: string
+          required: true
+          enum:
+            - application/vnd.lizards-and-pumpkins.current_version.v1.json
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CurrentVersionSpec"
+      responses:
+        "202":
+          description: The current_version update action was successfully queued.
+    
+      
+definitions:
+  CatalogImportSpec:
+    type: object
+    description: |
+      The specification where to find the data to import and associated meta data.
+    properties:
+      fileName:
+        type: string
+        description: |
+          The file name to import. The file is expected to be in the configured import directory.
+        minLength: 6
+      dataVersion:
+        type: string
+        description: |
+          The data version to associate the specified catalog data with. Ignored by version 1 of the catalog_import API.
+        minLength: 1
+    required:
+      - fileName
+      - dataVersion
+    example:
+      fileName: catalog-2017-03-07-032-x3r.xml
+      dataVersion: foo42
+        
+  ContentBlockImportSpec:
+    type: object
+    description: The content block data and associated meta data.
+    properties:
+      content:
+        type: string
+        description: The content block data
+      data_version:
+        type: string
+        description: |
+          The data version to associate the specified content block data with. Ignored by version 1 of the content_blocks API.
+      context:
+        type: object
+        description: |
+          Map of context part names to context values.
+          The parameter is required but may be empty.
+    required:
+      - content
+      - data_version
+      - context
+    example:
+      content: "<h2>This is some content!</h2>"
+      data_version: "123bar"
+      context:
+        locale: en_GB
+        website: foo
+          
+  TemplateImportSpec:
+    type: object
+    description: The template data and associated meta data.
+    properties:
+      content:
+        type: string
+        description: The template data to associate with the given template ID.
+      data_version:
+        type: string
+        description: The data version to associate the specified template data with.
+        minLength: 1
+    required:
+      - content
+      - data_version
+    example:
+      content: "<div>Foo</div>"
+      data_version: "69baz"
+      
+  CurrentVersionSpec:
+    type: object
+    description: The current_version data version to set in Lizards & Pumpkins.
+    properties:
+      current_version:
+        type: string
+        description: The data version to use as the current_version.
+        minLength: 1
+    required:
+      - current_version
+    example:
+      current_version: "45abc4pj-24"
