@@ -125,12 +125,6 @@ class DefaultWebFrontTest extends TestCase
         $this->webFront = new TestDefaultWebFront($stubHttpRequest, $stubMasterFactory, new UnitTestFactory($this));
     }
 
-    public function testMasterFactoryIsReturned()
-    {
-        $result = $this->webFront->getMasterFactory();
-        $this->assertInstanceOf(MasterFactory::class, $result);
-    }
-
     public function testSendMethodOfResponseIsCalled()
     {
         $this->mockHttpResponse->expects($this->once())->method('send');
