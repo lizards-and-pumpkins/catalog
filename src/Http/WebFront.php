@@ -63,7 +63,7 @@ abstract class WebFront
 
     abstract protected function registerFactories(MasterFactory $factory);
 
-    abstract protected function registerRouters(HttpRouterChain $router);
+    abstract protected function registerRouters(HttpRouterChain $routerChain);
 
     final protected function getRequest() : HttpRequest
     {

@@ -8,9 +8,9 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
-class CurrentVersionApiV1GetRequestHandler extends ApiRequestHandler
+class CurrentVersionApiV1GetRequestHandler implements HttpRequestHandler
 {
     /**
      * @var DataPoolReader
@@ -22,9 +22,9 @@ class CurrentVersionApiV1GetRequestHandler extends ApiRequestHandler
         $this->dataPoolReader = $dataPoolReader;
     }
 
-    final protected function getResponse(HttpRequest $request): HttpResponse
+    public function process(HttpRequest $request): HttpResponse
     {
-        return GenericHttpResponse::create($this->getResponseBody(), [], HttpResponse::STATUS_OK);
+        return GenericHttpResponse::create($this->getResponseBody(), $headers = [], HttpResponse::STATUS_OK);
     }
 
     public function canProcess(HttpRequest $request): bool

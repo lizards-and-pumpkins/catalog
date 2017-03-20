@@ -48,7 +48,7 @@ class CatalogImportApiTest extends AbstractIntegrationTest
         $commandQueue = $factory->getCommandMessageQueue();
         $this->assertEquals(0, $commandQueue->count());
 
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
         $message = $this->getNextMessageFromQueue($commandQueue);
@@ -76,7 +76,7 @@ class CatalogImportApiTest extends AbstractIntegrationTest
         $commandQueue = $factory->getCommandMessageQueue();
         $this->assertEquals(0, $commandQueue->count());
 
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
         $message = $this->getNextMessageFromQueue($commandQueue);

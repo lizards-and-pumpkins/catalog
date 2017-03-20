@@ -11,10 +11,10 @@ use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
-class CurrentVersionApiV1PutRequestHandler extends ApiRequestHandler
+class CurrentVersionApiV1PutRequestHandler implements HttpRequestHandler
 {
     const TARGET_VERSION_PARAM = 'current_version';
 
@@ -28,16 +28,13 @@ class CurrentVersionApiV1PutRequestHandler extends ApiRequestHandler
         $this->commandQueue = $commandQueue;
     }
 
-    final protected function processRequest(HttpRequest $request)
+    public function process(HttpRequest $request): HttpResponse
     {
         $versionString = $this->getTargetDataVersionFromRequest($request);
         $dataVersion = DataVersion::fromVersionString($versionString);
         $this->commandQueue->add(new SetCurrentDataVersionCommand($dataVersion));
-    }
 
-    final protected function getResponse(HttpRequest $request): HttpResponse
-    {
-        return GenericHttpResponse::create('', [], HttpResponse::STATUS_ACCEPTED);
+        return GenericHttpResponse::create($body = '', $headers = [], HttpResponse::STATUS_ACCEPTED);
     }
 
     public function canProcess(HttpRequest $request): bool

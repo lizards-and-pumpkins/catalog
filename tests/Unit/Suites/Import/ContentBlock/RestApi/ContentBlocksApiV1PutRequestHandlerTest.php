@@ -23,7 +23,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
 {

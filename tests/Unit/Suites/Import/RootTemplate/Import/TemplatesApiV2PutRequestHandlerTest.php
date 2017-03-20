@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\InvalidTemplateApiRequestBodyException;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
@@ -45,9 +45,9 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testApiRequestHandlerInterfaceIsImplemented()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
     public function testRequestCanNotBeProcessedIfMethodIsNotPut()
@@ -74,26 +74,24 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
 
     public function testThrowsExceptionIfRequestBodyIsNotValidJson()
     {
+        $this->expectException(InvalidTemplateApiRequestBodyException::class);
+        $this->expectExceptionMessage('The request body is not valid JSON: Syntax error');
+        
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn('this is not JSON!');
         
-        $response = $this->requestHandler->process($this->mockRequest);
-
-        $expectedResponseBody = json_encode(['error' => 'The request body is not valid JSON: Syntax error']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testThrowsExceptionIfRequestDoesNotContainADataVersion()
     {
+        $this->expectException(InvalidTemplateApiRequestBodyException::class);
+        $this->expectExceptionMessage('The API request is missing the target data_version.');
+        
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => 'foo']));
 
-        $response = $this->requestHandler->process($this->mockRequest);
-
-        $expectedResponseBody = json_encode(['error' => 'The API request is missing the target data_version.']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testDoesNotThrowExceptionIfRequestDoesNotContainContent()

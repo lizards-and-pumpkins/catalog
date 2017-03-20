@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
-class InjectableDefaultWebFront extends DefaultWebFront
+class TestREstApiWebFront extends RestApiWebFront
 {
     /**
      * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $testMasterFactory;
-    
-    public function __construct(HttpRequest $request, MasterFactory $testMasterFactory, Factory $implementationFactory)
-    {
-        parent::__construct($request, $implementationFactory);
+
+    public function __construct(
+        HttpRequest $request,
+        MasterFactory $testMasterFactory,
+        UnitTestFactory $unitTestFactory
+    ) {
+        parent::__construct($request, $unitTestFactory);
         $this->testMasterFactory = $testMasterFactory;
     }
 

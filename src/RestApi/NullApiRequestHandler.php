@@ -6,15 +6,16 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
-class NullApiRequestHandler extends ApiRequestHandler
+class NullApiRequestHandler implements HttpRequestHandler
 {
     public function canProcess(HttpRequest $request) : bool
     {
         return false;
     }
 
-    final protected function getResponse(HttpRequest $request) : HttpResponse
+    public function process(HttpRequest $request): HttpResponse
     {
         throw new \RuntimeException('NullApiRequestHandler should never be processed.');
     }

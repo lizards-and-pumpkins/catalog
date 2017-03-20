@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,14 +59,14 @@ class ApiRequestHandlerLocatorTest extends TestCase
         $requestHandlerCode = 'foo';
         $requestHandlerVersion = 1;
 
-        $dummyApiRequestHandler = $this->createMock(ApiRequestHandler::class);
-        $apiRequestHandlerFactory = function () use ($dummyApiRequestHandler) {
-            return $dummyApiRequestHandler;
+        $dummyHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $apiRequestHandlerFactory = function () use ($dummyHttpRequestHandler) {
+            return $dummyHttpRequestHandler;
         };
         $this->requestHandlerChain->register($requestHandlerCode, $requestHandlerVersion, $apiRequestHandlerFactory);
 
         $result = $this->requestHandlerChain->getApiRequestHandler($requestHandlerCode, $requestHandlerVersion);
 
-        $this->assertSame($dummyApiRequestHandler, $result);
+        $this->assertSame($dummyHttpRequestHandler, $result);
     }
 }

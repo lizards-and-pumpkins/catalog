@@ -9,19 +9,19 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\MissingContentBlockDataVersionException;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockBodyIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockContextIsMissingInRequestBodyException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockContextException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
 
-class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
+class ContentBlocksApiV2PutRequestHandler implements HttpRequestHandler
 {
     /**
      * @var CommandQueue
@@ -52,15 +52,7 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
         return true;
     }
 
-    final protected function getResponse(HttpRequest $request): HttpResponse
-    {
-        $headers = [];
-        $body = '';
-
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
-    }
-
-    final protected function processRequest(HttpRequest $request)
+    public function process(HttpRequest $request): HttpResponse
     {
         $requestBody = json_decode($request->getRawBody(), true);
         $this->validateRequestBody($requestBody);
@@ -73,6 +65,8 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
         );
 
         $this->commandQueue->add(new UpdateContentBlockCommand($contentBlockSource));
+
+        return GenericHttpResponse::create($body = '', $headers = [], HttpResponse::STATUS_ACCEPTED);
     }
 
     /**
@@ -81,9 +75,7 @@ class ContentBlocksApiV2PutRequestHandler extends ApiRequestHandler
     private function validateRequestBody(array $requestBody)
     {
         $this->validateContent($requestBody);
-
         $this->validateContext($requestBody);
-
         $this->validateUrlKey($requestBody);
     }
 

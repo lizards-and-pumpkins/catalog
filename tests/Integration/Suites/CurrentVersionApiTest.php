@@ -35,7 +35,7 @@ class CurrentVersionApiTest extends AbstractIntegrationTest
     private function processRequest($request): HttpResponse
     {
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $website = new InjectableDefaultWebFront($request, $factory, $this->getIntegrationTestFactory($factory));
+        $website = new InjectableRestApiWebFront($request, $factory, $this->getIntegrationTestFactory($factory));
 
         return $website->processRequest();
     }

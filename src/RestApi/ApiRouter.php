@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
 
 class ApiRouter implements HttpRouter
@@ -30,7 +31,7 @@ class ApiRouter implements HttpRouter
 
     /**
      * @param HttpRequest $request
-     * @return ApiRequestHandler|null
+     * @return HttpRequestHandler|null
      */
     public function route(HttpRequest $request)
     {
@@ -54,13 +55,13 @@ class ApiRouter implements HttpRouter
             return null;
         }
 
-        $apiRequestHandler = $this->requestHandlerLocator->getApiRequestHandler(
+        $requestHandler = $this->requestHandlerLocator->getApiRequestHandler(
             strtolower($request->getMethod() . '_' . $requestHandlerCode),
             (int) $matchedVersion['version']
         );
 
-        if ($apiRequestHandler->canProcess($request)) {
-            return $apiRequestHandler;
+        if ($requestHandler->canProcess($request)) {
+            return $requestHandler;
         }
 
         return null;

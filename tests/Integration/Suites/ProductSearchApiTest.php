@@ -22,7 +22,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
 
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
         $this->assertEquals(json_encode(['total' => 0, 'data' => [], 'facets' => []]), $response->getBody());
@@ -40,7 +40,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
 
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
         $expectedProductIds = ['Adilette' => '288193NEU', 'Adipure' => 'M29540'];
@@ -65,7 +65,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
 
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
         $expectedProductIds = ['Adilette' => '288193NEU', 'Adipure' => 'M29540'];
@@ -90,7 +90,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $this->importCatalogFixture($factory, 'simple_product_adilette.xml', 'configurable_product_adipure.xml');
 
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
 
         $expectedFacets = [

@@ -17,9 +17,12 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnyth
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnableToProcessProductSearchRequestException;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
+use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,7 +38,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\DefaultFullTextCriteriaBuilder
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 {
@@ -137,9 +139,9 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testIsApiRequestHandler()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
     /**
@@ -274,13 +276,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
 
     public function testThrowsAnExceptionDuringAttemptToProcessInvalidRequest()
     {
+        $this->expectException(UnableToProcessProductSearchRequestException::class);
+        $this->expectExceptionMessage('Invalid product search API request.');
+
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
 
-        $response = $this->requestHandler->process($this->stubRequest);
-        $expectedResponseBody = json_encode(['error' => 'Invalid product search API request.']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testDelegatesFetchingProductsToTheProductSearchService()
@@ -561,6 +563,9 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     {
         $unsupportedSortAttributeCode = 'baz';
 
+        $this->expectException(UnsupportedSortOrderException::class);
+        $this->expectExceptionMessage(sprintf('Sorting by "%s" is not supported', $unsupportedSortAttributeCode));
+
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
@@ -572,17 +577,19 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, $unsupportedSortAttributeCode],
         ]);
 
-        $response = $this->requestHandler->process($this->stubRequest);
-        $expectedResponseBody = json_encode(
-            ['error' => sprintf('Sorting by "%s" is not supported', $unsupportedSortAttributeCode)]
-        );
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testThrowsAnExceptionIfRequestedNumberOfProductsIsHigherThanAllowed()
     {
         $rowsPerPage = $this->testMaxAllowedProductsPerPage + 1;
+
+        $this->expectException(InvalidNumberOfProductsPerPageException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Maximum allowed number of products per page is %d, got %d.',
+            $this->testMaxAllowedProductsPerPage,
+            $rowsPerPage
+        ));
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
@@ -595,16 +602,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, $rowsPerPage],
         ]);
 
-        $response = $this->requestHandler->process($this->stubRequest);
-        $expectedResponseBody = json_encode(
-            ['error' => sprintf(
-                'Maximum allowed number of products per page is %d, got %d.',
-                $this->testMaxAllowedProductsPerPage,
-                $rowsPerPage
-            )]
-        );
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testAddsEmptySelectedFiltersArrayToQueryOptionsIfNoParameterIsPresent()

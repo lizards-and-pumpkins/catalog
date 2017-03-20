@@ -9,12 +9,11 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpGetRequest
  * @uses   \LizardsAndPumpkins\Http\HttpPostRequest
@@ -51,9 +50,9 @@ class CurrentVersionApiV1GetRequestHandlerTest extends TestCase
         $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
     }
 
-    public function testInheritsFromApiRequestHandler()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->createHandler());
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->createHandler());
     }
 
     /**
