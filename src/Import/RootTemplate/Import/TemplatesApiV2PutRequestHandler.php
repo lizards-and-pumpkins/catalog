@@ -48,10 +48,6 @@ class TemplatesApiV2PutRequestHandler implements HttpRequestHandler
         return GenericHttpResponse::create($body = '', $headers = [], HttpResponse::STATUS_ACCEPTED);
     }
 
-    final protected function processRequest(HttpRequest $request)
-    {
-    }
-
     protected function getContent(HttpRequest $request): string
     {
         return $this->extractContentFromRequest($request);
