@@ -90,7 +90,12 @@ class TemplatesApiV2PutRequestHandler implements HttpRequestHandler
         return (string) ($this->extractDataFromRequest($request)['content'] ?? '');
     }
 
-    private function hasValue($dataFromRequest, $key): bool
+    /**
+     * @param mixed[] $dataFromRequest
+     * @param string $key
+     * @return bool
+     */
+    private function hasValue(array $dataFromRequest, string $key): bool
     {
         return is_array($dataFromRequest) && isset($dataFromRequest[$key]);
     }
