@@ -36,8 +36,12 @@ class ProductJsonToXmlTest extends TestCase
             'type'       => $this->type,
             'tax_class'  => $this->taxClass,
             'attributes' => [
-                'backorders' => true,
-                'url_key'    => 'led-arm-signallampe',
+                'backorders'  => true,
+                'url_key'     => 'led-arm-signallampe',
+                'description' => 'LED Arm-Signallampe<br />
+<br />
+LED Arm-Signallampe mit elastischem Band und Flasher mit variabler Blinkfolge,
+Flasher abnehmbar.',
             ],
         ]);
     }
@@ -64,6 +68,12 @@ class ProductJsonToXmlTest extends TestCase
 
         $this->assertContains('<attribute name="backorders">true</attribute>', $xml);
         $this->assertContains('<attribute name="url_key">led-arm-signallampe</attribute>', $xml);
+    }
+
+    public function testWriteCData()
+    {
+        $xml = $this->productJsonToXml->toXml($this->getProductJson());
+        $this->assertContains('<attribute name="description"><![CDATA[', $xml);
     }
 
     protected function setUp()

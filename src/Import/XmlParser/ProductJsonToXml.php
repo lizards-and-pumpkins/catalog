@@ -69,14 +69,30 @@ class ProductJsonToXml
         $this->writer->endElement();
     }
 
-    private function writeAttribute($key, $value)
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
+    private function writeAttribute(string $key, $value)
     {
         if (is_bool($value)) {
             $value = $value ? 'true' : false;
         }
         $this->writer->startElement('attribute');
         $this->writer->writeAttribute('name', $key);
-        $this->writer->text($value);
+        $this->writeText($value);
         $this->writer->endElement();
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function writeText($value)
+    {
+        if (strpos($value, '<') === false && strpos($value, '& ') === false) {
+            $this->writer->text($value);
+            return;
+        }
+        $this->writer->writeCData($value);
     }
 }
