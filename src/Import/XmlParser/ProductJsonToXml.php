@@ -53,7 +53,7 @@ class ProductJsonToXml
     }
 
     /**
-     * @param string[] $product
+     * @param string[][] $product
      */
     private function writeProduct(array $product)
     {
@@ -61,6 +61,22 @@ class ProductJsonToXml
         foreach ($this->productNodeAttributes as $a) {
             $this->writer->writeAttribute($a, $product[$a]);
         }
+        /** @var string[] $attributes */
+        $attributes = $product['attributes'];
+        foreach ($attributes as $key => $value) {
+            $this->writeAttribute($key, $value);
+        }
+        $this->writer->endElement();
+    }
+
+    private function writeAttribute($key, $value)
+    {
+        if (is_bool($value)) {
+            $value = $value ? 'true' : false;
+        }
+        $this->writer->startElement('attribute');
+        $this->writer->writeAttribute('name', $key);
+        $this->writer->text($value);
         $this->writer->endElement();
     }
 }

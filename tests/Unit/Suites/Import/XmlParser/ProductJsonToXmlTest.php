@@ -26,6 +26,22 @@ class ProductJsonToXmlTest extends TestCase
         $this->assertContains('<?xml version="1.0" encoding="UTF-8"?>', $xml);
     }
 
+    /**
+     * @return string
+     */
+    private function getProductJson(): string
+    {
+        return json_encode([
+            'sku' => $this->sku,
+            'type' => $this->type,
+            'tax_class' => $this->taxClass,
+            'attributes' => [
+                'backorders' => true,
+                'url_key' => 'led-arm-signallampe',
+            ]
+        ]);
+    }
+
     public function testContainsCatalogRoot()
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
@@ -42,20 +58,16 @@ class ProductJsonToXmlTest extends TestCase
         $this->assertContains($productNode, $xml);
     }
 
+    public function testWriteAttributes()
+    {
+        $xml = $this->productJsonToXml->toXml($this->getProductJson());
+
+        $this->assertContains('<attribute name="backorders">true</attribute>', $xml);
+        $this->assertContains('<attribute name="url_key">led-arm-signallampe</attribute>', $xml);
+    }
+
     protected function setUp()
     {
         $this->productJsonToXml = new ProductJsonToXml();
-    }
-
-    /**
-     * @return string
-     */
-    private function getProductJson(): string
-    {
-        return json_encode([
-            'sku' => $this->sku,
-            'type' => $this->type,
-            'tax_class' => $this->taxClass,
-        ]);
     }
 }
