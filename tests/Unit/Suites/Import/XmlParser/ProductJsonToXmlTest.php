@@ -32,13 +32,13 @@ class ProductJsonToXmlTest extends TestCase
     private function getProductJson(): string
     {
         return json_encode([
-            'sku' => $this->sku,
-            'type' => $this->type,
-            'tax_class' => $this->taxClass,
+            'sku'        => $this->sku,
+            'type'       => $this->type,
+            'tax_class'  => $this->taxClass,
             'attributes' => [
                 'backorders' => true,
-                'url_key' => 'led-arm-signallampe',
-            ]
+                'url_key'    => 'led-arm-signallampe',
+            ],
         ]);
     }
 
