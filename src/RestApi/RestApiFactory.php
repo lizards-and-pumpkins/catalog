@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestH
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\ProductImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
@@ -94,6 +95,11 @@ class RestApiFactory implements Factory
         return new CurrentVersionApiV1PutRequestHandler(
             $this->getMasterFactory()->createCommandQueue()
         );
+    }
+
+    public function createProductImportApiV2PutRequestHandler()
+    {
+        return new ProductImportApiV2PutRequestHandler();
     }
 
     private function getCatalogImportDirectoryConfig(): string

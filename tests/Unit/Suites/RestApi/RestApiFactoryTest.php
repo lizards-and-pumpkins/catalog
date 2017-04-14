@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestH
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\ProductImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\UnitTestFactory;
@@ -159,5 +160,11 @@ class RestApiFactoryTest extends TestCase
     {
         $result = $this->factory->createTemplatesApiV2PutRequestHandler();
         $this->assertInstanceOf(TemplatesApiV2PutRequestHandler::class, $result);
+    }
+
+    public function testReturnsProductImportApiV2PutRequestHandler()
+    {
+        $result = $this->factory->createProductImportApiV2PutRequestHandler();
+        $this->assertInstanceOf(ProductImportApiV2PutRequestHandler::class, $result);
     }
 }
