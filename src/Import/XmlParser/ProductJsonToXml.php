@@ -96,6 +96,13 @@ class ProductJsonToXml
         $this->writer->endElement();
     }
 
+    private function writeContext()
+    {
+        foreach ($this->context as $contextKey => $contextValue) {
+            $this->writer->writeAttribute($contextKey, $contextValue);
+        }
+    }
+
     /**
      * @param mixed $value
      */
@@ -106,12 +113,5 @@ class ProductJsonToXml
             return;
         }
         $this->writer->writeCData($value);
-    }
-
-    private function writeContext()
-    {
-        foreach ($this->context as $contextKey => $contextValue) {
-            $this->writer->writeAttribute($contextKey, $contextValue);
-        }
     }
 }

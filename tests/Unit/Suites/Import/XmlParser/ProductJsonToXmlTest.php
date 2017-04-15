@@ -83,11 +83,6 @@ Flasher abnehmbar.',
         $this->assertContains('<attribute name="backorders" website="german" locale="de_DE">', $xml);
     }
 
-    protected function setUp()
-    {
-        $this->productJsonToXml = new ProductJsonToXml();
-    }
-
     private function getProductJsonWithContext()
     {
         $product = json_decode($this->getProductJson(), true);
@@ -96,5 +91,10 @@ Flasher abnehmbar.',
             'locale'  => 'de_DE',
         ];
         return json_encode($product);
+    }
+
+    protected function setUp()
+    {
+        $this->productJsonToXml = new ProductJsonToXml();
     }
 }
