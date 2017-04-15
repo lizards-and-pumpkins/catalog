@@ -13,10 +13,19 @@ class ProductJsonToXml
      * @var string[]
      */
     private $productNodeAttributes = ['type', 'sku', 'tax_class'];
+    /**
+     * @var string[]
+     */
+    private $context = [];
 
     public function toXml(string $product): string
     {
         $product = json_decode($product, true);
+
+        if (isset($product['context'])) {
+            $this->context = $product['context'];
+        }
+
         $this->startDocument();
 
         $this->writeProducts($product);
@@ -79,8 +88,11 @@ class ProductJsonToXml
             $value = $value ? 'true' : false;
         }
         $this->writer->startElement('attribute');
+
         $this->writer->writeAttribute('name', $key);
+        $this->writeContext();
         $this->writeText($value);
+
         $this->writer->endElement();
     }
 
@@ -94,5 +106,12 @@ class ProductJsonToXml
             return;
         }
         $this->writer->writeCData($value);
+    }
+
+    private function writeContext()
+    {
+        foreach ($this->context as $contextKey => $contextValue) {
+            $this->writer->writeAttribute($contextKey, $contextValue);
+        }
     }
 }

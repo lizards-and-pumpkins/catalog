@@ -76,8 +76,25 @@ Flasher abnehmbar.',
         $this->assertContains('<attribute name="description"><![CDATA[', $xml);
     }
 
+    public function testWritesContextToAttributes()
+    {
+        $xml = $this->productJsonToXml->toXml($this->getProductJsonWithContext());
+        $this->assertContains('<attribute name="description" website="german" locale="de_DE">', $xml);
+        $this->assertContains('<attribute name="backorders" website="german" locale="de_DE">', $xml);
+    }
+
     protected function setUp()
     {
         $this->productJsonToXml = new ProductJsonToXml();
+    }
+
+    private function getProductJsonWithContext()
+    {
+        $product = json_decode($this->getProductJson(), true);
+        $product['context'] = [
+            'website' => 'german',
+            'locale'  => 'de_DE',
+        ];
+        return json_encode($product);
     }
 }
