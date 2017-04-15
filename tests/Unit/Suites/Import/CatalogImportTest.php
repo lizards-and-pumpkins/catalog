@@ -7,18 +7,18 @@ namespace LizardsAndPumpkins\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
+use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -174,6 +174,37 @@ class CatalogImportTest extends TestCase
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
+    }
+
+    public function testItAddsCommandsForOneProductToQueue()
+    {
+        $xml = <<<XML
+<product type="simple" sku="288193NEU" tax_class="19%">
+    <images>
+        <image>
+            <file>288193_14.jpg</file>
+            <label/>
+        </image>
+    </images>
+    <attributes>
+        <attribute name="url_key">adilette</attribute>
+        <attribute name="name">Adilette</attribute>
+        <attribute name="category">sale</attribute>
+        <attribute name="price">14.92</attribute>
+        <attribute name="brand">Adidas</attribute>
+        <attribute name="gender">Herren</attribute>
+        <attribute name="stock_qty">1</attribute>
+        <attribute name="backorders">false</attribute>
+        <attribute name="color">d90000</attribute>
+        <attribute name="series">Adilette</attribute>
+        <attribute name="news_from_date">2015-02-25 00:00:00</attribute>
+    </attributes>
+</product>
+XML;
+
+        $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forProduct');
+        $this->setProductIsAvailableForContextFixture(true);
+        $this->catalogImport->addProductsAndProductImagesToQueue($xml, $this->testDataVersion);
     }
 
     public function testItAddsNoProductCommandsToTheQueueIfTheProductDoesNotMatchAGivenContext()

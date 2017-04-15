@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -21,11 +22,16 @@ class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
      * @var CatalogImport
      */
     private $catalogImport;
+    /**
+     * @var DataVersion
+     */
+    private $dataVersion;
 
-    public function __construct(ProductJsonToXml $productJsonToXml, CatalogImport $catalogImport)
+    public function __construct(ProductJsonToXml $productJsonToXml, CatalogImport $catalogImport, DataVersion $dataVersion)
     {
         $this->productJsonToXml = $productJsonToXml;
         $this->catalogImport = $catalogImport;
+        $this->dataVersion = $dataVersion;
     }
 
     public function canProcess(HttpRequest $request): bool
@@ -38,7 +44,7 @@ class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
         $productData = $this->getProductDataFromRequest($request);
         $productXml = $this->productJsonToXml->toXml($productData);
 
-        $this->catalogImport->addProductsAndProductImagesToQueue($productXml);
+        $this->catalogImport->addProductsAndProductImagesToQueue($productXml, $this->dataVersion);
 
         return $this->getResponse($request);
     }

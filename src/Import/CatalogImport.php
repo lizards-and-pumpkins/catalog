@@ -112,7 +112,7 @@ class CatalogImport
     private function processProductXml(string $productXml)
     {
         try {
-            $this->addProductsAndProductImagesToQueue($productXml);
+            $this->addProductsAndProductImagesToQueue($productXml, $this->dataVersion);
         } catch (\Exception $exceptionWillInterruptFurtherProcessingOfThisProduct) {
             $this->logger->log(new ProductImportCallbackFailureMessage(
                 $exceptionWillInterruptFurtherProcessingOfThisProduct,
@@ -122,8 +122,9 @@ class CatalogImport
         }
     }
 
-    public function addProductsAndProductImagesToQueue(string $productXml)
+    public function addProductsAndProductImagesToQueue(string $productXml, DataVersion $dataVersion)
     {
+        $this->dataVersion = $dataVersion;
         $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
         $contexts = $this->contextSource->getAllAvailableContextsWithVersionApplied($this->dataVersion);
         every($contexts, function (Context $context) use ($productBuilder, $productXml) {
