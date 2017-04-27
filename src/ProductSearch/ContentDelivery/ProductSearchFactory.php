@@ -17,13 +17,9 @@ class ProductSearchFactory implements FactoryWithCallback
 
     public function factoryRegistrationCallback(MasterFactory $masterFactory)
     {
-        $apiVersion = 1;
-
-        /** @var ApiRequestHandlerLocator $apiRequestHandlerLocator */
-        $apiRequestHandlerLocator = $masterFactory->getApiRequestHandlerLocator();
-        $apiRequestHandlerLocator->register('get_product', $apiVersion, function () {
-            return $this->getMasterFactory()->createProductSearchApiV1GetRequestHandler();
-        });
+        if (method_exists($masterFactory, 'getApiRequestHandlerLocator')) {
+            $this->registerProductSearchApiEndpoint($masterFactory);
+        }
     }
 
     public function createProductSearchApiV1GetRequestHandler(): ProductSearchApiV1GetRequestHandler
@@ -78,5 +74,16 @@ class ProductSearchFactory implements FactoryWithCallback
             $this->getMasterFactory()->getProductSearchDefaultSortBy(),
             ...$this->getMasterFactory()->getSortableAttributeCodes()
         );
+    }
+
+    private function registerProductSearchApiEndpoint(MasterFactory $masterFactory)
+    {
+        $apiVersion = 1;
+
+        /** @var ApiRequestHandlerLocator $apiRequestHandlerLocator */
+        $apiRequestHandlerLocator = $masterFactory->getApiRequestHandlerLocator();
+        $apiRequestHandlerLocator->register('get_product', $apiVersion, function () {
+            return $this->getMasterFactory()->createProductSearchApiV1GetRequestHandler();
+        });
     }
 }
