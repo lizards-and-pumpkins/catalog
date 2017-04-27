@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
@@ -42,6 +43,11 @@ class RestApiWebFrontTest extends TestCase
      */
     private $mockMasterFactory;
 
+    /**
+     * @var HttpResponse|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubHttpResponse;
+
     private function initMasterFactoryMock(HttpRequestHandler $httpRequestHandler)
     {
         $stubFactoryMethods = array_merge(
@@ -64,12 +70,12 @@ class RestApiWebFrontTest extends TestCase
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->createMock(HttpRequest::class);
 
-        $stubHttpResponse = $this->createMock(HttpResponse::class);
-        $stubHttpResponse->method('getStatusCode')->willReturn(HttpResponse::STATUS_OK);
+        $this->stubHttpResponse = $this->createMock(HttpResponse::class);
+        $this->stubHttpResponse->method('getStatusCode')->willReturn(HttpResponse::STATUS_OK);
 
         /** @var HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequestHandler */
         $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
-        $stubHttpRequestHandler->method('process')->willReturn($stubHttpResponse);
+        $stubHttpRequestHandler->method('process')->willReturn($this->stubHttpResponse);
 
         $this->initMasterFactoryMock($stubHttpRequestHandler);
 
@@ -90,17 +96,21 @@ class RestApiWebFrontTest extends TestCase
         $this->assertInstanceOf(HttpResponse::class, $this->webFront->processRequest());
     }
 
-    public function testCorsHeadersAreSet()
+    public function testCorsHeadersAreAdded()
     {
+        $originalHeaders = ['Foo' => 'Bar'];
+        $stubHttpHeaders = HttpHeaders::fromArray($originalHeaders);
+        $this->stubHttpResponse->method('getHeaders')->willReturn($stubHttpHeaders);
+
         $response = $this->webFront->processRequest();
 
-        $expectedHeaders = [
+        $expectedHeaders = array_merge($originalHeaders, [
             'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => '*',
             'Content-Type' => 'application/json',
-        ];
+        ]);
 
-        $this->assertArraySubset($expectedHeaders, $response->getHeaders()->getAll());
+        $this->assertEquals($expectedHeaders, $response->getHeaders()->getAll());
     }
 
     public function testReturnsJsonErrorResponseInCaseOfExceptions()
