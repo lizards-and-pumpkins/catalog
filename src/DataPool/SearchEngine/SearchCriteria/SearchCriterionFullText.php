@@ -19,7 +19,7 @@ class SearchCriterionFullText implements SearchCriteria
     /**
      * @return array[]
      */
-    function jsonSerialize() : array
+    public function jsonSerialize() : array
     {
         return $this->toArray();
     }
