@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductListing\Import;
+namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\SnippetRendererCollection;
 
-class ProductListingTemplateProjector implements Projector
+class GenericProjector implements Projector
 {
     /**
      * @var SnippetRendererCollection
@@ -20,10 +18,8 @@ class ProductListingTemplateProjector implements Projector
      */
     private $dataPoolWriter;
     
-    public function __construct(
-        SnippetRendererCollection $snippetRendererCollection,
-        DataPoolWriter $dataPoolWriter
-    ) {
+    public function __construct(SnippetRendererCollection $snippetRendererCollection, DataPoolWriter $dataPoolWriter)
+    {
         $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
     }

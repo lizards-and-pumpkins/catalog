@@ -2,17 +2,15 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductListing\Import;
+namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
+ * @covers \LizardsAndPumpkins\Import\GenericProjector
  */
-class ProductListingTemplateProjectorTest extends TestCase
+class GenericProjectorTest extends TestCase
 {
     /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
@@ -20,7 +18,7 @@ class ProductListingTemplateProjectorTest extends TestCase
     private $mockDataPoolWriter;
 
     /**
-     * @var ProductListingTemplateProjector
+     * @var GenericProjector
      */
     private $projector;
 
@@ -32,10 +30,7 @@ class ProductListingTemplateProjectorTest extends TestCase
 
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
 
-        $this->projector = new ProductListingTemplateProjector(
-            $stubSnippetRendererCollection,
-            $this->mockDataPoolWriter
-        );
+        $this->projector = new GenericProjector($stubSnippetRendererCollection, $this->mockDataPoolWriter);
     }
 
     public function testProjectorInterfaceIsImplemented()

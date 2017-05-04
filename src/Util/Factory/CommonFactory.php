@@ -70,7 +70,7 @@ use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector;
+use LizardsAndPumpkins\Import\GenericProjector;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
@@ -321,9 +321,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingTemplateProjector() : ProductListingTemplateProjector
+    public function createProductListingTemplateProjector(): GenericProjector
     {
-        return new ProductListingTemplateProjector(
+        return new GenericProjector(
             $this->createProductListingTemplateRendererCollection(),
             $this->getMasterFactory()->createDataPoolWriter()
         );

@@ -130,7 +130,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
+ * @uses   \LizardsAndPumpkins\Import\GenericProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
