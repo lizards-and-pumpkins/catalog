@@ -773,10 +773,26 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(FilesystemFileStorage::class, $this->commonFactory->createFilesystemFileStorage());
     }
 
-    public function testItReturnsTheMediaBaseDirectoryConfiguration()
+    public function testItReturnsTheDefaultMediaBaseDirectoryConfiguration()
     {
+        $path = preg_replace('#tests/Unit/Suites#', 'src', __DIR__);
         $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
-        $this->assertInternalType('string', $baseDirectory);
+
+        $this->assertSame($path . '/../pub/media', $baseDirectory);
+    }
+
+    public function testItReturnsTheConfiguredMediaBaseDirectoryConfiguration()
+    {
+        $configuredBaseMediaPath = '/foo/bar';
+
+        $originalState = $_SERVER;
+        $_SERVER['LP_MEDIA_BASE_PATH'] = $configuredBaseMediaPath;
+
+        $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
+
+        $_SERVER = $originalState;
+
+        $this->assertSame($configuredBaseMediaPath, $baseDirectory);
     }
 
     public function testItReturnsAMediaDirectoryBaseUrlBuilderinstance()
