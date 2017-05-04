@@ -32,7 +32,7 @@ class SnippetRendererCollectionTest extends TestCase
         $this->mockRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
         $this->mockRenderer2 = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
 
-        $this->rendererCollection = new SnippetRendererCollection([$this->mockRenderer, $this->mockRenderer2]);
+        $this->rendererCollection = new SnippetRendererCollection($this->mockRenderer, $this->mockRenderer2);
     }
 
     public function testArrayOfSnippetsIsReturned()

@@ -36,7 +36,6 @@ use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
-use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
@@ -263,16 +262,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductSnippetRendererCollection() : SnippetRendererCollection
     {
         return new SnippetRendererCollection(
-            $this->createProductDetailPageSnippetRendererList()
-        );
-    }
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    public function createProductDetailPageSnippetRendererList() : array
-    {
-        return [
             $this->getMasterFactory()->createProductDetailViewSnippetRenderer(),
             $this->getMasterFactory()->createProductInListingSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
@@ -280,8 +269,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createProductCanonicalTagSnippetRenderer(),
-            $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetRenderer(),
-        ];
+            $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetRenderer()
+        );
     }
 
     public function createProductJsonSnippetRenderer() : ProductJsonSnippetRenderer
@@ -343,19 +332,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     private function createProductListingTemplateRendererCollection() : SnippetRendererCollection
     {
         return new SnippetRendererCollection(
-            $this->createProductListingTemplateRendererList()
-        );
-    }
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    private function createProductListingTemplateRendererList() : array
-    {
-        return [
             $this->getMasterFactory()->createProductListingTemplateSnippetRenderer(),
-            $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer(),
-        ];
+            $this->getMasterFactory()->createProductSearchResultMetaSnippetRenderer()
+        );
     }
 
     public function createProductListingTemplateSnippetRenderer() : ProductListingTemplateSnippetRenderer
@@ -401,22 +380,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingSnippetRendererCollection() : SnippetRendererCollection
     {
         return new SnippetRendererCollection(
-            $this->createProductListingSnippetRendererList()
-        );
-    }
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    public function createProductListingSnippetRendererList() : array
-    {
-        return [
             $this->getMasterFactory()->createProductListingSnippetRenderer(),
             $this->getMasterFactory()->createProductListingTitleSnippetRenderer(),
             $this->getMasterFactory()->createProductListingDescriptionSnippetRenderer(),
             $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetRenderer(),
-            $this->getMasterFactory()->createProductListingCanonicalTagSnippetRenderer(),
-        ];
+            $this->getMasterFactory()->createProductListingCanonicalTagSnippetRenderer()
+        );
     }
 
     public function createProductListingTitleSnippetRenderer() : ProductListingTitleSnippetRenderer
@@ -939,16 +908,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createContentBlockSnippetRendererCollection() : SnippetRendererCollection
     {
         return new SnippetRendererCollection(
-            $this->getMasterFactory()->createContentBlockSnippetRendererList()
+            $this->getMasterFactory()->createContentBlockSnippetRenderer()
         );
-    }
-
-    /**
-     * @return SnippetRenderer[]
-     */
-    public function createContentBlockSnippetRendererList() : array
-    {
-        return [$this->getMasterFactory()->createContentBlockSnippetRenderer()];
     }
 
     public function createContentBlockSnippetRenderer() : ContentBlockSnippetRenderer

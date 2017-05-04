@@ -13,10 +13,7 @@ class SnippetRendererCollection
      */
     private $renderers = [];
 
-    /**
-     * @param SnippetRenderer[] $renderers
-     */
-    public function __construct(array $renderers)
+    public function __construct(SnippetRenderer ...$renderers)
     {
         $this->renderers = $renderers;
     }
