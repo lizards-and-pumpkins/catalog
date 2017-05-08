@@ -27,7 +27,20 @@ class ProductListingSnippetProjectorTest extends TestCase
      */
     private $mockUrlKeyCollector;
 
-    protected function setUp()
+    /**
+     * @param ProductListing|\PHPUnit_Framework_MockObject_MockObject $productListing
+     * @param Snippet|\PHPUnit_Framework_MockObject_MockObject $snippet
+     * @return SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSnippetRenderer(ProductListing $productListing, Snippet $snippet)
+    {
+        $stubSnippetRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
+        $stubSnippetRenderer->method('render')->with($productListing)->willReturn([$snippet]);
+
+        return $stubSnippetRenderer;
+    }
+
+    final protected function setUp()
     {
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
         $this->mockUrlKeyCollector = $this->createMock(UrlKeyForContextCollector::class);
@@ -50,16 +63,10 @@ class ProductListingSnippetProjectorTest extends TestCase
         $stubProductListing = $this->createMock(ProductListing::class);
 
         $stubSnippetA = $this->createMock(Snippet::class);
-        $stubSnippetRendererA = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
-        $stubSnippetRendererA->method('render')->with($stubProductListing)->willReturn([$stubSnippetA]);
+        $stubSnippetRendererA = $this->createStubSnippetRenderer($stubProductListing, $stubSnippetA);
 
         $stubSnippetB = $this->createMock(Snippet::class);
-        $stubSnippetRendererB = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
-        $stubSnippetRendererB->method('render')->with($stubProductListing)->willReturn([$stubSnippetB]);
+        $stubSnippetRendererB = $this->createStubSnippetRenderer($stubProductListing, $stubSnippetB);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
 

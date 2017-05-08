@@ -46,6 +46,19 @@ class ProductProjectorTest extends TestCase
      */
     private $productViewLocator;
 
+    /**
+     * @param ProductView|\PHPUnit_Framework_MockObject_MockObject $productView
+     * @param Snippet|\PHPUnit_Framework_MockObject_MockObject $snippet
+     * @return SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSnippetRenderer(ProductView $productView, Snippet $snippet)
+    {
+        $stubSnippetRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
+        $stubSnippetRenderer->method('render')->with($productView)->willReturn([$snippet]);
+
+        return $stubSnippetRenderer;
+    }
+
     public function setUp()
     {
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
@@ -79,16 +92,10 @@ class ProductProjectorTest extends TestCase
         $this->productViewLocator->method('createForProduct')->willReturn($stubProductView);
 
         $stubSnippetA = $this->createMock(Snippet::class);
-        $stubSnippetRendererA = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
-        $stubSnippetRendererA->method('render')->with($stubProductView)->willReturn([$stubSnippetA]);
+        $stubSnippetRendererA = $this->createStubSnippetRenderer($stubProductView, $stubSnippetA);
 
         $stubSnippetB = $this->createMock(Snippet::class);
-        $stubSnippetRendererB = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
-        $stubSnippetRendererB->method('render')->with($stubProductView)->willReturn([$stubSnippetB]);
+        $stubSnippetRendererB = $this->createStubSnippetRenderer($stubProductView, $stubSnippetB);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
 

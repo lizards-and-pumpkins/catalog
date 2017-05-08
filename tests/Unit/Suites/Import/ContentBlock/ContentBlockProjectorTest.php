@@ -20,6 +20,19 @@ class ContentBlockProjectorTest extends TestCase
      */
     private $mockDataPoolWriter;
 
+    /**
+     * @param ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject $contentBlockSource
+     * @param Snippet|\PHPUnit_Framework_MockObject_MockObject $snippet
+     * @return SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubSnippetRenderer(ContentBlockSource $contentBlockSource, Snippet $snippet)
+    {
+        $stubSnippetRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
+        $stubSnippetRenderer->method('render')->with($contentBlockSource)->willReturn([$snippet]);
+
+        return $stubSnippetRenderer;
+    }
+
     final protected function setUp()
     {
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
@@ -41,16 +54,10 @@ class ContentBlockProjectorTest extends TestCase
         $dummyContentBlockSource = $this->createMock(ContentBlockSource::class);
 
         $stubSnippetA = $this->createMock(Snippet::class);
-        $stubSnippetRendererA = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
-        $stubSnippetRendererA->method('render')->with($dummyContentBlockSource)->willReturn([$stubSnippetA]);
+        $stubSnippetRendererA = $this->createStubSnippetRenderer($dummyContentBlockSource, $stubSnippetA);
 
         $stubSnippetB = $this->createMock(Snippet::class);
-        $stubSnippetRendererB = $this->getMockBuilder(SnippetRenderer::class)
-            ->setMethods(['render'])
-            ->getMock();
-        $stubSnippetRendererB->method('render')->with($dummyContentBlockSource)->willReturn([$stubSnippetB]);
+        $stubSnippetRendererB = $this->createStubSnippetRenderer($dummyContentBlockSource, $stubSnippetA);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
 
