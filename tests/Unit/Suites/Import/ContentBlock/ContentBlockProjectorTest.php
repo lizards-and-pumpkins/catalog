@@ -44,13 +44,13 @@ class ContentBlockProjectorTest extends TestCase
         $stubSnippetRendererA = $this->getMockBuilder(SnippetRenderer::class)
             ->setMethods(['render'])
             ->getMock();
-        $stubSnippetRendererA->method('render')->with($dummyContentBlockSource)->willReturn($stubSnippetA);
+        $stubSnippetRendererA->method('render')->with($dummyContentBlockSource)->willReturn([$stubSnippetA]);
 
         $stubSnippetB = $this->createMock(Snippet::class);
         $stubSnippetRendererB = $this->getMockBuilder(SnippetRenderer::class)
             ->setMethods(['render'])
             ->getMock();
-        $stubSnippetRendererB->method('render')->with($dummyContentBlockSource)->willReturn($stubSnippetB);
+        $stubSnippetRendererB->method('render')->with($dummyContentBlockSource)->willReturn([$stubSnippetB]);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
 

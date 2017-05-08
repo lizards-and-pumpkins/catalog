@@ -30,7 +30,8 @@ class GenericProjector implements Projector
      */
     public function project($projectionData)
     {
-        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($projectionData));
+        $snippets = $this->getSnippets($projectionData);
+        $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 
     /**
@@ -39,8 +40,12 @@ class GenericProjector implements Projector
      */
     private function getSnippets($projectionData): array
     {
-        return array_map(function (SnippetRenderer $snippetRenderer) use ($projectionData) {
-            return $snippetRenderer->render($projectionData);
-        }, $this->snippetRenderers);
+        return array_reduce(
+            $this->snippetRenderers,
+            function ($carry, SnippetRenderer $snippetRenderer) use ($projectionData) {
+                return array_merge($carry, $snippetRenderer->render($projectionData));
+            },
+            []
+        );
     }
 }

@@ -54,8 +54,12 @@ class ProductListingSnippetProjector implements Projector
      */
     private function getSnippets(ProductListing $productListing): array
     {
-        return array_map(function (SnippetRenderer $snippetRenderer) use ($productListing) {
-            return $snippetRenderer->render($productListing);
-        }, $this->snippetRenderers);
+        return array_reduce(
+            $this->snippetRenderers,
+            function ($carry, SnippetRenderer $snippetRenderer) use ($productListing) {
+                return array_merge($carry, $snippetRenderer->render($productListing));
+            },
+            []
+        );
     }
 }

@@ -77,9 +77,13 @@ class ProductProjector implements Projector
      */
     private function getSnippets(ProductView $product): array
     {
-        return array_map(function (SnippetRenderer $snippetRenderer) use ($product) {
-            return $snippetRenderer->render($product);
-        }, $this->snippetRenderers);
+        return array_reduce(
+            $this->snippetRenderers,
+            function ($carry, SnippetRenderer $snippetRenderer) use ($product) {
+                return array_merge($carry, $snippetRenderer->render($product));
+            },
+            []
+        );
     }
 
     private function aggregateSearchDocument(Product $product)

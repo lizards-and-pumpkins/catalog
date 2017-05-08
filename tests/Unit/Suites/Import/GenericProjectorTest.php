@@ -36,13 +36,13 @@ class GenericProjectorTest extends TestCase
         $stubSnippetRendererA = $this->getMockBuilder(SnippetRenderer::class)
             ->setMethods(['render'])
             ->getMock();
-        $stubSnippetRendererA->method('render')->with($testProjectionSourceData)->willReturn($stubSnippetA);
+        $stubSnippetRendererA->method('render')->with($testProjectionSourceData)->willReturn([$stubSnippetA]);
 
         $stubSnippetB = $this->createMock(Snippet::class);
         $stubSnippetRendererB = $this->getMockBuilder(SnippetRenderer::class)
             ->setMethods(['render'])
             ->getMock();
-        $stubSnippetRendererB->method('render')->with($testProjectionSourceData)->willReturn($stubSnippetB);
+        $stubSnippetRendererB->method('render')->with($testProjectionSourceData)->willReturn([$stubSnippetB]);
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
 

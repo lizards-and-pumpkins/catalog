@@ -41,8 +41,12 @@ class ContentBlockProjector implements Projector
      */
     private function getSnippets(ContentBlockSource $projectionData): array
     {
-        return array_map(function (SnippetRenderer $snippetRenderer) use ($projectionData) {
-            return $snippetRenderer->render($projectionData);
-        }, $this->snippetRenderers);
+        return array_reduce(
+            $this->snippetRenderers,
+            function ($carry, SnippetRenderer $snippetRenderer) use ($projectionData) {
+                return array_merge($carry, $snippetRenderer->render($projectionData));
+            },
+            []
+        );
     }
 }
