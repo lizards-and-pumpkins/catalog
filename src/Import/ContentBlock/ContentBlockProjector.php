@@ -5,26 +5,26 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use LizardsAndPumpkins\Import\SnippetRenderer;
 
 class ContentBlockProjector implements Projector
 {
-    /**
-     * @var SnippetRendererCollection
-     */
-    private $snippetRendererCollection;
-
     /**
      * @var DataPoolWriter
      */
     private $dataPoolWriter;
 
-    public function __construct(SnippetRendererCollection $snippetRendererCollection, DataPoolWriter $dataPoolWriter)
+    /**
+     * @var SnippetRenderer[]
+     */
+    private $snippetRenderers;
+
+    public function __construct(DataPoolWriter $dataPoolWriter, SnippetRenderer ...$snippetRenderers)
     {
-        $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
+        $this->snippetRenderers = $snippetRenderers;
     }
 
     /**
@@ -32,13 +32,17 @@ class ContentBlockProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ContentBlockSource)) {
-            throw new InvalidProjectionSourceDataTypeException(
-                'First argument must be instance of ContentBlockSource.'
-            );
-        }
+        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($projectionSourceData));
+    }
 
-        $snippets = $this->snippetRendererCollection->render($projectionSourceData);
-        $this->dataPoolWriter->writeSnippets(...$snippets);
+    /**
+     * @param ContentBlockSource $projectionData
+     * @return Snippet[]
+     */
+    private function getSnippets(ContentBlockSource $projectionData): array
+    {
+        return array_map(function (SnippetRenderer $snippetRenderer) use ($projectionData) {
+            return $snippetRenderer->render($projectionData);
+        }, $this->snippetRenderers);
     }
 }

@@ -5,18 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 
 class ProductListingSnippetProjector implements Projector
 {
-    /**
-     * @var SnippetRendererCollection
-     */
-    private $snippetRendererCollection;
-
     /**
      * @var DataPoolWriter
      */
@@ -27,14 +22,19 @@ class ProductListingSnippetProjector implements Projector
      */
     private $urlKeyForContextCollector;
 
+    /**
+     * @var SnippetRenderer[]
+     */
+    private $snippetRenderers;
+
     public function __construct(
-        SnippetRendererCollection $snippetRendererCollection,
         UrlKeyForContextCollector $urlKeyForContextCollector,
-        DataPoolWriter $dataPoolWriter
+        DataPoolWriter $dataPoolWriter,
+        SnippetRenderer ...$snippetRenderers
     ) {
-        $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
         $this->urlKeyForContextCollector = $urlKeyForContextCollector;
+        $this->snippetRenderers = $snippetRenderers;
     }
 
     /**
@@ -42,21 +42,20 @@ class ProductListingSnippetProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        if (!($projectionSourceData instanceof ProductListing)) {
-            throw new InvalidProjectionSourceDataTypeException(
-                'First argument must be instance of ProductListingMetaInfo.'
-            );
-        }
+        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($projectionSourceData));
 
-        $this->projectProductListing($projectionSourceData);
+        $urlKeysForContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys($projectionSourceData);
+        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
     }
 
-    private function projectProductListing(ProductListing $listingCriteria)
+    /**
+     * @param ProductListing $productListing
+     * @return Snippet[]
+     */
+    private function getSnippets(ProductListing $productListing): array
     {
-        $snippets = $this->snippetRendererCollection->render($listingCriteria);
-        $this->dataPoolWriter->writeSnippets(...$snippets);
-        
-        $urlKeysForContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys($listingCriteria);
-        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
+        return array_map(function (SnippetRenderer $snippetRenderer) use ($productListing) {
+            return $snippetRenderer->render($productListing);
+        }, $this->snippetRenderers);
     }
 }

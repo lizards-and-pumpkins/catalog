@@ -50,7 +50,6 @@ use PHPUnit\Framework\TestCase;
  * @uses \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
  * @uses \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
  * @uses \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
- * @uses \LizardsAndPumpkins\Import\SnippetRendererCollection
  * @uses \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler

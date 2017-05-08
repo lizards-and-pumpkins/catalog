@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 
 class GenericProjector implements Projector
 {
     /**
-     * @var SnippetRendererCollection
-     */
-    private $snippetRendererCollection;
-
-    /**
      * @var DataPoolWriter
      */
     private $dataPoolWriter;
-    
-    public function __construct(SnippetRendererCollection $snippetRendererCollection, DataPoolWriter $dataPoolWriter)
+
+    /**
+     * @var SnippetRenderer[]
+     */
+    private $snippetRenderers;
+
+    public function __construct(DataPoolWriter $dataPoolWriter, SnippetRenderer ...$snippetRenderers)
     {
-        $this->snippetRendererCollection = $snippetRendererCollection;
         $this->dataPoolWriter = $dataPoolWriter;
+        $this->snippetRenderers = $snippetRenderers;
     }
 
     /**
@@ -29,7 +30,17 @@ class GenericProjector implements Projector
      */
     public function project($projectionData)
     {
-        $snippets = $this->snippetRendererCollection->render($projectionData);
-        $this->dataPoolWriter->writeSnippets(...$snippets);
+        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($projectionData));
+    }
+
+    /**
+     * @param mixed $projectionData
+     * @return Snippet[]
+     */
+    private function getSnippets($projectionData): array
+    {
+        return array_map(function (SnippetRenderer $snippetRenderer) use ($projectionData) {
+            return $snippetRenderer->render($projectionData);
+        }, $this->snippetRenderers);
     }
 }
