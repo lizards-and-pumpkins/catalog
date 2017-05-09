@@ -12,6 +12,10 @@ use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \LizardsAndPumpkins\ConsoleCommand\Command\DataversionGetConsoleCommand
+ * @uses   \LizardsAndPumpkins\ConsoleCommand\BaseCliCommand
+ */
 class DataversionGetConsoleCommandTest extends TestCase
 {
     /**
