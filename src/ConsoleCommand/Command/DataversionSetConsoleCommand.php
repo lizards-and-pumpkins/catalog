@@ -47,6 +47,7 @@ class DataversionSetConsoleCommand extends BaseCliCommand
     final protected function execute(CLImate $climate)
     {
         $this->addSetCurrentDataVersionCommand();
+        $this->output(sprintf('Queued set-data-version command with version "%s"', $this->getArg('dataVersion')));
         $this->processQueuesIfRequested();
     }
 

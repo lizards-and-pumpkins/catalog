@@ -40,7 +40,7 @@ class DataversionSetConsoleCommandTest extends TestCase
     {
         $mockCliMate = $this->getMockBuilder(CLImate::class)
             ->disableOriginalConstructor()
-            ->setMethods(array_merge(get_class_methods(CLImate::class), ['error', 'yellow']))
+            ->setMethods(array_merge(get_class_methods(CLImate::class), ['error', 'output']))
             ->getMock();
         $mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
 
