@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
-use LizardsAndPumpkins\Import\SnippetRendererCollection;
+use LizardsAndPumpkins\Import\SnippetRenderer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,51 +16,52 @@ use PHPUnit\Framework\TestCase;
 class ContentBlockProjectorTest extends TestCase
 {
     /**
-     * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockSnippetRendererCollection;
-
-    /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDataPoolWriter;
 
     /**
-     * @var ContentBlockProjector
+     * @param ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject $contentBlockSource
+     * @param Snippet|\PHPUnit_Framework_MockObject_MockObject $snippet
+     * @return SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $projector;
-
-    protected function setUp()
+    private function createStubSnippetRenderer(ContentBlockSource $contentBlockSource, Snippet $snippet)
     {
-        $this->mockSnippetRendererCollection = $this->createMock(SnippetRendererCollection::class);
-        $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
+        $stubSnippetRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
+        $stubSnippetRenderer->method('render')->with($contentBlockSource)->willReturn([$snippet]);
 
-        $this->projector = new ContentBlockProjector($this->mockSnippetRendererCollection, $this->mockDataPoolWriter);
+        return $stubSnippetRenderer;
     }
 
-    public function testProjectorInterfaceIsImplemented()
+    final protected function setUp()
     {
-        $this->assertInstanceOf(Projector::class, $this->projector);
+        $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
+    }
+
+    public function testImplementsProjectorInterface()
+    {
+        $this->assertInstanceOf(Projector::class, new ContentBlockProjector($this->mockDataPoolWriter));
     }
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotAnInstanceOfContentBlockSource()
     {
-        $this->expectException(InvalidProjectionSourceDataTypeException::class);
-
-        $stubProjectionSourceData = 'stub-projection-source-data';
-
-        $this->projector->project($stubProjectionSourceData);
+        $this->expectException(\TypeError::class);
+        (new ContentBlockProjector($this->mockDataPoolWriter))->project($projectionSourceData = 'foo');
     }
 
     public function testSnippetIsWrittenIntoDataPool()
     {
-        $stubSnippet = $this->createMock(Snippet::class);
+        $dummyContentBlockSource = $this->createMock(ContentBlockSource::class);
 
-        $this->mockSnippetRendererCollection->method('render')->willReturn([$stubSnippet]);
-        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippet);
+        $stubSnippetA = $this->createMock(Snippet::class);
+        $stubSnippetRendererA = $this->createStubSnippetRenderer($dummyContentBlockSource, $stubSnippetA);
 
-        $stubContentBlockSource = $this->createMock(ContentBlockSource::class);
+        $stubSnippetB = $this->createMock(Snippet::class);
+        $stubSnippetRendererB = $this->createStubSnippetRenderer($dummyContentBlockSource, $stubSnippetA);
 
-        $this->projector->project($stubContentBlockSource);
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
+
+        $projector = new ContentBlockProjector($this->mockDataPoolWriter, $stubSnippetRendererA, $stubSnippetRendererB);
+        $projector->project($dummyContentBlockSource);
     }
 }

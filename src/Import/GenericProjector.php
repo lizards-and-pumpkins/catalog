@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\Import\ContentBlock;
+namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
-use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\SnippetRenderer;
 
-class ContentBlockProjector implements Projector
+class GenericProjector implements Projector
 {
     /**
      * @var DataPoolWriter
@@ -28,18 +26,19 @@ class ContentBlockProjector implements Projector
     }
 
     /**
-     * @param mixed $projectionSourceData
+     * @param mixed $projectionData
      */
-    public function project($projectionSourceData)
+    public function project($projectionData)
     {
-        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($projectionSourceData));
+        $snippets = $this->getSnippets($projectionData);
+        $this->dataPoolWriter->writeSnippets(...$snippets);
     }
 
     /**
-     * @param ContentBlockSource $projectionData
+     * @param mixed $projectionData
      * @return Snippet[]
      */
-    private function getSnippets(ContentBlockSource $projectionData): array
+    private function getSnippets($projectionData): array
     {
         return array_reduce(
             $this->snippetRenderers,

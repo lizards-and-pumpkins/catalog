@@ -30,6 +30,7 @@ use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
@@ -89,7 +90,9 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
@@ -135,7 +138,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
+ * @uses   \LizardsAndPumpkins\Import\GenericProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
@@ -157,7 +160,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\Import\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
@@ -778,10 +780,26 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(FilesystemFileStorage::class, $this->commonFactory->createFilesystemFileStorage());
     }
 
-    public function testItReturnsTheMediaBaseDirectoryConfiguration()
+    public function testItReturnsTheDefaultMediaBaseDirectoryConfiguration()
     {
+        $path = preg_replace('#tests/Unit/Suites#', 'src', __DIR__);
         $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
-        $this->assertInternalType('string', $baseDirectory);
+
+        $this->assertSame($path . '/../pub/media', $baseDirectory);
+    }
+
+    public function testItReturnsTheConfiguredMediaBaseDirectoryConfiguration()
+    {
+        $configuredBaseMediaPath = '/foo/bar';
+
+        $originalState = $_SERVER;
+        $_SERVER['LP_MEDIA_BASE_PATH'] = $configuredBaseMediaPath;
+
+        $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
+
+        $_SERVER = $originalState;
+
+        $this->assertSame($configuredBaseMediaPath, $baseDirectory);
     }
 
     public function testItReturnsAMediaDirectoryBaseUrlBuilderinstance()
@@ -843,6 +861,7 @@ class CommonFactoryTest extends TestCase
         $result = $this->commonFactory->createProductListingTitleSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
+
 
     public function testItCreatesAProductListingDescriptionSnippetRenderer()
     {
@@ -918,6 +937,60 @@ class CommonFactoryTest extends TestCase
             [ConfigurableProductJsonSnippetRenderer::class],
             [ProductCanonicalTagSnippetRenderer::class],
             [ProductDetailPageRobotsMetaTagSnippetRenderer::class],
+        ];
+    }
+
+    /**
+     * @dataProvider productListingTemplateSnippetRenderersProvider
+     */
+    public function testContainsProductListingTemplateSnippetRenderersInSnippetRendererList(string $expected)
+    {
+        $found = array_reduce(
+            $this->commonFactory->createProductListingTemplateSnippetRendererList(),
+            function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
+                return $found || is_a($snippetRenderer, $expected);
+            }
+        );
+        $message = sprintf(
+            'SnippetRenderer "%s" not found in product listing template snippet renderer list',
+            $expected
+        );
+        $this->assertTrue($found, $message);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function productListingTemplateSnippetRenderersProvider() : array
+    {
+        return [
+            [ProductListingTemplateSnippetRenderer::class],
+            [ProductSearchResultMetaSnippetRenderer::class],
+        ];
+    }
+
+    /**
+     * @dataProvider contentBlockSnippetRenderersProvider
+     */
+    public function testContainsContentBlockSnippetRenderersInSnippetRendererList(string $expected)
+    {
+        $found = array_reduce(
+            $this->commonFactory->createContentBlockSnippetRendererList(),
+            function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
+                return $found || is_a($snippetRenderer, $expected);
+            }
+        );
+        $message = sprintf('SnippetRenderer "%s" not found in content block snippet renderer list', $expected);
+        $this->assertTrue($found, $message);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function contentBlockSnippetRenderersProvider() : array
+    {
+        return [
+            [ContentBlockSnippetRenderer::class],
         ];
     }
 

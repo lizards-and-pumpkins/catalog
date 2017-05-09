@@ -56,7 +56,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
- * @uses   \LizardsAndPumpkins\Import\SnippetRendererCollection
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses   \LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory
  * @uses   \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
@@ -74,7 +73,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateProjector
+ * @uses   \LizardsAndPumpkins\Import\GenericProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer

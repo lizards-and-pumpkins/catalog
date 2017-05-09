@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -21,7 +22,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */
-class ImportTemplateConsoleCommandTest extends \PHPUnit_Framework_TestCase
+class ImportTemplateConsoleCommandTest extends TestCase
 {
     private $testTemplateId = 'foo_page_template';
 

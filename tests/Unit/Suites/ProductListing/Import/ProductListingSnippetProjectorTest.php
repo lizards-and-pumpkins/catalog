@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
-use LizardsAndPumpkins\Import\SnippetRendererCollection;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
+use LizardsAndPumpkins\Import\Projector;
+use LizardsAndPumpkins\Import\SnippetRenderer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,19 +18,9 @@ use PHPUnit\Framework\TestCase;
 class ProductListingSnippetProjectorTest extends TestCase
 {
     /**
-     * @var Snippet|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubSnippet;
-
-    /**
      * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockDataPoolWriter;
-
-    /**
-     * @var SnippetRendererCollection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockRendererCollection;
 
     /**
      * @var UrlKeyForContextCollector|\PHPUnit_Framework_MockObject_MockObject
@@ -38,55 +28,63 @@ class ProductListingSnippetProjectorTest extends TestCase
     private $mockUrlKeyCollector;
 
     /**
-     * @var ProductListingSnippetProjector
+     * @param ProductListing|\PHPUnit_Framework_MockObject_MockObject $productListing
+     * @param Snippet|\PHPUnit_Framework_MockObject_MockObject $snippet
+     * @return SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $projector;
-
-    /**
-     * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockProductListing() : ProductListing
+    private function createStubSnippetRenderer(ProductListing $productListing, Snippet $snippet)
     {
-        return $this->createMock(ProductListing::class);
+        $stubSnippetRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
+        $stubSnippetRenderer->method('render')->with($productListing)->willReturn([$snippet]);
+
+        return $stubSnippetRenderer;
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
-        $this->stubSnippet = $this->createMock(Snippet::class);
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
-
-        $this->mockRendererCollection = $this->createMock(SnippetRendererCollection::class);
-        $this->mockRendererCollection->method('render')->willReturn([$this->stubSnippet]);
-        
         $this->mockUrlKeyCollector = $this->createMock(UrlKeyForContextCollector::class);
+    }
 
-        $this->projector = new ProductListingSnippetProjector(
-            $this->mockRendererCollection,
-            $this->mockUrlKeyCollector,
-            $this->mockDataPoolWriter
-        );
+    public function testImplementsProjectorInterface()
+    {
+        $projector = new ProductListingSnippetProjector($this->mockUrlKeyCollector, $this->mockDataPoolWriter);
+        $this->assertInstanceOf(Projector::class, $projector);
     }
 
     public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
     {
-        $this->expectException(InvalidProjectionSourceDataTypeException::class);
-        $this->projector->project('invalid-projection-source-data');
+        $this->expectException(\TypeError::class);
+        (new ProductListingSnippetProjector($this->mockUrlKeyCollector, $this->mockDataPoolWriter))->project('foo');
     }
 
     public function testSnippetIsWrittenToTheDataPool()
     {
-        $stubProductListing = $this->createMockProductListing();
+        $stubProductListing = $this->createMock(ProductListing::class);
+
+        $stubSnippetA = $this->createMock(Snippet::class);
+        $stubSnippetRendererA = $this->createStubSnippetRenderer($stubProductListing, $stubSnippetA);
+
+        $stubSnippetB = $this->createMock(Snippet::class);
+        $stubSnippetRendererB = $this->createStubSnippetRenderer($stubProductListing, $stubSnippetB);
+
+        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
+
         $stubUrlKeyForContextCollection = $this->createMock(UrlKeyForContextCollection::class);
         $this->mockUrlKeyCollector->method('collectListingUrlKeys')->willReturn($stubUrlKeyForContextCollection);
 
-        $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($this->stubSnippet);
-
-        $this->projector->project($stubProductListing);
+        $projector = new ProductListingSnippetProjector(
+            $this->mockUrlKeyCollector,
+            $this->mockDataPoolWriter,
+            $stubSnippetRendererA,
+            $stubSnippetRendererB
+        );
+        $projector->project($stubProductListing);
     }
 
     public function testUrlKeysForListingsAreCollectedAndWrittenToTheDataPool()
     {
-        $stubProductListing = $this->createMockProductListing();
+        $stubProductListing = $this->createMock(ProductListing::class);
         $stubUrlKeyForContextCollection = $this->createMock(UrlKeyForContextCollection::class);
         
         $this->mockUrlKeyCollector->expects($this->once())->method('collectListingUrlKeys')->with($stubProductListing)
@@ -95,6 +93,7 @@ class ProductListingSnippetProjectorTest extends TestCase
         $this->mockDataPoolWriter->expects($this->once())->method('writeUrlKeyCollection')
             ->with($stubUrlKeyForContextCollection);
 
-        $this->projector->project($stubProductListing);
+        $projector = new ProductListingSnippetProjector($this->mockUrlKeyCollector, $this->mockDataPoolWriter);
+        $projector->project($stubProductListing);
     }
 }
