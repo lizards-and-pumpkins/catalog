@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
@@ -23,12 +23,14 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @covers \LizardsAndPumpkins\ConsoleCommand\Command\ImportCatalogConsoleCommand
- * @uses \LizardsAndPumpkins\ConsoleCommand\BaseCliCommand
- * @uses \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses   \LizardsAndPumpkins\ConsoleCommand\BaseCliCommand
+ * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  */
 class ImportCatalogConsoleCommandTest extends TestCase
 {
     private $dummyImportFile = '/foo/bar.xml';
+
+    private $testDataVersion = 'foo';
 
     /**
      * @var MasterFactory|MockObject
@@ -53,15 +55,17 @@ class ImportCatalogConsoleCommandTest extends TestCase
     private function getCommandArgumentMap($overRideDefaults = []): array
     {
         $arguments = [
-            'clearStorage'      => ['clearStorage', false],
-            'importImages'      => ['importImages', false],
-            'importFile'        => ['importFile', $this->dummyImportFile],
-            'processQueues'     => ['processQueues', false],
-            'help'              => ['help', null],
+            'clearStorage'  => ['clearStorage', false],
+            'importImages'  => ['importImages', false],
+            'importFile'    => ['importFile', $this->dummyImportFile],
+            'processQueues' => ['processQueues', false],
+            'dataVersion'   => ['dataVersion', null],
+            'help'          => ['help', null],
         ];
         foreach ($overRideDefaults as $name => $value) {
             $arguments[$name] = [$name, $value];
         }
+
         return array_values($arguments);
     }
 
@@ -84,7 +88,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     private function mockDataPoolReader(MockObject $mockMasterFactory): MockObject
     {
         $stubDataPoolReader = $this->createMock(DataPoolReader::class);
-        $stubDataPoolReader->method('getCurrentDataVersion')->willReturn('foo');
+        $stubDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testDataVersion);
         $mockMasterFactory->method('createDataPoolReader')->willReturn($stubDataPoolReader);
 
         return $stubDataPoolReader;
@@ -126,7 +130,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     {
         $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
         $this->runCommand($this->mockMasterFactory);
-        
+
         $this->assertFactoryRegistered(UpdatingProductImportCommandFactory::class);
         $this->assertFactoryRegistered(UpdatingProductListingImportCommandFactory::class);
     }
@@ -134,7 +138,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     public function testDoesNotClearStorageIfRequested()
     {
         $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
-        
+
         $mockDataPoolWriter = $this->mockDataPoolWriter($this->mockMasterFactory);
         $mockDataPoolWriter->expects($this->never())->method('clear');
 
@@ -144,7 +148,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     public function testClearsStorageIfRequested()
     {
         $arguments = $this->getCommandArgumentMap(['clearStorage' => true]);
-        
+
         $this->stubCliMate->arguments->method('get')->willReturnMap($arguments);
         $mockDataPoolWriter = $this->mockDataPoolWriter($this->mockMasterFactory);
         $mockDataPoolWriter->expects($this->once())->method('clear');
@@ -166,7 +170,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
         $arguments = $this->getCommandArgumentMap(['importImages' => true]);
         $this->stubCliMate->arguments->method('get')->willReturnMap($arguments);
         $this->runCommand($this->mockMasterFactory);
-        
+
         $this->assertFactoryRegistered(UpdatingProductImageImportCommandFactory::class);
         $this->assertFactoryNotRegistered(NullProductImageImportCommandFactory::class);
     }
@@ -187,11 +191,11 @@ class ImportCatalogConsoleCommandTest extends TestCase
         $mockCommandConsumer = $this->createMock(CommandConsumer::class);
         $mockCommandConsumer->expects($this->never())->method('processAll');
         $this->mockMasterFactory->method('createCommandConsumer')->willReturn($mockCommandConsumer);
-        
+
         $mockEventConsumer = $this->createMock(DomainEventConsumer::class);
         $mockEventConsumer->expects($this->never())->method('processAll');
         $this->mockMasterFactory->method('createDomainEventConsumer')->willReturn($mockEventConsumer);
-        
+
         $this->runCommand($this->mockMasterFactory);
     }
 
@@ -208,6 +212,23 @@ class ImportCatalogConsoleCommandTest extends TestCase
         $mockEventConsumer->expects($this->once())->method('processAll');
         $this->mockMasterFactory->method('createDomainEventConsumer')->willReturn($mockEventConsumer);
 
+        $this->runCommand($this->mockMasterFactory);
+    }
+
+    public function testUsesTheCurrentDataVersionIfNoneIsSpecified()
+    {
+        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->mockCatalogImport->expects($this->once())->method('importFile')
+            ->with($this->anything(), $this->equalTo($this->testDataVersion));
+        $this->runCommand($this->mockMasterFactory);
+    }
+
+    public function testUsesTheSpecifiedDataVersion()
+    {
+        $this->stubCliMate->arguments->method('get')
+            ->willReturnMap($this->getCommandArgumentMap(['dataVersion' => 'bar']));
+        $this->mockCatalogImport->expects($this->once())->method('importFile')
+            ->with($this->anything(), $this->equalTo('bar'));
         $this->runCommand($this->mockMasterFactory);
     }
 }

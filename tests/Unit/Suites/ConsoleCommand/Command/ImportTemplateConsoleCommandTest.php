@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
@@ -28,6 +28,8 @@ class ImportTemplateConsoleCommandTest extends TestCase
 
     private $testValidTemplateIds;
 
+    private $testDataVersion = 'bar';
+
     /**
      * @var MasterFactory|MockObject
      */
@@ -44,6 +46,7 @@ class ImportTemplateConsoleCommandTest extends TestCase
             'processQueues' => ['processQueues', false],
             'list'          => ['list', false],
             'templateId'    => ['templateId', $this->testTemplateId],
+            'dataVersion'   => ['dataVersion', null],
             'help'          => ['help', null],
         ];
         foreach ($overRideDefaults as $name => $value) {
@@ -72,9 +75,10 @@ class ImportTemplateConsoleCommandTest extends TestCase
             ->getMock();
 
         $this->testValidTemplateIds = ['foo', $this->testTemplateId];
-        
+
         $this->stubMasterFactory->method('createDataPoolReader')->willReturn($this->createMock(DataPoolReader::class));
-        $this->stubMasterFactory->createDataPoolReader()->method('getCurrentDataVersion')->willReturn('bar');
+        $this->stubMasterFactory->createDataPoolReader()->method('getCurrentDataVersion')
+            ->willReturn($this->testDataVersion);
 
         $mockEventQueue = $this->createMock(DomainEventQueue::class);
         $this->stubMasterFactory->method('getEventQueue')->willReturn($mockEventQueue);
@@ -93,11 +97,11 @@ class ImportTemplateConsoleCommandTest extends TestCase
     public function testImportsTheSpecifiedTemplate()
     {
         $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
-        
+
         $this->stubMasterFactory->getEventQueue()
             ->expects($this->once())->method('add')
             ->with($this->isInstanceOf(TemplateWasUpdatedDomainEvent::class));
-        
+
         $this->runCommand($this->stubMasterFactory);
     }
 
@@ -105,11 +109,11 @@ class ImportTemplateConsoleCommandTest extends TestCase
     {
         $commandArgumentMap = $this->getCommandArgumentMap(['processQueues' => true]);
         $this->stubCliMate->arguments->method('get')->willReturnMap($commandArgumentMap);
-        
+
         $mockCommandConsumer = $this->createMock(CommandConsumer::class);
         $mockCommandConsumer->expects($this->once())->method('processAll');
         $this->stubMasterFactory->method('createCommandConsumer')->willReturn($mockCommandConsumer);
-        
+
         $mockEventConsumer = $this->createMock(DomainEventConsumer::class);
         $mockEventConsumer->expects($this->once())->method('processAll');
         $this->stubMasterFactory->method('createDomainEventConsumer')->willReturn($mockEventConsumer);
@@ -135,7 +139,7 @@ class ImportTemplateConsoleCommandTest extends TestCase
         $errorOutputSpy = $this->atLeastOnce();
         $this->stubCliMate->expects($errorOutputSpy)->method('error');
         $this->runCommand($this->stubMasterFactory);
-        
+
         $expectationFulfilled = array_reduce(
             $errorOutputSpy->getInvocations(),
             function ($found, \PHPUnit_Framework_MockObject_Invocation $invocation) {
@@ -143,5 +147,31 @@ class ImportTemplateConsoleCommandTest extends TestCase
             }
         );
         $this->assertTrue($expectationFulfilled, "Expected message not output as error.");
+    }
+
+    public function testUsesCurrentDataVersionIfNotSpecified()
+    {
+        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+
+        $this->stubMasterFactory->getEventQueue()
+            ->expects($this->once())->method('add')
+            ->with($this->callback(function (TemplateWasUpdatedDomainEvent $event) {
+                return $this->testDataVersion === (string) $event->getDataVersion();
+            })); 
+        $this->runCommand($this->stubMasterFactory);
+    }
+
+    public function testUsesSpecifiedDataVersionIfPresentInArguments()
+    {
+        $dataVersion = 'foobar123';
+        $this->stubCliMate->arguments->method('get')
+            ->willReturnMap($this->getCommandArgumentMap(['dataVersion' => $dataVersion]));
+
+        $this->stubMasterFactory->getEventQueue()
+            ->expects($this->once())->method('add')
+            ->with($this->callback(function (TemplateWasUpdatedDomainEvent $event) use ($dataVersion) {
+                return $dataVersion === (string) $event->getDataVersion();
+            })); 
+        $this->runCommand($this->stubMasterFactory);
     }
 }

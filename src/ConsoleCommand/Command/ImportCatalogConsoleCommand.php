@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
@@ -29,12 +29,12 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
         $this->factory->register(new UpdatingProductListingImportCommandFactory());
         $this->setCLImate($CLImate);
     }
-    
+
     /**
      * @param CLImate $climate
      * @return array[]
      */
-    final protected function getCommandLineArgumentsArray(CLImate $climate) : array
+    final protected function getCommandLineArgumentsArray(CLImate $climate): array
     {
         return array_merge(
             parent::getCommandLineArgumentsArray($climate),
@@ -55,6 +55,12 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
                     'prefix'      => 'i',
                     'longPrefix'  => 'importImages',
                     'description' => 'Process images during import',
+                    'noValue'     => true,
+                ],
+                'dataVersion'   => [
+                    'prefix'      => 'd',
+                    'longPrefix'  => 'dataVersion',
+                    'description' => 'Data version to associate with the catalog data (defaults to current version)',
                     'noValue'     => true,
                 ],
                 'importFile'    => [
@@ -101,11 +107,9 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
     {
         $this->output('Importing...');
 
-        $dataVersionString = $this->factory->createDataPoolReader()->getCurrentDataVersion();
-
         /** @var CatalogImport $import */
         $import = $this->factory->createCatalogImport();
-        $import->importFile($this->getArg('importFile'), DataVersion::fromVersionString($dataVersionString));
+        $import->importFile($this->getArg('importFile'), DataVersion::fromVersionString($this->getDataVersion()));
     }
 
     private function processQueuesIfRequested()
@@ -133,5 +137,10 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
         $this->output('Processing domain event queue...');
         $domainEventConsumer = $this->factory->createDomainEventConsumer();
         $domainEventConsumer->processAll();
+    }
+
+    private function getDataVersion(): string
+    {
+        return $this->getArg('dataVersion') ?? $this->factory->createDataPoolReader()->getCurrentDataVersion();
     }
 }

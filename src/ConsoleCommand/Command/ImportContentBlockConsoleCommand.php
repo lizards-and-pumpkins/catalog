@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
@@ -45,6 +45,12 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
                 'description' => 'Process queues after the import',
                 'noValue'     => true,
             ],
+            'dataVersion'     => [
+                'prefix'      => 'd',
+                'longPrefix'  => 'dataVersion',
+                'description' => 'Data version to associate with the content blocks (defaults to current version)',
+                'noValue'     => true,
+            ],
             'importDirectory' => [
                 'description' => 'Path to directory with *.html files to import',
                 'required'    => true,
@@ -66,7 +72,7 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
             $blockId = $this->createContentBlockIdBasedOnFileName($contentFileName);
             $blockContent = file_get_contents($contentFileName);
             $keyGeneratorParams = $this->createKeyGeneratorParamsBasedOnFileName($contentFileName);
-            
+
             $this->addCommandsForEachContext($blockId, $blockContent, $keyGeneratorParams);
         });
     }
@@ -96,7 +102,7 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         $blockIdString = $this->getContentBlockIdFromFileName($fileName);
 
         $this->validateContentBlockId($blockIdString);
-        
+
         if ($this->isProductListingContentBlock($blockIdString)) {
             $blockIdStringWithoutLastVariableToken = preg_replace('/[^_]+$/', '', $blockIdString);
 
@@ -163,17 +169,19 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
 
     private function getDataVersion(): DataVersion
     {
-        return DataVersion::fromVersionString($this->createDataPoolReader()->getCurrentDataVersion());
+        $version = $this->getArg('dataVersion') ?? $this->createDataPoolReader()->getCurrentDataVersion();
+
+        return DataVersion::fromVersionString($version);
     }
 
     private function validateContentBlockId(string $blockId)
     {
-        if (! preg_match('/^(:?product_listing_|)content_block_/', $blockId)) {
+        if (!preg_match('/^(:?product_listing_|)content_block_/', $blockId)) {
             $this->warn(sprintf('Warning: the content block "%s" is probably invalid.', $blockId));
             $this->warn('Content block IDs should start with "content_block_" or "product_listing_content_block_".');
         }
     }
-    
+
     private function warn(string $message)
     {
         $this->getCLImate()->yellow($message);

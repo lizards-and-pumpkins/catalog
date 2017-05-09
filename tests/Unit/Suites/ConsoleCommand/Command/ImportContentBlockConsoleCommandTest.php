@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
@@ -8,6 +8,7 @@ use League\CLImate\Argument\Manager as CliMateArgumentManager;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ImportContentBlockConsoleCommandTest extends TestCase
 {
+    private $testDataVersion = 'baz';
+
     use TestFileFixtureTrait;
 
     /**
@@ -45,11 +48,17 @@ class ImportContentBlockConsoleCommandTest extends TestCase
      */
     private $testImportDirectory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     */
+    private $contextSourceSpy;
+
     private function getCommandArgumentMap($overRideDefaults = []): array
     {
         $arguments = [
             'importDirectory' => ['importDirectory', $this->testImportDirectory],
             'processQueues'   => ['processQueues', false],
+            'dataVersion'     => ['dataVersion', null],
             'help'            => ['help', null],
         ];
         foreach ($overRideDefaults as $name => $value) {
@@ -57,6 +66,16 @@ class ImportContentBlockConsoleCommandTest extends TestCase
         }
 
         return array_values($arguments);
+    }
+
+    private function assertDataVersionForImportEquals(string $expectedDataVersionString)
+    {
+        $invocations = $this->contextSourceSpy->getInvocations();
+        if (count($invocations) === 0) {
+            $this->fail(sprintf('Method getAllAvailableContextsWithVersionApplied was not called on context source'));
+        }
+        $dataVersion = $invocations[0]->parameters[0];
+        $this->assertEquals($expectedDataVersionString, $dataVersion);
     }
 
     protected function setUp()
@@ -69,12 +88,13 @@ class ImportContentBlockConsoleCommandTest extends TestCase
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods($methods)->getMock();
 
         $stubContextSource = $this->createMock(ContextSource::class);
-        $stubContextSource->method('getAllAvailableContextsWithVersionApplied')
+        $this->contextSourceSpy = $this->any();
+        $stubContextSource->expects($this->contextSourceSpy)->method('getAllAvailableContextsWithVersionApplied')
             ->willReturn([$this->createMock(Context::class)]);
         $this->stubMasterFactory->method('createContextSource')->willReturn($stubContextSource);
 
         $stubDataPoolReader = $this->createMock(DataPoolReader::class);
-        $stubDataPoolReader->method('getCurrentDataVersion')->willReturn('baz');
+        $stubDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testDataVersion);
         $this->stubMasterFactory->method('createDataPoolReader')->willReturn($stubDataPoolReader);
 
         $this->mockCliMate = $this->getMockBuilder(CLImate::class)
@@ -163,5 +183,30 @@ class ImportContentBlockConsoleCommandTest extends TestCase
 
         $command = new ImportContentBlockConsoleCommand($this->stubMasterFactory, $this->mockCliMate);
         $command->run();
+    }
+
+    public function testUsesTheCurrentDataVersionIfNoneIsSpecified()
+    {
+        $this->mockCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->createFixtureFile($this->testImportDirectory . '/content_block_foo.html', 'dummy content');
+        $this->stubMasterFactory->method('getCommandQueue')->willReturn($this->createMock(CommandQueue::class));
+
+        (new ImportContentBlockConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
+
+        $this->assertDataVersionForImportEquals($this->testDataVersion);
+    }
+
+    public function testUsesTheSpecifiedDataVersion()
+    {
+        $dataVersion = 'foobar123';
+        
+        $this->mockCliMate->arguments->method('get')
+            ->willReturnMap($this->getCommandArgumentMap(['dataVersion' => $dataVersion]));
+        $this->createFixtureFile($this->testImportDirectory . '/content_block_foo.html', 'dummy content');
+        $this->stubMasterFactory->method('getCommandQueue')->willReturn($this->createMock(CommandQueue::class));
+
+        (new ImportContentBlockConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
+
+        $this->assertDataVersionForImportEquals($dataVersion);
     }
 }
