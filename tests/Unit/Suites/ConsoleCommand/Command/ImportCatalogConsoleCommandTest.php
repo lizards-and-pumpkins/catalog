@@ -30,6 +30,8 @@ class ImportCatalogConsoleCommandTest extends TestCase
 {
     private $dummyImportFile = '/foo/bar.xml';
 
+    private $testDataVersion = 'foo';
+
     /**
      * @var MasterFactory|MockObject
      */
@@ -86,7 +88,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     private function mockDataPoolReader(MockObject $mockMasterFactory): MockObject
     {
         $stubDataPoolReader = $this->createMock(DataPoolReader::class);
-        $stubDataPoolReader->method('getCurrentDataVersion')->willReturn('foo');
+        $stubDataPoolReader->method('getCurrentDataVersion')->willReturn($this->testDataVersion);
         $mockMasterFactory->method('createDataPoolReader')->willReturn($stubDataPoolReader);
 
         return $stubDataPoolReader;
@@ -217,7 +219,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     {
         $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
         $this->mockCatalogImport->expects($this->once())->method('importFile')
-            ->with($this->anything(), $this->equalTo('foo'));
+            ->with($this->anything(), $this->equalTo($this->testDataVersion));
         $this->runCommand($this->mockMasterFactory);
     }
 

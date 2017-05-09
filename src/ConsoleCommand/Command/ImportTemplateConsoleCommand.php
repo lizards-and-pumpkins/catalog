@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
@@ -24,7 +24,7 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
         $this->factory = $factory;
         $this->setCLImate($CLImate);
     }
-    
+
     /**
      * @param CLImate $climate
      * @return array[]
@@ -44,6 +44,12 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
                     'prefix'      => 'l',
                     'longPrefix'  => 'list',
                     'description' => 'List available template IDs',
+                    'noValue'     => true,
+                ],
+                'dataVersion'   => [
+                    'prefix'      => 'd',
+                    'longPrefix'  => 'dataVersion',
+                    'description' => 'Data version to associate with the template data (defaults to current version)',
                     'noValue'     => true,
                 ],
                 'templateId'    => [
@@ -145,9 +151,15 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
     private function createTemplateWasUpdatedEvent(string $templateId): TemplateWasUpdatedDomainEvent
     {
         $projectionSourceData = '';
-        $currentDataVersion = $this->factory->createDataPoolReader()->getCurrentDataVersion();
-        $dataVersion = DataVersion::fromVersionString($currentDataVersion);
+        $dataVersion = $this->getDataVersion();
 
         return new TemplateWasUpdatedDomainEvent($templateId, $projectionSourceData, $dataVersion);
+    }
+
+    private function getDataVersion(): DataVersion
+    {
+        $dataVersion = $this->getArg('dataVersion') ?? $this->factory->createDataPoolReader()->getCurrentDataVersion();
+
+        return DataVersion::fromVersionString($dataVersion);
     }
 }
