@@ -28,8 +28,8 @@ class ContextVersion implements ContextPartBuilder
      */
     public function getValue(array $inputDataSet): string
     {
-        if ($this->hasVersion($inputDataSet)) {
-            return (string) $this->getVersion($inputDataSet);
+        if ($this->hasVersionInDataSet($inputDataSet)) {
+            return (string) $this->getVersionFromDataSet($inputDataSet);
         }
         if ($this->hasVersionRequestParam($inputDataSet)) {
             return (string) $this->getVersionRequestParamValue($inputDataSet);
@@ -42,12 +42,12 @@ class ContextVersion implements ContextPartBuilder
         return DataVersion::CONTEXT_CODE;
     }
 
-    private function hasVersion(array $inputDataSet): bool
+    private function hasVersionInDataSet(array $inputDataSet): bool
     {
         return isset($inputDataSet[DataVersion::CONTEXT_CODE]);
     }
 
-    private function getVersion(array $inputDataSet)
+    private function getVersionFromDataSet(array $inputDataSet)
     {
         return $inputDataSet[DataVersion::CONTEXT_CODE];
     }
