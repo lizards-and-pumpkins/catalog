@@ -15,11 +15,11 @@ class ContextVersion implements ContextPartBuilder
     /**
      * @var DataVersion
      */
-    private $dataVersion;
+    private $defaultDataVersion;
 
-    public function __construct(DataVersion $dataVersion)
+    public function __construct(DataVersion $defaultDataVersion)
     {
-        $this->dataVersion = $dataVersion;
+        $this->defaultDataVersion = $defaultDataVersion;
     }
 
     /**
@@ -34,7 +34,7 @@ class ContextVersion implements ContextPartBuilder
         if ($this->hasVersionRequestParam($inputDataSet)) {
             return (string) $this->getVersionRequestParamValue($inputDataSet);
         }
-        return (string) $this->dataVersion;
+        return (string) $this->defaultDataVersion;
     }
 
     public function getCode(): string

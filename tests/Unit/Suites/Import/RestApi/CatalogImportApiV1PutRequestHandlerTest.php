@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
@@ -41,15 +42,15 @@ class CatalogImportApiV1PutRequestHandlerTest extends TestCase
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
 
-        /** @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject $stubDataPoolReader */
-        $stubDataPoolReader = $this->createMock(DataPoolReader::class);
-        $stubDataPoolReader->method('getCurrentDataVersion')->willReturn($testDataVersion);
+        /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
+        $stubDataVersion = $this->createMock(DataVersion::class);
+        $stubDataVersion->method('__toString')->willReturn($testDataVersion);
 
         $requestHandler = new CatalogImportApiV1PutRequestHandler(
             $testImportDirectoryPath,
             $mockCommandQueue,
             $dummyLogger,
-            $stubDataPoolReader
+            $stubDataVersion
         );
         
         $importFileName = 'import-file.xml';

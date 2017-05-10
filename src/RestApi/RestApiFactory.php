@@ -37,7 +37,7 @@ class RestApiFactory implements Factory
             $this->getCatalogImportDirectoryConfig(),
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->getLogger(),
-            $this->getMasterFactory()->createDataPoolReader()
+            DataVersion::fromVersionString($this->getMasterFactory()->getCurrentDataVersion())
         );
     }
 
