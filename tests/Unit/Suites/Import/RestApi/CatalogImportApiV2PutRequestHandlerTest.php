@@ -61,7 +61,7 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
 
         $this->logger = $this->createMock(Logger::class);
 
-        $this->requestHandler = CatalogImportApiV2PutRequestHandler::create(
+        $this->requestHandler = new CatalogImportApiV2PutRequestHandler(
             $this->testImportDirectoryPath,
             $this->mockCommandQueue,
             $this->logger
@@ -90,21 +90,13 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
     public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
     {
         $this->expectException(CatalogImportApiDirectoryNotReadableException::class);
-        CatalogImportApiV1PutRequestHandler::create(
-            '/some-not-existing-directory',
-            $this->mockCommandQueue,
-            $this->logger
-        );
+        new CatalogImportApiV2PutRequestHandler('/some-not-existing-directory', $this->mockCommandQueue, $this->logger);
     }
 
     public function testExceptionIsThrownIfImportDirectoryIsNotDirectory()
     {
         $this->expectException(CatalogImportApiDirectoryIsNotDirectoryException::class);
-        CatalogImportApiV1PutRequestHandler::create(
-            __FILE__,
-            $this->mockCommandQueue,
-            $this->logger
-        );
+        new CatalogImportApiV2PutRequestHandler(__FILE__, $this->mockCommandQueue, $this->logger);
     }
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()

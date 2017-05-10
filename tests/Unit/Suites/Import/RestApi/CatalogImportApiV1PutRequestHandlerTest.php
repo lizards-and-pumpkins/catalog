@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -24,21 +26,31 @@ class CatalogImportApiV1PutRequestHandlerTest extends TestCase
 {
     use TestFileFixtureTrait;
 
-    public function testCreatesCommandsWithHardcodedDataVersion()
+    public function testCreatesCommandsWithCurrentDataVersion()
     {
+        $testDataVersion = 'foo';
+        
         $testImportDirectoryPath = $this->getUniqueTempDir() . '/test/catalog-import-directory';
         $this->createFixtureDirectory($testImportDirectoryPath);
 
+        /** @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject $mockCommandQueue */
         $mockCommandQueue = $this->createMock(CommandQueue::class);
 
+        /** @var Logger|\PHPUnit_Framework_MockObject_MockObject $dummyLogger */
         $dummyLogger = $this->createMock(Logger::class);
-        
+
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
 
-        $requestHandler = CatalogImportApiV1PutRequestHandler::create(
+        /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
+        $stubDataVersion = $this->createMock(DataVersion::class);
+        $stubDataVersion->method('__toString')->willReturn($testDataVersion);
+
+        $requestHandler = new CatalogImportApiV1PutRequestHandler(
             $testImportDirectoryPath,
             $mockCommandQueue,
-            $dummyLogger
+            $dummyLogger,
+            $stubDataVersion
         );
         
         $importFileName = 'import-file.xml';
@@ -46,8 +58,8 @@ class CatalogImportApiV1PutRequestHandlerTest extends TestCase
         $stubRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $importFileName]));
 
         $mockCommandQueue->expects($this->once())->method('add')
-            ->willReturnCallback(function (ImportCatalogCommand $command) {
-                $this->assertEquals('-1', $command->getDataVersion());
+            ->willReturnCallback(function (ImportCatalogCommand $command) use ($testDataVersion) {
+                $this->assertEquals($testDataVersion, $command->getDataVersion());
             });
 
         $response = $requestHandler->process($stubRequest);

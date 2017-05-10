@@ -34,24 +34,16 @@ class CatalogImportApiV2PutRequestHandler extends ApiRequestHandler
      */
     private $commandQueue;
 
-    private function __construct(string $importDirectoryPath, CommandQueue $commandQueue, Logger $logger)
+    public function __construct(string $importDirectoryPath, CommandQueue $commandQueue, Logger $logger)
     {
+        $this->validateImportDirectoryPath($importDirectoryPath);
+        
         $this->importDirectoryPath = $importDirectoryPath;
         $this->commandQueue = $commandQueue;
         $this->logger = $logger;
     }
-
-    public static function create(
-        string $importDirectoryPath,
-        CommandQueue $commandQueue,
-        Logger $logger
-    ): self {
-        self::validateImportDirectoryPath($importDirectoryPath);
-        
-        return new static($importDirectoryPath, $commandQueue, $logger);
-    }
     
-    private static function validateImportDirectoryPath(string $importDirectoryPath)
+    private function validateImportDirectoryPath(string $importDirectoryPath)
     {
         if (!is_readable($importDirectoryPath)) {
             throw new CatalogImportApiDirectoryNotReadableException(

@@ -33,16 +33,17 @@ class RestApiFactory implements Factory
 
     public function createCatalogImportApiV1PutRequestHandler(): CatalogImportApiV1PutRequestHandler
     {
-        return CatalogImportApiV1PutRequestHandler::create(
+        return new CatalogImportApiV1PutRequestHandler(
             $this->getCatalogImportDirectoryConfig(),
             $this->getMasterFactory()->getCommandQueue(),
-            $this->getMasterFactory()->getLogger()
+            $this->getMasterFactory()->getLogger(),
+            DataVersion::fromVersionString($this->getMasterFactory()->getCurrentDataVersion())
         );
     }
 
     public function createCatalogImportApiV2PutRequestHandler(): CatalogImportApiV2PutRequestHandler
     {
-        return CatalogImportApiV2PutRequestHandler::create(
+        return new CatalogImportApiV2PutRequestHandler(
             $this->getCatalogImportDirectoryConfig(),
             $this->getMasterFactory()->getCommandQueue(),
             $this->getMasterFactory()->getLogger()
