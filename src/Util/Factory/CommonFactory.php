@@ -35,6 +35,7 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
@@ -77,7 +78,7 @@ use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingProjector;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
@@ -231,7 +232,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingWasAddedDomainEventHandler() : DomainEventHandler
     {
         return new ProductListingWasAddedDomainEventHandler(
-            $this->getMasterFactory()->createProductListingSnippetProjector()
+            $this->getMasterFactory()->createProductListingProjector()
         );
     }
 
@@ -244,8 +245,16 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return new ProductProjector(
             $this->getMasterFactory()->createProductViewLocator(),
+            $this->createProductSnippetProjector(),
             $this->getMasterFactory()->createProductSearchDocumentBuilder(),
             $this->createUrlKeyForContextCollector(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    private function createProductSnippetProjector(): Projector
+    {
+        return new GenericProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
             ...$this->getMasterFactory()->createProductDetailPageSnippetRendererList()
         );
@@ -372,10 +381,18 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingSnippetProjector() : ProductListingSnippetProjector
+    public function createProductListingProjector() : ProductListingProjector
     {
-        return new ProductListingSnippetProjector(
+        return new ProductListingProjector(
+            $this->createProductListingSnippetProjector(),
             $this->getMasterFactory()->createUrlKeyForContextCollector(),
+            $this->getMasterFactory()->createDataPoolWriter()
+        );
+    }
+
+    private function createProductListingSnippetProjector(): Projector
+    {
+        return new GenericProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
             ...$this->getMasterFactory()->createProductListingSnippetRendererList()
         );
@@ -907,6 +924,13 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createContentBlockProjector() : ContentBlockProjector
     {
         return new ContentBlockProjector(
+            $this->createContentBlockSnippetProjector()
+        );
+    }
+
+    private function createContentBlockSnippetProjector(): Projector
+    {
+        return new GenericProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
             ...$this->getMasterFactory()->createContentBlockSnippetRendererList()
         );
