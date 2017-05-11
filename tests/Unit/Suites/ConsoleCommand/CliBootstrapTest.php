@@ -73,7 +73,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\Import\GenericProjector
+ * @uses   \LizardsAndPumpkins\Import\GenericSnipetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
