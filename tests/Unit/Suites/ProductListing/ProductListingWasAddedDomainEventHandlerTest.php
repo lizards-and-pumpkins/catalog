@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingProjector;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class ProductListingWasAddedDomainEventHandlerTest extends TestCase
 {
     /**
-     * @var ProductListingSnippetProjector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingProjector|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockProjector;
 
@@ -45,7 +45,7 @@ class ProductListingWasAddedDomainEventHandlerTest extends TestCase
     protected function setUp()
     {
         
-        $this->mockProjector = $this->createMock(ProductListingSnippetProjector::class);
+        $this->mockProjector = $this->createMock(ProductListingProjector::class);
 
         $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler($this->mockProjector);
     }

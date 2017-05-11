@@ -5,17 +5,11 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Context\SelfContainedContext;
-use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
-use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
@@ -26,54 +20,35 @@ use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
-use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
-use LizardsAndPumpkins\Import\Image\AddImageCommand;
 use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
-use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\ProductAttributeList;
-use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductProjector;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\SimpleProduct;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
@@ -83,9 +58,7 @@ use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRender
 use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
-use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
@@ -95,7 +68,6 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
@@ -139,7 +111,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\GenericProjector
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
@@ -251,36 +223,19 @@ class CommonFactoryTest extends TestCase
 
     public function testProductWasUpdatedDomainEventHandlerIsReturned()
     {
-        $testProduct = new SimpleProduct(
-            new ProductId('foo'),
-            ProductTaxClass::fromString('bar'),
-            new ProductAttributeList(),
-            new ProductImageList(),
-            new SelfContainedContext([DataVersion::CONTEXT_CODE => 'buz'])
-        );
-        $testEvent = new ProductWasUpdatedDomainEvent($testProduct);
-        $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler($testEvent->toMessage());
-
+        $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler();
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testTemplateWasUpdatedDomainEventHandlerIsReturned()
     {
-        $testEvent = new TemplateWasUpdatedDomainEvent('foo', 'bar', DataVersion::fromVersionString('baz'));
-        $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler($testEvent->toMessage());
-
+        $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler();
         $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testProductListingWasAddedDomainEventHandlerIsReturned()
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->createMock(ProductListing::class);
-        $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => 'foo']);
-        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
-        $testEvent = new ProductListingWasAddedDomainEvent($stubProductListing);
-        $result = $this->commonFactory->createProductListingWasAddedDomainEventHandler($testEvent->toMessage());
-
+        $result = $this->commonFactory->createProductListingWasAddedDomainEventHandler();
         $this->assertInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
     }
 
@@ -434,9 +389,7 @@ class CommonFactoryTest extends TestCase
 
     public function testImageImportEventDomainHandlerIsReturned()
     {
-        $testEvent = new ImageWasAddedDomainEvent('foo', DataVersion::fromVersionString('foo'));
-        $result = $this->commonFactory->createImageWasAddedDomainEventHandler($testEvent->toMessage());
-
+        $result = $this->commonFactory->createImageWasAddedDomainEventHandler();
         $this->assertInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
     }
 
@@ -488,97 +441,55 @@ class CommonFactoryTest extends TestCase
 
     public function testUpdateContentBlockCommandHandlerIsReturned()
     {
-        $dummyContext = $this->createMock(Context::class);
-        $dummyContext->method('jsonSerialize')->willReturn([]);
-        $contentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', $dummyContext, []);
-        $sourceCommand = new UpdateContentBlockCommand($contentBlockSource);
-        $message = $sourceCommand->toMessage();
-        $result = $this->commonFactory->createUpdateContentBlockCommandHandler($message);
-
+        $result = $this->commonFactory->createUpdateContentBlockCommandHandler();
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
     }
 
     public function testReturnsAnUpdateTemplateCommandHandler()
     {
-        $message = (new UpdateTemplateCommand('foo', 'bar', DataVersion::fromVersionString('baz')))->toMessage();
-        $result = $this->commonFactory->createUpdateTemplateCommandHandler($message);
-        
+        $result = $this->commonFactory->createUpdateTemplateCommandHandler();
         $this->assertInstanceOf(UpdateTemplateCommandHandler::class, $result);
     }
 
     public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()
     {
-        $testContentBlockSource = new ContentBlockSource(
-            ContentBlockId::fromString('foo'),
-            '',
-            SelfContainedContextBuilder::rehydrateContext([]),
-            []
-        );
-        $testEvent = new ContentBlockWasUpdatedDomainEvent($testContentBlockSource);
-        $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler($testEvent->toMessage());
-
+        $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler();
         $this->assertInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
     }
 
     public function testUpdateProductCommandHandlerIsReturned()
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $this->createMock(Context::class);
-        $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
-        $stubContext->method('getValue')->willReturn('123');
-        $product = new SimpleProduct(
-            new ProductId('foo'),
-            ProductTaxClass::fromString('bar'),
-            new ProductAttributeList(),
-            new ProductImageList(),
-            $stubContext
-        );
-        $sourceCommand = new UpdateProductCommand($product);
-        $result = $this->commonFactory->createUpdateProductCommandHandler($sourceCommand->toMessage());
-
+        $result = $this->commonFactory->createUpdateProductCommandHandler();
         $this->assertInstanceOf(UpdateProductCommandHandler::class, $result);
     }
 
     public function testAddProductListingCommandHandlerIsReturned()
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
-        $stubProductListing = $this->createMock(ProductListing::class);
-        $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
-        $sourceCommand = new AddProductListingCommand($stubProductListing);
-        $result = $this->commonFactory->createAddProductListingCommandHandler($sourceCommand->toMessage());
-
+        $result = $this->commonFactory->createAddProductListingCommandHandler();
         $this->assertInstanceOf(AddProductListingCommandHandler::class, $result);
     }
 
     public function testAddImageCommandHandlerIsReturned()
     {
-        $sourceCommand = new AddImageCommand(__FILE__, DataVersion::fromVersionString('foo bar'));
-        $result = $this->commonFactory->createAddImageCommandHandler($sourceCommand->toMessage());
-
+        $result = $this->commonFactory->createAddImageCommandHandler();
         $this->assertInstanceOf(AddImageCommandHandler::class, $result);
     }
 
     public function testReturnsShutdownWorkerCommandHandler()
     {
-        $sourceCommand = new ShutdownWorkerDirective('*');
-        $result = $this->commonFactory->createShutdownWorkerCommandHandler($sourceCommand->toMessage());
-
+        $result = $this->commonFactory->createShutdownWorkerCommandHandler();
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
     
     public function testReturnsAnImportCatalogCommandHandler()
     {
-        $command = new ImportCatalogCommand(DataVersion::fromVersionString('foo bar'), __FILE__);
-        $result = $this->commonFactory->createImportCatalogCommandHandler($command->toMessage());
-
+        $result = $this->commonFactory->createImportCatalogCommandHandler();
         $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
     }
     
     public function testReturnsASetCurrentDataVersionCommandHandler()
     {
-        $command = new SetCurrentDataVersionCommand(DataVersion::fromVersionString('bar baz'));
-        $result = $this->commonFactory->createSetCurrentDataVersionCommandHandler($command->toMessage());
-
+        $result = $this->commonFactory->createSetCurrentDataVersionCommandHandler();
         $this->assertInstanceOf(SetCurrentDataVersionCommandHandler::class, $result);
     }
 
@@ -647,29 +558,25 @@ class CommonFactoryTest extends TestCase
 
     public function testItReturnsACatalogWasImportedDomainEventHandler()
     {
-        $testEvent = new CatalogWasImportedDomainEvent(DataVersion::fromVersionString('foo'));
-        $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler($testEvent->toMessage());
+        $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler();
         $this->assertInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
     }
 
     public function testReturnsAShutdownWorkerDomainEventHandler()
     {
-        $testEvent = new ShutdownWorkerDirective('*');
-        $result = $this->commonFactory->createShutdownWorkerDomainEventHandler($testEvent->toMessage());
+        $result = $this->commonFactory->createShutdownWorkerDomainEventHandler();
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
 
     public function testReturnsACatalogImportWasTriggeredDomainEventHandler()
     {
-        $testEvent = new CatalogImportWasTriggeredDomainEvent(DataVersion::fromVersionString('foo'), 'test.xml');
-        $result = $this->commonFactory->createCatalogImportWasTriggeredDomainEventHandler($testEvent->toMessage());
+        $result = $this->commonFactory->createCatalogImportWasTriggeredDomainEventHandler();
         $this->assertInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
     }
 
     public function testReturnsACurrentDataVersionWasSetDomainEventHandler()
     {
-        $testEvent = new CurrentDataVersionWasSetDomainEvent(DataVersion::fromVersionString('bar'));
-        $result = $this->commonFactory->createCurrentDataVersionWasSetDomainEventHandler($testEvent->toMessage());
+        $result = $this->commonFactory->createCurrentDataVersionWasSetDomainEventHandler();
         $this->assertInstanceOf(CurrentDataVersionWasSetDomainEventHandler::class, $result);
     }
 

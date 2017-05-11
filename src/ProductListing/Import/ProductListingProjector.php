@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 
-class ProductListingSnippetProjector implements Projector
+class ProductListingProjector implements Projector
 {
+    /**
+     * @var Projector
+     */
+    private $snippetProjector;
+
     /**
      * @var DataPoolWriter
      */
@@ -22,19 +25,14 @@ class ProductListingSnippetProjector implements Projector
      */
     private $urlKeyForContextCollector;
 
-    /**
-     * @var SnippetRenderer[]
-     */
-    private $snippetRenderers;
-
     public function __construct(
+        Projector $snippetProjector,
         UrlKeyForContextCollector $urlKeyForContextCollector,
-        DataPoolWriter $dataPoolWriter,
-        SnippetRenderer ...$snippetRenderers
+        DataPoolWriter $dataPoolWriter
     ) {
+        $this->snippetProjector = $snippetProjector;
         $this->dataPoolWriter = $dataPoolWriter;
         $this->urlKeyForContextCollector = $urlKeyForContextCollector;
-        $this->snippetRenderers = $snippetRenderers;
     }
 
     /**
@@ -42,24 +40,14 @@ class ProductListingSnippetProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($projectionSourceData));
+        $this->projectSnippets($projectionSourceData);
 
         $urlKeysForContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys($projectionSourceData);
         $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
     }
 
-    /**
-     * @param ProductListing $productListing
-     * @return Snippet[]
-     */
-    private function getSnippets(ProductListing $productListing): array
+    private function projectSnippets(ProductListing $productListing)
     {
-        return array_reduce(
-            $this->snippetRenderers,
-            function ($carry, SnippetRenderer $snippetRenderer) use ($productListing) {
-                return array_merge($carry, $snippetRenderer->render($productListing));
-            },
-            []
-        );
+        $this->snippetProjector->project($productListing);
     }
 }

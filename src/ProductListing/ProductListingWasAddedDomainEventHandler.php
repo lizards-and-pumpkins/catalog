@@ -6,16 +6,16 @@ namespace LizardsAndPumpkins\ProductListing;
 
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetProjector;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingProjector;
 
 class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
 {
     /**
-     * @var ProductListingSnippetProjector
+     * @var ProductListingProjector
      */
     private $projector;
 
-    public function __construct(ProductListingSnippetProjector $projector)
+    public function __construct(ProductListingProjector $projector)
     {
         $this->projector = $projector;
     }

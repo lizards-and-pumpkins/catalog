@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
-use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\Projector;
-use LizardsAndPumpkins\Import\SnippetRenderer;
 
 class ContentBlockProjector implements Projector
 {
     /**
-     * @var DataPoolWriter
+     * @var Projector
      */
-    private $dataPoolWriter;
+    private $snippetProjector;
 
-    /**
-     * @var SnippetRenderer[]
-     */
-    private $snippetRenderers;
-
-    public function __construct(DataPoolWriter $dataPoolWriter, SnippetRenderer ...$snippetRenderers)
+    public function __construct(Projector $snippetProjector)
     {
-        $this->dataPoolWriter = $dataPoolWriter;
-        $this->snippetRenderers = $snippetRenderers;
+        $this->snippetProjector = $snippetProjector;
     }
 
     /**
@@ -32,21 +23,11 @@ class ContentBlockProjector implements Projector
      */
     public function project($projectionSourceData)
     {
-        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($projectionSourceData));
+        $this->projectSnippets($projectionSourceData);
     }
 
-    /**
-     * @param ContentBlockSource $projectionData
-     * @return Snippet[]
-     */
-    private function getSnippets(ContentBlockSource $projectionData): array
+    private function projectSnippets(ContentBlockSource $projectionData)
     {
-        return array_reduce(
-            $this->snippetRenderers,
-            function ($carry, SnippetRenderer $snippetRenderer) use ($projectionData) {
-                return array_merge($carry, $snippetRenderer->render($projectionData));
-            },
-            []
-        );
+        $this->snippetProjector->project($projectionData);
     }
 }

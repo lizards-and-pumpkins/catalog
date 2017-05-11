@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Import\SnippetRenderer;
 
 class ProductProjector implements Projector
 {
+    /**
+     * @var Projector
+     */
+    private $snippetProjector;
+
     /**
      * @var SearchDocumentBuilder
      */
@@ -35,23 +38,18 @@ class ProductProjector implements Projector
      */
     private $productViewLocator;
 
-    /**
-     * @var SnippetRenderer[]
-     */
-    private $snippetRenderers;
-
     public function __construct(
         ProductViewLocator $productViewLocator,
+        Projector $snippetProjector,
         SearchDocumentBuilder $searchDocumentBuilder,
         UrlKeyForContextCollector $urlKeyCollector,
-        DataPoolWriter $dataPoolWriter,
-        SnippetRenderer ...$snippetRenderers
+        DataPoolWriter $dataPoolWriter
     ) {
         $this->productViewLocator = $productViewLocator;
+        $this->snippetProjector = $snippetProjector;
         $this->searchDocumentBuilder = $searchDocumentBuilder;
         $this->urlKeyCollector = $urlKeyCollector;
         $this->dataPoolWriter = $dataPoolWriter;
-        $this->snippetRenderers = $snippetRenderers;
     }
 
     /**
@@ -66,24 +64,9 @@ class ProductProjector implements Projector
         $this->storeProductUrlKeys($product);
     }
 
-    private function projectProductView(ProductView $product)
+    private function projectProductView(ProductView $productView)
     {
-        $this->dataPoolWriter->writeSnippets(...$this->getSnippets($product));
-    }
-
-    /**
-     * @param ProductView $product
-     * @return Snippet[]
-     */
-    private function getSnippets(ProductView $product): array
-    {
-        return array_reduce(
-            $this->snippetRenderers,
-            function ($carry, SnippetRenderer $snippetRenderer) use ($product) {
-                return array_merge($carry, $snippetRenderer->render($product));
-            },
-            []
-        );
+        $this->snippetProjector->project($productView);
     }
 
     private function aggregateSearchDocument(Product $product)
