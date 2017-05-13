@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 
@@ -36,18 +37,19 @@ class ProductListingProjector implements Projector
     }
 
     /**
-     * @param mixed $projectionSourceData
+     * @param ProductListing $productListing
      */
-    public function project($projectionSourceData)
+    public function project($productListing)
     {
-        $this->projectSnippets($projectionSourceData);
+        if (! $productListing instanceof ProductListing) {
+            throw new InvalidProjectionSourceDataTypeException(
+                sprintf('Projection source data must be of ProductListing type, got "%s".', typeof($productListing))
+            );
+        }
 
-        $urlKeysForContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys($projectionSourceData);
-        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
-    }
-
-    private function projectSnippets(ProductListing $productListing)
-    {
         $this->snippetProjector->project($productListing);
+
+        $urlKeysForContextsCollection = $this->urlKeyForContextCollector->collectListingUrlKeys($productListing);
+        $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);
     }
 }

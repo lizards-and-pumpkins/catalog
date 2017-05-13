@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
 use LizardsAndPumpkins\Import\Projector;
@@ -53,9 +54,9 @@ class ProductListingProjectorTest extends TestCase
         $this->assertInstanceOf(Projector::class, $this->projector);
     }
 
-    public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
+    public function testThrowsAnExceptionIfProjectionSourceDataIsNotProductListing()
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->projector->project('foo');
     }
 

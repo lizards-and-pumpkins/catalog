@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Projector;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,7 @@ class ContentBlockProjectorTest extends TestCase
     private $mockSnippetProjector;
 
     /**
-     * @var Projector
+     * @var ContentBlockProjector
      */
     private $projector;
 
@@ -33,14 +34,15 @@ class ContentBlockProjectorTest extends TestCase
         $this->assertInstanceOf(Projector::class, $this->projector);
     }
 
-    public function testExceptionIsThrownIfProjectionSourceDataIsNotAnInstanceOfContentBlockSource()
+    public function testThrowsAnExceptionIfProjectionSourceDataIsNotContentBlockSource()
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->projector->project($projectionSourceData = 'foo');
     }
 
     public function testSnippetIsWrittenIntoDataPool()
     {
+        /** @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject $dummyContentBlockSource */
         $dummyContentBlockSource = $this->createMock(ContentBlockSource::class);
         $this->mockSnippetProjector->expects($this->once())->method('project')->with($dummyContentBlockSource);
 

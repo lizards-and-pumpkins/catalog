@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocument;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollection;
@@ -73,6 +74,12 @@ class ProductProjectorTest extends TestCase
     public function testImplementsProjectorInterface()
     {
         $this->assertInstanceOf(Projector::class, $this->projector);
+    }
+
+    public function testThrownAnExceptionIfProjectionSourceDataIsNotProduct()
+    {
+        $this->expectException(InvalidProjectionSourceDataTypeException::class);
+        $this->projector->project('foo');
     }
 
     public function testWritesSearchDocumentToDataPool()
