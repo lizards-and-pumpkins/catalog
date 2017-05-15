@@ -9,7 +9,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\Import\GenericSnipetProjector
+ * @covers \LizardsAndPumpkins\Import\GenericSnippetProjector
  */
 class GenericSnippetProjectorTest extends TestCase
 {
@@ -38,7 +38,7 @@ class GenericSnippetProjectorTest extends TestCase
 
     public function testImplementsProjectorInterface()
     {
-        $this->assertInstanceOf(Projector::class, new GenericSnipetProjector($this->mockDataPoolWriter));
+        $this->assertInstanceOf(Projector::class, new GenericSnippetProjector($this->mockDataPoolWriter));
     }
 
     public function testSnippetIsWrittenIntoDataPool()
@@ -53,7 +53,7 @@ class GenericSnippetProjectorTest extends TestCase
 
         $this->mockDataPoolWriter->expects($this->once())->method('writeSnippets')->with($stubSnippetA, $stubSnippetB);
 
-        $projector = new GenericSnipetProjector($this->mockDataPoolWriter, $stubSnippetRendererA, $stubSnippetRendererB);
+        $projector = new GenericSnippetProjector($this->mockDataPoolWriter, $stubSnippetRendererA, $stubSnippetRendererB);
         $projector->project($testProjectionSourceData);
     }
 }
