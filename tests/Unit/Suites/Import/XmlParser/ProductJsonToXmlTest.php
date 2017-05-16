@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\XmlParser;
@@ -8,23 +9,15 @@ use PHPUnit\Framework\TestCase;
 class ProductJsonToXmlTest extends TestCase
 {
     private $sku = '118235-251';
+
     private $type = 'simple';
+
     private $taxClass = '19%';
+
     /**
      * @var ProductJsonToXml
      */
     private $productJsonToXml;
-
-    public function testImplementsProductJsonToXml()
-    {
-        $this->assertInstanceOf(ProductJsonToXml::class, $this->productJsonToXml);
-    }
-
-    public function testStartsWithXmlHeader()
-    {
-        $xml = $this->productJsonToXml->toXml($this->getProductJson());
-        $this->assertContains('<?xml version="1.0" encoding="UTF-8"?>', $xml);
-    }
 
     /**
      * @return string
@@ -44,6 +37,32 @@ LED Arm-Signallampe mit elastischem Band und Flasher mit variabler Blinkfolge,
 Flasher abnehmbar.',
             ],
         ]);
+    }
+
+    private function getProductJsonWithContext()
+    {
+        $product = json_decode($this->getProductJson(), true);
+        $product['context'] = [
+            'website' => 'german',
+            'locale'  => 'de_DE',
+        ];
+        return json_encode($product);
+    }
+
+    protected function setUp()
+    {
+        $this->productJsonToXml = new ProductJsonToXml();
+    }
+
+    public function testImplementsProductJsonToXml()
+    {
+        $this->assertInstanceOf(ProductJsonToXml::class, $this->productJsonToXml);
+    }
+
+    public function testStartsWithXmlHeader()
+    {
+        $xml = $this->productJsonToXml->toXml($this->getProductJson());
+        $this->assertStringStartsWith('<?xml version="1.0" encoding="UTF-8"?>', $xml);
     }
 
     public function testContainsCatalogRoot()
@@ -81,20 +100,5 @@ Flasher abnehmbar.',
         $xml = $this->productJsonToXml->toXml($this->getProductJsonWithContext());
         $this->assertContains('<attribute name="description" website="german" locale="de_DE">', $xml);
         $this->assertContains('<attribute name="backorders" website="german" locale="de_DE">', $xml);
-    }
-
-    private function getProductJsonWithContext()
-    {
-        $product = json_decode($this->getProductJson(), true);
-        $product['context'] = [
-            'website' => 'german',
-            'locale'  => 'de_DE',
-        ];
-        return json_encode($product);
-    }
-
-    protected function setUp()
-    {
-        $this->productJsonToXml = new ProductJsonToXml();
     }
 }

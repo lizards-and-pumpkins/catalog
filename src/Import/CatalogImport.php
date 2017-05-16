@@ -7,6 +7,8 @@ namespace LizardsAndPumpkins\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
@@ -15,8 +17,6 @@ use LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 
 class CatalogImport
 {
@@ -67,7 +67,8 @@ class CatalogImport
         DomainEventQueue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
-    ) {
+    )
+    {
         $this->queueImportCommands = $queueImportCommands;
         $this->productXmlToProductBuilder = $productXmlToProductBuilder;
         $this->productListingBuilder = $productListingBuilder;
@@ -102,7 +103,7 @@ class CatalogImport
         }
     }
 
-    private function createClosureForMethod(string $methodName) : \Closure
+    private function createClosureForMethod(string $methodName): \Closure
     {
         return function (...$args) use ($methodName) {
             return $this->{$methodName}(...$args);

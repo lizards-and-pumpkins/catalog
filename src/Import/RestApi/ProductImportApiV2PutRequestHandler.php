@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RestApi;
@@ -18,10 +19,12 @@ class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
      * @var ProductJsonToXml
      */
     private $productJsonToXml;
+
     /**
      * @var CatalogImport
      */
     private $catalogImport;
+
     /**
      * @var DataVersion
      */
@@ -53,13 +56,13 @@ class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 
-        if (!$this->hasArgument($requestArguments, 'productData')) {
+        if (!$this->hasArgument($requestArguments, 'product_data')) {
             throw new CatalogImportProductDataNotFoundInRequestBodyException(
-                'Product data is not found in request body.'
+                'Product data not found in import product API request.'
             );
         }
 
-        return $requestArguments['productData'];
+        return $requestArguments['product_data'];
     }
 
     private function hasArgument($requestArguments, string $argument): bool

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\XmlParser;
@@ -9,10 +10,12 @@ class ProductJsonToXml
      * @var \XMLWriter
      */
     private $writer;
+
     /**
      * @var string[]
      */
     private $productNodeAttributes = ['type', 'sku', 'tax_class'];
+
     /**
      * @var string[]
      */
@@ -62,7 +65,7 @@ class ProductJsonToXml
     }
 
     /**
-     * @param string[][] $product
+     * @param array[] $product
      */
     private function writeProduct(array $product)
     {
