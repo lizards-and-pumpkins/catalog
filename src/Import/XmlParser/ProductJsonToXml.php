@@ -21,7 +21,7 @@ class ProductJsonToXml
      */
     private $context = [];
 
-    public function toXml(string $product): string
+    public function toXml(string $product) : string
     {
         $product = json_decode($product, true);
 
@@ -88,7 +88,7 @@ class ProductJsonToXml
     private function writeAttribute(string $key, $value)
     {
         if (is_bool($value)) {
-            $value = $value ? 'true' : false;
+            $value = $value ? 'true' : 'false';
         }
         $this->writer->startElement('attribute');
 

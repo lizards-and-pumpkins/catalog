@@ -67,8 +67,7 @@ class CatalogImport
         DomainEventQueue $eventQueue,
         ContextSource $contextSource,
         Logger $logger
-    )
-    {
+    ) {
         $this->queueImportCommands = $queueImportCommands;
         $this->productXmlToProductBuilder = $productXmlToProductBuilder;
         $this->productListingBuilder = $productListingBuilder;
@@ -91,25 +90,27 @@ class CatalogImport
 
     private function validateImportFilePath(string $importFilePath)
     {
-        if (!file_exists($importFilePath)) {
+        if (! file_exists($importFilePath)) {
             throw new CatalogImportFileDoesNotExistException(
                 sprintf('Catalog import file not found: "%s"', $importFilePath)
             );
         }
-        if (!is_readable($importFilePath)) {
+        if (! is_readable($importFilePath)) {
             throw new CatalogImportFileNotReadableException(
                 sprintf('Catalog import file is not readable: "%s"', $importFilePath)
             );
         }
     }
 
-    private function createClosureForMethod(string $methodName): \Closure
+    private function createClosureForMethod(string $methodName) : \Closure
     {
         return function (...$args) use ($methodName) {
             return $this->{$methodName}(...$args);
         };
     }
 
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function processProductXml(string $productXml)
     {
         try {
@@ -156,6 +157,7 @@ class CatalogImport
         }
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function processListingXml(string $listingXml)
     {
         try {

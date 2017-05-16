@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportProductDataNotFound
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
-class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
+class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
 {
     /**
      * @var ProductJsonToXml
@@ -37,12 +37,12 @@ class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
         $this->dataVersion = $dataVersion;
     }
 
-    public function canProcess(HttpRequest $request): bool
+    public function canProcess(HttpRequest $request) : bool
     {
         return $request->getMethod() === HttpRequest::METHOD_PUT;
     }
 
-    public function processRequest(HttpRequest $request): HttpResponse
+    public function processRequest(HttpRequest $request) : HttpResponse
     {
         $productData = $this->getProductDataFromRequest($request);
         $productXml = $this->productJsonToXml->toXml($productData);
@@ -52,11 +52,11 @@ class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
         return $this->getResponse($request);
     }
 
-    private function getProductDataFromRequest(HttpRequest $request): string
+    private function getProductDataFromRequest(HttpRequest $request) : string
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 
-        if (!$this->hasArgument($requestArguments, 'product_data')) {
+        if (! $this->hasArgument($requestArguments, 'product_data')) {
             throw new CatalogImportProductDataNotFoundInRequestBodyException(
                 'Product data not found in import product API request.'
             );
@@ -65,12 +65,12 @@ class ProductImportApiV2PutRequestHandler extends ApiRequestHandler
         return $requestArguments['product_data'];
     }
 
-    private function hasArgument($requestArguments, string $argument): bool
+    private function hasArgument($requestArguments, string $argument) : bool
     {
         return is_array($requestArguments) && isset($requestArguments[$argument]) && $requestArguments[$argument];
     }
 
-    protected function getResponse(HttpRequest $request): HttpResponse
+    protected function getResponse(HttpRequest $request) : HttpResponse
     {
         $headers = [];
         $body = '';

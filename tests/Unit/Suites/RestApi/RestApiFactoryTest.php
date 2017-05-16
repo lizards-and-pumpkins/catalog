@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestH
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
-use LizardsAndPumpkins\Import\RestApi\ProductImportApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
@@ -94,14 +94,17 @@ class RestApiFactoryTest extends TestCase
     /**
      * @dataProvider registeredRequestHandlerProvider
      */
-    public function testRegistersExpectedHandlersWithApiRouter($code, $version)
+    public function testRegistersExpectedHandlersWithApiRouter(string $code, int $version)
     {
         $locator = $this->factory->getApiRequestHandlerLocator();
 
         $this->assertApiRequestHandlerIsRegistered($locator, $code, $version);
     }
 
-    public function registeredRequestHandlerProvider(): array
+    /**
+     * @return array[]
+     */
+    public function registeredRequestHandlerProvider() : array
     {
         return [
             'put_catalog_import v1'  => ['put_catalog_import', 1],
@@ -163,10 +166,10 @@ class RestApiFactoryTest extends TestCase
         $this->assertInstanceOf(TemplatesApiV2PutRequestHandler::class, $result);
     }
 
-    public function testReturnsProductImportApiV2PutRequestHandler()
+    public function testReturnsProductImportApiV1PutRequestHandler()
     {
-        $result = $this->factory->createProductImportApiV2PutRequestHandler();
-        $this->assertInstanceOf(ProductImportApiV2PutRequestHandler::class, $result);
+        $result = $this->factory->createProductImportApiV1PutRequestHandler();
+        $this->assertInstanceOf(ProductImportApiV1PutRequestHandler::class, $result);
     }
 
     public function testReturnsProductJsonToXml()

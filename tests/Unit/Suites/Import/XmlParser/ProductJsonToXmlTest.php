@@ -22,7 +22,7 @@ class ProductJsonToXmlTest extends TestCase
     /**
      * @return string
      */
-    private function getProductJson(): string
+    private function getProductJson() : string
     {
         return json_encode([
             'sku'        => $this->sku,
@@ -39,7 +39,7 @@ Flasher abnehmbar.',
         ]);
     }
 
-    private function getProductJsonWithContext()
+    private function getProductJsonWithContext() : string
     {
         $product = json_decode($this->getProductJson(), true);
         $product['context'] = [

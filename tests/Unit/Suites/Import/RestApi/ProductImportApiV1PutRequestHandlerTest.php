@@ -8,17 +8,17 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\CatalogImport;
-use LizardsAndPumpkins\Import\RestApi\ProductImportApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use PHPUnit\Framework\TestCase;
 
-class ProductImportApiV2PutRequestHandlerTest extends TestCase
+class ProductImportApiV1PutRequestHandlerTest extends TestCase
 {
     private $productJson = 'DATA';
 
     /**
-     * @var ProductImportApiV2PutRequestHandler
+     * @var ProductImportApiV1PutRequestHandler
      */
     private $handler;
 
@@ -35,13 +35,13 @@ class ProductImportApiV2PutRequestHandlerTest extends TestCase
     /**
      * @var DataVersion
      */
-    private $dataVersion;
+    private $dummyDataVersion;
 
 
     /**
      * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createValidRequestMock(): HttpRequest
+    private function createValidRequestMock() : HttpRequest
     {
         $productJson = json_encode(['product_data' => $this->productJson]);
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $request */
@@ -55,17 +55,17 @@ class ProductImportApiV2PutRequestHandlerTest extends TestCase
     {
         $this->mockProductJsonToXml = $this->createMock(ProductJsonToXml::class);
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
-        $this->dataVersion = $this->createMock(DataVersion::class);
-        $this->handler = new ProductImportApiV2PutRequestHandler(
+        $this->dummyDataVersion = $this->createMock(DataVersion::class);
+        $this->handler = new ProductImportApiV1PutRequestHandler(
             $this->mockProductJsonToXml,
             $this->mockCatalogImport,
-            $this->dataVersion
+            $this->dummyDataVersion
         );
     }
 
     public function testIsProductImportRequestHandler()
     {
-        $this->assertInstanceOf(ProductImportApiV2PutRequestHandler::class, $this->handler);
+        $this->assertInstanceOf(ProductImportApiV1PutRequestHandler::class, $this->handler);
     }
 
     public function testImplementsApiRequestHandler()
@@ -137,7 +137,7 @@ class ProductImportApiV2PutRequestHandlerTest extends TestCase
         $this->mockCatalogImport
             ->expects($this->once())
             ->method('addProductsAndProductImagesToQueue')
-            ->with($productXml, $this->dataVersion);
+            ->with($productXml, $this->dummyDataVersion);
 
         $this->handler->process($request);
     }

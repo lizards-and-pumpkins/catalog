@@ -37,7 +37,7 @@ use PHPUnit\Framework\TestCase;
 class CatalogImportTest extends TestCase
 {
     use TestFileFixtureTrait;
-    
+
     private $sharedFixtureFilePath = __DIR__ . '/../../../shared-fixture/catalog.xml';
 
     /**
@@ -128,9 +128,9 @@ class CatalogImportTest extends TestCase
     {
         $this->testDirectoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($this->testDirectoryPath);
-        
+
         $this->mockQueueImportCommands = $this->createMock(QueueImportCommands::class);
-        
+
         $this->stubProductXmlToProductBuilder = $this->createMockProductXmlToProductBuilder();
         $this->stubProductListingBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->mockEventQueue = $this->createMock(DomainEventQueue::class);
@@ -249,7 +249,7 @@ XML;
             ->with($this->isInstanceOf(CatalogListingImportCallbackFailureMessage::class));
 
         $this->mockQueueImportCommands->method('forListing')->willThrowException(new \Exception('dummy'));
-        
+
         $fullXml = file_get_contents($this->sharedFixtureFilePath);
         $onlyListingXml = (new XPathParser($fullXml))->getXmlNodesRawXmlArrayByXPath('/catalog/listings')[0];
         $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
@@ -261,7 +261,7 @@ XML;
     {
         $this->mockLogger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(ProductImportCallbackFailureMessage::class));
-        
+
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->createMock(ProductBuilder::class);
         $stubProductBuilder->method('isAvailableForContext')->willReturn(true);
@@ -269,6 +269,7 @@ XML;
             new \Exception('dummy exception')
         );
 
+        /** @var ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject $stubProductXmlToProductBuilder */
         $stubProductXmlToProductBuilder = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $stubProductXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
 
@@ -280,7 +281,7 @@ XML;
             $this->contextSource,
             $this->mockLogger
         );
-        
+
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
