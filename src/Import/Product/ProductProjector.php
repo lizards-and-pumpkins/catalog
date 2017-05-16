@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Projector;
@@ -57,16 +58,17 @@ class ProductProjector implements Projector
      */
     public function project($product)
     {
+        if (! $product instanceof Product) {
+            throw new InvalidProjectionSourceDataTypeException(
+                sprintf('Projection source data must be of Product type, got "%s".', typeof($product))
+            );
+        }
+
         $productView = $this->productViewLocator->createForProduct($product);
 
-        $this->projectProductView($productView);
+        $this->snippetProjector->project($productView);
         $this->aggregateSearchDocument($product);
         $this->storeProductUrlKeys($product);
-    }
-
-    private function projectProductView(ProductView $productView)
-    {
-        $this->snippetProjector->project($productView);
     }
 
     private function aggregateSearchDocument(Product $product)

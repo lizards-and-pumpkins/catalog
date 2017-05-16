@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
+use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
 use LizardsAndPumpkins\Import\Projector;
 
 class ContentBlockProjector implements Projector
@@ -19,15 +20,17 @@ class ContentBlockProjector implements Projector
     }
 
     /**
-     * @param mixed $projectionSourceData
+     * @param ContentBlockSource $contentBlockSource
      */
-    public function project($projectionSourceData)
+    public function project($contentBlockSource)
     {
-        $this->projectSnippets($projectionSourceData);
-    }
+        if (! $contentBlockSource instanceof ContentBlockSource) {
+            throw new InvalidProjectionSourceDataTypeException(sprintf(
+                'Projection source data must be of ContentBlockSource type, got "%s".',
+                typeof($contentBlockSource)
+            ));
+        }
 
-    private function projectSnippets(ContentBlockSource $projectionData)
-    {
-        $this->snippetProjector->project($projectionData);
+        $this->snippetProjector->project($contentBlockSource);
     }
 }

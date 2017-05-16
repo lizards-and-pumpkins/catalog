@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\Import;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 
-class GenericProjector implements Projector
+class GenericSnippetProjector implements Projector
 {
     /**
      * @var DataPoolWriter

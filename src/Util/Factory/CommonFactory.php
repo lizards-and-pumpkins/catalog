@@ -70,7 +70,7 @@ use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
-use LizardsAndPumpkins\Import\GenericProjector;
+use LizardsAndPumpkins\Import\GenericSnippetProjector;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
@@ -254,7 +254,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     private function createProductSnippetProjector(): Projector
     {
-        return new GenericProjector(
+        return new GenericSnippetProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
             ...$this->getMasterFactory()->createProductDetailPageSnippetRendererList()
         );
@@ -332,9 +332,9 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingTemplateProjector(): GenericProjector
+    public function createProductListingTemplateProjector(): GenericSnippetProjector
     {
-        return new GenericProjector(
+        return new GenericSnippetProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
             ...$this->getMasterFactory()->createProductListingTemplateSnippetRendererList()
         );
@@ -392,7 +392,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     private function createProductListingSnippetProjector(): Projector
     {
-        return new GenericProjector(
+        return new GenericSnippetProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
             ...$this->getMasterFactory()->createProductListingSnippetRendererList()
         );
@@ -930,7 +930,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     private function createContentBlockSnippetProjector(): Projector
     {
-        return new GenericProjector(
+        return new GenericSnippetProjector(
             $this->getMasterFactory()->createDataPoolWriter(),
             ...$this->getMasterFactory()->createContentBlockSnippetRendererList()
         );
