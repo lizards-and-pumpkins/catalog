@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
@@ -13,10 +13,11 @@ use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\ProductImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\UnitTestFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -166,5 +167,11 @@ class RestApiFactoryTest extends TestCase
     {
         $result = $this->factory->createProductImportApiV2PutRequestHandler();
         $this->assertInstanceOf(ProductImportApiV2PutRequestHandler::class, $result);
+    }
+
+    public function testReturnsProductJsonToXml()
+    {
+        $result = $this->factory->createProductJsonToXml();
+        $this->assertInstanceOf(ProductJsonToXml::class, $result);
     }
 }

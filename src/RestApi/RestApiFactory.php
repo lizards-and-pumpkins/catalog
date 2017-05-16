@@ -155,13 +155,13 @@ class RestApiFactory implements Factory
     public function createProductImportApiV2PutRequestHandler()
     {
         return new ProductImportApiV2PutRequestHandler(
-            $this->createProductJsonToXml(),
+            $this->getMasterFactory()->createProductJsonToXml(),
             $this->getMasterFactory()->createCatalogImport(),
             DataVersion::fromVersionString($this->getMasterFactory()->getCurrentDataVersion())
         );
     }
 
-    private function createProductJsonToXml(): ProductJsonToXml
+    public function createProductJsonToXml(): ProductJsonToXml
     {
         return new ProductJsonToXml();
     }
