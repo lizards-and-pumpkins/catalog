@@ -120,7 +120,7 @@ class ProductImportApiV2PutRequestHandlerTest extends TestCase
         );
     }
 
-    public function testSendJsonAndCallJsonToXmlWithIt()
+    public function testDelegatesToJsonToXmlInstance()
     {
         $request = $this->createValidRequestMock();
         $this->mockProductJsonToXml->expects($this->once())->method('toXml')->with($this->productJson);
