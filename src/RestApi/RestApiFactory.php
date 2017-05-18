@@ -28,7 +28,10 @@ class RestApiFactory implements Factory
 
     public function createApiRouter(): ApiRouter
     {
-        return new ApiRouter($this->getApiRequestHandlerLocator());
+        return new ApiRouter(
+            $this->getApiRequestHandlerLocator(),
+            $this->getMasterFactory()->createUrlToWebsiteMap()
+        );
     }
 
     public function createCatalogImportApiV1PutRequestHandler(): CatalogImportApiV1PutRequestHandler

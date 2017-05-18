@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
@@ -354,6 +355,11 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     public function createApiRouter() : ApiRouter
     {
         return $this->createMock(ApiRouter::class);
+    }
+
+    public function createUrlToWebsiteMap(): UrlToWebsiteMap
+    {
+        return $this->createMock(UrlToWebsiteMap::class);
     }
 
     public function getMaxAllowedProductsPerSearchResultsPage() : int

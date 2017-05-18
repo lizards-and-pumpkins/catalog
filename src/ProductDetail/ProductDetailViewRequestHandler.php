@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\Locale;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
@@ -55,10 +56,16 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     private $translatorRegistry;
 
+    /**
+     * @var UrlToWebsiteMap
+     */
+    private $urlToWebsiteMap;
+
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         PageBuilder $pageBuilder,
+        UrlToWebsiteMap $urlToWebsiteMap,
         TranslatorRegistry $translatorRegistry,
         SnippetKeyGenerator $snippetKeyGenerator
     ) {
@@ -67,6 +74,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $this->pageBuilder = $pageBuilder;
         $this->translatorRegistry = $translatorRegistry;
         $this->snippetKeyGenerator = $snippetKeyGenerator;
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -104,7 +112,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
             }
         }
     }
-
+                                                          
     /**
      * @param string $metaInfoSnippetKey
      * @return mixed
@@ -121,7 +129,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
 
     private function getMetaInfoSnippetKey(HttpRequest $request) : string
     {
-        $urlKey = $request->getPathWithoutWebsitePrefix();
+        $urlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $metaInfoSnippetKey = $this->snippetKeyGenerator->getKeyForContext(
             $this->context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]

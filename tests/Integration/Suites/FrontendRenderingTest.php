@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
+use LizardsAndPumpkins\Context\Website\IntegrationTestUrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
@@ -141,6 +142,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             $context,
             $dataPoolReader,
             new GenericPageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
+            new IntegrationTestUrlToWebsiteMap(),
             $this->factory->getTranslatorRegistry(),
             $productDetailPageMetaSnippetKeyGenerator
         );

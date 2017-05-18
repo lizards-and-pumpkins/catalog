@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
@@ -23,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class ProductDetailViewRequestHandlerTest extends TestCase
 {
@@ -81,7 +83,12 @@ class ProductDetailViewRequestHandlerTest extends TestCase
      */
     private $addSnippetsToPageSpy;
 
-    private function createProductDetailPageMetaInfoContentJson() : string
+    /**
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlToWebsiteMap;
+
+    private function createProductDetailPageMetaInfoContentJson(): string
     {
         return json_encode(ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
@@ -95,8 +102,8 @@ class ProductDetailViewRequestHandlerTest extends TestCase
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
             array_map(function ($invocation) use ($snippetCode, $snippetValue) {
-                return intval([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
-                    [$snippetCode => $snippetValue] === $invocation->parameters[1]);
+                return (int) ([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
+                              [$snippetCode => $snippetValue] === $invocation->parameters[1]);
             }, $this->addSnippetsToPageSpy->getInvocations())
         );
 
@@ -119,6 +126,13 @@ class ProductDetailViewRequestHandlerTest extends TestCase
         $this->mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
 
         $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        
+
+        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
+            ->willReturnCallback(function (string $url): string {
+                return (string) substr($url, strlen('http://example.com/'));
+            });
 
         $this->stubTranslator = $this->createMock(Translator::class);
 
@@ -130,6 +144,7 @@ class ProductDetailViewRequestHandlerTest extends TestCase
             $this->stubContext,
             $this->mockDataPoolReader,
             $this->mockPageBuilder,
+            $this->stubUrlToWebsiteMap,
             $stubTranslatorRegistry,
             $this->stubSnippetKeyGenerator
         );
@@ -200,22 +215,22 @@ class ProductDetailViewRequestHandlerTest extends TestCase
 
     public function testItHandlesDifferentRequestsIndependently()
     {
-        $urlKeyA = 'A.html';
+        $urlA = 'http://example.com/A.html';
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequestA */
         $stubRequestA = $this->createMock(HttpRequest::class);
-        $stubRequestA->method('getPathWithoutWebsitePrefix')->willReturn($urlKeyA);
+        $stubRequestA->method('getUrl')->willReturn(HttpUrl::fromString($urlA));
 
-        $urlKeyB = 'B.html';
+        $urlB = 'http://example.com/B.html';
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequestB */
         $stubRequestB = $this->createMock(HttpRequest::class);
-        $stubRequestB->method('getPathWithoutWebsitePrefix')->willReturn($urlKeyB);
+        $stubRequestB->method('getUrl')->willReturn(HttpUrl::fromString($urlB));
 
         $requestAMetaInfoSnippetKey = 'A';
         $requestBMetaInfoSnippetKey = 'B';
 
         $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturnMap([
-            [$this->stubContext, [PageMetaInfoSnippetContent::URL_KEY => $urlKeyA], $requestAMetaInfoSnippetKey],
-            [$this->stubContext, [PageMetaInfoSnippetContent::URL_KEY => $urlKeyB], $requestBMetaInfoSnippetKey],
+            [$this->stubContext, [PageMetaInfoSnippetContent::URL_KEY => 'A.html'], $requestAMetaInfoSnippetKey],
+            [$this->stubContext, [PageMetaInfoSnippetContent::URL_KEY => 'B.html'], $requestBMetaInfoSnippetKey],
         ]);
 
         $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
