@@ -95,6 +95,18 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
     public function getRequestPathWithoutWebsitePrefix(string $url): string
     {
         list($urlPrefix, $website) = $this->getWebsiteUrlPrefixAndCodeByUrl($url);
-        return substr($url, strlen($urlPrefix));
+        $pathWithoutPrefix = substr($url, strlen($urlPrefix));
+
+        return $this->hasQueryParameter($url) ? $this->removeQueryParameter($pathWithoutPrefix) : $pathWithoutPrefix;
+    }
+
+    private function hasQueryParameter(string $url): bool
+    {
+        return strrpos($url, '?') !== false;
+    }
+
+    private function removeQueryParameter($pathWithoutPrefix): string
+    {
+        return substr($pathWithoutPrefix, 0, strrpos($pathWithoutPrefix, '?'));
     }
 }

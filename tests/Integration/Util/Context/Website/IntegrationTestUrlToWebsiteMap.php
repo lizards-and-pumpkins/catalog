@@ -13,6 +13,6 @@ class IntegrationTestUrlToWebsiteMap implements UrlToWebsiteMap
 
     public function getRequestPathWithoutWebsitePrefix(string $url): string
     {
-        return preg_match('#^https?://[^/]+/(?<path>.+)#', $url, $m) ? $m['path'] : '';
+        return preg_match('#^https?://[^/]+/(?<pathWithoutQuery>[^?]+)#', $url, $m) ? $m['pathWithoutQuery'] : '';
     }
 }

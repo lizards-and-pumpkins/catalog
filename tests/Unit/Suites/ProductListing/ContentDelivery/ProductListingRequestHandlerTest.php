@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
@@ -57,6 +58,11 @@ class ProductListingRequestHandlerTest extends TestCase
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubRequest;
+
+    /**
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlToWebsiteMap;
 
     private function prepareMockDataPoolReader(int $numberOfResults)
     {
@@ -133,6 +139,8 @@ class ProductListingRequestHandlerTest extends TestCase
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
+        
+        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
 
         $stubDefaultSortBy = $this->createMock(SortBy::class);
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
@@ -142,6 +150,7 @@ class ProductListingRequestHandlerTest extends TestCase
             $this->mockDataPoolReader,
             $stubSnippetKeyGenerator,
             $stubFacetFilterRequest,
+            $this->stubUrlToWebsiteMap,
             $stubProductListingPageContentBuilder,
             $stubSelectRobotsMetaTagContent,
             $this->mockProductListingPageRequest,
