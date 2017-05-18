@@ -65,12 +65,10 @@ Flasher abnehmbar.',
         $this->assertStringStartsWith('<?xml version="1.0" encoding="UTF-8"?>', $xml);
     }
 
-    public function testContainsCatalogRoot()
+    public function testContainsClosingProductNode()
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
-        $rootNode = '<catalog xmlns="http://lizardsandpumpkins.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://lizardsandpumpkins.com ../../schema/catalog.xsd"';
-
-        $this->assertContains($rootNode, $xml);
+        $this->assertStringEndsWith("</product>\n", $xml);
     }
 
     public function testWritesProductNodeWithAttributes()
@@ -79,6 +77,19 @@ Flasher abnehmbar.',
         $productNode = "<product type=\"{$this->type}\" sku=\"{$this->sku}\" tax_class=\"{$this->taxClass}\"";
 
         $this->assertContains($productNode, $xml);
+    }
+
+    public function testAttributeNodesAreInsideAttributesNode()
+    {
+        $xml = $this->productJsonToXml->toXml($this->getProductJson());
+
+        $this->assertContains('<attributes><attribute', $xml);
+    }
+
+    public function testIsValidXml()
+    {
+        $simpleXml = simplexml_load_string($xml = $this->productJsonToXml->toXml($this->getProductJson()));
+        $this->assertInstanceOf(\SimpleXMLElement::class, $simpleXml);
     }
 
     public function testWriteAttributes()

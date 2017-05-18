@@ -31,7 +31,7 @@ class ProductJsonToXml
 
         $this->startDocument();
 
-        $this->writeProducts($product);
+        $this->writeProduct($product);
 
         $this->writer->endDocument();
         return $this->writer->outputMemory();
@@ -42,26 +42,7 @@ class ProductJsonToXml
         $this->writer = new \XMLWriter();
         $this->writer->openMemory();
         $this->writer->startDocument('1.0', 'UTF-8');
-        $this->writeCatalogRoot();
-    }
 
-    private function writeCatalogRoot()
-    {
-        $this->writer->startElement('catalog');
-        $this->writer->writeAttribute('xmlns', 'http://lizardsandpumpkins.com');
-        $this->writer->writeAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-        $this->writer->writeAttribute('xsi:schemaLocation', 'http://lizardsandpumpkins.com ../../schema/catalog.xsd');
-        $this->writer->endElement();
-    }
-
-    /**
-     * @param string[] $product
-     */
-    private function writeProducts(array $product)
-    {
-        $this->writer->startElement('products');
-        $this->writeProduct($product);
-        $this->writer->endElement();
     }
 
     /**
@@ -73,11 +54,8 @@ class ProductJsonToXml
         foreach ($this->productNodeAttributes as $a) {
             $this->writer->writeAttribute($a, $product[$a]);
         }
-        /** @var string[] $attributes */
-        $attributes = $product['attributes'];
-        foreach ($attributes as $key => $value) {
-            $this->writeAttribute($key, $value);
-        }
+
+        $this->writeAttributes($product);
         $this->writer->endElement();
     }
 
@@ -116,5 +94,20 @@ class ProductJsonToXml
             return;
         }
         $this->writer->writeCData($value);
+    }
+
+    /**
+     * @param array $product
+     */
+    private function writeAttributes(array $product)
+    {
+        $this->writer->startElement('attributes');
+
+        /** @var string[] $attributes */
+        $attributes = $product['attributes'];
+        foreach ($attributes as $key => $value) {
+            $this->writeAttribute($key, $value);
+        }
+        $this->writer->endElement();
     }
 }
