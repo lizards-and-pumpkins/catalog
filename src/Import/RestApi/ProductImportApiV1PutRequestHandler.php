@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportProductDataNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
@@ -30,11 +31,10 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
      */
     private $dataVersion;
 
-    public function __construct(ProductJsonToXml $productJsonToXml, CatalogImport $catalogImport, DataVersion $dataVersion)
+    public function __construct(ProductJsonToXml $productJsonToXml, CatalogImport $catalogImport)
     {
         $this->productJsonToXml = $productJsonToXml;
         $this->catalogImport = $catalogImport;
-        $this->dataVersion = $dataVersion;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -47,7 +47,9 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         $productData = $this->getProductDataFromRequest($request);
         $productXml = $this->productJsonToXml->toXml($productData);
 
-        $this->catalogImport->addProductsAndProductImagesToQueue($productXml, $this->dataVersion);
+        $dataVersion = $this->createDataVersion($request);
+
+        $this->catalogImport->addProductsAndProductImagesToQueue($productXml, $dataVersion);
 
         return $this->getResponse($request);
     }
@@ -76,5 +78,25 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         $body = '';
 
         return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
+    }
+
+    protected function createDataVersion(HttpRequest $request) : DataVersion
+    {
+        $versionString = $this->getDataVersionFromRequest($request);
+
+        return DataVersion::fromVersionString($versionString);
+    }
+
+    private function getDataVersionFromRequest(HttpRequest $request) : string
+    {
+        $requestArguments = json_decode($request->getRawBody(), true);
+
+        if (! $this->hasArgument($requestArguments, 'data_version')) {
+            throw new DataVersionNotFoundInRequestBodyException(
+                'The catalog import data version is not found in request body.'
+            );
+        }
+
+        return $requestArguments['data_version'];
     }
 }

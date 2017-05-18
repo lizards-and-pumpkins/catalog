@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Import\RestApi;
 
-use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\CatalogImport;
@@ -33,7 +32,7 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
     private $mockCatalogImport;
 
     /**
-     * @var DataVersion
+     * @var string
      */
     private $dummyDataVersion;
 
@@ -43,7 +42,7 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
      */
     private function createValidRequestMock() : HttpRequest
     {
-        $productJson = json_encode(['product_data' => $this->productJson]);
+        $productJson = json_encode(['product_data' => $this->productJson, 'data_version' => $this->dummyDataVersion]);
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $request */
         $request = $this->createMock(HttpRequest::class);
         $request->method('getRawBody')->willReturn($productJson);
@@ -55,11 +54,10 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
     {
         $this->mockProductJsonToXml = $this->createMock(ProductJsonToXml::class);
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
-        $this->dummyDataVersion = $this->createMock(DataVersion::class);
+        $this->dummyDataVersion = '1.0.0';
         $this->handler = new ProductImportApiV1PutRequestHandler(
             $this->mockProductJsonToXml,
-            $this->mockCatalogImport,
-            $this->dummyDataVersion
+            $this->mockCatalogImport
         );
     }
 
