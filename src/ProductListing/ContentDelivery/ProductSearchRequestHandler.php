@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
@@ -73,11 +74,17 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      */
     private $availableSortBy;
 
+    /**
+     * @var UrlToWebsiteMap
+     */
+    private $urlToWebsiteMap;
+
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
+        UrlToWebsiteMap $urlToWebsiteMap,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
         ProductSearchService $productSearchService,
@@ -95,6 +102,7 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $this->fullTextCriteriaBuilder = $fullTextCriteriaBuilder;
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -136,7 +144,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
 
     private function isValidSearchRequest(HttpRequest $request) : bool
     {
-        $urlPathWithoutTrailingSlash = rtrim($request->getPathWithoutWebsitePrefix(), '/');
+        $pathWithoutWebsitePrefix = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
+        $urlPathWithoutTrailingSlash = rtrim($pathWithoutWebsitePrefix, '/');
 
         if (self::SEARCH_RESULTS_SLUG !== $urlPathWithoutTrailingSlash) {
             return false;
