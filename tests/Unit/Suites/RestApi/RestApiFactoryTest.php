@@ -109,6 +109,7 @@ class RestApiFactoryTest extends TestCase
         return [
             'put_catalog_import v1'  => ['put_catalog_import', 1],
             'put_catalog_import v2'  => ['put_catalog_import', 2],
+            'put_product_import v1'  => ['put_product_import', 1],
             'put_content_blocks v1'  => ['put_content_blocks', 1],
             'put_content_blocks v2'  => ['put_content_blocks', 2],
             'put_templates v1'       => ['put_templates', 1],

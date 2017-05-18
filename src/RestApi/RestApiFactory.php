@@ -53,6 +53,10 @@ class RestApiFactory implements Factory
             return $this->getMasterFactory()->createCatalogImportApiV2PutRequestHandler();
         });
 
+        $requestHandlerLocator->register('put_product_import', $version = 1, function () {
+            return $this->getMasterFactory()->createProductImportApiV1PutRequestHandler();
+        });
+
         $requestHandlerLocator->register('put_content_blocks', $version = 1, function () {
             return $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler();
         });
