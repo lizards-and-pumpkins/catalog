@@ -109,7 +109,7 @@ Flasher abnehmbar.',
             ],
         ]);
 
-        $httpRequestBodyString = json_encode(['product_data' => $productJson, 'dataVersion' => $testDataVersionString]);
+        $httpRequestBodyString = json_encode(['product_data' => $productJson, 'data_version' => $testDataVersionString]);
         $httpRequestBody = new HttpRequestBody($httpRequestBodyString);
         $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
