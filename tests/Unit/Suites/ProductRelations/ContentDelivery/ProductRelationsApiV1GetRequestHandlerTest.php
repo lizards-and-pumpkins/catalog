@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use PHPUnit\Framework\TestCase;
@@ -49,13 +50,20 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
      */
     private $stubContextBuilder;
 
+    /**
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlToWebsiteMap;
+
     protected function setUp()
     {
         $this->mockProductRelationsService = $this->createMock(ProductRelationsService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
+        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
 
         $this->requestHandler = new ProductRelationsApiV1GetRequestHandler(
             $this->mockProductRelationsService,
+            $this->stubUrlToWebsiteMap,
             $this->stubContextBuilder
         );
 
@@ -73,7 +81,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     public function testItCanNotProcessNonHttpGetRequestTypes(string $nonGetRequestMethod)
     {
         $this->stubRequest->method('getMethod')->willReturn($nonGetRequestMethod);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
         $message = sprintf('%s request should NOT be able to be processed', $nonGetRequestMethod);
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
     }
@@ -96,7 +104,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     public function testItCanNotProcessNonMatchingGetRequests(string $nonMatchingRequestPath)
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
         $message = sprintf('GET request to "%s" should NOT be able to be processed', $nonMatchingRequestPath);
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
     }
@@ -114,7 +122,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     public function testItCanProcessMatchingGetRequests()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
         $message = sprintf('Not able to process a GET request to "%s"', $this->testMatchingRequestPath);
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest), $message);
     }
@@ -122,7 +130,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     public function testItThrowsAnExceptionIfANonProcessableRequestIsPassed()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
 
         $response = $this->requestHandler->process($this->stubRequest);
         $expectedResponseBody = json_encode([
@@ -146,7 +154,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
             ->willReturn($testProductData);
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
 
         $stubContext = $this->createMock(Context::class);
 
