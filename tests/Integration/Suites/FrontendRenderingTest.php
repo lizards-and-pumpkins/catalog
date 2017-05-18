@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\IntegrationTestUrlToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
@@ -162,10 +163,13 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             Locale::CONTEXT_CODE => 'foo_BAR'
         ]);
         
+        /** @var UrlToWebsiteMap $urlToWebsiteMap */
+        $urlToWebsiteMap = $this->factory->createUrlToWebsiteMap();
         $metaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
+        $pathWithoutWebsitePrefix = $urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $this->request->getUrl());
         $productDetailPageMetaSnippetKey = $metaSnippetKeyGenerator->getKeyForContext(
             $context,
-            [PageMetaInfoSnippetContent::URL_KEY => $this->request->getPathWithoutWebsitePrefix()]
+            [PageMetaInfoSnippetContent::URL_KEY => $pathWithoutWebsitePrefix]
         );
 
         $this->addSnippetsFixtureToKeyValueStorage($productDetailPageMetaSnippetKey, $context);

@@ -84,17 +84,16 @@ class HttpUrl
         return $schema . '//' . $this->host . $port . $this->path . $query;
     }
 
+    /**
+     * @deprecated Use UrlToWebsiteMap::getRequestPathWithoutWebsitePrefix() instead.
+     * @codeCoverageIgnore
+     */
     public function getPathWithoutWebsitePrefix() : string
     {
-        $websitePrefix = $this->getAppEntryPointPath();
+        $websitePrefix = preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
         return ltrim(preg_replace('/^' . preg_quote($websitePrefix, '/') . '/', '', $this->path), '/');
     }
-
-    private function getAppEntryPointPath() : string
-    {
-        return preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
-    }
-
+    
     public function hasQueryParameter(string $queryParameter) : bool
     {
         return isset($this->query[$queryParameter]);
