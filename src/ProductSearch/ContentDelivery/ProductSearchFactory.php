@@ -33,6 +33,7 @@ class ProductSearchFactory implements FactoryWithCallback
         return new ProductSearchApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createContextBuilder(),
+            $this->getMasterFactory()->createUrlToWebsiteMap(),
             $this->getMasterFactory()->createFullTextCriteriaBuilder(),
             $this->getMasterFactory()->createSelectedFiltersParser(),
             $this->getMasterFactory()->createCriteriaParser(),

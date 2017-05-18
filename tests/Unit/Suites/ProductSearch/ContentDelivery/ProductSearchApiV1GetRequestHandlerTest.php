@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
@@ -98,6 +99,11 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
      */
     private $stubSearchEngineConfiguration;
 
+    /**
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlToWebsiteMap;
+
     final protected function setUp()
     {
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
@@ -115,10 +121,13 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
             $this->stubDefaultSorBy,
             ...$this->testSortableAttributeCodes
         );
+        
+        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
 
         $this->requestHandler = new ProductSearchApiV1GetRequestHandler(
             $this->mockProductSearchService,
             $this->stubContextBuilder,
+            $this->stubUrlToWebsiteMap,
             $this->stubFullTextCriteriaBuilder,
             $this->stubSelectedFiltersParser,
             $this->stubCriteriaParser,
@@ -162,7 +171,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testCanNotProcessNonMatchingGetRequests(string $nonMatchingRequestPath)
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
         $message = sprintf('GET request to "%s" should NOT be able to be processed', $nonMatchingRequestPath);
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest), $message);
     }
@@ -182,7 +191,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testCanNotProcessEmptyQuery(string $emptyQuery)
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
         ]);
@@ -201,7 +210,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testCanProcessMatchingRequest()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
         ]);
@@ -214,7 +223,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testRequestsAllProductsIfNeitherQueryStringNorInitialCriteriaParameterIsSet()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, false],
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, false],
@@ -231,7 +240,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $queryString = 'foo';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true]
         ]);
@@ -250,7 +259,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testReturnHttpResponse()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, true],
@@ -266,7 +275,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testThrowsAnExceptionDuringAttemptToProcessInvalidRequest()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
 
         $response = $this->requestHandler->process($this->stubRequest);
         $expectedResponseBody = json_encode(['error' => 'Invalid product search API request.']);
@@ -277,7 +286,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testDelegatesFetchingProductsToTheProductSearchService()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, true],
@@ -304,7 +313,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $queryString = 'foo';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
         ]);
@@ -343,7 +352,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $numberOfProductsPerPage = '5';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, true],
@@ -384,7 +393,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $pageNumber = '1';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::PAGE_NUMBER_PARAMETER, true],
@@ -425,7 +434,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $sortOrder = 'bar';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, true],
@@ -467,7 +476,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $queryString = 'foo';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::SORT_DIRECTION_PARAMETER, true],
@@ -509,7 +518,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $sortDirection = 'desc';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, true],
@@ -553,7 +562,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $unsupportedSortAttributeCode = 'baz';
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::SORT_ORDER_PARAMETER, true],
@@ -576,7 +585,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $rowsPerPage = $this->testMaxAllowedProductsPerPage + 1;
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER, true],
@@ -601,7 +610,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testAddsEmptySelectedFiltersArrayToQueryOptionsIfNoParameterIsPresent()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::SELECTED_FILTERS_PARAMETER, false],
         ]);
@@ -633,7 +642,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $decodedSelectedFilters = ['dummy-filter-key' => ['dummy filter value']];
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::SELECTED_FILTERS_PARAMETER, true],
         ]);
@@ -671,7 +680,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $stubInitialCriteria = $this->createMock(SearchCriteria::class);
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, true],
         ]);
@@ -694,7 +703,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
         $stubInitialCriteria = $this->createMock(SearchCriteria::class);
 
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, true],
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, true],
@@ -720,7 +729,7 @@ class ProductSearchApiV1GetRequestHandlerTest extends TestCase
     public function testRequestsFacets()
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('getPathWithoutWebsitePrefix')->willReturn('/api/product');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('/api/product');
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchApiV1GetRequestHandler::QUERY_PARAMETER, false],
             [ProductSearchApiV1GetRequestHandler::INITIAL_CRITERIA_PARAMETER, false],

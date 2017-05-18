@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
@@ -73,9 +74,15 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
      */
     private $searchEngineConfiguration;
 
+    /**
+     * @var UrlToWebsiteMap
+     */
+    private $urlToWebsiteMap;
+
     public function __construct(
         ProductSearchService $productSearchService,
         ContextBuilder $contextBuilder,
+        UrlToWebsiteMap $urlToWebsiteMap,
         FullTextCriteriaBuilder $fullTextCriteriaBuilder,
         SelectedFiltersParser $selectedFiltersParser,
         CriteriaParser $criteriaParser,
@@ -87,6 +94,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         $this->selectedFiltersParser = $selectedFiltersParser;
         $this->criteriaParser = $criteriaParser;
         $this->searchEngineConfiguration = $searchEngineConfiguration;
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -133,7 +141,9 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
      */
     private function getRequestPathParts(HttpRequest $request) : array
     {
-        return explode('/', trim($request->getPathWithoutWebsitePrefix(), '/'));
+        $pathWithoutWebsitePrefix = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
+
+        return explode('/', trim($pathWithoutWebsitePrefix, '/'));
     }
 
     private function createQueryOptions(HttpRequest $request) : QueryOptions
