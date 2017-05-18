@@ -42,7 +42,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         $url = 'http://www.example.com/';
 
         $this->expectException(UnknownWebsiteUrlException::class);
-        $this->expectExceptionMessage(sprintf('No website code found for url "%s"', $url));
+        $this->expectExceptionMessage(sprintf('No website found for url "%s"', $url));
 
         $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
         $websiteMap->getWebsiteCodeByUrl($url);
@@ -82,6 +82,30 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
             ['http://example.com/=foo|http://example.com/=bar', 'http://example.com/', 'bar'],
             ['http://example.com/=foo|https://example.com/=bar', 'http://example.com/', 'foo'],
             ['http://example.com/foo/=foo|http://example.com/bar/=bar', 'http://example.com/bar/baz', 'bar'],
+            ['http://example.com/aa/=foo|http://example.com/=bar', 'http://example.com/aa/baz', 'foo'],
+            ['http://example.com/aa/=foo|http://example.com/=bar', 'http://example.com/baz', 'bar'],
+            ['http://example.com/=bar|http://example.com/aa/=foo', 'http://example.com/aa/baz', 'bar'],
         ];
+    }
+
+    public function testThrowsAnExceptionIfTheWebsiteCanNotBeDetermined()
+    {
+        $url = 'http://www.example.com/';
+
+        $this->expectException(UnknownWebsiteUrlException::class);
+        $this->expectExceptionMessage(sprintf('No website found for url "%s"', $url));
+
+        $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
+        $websiteMap->getRequestPathWithoutWebsitePrefix($url);
+    }
+    
+    public function testReturnsTheRequestPathWithoutUrlPrefix()
+    {
+        $testMap = 'http://example.com/aa/=foo|http://example.com/=bar';
+        $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
+
+        $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
+        $this->assertSame('a/b/c?d=e', $websiteMap->getRequestPathWithoutWebsitePrefix('http://example.com/aa/a/b/c?d=e'));
+        $this->assertSame('foo', $websiteMap->getRequestPathWithoutWebsitePrefix('http://example.com/foo'));
     }
 }

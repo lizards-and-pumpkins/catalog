@@ -43,7 +43,7 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
      * @param string[] $map
      * @return Website[]
      */
-    private static function createWebsites(array $map) : array
+    private static function createWebsites(array $map): array
     {
         return array_reduce(array_keys($map), function (array $carry, $url) use ($map) {
             return array_merge($carry, [$url => Website::fromString($map[$url])]);
@@ -58,14 +58,14 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
     {
         $pairs = array_map([self::class, 'splitConfigRecord'], explode(self::RECORD_SEPARATOR, $configValue));
 
-        return self::flatten($pairs);
+        return array_merge(...$pairs);
     }
 
     /**
      * @param string $mapping
      * @return string[]
      */
-    private static function splitConfigRecord(string $mapping) : array
+    private static function splitConfigRecord(string $mapping): array
     {
         if (!preg_match('/^([^=]+)=(.+)/', $mapping, $matches)) {
             $message = sprintf('Unable to parse the website to code mapping record "%s"', $mapping);
@@ -75,25 +75,26 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
         return [$matches[1] => $matches[2]];
     }
 
-    /**
-     * @param array[] $array
-     * @return string[]
-     */
-    private static function flatten(array $array) : array
+    private function getWebsiteUrlPrefixAndCodeByUrl(string $url): array
     {
-        return array_reduce($array, function (array $carry, array $pair) {
-            return array_merge($carry, $pair);
-        }, []);
-    }
-
-    public function getWebsiteCodeByUrl(string $url) : Website
-    {
-        foreach ($this->urlToWebsiteMap as $urlPattern => $website) {
-            if (stripos($url, $urlPattern) === 0) {
-                return $website;
+        foreach ($this->urlToWebsiteMap as $urlPrefix => $website) {
+            if (stripos($url, $urlPrefix) === 0) {
+                return [$urlPrefix, $website];
             }
         }
 
-        throw new UnknownWebsiteUrlException(sprintf('No website code found for url "%s"', $url));
+        throw new UnknownWebsiteUrlException(sprintf('No website found for url "%s"', $url));
+    }
+
+    public function getWebsiteCodeByUrl(string $url): Website
+    {
+        list($urlPrefix, $website) = $this->getWebsiteUrlPrefixAndCodeByUrl($url);
+        return $website;
+    }
+
+    public function getRequestPathWithoutWebsitePrefix(string $url): string
+    {
+        list($urlPrefix, $website) = $this->getWebsiteUrlPrefixAndCodeByUrl($url);
+        return substr($url, strlen($urlPrefix));
     }
 }
