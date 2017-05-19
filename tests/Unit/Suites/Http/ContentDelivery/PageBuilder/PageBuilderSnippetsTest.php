@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\RecursionTooDeepOrSnippetCircleFoundException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -138,5 +139,20 @@ class PageBuilderSnippetsTest extends TestCase
         $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
         $result = $pageSnippets->buildPageContent('root');
         $this->assertSame('AAABBB', $result);
+    }
+
+    public function testThrowsExceptionIfRecursionIsTooDeepOrACircleIsFound()
+    {
+        $this->expectException(RecursionTooDeepOrSnippetCircleFoundException::class);
+        $this->expectExceptionMessage('Snippets are nested too deep or circle found.');
+        $codeToKeyMap = ['code-a' => 'key-a', 'code-b' => 'key-b', 'root' => 'root'];
+        $keyToContentMap = [
+            'key-b' => '{{snippet code-a}}',
+            'key-a' => '{{snippet code-b}}',
+            'root'  => '{{snippet code-a}}',
+        ];
+        $containers = [];
+        $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
+        $pageSnippets->buildPageContent('root');
     }
 }

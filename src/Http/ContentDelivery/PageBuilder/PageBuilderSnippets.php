@@ -6,9 +6,12 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\RecursionTooDeepOrSnippetCircleFoundException;
 
 class PageBuilderSnippets implements PageSnippets
 {
+    const MAX_SNIPPET_DEPTH = 50;
+
     private static $placeholderTemplateString = '{{snippet %s}}';
 
     /**
@@ -98,7 +101,7 @@ class PageBuilderSnippets implements PageSnippets
      */
     public function getSnippetCodes() : array
     {
-        if (!isset($this->memoizedLoadedSnippetCodes)) {
+        if (! isset($this->memoizedLoadedSnippetCodes)) {
             $this->memoizedLoadedSnippetCodes = array_keys(array_filter($this->codeToKeyMap, function ($key) {
                 return isset($this->keyToContentMap[$key]);
             }));
@@ -131,7 +134,7 @@ class PageBuilderSnippets implements PageSnippets
 
     public function getSnippetByKey(string $snippetKey) : string
     {
-        if (!array_key_exists($snippetKey, $this->keyToContentMap)) {
+        if (! array_key_exists($snippetKey, $this->keyToContentMap)) {
             throw new NonExistingSnippetException($this->formatSnippetNotAvailableErrorMessage($snippetKey));
         }
         return $this->keyToContentMap[$snippetKey];
@@ -184,8 +187,15 @@ class PageBuilderSnippets implements PageSnippets
      */
     private function replaceAsLongAsSomethingIsReplaced(string $content, array $placeholders, $snippets) : string
     {
+        $resursionCounter = 0;
         do {
             $content = str_replace($placeholders, $snippets, $content, $count);
+            $resursionCounter++;
+            if ($resursionCounter > self::MAX_SNIPPET_DEPTH) {
+                throw new RecursionTooDeepOrSnippetCircleFoundException(
+                    'Snippets are nested too deep or circle found.'
+                );
+            }
         } while ($count);
 
         return $content;
@@ -199,7 +209,7 @@ class PageBuilderSnippets implements PageSnippets
 
     public function updateSnippetByKey(string $snippetKey, string $content)
     {
-        if (!isset($this->keyToContentMap[$snippetKey])) {
+        if (! isset($this->keyToContentMap[$snippetKey])) {
             throw $this->createNonExistingSnippetException('key', $snippetKey);
         }
         $this->keyToContentMap[$snippetKey] = $content;
@@ -207,7 +217,7 @@ class PageBuilderSnippets implements PageSnippets
 
     public function updateSnippetByCode(string $snippetCode, string $content)
     {
-        if (!isset($this->codeToKeyMap[$snippetCode])) {
+        if (! isset($this->codeToKeyMap[$snippetCode])) {
             throw $this->createNonExistingSnippetException('code', $snippetCode);
         }
         $this->updateSnippetByKey($this->codeToKeyMap[$snippetCode], $content);
