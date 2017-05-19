@@ -67,7 +67,7 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
      */
     private static function splitConfigRecord(string $mapping): array
     {
-        if (!preg_match('/^([^=]+)=(.+)/', $mapping, $matches)) {
+        if (! preg_match('/^([^=]+)=(.+)/', $mapping, $matches)) {
             $message = sprintf('Unable to parse the website to code mapping record "%s"', $mapping);
             throw new InvalidWebsiteMapConfigRecordException($message);
         }

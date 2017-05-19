@@ -53,7 +53,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
 
     final protected function getResponse(HttpRequest $request): HttpResponse
     {
-        if (!$this->canProcess($request)) {
+        if (! $this->canProcess($request)) {
             throw $this->getUnableToProcessRequestException($request);
         }
 
