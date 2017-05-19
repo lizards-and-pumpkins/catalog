@@ -192,12 +192,10 @@ class PageBuilderSnippets implements PageSnippets
             $content = str_replace($placeholders, $snippets, $content, $count);
             $resursionCounter++;
             if ($resursionCounter > self::MAX_SNIPPET_DEPTH) {
-                throw new RecursionTooDeepOrSnippetLoopFoundException(
-                    sprintf(
-                        'Snippets are nested deeper than %s levels or a loop is inside snippets.',
-                        self::MAX_SNIPPET_DEPTH
-                    )
-                );
+                throw new RecursionTooDeepOrSnippetLoopFoundException(sprintf(
+                    'Snippets are nested deeper than %s levels or a loop is inside snippets.',
+                    self::MAX_SNIPPET_DEPTH
+                ));
             }
         } while ($count);
 
