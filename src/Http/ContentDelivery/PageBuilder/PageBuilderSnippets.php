@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\RecursionTooDeepOrSnippetCircleFoundException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\RecursionTooDeepOrSnippetLoopFoundException;
 
 class PageBuilderSnippets implements PageSnippets
 {
@@ -51,7 +51,7 @@ class PageBuilderSnippets implements PageSnippets
         array $codeToKeyMap,
         array $keyToContentMap,
         array $containerSnippets
-    ) : PageBuilderSnippets {
+    ): PageBuilderSnippets {
         $containerKeys = array_keys($containerSnippets);
         $containerCodeToContentMap = self::buildContainerCodeToContentMap($containerSnippets);
         $combinedCodeToKeyMap = array_merge($codeToKeyMap, array_combine($containerKeys, $containerKeys));
@@ -65,7 +65,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string[] $keyToContentMap
      * @return string[]
      */
-    private static function sortKeyToContentByCodeToKeymap(array $codeToKeyMap, array $keyToContentMap) : array
+    private static function sortKeyToContentByCodeToKeymap(array $codeToKeyMap, array $keyToContentMap): array
     {
         return array_reduce($codeToKeyMap, function (array $carry, $key) use ($keyToContentMap) {
             return isset($keyToContentMap[$key]) ?
@@ -74,7 +74,7 @@ class PageBuilderSnippets implements PageSnippets
         }, []);
     }
 
-    public function buildPageContent(string $rootSnippetCode) : string
+    public function buildPageContent(string $rootSnippetCode): string
     {
         $this->guardAgainstMultipleInvocations();
         list($rootSnippet, $childSnippets) = $this->separateRootAndChildSnippets($rootSnippetCode);
@@ -86,7 +86,7 @@ class PageBuilderSnippets implements PageSnippets
     /**
      * @return string[]
      */
-    public function getNotLoadedSnippetCodes() : array
+    public function getNotLoadedSnippetCodes(): array
     {
         return array_reduce(array_keys($this->codeToKeyMap), function (array $missingCodes, $code) {
             $key = $this->codeToKeyMap[$code];
@@ -99,7 +99,7 @@ class PageBuilderSnippets implements PageSnippets
     /**
      * @return string[]
      */
-    public function getSnippetCodes() : array
+    public function getSnippetCodes(): array
     {
         if (! isset($this->memoizedLoadedSnippetCodes)) {
             $this->memoizedLoadedSnippetCodes = array_keys(array_filter($this->codeToKeyMap, function ($key) {
@@ -113,7 +113,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string $rootSnippetCode
      * @return string[]
      */
-    private function getLoadedChildSnippetCodes(string $rootSnippetCode) : array
+    private function getLoadedChildSnippetCodes(string $rootSnippetCode): array
     {
         return array_filter($this->getSnippetCodes(), function ($code) use ($rootSnippetCode) {
             return $code !== $rootSnippetCode;
@@ -124,7 +124,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string $rootSnippetCode
      * @return string[]
      */
-    private function separateRootAndChildSnippets(string $rootSnippetCode) : array
+    private function separateRootAndChildSnippets(string $rootSnippetCode): array
     {
         $rootSnippetKey = $this->codeToKeyMap[$rootSnippetCode];
         $rootSnippet = $this->getSnippetByKey($rootSnippetKey);
@@ -132,7 +132,7 @@ class PageBuilderSnippets implements PageSnippets
         return [$rootSnippet, $childSnippets];
     }
 
-    public function getSnippetByKey(string $snippetKey) : string
+    public function getSnippetByKey(string $snippetKey): string
     {
         if (! array_key_exists($snippetKey, $this->keyToContentMap)) {
             throw new NonExistingSnippetException($this->formatSnippetNotAvailableErrorMessage($snippetKey));
@@ -140,7 +140,7 @@ class PageBuilderSnippets implements PageSnippets
         return $this->keyToContentMap[$snippetKey];
     }
 
-    private function formatSnippetNotAvailableErrorMessage(string $snippetKey) : string
+    private function formatSnippetNotAvailableErrorMessage(string $snippetKey): string
     {
         return sprintf('Snippet not available (key "%s")', $snippetKey);
     }
@@ -149,7 +149,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string[] $snippetCodes
      * @return string[]
      */
-    private function buildPlaceholdersFromCodes(array $snippetCodes) : array
+    private function buildPlaceholdersFromCodes(array $snippetCodes): array
     {
         return array_map([$this, 'buildPlaceholderFromCode'], $snippetCodes);
     }
@@ -158,7 +158,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string $code
      * @return string
      */
-    private function buildPlaceholderFromCode(string $code) : string
+    private function buildPlaceholderFromCode(string $code): string
     {
         // TODO delegate placeholder creation (and also use the delegate during import)
         /** @see \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer::getBlockPlaceholder() * */
@@ -172,7 +172,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string[] $snippets
      * @return string
      */
-    private function injectSnippetsIntoContent(string $content, array $placeholders, array $snippets) : string
+    private function injectSnippetsIntoContent(string $content, array $placeholders, array $snippets): string
     {
         return $this->removePlaceholders(
             $this->replaceAsLongAsSomethingIsReplaced($content, $placeholders, $snippets)
@@ -185,15 +185,18 @@ class PageBuilderSnippets implements PageSnippets
      * @param string[] $snippets
      * @return string
      */
-    private function replaceAsLongAsSomethingIsReplaced(string $content, array $placeholders, $snippets) : string
+    private function replaceAsLongAsSomethingIsReplaced(string $content, array $placeholders, $snippets): string
     {
         $resursionCounter = 0;
         do {
             $content = str_replace($placeholders, $snippets, $content, $count);
             $resursionCounter++;
             if ($resursionCounter > self::MAX_SNIPPET_DEPTH) {
-                throw new RecursionTooDeepOrSnippetCircleFoundException(
-                    'Snippets are nested too deep or circle found.'
+                throw new RecursionTooDeepOrSnippetLoopFoundException(
+                    sprintf(
+                        'Snippets are nested deeper than %s levels or a loop is inside snippets.',
+                        self::MAX_SNIPPET_DEPTH
+                    )
                 );
             }
         } while ($count);
@@ -201,7 +204,7 @@ class PageBuilderSnippets implements PageSnippets
         return $content;
     }
 
-    private function removePlaceholders(string $content) : string
+    private function removePlaceholders(string $content): string
     {
         $pattern = $this->buildPlaceholderFromCode('[^}]*');
         return preg_replace('/' . $pattern . '/', '', $content);
@@ -223,7 +226,7 @@ class PageBuilderSnippets implements PageSnippets
         $this->updateSnippetByKey($this->codeToKeyMap[$snippetCode], $content);
     }
 
-    public function getSnippetByCode(string $snippetCode) : string
+    public function getSnippetByCode(string $snippetCode): string
     {
         return $this->getSnippetByKey($this->codeToKeyMap[$snippetCode]);
     }
@@ -231,7 +234,7 @@ class PageBuilderSnippets implements PageSnippets
     private function createNonExistingSnippetException(
         string $specType,
         string $snippetSpec
-    ) : NonExistingSnippetException {
+    ): NonExistingSnippetException {
         $message = sprintf('The snippet %s "%s" does not exist on the current page', $specType, $snippetSpec);
         return new NonExistingSnippetException($message);
     }
@@ -245,12 +248,12 @@ class PageBuilderSnippets implements PageSnippets
         $this->pageWasBuilt = true;
     }
 
-    public function hasSnippetCode(string $snippetCode) : bool
+    public function hasSnippetCode(string $snippetCode): bool
     {
         return isset($this->codeToKeyMap[$snippetCode]) && $this->hasSnippetKey($this->codeToKeyMap[$snippetCode]);
     }
 
-    private function hasSnippetKey(string $snippetKey) : bool
+    private function hasSnippetKey(string $snippetKey): bool
     {
         return isset($this->keyToContentMap[$snippetKey]);
     }
@@ -259,7 +262,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string[] $containers
      * @return string[]
      */
-    private static function buildContainerCodeToContentMap(array $containers) : array
+    private static function buildContainerCodeToContentMap(array $containers): array
     {
         return array_reduce(array_keys($containers), function ($carry, $containerCode) use ($containers) {
             $containedSnippets = $containers[$containerCode];
@@ -271,7 +274,7 @@ class PageBuilderSnippets implements PageSnippets
      * @param string[] $containerSnippets
      * @return string
      */
-    private static function getContainerContentPlaceholders(array $containerSnippets) : string
+    private static function getContainerContentPlaceholders(array $containerSnippets): string
     {
         return array_reduce($containerSnippets, function ($carry, $snippetCode) {
             return $carry . sprintf(static::$placeholderTemplateString, $snippetCode);

@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\RecursionTooDeepOrSnippetCircleFoundException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\RecursionTooDeepOrSnippetLoopFoundException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -141,10 +141,10 @@ class PageBuilderSnippetsTest extends TestCase
         $this->assertSame('AAABBB', $result);
     }
 
-    public function testThrowsExceptionIfRecursionIsTooDeepOrACircleIsFound()
+    public function testThrowsExceptionIfRecursionIsTooDeepOrALoopIsFound()
     {
-        $this->expectException(RecursionTooDeepOrSnippetCircleFoundException::class);
-        $this->expectExceptionMessage('Snippets are nested too deep or circle found.');
+        $this->expectException(RecursionTooDeepOrSnippetLoopFoundException::class);
+        $this->expectExceptionMessage('Snippets are nested deeper than 50 levels or a loop is inside snippets.');
         $codeToKeyMap = ['code-a' => 'key-a', 'code-b' => 'key-b', 'root' => 'root'];
         $keyToContentMap = [
             'key-b' => '{{snippet code-a}}',
