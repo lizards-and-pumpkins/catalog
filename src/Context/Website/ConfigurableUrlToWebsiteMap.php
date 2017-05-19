@@ -89,24 +89,26 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
     public function getWebsiteCodeByUrl(string $url): Website
     {
         list($urlPrefix, $website) = $this->getWebsiteUrlPrefixAndCodeByUrl($url);
+
         return $website;
     }
 
     public function getRequestPathWithoutWebsitePrefix(string $url): string
     {
         list($urlPrefix, $website) = $this->getWebsiteUrlPrefixAndCodeByUrl($url);
-        $pathWithoutPrefix = substr($url, strlen($urlPrefix));
 
-        return $this->hasQueryParameter($url) ? $this->removeQueryParameter($pathWithoutPrefix) : $pathWithoutPrefix;
+        $relevantUrlParts = $this->removeQueryAndAnchor($url);
+
+        return substr($relevantUrlParts, strlen($urlPrefix));
     }
 
-    private function hasQueryParameter(string $url): bool
+    private function removeQueryAndAnchor(string $url): string
     {
-        return strrpos($url, '?') !== false;
-    }
+        $parts = parse_url($url);
 
-    private function removeQueryParameter($pathWithoutPrefix): string
-    {
-        return substr($pathWithoutPrefix, 0, strrpos($pathWithoutPrefix, '?'));
+        return (isset($parts['scheme']) ? $parts['scheme'] . '://' : '') .
+               ($parts['host'] ?? '') .
+               (isset($parts['port']) ? ':' . $parts['port'] : '') .
+               (isset($parts['path']) ? $parts['path'] : '/');
     }
 }
