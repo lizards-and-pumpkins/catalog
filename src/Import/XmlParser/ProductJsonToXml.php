@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\XmlParser;
 
@@ -21,7 +21,7 @@ class ProductJsonToXml
      */
     private $context = [];
 
-    public function toXml(string $product) : string
+    public function toXml(string $product): string
     {
         $product = json_decode($product, true);
 
@@ -97,7 +97,7 @@ class ProductJsonToXml
     }
 
     /**
-     * @param array $product
+     * @param array[] $product
      */
     private function writeAttributes(array $product)
     {
