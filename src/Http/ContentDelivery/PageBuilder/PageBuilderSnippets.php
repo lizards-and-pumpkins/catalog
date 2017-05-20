@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
-use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\RecursionTooDeepOrSnippetLoopFoundException;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\MaxSnippetNestingLevelExceededException;
 
 class PageBuilderSnippets implements PageSnippets
 {
@@ -187,12 +187,12 @@ class PageBuilderSnippets implements PageSnippets
      */
     private function replaceAsLongAsSomethingIsReplaced(string $content, array $placeholders, $snippets): string
     {
-        $resursionCounter = 0;
+        $recursionCounter = 0;
         do {
             $content = str_replace($placeholders, $snippets, $content, $count);
-            $resursionCounter++;
-            if ($resursionCounter > self::MAX_SNIPPET_DEPTH) {
-                throw new RecursionTooDeepOrSnippetLoopFoundException(sprintf(
+            $recursionCounter++;
+            if ($recursionCounter > self::MAX_SNIPPET_DEPTH) {
+                throw new MaxSnippetNestingLevelExceededException(sprintf(
                     'Snippets are nested deeper than %s levels or a loop is inside snippets.',
                     self::MAX_SNIPPET_DEPTH
                 ));
