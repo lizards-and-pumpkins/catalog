@@ -75,6 +75,10 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
         return [$matches[1] => $matches[2]];
     }
 
+    /**
+     * @param string $url
+     * @return string[]
+     */
     private function getWebsiteUrlPrefixAndCodeByUrl(string $url): array
     {
         foreach ($this->urlToWebsiteMap as $urlPrefix => $website) {
