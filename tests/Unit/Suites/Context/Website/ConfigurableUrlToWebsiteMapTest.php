@@ -37,7 +37,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $result);
     }
 
-    public function testExceptionIsThrownIfGivenUrlMatchesNoneOfWebsites()
+    public function testThrowsExceptionIfGivenUrlMatchesNoneOfWebsites()
     {
         $url = 'http://www.example.com/';
 
@@ -74,7 +74,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
     /**
      * @return array[]
      */
-    public function websiteMapProvider() : array
+    public function websiteMapProvider(): array
     {
         return [
             ['http://example.com/=foo|https://127.0.0.1=bar', 'http://example.com/', 'foo'],
@@ -88,17 +88,6 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         ];
     }
 
-    public function testThrowsAnExceptionIfTheWebsiteCanNotBeDetermined()
-    {
-        $url = 'http://www.example.com/';
-
-        $this->expectException(UnknownWebsiteUrlException::class);
-        $this->expectExceptionMessage(sprintf('No website found for url "%s"', $url));
-
-        $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
-        $websiteMap->getRequestPathWithoutWebsitePrefix($url);
-    }
-    
     public function testReturnsTheRequestPathWithoutUrlPrefix()
     {
         $testMap = 'http://example.com/aa/=foo|http://example.com/=bar';
