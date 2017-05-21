@@ -109,7 +109,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         $this->assertSame('foo', $websiteMap->getRequestPathWithoutWebsitePrefix('http://example.com/foo'));
     }
 
-    public function testRturnsTheRequestPathWithoutUrlPrefixWithoutQueryArguments()
+    public function testReturnsTheRequestPathWithoutUrlPrefixWithoutQueryArguments()
     {
         $testMap = 'http://example.com/aa/=foo|http://example.com/=bar';
         $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
