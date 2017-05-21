@@ -35,6 +35,7 @@ class ProductRelationsFactory implements FactoryWithCallback
     {
         return new ProductRelationsApiV1GetRequestHandler(
             $this->getMasterFactory()->createProductRelationsService(),
+            $this->getMasterFactory()->createUrlToWebsiteMap(),
             $this->getMasterFactory()->createContextBuilder()
         );
     }

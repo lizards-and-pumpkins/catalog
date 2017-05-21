@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
@@ -72,11 +73,17 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $availableSortBy;
 
+    /**
+     * @var UrlToWebsiteMap
+     */
+    private $urlToWebsiteMap;
+
     public function __construct(
         Context $context,
         DataPoolReader $dataPoolReader,
         SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         FacetFiltersToIncludeInResult $facetFilterRequest,
+        UrlToWebsiteMap $urlToWebsiteMap,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         SelectProductListingRobotsMetaTagContent $selectProductListingRobotsMetaTagContent,
         ProductListingPageRequest $productListingPageRequest,
@@ -94,6 +101,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->productSearchService = $productSearchService;
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     /**
@@ -123,8 +131,9 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
         
         $metaInfo = $this->getPageMetaInfoSnippet($request);
+        $requestUrlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $keyGeneratorParams = [
-            PageMetaInfoSnippetContent::URL_KEY => ltrim($request->getPathWithoutWebsitePrefix(), '/'),
+            PageMetaInfoSnippetContent::URL_KEY => ltrim($requestUrlKey, '/'),
             'robots' => $this->selectProductListingRobotsMetaTagContent->getRobotsMetaTagContentForRequest($request),
         ];
 
@@ -225,7 +234,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     private function getMetaInfoSnippetKey(HttpRequest $request) : string
     {
-        $urlKey = $request->getPathWithoutWebsitePrefix();
+        $urlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext(
             $this->context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]

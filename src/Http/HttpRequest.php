@@ -80,6 +80,10 @@ abstract class HttpRequest
         return $this->url;
     }
 
+    /**
+     * @deprecated Use UrlToWebsiteMap::getRequestPathWithoutWebsitePrefix() instead.
+     * @codeCoverageIgnore
+     */
     public function getPathWithoutWebsitePrefix() : string
     {
         return $this->getUrl()->getPathWithoutWebsitePrefix();

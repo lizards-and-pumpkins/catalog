@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use PHPUnit\Framework\TestCase;
@@ -29,17 +30,23 @@ class ApiRouterTest extends TestCase
      */
     private $stubHttpRequest;
 
+    /**
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlToWebsiteMap;
+
     protected function setUp()
     {
         $this->stubApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
-        $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerLocator);
+        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
+        $this->apiRouter = new ApiRouter($this->stubApiRequestHandlerLocator, $this->stubUrlToWebsiteMap);
 
         $this->stubHttpRequest = $this->createMock(HttpRequest::class);
     }
 
     public function testNullIsReturnedIfUrlIsNotLedByApiPrefix()
     {
-        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('foo/bar');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('foo/bar');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -49,7 +56,7 @@ class ApiRouterTest extends TestCase
     {
         $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willReturn('application/json');
-        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api/foo');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -59,7 +66,7 @@ class ApiRouterTest extends TestCase
     {
         $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(false);
         $this->stubHttpRequest->method('getHeader')->with('Accept')->willThrowException(new HeaderNotPresentException);
-        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('api');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -70,7 +77,7 @@ class ApiRouterTest extends TestCase
         $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')
             ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
-        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('api');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertNull($result);
@@ -85,7 +92,7 @@ class ApiRouterTest extends TestCase
             ->method('getApiRequestHandler')
             ->willReturn($stubApiRequestHandler);
 
-        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api/foo');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('api/foo');
         $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')
             ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
@@ -106,7 +113,7 @@ class ApiRouterTest extends TestCase
         $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')
             ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
-        $this->stubHttpRequest->method('getPathWithoutWebsitePrefix')->willReturn('api/foo');
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
         $this->assertInstanceOf(ApiRequestHandler::class, $result);

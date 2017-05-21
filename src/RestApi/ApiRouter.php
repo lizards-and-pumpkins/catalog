@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
 
@@ -16,9 +17,15 @@ class ApiRouter implements HttpRouter
      */
     private $requestHandlerLocator;
 
-    public function __construct(ApiRequestHandlerLocator $requestHandlerLocator)
+    /**
+     * @var UrlToWebsiteMap
+     */
+    private $urlToWebsiteMap;
+
+    public function __construct(ApiRequestHandlerLocator $requestHandlerLocator, UrlToWebsiteMap $urlToWebsiteMap)
     {
         $this->requestHandlerLocator = $requestHandlerLocator;
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     /**
@@ -27,7 +34,7 @@ class ApiRouter implements HttpRouter
      */
     public function route(HttpRequest $request)
     {
-        $urlPath = trim($request->getPathWithoutWebsitePrefix(), '/');
+        $urlPath = trim($this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl()), '/');
         $urlToken = explode('/', $urlPath);
 
         if (self::API_URL_PREFIX !== array_shift($urlToken)) {

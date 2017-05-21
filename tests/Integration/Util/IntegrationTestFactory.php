@@ -11,6 +11,8 @@ use LizardsAndPumpkins\Context\Country\IntegrationTestContextCountry;
 use LizardsAndPumpkins\Context\IntegrationTestContextSource;
 use LizardsAndPumpkins\Context\Locale\IntegrationTestContextLocale;
 use LizardsAndPumpkins\Context\Website\IntegrationTestContextWebsite;
+use LizardsAndPumpkins\Context\Website\IntegrationTestUrlToWebsiteMap;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
@@ -443,7 +445,12 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
     {
         return new IntegrationTestContextWebsite();
     }
-
+    
+    public function createUrlToWebsiteMap() : UrlToWebsiteMap
+    {
+        return new IntegrationTestUrlToWebsiteMap();
+    }
+    
     public function getMaxAllowedProductsPerSearchResultsPage() : int
     {
         return 120;
