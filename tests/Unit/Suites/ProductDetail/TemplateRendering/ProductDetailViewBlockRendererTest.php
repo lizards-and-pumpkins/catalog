@@ -23,13 +23,15 @@ class ProductDetailViewBlockRendererTest extends AbstractBlockRendererTest
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
-        BaseUrlBuilder $stubBaseUrlBuilder
+        BaseUrlBuilder $stubBaseUrlBuilder,
+        BaseUrlBuilder $stubAssetsBaseUrlBuilder
     ) : BlockRenderer {
         return new ProductDetailViewBlockRenderer(
             $stubThemeLocator,
             $stubBlockStructure,
             $stubTranslatorRegistry,
-            $stubBaseUrlBuilder
+            $stubBaseUrlBuilder,
+            $stubAssetsBaseUrlBuilder
         );
     }
 }

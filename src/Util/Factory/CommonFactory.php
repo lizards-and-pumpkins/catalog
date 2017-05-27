@@ -377,7 +377,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createBaseUrlBuilder()
+            $this->getMasterFactory()->createBaseUrlBuilder(),
+            $this->getMasterFactory()->createAssetsBaseUrlBuilder()
         );
     }
 
@@ -480,7 +481,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createBaseUrlBuilder()
+            $this->getMasterFactory()->createBaseUrlBuilder(),
+            $this->getMasterFactory()->createAssetsBaseUrlBuilder()
         );
     }
 
@@ -1126,6 +1128,11 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new WebsiteBaseUrlBuilder($this->getMasterFactory()->createConfigReader());
     }
 
+    public function createAssetsBaseUrlBuilder() : BaseUrlBuilder
+    {
+        return new WebsiteBaseUrlBuilder($this->getMasterFactory()->createConfigReader());
+    }
+
     public function getFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry
     {
         if (null === $this->memoizedFacetFieldTransformationRegistry) {
@@ -1236,7 +1243,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->getThemeLocator(),
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createBaseUrlBuilder()
+            $this->getMasterFactory()->createBaseUrlBuilder(),
+            $this->getMasterFactory()->createAssetsBaseUrlBuilder()
         );
     }
 
