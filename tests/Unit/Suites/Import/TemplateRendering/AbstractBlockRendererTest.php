@@ -46,6 +46,11 @@ abstract class AbstractBlockRendererTest extends TestCase
     private $mockBaseUrlBuilder;
 
     /**
+     * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockAssetsBaseUrlBuilder;
+
+    /**
      * @return Layout|\PHPUnit_Framework_MockObject_MockObject
      */
     final protected function getStubLayout()
@@ -80,6 +85,14 @@ abstract class AbstractBlockRendererTest extends TestCase
     final protected function getMockBaseUrlBuilder()
     {
         return $this->mockBaseUrlBuilder;
+    }
+
+    /**
+     * @return BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    final protected function getMockAssetsBaseUrlBuilder()
+    {
+        return $this->mockAssetsBaseUrlBuilder;
     }
 
     /**
@@ -133,7 +146,8 @@ abstract class AbstractBlockRendererTest extends TestCase
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
-        BaseUrlBuilder $baseUrlBuilder
+        BaseUrlBuilder $baseUrlBuilder,
+        BaseUrlBuilder $assetsBaseUrlBuilder
     ) : BlockRenderer;
 
     protected function setUp()
@@ -147,6 +161,7 @@ abstract class AbstractBlockRendererTest extends TestCase
         $this->stubTranslator = $this->createMock(Translator::class);
         
         $this->mockBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
+        $this->mockAssetsBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
 
         /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
         $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
@@ -156,7 +171,8 @@ abstract class AbstractBlockRendererTest extends TestCase
             $this->stubThemeLocator,
             $this->stubBlockStructure,
             $stubTranslatorRegistry,
-            $this->mockBaseUrlBuilder
+            $this->mockBaseUrlBuilder,
+            $this->mockAssetsBaseUrlBuilder
         );
     }
 

@@ -117,10 +117,17 @@ class BlockTest extends TestCase
 
     public function testItDelegatesFetchingTheBaseUrlToTheBlockRenderer()
     {
-        $dummyBaseUrl = new HttpBaseUrl('http://example.com/');
-        $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($dummyBaseUrl);
+        $baseUrl = new HttpBaseUrl('http://example.com/');
+        $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         
-        $this->assertSame($dummyBaseUrl, $this->block->getBaseUrl());
+        $this->assertSame($baseUrl, $this->block->getBaseUrl());
+    }
+
+    public function testDelegatesFetchingTheAssetsBaseUrlToTheBlockRenderer()
+    {
+        $assetsBaseUrl = new HttpBaseUrl('http://example.com/');
+        $this->mockBlockRenderer->expects($this->once())->method('getAssetsBaseUrl')->willReturn($assetsBaseUrl);
+        $this->assertSame($assetsBaseUrl, $this->block->getAssetsBaseUrl());
     }
 
     public function testFetchingWebsiteCodeIsDelegatedToBlockRenderer()

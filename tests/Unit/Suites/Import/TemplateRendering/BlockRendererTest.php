@@ -24,9 +24,16 @@ class BlockRendererTest extends AbstractBlockRendererTest
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
-        BaseUrlBuilder $baseUrlBuilder
-    ) : BlockRenderer {
-        return new StubBlockRenderer($stubThemeLocator, $stubBlockStructure, $stubTranslatorRegistry, $baseUrlBuilder);
+        BaseUrlBuilder $baseUrlBuilder,
+        BaseUrlBuilder $stubAssetsBaseUrlBuilder
+    ): BlockRenderer {
+        return new StubBlockRenderer(
+            $stubThemeLocator,
+            $stubBlockStructure,
+            $stubTranslatorRegistry,
+            $baseUrlBuilder,
+            $stubAssetsBaseUrlBuilder
+        );
     }
 
     public function testExceptionIsThrownIfNoRootBlockIsDefined()
@@ -160,7 +167,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
-        
+
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
@@ -205,10 +212,10 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
         $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
-        
+
         $this->getBlockRenderer()->getBaseUrl();
     }
-    
+
     public function testWebsiteCodeIsReturned()
     {
         $testWebsiteCode = 'foo';
@@ -224,5 +231,18 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render($dataObject, $stubContext);
 
         $this->assertSame($testWebsiteCode, $this->getBlockRenderer()->getWebsiteCode());
+    }
+
+    public function testDelegatesGettingTheAssetBaseUrlToTheAssetsBaseUrlBuilder()
+    {
+        $this->getMockAssetsBaseUrlBuilder()->expects($this->once())->method('create')->with($this->getStubContext());
+
+        $testDir = $this->getUniqueTempDir();
+        $this->createFixtureDirectory($testDir);
+        $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
+        $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
+        $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
+
+        $this->getBlockRenderer()->getAssetsBaseUrl();
     }
 }

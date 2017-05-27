@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\IntegrationTestFixedBaseUrlBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
@@ -285,7 +286,12 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return new LocalFilesystemStorageWriter();
     }
 
-    public function createBaseUrlBuilder() : IntegrationTestFixedBaseUrlBuilder
+    public function createBaseUrlBuilder() : BaseUrlBuilder
+    {
+        return new IntegrationTestFixedBaseUrlBuilder();
+    }
+
+    public function createAssetsBaseUrlBuilder() : BaseUrlBuilder
     {
         return new IntegrationTestFixedBaseUrlBuilder();
     }

@@ -44,17 +44,22 @@ class Block
         $this->dataObject = $dataObject;
     }
 
-    public function getBlockName() : string
+    public function getBlockName(): string
     {
         return $this->blockName;
     }
 
-    public function getBaseUrl() : BaseUrl
+    public function getBaseUrl(): BaseUrl
     {
         return $this->blockRenderer->getBaseUrl();
     }
 
-    public function getWebsiteCode() : string
+    public function getAssetsBaseUrl(): BaseUrl
+    {
+        return $this->blockRenderer->getAssetsBaseUrl();
+    }
+
+    public function getWebsiteCode(): string
     {
         return $this->blockRenderer->getWebsiteCode();
     }
@@ -67,16 +72,16 @@ class Block
         return $this->dataObject;
     }
 
-    final public function getLayoutHandle() : string
+    final public function getLayoutHandle(): string
     {
         return $this->blockRenderer->getLayoutHandle();
     }
 
-    final public function render() : string
+    final public function render(): string
     {
         $templatePath = realpath($this->template);
 
-        if (false === $templatePath || !is_readable($templatePath) || is_dir($templatePath)) {
+        if (false === $templatePath || ! is_readable($templatePath) || is_dir($templatePath)) {
             throw new TemplateFileNotReadableException(sprintf('Template "%s" is not readable.', $this->template));
         }
 
@@ -87,12 +92,12 @@ class Block
         return ob_get_clean();
     }
 
-    final public function getChildOutput(string $childName) : string
+    final public function getChildOutput(string $childName): string
     {
         return $this->blockRenderer->getChildBlockOutput($this->blockName, $childName);
     }
 
-    public function __(string $string) : string
+    public function __(string $string): string
     {
         return $this->blockRenderer->translate($string);
     }

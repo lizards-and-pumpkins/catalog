@@ -164,6 +164,11 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return $this->createMock(BaseUrlBuilder::class);
     }
 
+    public function createAssetsBaseUrlBuilder() : BaseUrlBuilder
+    {
+        return $this->createMock(BaseUrlBuilder::class);
+    }
+
     public function createImageProcessingStrategySequence() : ImageProcessingStrategy
     {
         return $this->createMock(ImageProcessingStrategy::class);

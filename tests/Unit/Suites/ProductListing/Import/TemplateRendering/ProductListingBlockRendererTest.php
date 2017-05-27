@@ -21,13 +21,15 @@ class ProductListingBlockRendererTest extends AbstractBlockRendererTest
         ThemeLocator $stubThemeLocator,
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
-        BaseUrlBuilder $baseUrlBuilder
+        BaseUrlBuilder $baseUrlBuilder,
+        BaseUrlBuilder $assetsBaseUrlBuilder
     ) : BlockRenderer {
         return new ProductListingBlockRenderer(
             $stubThemeLocator,
             $stubBlockStructure,
             $stubTranslatorRegistry,
-            $baseUrlBuilder
+            $baseUrlBuilder, 
+            $assetsBaseUrlBuilder
         );
     }
 }
