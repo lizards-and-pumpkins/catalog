@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http;
 
-class HttpGetRequest extends HttpRequest
+class HttpDeleteRequest extends HttpRequest
 {
     final public function getMethod(): string
     {
-        return self::METHOD_GET;
+        return self::METHOD_DELETE;
     }
 }

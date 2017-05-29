@@ -36,7 +36,7 @@ class HttpGetRequestTest extends AbstractHttpRequestTest
     {
         $this->assertInstanceOf(HttpGetRequest::class, $this->request);
     }
-    
+
     public function testGetRequestIsReturnedForHeadRequests()
     {
         /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */

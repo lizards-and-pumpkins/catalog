@@ -51,11 +51,11 @@ class HttpUrl
         $this->query = $query;
     }
 
-    public static function fromString(string $urlString) : HttpUrl
+    public static function fromString(string $urlString): HttpUrl
     {
         $components = parse_url($urlString);
 
-        if (false === $components || !isset($components['host'])) {
+        if (false === $components || ! isset($components['host'])) {
             throw new InvalidUrlStringException(sprintf('Host name can not be parsed from "%s" URL.', $urlString));
         }
 
@@ -73,7 +73,7 @@ class HttpUrl
         return new self($schema, $host, $port, $path, $query);
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         $schema = $this->schema . ($this->schema !== '' ? ':' : '');
         $port = '' === $this->port ? '' : ':' . $this->port;
@@ -88,13 +88,14 @@ class HttpUrl
      * @deprecated Use UrlToWebsiteMap::getRequestPathWithoutWebsitePrefix() instead.
      * @codeCoverageIgnore
      */
-    public function getPathWithoutWebsitePrefix() : string
+    public function getPathWithoutWebsitePrefix(): string
     {
         $websitePrefix = preg_replace('#/[^/]*$#', '', $_SERVER['SCRIPT_NAME']);
+
         return ltrim(preg_replace('/^' . preg_quote($websitePrefix, '/') . '/', '', $this->path), '/');
     }
-    
-    public function hasQueryParameter(string $queryParameter) : bool
+
+    public function hasQueryParameter(string $queryParameter): bool
     {
         return isset($this->query[$queryParameter]);
     }
@@ -110,12 +111,12 @@ class HttpUrl
         return $this->query[$parameterName];
     }
 
-    public function hasQueryParameters() : bool
+    public function hasQueryParameters(): bool
     {
         return count($this->query) > 0;
     }
 
-    public function getHost() : string
+    public function getHost(): string
     {
         return $this->host;
     }

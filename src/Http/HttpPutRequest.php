@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Http;
 
 class HttpPutRequest extends HttpRequest
 {
-    final public function getMethod() : string
+    final public function getMethod(): string
     {
         return self::METHOD_PUT;
     }

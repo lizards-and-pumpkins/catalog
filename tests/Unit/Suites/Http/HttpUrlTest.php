@@ -25,7 +25,7 @@ class HttpUrlTest extends TestCase
     /**
      * @return array[]
      */
-    public function urlStringProvider() : array
+    public function urlStringProvider(): array
     {
         return [
             ['http://example.com'],
@@ -60,7 +60,7 @@ class HttpUrlTest extends TestCase
         $this->expectException(InvalidUrlStringException::class);
         HttpUrl::fromString('this is not a valid url');
     }
-    
+
     public function testReturnsFalseIfQueryParameterIsNotSet()
     {
         $url = HttpUrl::fromString('http://example.com');
@@ -109,14 +109,14 @@ class HttpUrlTest extends TestCase
     /**
      * @return array[]
      */
-    public function requestHostDataProvider() : array
+    public function requestHostDataProvider(): array
     {
         return [
             'top'      => ['example.com', 'example.com'],
             'sub'      => ['www.example.com', 'www.example.com'],
             'special'  => ['über.com', 'über.com'],
             'punycode' => ['xn--ber-goa.com', 'über.com'],
-            'ip4'      => ['127.0.0.1', '127.0.0.1']
+            'ip4'      => ['127.0.0.1', '127.0.0.1'],
         ];
     }
 }

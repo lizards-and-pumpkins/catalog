@@ -78,12 +78,12 @@ class HttpHeadersTest extends TestCase
     /**
      * @return array[]
      */
-    public function getMalformedHeadersSources() : array
+    public function getMalformedHeadersSources(): array
     {
         return [
             [['foo' => 1]],
             [['bar']],
-            [[1 => []]]
+            [[1 => []]],
         ];
     }
 
@@ -96,14 +96,14 @@ class HttpHeadersTest extends TestCase
     {
         $dummyValue = 'bar';
         $_SERVER['HTTP_FOO'] = $dummyValue;
-        
+
         $result = HttpHeaders::fromGlobalRequestHeaders();
 
         unset($_SERVER['HTTP_FOO']);
 
         $this->assertSame(['Foo' => $dummyValue], $result->getAll());
     }
-    
+
     public function testOnlyHttpGlobalsAreUsedForCreatingHeaders()
     {
         $_SERVER['FOO_BAR'] = 'baz';
@@ -114,7 +114,7 @@ class HttpHeadersTest extends TestCase
 
         $this->assertSame([], $result->getAll());
     }
-    
+
     public function testHeadersCreatedFromGlobalsAreNormalized()
     {
         $_SERVER['HTTP_FOO_BAR'] = 'bar';
@@ -124,6 +124,5 @@ class HttpHeadersTest extends TestCase
         unset($_SERVER['HTTP_FOO_BAR']);
 
         $this->assertTrue($result->has('Foo-Bar'));
-
     }
 }

@@ -15,8 +15,8 @@ class HttpRequestBody
     {
         $this->requestBody = $requestBody;
     }
-    
-    public function toString() : string
+
+    public function toString(): string
     {
         return $this->requestBody;
     }
