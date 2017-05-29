@@ -17,6 +17,7 @@ abstract class HttpRequest
     const METHOD_HEAD = 'HEAD';
     const METHOD_OPTIONS = 'OPTIONS';
     const METHOD_TRACE = 'TRACE';
+    const METHOD_CONNECT = 'CONNECT';
 
     /**
      * @var HttpUrl
@@ -76,6 +77,8 @@ abstract class HttpRequest
                 return new HttpOptionsRequest($url, $headers, $body);
             case self::METHOD_TRACE:
                 return new HttpTraceRequest($url, $headers, $body);
+            case self::METHOD_CONNECT:
+                return new HttpConnectRequest($url, $headers, $body);
             default:
                 throw new UnsupportedRequestMethodException(
                     sprintf('Unsupported request method: "%s"', $requestMethod)
