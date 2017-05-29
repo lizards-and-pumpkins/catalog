@@ -68,6 +68,8 @@ abstract class HttpRequest
                 return new HttpPostRequest($url, $headers, $body);
             case self::METHOD_PUT:
                 return new HttpPutRequest($url, $headers, $body);
+            case self::METHOD_DELETE:
+                return new HttpDeleteRequest($url, $headers, $body);
             default:
                 throw new UnsupportedRequestMethodException(
                     sprintf('Unsupported request method: "%s"', $requestMethod)
