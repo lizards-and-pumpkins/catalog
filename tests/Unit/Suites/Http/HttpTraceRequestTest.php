@@ -7,34 +7,34 @@ namespace LizardsAndPumpkins\Http;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\Http\HttpOptionsRequest
+ * @covers \LizardsAndPumpkins\Http\HttpTraceRequest
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpRequest
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
-class HttpOptionsRequestTest extends TestCase
+class HttpTraceRequestTest extends TestCase
 {
-    public function testReturnsHttpOptionsRequestInstance()
+    public function testReturnsHttpTraceRequestInstance()
     {
         $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_OPTIONS,
+            HttpRequest::METHOD_TRACE,
             HttpUrl::fromString('https://example.com/'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
-        $this->assertInstanceOf(HttpOptionsRequest::class, $request);
+        $this->assertInstanceOf(HttpTraceRequest::class, $request);
         $this->assertInstanceOf(HttpRequest::class, $request);
     }
 
-    public function testReturnsOptionsMethodCode()
+    public function testReturnsTraceMethodCode()
     {
         $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_OPTIONS,
+            HttpRequest::METHOD_TRACE,
             HttpUrl::fromString('https://example.com/'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
-        $this->assertSame(HttpRequest::METHOD_OPTIONS, $request->getMethod());
+        $this->assertSame(HttpRequest::METHOD_TRACE, $request->getMethod());
     }
 }
