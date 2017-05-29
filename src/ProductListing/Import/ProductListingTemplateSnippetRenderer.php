@@ -50,6 +50,10 @@ class ProductListingTemplateSnippetRenderer implements SnippetRenderer
         return $this->projectDataForAllContexts($dataToRender);
     }
 
+    /**
+     * @param TemplateProjectionData $dataToRender
+     * @return Snippet[]
+     */
     private function projectDataForAllContexts(TemplateProjectionData $dataToRender): array
     {
         return array_map(function (Context $context) use ($dataToRender) {
