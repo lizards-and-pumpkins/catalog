@@ -6,6 +6,13 @@ namespace LizardsAndPumpkins\Http;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \LizardsAndPumpkins\Http\HttpDeleteRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ */
 class HttpDeleteRequestTest extends TestCase
 {
     public function testReturnsAHttpDeleteRequestInstance()
