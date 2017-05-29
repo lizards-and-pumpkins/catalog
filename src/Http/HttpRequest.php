@@ -41,7 +41,7 @@ abstract class HttpRequest
         $this->body = $body;
     }
 
-    public static function fromGlobalState(string $requestBody = '') : HttpRequest
+    public static function fromGlobalState(string $requestBody = ''): HttpRequest
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
@@ -62,7 +62,7 @@ abstract class HttpRequest
         HttpUrl $url,
         HttpHeaders $headers,
         HttpRequestBody $body
-    ) : HttpRequest {
+    ): HttpRequest {
         switch (strtoupper($requestMethod)) {
             case self::METHOD_GET:
             case self::METHOD_HEAD:
@@ -86,7 +86,7 @@ abstract class HttpRequest
         }
     }
 
-    public function getUrl() : HttpUrl
+    public function getUrl(): HttpUrl
     {
         return $this->url;
     }
@@ -95,27 +95,27 @@ abstract class HttpRequest
      * @deprecated Use UrlToWebsiteMap::getRequestPathWithoutWebsitePrefix() instead.
      * @codeCoverageIgnore
      */
-    public function getPathWithoutWebsitePrefix() : string
+    public function getPathWithoutWebsitePrefix(): string
     {
         return $this->getUrl()->getPathWithoutWebsitePrefix();
     }
 
-    public function hasHeader(string $headerName) : bool
+    public function hasHeader(string $headerName): bool
     {
         return $this->headers->has($headerName);
     }
 
-    public function getHeader(string $headerName) : string
+    public function getHeader(string $headerName): string
     {
         return $this->headers->get($headerName);
     }
 
-    public function getRawBody() : string
+    public function getRawBody(): string
     {
         return $this->body->toString();
     }
 
-    abstract public function getMethod() : string;
+    abstract public function getMethod(): string;
 
     public function hasQueryParameter(string $parameterName)
     {
@@ -137,7 +137,7 @@ abstract class HttpRequest
         return $this->url->getQueryParameter($parameterName);
     }
 
-    public function hasQueryParameters() : bool
+    public function hasQueryParameters(): bool
     {
         return $this->url->hasQueryParameters();
     }
@@ -145,26 +145,26 @@ abstract class HttpRequest
     /**
      * @return string[]
      */
-    public function getCookies() : array
+    public function getCookies(): array
     {
         return $_COOKIE;
     }
 
-    public function hasCookie(string $cookieName) : bool
+    public function hasCookie(string $cookieName): bool
     {
         return isset($_COOKIE[$cookieName]);
     }
 
-    public function getCookieValue(string $cookieName) : string
+    public function getCookieValue(string $cookieName): string
     {
-        if (!$this->hasCookie($cookieName)) {
+        if (! $this->hasCookie($cookieName)) {
             throw new CookieNotSetException(sprintf('Cookie with "%s" name is not set.', $cookieName));
         }
 
         return $_COOKIE[$cookieName];
     }
 
-    public function getHost() : string
+    public function getHost(): string
     {
         return $this->url->getHost();
     }
