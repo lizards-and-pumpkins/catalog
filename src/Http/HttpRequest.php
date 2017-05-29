@@ -15,6 +15,7 @@ abstract class HttpRequest
     const METHOD_PUT = 'PUT';
     const METHOD_DELETE = 'DELETE';
     const METHOD_HEAD = 'HEAD';
+    const METHOD_OPTIONS = 'OPTIONS';
 
     /**
      * @var HttpUrl
@@ -70,6 +71,8 @@ abstract class HttpRequest
                 return new HttpPutRequest($url, $headers, $body);
             case self::METHOD_DELETE:
                 return new HttpDeleteRequest($url, $headers, $body);
+            case self::METHOD_OPTIONS:
+                return new HttpOptionsRequest($url, $headers, $body);
             default:
                 throw new UnsupportedRequestMethodException(
                     sprintf('Unsupported request method: "%s"', $requestMethod)
