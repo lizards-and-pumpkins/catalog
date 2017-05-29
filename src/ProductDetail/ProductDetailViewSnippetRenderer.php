@@ -64,7 +64,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     public function render(ProductView $productView) : array
     {
         $contentSnippets = [
-            $this->createdContentSnippet($productView),
+            $this->createContentSnippet($productView),
             $this->createProductTitleSnippet($productView),
             $this->createProductDetailPageMetaDescriptionSnippet($productView),
         ];
@@ -86,7 +86,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         }, $this->getAllProductUrlKeys($productView));
     }
 
-    private function createdContentSnippet(ProductView $productView) : Snippet
+    private function createContentSnippet(ProductView $productView) : Snippet
     {
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
