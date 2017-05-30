@@ -45,14 +45,12 @@ class TemplateSnippetRenderer implements SnippetRenderer
     public function render(TemplateProjectionData $dataToRender): array
     {
         return array_map(function (Context $context) use ($dataToRender) {
-            return $this->renderProductListingPageSnippetForContext($dataToRender, $context);
+            return $this->renderTemplateSnippetForContext($dataToRender, $context);
         }, $this->contextSource->getAllAvailableContextsWithVersionApplied($dataToRender->getDataVersion()));
     }
 
-    private function renderProductListingPageSnippetForContext(
-        TemplateProjectionData $dataToRender,
-        Context $context
-    ): Snippet {
+    private function renderTemplateSnippetForContext(TemplateProjectionData $dataToRender, Context $context): Snippet
+    {
         $content = $this->blockRenderer->render($dataToRender, $context);
         $key = $this->snippetKeyGenerator->getKeyForContext($context, []);
 
