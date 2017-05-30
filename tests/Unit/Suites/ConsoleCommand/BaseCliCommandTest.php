@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 use League\CLImate\Argument\Manager as ArgumentManager;
 use League\CLImate\CLImate;
 use League\CLImate\Util\Output as CliOutput;
-use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\ConsoleCommand\TestDouble\StubCliCommand;
 use PHPUnit\Framework\TestCase;
 
