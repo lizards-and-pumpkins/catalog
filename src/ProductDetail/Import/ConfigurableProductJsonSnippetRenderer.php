@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
@@ -34,14 +35,20 @@ class ConfigurableProductJsonSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param ProductView $product
+     * @param ProductView $productView
      * @return Snippet[]
      */
-    public function render(ProductView $product) : array
+    public function render($productView) : array
     {
+        if (! $productView instanceof ProductView) {
+            throw new InvalidDataObjectTypeException(
+                sprintf('Data object must be ProductView, got %s.', typeof($productView))
+            );
+        }
+
         return [
-            $this->createVariationAttributesJsonSnippet($product),
-            $this->createAssociatedProductsJsonSnippet($product)
+            $this->createVariationAttributesJsonSnippet($productView),
+            $this->createAssociatedProductsJsonSnippet($productView)
         ];
     }
 

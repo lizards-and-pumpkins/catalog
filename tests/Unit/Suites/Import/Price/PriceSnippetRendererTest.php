@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
@@ -66,7 +67,7 @@ class PriceSnippetRendererTest extends TestCase
     /**
      * @return ProductView|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductView() : ProductView
+    private function createStubProductView(): ProductView
     {
         $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('getContext')->willReturn($this->createMock(Context::class));
@@ -77,7 +78,20 @@ class PriceSnippetRendererTest extends TestCase
         return $stubProductView;
     }
 
-    protected function setUp()
+    /**
+     * @param Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct
+     */
+    private function stubContextWebsiteAndCountry($stubProduct)
+    {
+        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        $stubContext = $stubProduct->getContext();
+        $stubContext->method('getValue')->willReturnMap([
+            [Website::CONTEXT_CODE, 'test website'],
+            [Country::CONTEXT_CODE, 'XX'],
+        ]);
+    }
+
+    final protected function setUp()
     {
         $stubTaxService = $this->createMock(TaxService::class);
         $stubTaxService->method('applyTo')->willReturnArgument(0);
@@ -87,9 +101,9 @@ class PriceSnippetRendererTest extends TestCase
         $this->stubTaxableCountries = $this->createMock(TaxableCountries::class);
         $this->stubTaxableCountries->method('getIterator')->willReturn(new \ArrayIterator($this->testCountries));
         $this->stubTaxableCountries->method('getCountries')->willReturn($this->testCountries);
-        
+
         $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
-        
+
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
         $this->stubContextBuilder->method('expandContext')->willReturn($this->createMock(Context::class));
 
@@ -104,18 +118,26 @@ class PriceSnippetRendererTest extends TestCase
         );
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testIsSnippetRenderer()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testItReturnsSnippets()
+    public function testReturnsSnippets()
     {
         $result = $this->renderer->render($this->createStubProductView());
         $this->assertContainsOnly(Snippet::class, $result);
     }
 
-    public function testEmptyArrayIsReturnedIfProductDoesNotHaveARequiredAttribute()
+    public function testThrowsExceptionIfDataObjectIsNotProductView()
+    {
+        $this->expectException(InvalidDataObjectTypeException::class);
+        $this->expectExceptionMessage('Data object must be ProductView, got string.');
+
+        $this->renderer->render('foo');
+    }
+
+    public function testReturnsEmptyArrayIfProductDoesNotHaveARequiredAttribute()
     {
         $stubProduct = $this->createStubProductView();
         $stubProduct->method('hasAttribute')->with($this->testPriceAttributeCode)->willReturn(false);
@@ -124,7 +146,7 @@ class PriceSnippetRendererTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testSnippetsWithGivenKeyAndPriceAreReturned()
+    public function testReturnsSnippetsWithGivenKeyAndPrice()
     {
         $dummyPriceSnippetKey = 'bar';
         $dummyPriceAttributeValue = 1;
@@ -145,18 +167,5 @@ class PriceSnippetRendererTest extends TestCase
 
         $result = $this->renderer->render($stubProductView);
         $this->assertCount(2, $result);
-    }
-
-    /**
-     * @param Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct
-     */
-    private function stubContextWebsiteAndCountry($stubProduct)
-    {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
-        $stubContext = $stubProduct->getContext();
-        $stubContext->method('getValue')->willReturnMap([
-            [Website::CONTEXT_CODE, 'test website'],
-            [Country::CONTEXT_CODE, 'XX'],
-        ]);
     }
 }

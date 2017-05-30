@@ -10,7 +10,6 @@ use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +45,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
  * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
- * @uses   \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
@@ -62,21 +60,16 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder

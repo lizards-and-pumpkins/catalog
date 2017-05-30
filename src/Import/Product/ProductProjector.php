@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\Import\Product;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchDocument\SearchDocumentBuilder;
 use LizardsAndPumpkins\Import\Exception\InvalidProjectionSourceDataTypeException;
-use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;

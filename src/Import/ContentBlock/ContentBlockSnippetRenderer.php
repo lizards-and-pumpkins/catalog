@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 
 class ContentBlockSnippetRenderer implements SnippetRenderer
@@ -24,8 +25,14 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
      * @param ContentBlockSource $contentBlockSource
      * @return Snippet[]
      */
-    public function render(ContentBlockSource $contentBlockSource) : array
+    public function render($contentBlockSource) : array
     {
+        if (! $contentBlockSource instanceof ContentBlockSource) {
+            throw new InvalidDataObjectTypeException(
+                sprintf('Data object must be ContentBlockSource, got %s.', typeof($contentBlockSource))
+            );
+        }
+
         $snippetCode = (string) $contentBlockSource->getContentBlockId();
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 

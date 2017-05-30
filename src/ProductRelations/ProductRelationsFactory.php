@@ -8,9 +8,7 @@ use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1Get
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 

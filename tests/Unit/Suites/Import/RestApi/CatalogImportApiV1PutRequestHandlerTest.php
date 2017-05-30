@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\Import\RestApi;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;

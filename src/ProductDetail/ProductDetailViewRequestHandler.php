@@ -94,7 +94,6 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
             'robots' => 'all'
         ];
 
-        $this->addRobotsMetaTagToHeadContainer();
         $this->addTranslationsToPageBuilder($this->context);
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
@@ -153,11 +152,5 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
 
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
-    }
-
-    private function addRobotsMetaTagToHeadContainer()
-    {
-        $snippetCode = ProductDetailPageRobotsMetaTagSnippetRenderer::CODE;
-        $this->pageBuilder->addSnippetToContainer('head_container', $snippetCode);
     }
 }

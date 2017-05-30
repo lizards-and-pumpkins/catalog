@@ -47,11 +47,6 @@ class ProductListingTest extends AbstractIntegrationTest
         $metaInfoSnippetJson = $dataPoolReader->getSnippet($pageInfoSnippetKey);
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
         
-        $titleKeyGenerator = $this->factory->createProductListingTitleSnippetKeyGenerator();
-        $titleKey = $titleKeyGenerator->getKeyForContext($context, [PageMetaInfoSnippetContent::URL_KEY => $urlKey]);
-        $titleSnippet = $dataPoolReader->getSnippet($titleKey);
-        $this->assertSame('Adidas Rausverkauf!', $titleSnippet);
-        
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             new SearchCriterionGreaterThan('stock_qty', '0'),
             new SearchCriterionEqual('category', 'sale'),
@@ -84,16 +79,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
 
-        $expectedMetaDescription = 'Acheter des chaussures de sport moins chères ? C’est possible grâce à
-                    nos offres à prix discount. Commandez très simplement vos futures chaussures de course qui vous
-                    seront expédiées rapidement.';
-        
-        $expectedKeywords = 'vendre, offre, proposition';
-
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
-
-        $this->assertContains($expectedMetaDescription, $body);
-        $this->assertContains($expectedKeywords, $body);
     }
 }

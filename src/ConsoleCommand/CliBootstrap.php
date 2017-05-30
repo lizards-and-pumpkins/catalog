@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\Exception\NoConsoleCommandSpecifiedException;
-use LizardsAndPumpkins\ConsoleCommand\ConsoleCommandFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 

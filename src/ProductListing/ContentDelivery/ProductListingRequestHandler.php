@@ -54,11 +54,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $productListingPageRequest;
 
     /**
-     * @var SelectProductListingRobotsMetaTagContent
-     */
-    private $selectProductListingRobotsMetaTagContent;
-
-    /**
      * @var ProductSearchService
      */
     private $productSearchService;
@@ -85,7 +80,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         FacetFiltersToIncludeInResult $facetFilterRequest,
         UrlToWebsiteMap $urlToWebsiteMap,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
-        SelectProductListingRobotsMetaTagContent $selectProductListingRobotsMetaTagContent,
         ProductListingPageRequest $productListingPageRequest,
         ProductSearchService $productSearchService,
         SortBy $defaultSortBy,
@@ -96,7 +90,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
         $this->facetFilterRequest = $facetFilterRequest;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
-        $this->selectProductListingRobotsMetaTagContent = $selectProductListingRobotsMetaTagContent;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->productSearchService = $productSearchService;
         $this->defaultSortBy = $defaultSortBy;
@@ -134,7 +127,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $requestUrlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $keyGeneratorParams = [
             PageMetaInfoSnippetContent::URL_KEY => ltrim($requestUrlKey, '/'),
-            'robots' => $this->selectProductListingRobotsMetaTagContent->getRobotsMetaTagContentForRequest($request),
         ];
 
         return $this->productListingPageContentBuilder->buildPageContent(

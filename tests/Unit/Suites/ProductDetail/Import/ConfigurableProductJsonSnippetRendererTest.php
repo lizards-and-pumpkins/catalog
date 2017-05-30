@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\Product\Composite\ProductVariationAttributeList;
 use LizardsAndPumpkins\Import\Product\View\CompositeProductView;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -49,7 +50,7 @@ class ConfigurableProductJsonSnippetRendererTest extends TestCase
         $this->assertSame($expected, $snippet->getContent());
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         $stubVariationAttributesJsonSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubVariationAttributesJsonSnippetKeyGenerator->method('getKeyForContext')
@@ -75,7 +76,15 @@ class ConfigurableProductJsonSnippetRendererTest extends TestCase
         $this->stubCompositeProductView->method('getVariationAttributes')->willReturn($stubVariationAttributes);
     }
 
-    public function testItReturnsAnEmptyVariationAttributesJsonArraySnippetForNonCompositeProducts()
+    public function testThrowsExceptionIfDataObjectIsNotProductView()
+    {
+        $this->expectException(InvalidDataObjectTypeException::class);
+        $this->expectExceptionMessage('Data object must be ProductView, got string.');
+
+        $this->renderer->render('foo');
+    }
+
+    public function testReturnsAnEmptyVariationAttributesJsonArraySnippetForNonCompositeProducts()
     {
         /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubNonCompositeProduct */
         $stubNonCompositeProduct = $this->createMock(ProductView::class);
@@ -87,7 +96,7 @@ class ConfigurableProductJsonSnippetRendererTest extends TestCase
         $this->assertSnippetContent(json_encode([]), $snippet);
     }
 
-    public function testItReturnsAnEmptyAssociatedProductsJsonArraySnippetForNonCompositeProducts()
+    public function testReturnsAnEmptyAssociatedProductsJsonArraySnippetForNonCompositeProducts()
     {
         /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubNonCompositeProduct */
         $stubNonCompositeProduct = $this->createMock(ProductView::class);
@@ -99,7 +108,7 @@ class ConfigurableProductJsonSnippetRendererTest extends TestCase
         $this->assertSnippetContent(json_encode([]), $snippet);
     }
 
-    public function testVariationAttributesJsonSnippetIsReturned()
+    public function testReturnsVariationAttributesJsonSnippet()
     {
         $snippets = $this->renderer->render($this->stubCompositeProductView);
         $snippet = $this->getSnippetWithKey($this->testVariationAttributesSnippetKey, ...$snippets);
@@ -107,7 +116,7 @@ class ConfigurableProductJsonSnippetRendererTest extends TestCase
         $this->assertSnippetContent(json_encode($this->testVariationAttributesJsonData), $snippet);
     }
 
-    public function testAssociatedProductsJsonSnippetIsReturned()
+    public function testReturnsAssociatedProductsJsonSnippet()
     {
         $snippets = $this->renderer->render($this->stubCompositeProductView);
         $snippet = $this->getSnippetWithKey($this->testAssociatedProductsSnippetKey, ...$snippets);

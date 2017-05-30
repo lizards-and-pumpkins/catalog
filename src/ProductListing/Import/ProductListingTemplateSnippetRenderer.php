@@ -4,12 +4,9 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
-use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 class ProductListingTemplateSnippetRenderer implements SnippetRenderer
@@ -17,28 +14,12 @@ class ProductListingTemplateSnippetRenderer implements SnippetRenderer
     const CODE = 'product_listing';
 
     /**
-     * @var SnippetKeyGenerator
+     * @var TemplateSnippetRenderer
      */
-    private $snippetKeyGenerator;
+    private $templateSnippetRenderer;
 
-    /**
-     * @var ProductListingBlockRenderer
-     */
-    private $blockRenderer;
-
-    /**
-     * @var ContextSource
-     */
-    private $contextSource;
-
-    public function __construct(
-        SnippetKeyGenerator $snippetKeyGenerator,
-        ProductListingBlockRenderer $blockRenderer,
-        ContextSource $contextSource
-    ) {
-        $this->snippetKeyGenerator = $snippetKeyGenerator;
-        $this->blockRenderer = $blockRenderer;
-        $this->contextSource = $contextSource;
+    public function __construct(TemplateSnippetRenderer $templateSnippetRenderer) {
+        $this->templateSnippetRenderer = $templateSnippetRenderer;
     }
 
     /**
@@ -47,23 +28,6 @@ class ProductListingTemplateSnippetRenderer implements SnippetRenderer
      */
     public function render($dataToRender): array
     {
-        return $this->projectDataForAllContexts($dataToRender);
-    }
-
-    private function projectDataForAllContexts(TemplateProjectionData $dataToRender): array
-    {
-        return array_map(function (Context $context) use ($dataToRender) {
-            return $this->renderProductListingPageSnippetForContext($dataToRender, $context);
-        }, $this->contextSource->getAllAvailableContextsWithVersionApplied($dataToRender->getDataVersion()));
-    }
-
-    private function renderProductListingPageSnippetForContext(
-        TemplateProjectionData $dataToRender,
-        Context $context
-    ): Snippet {
-        $content = $this->blockRenderer->render($dataToRender, $context);
-        $key = $this->snippetKeyGenerator->getKeyForContext($context, []);
-
-        return Snippet::create($key, $content);
+        return $this->templateSnippetRenderer->render($dataToRender);
     }
 }

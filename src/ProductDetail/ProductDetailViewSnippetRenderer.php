@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductDetail;
 
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
@@ -15,8 +16,6 @@ use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRen
 class ProductDetailViewSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
-    const HTML_HEAD_META_CODE = 'product_detail_view_meta_description';
-    const TITLE_KEY_CODE = 'product_view_title';
 
     /**
      * @var ProductDetailViewBlockRenderer
@@ -33,51 +32,39 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      */
     private $productDetailPageMetaSnippetKeyGenerator;
 
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $productTitleSnippetKeyGenerator;
-
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $productDetailViewHtmlHeadMetaSnippetKeyGenerator;
-
     public function __construct(
         ProductDetailViewBlockRenderer $blockRenderer,
         SnippetKeyGenerator $productDetailViewSnippetKeyGenerator,
-        SnippetKeyGenerator $productTitleSnippetKeyGenerator,
-        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator,
-        SnippetKeyGenerator $productDetailViewHtmlHeadMetaSnippetKeyGenerator
+        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
     ) {
         $this->productDetailViewBlockRenderer = $blockRenderer;
         $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
-        $this->productTitleSnippetKeyGenerator = $productTitleSnippetKeyGenerator;
         $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
-        $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator = $productDetailViewHtmlHeadMetaSnippetKeyGenerator;
     }
 
     /**
      * @param ProductView $productView
      * @return Snippet[]
      */
-    public function render(ProductView $productView) : array
+    public function render($productView): array
     {
-        $contentSnippets = [
-            $this->createdContentSnippet($productView),
-            $this->createProductTitleSnippet($productView),
-            $this->createProductDetailPageMetaDescriptionSnippet($productView),
-        ];
-        $productMetaSnippets = $this->createProductDetailPageMetaSnippets($productView);
+        if (! $productView instanceof ProductView) {
+            throw new InvalidDataObjectTypeException(
+                sprintf('Data object must be ProductView, got %s.', typeof($productView))
+            );
+        }
 
-        return array_merge($contentSnippets, $productMetaSnippets);
+        return array_merge(
+            [$this->createContentSnippet($productView)],
+            $this->createProductDetailPageMetaSnippets($productView)
+        );
     }
 
     /**
      * @param ProductView $productView
      * @return Snippet[]
      */
-    private function createProductDetailPageMetaSnippets(ProductView $productView) : array
+    private function createProductDetailPageMetaSnippets(ProductView $productView): array
     {
         $pageMetaData = json_encode($this->getPageMetaSnippetContent($productView));
         return array_map(function ($urlKey) use ($pageMetaData, $productView) {
@@ -86,7 +73,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         }, $this->getAllProductUrlKeys($productView));
     }
 
-    private function createdContentSnippet(ProductView $productView) : Snippet
+    private function createContentSnippet(ProductView $productView): Snippet
     {
         $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
@@ -97,54 +84,24 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         return Snippet::create($key, $content);
     }
 
-    private function createProductTitleSnippet(ProductView $productView) : Snippet
-    {
-        $key = $this->productTitleSnippetKeyGenerator->getKeyForContext(
-            $productView->getContext(),
-            [Product::ID => $productView->getId()]
-        );
-        $content = $productView->getProductPageTitle();
-
-        return Snippet::create($key, $content);
-    }
-
     /**
      * @param ProductView $productView
      * @return mixed[]
      */
-    private function getPageMetaSnippetContent(ProductView $productView) : array
+    private function getPageMetaSnippetContent(ProductView $productView): array
     {
         $rootBlockName = $this->productDetailViewBlockRenderer->getRootSnippetCode();
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
-            (string)$productView->getId(),
+            (string) $productView->getId(),
             $rootBlockName,
             $this->productDetailViewBlockRenderer->getNestedSnippetCodes(),
-            [
-                'title' => [self::TITLE_KEY_CODE],
-                'head_container' => [self::HTML_HEAD_META_CODE, ProductCanonicalTagSnippetRenderer::CODE],
-            ]
+            []
         );
 
         return $pageMetaInfo->getInfo();
     }
 
-    private function createProductDetailPageMetaDescriptionSnippet(ProductView $productView) : Snippet
-    {
-        $productMetaDescription = $productView->getFirstValueOfAttribute('meta_description');
-        $description = sprintf('<meta name="description" content="%s" />', htmlspecialchars($productMetaDescription));
-
-        $productMetaKeywords = $productView->getFirstValueOfAttribute('meta_keywords');
-        $keywords = sprintf('<meta name="keywords" content="%s" />', htmlspecialchars($productMetaKeywords));
-
-        $key = $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator->getKeyForContext(
-            $productView->getContext(),
-            [Product::ID => $productView->getId()]
-        );
-
-        return Snippet::create($key, $description . $keywords);
-    }
-
-    private function createPageMetaSnippetKey(string $urlKey, ProductView $productView) : string
+    private function createPageMetaSnippetKey(string $urlKey, ProductView $productView): string
     {
         return $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
@@ -156,7 +113,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      * @param ProductView $productView
      * @return string[]
      */
-    private function getAllProductUrlKeys(ProductView $productView) : array
+    private function getAllProductUrlKeys(ProductView $productView): array
     {
         return array_merge(
             [$productView->getFirstValueOfAttribute(Product::URL_KEY)],
