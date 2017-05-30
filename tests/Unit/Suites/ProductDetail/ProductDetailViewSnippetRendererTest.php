@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\ProductDetail;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
@@ -17,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
- * @uses \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class ProductDetailViewSnippetRendererTest extends TestCase
 {
@@ -44,7 +45,7 @@ class ProductDetailViewSnippetRendererTest extends TestCase
     /**
      * @return ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductDetailViewBlockRenderer() : ProductDetailViewBlockRenderer
+    private function createStubProductDetailViewBlockRenderer(): ProductDetailViewBlockRenderer
     {
         $blockRenderer = $this->createMock(ProductDetailViewBlockRenderer::class);
         $blockRenderer->method('render')->willReturnCallback(function () {
@@ -68,7 +69,7 @@ class ProductDetailViewSnippetRendererTest extends TestCase
         $this->fail(sprintf('Failed asserting snippet list contains snippet with "%s" key.', $expectedKey));
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         $blockRenderer = $this->createStubProductDetailViewBlockRenderer();
         $this->stubProductDetailViewSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
@@ -85,12 +86,20 @@ class ProductDetailViewSnippetRendererTest extends TestCase
         $this->stubProductView->method('getProductPageTitle')->willReturn('');
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testIsSnippetRenderer()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testProductDetailViewSnippetsAreRendered()
+    public function testThrowsExceptionIfDataObjectIsNotProductView()
+    {
+        $this->expectException(InvalidDataObjectTypeException::class);
+        $this->expectExceptionMessage('Data object must be ProductView, got string.');
+
+        $this->renderer->render('foo');
+    }
+
+    public function testRendersProductDetailViewSnippets()
     {
         $testContentSnippetKey = 'stub-content-key';
         $testMetaSnippetKey = 'stub-meta-key';

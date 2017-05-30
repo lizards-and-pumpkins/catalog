@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 use PHPUnit\Framework\TestCase;
@@ -39,9 +40,17 @@ class TemplateSnippetRendererTest extends TestCase
         $this->renderer = new TemplateSnippetRenderer($stubSnippetKeyGenerator, $stubBlockRenderer, $stubContextSource);
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testIsSnippetRenderer()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
+    }
+
+    public function testThrowsExceptionIfDataObjectIsNotTemplateProjectionData()
+    {
+        $this->expectException(InvalidDataObjectTypeException::class);
+        $this->expectExceptionMessage('Data object must be TemplateProjectionData, got string.');
+
+        $this->renderer->render('foo');
     }
 
     public function testArrayOfSnippetsIsReturned()

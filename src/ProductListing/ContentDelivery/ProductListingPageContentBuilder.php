@@ -12,7 +12,6 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
@@ -67,7 +66,6 @@ class ProductListingPageContentBuilder
         $this->addPaginationSnippetsToPageBuilder($productSearchResult, $productsPerPage);
         $this->addSortOrderSnippetsToPageBuilder($selectedSortBy, ...$availableSortBy);
         $this->addTranslationsToPageBuilder($context);
-        $this->addRobotsMetaTagSnippetToHeadContainer();
 
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
     }
@@ -136,10 +134,5 @@ class ProductListingPageContentBuilder
             $context->getValue(Locale::CONTEXT_CODE)
         );
         $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
-    }
-
-    private function addRobotsMetaTagSnippetToHeadContainer()
-    {
-        $this->pageBuilder->addSnippetToContainer('head_container', ProductListingRobotsMetaTagSnippetRenderer::CODE);
     }
 }

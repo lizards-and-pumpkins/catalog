@@ -23,10 +23,7 @@ use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRender
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
@@ -171,12 +168,6 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductListingSnippetRenderer::CANONICAL_TAG_KEY,
-            function () {
-                return $this->getMasterFactory()->createProductListingCanonicalTagSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator();
@@ -200,30 +191,7 @@ class FrontendFactory implements Factory
                 return $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
             }
         );
-        $registrySnippetKeyGeneratorLocator->register(
-            ProductListingTitleSnippetRenderer::CODE,
-            function () {
-                return $this->getMasterFactory()->createProductListingTitleSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
-            ProductListingDescriptionSnippetRenderer::CODE,
-            function () {
-                return $this->getMasterFactory()->createProductListingDescriptionSnippetKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
-            ProductListingSnippetRenderer::HTML_HEAD_META_KEY,
-            function () {
-                return $this->getMasterFactory()->createHtmlHeadMetaKeyGenerator();
-            }
-        );
-        $registrySnippetKeyGeneratorLocator->register(
-            ProductListingRobotsMetaTagSnippetRenderer::CODE,
-            function () {
-                return $this->getMasterFactory()->createProductListingPageRobotsMetaTagSnippetKeyGenerator();
-            }
-        );
+
         return $registrySnippetKeyGeneratorLocator;
     }
 

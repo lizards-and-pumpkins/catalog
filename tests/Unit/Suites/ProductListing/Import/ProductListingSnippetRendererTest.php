@@ -9,10 +9,9 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 use PHPUnit\Framework\TestCase;
 
@@ -74,20 +73,6 @@ class ProductListingSnippetRendererTest extends TestCase
     }
 
     /**
-     * @param Snippet $metaSnippet
-     * @param string $containerCode
-     * @param string $expectedSnippetCode
-     */
-    private function assertContainerContainsSnippet(Snippet $metaSnippet, $containerCode, $expectedSnippetCode)
-    {
-        $pageData = json_decode($metaSnippet->getContent(), true);
-        $this->assertContains(
-            $expectedSnippetCode,
-            $pageData[PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS][$containerCode]
-        );
-    }
-
-    /**
      * @param string $metaSnippetKey
      * @param string $htmlHeadMetaKey
      */
@@ -97,7 +82,15 @@ class ProductListingSnippetRendererTest extends TestCase
         $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn($htmlHeadMetaKey);
     }
 
-    protected function setUp()
+    public function testThrowsExceptionIfDataObjectIsNotProductListing()
+    {
+        $this->expectException(InvalidDataObjectTypeException::class);
+        $this->expectExceptionMessage('Data object must be ProductListing, got string.');
+
+        $this->renderer->render('foo');
+    }
+
+    final protected function setUp()
     {
         /** @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubListingBlockRenderer */
         $stubListingBlockRenderer = $this->createMock(ProductListingBlockRenderer::class);
@@ -137,135 +130,5 @@ class ProductListingSnippetRendererTest extends TestCase
         $pageData = json_decode($metaSnippet->getContent(), true);
         $this->assertSame('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE]);
         $this->assertContains('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]);
-    }
-
-    public function testReturnsProductListingHtmlHeadMetaSnippet()
-    {
-        $testMetaDescription = 'META DESCRIPTION FOR LISTING';
-        $testMetaKeywords = 'meta keywords for listing';
-        $htmlHeadMetaKey = 'meta_description';
-        $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey);
-
-        $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getUrlKey')->willReturn(UrlKey::fromString('listing.html'));
-        $stubProductListing->method('hasAttribute')->willReturn(true);
-        $stubProductListing->method('getAttributeValueByCode')->willReturnMap(
-            [
-                ['meta_description', $testMetaDescription],
-                ['meta_keywords', $testMetaKeywords],
-            ]
-        );
-        $result = $this->renderer->render($stubProductListing);
-
-        $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
-        $this->assertInstanceOf(Snippet::class, $metaDescriptionSnippet);
-
-        $this->assertContains(
-            "<meta name=\"description\" content=\"$testMetaDescription\" />",
-            $metaDescriptionSnippet->getContent()
-        );
-
-        $this->assertContains(
-            "<meta name=\"keywords\" content=\"$testMetaKeywords\" />",
-            $metaDescriptionSnippet->getContent()
-        );
-    }
-
-    public function testFillsContainerSnippets()
-    {
-        $testSnippetKey = 'listing';
-        $htmlHeadMetaKey = 'dummy_meta_key';
-        $this->prepareKeyGeneratorsForProductListing($testSnippetKey, $htmlHeadMetaKey);
-
-        $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getAttributeValueByCode')->willReturn('meta_description_value');
-        $stubProductListing->method('hasAttribute')->willReturn(true);
-        $result = $this->renderer->render($stubProductListing);
-
-        $metaSnippet = $this->findSnippetByKey($testSnippetKey, ...$result);
-        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
-
-        $this->assertContains(
-            '<meta name="description" content="meta_description_value" />',
-            $htmlHeadMetaKeySnippet->getContent()
-        );
-        $listingDescriptionSnippetKey = ProductListingDescriptionSnippetRenderer::CODE;
-        $canonicalTagSnippetKey = ProductListingSnippetRenderer::CANONICAL_TAG_KEY;
-        $htmlHeadSnippetKey = ProductListingSnippetRenderer::HTML_HEAD_META_KEY;
-
-        $this->assertContainerContainsSnippet($metaSnippet, 'title', ProductListingTitleSnippetRenderer::CODE);
-        $this->assertContainerContainsSnippet($metaSnippet, 'sidebar_container', $listingDescriptionSnippetKey);
-        $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $canonicalTagSnippetKey);
-        $this->assertContainerContainsSnippet($metaSnippet, 'head_container', $htmlHeadSnippetKey);
-    }
-
-    public function testProductListingDoesNotThrowExceptionOnUndefinedMetaDescription()
-    {
-        $testSnippetKey = 'listing';
-        $htmlHeadMetaKey = 'dummy_meta_key';
-        $this->prepareKeyGeneratorsForProductListing($testSnippetKey, $htmlHeadMetaKey);
-
-        $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getAttributeValueByCode')->willThrowException(
-            new ProductListingAttributeNotFoundException(
-                sprintf('Product list attribute with code "meta_description" is not found.')
-            )
-        );
-        $result = $this->renderer->render($stubProductListing);
-
-        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
-        $this->assertContains(
-            '<meta name="description" content="" />',
-            $htmlHeadMetaKeySnippet->getContent()
-        );
-    }
-
-    public function testProductListingDoesNotThrowExceptionOnUndefinedMetaKeywords()
-    {
-        $testSnippetKey = 'listing';
-        $htmlHeadMetaKey = 'dummy_meta_key';
-        $this->prepareKeyGeneratorsForProductListing($testSnippetKey, $htmlHeadMetaKey);
-
-        $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getAttributeValueByCode')->willThrowException(
-            new ProductListingAttributeNotFoundException(
-                sprintf('Product list attribute with code "meta_description" is not found.')
-            )
-        );
-        $result = $this->renderer->render($stubProductListing);
-
-        $htmlHeadMetaKeySnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
-        $this->assertContains(
-            '<meta name="keywords" content="" />',
-            $htmlHeadMetaKeySnippet->getContent()
-        );
-    }
-
-    public function testEncodesTheMetaTagValues()
-    {
-        $testMetaContent = 'some content that needs to be escaped: <"&';
-        $expectedContent = htmlspecialchars($testMetaContent);
-
-        $htmlHeadMetaKey = 'meta_description';
-        $this->prepareKeyGeneratorsForProductListing('listing', $htmlHeadMetaKey);
-
-        $stubProductListing = $this->createStubProductListing();
-        $stubProductListing->method('getUrlKey')->willReturn(UrlKey::fromString('listing.html'));
-        $stubProductListing->method('hasAttribute')->willReturn(true);
-        $stubProductListing->method('getAttributeValueByCode')->willReturn($testMetaContent);
-
-        $result = $this->renderer->render($stubProductListing);
-
-        $metaDescriptionSnippet = $this->findSnippetByKey($htmlHeadMetaKey, ...$result);
-
-        $this->assertContains(
-            "<meta name=\"description\" content=\"$expectedContent\" />",
-            $metaDescriptionSnippet->getContent()
-        );
-
-        $this->assertContains(
-            "<meta name=\"keywords\" content=\"$expectedContent\" />",
-            $metaDescriptionSnippet->getContent()
-        );
     }
 }

@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use PHPUnit\Framework\TestCase;
 
@@ -31,7 +32,7 @@ class ContentBlockSnippetRendererTest extends TestCase
     /**
      * @return ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubContextBuilder() : ContextBuilder
+    private function createStubContextBuilder(): ContextBuilder
     {
         $stubContext = $this->createMock(Context::class);
         $stubContextBuilder = $this->createMock(ContextBuilder::class);
@@ -44,7 +45,7 @@ class ContentBlockSnippetRendererTest extends TestCase
      * @param string $contentBlockContent
      * @return ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubContentBlockSource(string $contentBlockContent) : ContentBlockSource
+    private function createStubContentBlockSource(string $contentBlockContent): ContentBlockSource
     {
         $stubContentBlockSource = $this->createMock(ContentBlockSource::class);
         $stubContentBlockSource->method('getContent')->willReturn($contentBlockContent);
@@ -54,7 +55,7 @@ class ContentBlockSnippetRendererTest extends TestCase
         return $stubContentBlockSource;
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         $this->stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $stubContextBuilder = $this->createStubContextBuilder();
@@ -65,6 +66,14 @@ class ContentBlockSnippetRendererTest extends TestCase
     public function testSnippetRendererInterfaceIsImplemented()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
+    }
+
+    public function testThrowsExceptionIfDataObjectIsNotContentBlockSource()
+    {
+        $this->expectException(InvalidDataObjectTypeException::class);
+        $this->expectExceptionMessage('Data object must be ContentBlockSource, got string.');
+
+        $this->renderer->render('foo');
     }
 
     public function testSnippetIsAddedToList()

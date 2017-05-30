@@ -20,11 +20,8 @@ use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
@@ -206,11 +203,6 @@ class FrontendFactoryTest extends TestCase
             [ProductJsonSnippetRenderer::CODE],
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
             [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],
-            [ProductListingSnippetRenderer::CANONICAL_TAG_KEY],
-            [ProductListingTitleSnippetRenderer::CODE],
-            [ProductListingDescriptionSnippetRenderer::CODE],
-            [ProductListingSnippetRenderer::HTML_HEAD_META_KEY],
-            [ProductListingRobotsMetaTagSnippetRenderer::CODE],
         ];
     }
 

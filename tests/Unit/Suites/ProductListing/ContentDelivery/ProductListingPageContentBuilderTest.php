@@ -12,7 +12,6 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldCollection;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use PHPUnit\Framework\TestCase;
@@ -341,22 +340,5 @@ class ProductListingPageContentBuilderTest extends TestCase
 
         $snippetCode = 'translations';
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($translations));
-    }
-
-    public function testAddsTheRobotsMetaTagSnippetToHeadContainer()
-    {
-        $this->mockPageBuilder->expects($this->once())
-            ->method('addSnippetToContainer')
-            ->with('head_container', ProductListingRobotsMetaTagSnippetRenderer::CODE);
-            
-        $this->pageContentBuilder->buildPageContent(
-            $this->stubPageMetaInfoSnippetContent,
-            $this->stubContext,
-            $this->stubKeyGeneratorParams,
-            $this->stubProductSearchResult,
-            $this->stubProductsPerPage,
-            $this->stubSelectedSortBy,
-            ...$this->stubListOfAvailableSortBy
-        );
     }
 }

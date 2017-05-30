@@ -46,7 +46,6 @@ use PHPUnit\Framework\TestCase;
  * @uses \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler
  * @uses \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
  * @uses \LizardsAndPumpkins\Import\Product\QueueImportCommands
- * @uses \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
  * @uses \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
  * @uses \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
  * @uses \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
@@ -58,16 +57,12 @@ use PHPUnit\Framework\TestCase;
  * @uses \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
  * @uses \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
  * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
- * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
- * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
  * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
  * @uses \LizardsAndPumpkins\Import\GenericSnippetProjector
  * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
- * @uses \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
  * @uses \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
  * @uses \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
- * @uses \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
  * @uses \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
  * @uses \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder

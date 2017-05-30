@@ -39,7 +39,6 @@ use LizardsAndPumpkins\Import\Product\ProductProjector;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
-use LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
@@ -58,11 +57,8 @@ use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRender
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
@@ -111,8 +107,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTitleSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent
@@ -158,9 +152,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
@@ -748,37 +739,6 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(ProductListingImportCommandLocator::class, $result);
     }
 
-    public function testItCreatesACreateProductListingTitleSnippetRenderer()
-    {
-        $result = $this->commonFactory->createProductListingTitleSnippetRenderer();
-        $this->assertInstanceOf(ProductListingTitleSnippetRenderer::class, $result);
-    }
-
-    public function testItCreatesAProductListingTitleSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductListingTitleSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
-
-    public function testItCreatesAProductListingDescriptionSnippetRenderer()
-    {
-        $result = $this->commonFactory->createProductListingDescriptionSnippetRenderer();
-        $this->assertInstanceOf(ProductListingDescriptionSnippetRenderer::class, $result);
-    }
-
-    public function testItCreatesAProductListingDescriptionSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductListingDescriptionSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
-    public function testItCreatesAProductListingCanonicalTagSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductListingCanonicalTagSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
     /**
      * @dataProvider productListSnippetRenderersProvider
      */
@@ -800,10 +760,7 @@ class CommonFactoryTest extends TestCase
     public function productListSnippetRenderersProvider() : array
     {
         return [
-            [ProductListingDescriptionSnippetRenderer::class],
-            [ProductListingTitleSnippetRenderer::class],
             [ProductListingSnippetRenderer::class],
-            [ProductListingRobotsMetaTagSnippetRenderer::class],
         ];
     }
 
@@ -894,26 +851,6 @@ class CommonFactoryTest extends TestCase
     {
         $result = $this->commonFactory->createProductListingDescriptionBlockRenderer();
         $this->assertInstanceOf(ProductListingDescriptionBlockRenderer::class, $result);
-    }
-
-    public function testReturnsProductListingPageRobotsMetaTagAllSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductListingPageRobotsMetaTagSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
-    public function testReturnsRobotsMetaTagSnippetRenderer()
-    {
-        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $snippetKeyGenerator */
-        $snippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
-        $result = $this->commonFactory->createRobotsMetaTagSnippetRenderer($snippetKeyGenerator);
-        $this->assertInstanceOf(RobotsMetaTagSnippetRenderer::class, $result);
-    }
-
-    public function testReturnsProductListingPageRobotsMetaTagSnippetRenderer()
-    {
-        $result = $this->commonFactory->createProductListingPageRobotsMetaTagSnippetRenderer();
-        $this->assertInstanceOf(ProductListingRobotsMetaTagSnippetRenderer::class, $result);
     }
 
     public function testItReturnsAProductJsonService()
