@@ -259,19 +259,4 @@ class ProductDetailViewRequestHandlerTest extends TestCase
         $snippetCode = 'translations';
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($translations));
     }
-
-    public function testAddsRobotsMetaTagToHeadContainer()
-    {
-        $this->stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummyMetaInfoKey);
-        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->dummyMetaInfoKey, $this->dummyMetaInfoSnippetJson],
-        ]);
-
-        $code = ProductDetailPageRobotsMetaTagSnippetRenderer::CODE;
-        $this->mockPageBuilder->expects($this->once())->method('addSnippetToContainer')->with('head_container', $code);
-        $this->mockPageBuilder->expects($this->once())->method('buildPage')
-            ->with($this->anything(), $this->anything(), $this->arrayHasKey('robots'));
-
-        $this->requestHandler->process($this->stubRequest);
-    }
 }

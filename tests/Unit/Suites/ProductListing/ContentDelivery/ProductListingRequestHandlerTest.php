@@ -134,14 +134,13 @@ class ProductListingRequestHandlerTest extends TestCase
 
         $stubProductListingPageContentBuilder = $this->createStubProductListingPageContentBuilder();
 
-        $stubSelectRobotsMetaTagContent = $this->createMock(SelectProductListingRobotsMetaTagContent::class);
-
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
         
         $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
 
+        /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubDefaultSortBy */
         $stubDefaultSortBy = $this->createMock(SortBy::class);
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
 
@@ -152,7 +151,6 @@ class ProductListingRequestHandlerTest extends TestCase
             $stubFacetFilterRequest,
             $this->stubUrlToWebsiteMap,
             $stubProductListingPageContentBuilder,
-            $stubSelectRobotsMetaTagContent,
             $this->mockProductListingPageRequest,
             $this->mockProductSearchService,
             $stubDefaultSortBy

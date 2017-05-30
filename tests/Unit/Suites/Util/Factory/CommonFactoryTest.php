@@ -55,8 +55,6 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
@@ -160,11 +158,9 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Product\RobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingCanonicalTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
@@ -249,12 +245,6 @@ class CommonFactoryTest extends TestCase
     public function testProductDetailViewSnippetKeyGeneratorIsReturned()
     {
         $result = $this->commonFactory->createProductDetailViewSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
-    public function testProductTitleSnippetKeyGeneratorIsReturned()
-    {
-        $result = $this->commonFactory->createProductTitleSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
@@ -843,8 +833,6 @@ class CommonFactoryTest extends TestCase
             [PriceSnippetRenderer::class],
             [ProductJsonSnippetRenderer::class],
             [ConfigurableProductJsonSnippetRenderer::class],
-            [ProductCanonicalTagSnippetRenderer::class],
-            [ProductDetailPageRobotsMetaTagSnippetRenderer::class],
         ];
     }
 
@@ -908,30 +896,6 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(ProductListingDescriptionBlockRenderer::class, $result);
     }
 
-    public function testItReturnsAProductDetailPageMetaDescriptionSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductDetailPageMetaDescriptionSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
-    public function testReturnsProductCanonicalSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductCanonicalTagSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
-    public function testReturnsProductCanonicalTagSnippetRenderer()
-    {
-        $result = $this->commonFactory->createProductCanonicalTagSnippetRenderer();
-        $this->assertInstanceOf(ProductCanonicalTagSnippetRenderer::class, $result);
-    }
-
-    public function testReturnsProductDetailPageRobotsMetaTagAllSnippetKeyGenerator()
-    {
-        $result = $this->commonFactory->createProductDetailPageRobotsMetaTagSnippetKeyGenerator();
-        $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
-    }
-
     public function testReturnsProductListingPageRobotsMetaTagAllSnippetKeyGenerator()
     {
         $result = $this->commonFactory->createProductListingPageRobotsMetaTagSnippetKeyGenerator();
@@ -950,12 +914,6 @@ class CommonFactoryTest extends TestCase
     {
         $result = $this->commonFactory->createProductListingPageRobotsMetaTagSnippetRenderer();
         $this->assertInstanceOf(ProductListingRobotsMetaTagSnippetRenderer::class, $result);
-    }
-
-    public function testReturnsProductDetailPageRobotsMetaTagSnippetRenderer()
-    {
-        $result = $this->commonFactory->createProductDetailPageRobotsMetaTagSnippetRenderer();
-        $this->assertInstanceOf(ProductDetailPageRobotsMetaTagSnippetRenderer::class, $result);
     }
 
     public function testItReturnsAProductJsonService()

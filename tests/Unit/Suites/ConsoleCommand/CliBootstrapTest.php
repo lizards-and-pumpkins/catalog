@@ -10,9 +10,7 @@ use LizardsAndPumpkins\ConsoleCommand\Exception\NoConsoleCommandSpecifiedExcepti
 use LizardsAndPumpkins\ConsoleCommand\TestDouble\MockCliCommand;
 use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
-use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
@@ -65,8 +63,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy

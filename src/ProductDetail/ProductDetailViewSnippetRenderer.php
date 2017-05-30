@@ -15,8 +15,6 @@ use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRen
 class ProductDetailViewSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_detail_view';
-    const HTML_HEAD_META_CODE = 'product_detail_view_meta_description';
-    const TITLE_KEY_CODE = 'product_view_title';
 
     /**
      * @var ProductDetailViewBlockRenderer
@@ -33,28 +31,14 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
      */
     private $productDetailPageMetaSnippetKeyGenerator;
 
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $productTitleSnippetKeyGenerator;
-
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $productDetailViewHtmlHeadMetaSnippetKeyGenerator;
-
     public function __construct(
         ProductDetailViewBlockRenderer $blockRenderer,
         SnippetKeyGenerator $productDetailViewSnippetKeyGenerator,
-        SnippetKeyGenerator $productTitleSnippetKeyGenerator,
-        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator,
-        SnippetKeyGenerator $productDetailViewHtmlHeadMetaSnippetKeyGenerator
+        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
     ) {
         $this->productDetailViewBlockRenderer = $blockRenderer;
         $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
-        $this->productTitleSnippetKeyGenerator = $productTitleSnippetKeyGenerator;
         $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
-        $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator = $productDetailViewHtmlHeadMetaSnippetKeyGenerator;
     }
 
     /**
@@ -65,8 +49,6 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
     {
         $contentSnippets = [
             $this->createContentSnippet($productView),
-            $this->createProductTitleSnippet($productView),
-            $this->createProductDetailPageMetaDescriptionSnippet($productView),
         ];
         $productMetaSnippets = $this->createProductDetailPageMetaSnippets($productView);
 
@@ -97,17 +79,6 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         return Snippet::create($key, $content);
     }
 
-    private function createProductTitleSnippet(ProductView $productView) : Snippet
-    {
-        $key = $this->productTitleSnippetKeyGenerator->getKeyForContext(
-            $productView->getContext(),
-            [Product::ID => $productView->getId()]
-        );
-        $content = $productView->getProductPageTitle();
-
-        return Snippet::create($key, $content);
-    }
-
     /**
      * @param ProductView $productView
      * @return mixed[]
@@ -119,29 +90,10 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             (string)$productView->getId(),
             $rootBlockName,
             $this->productDetailViewBlockRenderer->getNestedSnippetCodes(),
-            [
-                'title' => [self::TITLE_KEY_CODE],
-                'head_container' => [self::HTML_HEAD_META_CODE, ProductCanonicalTagSnippetRenderer::CODE],
-            ]
+            []
         );
 
         return $pageMetaInfo->getInfo();
-    }
-
-    private function createProductDetailPageMetaDescriptionSnippet(ProductView $productView) : Snippet
-    {
-        $productMetaDescription = $productView->getFirstValueOfAttribute('meta_description');
-        $description = sprintf('<meta name="description" content="%s" />', htmlspecialchars($productMetaDescription));
-
-        $productMetaKeywords = $productView->getFirstValueOfAttribute('meta_keywords');
-        $keywords = sprintf('<meta name="keywords" content="%s" />', htmlspecialchars($productMetaKeywords));
-
-        $key = $this->productDetailViewHtmlHeadMetaSnippetKeyGenerator->getKeyForContext(
-            $productView->getContext(),
-            [Product::ID => $productView->getId()]
-        );
-
-        return Snippet::create($key, $description . $keywords);
     }
 
     private function createPageMetaSnippetKey(string $urlKey, ProductView $productView) : string

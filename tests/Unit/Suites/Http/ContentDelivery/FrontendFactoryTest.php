@@ -19,10 +19,7 @@ use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\SelectProductListingRobotsMetaTagContent;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingDescriptionSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
@@ -210,14 +207,10 @@ class FrontendFactoryTest extends TestCase
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],
             [ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE],
             [ProductListingSnippetRenderer::CANONICAL_TAG_KEY],
-            [ProductDetailViewSnippetRenderer::TITLE_KEY_CODE],
             [ProductListingTitleSnippetRenderer::CODE],
             [ProductListingDescriptionSnippetRenderer::CODE],
-            [ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE],
-            [ProductCanonicalTagSnippetRenderer::CODE],
             [ProductListingSnippetRenderer::HTML_HEAD_META_KEY],
             [ProductListingRobotsMetaTagSnippetRenderer::CODE],
-            [ProductDetailPageRobotsMetaTagSnippetRenderer::CODE],
         ];
     }
 
@@ -225,11 +218,5 @@ class FrontendFactoryTest extends TestCase
     {
         $result = $this->frontendFactory->createProductJsonSnippetTransformation();
         $this->assertInstanceOf(ProductJsonSnippetTransformation::class, $result);
-    }
-
-    public function testReturnsSelectProductListingRobotsMetaTagContent()
-    {
-        $result = $this->frontendFactory->createSelectProductListingRobotsMetaTagContent();
-        $this->assertInstanceOf(SelectProductListingRobotsMetaTagContent::class, $result);
     }
 }

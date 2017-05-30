@@ -63,9 +63,7 @@ use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\ProductDetail\ProductDetailPageRobotsMetaTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductCanonicalTagSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
@@ -280,8 +278,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
             $this->getMasterFactory()->createConfigurableProductJsonSnippetRenderer(),
-            $this->getMasterFactory()->createProductCanonicalTagSnippetRenderer(),
-            $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetRenderer(),
         ];
     }
 
@@ -470,9 +466,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new ProductDetailViewSnippetRenderer(
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
             $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductTitleSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductDetailPageMetaDescriptionSnippetKeyGenerator()
+            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
         );
     }
 
@@ -493,17 +487,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
         return new GenericSnippetKeyGenerator(
             'product_detail_view_content',
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
-        );
-    }
-
-    public function createProductTitleSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductDetailViewSnippetRenderer::TITLE_KEY_CODE,
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -1246,51 +1229,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder(),
             $this->getMasterFactory()->createAssetsBaseUrlBuilder()
-        );
-    }
-
-    public function createProductDetailPageMetaDescriptionSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductDetailViewSnippetRenderer::HTML_HEAD_META_CODE,
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
-        );
-    }
-
-    public function createProductCanonicalTagSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductCanonicalTagSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
-        );
-    }
-
-    public function createProductCanonicalTagSnippetRenderer() : ProductCanonicalTagSnippetRenderer
-    {
-        return new ProductCanonicalTagSnippetRenderer(
-            $this->getMasterFactory()->createProductCanonicalTagSnippetKeyGenerator(),
-            $this->getMasterFactory()->createBaseUrlBuilder()
-        );
-    }
-
-    public function createProductDetailPageRobotsMetaTagSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        return $this->createRobotsMetaTagSnippetKeyGeneratorForSnippetCode(
-            ProductDetailPageRobotsMetaTagSnippetRenderer::CODE
-        );
-    }
-
-    public function createProductDetailPageRobotsMetaTagSnippetRenderer() : ProductDetailPageRobotsMetaTagSnippetRenderer
-    {
-        $snippetKeyGenerator = $this->getMasterFactory()->createProductDetailPageRobotsMetaTagSnippetKeyGenerator();
-        return new ProductDetailPageRobotsMetaTagSnippetRenderer(
-            $this->getMasterFactory()->createRobotsMetaTagSnippetRenderer($snippetKeyGenerator)
         );
     }
 
