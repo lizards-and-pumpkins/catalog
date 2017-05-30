@@ -51,6 +51,7 @@ use PHPUnit\Framework\TestCase;
  * @uses \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
  * @uses \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  * @uses \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
  * @uses \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope

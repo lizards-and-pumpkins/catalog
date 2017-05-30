@@ -152,6 +152,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator
  * @uses   \LizardsAndPumpkins\Translation\CsvTranslator
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry

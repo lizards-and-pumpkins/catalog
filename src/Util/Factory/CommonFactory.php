@@ -38,6 +38,7 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
@@ -353,21 +354,21 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createProductListingTemplateSnippetRenderer() : ProductListingTemplateSnippetRenderer
     {
-        return new ProductListingTemplateSnippetRenderer(
+        $templateSnippetRenderer = new TemplateSnippetRenderer(
             $this->getMasterFactory()->createProductListingTemplateSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->getContextSource()
         );
+
+        return new ProductListingTemplateSnippetRenderer($templateSnippetRenderer);
     }
 
     public function createProductListingTemplateSnippetKeyGenerator() : SnippetKeyGenerator
     {
-        $usedDataParts = [];
-
         return new GenericSnippetKeyGenerator(
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
+            $usedDataParts = []
         );
     }
 

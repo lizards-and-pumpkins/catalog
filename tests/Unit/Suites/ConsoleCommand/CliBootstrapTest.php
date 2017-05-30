@@ -57,6 +57,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory
  * @uses   \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
  * @uses   \LizardsAndPumpkins\Logging\LoggingQueueDecorator
