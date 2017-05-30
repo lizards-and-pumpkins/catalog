@@ -6,8 +6,8 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 class ProductListingTemplateSnippetRenderer implements SnippetRenderer
 {

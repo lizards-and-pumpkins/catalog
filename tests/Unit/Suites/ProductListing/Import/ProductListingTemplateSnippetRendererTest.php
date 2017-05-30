@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductListing\Import;
 
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 use PHPUnit\Framework\TestCase;
 
 /**

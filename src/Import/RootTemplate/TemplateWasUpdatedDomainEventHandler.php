@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\Import\RootTemplate;
 
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
 {

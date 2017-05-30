@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
+namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
