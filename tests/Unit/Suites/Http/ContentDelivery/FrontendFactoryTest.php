@@ -20,7 +20,7 @@ use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
@@ -206,7 +206,7 @@ class FrontendFactoryTest extends TestCase
     public function registeredSnippetCodeDataProvider() : array
     {
         return [
-            [ProductDetailViewSnippetRenderer::CODE],
+            [ProductDetailMetaSnippetRenderer::CODE],
             [ProductInListingSnippetRenderer::CODE],
             [ProductListingTemplateSnippetRenderer::CODE],
             [PriceSnippetRenderer::PRICE],

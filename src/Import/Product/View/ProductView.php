@@ -53,6 +53,4 @@ interface ProductView extends \JsonSerializable
     public function getMainImageUrl(string $variation) : HttpUrl;
 
     public function getMainImageLabel() : string;
-
-    public function getProductPageTitle() : string;
 }

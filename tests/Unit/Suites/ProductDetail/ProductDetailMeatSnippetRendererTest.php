@@ -14,28 +14,23 @@ use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRen
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
+ * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductDetailViewSnippetRendererTest extends TestCase
+class ProductDetailMeatSnippetRendererTest extends TestCase
 {
     /**
-     * @var ProductDetailViewSnippetRenderer
+     * @var ProductDetailMetaSnippetRenderer
      */
     private $renderer;
 
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubProductDetailViewSnippetKeyGenerator;
-
-    /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubProductDetailPageMetaSnippetKeyGenerator;
+    private $stubSnippetKeyGenerator;
 
     /**
      * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
@@ -57,33 +52,16 @@ class ProductDetailViewSnippetRendererTest extends TestCase
         return $blockRenderer;
     }
 
-    private function assertContainsSnippetWithGivenKey(string $expectedKey, Snippet ...$snippets)
-    {
-        foreach ($snippets as $snippet) {
-            if ($snippet->getKey() === $expectedKey) {
-                $this->assertTrue(true);
-                return;
-            }
-        }
-
-        $this->fail(sprintf('Failed asserting snippet list contains snippet with "%s" key.', $expectedKey));
-    }
-
     final protected function setUp()
     {
         $blockRenderer = $this->createStubProductDetailViewBlockRenderer();
         $this->stubProductDetailViewSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
-        $this->stubProductDetailPageMetaSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
-        $this->renderer = new ProductDetailViewSnippetRenderer(
-            $blockRenderer,
-            $this->stubProductDetailViewSnippetKeyGenerator,
-            $this->stubProductDetailPageMetaSnippetKeyGenerator
-        );
+        $this->renderer = new ProductDetailMetaSnippetRenderer($blockRenderer, $this->stubSnippetKeyGenerator);
 
         $this->stubProductView = $this->createMock(ProductView::class);
         $this->stubProductView->method('getContext')->willReturn($this->createMock(Context::class));
-        $this->stubProductView->method('getProductPageTitle')->willReturn('');
     }
 
     public function testIsSnippetRenderer()
@@ -101,17 +79,16 @@ class ProductDetailViewSnippetRendererTest extends TestCase
 
     public function testRendersProductDetailViewSnippets()
     {
-        $testContentSnippetKey = 'stub-content-key';
         $testMetaSnippetKey = 'stub-meta-key';
 
-        $this->stubProductDetailViewSnippetKeyGenerator->method('getKeyForContext')->willReturn($testContentSnippetKey);
-        $this->stubProductDetailPageMetaSnippetKeyGenerator->method('getKeyForContext')
+        $this->stubSnippetKeyGenerator->method('getKeyForContext')
             ->willReturn($testMetaSnippetKey);
 
         $this->stubProductView->method('getAllValuesOfAttribute')->willReturn([]);
         $result = $this->renderer->render($this->stubProductView);
 
-        $this->assertContainsSnippetWithGivenKey($testContentSnippetKey, ...$result);
-        $this->assertContainsSnippetWithGivenKey($testMetaSnippetKey, ...$result);
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(Snippet::class, $result[0]);
+        $this->assertSame($testMetaSnippetKey, $result[0]->getKey());
     }
 }

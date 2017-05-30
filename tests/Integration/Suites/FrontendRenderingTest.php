@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\IntegrationTestUrlToWebsiteMap;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
@@ -24,7 +23,7 @@ use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
@@ -74,7 +73,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     private function registerSnippetKeyGenerators(string $rootSnippetCode)
     {
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
-            ProductDetailViewSnippetRenderer::CODE,
+            ProductDetailMetaSnippetRenderer::CODE,
             $this->factory->getRequiredContextParts(),
             [Product::ID]
         );
@@ -163,7 +162,6 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             Locale::CONTEXT_CODE => 'foo_BAR'
         ]);
         
-        /** @var UrlToWebsiteMap $urlToWebsiteMap */
         $urlToWebsiteMap = $this->factory->createUrlToWebsiteMap();
         $metaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
         $pathWithoutWebsitePrefix = $urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $this->request->getUrl());

@@ -13,33 +13,24 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 
-class ProductDetailViewSnippetRenderer implements SnippetRenderer
+class ProductDetailMetaSnippetRenderer implements SnippetRenderer
 {
-    const CODE = 'product_detail_view';
+    const CODE = 'product_detail_meta';
 
     /**
      * @var ProductDetailViewBlockRenderer
      */
-    private $productDetailViewBlockRenderer;
+    private $blockRenderer;
 
     /**
      * @var SnippetKeyGenerator
      */
-    private $productDetailViewSnippetKeyGenerator;
+    private $snippetKeyGenerator;
 
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $productDetailPageMetaSnippetKeyGenerator;
-
-    public function __construct(
-        ProductDetailViewBlockRenderer $blockRenderer,
-        SnippetKeyGenerator $productDetailViewSnippetKeyGenerator,
-        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
-    ) {
-        $this->productDetailViewBlockRenderer = $blockRenderer;
-        $this->productDetailViewSnippetKeyGenerator = $productDetailViewSnippetKeyGenerator;
-        $this->productDetailPageMetaSnippetKeyGenerator = $productDetailPageMetaSnippetKeyGenerator;
+    public function __construct(ProductDetailViewBlockRenderer $blockRenderer, SnippetKeyGenerator $snippetKeyGenerator)
+    {
+        $this->blockRenderer = $blockRenderer;
+        $this->snippetKeyGenerator = $snippetKeyGenerator;
     }
 
     /**
@@ -54,10 +45,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
             );
         }
 
-        return array_merge(
-            [$this->createContentSnippet($productView)],
-            $this->createProductDetailPageMetaSnippets($productView)
-        );
+        return $this->createProductDetailPageMetaSnippets($productView);
     }
 
     /**
@@ -73,28 +61,19 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
         }, $this->getAllProductUrlKeys($productView));
     }
 
-    private function createContentSnippet(ProductView $productView): Snippet
-    {
-        $key = $this->productDetailViewSnippetKeyGenerator->getKeyForContext(
-            $productView->getContext(),
-            [Product::ID => $productView->getId()]
-        );
-        $content = $this->productDetailViewBlockRenderer->render($productView, $productView->getContext());
-
-        return Snippet::create($key, $content);
-    }
-
     /**
      * @param ProductView $productView
      * @return mixed[]
      */
     private function getPageMetaSnippetContent(ProductView $productView): array
     {
-        $rootBlockName = $this->productDetailViewBlockRenderer->getRootSnippetCode();
+        $this->blockRenderer->render($productView, $productView->getContext());
+
+        $rootBlockName = $this->blockRenderer->getRootSnippetCode();
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             (string) $productView->getId(),
             $rootBlockName,
-            $this->productDetailViewBlockRenderer->getNestedSnippetCodes(),
+            $this->blockRenderer->getNestedSnippetCodes(),
             []
         );
 
@@ -103,7 +82,7 @@ class ProductDetailViewSnippetRenderer implements SnippetRenderer
 
     private function createPageMetaSnippetKey(string $urlKey, ProductView $productView): string
     {
-        return $this->productDetailPageMetaSnippetKeyGenerator->getKeyForContext(
+        return $this->snippetKeyGenerator->getKeyForContext(
             $productView->getContext(),
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );

@@ -127,14 +127,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
 
         $metaInfoSnippetContent = $this->getPageMetaInfo();
-        $keyGeneratorParams = [
-            'robots' => 'noindex',
-        ];
 
         return $this->productListingPageContentBuilder->buildPageContent(
             $metaInfoSnippetContent,
             $this->context,
-            $keyGeneratorParams,
+            $keyGeneratorParams = [],
             $productSearchResult,
             $productsPerPage,
             $selectedSortBy,

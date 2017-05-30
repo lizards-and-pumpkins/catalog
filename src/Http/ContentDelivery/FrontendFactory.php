@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Http\ContentDelivery;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler;
+use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
@@ -23,7 +24,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
@@ -144,9 +145,15 @@ class FrontendFactory implements Factory
     {
         $registrySnippetKeyGeneratorLocator = new RegistrySnippetKeyGeneratorLocatorStrategy;
         $registrySnippetKeyGeneratorLocator->register(
-            ProductDetailViewSnippetRenderer::CODE,
+            ProductDetailMetaSnippetRenderer::CODE,
             function () {
-                return $this->getMasterFactory()->createProductDetailViewSnippetKeyGenerator();
+                return $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator();
+            }
+        );
+        $registrySnippetKeyGeneratorLocator->register(
+            ProductDetailTemplateSnippetRenderer::CODE,
+            function () {
+                return $this->getMasterFactory()->createProductDetailTemplateSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
