@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
@@ -137,7 +138,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
     private function addTranslationsToPageBuilder(Context $context)
     {
         $translator = $this->translatorRegistry->getTranslator(
-            ProductDetailMetaSnippetRenderer::CODE,
+            ProductDetailTemplateSnippetRenderer::CODE,
             $context->getValue(Locale::CONTEXT_CODE)
         );
         $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));

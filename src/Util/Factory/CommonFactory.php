@@ -1041,7 +1041,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             );
 
             $this->translatorRegistry->register(
-                ProductDetailMetaSnippetRenderer::CODE,
+                ProductDetailTemplateSnippetRenderer::CODE,
                 $this->getMasterFactory()->getProductDetailsViewTranslatorFactory()
             );
         }
