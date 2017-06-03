@@ -94,6 +94,7 @@ class DefaultWebFrontTest extends TestCase
             'createProductListingRouter',
             'createResourceNotFoundRouter',
             'createProductSearchResultRouter',
+            'createUnknownHttpRequestMethodRouter',
         ];
 
         $stubFactoryMethods = array_merge(

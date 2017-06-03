@@ -52,6 +52,7 @@ class DefaultWebFront extends WebFront
         $router->register($this->getMasterFactory()->createProductSearchResultRouter());
         $router->register($this->getMasterFactory()->createProductDetailViewRouter());
         $router->register($this->getMasterFactory()->createProductListingRouter());
+        $router->register($this->getMasterFactory()->createUnknownHttpRequestMethodRouter());
         $router->register($this->getMasterFactory()->createResourceNotFoundRouter());
     }
 }
