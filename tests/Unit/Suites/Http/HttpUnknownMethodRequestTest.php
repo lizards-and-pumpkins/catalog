@@ -7,34 +7,38 @@ namespace LizardsAndPumpkins\Http;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\Http\HttpDeleteRequest
+ * @covers \LizardsAndPumpkins\Http\HttpUnknownMethodRequest
  * @covers \LizardsAndPumpkins\Http\HttpRequest
- * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Http\HttpGetRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpPostRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  */
-class HttpDeleteRequestTest extends TestCase
+class HttpUnknownMethodRequestTest extends TestCase
 {
-    public function testReturnsAHttpDeleteRequestInstance()
+    public function testReturnsHttpUnknownRequestMethodInstance()
     {
+        $unknownRequestMethod = 'FOO';
         $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_DELETE,
+            $unknownRequestMethod,
             HttpUrl::fromString('https://example.com/'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
-        $this->assertInstanceOf(HttpDeleteRequest::class, $request);
+        $this->assertInstanceOf(HttpUnknownMethodRequest::class, $request);
         $this->assertInstanceOf(HttpRequest::class, $request);
     }
-    
-    public function testReturnsDeleteMethodCode()
+
+    public function testReturnsTheGivenMethodCode()
     {
+        $unknownRequestMethod = 'FOO';
         $request = HttpRequest::fromParameters(
-            HttpRequest::METHOD_DELETE,
+            $unknownRequestMethod,
             HttpUrl::fromString('https://example.com/'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
-        $this->assertSame(HttpRequest::METHOD_DELETE, $request->getMethod());
+        $this->assertSame($unknownRequestMethod, $request->getMethod());
     }
 }
