@@ -12,6 +12,12 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler
+ * @uses   \LizardsAndPumpkins\Http\HttpUnknownMethodRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Http\HttpRequest
+ * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
+ * @uses   \LizardsAndPumpkins\Http\HttpUrl
+ * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  */
 class UnknownHttpRequestMethodHandlerTest extends TestCase
 {
