@@ -12,6 +12,8 @@ use LizardsAndPumpkins\Http\HttpUnknownMethodRequest;
 
 class UnknownHttpRequestMethodHandler implements HttpRequestHandler
 {
+    const STATUSCODE_METHOD_NOT_ALLOWED = 405;
+
     public function canProcess(HttpRequest $request): bool
     {
         return $request instanceof HttpUnknownMethodRequest;
@@ -19,6 +21,6 @@ class UnknownHttpRequestMethodHandler implements HttpRequestHandler
 
     public function process(HttpRequest $request): HttpResponse
     {
-        return GenericHttpResponse::create('Method not allowed', [], 405);
+        return GenericHttpResponse::create('Method not allowed', [], self::STATUSCODE_METHOD_NOT_ALLOWED);
     }
 }
