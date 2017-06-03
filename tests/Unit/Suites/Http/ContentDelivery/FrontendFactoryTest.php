@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
+use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
@@ -125,6 +126,18 @@ class FrontendFactoryTest extends TestCase
     {
         $result = $this->frontendFactory->createProductDetailViewRouter();
         $this->assertInstanceOf(GenericHttpRouter::class, $result);
+    }
+
+    public function testReturnsUnknownHttpRequestMethodRouter()
+    {
+        $result = $this->frontendFactory->createUnknownHttpRequestMethodRouter();
+        $this->assertInstanceOf(GenericHttpRouter::class, $result);
+    }
+
+    public function testReturnsUnknownHttpRequestMethodHandler()
+    {
+        $result = $this->frontendFactory->createUnknownHttpRequestMethodHandler();
+        $this->assertInstanceOf(UnknownHttpRequestMethodHandler::class, $result);
     }
 
     public function testProductListingRouterIsReturned()

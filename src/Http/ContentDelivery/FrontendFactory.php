@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
@@ -56,6 +58,16 @@ class FrontendFactory implements Factory
     public function createProductDetailViewRouter() : HttpRouter
     {
         return new GenericHttpRouter($this->createProductDetailViewRequestHandler());
+    }
+
+    public function createUnknownHttpRequestMethodRouter(): HttpRouter
+    {
+        return new GenericHttpRouter($this->createUnknownHttpRequestMethodHandler());
+    }
+
+    public function createUnknownHttpRequestMethodHandler(): HttpRequestHandler
+    {
+        return new UnknownHttpRequestMethodHandler();
     }
 
     public function createProductListingRouter() : HttpRouter

@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
 use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
-use LizardsAndPumpkins\Http\Routing\Exception\UnsupportedRequestMethodException;
 
 abstract class HttpRequest
 {
@@ -15,9 +14,6 @@ abstract class HttpRequest
     const METHOD_PUT = 'PUT';
     const METHOD_DELETE = 'DELETE';
     const METHOD_HEAD = 'HEAD';
-    const METHOD_OPTIONS = 'OPTIONS';
-    const METHOD_TRACE = 'TRACE';
-    const METHOD_CONNECT = 'CONNECT';
 
     /**
      * @var HttpUrl
@@ -73,16 +69,11 @@ abstract class HttpRequest
                 return new HttpPutRequest($url, $headers, $body);
             case self::METHOD_DELETE:
                 return new HttpDeleteRequest($url, $headers, $body);
-            case self::METHOD_OPTIONS:
-                return new HttpOptionsRequest($url, $headers, $body);
-            case self::METHOD_TRACE:
-                return new HttpTraceRequest($url, $headers, $body);
-            case self::METHOD_CONNECT:
-                return new HttpConnectRequest($url, $headers, $body);
             default:
-                throw new UnsupportedRequestMethodException(
-                    sprintf('Unsupported request method: "%s"', $requestMethod)
-                );
+                $unknownMethodRequest = new HttpUnknownMethodRequest($url, $headers, $body);
+                $unknownMethodRequest->setMethodCode($requestMethod);
+                return $unknownMethodRequest;
+                
         }
     }
 

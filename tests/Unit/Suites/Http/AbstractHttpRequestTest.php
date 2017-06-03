@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\Http;
 
 use LizardsAndPumpkins\Http\Exception\CookieNotSetException;
 use LizardsAndPumpkins\Http\Exception\QueryParameterDoesNotExistException;
-use LizardsAndPumpkins\Http\Routing\Exception\UnsupportedRequestMethodException;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractHttpRequestTest extends TestCase
@@ -66,17 +65,6 @@ abstract class AbstractHttpRequestTest extends TestCase
         $this->assertSame($stubHttpUrl, $result);
     }
     
-    public function testUnsupportedRequestMethodExceptionIsThrown()
-    {
-        /** @var HttpUrl|\PHPUnit_Framework_MockObject_MockObject $stubHttpUrl */
-        $stubHttpUrl = $this->createMock(HttpUrl::class);
-
-        $this->expectException(UnsupportedRequestMethodException::class);
-        $this->expectExceptionMessage('Unsupported request method: "XXX"');
-
-        HttpRequest::fromParameters('XXX', $stubHttpUrl, HttpHeaders::fromArray([]), new HttpRequestBody(''));
-    }
-
     public function testHttpIsRequestReturnedFromGlobalState()
     {
         $this->setUpGlobalState();
