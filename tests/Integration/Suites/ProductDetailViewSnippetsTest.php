@@ -56,7 +56,7 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
 
         $simpleProductIdString = CatalogFixtureFileQuery::getSkuOfFirstSimpleProductInFixture($simpleProductFixture);
 
-        $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($this->factory, $simpleProductIdString);
+        $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($this->factory, $simpleProductIdString, '-1');
 
         $simpleProductData = json_decode($simpleProductSnippet, true);
         $this->assertEquals($simpleProductIdString, $simpleProductData['product_id']);

@@ -40,16 +40,16 @@ class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
         $stubCliMate->arguments->method('get')->willReturnMap($argumentMap);
         return $stubCliMate;
     }
-    
+
     public function testRunImportsCatalogCommand()
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $command = new ImportCatalogConsoleCommand($factory, $this->createTestCliMate($this->getCommandArgumentMap()));
         $command->run();
-        
+
         $simpleProductIdString = CatalogFixtureFileQuery::getSkuOfFirstSimpleProductInFixture($this->fixtureFile);
 
-        $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($factory, $simpleProductIdString);
+        $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($factory, $simpleProductIdString, '-1');
 
         $simpleProductData = json_decode($simpleProductSnippet, true);
         $this->assertEquals($simpleProductIdString, $simpleProductData['product_id']);
