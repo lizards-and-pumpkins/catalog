@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 
@@ -55,17 +55,16 @@ class ImageProcessor
 
     private function ensureTargetDirectoryExists()
     {
-        if (!file_exists($this->targetImageDirectoryPath)) {
+        if (! file_exists($this->targetImageDirectoryPath)) {
             $this->createDirectory($this->targetImageDirectoryPath);
         }
     }
 
     private function createDirectory(string $directoryPath)
     {
-        if (!is_writable(dirname($directoryPath))) {
+        if (!@mkdir($directoryPath, 0755, true) || ! is_dir(dirname($directoryPath))) {
             $message = sprintf('Unable to create the target directory for processed images "%s"', $directoryPath);
             throw new UnableToCreateTargetDirectoryForProcessedImagesException($message);
         }
-        mkdir($directoryPath, 0755, true);
     }
 }
