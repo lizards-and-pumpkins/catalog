@@ -63,6 +63,7 @@ Flasher abnehmbar.',
         $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($factory, $sku, $testDataVersionString);
 
         $this->assertNotEmpty($simpleProductSnippet);
+        $this->failIfMessagesWhereLogged($factory->getLogger());
     }
 
     private function getNextMessageFromQueue(Queue $queue): Message
