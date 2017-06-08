@@ -37,7 +37,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     private $pageSnippetCodes;
 
     /**
-     * @var array[]
+     * @var SnippetContainer[]
      */
     private $containers;
 
@@ -100,7 +100,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @param mixed[] $pageInfo
      */
-    protected static function validateRequiredKeysArePresent(array $pageInfo)
+    private static function validateRequiredKeysArePresent(array $pageInfo)
     {
         foreach (self::$requiredKeys as $key) {
             if (! array_key_exists($key, $pageInfo)) {
@@ -116,12 +116,11 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     private static function decodeJson(string $json) : array
     {
         $result = json_decode($json, true);
+
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \OutOfBoundsException(sprintf(
-                'JSON decode error: %s',
-                json_last_error_msg()
-            ));
+            throw new \OutOfBoundsException(sprintf('JSON decode error: %s', json_last_error_msg()));
         }
+
         return $result;
     }
 
