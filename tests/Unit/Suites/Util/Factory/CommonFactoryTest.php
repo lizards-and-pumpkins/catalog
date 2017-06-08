@@ -54,7 +54,8 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
@@ -102,7 +103,8 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Price\PriceSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Product\ProductProjector
- * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
@@ -233,9 +235,9 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
 
-    public function testProductDetailViewSnippetKeyGeneratorIsReturned()
+    public function testProductDetailMetaSnippetKeyGeneratorIsReturned()
     {
-        $result = $this->commonFactory->createProductDetailViewSnippetKeyGenerator();
+        $result = $this->commonFactory->createProductDetailPageMetaSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
@@ -785,7 +787,7 @@ class CommonFactoryTest extends TestCase
     public function productSnippetRenderersProvider() : array
     {
         return [
-            [ProductDetailViewSnippetRenderer::class],
+            [ProductDetailMetaSnippetRenderer::class],
             [ProductInListingSnippetRenderer::class],
             [PriceSnippetRenderer::class],
             [ProductJsonSnippetRenderer::class],
@@ -819,6 +821,34 @@ class CommonFactoryTest extends TestCase
         return [
             [ProductListingTemplateSnippetRenderer::class],
             [ProductSearchResultMetaSnippetRenderer::class],
+        ];
+    }
+
+    /**
+     * @dataProvider productDetailTemplateSnippetRenderersProvider
+     */
+    public function testContainsProductDetailTemplateSnippetRenderersInSnippetRendererList(string $expected)
+    {
+        $found = array_reduce(
+            $this->commonFactory->createProductDetailTemplateSnippetRendererList(),
+            function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
+                return $found || is_a($snippetRenderer, $expected);
+            }
+        );
+        $message = sprintf(
+            'SnippetRenderer "%s" not found in product detail template snippet renderer list',
+            $expected
+        );
+        $this->assertTrue($found, $message);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function productDetailTemplateSnippetRenderersProvider() : array
+    {
+        return [
+            [ProductDetailTemplateSnippetRenderer::class],
         ];
     }
 

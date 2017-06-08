@@ -10,7 +10,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 
 class TemplateSnippetRenderer implements SnippetRenderer
 {

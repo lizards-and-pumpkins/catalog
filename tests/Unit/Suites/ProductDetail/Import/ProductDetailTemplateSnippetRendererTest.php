@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductListing\Import;
+namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
@@ -10,13 +10,13 @@ use LizardsAndPumpkins\Import\SnippetRenderer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
+ * @covers \LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  */
-class ProductListingTemplateSnippetRendererTest extends TestCase
+class ProductDetailTemplateSnippetRendererTest extends TestCase
 {
     /**
-     * @var ProductListingTemplateSnippetRenderer
+     * @var ProductDetailTemplateSnippetRenderer
      */
     private $renderer;
 
@@ -28,10 +28,10 @@ class ProductListingTemplateSnippetRendererTest extends TestCase
     final protected function setUp()
     {
         $this->mockTemplateSnippetRenderer = $this->createMock(TemplateSnippetRenderer::class);
-        $this->renderer = new ProductListingTemplateSnippetRenderer($this->mockTemplateSnippetRenderer);
+        $this->renderer = new ProductDetailTemplateSnippetRenderer($this->mockTemplateSnippetRenderer);
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testisSnippetRenderer()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }

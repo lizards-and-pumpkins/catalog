@@ -35,9 +35,4 @@ class StubProductView extends AbstractProductView
     {
         return $this->imageFileLocator;
     }
-
-    public function getProductPageTitle() : string
-    {
-        return $this->getFirstValueOfAttribute('name');
-    }
 }

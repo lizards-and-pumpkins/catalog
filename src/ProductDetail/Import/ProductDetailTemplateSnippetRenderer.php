@@ -1,24 +1,25 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace LizardsAndPumpkins\ProductListing\Import;
+namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
 
-class ProductListingTemplateSnippetRenderer implements SnippetRenderer
+class ProductDetailTemplateSnippetRenderer implements SnippetRenderer
 {
-    const CODE = 'product_listing';
+    const CODE = 'product_detail_view';
 
     /**
      * @var TemplateSnippetRenderer
      */
     private $templateSnippetRenderer;
 
-    public function __construct(TemplateSnippetRenderer $templateSnippetRenderer) {
+    public function __construct(TemplateSnippetRenderer $templateSnippetRenderer)
+    {
         $this->templateSnippetRenderer = $templateSnippetRenderer;
     }
 

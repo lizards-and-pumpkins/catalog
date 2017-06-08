@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace LizardsAndPumpkins\ProductListing\Import\TemplateRendering;
+namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
  */

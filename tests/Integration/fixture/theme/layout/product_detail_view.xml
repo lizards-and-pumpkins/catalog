@@ -3,6 +3,6 @@
         xsi:schemaLocation="http://lizardsandpumpkins.com ../../../../../schema/snippet.xsd">
     <block name="product_details_snippet" class="LizardsAndPumpkins\Import\TemplateRendering\Block" template="template/1column.phtml">
         <block name="head" class="LizardsAndPumpkins\Import\TemplateRendering\Block" template="template/head.phtml"/>
-        <block name="content" class="LizardsAndPumpkins\Import\TemplateRendering\Block\ProductBlock" template="template/product-details.phtml"/>
+        <block name="content" class="LizardsAndPumpkins\Import\TemplateRendering\Block" template="template/product-details.phtml"/>
     </block>
 </snippet>

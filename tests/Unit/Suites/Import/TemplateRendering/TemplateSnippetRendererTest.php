@@ -10,7 +10,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\SnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 use PHPUnit\Framework\TestCase;
 
 /**

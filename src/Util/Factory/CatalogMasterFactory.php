@@ -7,10 +7,10 @@ namespace LizardsAndPumpkins\Util\Factory;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
@@ -45,7 +45,6 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method RegistrySnippetKeyGeneratorLocatorStrategy createRegistrySnippetKeyGeneratorLocatorStrategy
  * @method SnippetKeyGeneratorLocator getSnippetKeyGeneratorLocator
  * @method InMemoryLogger getLogger
- * @method GenericSnippetKeyGenerator createProductDetailViewSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductListingSnippetKeyGenerator
  * @method GenericSnippetKeyGenerator createProductStockQuantityRendererSnippetKeyGenerator
  * @method ContentBlockSnippetKeyGeneratorLocatorStrategy createContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -66,7 +65,7 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method SearchEngine getSearchEngine
  * @method callable getProductDetailsViewTranslatorFactory
  * @method TranslatorRegistry getTranslatorRegistry
- * @method SnippetKeyGenerator createProductListingTitleSnippetKeyGenerator
+ * @method UrlToWebsiteMap createUrlToWebsiteMap
  */
 class CatalogMasterFactory implements MasterFactory
 {

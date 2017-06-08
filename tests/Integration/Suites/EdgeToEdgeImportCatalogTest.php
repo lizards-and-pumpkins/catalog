@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\Http\HttpHeaders;
@@ -19,7 +20,6 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\Price;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailViewSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -112,7 +112,29 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         return $website->processRequest();
     }
-    
+
+    private function importProductDetailTemplate(string $dataVersion)
+    {
+        $requestBodyContent = json_encode(['data_version' => $dataVersion]);
+
+        $httpUrl = HttpUrl::fromString('https://example.com/api/templates/product_detail_view');
+        $httpHeaders = HttpHeaders::fromArray([
+            'Accept' => 'application/vnd.lizards-and-pumpkins.templates.v2+json',
+        ]);
+        $body = new HttpRequestBody($requestBodyContent);
+
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $body);
+
+        $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $factory->createDataPoolWriter()->setCurrentDataVersion($dataVersion);
+
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
+        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website->processRequest();
+        $this->processAllMessages($factory);
+        $this->failIfMessagesWhereLogged($factory->getLogger());
+    }
+
     public function assertProductCanBeAccessedOnFrontend(string $urlKey, string $name, string $dataVersion)
     {
         $this->factory->createDataPoolWriter()->setCurrentDataVersion($dataVersion);
@@ -122,7 +144,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         }
         $this->assertContains($name, $response->getBody());
     }
-    
+
     public function assertProductPriceOnFrontend(string $urlKey, string $dataVersion, string $expectedPrice)
     {
         $price = Price::fromDecimalValue($expectedPrice)->round((new Currency('EUR'))->getDefaultFractionDigits());
@@ -152,23 +174,23 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $contextSource = $this->factory->createContextSource();
         $context = $contextSource->getAllAvailableContexts()[0];
 
-        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductDetailViewSnippetRenderer::CODE
+        $productJsonSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductJsonSnippetRenderer::CODE
         );
-        $productDetailViewKey = $productDetailViewKeyGenerator->getKeyForContext(
+        $productJsonSnippetKey = $productJsonSnippetKeyGenerator->getKeyForContext(
             $context,
             [Product::ID => $productId]
         );
-        $productDetailViewHtml = $dataPoolReader->getSnippet($productDetailViewKey);
+        $productJson = $dataPoolReader->getSnippet($productJsonSnippetKey);
 
         $this->assertContains(
             (string) $productId,
-            $productDetailViewHtml,
+            $productJson,
             sprintf('The result page HTML does not contain the expected sku "%s"', $productId)
         );
         $this->assertContains(
             $productName,
-            $productDetailViewHtml,
+            $productJson,
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
         );
 
@@ -218,18 +240,26 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
     public function testImportedProductIsAccessibleFromTheFrontend()
     {
+        $dataVersion = '-1';
+
+        $this->importProductDetailTemplate($dataVersion);
+
         $fixtureFile = 'simple_product_armflasher-v1.xml';
         $this->importCatalogFixtureWithApiV1($fixtureFile);
-        
+
         $this->assertProductCanBeAccessedOnFrontend(
             $this->getProductUrlKeyFromFixture($fixtureFile),
             $this->getProductNameFromFixture($fixtureFile),
-            $dataVersion = '-1'
+            $dataVersion
         );
     }
 
     public function testImportedProductIsAccessibleViaNonCanonicalUrlFromTheFrontend()
     {
+        $dataVersion = '-1';
+
+        $this->importProductDetailTemplate($dataVersion);
+
         $fixtureFile = 'simple_product_armflasher-v1.xml';
         $this->importCatalogFixtureWithApiV1($fixtureFile);
 
@@ -239,7 +269,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         )[0]['value'];
 
         $name = $this->getProductNameFromFixture($fixtureFile);
-        $this->assertProductCanBeAccessedOnFrontend($urlKey, $name, $dataVersion = '-1');
+        $this->assertProductCanBeAccessedOnFrontend($urlKey, $name, $dataVersion);
     }
 
     public function testHttpResourceNotFoundResponseIsReturned()
@@ -266,35 +296,35 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
-        $productDetailViewKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductDetailViewSnippetRenderer::CODE
+        $productJsonSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+            ProductJsonSnippetRenderer::CODE
         );
 
         $validProductId = new ProductId('288193NEU');
-        $validProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
+        $validProductJsonSnippetKey = $productJsonSnippetKeyGenerator->getKeyForContext(
             $context,
             [Product::ID => $validProductId]
         );
 
         $invalidProductId = new ProductId('T4H2N-4701');
-        $invalidProductDetailViewSnippetKey = $productDetailViewKeyGenerator->getKeyForContext(
+        $invalidProductJsonSnippetKey = $productJsonSnippetKeyGenerator->getKeyForContext(
             $context,
             [Product::ID => $invalidProductId]
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
         $this->assertTrue(
-            $dataPoolReader->hasSnippet($validProductDetailViewSnippetKey),
-            sprintf('Expected snippet "%s" not found in data pool', $validProductDetailViewSnippetKey)
+            $dataPoolReader->hasSnippet($validProductJsonSnippetKey),
+            sprintf('Expected snippet "%s" not found in data pool', $validProductJsonSnippetKey)
         );
         $this->assertFalse(
-            $dataPoolReader->hasSnippet($invalidProductDetailViewSnippetKey),
-            sprintf('Unexpected product snippet "%s" found in data pool', $invalidProductDetailViewSnippetKey)
+            $dataPoolReader->hasSnippet($invalidProductJsonSnippetKey),
+            sprintf('Unexpected product snippet "%s" found in data pool', $invalidProductJsonSnippetKey)
         );
 
         $logger = $this->factory->getLogger();
         $messages = $logger->getMessages();
-        
+
         $importExceptionMessage = 'The attribute "price" has multiple values with ' .
             'different contexts which can not be part of one product attribute list';
         $expectedLoggedErrorMessage = sprintf(
@@ -303,7 +333,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $importExceptionMessage
         );
         $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');
-        
+
         if (count($messages) > 0) {
             array_map(function (LogMessage $message) use ($expectedLoggedErrorMessage) {
                 if ($expectedLoggedErrorMessage != $message) {
@@ -319,7 +349,10 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $fixtureFileV2 = 'simple_product_armflasher-v2.xml';
         $dataVersion1 = 'data-version-1';
         $dataVersion2 = 'data-version-2';
-        
+
+        $this->importProductDetailTemplate($dataVersion1);
+        $this->importProductDetailTemplate($dataVersion2);
+
         $this->importCatalogFixtureWithApiV2($fixtureFileV1, $dataVersion1);
         $this->importCatalogFixtureWithApiV2($fixtureFileV2, $dataVersion2);
 
@@ -331,7 +364,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->factory->createDataPoolWriter()->setCurrentDataVersion('-1');
         $response = $this->getHttpRequestResponse($urlKey1);
         $this->assertSame(HttpResponse::STATUS_NOT_FOUND, $response->getStatusCode());
-        
+
         $this->assertProductCanBeAccessedOnFrontend($urlKey1, $name1, $dataVersion1);
         $this->assertProductCanBeAccessedOnFrontend($urlKey2, $name2, $dataVersion2);
     }
@@ -343,13 +376,16 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $dataVersion1 = 'data-version-1';
         $dataVersion2 = 'data-version-2';
 
+        $this->importProductDetailTemplate($dataVersion1);
+        $this->importProductDetailTemplate($dataVersion2);
+
         $this->importCatalogFixtureWithApiV2($fixtureFileV1, $dataVersion1);
         $this->importCatalogFixtureWithApiV2($fixtureFileV2, $dataVersion2);
 
         $urlKey1 = $this->getProductUrlKeyFromFixture($fixtureFileV1);
         $urlKey2 = $this->getProductUrlKeyFromFixture($fixtureFileV2);
         $expectedPrice = $this->getProductPriceFromFixture($fixtureFileV2);
-        
+
         $this->assertProductPriceOnFrontend($urlKey1, $dataVersion1, $expectedPrice);
         $this->assertProductPriceOnFrontend($urlKey2, $dataVersion2, $expectedPrice);
     }

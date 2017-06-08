@@ -7,20 +7,20 @@ namespace LizardsAndPumpkins\Import\RootTemplate;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Message
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageMetadata
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessageName
  * @uses   \LizardsAndPumpkins\Messaging\Queue\MessagePayload
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
- * @uses   \LizardsAndPumpkins\ProductListing\Import\TemplateRendering\TemplateProjectionData
  */
 class TemplateWasUpdatedDomainEventHandlerTest extends TestCase
 {
