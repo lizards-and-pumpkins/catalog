@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
@@ -15,7 +15,14 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogImportApiTest extends AbstractIntegrationTest
 {
-    private function getNextMessageFromQueue(Queue $queue): Message
+    const TIMEOUT = 5;
+
+    /**
+     * @var \Closure
+     */
+    private $checkTimeout;
+
+    private function getNextMessageFromQueue(Queue $queue) : Message
     {
         $receiver = new class implements MessageReceiver
         {
@@ -26,9 +33,35 @@ class CatalogImportApiTest extends AbstractIntegrationTest
                 $this->message = $message;
             }
         };
-        $queue->consume($receiver, 1);
+        declare(ticks=1) {
+            $queue->consume($receiver, 1);
+        }
 
         return $receiver->message;
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->setupTimeOutToNoticeNoMessageAdded();
+    }
+
+    protected function setupTimeOutToNoticeNoMessageAdded()
+    {
+        $startTime = microtime(true);
+        $this->checkTimeout = function () use ($startTime) {
+            if ((microtime(true) - $startTime) > 5) {
+                throw new \Exception('Tests ran longer than ' . self::TIMEOUT . ' sec, it seems no message was added ' .
+                    'to the queue and the endless loop in \LizardsAndPumpkins\Messaging\Queue::consume was killed.');
+
+            }
+        };
+        register_tick_function($this->checkTimeout);
+    }
+
+    protected function tearDown()
+    {
+        unregister_tick_function($this->checkTimeout);
     }
 
     public function testV1CatalogImportHandlerPlacesImportCommandsIntoQueue()

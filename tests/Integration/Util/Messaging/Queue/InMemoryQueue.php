@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+declare(ticks=1);
 
 namespace LizardsAndPumpkins\Messaging\Queue;
 
@@ -53,6 +54,7 @@ class InMemoryQueue implements Queue, Clearable
                 $messageReceiver->receive($this->next());
                 $numberOfMessagesToConsumeBeforeReturn--;
             }
+            usleep(1);
         }
     }
 }
