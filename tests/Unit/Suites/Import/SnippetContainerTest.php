@@ -12,58 +12,33 @@ use PHPUnit\Framework\TestCase;
  */
 class SnippetContainerTest extends TestCase
 {
-    /**
-     * @param string $code
-     * @param string[] $containedSnippetCodes
-     * @return SnippetContainer
-     */
-    private function createInstance(string $code, array $containedSnippetCodes) : SnippetContainer
-    {
-        return new SnippetContainer($code, $containedSnippetCodes);
-    }
-
-    public function testItReturnsTheContainerCode()
-    {
-        $container = $this->createInstance('test', ['foo', 'bar']);
-
-        $this->assertSame('test', $container->getCode());
-    }
-
-    public function testItReturnsTheContainedSnippetCodes()
-    {
-        $container = $this->createInstance('test', ['abc', 'def']);
-        $this->assertSame(['abc', 'def'], $container->getSnippetCodes());
-    }
-
-    public function testItThrowsAnExceptionIfTheContainerCodeIsNotAString()
+    public function testThrowsAnExceptionIfTheContainerCodeIsNotAString()
     {
         $this->expectException(\TypeError::class);
         new SnippetContainer(12, []);
     }
 
-    public function testItThrowsAnExceptionIfTheContainerCodeIsTooShort()
+    public function testThrowsAnExceptionIfTheContainerCodeIsTooShort()
     {
         $this->expectException(InvalidSnippetContainerCodeException::class);
         $this->expectExceptionMessage('The snippet container code has to be at least 2 characters long');
 
-        $this->createInstance('i', []);
+        new SnippetContainer('i', []);
     }
 
-    public function testItReturnsAnAssociativeArray()
+    public function testReturnsSnippetContainerArrayRepresentation()
     {
-        $container = $this->createInstance('test', ['foo', 'bar']);
+        $container = new SnippetContainer('test', ['foo', 'bar']);
         $jsonData = $container->toArray();
-        
+
         $this->assertSame(['test' => ['foo', 'bar']], $jsonData);
     }
 
     public function testCanBeRehydrated()
     {
-        $source = $this->createInstance('test', ['foo', 'bar']);
-        $rehydrated = SnippetContainer::rehydrate($source->getCode(), $source->getSnippetCodes());
-        
+        $rehydrated = SnippetContainer::rehydrate('test', ['foo', 'bar']);
+
         $this->assertInstanceOf(SnippetContainer::class, $rehydrated);
-        $this->assertSame($source->getCode(), $rehydrated->getCode());
-        $this->assertSame($source->getSnippetCodes(), $rehydrated->getSnippetCodes());
+        $this->assertSame(['test' => ['foo', 'bar']], $rehydrated->toArray());
     }
 }

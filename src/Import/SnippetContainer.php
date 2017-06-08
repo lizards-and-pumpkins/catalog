@@ -43,29 +43,16 @@ class SnippetContainer
      * @param string[] $containedSnippetCodes
      * @return SnippetContainer
      */
-    public static function rehydrate(string $code, array $containedSnippetCodes) : SnippetContainer
+    public static function rehydrate(string $code, array $containedSnippetCodes): SnippetContainer
     {
         return new static($code, $containedSnippetCodes);
     }
 
-    public function getCode() : string
-    {
-        return $this->containerCode;
-    }
-
     /**
      * @return string[]
      */
-    public function getSnippetCodes() : array
+    public function toArray(): array
     {
-        return $this->containedSnippetCodes;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function toArray() : array
-    {
-        return [$this->getCode() => $this->getSnippetCodes()];
+        return [$this->containerCode => $this->containedSnippetCodes];
     }
 }
