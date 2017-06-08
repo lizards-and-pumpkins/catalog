@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetContainer;
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
@@ -237,7 +236,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
 
     private static function getCriterionClassNameForOperation(string $operationName) : string
     {
-        return SearchCriterion::class . $operationName;
+        return preg_replace('/Criteria$/', 'Criterion', SearchCriteria::class) . $operationName;
     }
 
     /**
