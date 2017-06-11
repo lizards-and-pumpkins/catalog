@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterion;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
@@ -287,7 +287,7 @@ class ProductListingSnippetContentTest extends TestCase
         $metaSnippetContent = ProductListingSnippetContent::fromJson($json);
         $result = $metaSnippetContent->getSelectionCriteria();
 
-        $className = SearchCriterion::class . $operation;
+        $className = preg_replace('/Criteria$/', 'Criterion', SearchCriteria::class) . $operation;
         $expectedCriterion = new $className($fieldName, $fieldValue);
         $expectedCriteria = CompositeSearchCriterion::createAnd($expectedCriterion);
 
