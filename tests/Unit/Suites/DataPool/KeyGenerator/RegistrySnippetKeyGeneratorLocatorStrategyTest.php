@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
-use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
- * @covers \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
@@ -37,13 +37,13 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
 
     public function testFalseIsReturnedIfSnippetCodeCanNotBeHandled()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->assertFalse($this->strategy->canHandle($unsupportedSnippetCode));
     }
 
     public function testTrueIsReturnedIfSnippetCodeCanBeHandled()
     {
-        $snippetCode = 'foo';
+        $snippetCode = new SnippetCode('foo');
         $testClosure = function () {
             // intentionally left empty
         };
@@ -55,7 +55,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
 
     public function testExceptionIsThrownDuringAttemptToLocateSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
@@ -66,30 +66,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
         $this->strategy->getKeyGeneratorForSnippetCode(new \stdClass());
     }
 
-    /**
-     * @dataProvider emptySnippetCodeDataProvider
-     */
-    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed(string $emptySnippetCode)
-    {
-        $this->expectException(InvalidSnippetCodeException::class);
-        $this->expectExceptionMessage('Snippet code must not be empty.');
-        $this->strategy->getKeyGeneratorForSnippetCode($emptySnippetCode);
-    }
-
-    /**
-     * @return array[]
-     */
-    public function emptySnippetCodeDataProvider() : array
-    {
-        return [
-            [''],
-            [' '],
-        ];
-    }
-
     public function testKeyGeneratorForSnippetCodesIsReturned()
     {
-        $snippetCode = 'foo';
+        $snippetCode = new SnippetCode('foo');
         $testClosure = function () {
             return $this->stubSnippetKeyGenerator;
         };
@@ -99,21 +78,9 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
         $this->assertSame($this->stubSnippetKeyGenerator, $this->strategy->getKeyGeneratorForSnippetCode($snippetCode));
     }
 
-    public function testExceptionIsThrownWhenRegisteringEmptyStringSnippetCode()
-    {
-        $invalidSnippetCode = '';
-        $testClosure = function () {
-            // intentionally left empty
-        };
-
-        $this->expectException(InvalidSnippetCodeException::class);
-
-        $this->strategy->register($invalidSnippetCode, $testClosure);
-    }
-
     public function testSameInstanceForSameSnippetCodeIsReturned()
     {
-        $snippetCode = 'foo';
+        $snippetCode = new SnippetCode('foo');
         $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $testClosure = function () use ($stubSnippetKeyGenerator) {
             return $stubSnippetKeyGenerator;
@@ -129,14 +96,14 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
 
     public function testDifferentInstancesAreReturnedForDifferentSnippetCodes()
     {
-        $snippetCodeA = 'foo';
+        $snippetCodeA = new SnippetCode('foo');
         $stubSnippetKeyGeneratorA = $this->createMock(SnippetKeyGenerator::class);
         $testClosureA = function () use ($stubSnippetKeyGeneratorA) {
             return $stubSnippetKeyGeneratorA;
         };
         $this->strategy->register($snippetCodeA, $testClosureA);
 
-        $snippetCodeB = 'bar';
+        $snippetCodeB = new SnippetCode('bar');
         $stubSnippetKeyGeneratorB = $this->createMock(SnippetKeyGenerator::class);
         $testClosureB = function () use ($stubSnippetKeyGeneratorB) {
             return $stubSnippetKeyGeneratorB;

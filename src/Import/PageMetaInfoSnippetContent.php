@@ -10,21 +10,21 @@ interface PageMetaInfoSnippetContent
     const KEY_PAGE_SNIPPET_CODES = 'page_snippet_codes';
     const KEY_CONTAINER_SNIPPETS = 'container_snippets';
     const URL_KEY = 'url_key';
-    
+
     /**
      * @return mixed[]
      */
-    public function getInfo() : array;
+    public function getInfo(): array;
 
-    public function getRootSnippetCode() : string;
-
-    /**
-     * @return string[]
-     */
-    public function getPageSnippetCodes() : array;
+    public function getRootSnippetCode(): SnippetCode;
 
     /**
-     * @return array[]
+     * @return SnippetCode[]
      */
-    public function getContainerSnippets() : array;
+    public function getPageSnippetCodes(): array;
+
+    /**
+     * @return SnippetCode[]
+     */
+    public function getContainerSnippets(): array;
 }

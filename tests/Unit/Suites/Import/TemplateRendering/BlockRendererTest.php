@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
  * @covers \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\Block
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockStructure
  */

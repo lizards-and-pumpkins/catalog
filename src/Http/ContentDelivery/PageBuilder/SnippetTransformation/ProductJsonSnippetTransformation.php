@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJson
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ProductJsonSnippetTransformation implements SnippetTransformation
 {
@@ -29,7 +30,7 @@ class ProductJsonSnippetTransformation implements SnippetTransformation
      */
     public function __invoke($input, Context $context, PageSnippets $pageSnippets) : string
     {
-        $price = $pageSnippets->getSnippetByCode(PriceSnippetRenderer::PRICE);
+        $price = $pageSnippets->getSnippetByCode(new SnippetCode(PriceSnippetRenderer::PRICE));
         $specialPrice = $this->getSpecialPrice($pageSnippets);
         $productData = json_decode($input, true);
         $enrichedProductData = $this->enrichProductJson->addPricesToProductData(
@@ -48,8 +49,10 @@ class ProductJsonSnippetTransformation implements SnippetTransformation
      */
     private function getSpecialPrice(PageSnippets $pageSnippets)
     {
-        return $pageSnippets->hasSnippetCode(PriceSnippetRenderer::SPECIAL_PRICE) ?
-            $pageSnippets->getSnippetByCode(PriceSnippetRenderer::SPECIAL_PRICE) :
+        $snippetCode = new SnippetCode(PriceSnippetRenderer::SPECIAL_PRICE);
+
+        return $pageSnippets->hasSnippetCode($snippetCode) ?
+            $pageSnippets->getSnippetByCode($snippetCode) :
             null;
     }
 }

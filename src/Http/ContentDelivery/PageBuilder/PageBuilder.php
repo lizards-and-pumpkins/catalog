@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 interface PageBuilder
 {
@@ -28,9 +29,9 @@ interface PageBuilder
      */
     public function addSnippetsToPage(array $snippetCodeToKeyMap, array $snippetKeyToContentMap);
 
-    public function registerSnippetTransformation(string $snippetCode, callable $transformation);
+    public function registerSnippetTransformation(SnippetCode $snippetCode, callable $transformation);
 
-    public function addSnippetToContainer(string $containerCode, string $snippetCode);
+    public function addSnippetToContainer(SnippetCode $containerCode, SnippetCode $snippetCode);
 
-    public function addSnippetToPage(string $snippetCode, string $snippetContent);
+    public function addSnippetToPage(SnippetCode $snippetCode, string $snippetContent);
 }

@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductDetailMeatSnippetRendererTest extends TestCase
 {
@@ -46,7 +47,7 @@ class ProductDetailMeatSnippetRendererTest extends TestCase
         $blockRenderer->method('render')->willReturnCallback(function () {
             return '';
         });
-        $blockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
+        $blockRenderer->method('getRootSnippetCode')->willReturn(new SnippetCode('dummy root block code'));
         $blockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
         return $blockRenderer;

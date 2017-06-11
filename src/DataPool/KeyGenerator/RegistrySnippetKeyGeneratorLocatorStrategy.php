@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
-use LizardsAndPumpkins\Util\SnippetCodeValidator;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorLocator
 {
@@ -14,27 +14,24 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
      */
     private $keyGeneratorFactoryClosures = [];
 
-    public function canHandle(string $snippetCode) : bool
+    public function canHandle(SnippetCode $snippetCode): bool
     {
-        return array_key_exists($snippetCode, $this->keyGeneratorFactoryClosures);
+        return array_key_exists((string) $snippetCode, $this->keyGeneratorFactoryClosures);
     }
 
-    public function getKeyGeneratorForSnippetCode(string $snippetCode) : SnippetKeyGenerator
+    public function getKeyGeneratorForSnippetCode(SnippetCode $snippetCode): SnippetKeyGenerator
     {
-        SnippetCodeValidator::validate($snippetCode);
-
-        if (!$this->canHandle($snippetCode)) {
+        if (! $this->canHandle($snippetCode)) {
             throw new SnippetCodeCanNotBeProcessedException(
                 sprintf('%s can not process "%s" snippet code.', __CLASS__, $snippetCode)
             );
         }
 
-        return call_user_func($this->keyGeneratorFactoryClosures[$snippetCode]);
+        return call_user_func($this->keyGeneratorFactoryClosures[(string) $snippetCode]);
     }
 
-    public function register(string $snippetCode, \Closure $keyGeneratorFactoryClosure)
+    public function register(SnippetCode $snippetCode, \Closure $keyGeneratorFactoryClosure)
     {
-        SnippetCodeValidator::validate($snippetCode);
-        $this->keyGeneratorFactoryClosures[$snippetCode] = $keyGeneratorFactoryClosure;
+        $this->keyGeneratorFactoryClosures[(string) $snippetCode] = $keyGeneratorFactoryClosure;
     }
 }

@@ -12,6 +12,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
 {
@@ -72,11 +73,11 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
     }
 
     /**
-     * @param string $rootSnippetCode
+     * @param SnippetCode $rootSnippetCode
      * @param string[] $pageSnippetCodes
      * @return ProductSearchResultMetaSnippetContent|string
      */
-    private function getMetaSnippetContentJson(string $rootSnippetCode, array $pageSnippetCodes)
+    private function getMetaSnippetContentJson(SnippetCode $rootSnippetCode, array $pageSnippetCodes)
     {
         $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($rootSnippetCode, $pageSnippetCodes, []);
         return json_encode($metaSnippetContent->getInfo());

@@ -4,55 +4,38 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import;
 
-use LizardsAndPumpkins\Import\Exception\InvalidSnippetContainerCodeException;
-
 class SnippetContainer
 {
     /**
-     * @var string
+     * @var SnippetCode
      */
     private $containerCode;
 
     /**
-     * @var string[]
+     * @var SnippetCode[]
      */
     private $containedSnippetCodes;
 
-    /**
-     * @param string $containerCode
-     * @param string[] $containedSnippetCodes
-     */
-    public function __construct(string $containerCode, array $containedSnippetCodes)
+    public function __construct(SnippetCode $containerCode, SnippetCode ...$containedSnippetCodes)
     {
-        $this->validateContainerCode($containerCode);
-        // todo: validate contained snippet codes (via yet to be implemented snippet code value object)
         $this->containerCode = $containerCode;
         $this->containedSnippetCodes = $containedSnippetCodes;
     }
 
-    private function validateContainerCode(string $containerCode)
+    public static function rehydrate(string $code, string ...$containedSnippetCodeStrings): SnippetContainer
     {
-        if (strlen($containerCode) < 2) {
-            $message = 'The snippet container code has to be at least 2 characters long';
-            throw new InvalidSnippetContainerCodeException($message);
-        }
+        $containedSnippetCodes = array_map(function (string $containerSnippetCodeString) {
+            return new SnippetCode($containerSnippetCodeString);
+        }, $containedSnippetCodeStrings);
+
+        return new static(new SnippetCode($code), ...$containedSnippetCodes);
     }
 
     /**
-     * @param string $code
-     * @param string[] $containedSnippetCodes
-     * @return SnippetContainer
-     */
-    public static function rehydrate(string $code, array $containedSnippetCodes): SnippetContainer
-    {
-        return new static($code, $containedSnippetCodes);
-    }
-
-    /**
-     * @return string[]
+     * @return SnippetCode[]
      */
     public function toArray(): array
     {
-        return [$this->containerCode => $this->containedSnippetCodes];
+        return [(string) $this->containerCode => $this->containedSnippetCodes];
     }
 }

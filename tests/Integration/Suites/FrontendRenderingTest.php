@@ -27,6 +27,7 @@ use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class FrontendRenderingTest extends AbstractIntegrationTest
 {
@@ -51,7 +52,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     {
         $dataPoolWriter = $this->factory->createDataPoolWriter();
 
-        $rootSnippetCode = 'root-snippet';
+        $rootSnippetCode = new SnippetCode('root-snippet');
         $this->registerSnippetKeyGenerators($rootSnippetCode);
         
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
@@ -70,27 +71,29 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $dataPoolWriter->writeSnippets($rootSnippet, $metaInfoSnippet, ...$pageSnippets);
     }
 
-    private function registerSnippetKeyGenerators(string $rootSnippetCode)
+    private function registerSnippetKeyGenerators(SnippetCode $rootSnippetCode)
     {
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
-            ProductDetailMetaSnippetRenderer::CODE,
+            new SnippetCode(ProductDetailMetaSnippetRenderer::CODE),
             $this->factory->getRequiredContextParts(),
             [Product::ID]
         );
         $this->snippetKeyGeneratorLocator->register($rootSnippetCode, function () use ($rootSnippetKeyGenerator) {
             return $rootSnippetKeyGenerator;
         });
-        $this->snippetKeyGeneratorLocator->register('head', function () {
-            return new GenericSnippetKeyGenerator('head', $this->factory->getRequiredContextParts(), []);
+        $headSnippetCode = new SnippetCode('head');
+        $this->snippetKeyGeneratorLocator->register($headSnippetCode, function () use ($headSnippetCode) {
+            return new GenericSnippetKeyGenerator($headSnippetCode, $this->factory->getRequiredContextParts(), []);
         });
-        $this->snippetKeyGeneratorLocator->register('body', function () {
-            return new GenericSnippetKeyGenerator('body', $this->factory->getRequiredContextParts(), []);
+        $bodySnippetCode = new SnippetCode('body');
+        $this->snippetKeyGeneratorLocator->register($bodySnippetCode, function () use ($bodySnippetCode) {
+            return new GenericSnippetKeyGenerator($bodySnippetCode, $this->factory->getRequiredContextParts(), []);
         });
     }
 
-    private function getSnippetKey(string $code, Context $context) : string
+    private function getSnippetKey(SnippetCode $snippetCode, Context $context) : string
     {
-        $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($code);
+        $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
         return $keyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
     }
 
@@ -101,20 +104,20 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     private function createTestProductDetailPageSnippets(Context $context) : array
     {
         $headSnippetContent = '<title>Page Title</title>';
-        $headSnippet = Snippet::create($this->getSnippetKey('head', $context), $headSnippetContent);
+        $headSnippet = Snippet::create($this->getSnippetKey(new SnippetCode('head'), $context), $headSnippetContent);
 
         $bodySnippetContent = '<h1>Headline</h1>';
-        $bodySnippet = Snippet::create($this->getSnippetKey('body', $context), $bodySnippetContent);
+        $bodySnippet = Snippet::create($this->getSnippetKey(new SnippetCode('body'), $context), $bodySnippetContent);
 
-        $productJsonSnippetKey = $this->getSnippetKey(ProductJsonSnippetRenderer::CODE, $context);
+        $productJsonSnippetKey = $this->getSnippetKey(new SnippetCode(ProductJsonSnippetRenderer::CODE), $context);
         $jsonSnippetContent = json_encode(['sku' => $this->testProductId]);
         $productJsonSnippet = Snippet::create($productJsonSnippetKey, $jsonSnippetContent);
 
-        $priceSnippetKey = $this->getSnippetKey(PriceSnippetRenderer::PRICE, $context);
+        $priceSnippetKey = $this->getSnippetKey(new SnippetCode(PriceSnippetRenderer::PRICE), $context);
         $priceSnippetContent = '1199';
         $priceSnippet = Snippet::create($priceSnippetKey, $priceSnippetContent);
 
-        $specialPriceSnippetKey = $this->getSnippetKey(PriceSnippetRenderer::SPECIAL_PRICE, $context);
+        $specialPriceSnippetKey = $this->getSnippetKey(new SnippetCode(PriceSnippetRenderer::SPECIAL_PRICE), $context);
         $specialPriceSnippetContent = '999';
         $specialPriceSnippet = Snippet::create($specialPriceSnippetKey, $specialPriceSnippetContent);
         

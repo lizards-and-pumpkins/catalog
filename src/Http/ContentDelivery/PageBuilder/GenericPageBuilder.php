@@ -10,11 +10,12 @@ use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class GenericPageBuilder implements PageBuilder
 {
     /**
-     * @var string
+     * @var SnippetCode
      */
     private $rootSnippetCode;
 
@@ -79,7 +80,7 @@ class GenericPageBuilder implements PageBuilder
         PageMetaInfoSnippetContent $metaInfo,
         Context $context,
         array $keyGeneratorParams
-    ) : HttpResponse {
+    ): HttpResponse {
         $this->context = $context;
         $this->keyGeneratorParams = $keyGeneratorParams;
 
@@ -113,7 +114,7 @@ class GenericPageBuilder implements PageBuilder
      * @param PageMetaInfoSnippetContent $metaInfo
      * @return string[]
      */
-    private function initFromMetaInfo(PageMetaInfoSnippetContent $metaInfo) : array
+    private function initFromMetaInfo(PageMetaInfoSnippetContent $metaInfo): array
     {
         $this->rootSnippetCode = $metaInfo->getRootSnippetCode();
         $containerSnippetCodes = array_reduce($metaInfo->getContainerSnippets(), function ($carry, $codes) {
@@ -128,38 +129,39 @@ class GenericPageBuilder implements PageBuilder
             $snippetCodes,
             array_map([$this, 'tryToGetSnippetKey'], $snippetCodes)
         ));
+
         return $this->snippetCodeToKeyMap;
     }
 
     /**
      * @return string[]
      */
-    private function getFlattenedContainerSnippetCodes() : array
+    private function getFlattenedContainerSnippetCodes(): array
     {
         return array_reduce($this->containerSnippets, function (array $flattened, array $snippetsInContainer) {
             return array_merge($flattened, $snippetsInContainer);
         }, []);
     }
 
-    public function registerSnippetTransformation(string $snippetCode, callable $transformation)
+    public function registerSnippetTransformation(SnippetCode $snippetCode, callable $transformation)
     {
-        if (!array_key_exists($snippetCode, $this->snippetTransformations)) {
-            $this->snippetTransformations[$snippetCode] = [];
+        if (! array_key_exists((string) $snippetCode, $this->snippetTransformations)) {
+            $this->snippetTransformations[(string) $snippetCode] = [];
         }
-        $this->snippetTransformations[$snippetCode][] = $transformation;
+        $this->snippetTransformations[(string) $snippetCode][] = $transformation;
     }
 
-    public function addSnippetToContainer(string $containerCode, string $snippetCode)
+    public function addSnippetToContainer(SnippetCode $containerCode, SnippetCode $snippetCode)
     {
-        $this->containerSnippets[$containerCode][] = $snippetCode;
+        $this->containerSnippets[(string) $containerCode][] = $snippetCode;
     }
 
-    public function addSnippetToPage(string $snippetCode, string $snippetContent)
+    public function addSnippetToPage(SnippetCode $snippetCode, string $snippetContent)
     {
-        $this->addSnippetsToPage([$snippetCode => $snippetCode], [$snippetCode => $snippetContent]);
+        $this->addSnippetsToPage([(string) $snippetCode => $snippetCode], [(string) $snippetCode => $snippetContent]);
     }
 
-    private function tryToGetSnippetKey(string $snippetCode) : string
+    private function tryToGetSnippetKey(SnippetCode $snippetCode): string
     {
         try {
             $keyGenerator = $this->keyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
@@ -167,26 +169,28 @@ class GenericPageBuilder implements PageBuilder
         } catch (\Exception $e) {
             $keyForContext = '';
         }
+
         return $keyForContext;
     }
 
     /**
      * @return string[]
      */
-    private function loadSnippets() : array
+    private function loadSnippets(): array
     {
         $keys = $this->getSnippetKeysInContext();
         $this->snippetKeyToContentMap = array_merge(
             $this->snippetKeyToContentMap,
             $this->dataPoolReader->getSnippets($keys)
         );
+
         return $this->snippetKeyToContentMap;
     }
 
     /**
      * @return string[]
      */
-    private function getSnippetKeysInContext() : array
+    private function getSnippetKeysInContext(): array
     {
         return array_values($this->removeCodesThatCouldNotBeMappedToAKey($this->snippetCodeToKeyMap));
     }
@@ -195,30 +199,31 @@ class GenericPageBuilder implements PageBuilder
      * @param string[] $snippetKeys
      * @return string[]
      */
-    private function removeCodesThatCouldNotBeMappedToAKey(array $snippetKeys) : array
+    private function removeCodesThatCouldNotBeMappedToAKey(array $snippetKeys): array
     {
         return array_filter($snippetKeys);
     }
 
     private function applySnippetTransformations()
     {
-        every($this->getCodesOfSnippetsWithTransformations(), function ($snippetCode) {
+        every($this->getCodesOfSnippetsWithTransformations(), function (SnippetCode $snippetCode) {
             $this->applyTransformationToSnippetByCode($snippetCode);
         });
     }
 
     /**
-     * @return string[]
+     * @return SnippetCode[]
      */
-    private function getCodesOfSnippetsWithTransformations() : array
+    private function getCodesOfSnippetsWithTransformations(): array
     {
-        return array_intersect(
-            array_keys($this->snippetTransformations),
-            $this->pageSnippets->getSnippetCodes()
-        );
+        $codesOfSnippetsWithTransformations = array_map(function (string $snippetCodeString) {
+            return new SnippetCode($snippetCodeString);
+        }, array_keys($this->snippetTransformations));
+
+        return array_intersect($codesOfSnippetsWithTransformations, $this->pageSnippets->getSnippetCodes());
     }
 
-    private function applyTransformationToSnippetByCode(string $snippetCode)
+    private function applyTransformationToSnippetByCode(SnippetCode $snippetCode)
     {
         $this->pageSnippets->updateSnippetByCode(
             $snippetCode,
@@ -230,17 +235,17 @@ class GenericPageBuilder implements PageBuilder
         );
     }
 
-    private function applyTransformationToSnippetContent(string $content, callable $transformation) : string
+    private function applyTransformationToSnippetContent(string $content, callable $transformation): string
     {
         return $transformation($content, $this->context, $this->pageSnippets);
     }
 
     /**
-     * @param string $snippetCode
+     * @param SnippetCode $snippetCode
      * @return callable[]
      */
-    private function getTransformationsForSnippetByCode(string $snippetCode) : array
+    private function getTransformationsForSnippetByCode(SnippetCode $snippetCode): array
     {
-        return $this->snippetTransformations[$snippetCode];
+        return $this->snippetTransformations[(string) $snippetCode];
     }
 }

@@ -18,12 +18,13 @@ use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
 class ProductDetailViewRequestHandlerTest extends TestCase
@@ -92,7 +93,7 @@ class ProductDetailViewRequestHandlerTest extends TestCase
     {
         return json_encode(ProductDetailPageMetaInfoSnippetContent::create(
             $this->testProductId,
-            'root-snippet-code',
+            new SnippetCode('root-snippet-code'),
             ['child-snippet1'],
             []
         )->getInfo());

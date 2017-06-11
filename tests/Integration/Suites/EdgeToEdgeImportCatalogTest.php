@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
@@ -25,6 +26,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\XPathParser;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
+use LizardsAndPumpkins\Import\SnippetCode;
 use SebastianBergmann\Money\Currency;
 
 class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
@@ -175,7 +177,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $context = $contextSource->getAllAvailableContexts()[0];
 
         $productJsonSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductJsonSnippetRenderer::CODE
+            new SnippetCode(ProductJsonSnippetRenderer::CODE)
         );
         $productJsonSnippetKey = $productJsonSnippetKeyGenerator->getKeyForContext(
             $context,
@@ -195,7 +197,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
 
         $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInListingSnippetRenderer::CODE
+            new SnippetCode(ProductInListingSnippetRenderer::CODE)
         );
         $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
         $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
@@ -210,7 +212,9 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $contextDataSet = [Country::CONTEXT_CODE => $country];
             $contextWithCountry = $this->factory->createContextBuilder()->expandContext($context, $contextDataSet);
 
-            $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
+            $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
+                new SnippetCode(PriceSnippetRenderer::PRICE)
+            );
             $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext(
                 $contextWithCountry,
                 [Product::ID => $productId]
@@ -297,7 +301,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
 
         $keyGeneratorLocator = $this->factory->getSnippetKeyGeneratorLocator();
         $productJsonSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductJsonSnippetRenderer::CODE
+            new SnippetCode(ProductJsonSnippetRenderer::CODE)
         );
 
         $validProductId = new ProductId('288193NEU');

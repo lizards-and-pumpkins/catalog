@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -21,6 +22,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class GenericPageBuilderTest extends TestCase
 {
@@ -30,9 +32,9 @@ class GenericPageBuilderTest extends TestCase
     private $urlPathKeyFixture = 'dummy-url-key';
 
     /**
-     * @var string
+     * @var SnippetCode
      */
-    private $testRootSnippetCode = 'root-snippet';
+    private $testRootSnippetCode;
 
     /**
      * @var GenericPageBuilder
@@ -65,30 +67,42 @@ class GenericPageBuilderTest extends TestCase
     private $stubSnippetKeyGeneratorLocator;
 
     /**
-     * @param string $rootSnippetCode
+     * @param SnippetCode $rootSnippetCode
      * @param string $rootSnippetContent
      * @param string[] $childSnippetMap
      * @param string[] $containerSnippets
      */
     private function setDataPoolFixture(
-        string $rootSnippetCode,
+        SnippetCode $rootSnippetCode,
         string $rootSnippetContent,
         array $childSnippetMap,
         array $containerSnippets = []
     ) {
-        $allSnippetCodes = array_merge([$rootSnippetCode], array_keys($childSnippetMap));
+        $childSnippetCodes = $this->createSnippetCodesFromStrings(...array_keys($childSnippetMap));
+        $allSnippetCodes = array_merge([$rootSnippetCode], $childSnippetCodes);
         $allSnippetContent = array_merge([$rootSnippetContent], array_values($childSnippetMap));
         $this->setPageMetaInfoFixture($rootSnippetCode, $allSnippetCodes, $containerSnippets);
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
     }
 
     /**
-     * @param string $rootSnippetCode
+     * @param string[] ...$snippetCodeStrings
+     * @return SnippetCode[]
+     */
+    private function createSnippetCodesFromStrings(string ...$snippetCodeStrings): array
+    {
+        return array_map(function (string $snippetCodeString) {
+            return new SnippetCode($snippetCodeString);
+        }, $snippetCodeStrings);
+    }
+
+    /**
+     * @param SnippetCode $rootSnippetCode
      * @param string[] $allSnippetCodes
      * @param string[] $containerSnippets
      */
     private function setPageMetaInfoFixture(
-        string $rootSnippetCode,
+        SnippetCode $rootSnippetCode,
         array $allSnippetCodes,
         array $containerSnippets = []
     ) {
@@ -142,8 +156,10 @@ class GenericPageBuilderTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
+        $this->testRootSnippetCode = new SnippetCode('root-snippet');
+
         $this->stubContext = $this->createMock(Context::class);
         $this->stubContext->method('getIdForParts')->willReturn($this->contextIdFixture);
 
@@ -244,7 +260,7 @@ EOH;
 
     public function testExceptionIsThrownIfTheRootSnippetContentIsNotFound()
     {
-        $childSnippetCodes = ['child1'];
+        $childSnippetCodes = [new SnippetCode('child1')];
         $allSnippetCodes = [];
         $allSnippetContent = [];
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
@@ -282,7 +298,7 @@ EOH;
 
         $this->setDataPoolFixture($this->testRootSnippetCode, $rootSnippetContent, $childSnippetCodeToContentMap);
 
-        $this->pageBuilder->addSnippetToPage('added-later', 'Added Content');
+        $this->pageBuilder->addSnippetToPage(new SnippetCode('added-later'), 'Added Content');
 
         $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
 
@@ -297,12 +313,12 @@ EOH;
 
         $this->pageBuilder = new GenericPageBuilder($this->mockDataPoolReader, $stubKeyGeneratorLocator);
 
-        $childSnippetCodes = ['child1'];
+        $childSnippetCodes = [new SnippetCode('child1')];
         $this->setPageMetaInfoFixture($this->testRootSnippetCode, $childSnippetCodes);
         
         $rootSnippetContent = "This is returned even the child snippet doesn't have a key generator ";
         $this->mockDataPoolReader->method('getSnippets')
-            ->willReturn([$this->testRootSnippetCode => $rootSnippetContent . '{{snippet child1}}',]);
+            ->willReturn([(string) $this->testRootSnippetCode => $rootSnippetContent . '{{snippet child1}}',]);
         
         $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
 
@@ -311,10 +327,12 @@ EOH;
 
     public function testTestSnippetTransformationIsNotCalledIfThereIsNoMatchingSnippet()
     {
+        $nonExistingSnippetCode = new SnippetCode('non-existing-snippet-code');
+
         /** @var callable|MockObject $mockTransformation */
         $mockTransformation = $this->createMock(SnippetTransformation::class);
         $mockTransformation->expects($this->never())->method('__invoke');
-        $this->pageBuilder->registerSnippetTransformation('non-existing-snippet-code', $mockTransformation);
+        $this->pageBuilder->registerSnippetTransformation($nonExistingSnippetCode, $mockTransformation);
 
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
@@ -332,7 +350,7 @@ EOH;
         $mockTransformation = $this->createMock(SnippetTransformation::class);
         $mockTransformation->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
             ->willReturn('Transformed Content');
-        $this->pageBuilder->registerSnippetTransformation('body', $mockTransformation);
+        $this->pageBuilder->registerSnippetTransformation(new SnippetCode('body'), $mockTransformation);
 
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
@@ -350,13 +368,13 @@ EOH;
         $mockTransformationOne = $this->createMock(SnippetTransformation::class);
         $mockTransformationOne->expects($this->once())->method('__invoke')->with('<h1>My Website!</h1>')
             ->willReturn('result one');
-        $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationOne);
+        $this->pageBuilder->registerSnippetTransformation(new SnippetCode('body'), $mockTransformationOne);
 
         /** @var callable|MockObject $mockTransformationTwo */
         $mockTransformationTwo = $this->createMock(SnippetTransformation::class);
         $mockTransformationTwo->expects($this->once())->method('__invoke')->with('result one')
             ->willReturn('result two');
-        $this->pageBuilder->registerSnippetTransformation('body', $mockTransformationTwo);
+        $this->pageBuilder->registerSnippetTransformation(new SnippetCode('body'), $mockTransformationTwo);
 
         $rootSnippetContent = '<body>{{snippet body}}</body>';
         $childSnippetMap = [
@@ -399,9 +417,9 @@ EOH;
             'child3' => 'Child 3',
         ];
         $containerSnippets = [
-            'container1' => ['child1', 'container2'],
-            'container2' => ['child2', 'container3'],
-            'container3' => ['child3'],
+            'container1' => [new SnippetCode('child1'), new SnippetCode('container2')],
+            'container2' => [new SnippetCode('child2'), new SnippetCode('container3')],
+            'container3' => [new SnippetCode('child3')],
         ];
 
         $this->setDataPoolFixture(
@@ -424,7 +442,7 @@ EOH;
             'child2' => 'Child 2',
             'child3' => 'Child 3',
         ];
-        $containerSnippets = ['container1' => ['child1']];
+        $containerSnippets = ['container1' => [new SnippetCode('child1')]];
 
         $this->setDataPoolFixture(
             $this->testRootSnippetCode,
@@ -433,10 +451,10 @@ EOH;
             $containerSnippets
         );
         
-        $this->pageBuilder->addSnippetToContainer('container1', 'child2');
-        $this->pageBuilder->addSnippetToContainer('container2', 'child3');
-        $this->pageBuilder->addSnippetToContainer('container2', 'child4');
-        $this->pageBuilder->addSnippetToPage('child4', 'Child 4');
+        $this->pageBuilder->addSnippetToContainer(new SnippetCode('container1'), new SnippetCode('child2'));
+        $this->pageBuilder->addSnippetToContainer(new SnippetCode('container2'), new SnippetCode('child3'));
+        $this->pageBuilder->addSnippetToContainer(new SnippetCode('container2'), new SnippetCode('child4'));
+        $this->pageBuilder->addSnippetToPage(new SnippetCode('child4'), 'Child 4');
 
         $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
 
@@ -453,11 +471,11 @@ EOH;
             [$this->testRootSnippetCode],
             $containerSnippetsInPageMetaInfo
         );
-        $allSnippetCodes = [$this->testRootSnippetCode, 'child1'];
+        $allSnippetCodes = [$this->testRootSnippetCode, new SnippetCode('child1')];
         $allSnippetContent = [$rootSnippetContent, 'Child 1 Content'];
         $this->setPageContentSnippetFixture($allSnippetCodes, $allSnippetContent);
 
-        $this->pageBuilder->addSnippetToContainer('container1', 'child1');
+        $this->pageBuilder->addSnippetToContainer(new SnippetCode('container1'), new SnippetCode('child1'));
         
         $page = $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
 

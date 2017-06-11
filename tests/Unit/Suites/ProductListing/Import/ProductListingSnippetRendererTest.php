@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductListingSnippetRendererTest extends TestCase
 {

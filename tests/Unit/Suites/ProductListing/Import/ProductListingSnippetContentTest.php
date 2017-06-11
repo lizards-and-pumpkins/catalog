@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
-use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductListingSnippetContentTest extends TestCase
 {
@@ -26,9 +26,9 @@ class ProductListingSnippetContentTest extends TestCase
     private $pageMetaInfo;
 
     /**
-     * @var string
+     * @var SnippetCode
      */
-    private $rootSnippetCode = 'root-snippet-code';
+    private $rootSnippetCode;
 
     private $containerSnippets = ['additional-info' => []];
 
@@ -39,6 +39,8 @@ class ProductListingSnippetContentTest extends TestCase
 
     protected function setUp()
     {
+        $this->rootSnippetCode = new SnippetCode('root-snippet-code');
+
         $this->stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
         $this->stubSelectionCriteria->method('jsonSerialize')->willReturn([
             'condition' => CompositeSearchCriterion::AND_CONDITION,
@@ -81,18 +83,12 @@ class ProductListingSnippetContentTest extends TestCase
         }
     }
 
-    public function testExceptionIsThrownIfTheRootSnippetCodeIsAnEmptyString()
-    {
-        $this->expectException(InvalidSnippetCodeException::class);
-        ProductListingSnippetContent::create($this->stubSelectionCriteria, '', [], []);
-    }
-
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
         $pageMetaInfo = ProductListingSnippetContent::create(
             $this->stubSelectionCriteria,
-            $rootSnippetCode,
+            new SnippetCode($rootSnippetCode),
             [],
             []
         );

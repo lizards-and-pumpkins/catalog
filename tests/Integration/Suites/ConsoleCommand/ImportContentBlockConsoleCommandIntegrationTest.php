@@ -10,6 +10,7 @@ use LizardsAndPumpkins\AbstractIntegrationTest;
 use LizardsAndPumpkins\ConsoleCommand\Command\ImportContentBlockConsoleCommand;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ImportContentBlockConsoleCommandIntegrationTest extends AbstractIntegrationTest
 {
@@ -60,14 +61,16 @@ class ImportContentBlockConsoleCommandIntegrationTest extends AbstractIntegratio
         $this->failIfMessagesWhereLogged($factory->getLogger());
         
         /** @var SnippetKeyGenerator $keyGenerator */
-        $keyGenerator = $factory->createContentBlockSnippetKeyGenerator('content_block_foo_bar');
+        $keyGenerator = $factory->createContentBlockSnippetKeyGenerator(new SnippetCode('content_block_foo_bar'));
         $context = $factory->createContextBuilder()->createContext([]);
         $dataPoolReader = $factory->createDataPoolReader();
         $regularContentBlockSnippet = $dataPoolReader->getSnippet($keyGenerator->getKeyForContext($context, []));
         $this->assertSame($this->testRegularContentBlockContent, $regularContentBlockSnippet);
 
         /** @var SnippetKeyGenerator $keyGenerator */
-        $listingKeyGenerator = $factory->createProductListingContentBlockSnippetKeyGenerator('product_listing_content_block_');
+        $listingKeyGenerator = $factory->createProductListingContentBlockSnippetKeyGenerator(
+            new SnippetCode('product_listing_content_block_')
+        );
         $key = $listingKeyGenerator->getKeyForContext($context, ['url_key' => 'sale']);
         $listingContentBlockSnippet = $dataPoolReader->getSnippet($key);
         $this->assertSame($this->testListingContentBlockContent, $listingContentBlockSnippet);

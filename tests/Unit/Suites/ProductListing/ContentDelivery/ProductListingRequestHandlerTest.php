@@ -18,6 +18,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,7 +26,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductListingRequestHandlerTest extends TestCase
 {
@@ -74,7 +75,7 @@ class ProductListingRequestHandlerTest extends TestCase
 
         $testMetaInfoSnippetJson = json_encode(ProductListingSnippetContent::create(
             $stubSelectionCriteria,
-            'root-snippet-code',
+            new SnippetCode('root-snippet-code'),
             $pageSnippetCodes,
             []
         )->getInfo());
