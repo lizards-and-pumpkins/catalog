@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
@@ -9,13 +9,14 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogImportApiTest extends AbstractIntegrationTest
 {
-    private function getNextMessageFromQueue(Queue $queue): Message
+    private function getNextMessageFromQueue(Queue $queue) : Message
     {
         $receiver = new class implements MessageReceiver
         {

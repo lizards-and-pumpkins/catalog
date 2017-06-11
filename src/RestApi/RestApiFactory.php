@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
@@ -11,8 +11,10 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestH
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
@@ -34,6 +36,55 @@ class RestApiFactory implements Factory
         );
     }
 
+    public function getApiRequestHandlerLocator(): ApiRequestHandlerLocator
+    {
+        if (null === $this->memoizedApiRequestHandlerLocator) {
+            $this->memoizedApiRequestHandlerLocator = new ApiRequestHandlerLocator();
+            $this->registerApiRequestHandlers($this->memoizedApiRequestHandlerLocator);
+        }
+
+        return $this->memoizedApiRequestHandlerLocator;
+    }
+
+    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
+    {
+        $requestHandlerLocator->register('put_catalog_import', $version = 1, function () {
+            return $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_catalog_import', $version = 2, function () {
+            return $this->getMasterFactory()->createCatalogImportApiV2PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_product_import', $version = 1, function () {
+            return $this->getMasterFactory()->createProductImportApiV1PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_content_blocks', $version = 1, function () {
+            return $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_content_blocks', $version = 2, function () {
+            return $this->getMasterFactory()->createContentBlocksApiV2PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_templates', $version = 1, function () {
+            return $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_templates', $version = 2, function () {
+            return $this->getMasterFactory()->createTemplatesApiV2PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('get_current_version', $version = 1, function () {
+            return $this->getMasterFactory()->createCurrentVersionApiV1GetRequestHandler();
+        });
+
+        $requestHandlerLocator->register('put_current_version', $version = 1, function () {
+            return $this->getMasterFactory()->createCurrentVersionApiV1PutRequestHandler();
+        });
+    }
+
     public function createCatalogImportApiV1PutRequestHandler(): CatalogImportApiV1PutRequestHandler
     {
         return new CatalogImportApiV1PutRequestHandler(
@@ -42,6 +93,14 @@ class RestApiFactory implements Factory
             $this->getMasterFactory()->getLogger(),
             DataVersion::fromVersionString($this->getMasterFactory()->getCurrentDataVersion())
         );
+    }
+
+    private function getCatalogImportDirectoryConfig(): string
+    {
+        /** @var ConfigReader $configReader */
+        $configReader = $this->getMasterFactory()->createConfigReader();
+
+        return $configReader->get('catalog_import_directory');
     }
 
     public function createCatalogImportApiV2PutRequestHandler(): CatalogImportApiV2PutRequestHandler
@@ -99,57 +158,16 @@ class RestApiFactory implements Factory
         );
     }
 
-    private function getCatalogImportDirectoryConfig(): string
+    public function createProductImportApiV1PutRequestHandler()
     {
-        /** @var ConfigReader $configReader */
-        $configReader = $this->getMasterFactory()->createConfigReader();
-
-        return $configReader->get('catalog_import_directory');
+        return new ProductImportApiV1PutRequestHandler(
+            $this->getMasterFactory()->createProductJsonToXml(),
+            $this->getMasterFactory()->createCatalogImport()
+        );
     }
 
-    public function getApiRequestHandlerLocator(): ApiRequestHandlerLocator
+    public function createProductJsonToXml(): ProductJsonToXml
     {
-        if (null === $this->memoizedApiRequestHandlerLocator) {
-            $this->memoizedApiRequestHandlerLocator = new ApiRequestHandlerLocator();
-            $this->registerApiRequestHandlers($this->memoizedApiRequestHandlerLocator);
-        }
-
-        return $this->memoizedApiRequestHandlerLocator;
-    }
-
-    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
-    {
-
-        $requestHandlerLocator->register('put_catalog_import', $version = 1, function () {
-            return $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler();
-        });
-
-        $requestHandlerLocator->register('put_catalog_import', $version = 2, function () {
-            return $this->getMasterFactory()->createCatalogImportApiV2PutRequestHandler();
-        });
-
-        $requestHandlerLocator->register('put_content_blocks', $version = 1, function () {
-            return $this->getMasterFactory()->createContentBlocksApiV1PutRequestHandler();
-        });
-
-        $requestHandlerLocator->register('put_content_blocks', $version = 2, function () {
-            return $this->getMasterFactory()->createContentBlocksApiV2PutRequestHandler();
-        });
-
-        $requestHandlerLocator->register('put_templates', $version = 1, function () {
-            return $this->getMasterFactory()->createTemplatesApiV1PutRequestHandler();
-        });
-
-        $requestHandlerLocator->register('put_templates', $version = 2, function () {
-            return $this->getMasterFactory()->createTemplatesApiV2PutRequestHandler();
-        });
-
-        $requestHandlerLocator->register('get_current_version', $version = 1, function () {
-            return $this->getMasterFactory()->createCurrentVersionApiV1GetRequestHandler();
-        });
-
-        $requestHandlerLocator->register('put_current_version', $version = 1, function () {
-            return $this->getMasterFactory()->createCurrentVersionApiV1PutRequestHandler();
-        });
+        return new ProductJsonToXml();
     }
 }

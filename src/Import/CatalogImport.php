@@ -7,6 +7,8 @@ namespace LizardsAndPumpkins\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
@@ -15,8 +17,6 @@ use LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 
 class CatalogImport
 {
@@ -90,19 +90,19 @@ class CatalogImport
 
     private function validateImportFilePath(string $importFilePath)
     {
-        if (!file_exists($importFilePath)) {
+        if (! file_exists($importFilePath)) {
             throw new CatalogImportFileDoesNotExistException(
                 sprintf('Catalog import file not found: "%s"', $importFilePath)
             );
         }
-        if (!is_readable($importFilePath)) {
+        if (! is_readable($importFilePath)) {
             throw new CatalogImportFileNotReadableException(
                 sprintf('Catalog import file is not readable: "%s"', $importFilePath)
             );
         }
     }
 
-    private function createClosureForMethod(string $methodName) : \Closure
+    private function createClosureForMethod(string $methodName): \Closure
     {
         return function (...$args) use ($methodName) {
             return $this->{$methodName}(...$args);
@@ -112,7 +112,7 @@ class CatalogImport
     private function processProductXml(string $productXml)
     {
         try {
-            $this->addProductsAndProductImagesToQueue($productXml);
+            $this->addProductsAndProductImagesToQueue($productXml, $this->dataVersion);
         } catch (\Exception $exceptionWillInterruptFurtherProcessingOfThisProduct) {
             $this->logger->log(new ProductImportCallbackFailureMessage(
                 $exceptionWillInterruptFurtherProcessingOfThisProduct,
@@ -122,8 +122,9 @@ class CatalogImport
         }
     }
 
-    public function addProductsAndProductImagesToQueue(string $productXml)
+    public function addProductsAndProductImagesToQueue(string $productXml, DataVersion $dataVersion)
     {
+        $this->dataVersion = $dataVersion;
         $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
         $contexts = $this->contextSource->getAllAvailableContextsWithVersionApplied($this->dataVersion);
         every($contexts, function (Context $context) use ($productBuilder, $productXml) {

@@ -7,18 +7,18 @@ namespace LizardsAndPumpkins\Import;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
+use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCallbackFailureMessage;
+use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileDoesNotExistException;
-use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +37,7 @@ use PHPUnit\Framework\TestCase;
 class CatalogImportTest extends TestCase
 {
     use TestFileFixtureTrait;
-    
+
     private $sharedFixtureFilePath = __DIR__ . '/../../../shared-fixture/catalog.xml';
 
     /**
@@ -128,9 +128,9 @@ class CatalogImportTest extends TestCase
     {
         $this->testDirectoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($this->testDirectoryPath);
-        
+
         $this->mockQueueImportCommands = $this->createMock(QueueImportCommands::class);
-        
+
         $this->stubProductXmlToProductBuilder = $this->createMockProductXmlToProductBuilder();
         $this->stubProductListingBuilder = $this->createMockProductsPerPageForContextBuilder();
         $this->mockEventQueue = $this->createMock(DomainEventQueue::class);
@@ -176,6 +176,37 @@ class CatalogImportTest extends TestCase
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
+    public function testItAddsCommandsForOneProductToQueue()
+    {
+        $xml = <<<XML
+<product type="simple" sku="288193NEU" tax_class="19%">
+    <images>
+        <image>
+            <file>288193_14.jpg</file>
+            <label/>
+        </image>
+    </images>
+    <attributes>
+        <attribute name="url_key">adilette</attribute>
+        <attribute name="name">Adilette</attribute>
+        <attribute name="category">sale</attribute>
+        <attribute name="price">14.92</attribute>
+        <attribute name="brand">Adidas</attribute>
+        <attribute name="gender">Herren</attribute>
+        <attribute name="stock_qty">1</attribute>
+        <attribute name="backorders">false</attribute>
+        <attribute name="color">d90000</attribute>
+        <attribute name="series">Adilette</attribute>
+        <attribute name="news_from_date">2015-02-25 00:00:00</attribute>
+    </attributes>
+</product>
+XML;
+
+        $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forProduct');
+        $this->setProductIsAvailableForContextFixture(true);
+        $this->catalogImport->addProductsAndProductImagesToQueue($xml, $this->testDataVersion);
+    }
+
     public function testItAddsNoProductCommandsToTheQueueIfTheProductDoesNotMatchAGivenContext()
     {
         $this->mockQueueImportCommands->expects($this->never())->method('forProduct');
@@ -218,7 +249,7 @@ class CatalogImportTest extends TestCase
             ->with($this->isInstanceOf(CatalogListingImportCallbackFailureMessage::class));
 
         $this->mockQueueImportCommands->method('forListing')->willThrowException(new \Exception('dummy'));
-        
+
         $fullXml = file_get_contents($this->sharedFixtureFilePath);
         $onlyListingXml = (new XPathParser($fullXml))->getXmlNodesRawXmlArrayByXPath('/catalog/listings')[0];
         $fixtureFile = $this->getUniqueTempDir() . '/listings.xml';
@@ -230,7 +261,7 @@ class CatalogImportTest extends TestCase
     {
         $this->mockLogger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(ProductImportCallbackFailureMessage::class));
-        
+
         /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
         $stubProductBuilder = $this->createMock(ProductBuilder::class);
         $stubProductBuilder->method('isAvailableForContext')->willReturn(true);
@@ -238,6 +269,7 @@ class CatalogImportTest extends TestCase
             new \Exception('dummy exception')
         );
 
+        /** @var ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject $stubProductXmlToProductBuilder */
         $stubProductXmlToProductBuilder = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $stubProductXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
 
@@ -249,7 +281,7 @@ class CatalogImportTest extends TestCase
             $this->contextSource,
             $this->mockLogger
         );
-        
+
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
@@ -10,12 +10,14 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestH
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
+use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\UnitTestFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -92,18 +94,22 @@ class RestApiFactoryTest extends TestCase
     /**
      * @dataProvider registeredRequestHandlerProvider
      */
-    public function testRegistersExpectedHandlersWithApiRouter($code, $version)
+    public function testRegistersExpectedHandlersWithApiRouter(string $code, int $version)
     {
         $locator = $this->factory->getApiRequestHandlerLocator();
 
         $this->assertApiRequestHandlerIsRegistered($locator, $code, $version);
     }
 
-    public function registeredRequestHandlerProvider(): array
+    /**
+     * @return array[]
+     */
+    public function registeredRequestHandlerProvider() : array
     {
         return [
             'put_catalog_import v1'  => ['put_catalog_import', 1],
             'put_catalog_import v2'  => ['put_catalog_import', 2],
+            'put_product_import v1'  => ['put_product_import', 1],
             'put_content_blocks v1'  => ['put_content_blocks', 1],
             'put_content_blocks v2'  => ['put_content_blocks', 2],
             'put_templates v1'       => ['put_templates', 1],
@@ -159,5 +165,17 @@ class RestApiFactoryTest extends TestCase
     {
         $result = $this->factory->createTemplatesApiV2PutRequestHandler();
         $this->assertInstanceOf(TemplatesApiV2PutRequestHandler::class, $result);
+    }
+
+    public function testReturnsProductImportApiV1PutRequestHandler()
+    {
+        $result = $this->factory->createProductImportApiV1PutRequestHandler();
+        $this->assertInstanceOf(ProductImportApiV1PutRequestHandler::class, $result);
+    }
+
+    public function testReturnsProductJsonToXml()
+    {
+        $result = $this->factory->createProductJsonToXml();
+        $this->assertInstanceOf(ProductJsonToXml::class, $result);
     }
 }
