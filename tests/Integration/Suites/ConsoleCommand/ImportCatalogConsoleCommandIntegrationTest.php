@@ -49,7 +49,7 @@ class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
 
         $simpleProductIdString = CatalogFixtureFileQuery::getSkuOfFirstSimpleProductInFixture($this->fixtureFile);
 
-        $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($factory, $simpleProductIdString, '-1');
+        $simpleProductSnippet = TestDataPoolQuery::getProductJsonSnippetForId($factory, $simpleProductIdString);
 
         $simpleProductData = json_decode($simpleProductSnippet, true);
         $this->assertEquals($simpleProductIdString, $simpleProductData['product_id']);
