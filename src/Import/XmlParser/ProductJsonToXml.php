@@ -51,9 +51,9 @@ class ProductJsonToXml
     private function writeProductNode(array $productData)
     {
         $this->writer->startElement('product');
-        foreach ($this->productRootNodeAttributes as $a) {
-            $this->writer->writeAttribute($a, $productData[$a]);
-        }
+        every($this->productRootNodeAttributes, function (string $attribute) use ($productData) {
+            $this->writer->writeAttribute($attribute, $productData[$attribute]);
+        });
 
         $this->writeProductAttributeNodes($productData);
         $this->writer->endElement();
