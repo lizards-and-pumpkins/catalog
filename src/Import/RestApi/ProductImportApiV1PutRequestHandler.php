@@ -72,7 +72,7 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         return is_array($requestArguments) && isset($requestArguments[$argument]) && $requestArguments[$argument];
     }
 
-    protected function getResponse(HttpRequest $request): HttpResponse
+    final protected function getResponse(HttpRequest $request): HttpResponse
     {
         $headers = [];
         $body = '';
