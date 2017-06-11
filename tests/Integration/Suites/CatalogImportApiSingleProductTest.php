@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
@@ -15,6 +15,23 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogImportApiSingleProductTest extends AbstractIntegrationTest
 {
+
+    private function getNextMessageFromQueue(Queue $queue): Message
+    {
+        $receiver = new class implements MessageReceiver
+        {
+            public $message;
+
+            public function receive(Message $message)
+            {
+                $this->message = $message;
+            }
+        };
+        $queue->consume($receiver, 1);
+
+        return $receiver->message;
+    }
+
     public function testV1ProductImportApiV1PutRequestHandler()
     {
         $testDataVersionString = 'foo-123';
@@ -64,21 +81,5 @@ Flasher abnehmbar.',
 
         $this->assertNotEmpty($simpleProductSnippet);
         $this->failIfMessagesWhereLogged($factory->getLogger());
-    }
-
-    private function getNextMessageFromQueue(Queue $queue): Message
-    {
-        $receiver = new class implements MessageReceiver
-        {
-            public $message;
-
-            public function receive(Message $message)
-            {
-                $this->message = $message;
-            }
-        };
-        $queue->consume($receiver, 1);
-
-        return $receiver->message;
     }
 }
