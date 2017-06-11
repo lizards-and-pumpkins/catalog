@@ -102,15 +102,13 @@ class CatalogImport
         }
     }
 
-    private function createClosureForMethod(string $methodName) : \Closure
+    private function createClosureForMethod(string $methodName): \Closure
     {
         return function (...$args) use ($methodName) {
             return $this->{$methodName}(...$args);
         };
     }
 
-
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function processProductXml(string $productXml)
     {
         try {
@@ -157,7 +155,6 @@ class CatalogImport
         }
     }
 
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     private function processListingXml(string $listingXml)
     {
         try {

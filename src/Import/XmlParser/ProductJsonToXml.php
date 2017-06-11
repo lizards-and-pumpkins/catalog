@@ -14,24 +14,24 @@ class ProductJsonToXml
     /**
      * @var string[]
      */
-    private $productNodeAttributes = ['type', 'sku', 'tax_class'];
+    private $productRootNodeAttributes = ['type', 'sku', 'tax_class'];
 
     /**
      * @var string[]
      */
     private $context = [];
 
-    public function toXml(string $product): string
+    public function toXml(string $productDataJson): string
     {
-        $product = json_decode($product, true);
+        $productData = json_decode($productDataJson, true);
 
-        if (isset($product['context'])) {
-            $this->context = $product['context'];
+        if (isset($productData['context'])) {
+            $this->context = $productData['context'];
         }
 
         $this->startDocument();
 
-        $this->writeProduct($product);
+        $this->writeProductNode($productData);
 
         $this->writer->endDocument();
         return $this->writer->outputMemory();
@@ -46,16 +46,16 @@ class ProductJsonToXml
     }
 
     /**
-     * @param array[] $product
+     * @param array[] $productData
      */
-    private function writeProduct(array $product)
+    private function writeProductNode(array $productData)
     {
         $this->writer->startElement('product');
-        foreach ($this->productNodeAttributes as $a) {
-            $this->writer->writeAttribute($a, $product[$a]);
+        foreach ($this->productRootNodeAttributes as $a) {
+            $this->writer->writeAttribute($a, $productData[$a]);
         }
 
-        $this->writeAttributes($product);
+        $this->writeProductAttributeNodes($productData);
         $this->writer->endElement();
     }
 
@@ -63,7 +63,7 @@ class ProductJsonToXml
      * @param string $key
      * @param mixed $value
      */
-    private function writeAttribute(string $key, $value)
+    private function writeAttributeNode(string $key, $value)
     {
         if (is_bool($value)) {
             $value = $value ? 'true' : 'false';
@@ -71,13 +71,13 @@ class ProductJsonToXml
         $this->writer->startElement('attribute');
 
         $this->writer->writeAttribute('name', $key);
-        $this->writeContext();
-        $this->writeText($value);
+        $this->writeContextNode();
+        $this->writeTextNode($value);
 
         $this->writer->endElement();
     }
 
-    private function writeContext()
+    private function writeContextNode()
     {
         foreach ($this->context as $contextKey => $contextValue) {
             $this->writer->writeAttribute($contextKey, $contextValue);
@@ -87,27 +87,36 @@ class ProductJsonToXml
     /**
      * @param mixed $value
      */
-    private function writeText($value)
+    private function writeTextNode($value)
     {
-        if (strpos($value, '<') === false && strpos($value, '& ') === false) {
-            $this->writer->text($value);
+        if ($this->containsTriangularBracket($value) || $this->containsAmpersand($value)) {
+            $this->writer->writeCData($value);
             return;
         }
-        $this->writer->writeCData($value);
+        $this->writer->text($value);
     }
 
     /**
      * @param array[] $product
      */
-    private function writeAttributes(array $product)
+    private function writeProductAttributeNodes(array $product)
     {
         $this->writer->startElement('attributes');
 
-        /** @var string[] $attributes */
         $attributes = $product['attributes'];
         foreach ($attributes as $key => $value) {
-            $this->writeAttribute($key, $value);
+            $this->writeAttributeNode($key, $value);
         }
         $this->writer->endElement();
+    }
+
+    private function containsTriangularBracket(string $string): bool
+    {
+        return strpos($string, '<') !== false;
+    }
+
+    private function containsAmpersand(string $string): bool
+    {
+        return strpos($string, '& ') !== false;
     }
 }

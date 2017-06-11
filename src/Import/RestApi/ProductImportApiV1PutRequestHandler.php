@@ -26,23 +26,18 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
      */
     private $catalogImport;
 
-    /**
-     * @var DataVersion
-     */
-    private $dataVersion;
-
     public function __construct(ProductJsonToXml $productJsonToXml, CatalogImport $catalogImport)
     {
         $this->productJsonToXml = $productJsonToXml;
         $this->catalogImport = $catalogImport;
     }
 
-    public function canProcess(HttpRequest $request) : bool
+    public function canProcess(HttpRequest $request): bool
     {
         return $request->getMethod() === HttpRequest::METHOD_PUT;
     }
 
-    public function processRequest(HttpRequest $request) : HttpResponse
+    public function processRequest(HttpRequest $request): HttpResponse
     {
         $productData = $this->getProductDataFromRequest($request);
         $productXml = $this->productJsonToXml->toXml($productData);
@@ -54,7 +49,7 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         return $this->getResponse($request);
     }
 
-    private function getProductDataFromRequest(HttpRequest $request) : string
+    private function getProductDataFromRequest(HttpRequest $request): string
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 
@@ -67,12 +62,17 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         return $requestArguments['product_data'];
     }
 
-    private function hasArgument($requestArguments, string $argument) : bool
+    /**
+     * @param string[] $requestArguments
+     * @param string $argument
+     * @return bool
+     */
+    private function hasArgument($requestArguments, string $argument): bool
     {
         return is_array($requestArguments) && isset($requestArguments[$argument]) && $requestArguments[$argument];
     }
 
-    protected function getResponse(HttpRequest $request) : HttpResponse
+    protected function getResponse(HttpRequest $request): HttpResponse
     {
         $headers = [];
         $body = '';
@@ -80,14 +80,14 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
     }
 
-    protected function createDataVersion(HttpRequest $request) : DataVersion
+    private function createDataVersion(HttpRequest $request): DataVersion
     {
         $versionString = $this->getDataVersionFromRequest($request);
 
         return DataVersion::fromVersionString($versionString);
     }
 
-    private function getDataVersionFromRequest(HttpRequest $request) : string
+    private function getDataVersionFromRequest(HttpRequest $request): string
     {
         $requestArguments = json_decode($request->getRawBody(), true);
 
