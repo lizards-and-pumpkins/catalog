@@ -66,7 +66,8 @@ class ProductSearchRequestHandlerTest extends TestCase
         $testMetaInfoSnippetJson = json_encode(ProductSearchResultMetaSnippetContent::create(
             'root-snippet-code',
             $pageSnippetCodes,
-            []
+            $containers = [],
+            $pageSpecificData = []
         )->toArray());
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);

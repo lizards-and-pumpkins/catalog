@@ -80,6 +80,7 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
             ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
             ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
 

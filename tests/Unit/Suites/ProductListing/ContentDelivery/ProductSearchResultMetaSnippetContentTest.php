@@ -27,12 +27,15 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
 
     private $containerSnippets = ['additional-info' => []];
 
+    private $pageSpecificData = [['foo' => 'bar'], ['baz' => 'qux']];
+
     protected function setUp()
     {
         $this->metaSnippetContent = ProductSearchResultMetaSnippetContent::create(
             $this->dummyRootSnippetCode,
             [$this->dummyRootSnippetCode],
-            $this->containerSnippets
+            $this->containerSnippets,
+            $this->pageSpecificData
         );
     }
 
@@ -44,7 +47,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
     public function testExceptionIsThrownIfTheRootSnippetCodeIsAnEmptyString()
     {
         $this->expectException(InvalidSnippetCodeException::class);
-        ProductSearchResultMetaSnippetContent::create('', [], []);
+        ProductSearchResultMetaSnippetContent::create('', [], [], []);
     }
 
     public function testMetaSnippetContentInfoContainsRequiredKeys()
@@ -53,6 +56,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
             ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE,
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES,
             ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS,
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA,
         ];
 
         $result = $this->metaSnippetContent->toArray();
@@ -74,7 +78,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfAbsent()
     {
-        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($this->dummyRootSnippetCode, [], []);
+        $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($this->dummyRootSnippetCode, [], [], []);
         $metaMetaInfo = $metaSnippetContent->toArray();
         $pageSnippetCodes = $metaMetaInfo[ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES];
 
@@ -111,6 +115,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
             [ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE],
             [ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES],
             [ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS],
+            [ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA],
         ];
     }
 
@@ -123,5 +128,10 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
     public function testItReturnsThePageSnippetContainers()
     {
         $this->assertSame($this->containerSnippets, $this->metaSnippetContent->getContainerSnippets());
+    }
+
+    public function testReturnsPageSpecificData()
+    {
+        $this->assertSame($this->pageSpecificData, $this->metaSnippetContent->getPageSpecificData());
     }
 }

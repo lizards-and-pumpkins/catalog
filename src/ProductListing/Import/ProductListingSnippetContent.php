@@ -43,21 +43,29 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     private $containers;
 
     /**
+     * @var array[]
+     */
+    private $pageSpecificData;
+
+    /**
      * @param SearchCriteria $productSelectionCriteria
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      * @param SnippetContainer[] $containers
+     * @param array[] $pageSpecificData
      */
     private function __construct(
         SearchCriteria $productSelectionCriteria,
         string $rootSnippetCode,
         array $pageSnippetCodes,
-        array $containers
+        array $containers,
+        array $pageSpecificData
     ) {
         $this->selectionCriteria = $productSelectionCriteria;
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
         $this->containers = $containers;
+        $this->pageSpecificData = $pageSpecificData;
     }
 
     /**
@@ -65,24 +73,25 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      * @param array[] $containerData
+     * @param array[] $pageSpecificData
      * @return ProductListingSnippetContent
      */
     public static function create(
         SearchCriteria $selectionCriteria,
         string $rootSnippetCode,
         array $pageSnippetCodes,
-        array $containerData
+        array $containerData,
+        array $pageSpecificData
     ) : ProductListingSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
+
         if (! in_array($rootSnippetCode, $pageSnippetCodes)) {
             $pageSnippetCodes = array_merge([$rootSnippetCode], $pageSnippetCodes);
         }
-        return new self(
-            $selectionCriteria,
-            $rootSnippetCode,
-            $pageSnippetCodes,
-            self::createSnippetContainers($containerData)
-        );
+
+        $snippetContainers = self::createSnippetContainers($containerData);
+
+        return new self($selectionCriteria, $rootSnippetCode, $pageSnippetCodes, $snippetContainers, $pageSpecificData);
     }
 
     /**
@@ -108,7 +117,8 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
             $searchCriteria,
             $pageInfo[self::KEY_ROOT_SNIPPET_CODE],
             $pageInfo[self::KEY_PAGE_SNIPPET_CODES],
-            $pageInfo[self::KEY_CONTAINER_SNIPPETS]
+            $pageInfo[self::KEY_CONTAINER_SNIPPETS],
+            $pageInfo[self::KEY_PAGE_SPECIFIC_DATA]
         );
     }
 
@@ -147,6 +157,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
             self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets(),
+            self::KEY_PAGE_SPECIFIC_DATA => $this->pageSpecificData,
         ];
     }
 
@@ -247,5 +258,13 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         return array_reduce($this->containers, function ($carry, SnippetContainer $container) {
             return array_merge($carry, $container->toArray());
         }, []);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getPageSpecificData(): array
+    {
+        return $this->pageSpecificData;
     }
 }

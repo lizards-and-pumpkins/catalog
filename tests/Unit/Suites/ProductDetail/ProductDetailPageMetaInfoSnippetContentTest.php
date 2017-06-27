@@ -32,13 +32,16 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 
     private $containers = ['additional_info' => []];
 
+    private $pageSpecificData = [['foo' => 'bar'], ['baz' => 'qux']];
+
     protected function setUp()
     {
         $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             $this->sourceId,
             $this->rootSnippetCode,
             [$this->rootSnippetCode],
-            $this->containers
+            $this->containers,
+            $this->pageSpecificData
         );
     }
 
@@ -66,19 +69,19 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
     {
         $this->expectException(\TypeError::class);
-        ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], []);
+        ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], [], []);
     }
 
     public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
     {
         $this->expectException(\TypeError::class);
-        ProductDetailPageMetaInfoSnippetContent::create('foo', 1.0, [], []);
+        ProductDetailPageMetaInfoSnippetContent::create('foo', 1.0, [], [], []);
     }
 
     public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, [], []);
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, [], [], []);
         $this->assertContains(
             $rootSnippetCode,
             $pageMetaInfo->getPageSnippetCodes()
@@ -119,6 +122,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
             [ProductDetailPageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE],
             [ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES],
             [ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS],
+            [ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA],
         ];
     }
 
@@ -148,5 +152,10 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     public function testItReturnsThePageSnippetContainers()
     {
         $this->assertSame($this->containers, $this->pageMetaInfo->getContainerSnippets());
+    }
+
+    public function testReturnsPageSpecificData()
+    {
+        $this->assertSame($this->pageSpecificData, $this->pageMetaInfo->getPageSpecificData());
     }
 }

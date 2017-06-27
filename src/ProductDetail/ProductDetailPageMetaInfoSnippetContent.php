@@ -14,13 +14,6 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
 {
     const KEY_PRODUCT_ID = 'product_id';
 
-    private static $requiredKeys = [
-        self::KEY_PRODUCT_ID,
-        self::KEY_ROOT_SNIPPET_CODE,
-        self::KEY_PAGE_SNIPPET_CODES,
-        self::KEY_CONTAINER_SNIPPETS,
-    ];
-
     /**
      * @var string
      */
@@ -42,24 +35,45 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     private $containers;
 
     /**
+     * @var array[]
+     */
+    private $pageSpecificData;
+
+    /**
      * @param string $productId
      * @param string $rootSnippetCode
      * @param string[] $pageSnippetCodes
      * @param SnippetContainer[] $containers
+     * @param array[] $pageSpecificData
      */
-    private function __construct(string $productId, string $rootSnippetCode, array $pageSnippetCodes, array $containers)
-    {
+    private function __construct(
+        string $productId,
+        string $rootSnippetCode,
+        array $pageSnippetCodes,
+        array $containers,
+        array $pageSpecificData
+    ) {
         $this->productId = $productId;
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
         $this->containers = $containers;
+        $this->pageSpecificData = $pageSpecificData;
     }
 
+    /**
+     * @param string $productId
+     * @param string $rootSnippetCode
+     * @param string[] $pageSnippetCodes
+     * @param array[] $containerData
+     * @param array[] $pageSpecificData
+     * @return ProductDetailPageMetaInfoSnippetContent
+     */
     public static function create(
         string $productId,
         string $rootSnippetCode,
         array $pageSnippetCodes,
-        array $containerData
+        array $containerData,
+        array $pageSpecificData
     ): ProductDetailPageMetaInfoSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
         $pageSnippetCodes = array_unique(array_merge(
@@ -72,7 +86,9 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
             $pageSnippetCodes
         ));
 
-        return new self($productId, $rootSnippetCode, $pageSnippetCodes, self::createSnippetContainers($containerData));
+        $snippetContainers = self::createSnippetContainers($containerData);
+
+        return new self($productId, $rootSnippetCode, $pageSnippetCodes, $snippetContainers, $pageSpecificData);
     }
 
     /**
@@ -95,7 +111,8 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
             $pageInfo[self::KEY_PRODUCT_ID],
             $pageInfo[self::KEY_ROOT_SNIPPET_CODE],
             $pageInfo[self::KEY_PAGE_SNIPPET_CODES],
-            $pageInfo[self::KEY_CONTAINER_SNIPPETS]
+            $pageInfo[self::KEY_CONTAINER_SNIPPETS],
+            $pageInfo[self::KEY_PAGE_SPECIFIC_DATA]
         );
     }
 
@@ -104,7 +121,15 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      */
     private static function validateRequiredKeysArePresent(array $pageInfo)
     {
-        foreach (self::$requiredKeys as $key) {
+        $requiredKeys = [
+            self::KEY_PRODUCT_ID,
+            self::KEY_ROOT_SNIPPET_CODE,
+            self::KEY_PAGE_SNIPPET_CODES,
+            self::KEY_CONTAINER_SNIPPETS,
+            self::KEY_PAGE_SPECIFIC_DATA,
+        ];
+
+        foreach ($requiredKeys as $key) {
             if (! array_key_exists($key, $pageInfo)) {
                 throw new \RuntimeException(sprintf('Missing key in input JSON: "%s"', $key));
             }
@@ -136,6 +161,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
             self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets(),
+            self::KEY_PAGE_SPECIFIC_DATA => $this->pageSpecificData,
         ];
     }
 
@@ -165,5 +191,13 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         return array_reduce($this->containers, function ($carry, SnippetContainer $container) {
             return array_merge($carry, $container->toArray());
         }, []);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getPageSpecificData(): array
+    {
+        return $this->pageSpecificData;
     }
 }
