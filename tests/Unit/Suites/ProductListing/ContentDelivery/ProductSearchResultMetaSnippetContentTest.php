@@ -55,7 +55,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
             ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS,
         ];
 
-        $result = $this->metaSnippetContent->getInfo();
+        $result = $this->metaSnippetContent->toArray();
 
         foreach ($expectedKeys as $key) {
             $this->assertArrayHasKey($key, $result, sprintf('Page meta info array is lacking "%s" key', $key));
@@ -75,7 +75,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfAbsent()
     {
         $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($this->dummyRootSnippetCode, [], []);
-        $metaMetaInfo = $metaSnippetContent->getInfo();
+        $metaMetaInfo = $metaSnippetContent->toArray();
         $pageSnippetCodes = $metaMetaInfo[ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES];
 
         $this->assertContains($this->dummyRootSnippetCode, $pageSnippetCodes);
@@ -83,7 +83,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
 
     public function testCanBeCreatedFromJson()
     {
-        $jsonEncodedPageMetaInfo = json_encode($this->metaSnippetContent->getInfo());
+        $jsonEncodedPageMetaInfo = json_encode($this->metaSnippetContent->toArray());
         $metaSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($jsonEncodedPageMetaInfo);
         $this->assertInstanceOf(ProductSearchResultMetaSnippetContent::class, $metaSnippetContent);
     }
@@ -93,7 +93,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
      */
     public function testExceptionIsThrownIfJsonDoesNotContainRequiredData(string $missingKey)
     {
-        $pageMetaInfo = $this->metaSnippetContent->getInfo();
+        $pageMetaInfo = $this->metaSnippetContent->toArray();
         unset($pageMetaInfo[$missingKey]);
 
         $this->expectException(\RuntimeException::class);

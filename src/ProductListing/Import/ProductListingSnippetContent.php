@@ -115,7 +115,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param mixed[] $pageInfo
      */
-    protected static function validateRequiredKeysArePresent(array $pageInfo)
+    private static function validateRequiredKeysArePresent(array $pageInfo)
     {
         foreach (self::$requiredKeys as $key) {
             if (! array_key_exists($key, $pageInfo)) {
@@ -140,7 +140,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @return mixed[]
      */
-    public function getInfo() : array
+    public function toArray() : array
     {
         return [
             self::KEY_CRITERIA => $this->selectionCriteria,
