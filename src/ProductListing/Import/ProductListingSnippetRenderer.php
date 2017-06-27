@@ -62,7 +62,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     private function createPageMetaSnippet(ProductListing $productListing): Snippet
     {
         $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListing);
-        $metaDataSnippetContent = json_encode($this->getPageMetaInfoSnippetContent($productListing));
+        $metaDataSnippetContent = json_encode($this->getPageMetaInfoSnippetContent($productListing)->toArray());
         return Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
     }
 

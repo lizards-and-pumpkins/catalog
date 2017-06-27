@@ -67,7 +67,7 @@ class ProductSearchRequestHandlerTest extends TestCase
             'root-snippet-code',
             $pageSnippetCodes,
             []
-        ));
+        )->toArray());
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
 

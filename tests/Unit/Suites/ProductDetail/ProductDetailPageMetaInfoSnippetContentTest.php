@@ -42,9 +42,9 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
         );
     }
 
-    public function testCanBeJsonEncoded()
+    public function testReturnsPageMetaSnippetAsArray()
     {
-        $this->assertInternalType('array', $this->pageMetaInfo->jsonSerialize());
+        $this->assertInternalType('array', $this->pageMetaInfo->toArray());
     }
 
     public function testExpectedArrayKeysArePresentInJsonContent()
@@ -57,7 +57,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
         ];
         foreach ($keys as $key) {
             $this->assertTrue(
-                array_key_exists($key, $this->pageMetaInfo->jsonSerialize()),
+                array_key_exists($key, $this->pageMetaInfo->toArray()),
                 sprintf('The expected key "%s" is not set on the page meta info array', $key)
             );
         }
@@ -87,7 +87,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 
     public function testFromJsonConstructorIsPresent()
     {
-        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo));
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->toArray()));
         $this->assertInstanceOf(ProductDetailPageMetaInfoSnippetContent::class, $pageMetaInfo);
     }
 
@@ -104,7 +104,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Missing key in input JSON');
-        $pageInfo = $this->pageMetaInfo->jsonSerialize();
+        $pageInfo = $this->pageMetaInfo->toArray();
         unset($pageInfo[$key]);
         ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($pageInfo));
     }

@@ -95,7 +95,7 @@ class ProductDetailViewRequestHandlerTest extends TestCase
             'root-snippet-code',
             ['child-snippet1'],
             []
-        ));
+        )->toArray());
     }
 
     private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)

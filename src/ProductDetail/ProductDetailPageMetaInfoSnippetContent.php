@@ -129,7 +129,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return mixed[]
      */
-    public function jsonSerialize(): array
+    public function toArray(): array
     {
         return [
             self::KEY_PRODUCT_ID => $this->productId,

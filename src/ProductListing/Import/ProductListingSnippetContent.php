@@ -140,7 +140,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @return mixed[]
      */
-    public function jsonSerialize() : array
+    public function toArray() : array
     {
         return [
             self::KEY_CRITERIA => $this->selectionCriteria,

@@ -66,7 +66,7 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
         $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
-        $metaSnippetContent = json_encode($this->getMetaSnippetContent($rootSnippetCode, $pageSnippetCodes));
+        $metaSnippetContent = json_encode($this->getMetaSnippetContent($rootSnippetCode, $pageSnippetCodes)->toArray());
 
         return Snippet::create($metaSnippetKey, $metaSnippetContent);
     }
