@@ -6,12 +6,12 @@ namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\MissingSnippetKeyGenerationDataException;
-use LizardsAndPumpkins\Util\SnippetCodeValidator;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class GenericSnippetKeyGenerator implements SnippetKeyGenerator
 {
     /**
-     * @var string
+     * @var SnippetCode
      */
     private $snippetCode;
     
@@ -26,14 +26,12 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     private $usedDataParts;
 
     /**
-     * @param string $snippetCode
+     * @param SnippetCode $snippetCode
      * @param string[] $contextParts
      * @param string[] $usedDataParts
      */
-    public function __construct(string $snippetCode, array $contextParts, array $usedDataParts)
+    public function __construct(SnippetCode $snippetCode, array $contextParts, array $usedDataParts)
     {
-        SnippetCodeValidator::validate($snippetCode);
-
         $this->snippetCode = $snippetCode;
         $this->contextParts = $contextParts;
         $this->usedDataParts = $usedDataParts;

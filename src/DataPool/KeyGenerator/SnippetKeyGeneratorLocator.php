@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
+use LizardsAndPumpkins\Import\SnippetCode;
+
 interface SnippetKeyGeneratorLocator
 {
-    public function canHandle(string $snippetCode) : bool;
+    public function canHandle(SnippetCode $snippetCode) : bool;
 
-    public function getKeyGeneratorForSnippetCode(string $snippetCode) : SnippetKeyGenerator;
+    public function getKeyGeneratorForSnippetCode(SnippetCode $snippetCode) : SnippetKeyGenerator;
 }

@@ -7,10 +7,12 @@ namespace LizardsAndPumpkins\Import\ContentBlock;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
@@ -40,26 +42,26 @@ class ContentBlockSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 
     public function testFalseIsReturnedIfSnippetCodeIsNotSupported()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->assertFalse($this->strategy->canHandle($unsupportedSnippetCode));
     }
 
     public function testTrueIsReturnedIfSnippetCodeIsSupported()
     {
-        $snippetCode = 'content_block_foo';
+        $snippetCode = new SnippetCode('content_block_foo');
         $this->assertTrue($this->strategy->canHandle($snippetCode));
     }
 
     public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 
     public function testSnippetKeyGeneratorIsReturned()
     {
-        $snippetCode = 'content_block_foo';
+        $snippetCode = new SnippetCode('content_block_foo');
         $result = $this->strategy->getKeyGeneratorForSnippetCode($snippetCode);
         $this->assertSame($this->stubSnippetKeyGenerator, $result);
     }

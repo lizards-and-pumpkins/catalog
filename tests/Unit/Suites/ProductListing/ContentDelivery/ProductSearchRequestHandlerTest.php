@@ -16,13 +16,14 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\FullTextCriteriaBuilder;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductSearchRequestHandlerTest extends TestCase
 {
@@ -64,7 +65,7 @@ class ProductSearchRequestHandlerTest extends TestCase
         $pageSnippetCodes = ['child-snippet1'];
 
         $testMetaInfoSnippetJson = json_encode(ProductSearchResultMetaSnippetContent::create(
-            'root-snippet-code',
+            new SnippetCode('root-snippet-code'),
             $pageSnippetCodes,
             []
         )->getInfo());

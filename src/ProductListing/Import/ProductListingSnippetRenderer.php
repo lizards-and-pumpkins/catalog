@@ -12,6 +12,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ProductListingSnippetRenderer implements SnippetRenderer
 {
@@ -81,7 +82,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     {
         $metaSnippetContent = ProductListingSnippetContent::create(
             $productListing->getCriteria(),
-            ProductListingTemplateSnippetRenderer::CODE,
+            new SnippetCode(ProductListingTemplateSnippetRenderer::CODE),
             $this->getPageSnippetCodes($productListing),
             []
         );

@@ -30,13 +30,14 @@ use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
  * @covers \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\CatalogMasterFactory
  * @uses   \LizardsAndPumpkins\UnitTestFactory
@@ -192,8 +193,9 @@ class FrontendFactoryTest extends TestCase
     /**
      * @dataProvider registeredSnippetCodeDataProvider
      */
-    public function testSnippetKeyGeneratorForGivenCodeIsReturned(string $snippetCode)
+    public function testSnippetKeyGeneratorForGivenCodeIsReturned(string $snippetCodeString)
     {
+        $snippetCode = new SnippetCode($snippetCodeString);
         $snippetKeyGeneratorLocator = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 

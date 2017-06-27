@@ -5,14 +5,19 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
-    private $supportedSnippetCode = 'bar';
+    /**
+     * @var SnippetCode
+     */
+    private $supportedSnippetCode;
 
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -26,10 +31,11 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 
     protected function setUp()
     {
+        $this->supportedSnippetCode = new SnippetCode('bar');
         $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
         $stubSnippetKeyGeneratorLocatorStrategy = $this->createMock(SnippetKeyGeneratorLocator::class);
-        $stubSnippetKeyGeneratorLocatorStrategy->method('canHandle')->willReturnCallback(function (string $code) {
+        $stubSnippetKeyGeneratorLocatorStrategy->method('canHandle')->willReturnCallback(function (SnippetCode $code) {
             return $code === $this->supportedSnippetCode;
         });
         $stubSnippetKeyGeneratorLocatorStrategy->method('getKeyGeneratorForSnippetCode')->willReturnMap([
@@ -46,7 +52,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 
     public function testFalseIsReturnedIfNoUnderlyingStrategyCanHandleSnippetCode()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->assertFalse($this->strategy->canHandle($unsupportedSnippetCode));
     }
 
@@ -57,7 +63,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 
     public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }

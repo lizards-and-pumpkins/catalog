@@ -6,31 +6,31 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetContainer;
-use LizardsAndPumpkins\Util\SnippetCodeValidator;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetContent
 {
     /**
-     * @var string
+     * @var SnippetCode
      */
     private $rootSnippetCode;
 
     /**
-     * @var string[]
+     * @var SnippetCode[]
      */
     private $pageSnippetCodes;
 
     /**
-     * @var array|SnippetContainer[]
+     * @var SnippetContainer[]
      */
     private $containerSnippets;
 
     /**
-     * @param string $rootSnippetCode
-     * @param string[] $pageSnippetCodes
+     * @param SnippetCode $rootSnippetCode
+     * @param SnippetCode[] $pageSnippetCodes
      * @param SnippetContainer[] $containerSnippets
      */
-    private function __construct(string $rootSnippetCode, array $pageSnippetCodes, array $containerSnippets)
+    private function __construct(SnippetCode $rootSnippetCode, array $pageSnippetCodes, array $containerSnippets)
     {
         $this->rootSnippetCode = $rootSnippetCode;
         $this->pageSnippetCodes = $pageSnippetCodes;
@@ -38,21 +38,20 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     }
 
     /**
-     * @param string $rootSnippetCode
-     * @param string[] $pageSnippetCodes
+     * @param SnippetCode $rootSnippetCode
+     * @param SnippetCode[] $pageSnippetCodes
      * @param array[] $containerData
      * @return ProductSearchResultMetaSnippetContent
      */
     public static function create(
-        string $rootSnippetCode,
+        SnippetCode $rootSnippetCode,
         array $pageSnippetCodes,
         array $containerData
-    ) : ProductSearchResultMetaSnippetContent {
-        SnippetCodeValidator::validate($rootSnippetCode);
-
-        if (!in_array($rootSnippetCode, $pageSnippetCodes)) {
+    ): ProductSearchResultMetaSnippetContent {
+        if (! in_array($rootSnippetCode, $pageSnippetCodes)) {
             $pageSnippetCodes = array_merge([$rootSnippetCode], $pageSnippetCodes);
         }
+
         return new self($rootSnippetCode, $pageSnippetCodes, self::createSnippetContainers($containerData));
     }
 
@@ -60,14 +59,14 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
      * @param array[] $containerArray
      * @return SnippetContainer[]
      */
-    private static function createSnippetContainers(array $containerArray) : array
+    private static function createSnippetContainers(array $containerArray): array
     {
-        return array_map(function ($code) use ($containerArray) {
-            return new SnippetContainer($code, $containerArray[$code]);
+        return array_map(function (string $snippetCodeString) use ($containerArray) {
+            return new SnippetContainer(new SnippetCode($snippetCodeString), ...$containerArray[$snippetCodeString]);
         }, array_keys($containerArray));
     }
 
-    public static function fromJson(string $json) : ProductSearchResultMetaSnippetContent
+    public static function fromJson(string $json): ProductSearchResultMetaSnippetContent
     {
         $pageMetaInfo = json_decode($json, true);
 
@@ -76,22 +75,24 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
         }
 
         foreach ([self::KEY_ROOT_SNIPPET_CODE, self::KEY_PAGE_SNIPPET_CODES, self::KEY_CONTAINER_SNIPPETS] as $key) {
-            if (!array_key_exists($key, $pageMetaInfo)) {
+            if (! array_key_exists($key, $pageMetaInfo)) {
                 throw new \RuntimeException(sprintf('Missing "%s" in input JSON', $key));
             }
         }
 
-        return self::create(
-            $pageMetaInfo[self::KEY_ROOT_SNIPPET_CODE],
-            $pageMetaInfo[self::KEY_PAGE_SNIPPET_CODES],
-            $pageMetaInfo[self::KEY_CONTAINER_SNIPPETS]
-        );
+        $rootSnippetCode = new SnippetCode($pageMetaInfo[self::KEY_ROOT_SNIPPET_CODE]);
+
+        $pageSnippetCodes = array_map(function (string $snippetCodeString) {
+            return new SnippetCode($snippetCodeString);
+        }, $pageMetaInfo[self::KEY_PAGE_SNIPPET_CODES]);
+
+        return self::create($rootSnippetCode, $pageSnippetCodes, $pageMetaInfo[self::KEY_CONTAINER_SNIPPETS]);
     }
 
     /**
      * @return mixed[]
      */
-    public function getInfo() : array
+    public function getInfo(): array
     {
         return [
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
@@ -100,23 +101,23 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
         ];
     }
 
-    public function getRootSnippetCode() : string
+    public function getRootSnippetCode(): SnippetCode
     {
         return $this->rootSnippetCode;
     }
 
     /**
-     * @return string[]
+     * @return SnippetCode[]
      */
-    public function getPageSnippetCodes() : array
+    public function getPageSnippetCodes(): array
     {
         return $this->pageSnippetCodes;
     }
 
     /**
-     * @return array[]
+     * @return SnippetCode[]
      */
-    public function getContainerSnippets() : array
+    public function getContainerSnippets(): array
     {
         return array_reduce($this->containerSnippets, function ($carry, SnippetContainer $container) {
             return array_merge($carry, $container->toArray());

@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
 {
@@ -48,7 +49,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
     private function registerProductSearchResultMetaSnippetKeyGenerator()
     {
         $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
-            ProductSearchResultMetaSnippetRenderer::CODE,
+            new SnippetCode(ProductSearchResultMetaSnippetRenderer::CODE),
             function () {
                 return$this->factory->createProductSearchResultMetaSnippetKeyGenerator();
             }

@@ -7,16 +7,21 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 use LizardsAndPumpkins\Http\ContentDelivery\Exception\NonExistingSnippetException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\MaxSnippetNestingLevelExceededException;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\Exception\PageContentBuildAlreadyTriggeredException;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class PageBuilderSnippetsTest extends TestCase
 {
     private $testKey = 'a-key';
 
-    private $testCode = 'a-code';
+    /**
+     * @var SnippetCode
+     */
+    private $testCode;
 
     private $testContent = 'some content';
 
@@ -27,7 +32,8 @@ class PageBuilderSnippetsTest extends TestCase
 
     protected function setUp()
     {
-        $codeToKeyMap = [$this->testCode => $this->testKey];
+        $this->testCode = new SnippetCode('a-code');
+        $codeToKeyMap = [(string) $this->testCode => $this->testKey];
         $keyToContentMap = [$this->testKey => $this->testContent];
         $containers = [];
         $this->pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
@@ -62,7 +68,7 @@ class PageBuilderSnippetsTest extends TestCase
         $keyToContentMap = ['found_key' => 'found_content'];
         $containers = [];
         $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
-        $this->assertSame(['found'], $pageSnippets->getSnippetCodes());
+        $this->assertEquals([new SnippetCode('found')], $pageSnippets->getSnippetCodes());
     }
 
     public function testItReturnsTheSnippetContentForAGivenKey()
@@ -104,7 +110,7 @@ class PageBuilderSnippetsTest extends TestCase
     {
         $this->expectException(NonExistingSnippetException::class);
         $this->expectExceptionMessage('The snippet code "not-existing-code" does not exist on the current page');
-        $this->pageSnippets->updateSnippetByCode('not-existing-code', 'new content');
+        $this->pageSnippets->updateSnippetByCode(new SnippetCode('not-existing-code'), 'new content');
     }
 
     public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithCodeSpec()
@@ -128,7 +134,7 @@ class PageBuilderSnippetsTest extends TestCase
 
     public function testItReturnsFalseIfASnippetIsNotPresent()
     {
-        $this->assertFalse($this->pageSnippets->hasSnippetCode('not-present-code'));
+        $this->assertFalse($this->pageSnippets->hasSnippetCode(new SnippetCode('not-present-code')));
     }
 
     public function testItDoesNotDependOnMapSortOrder()
@@ -137,7 +143,7 @@ class PageBuilderSnippetsTest extends TestCase
         $keyToContentMap = ['key-b' => 'BBB', 'key-a' => 'AAA', 'root' => '{{snippet code-a}}{{snippet code-b}}'];
         $containers = [];
         $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
-        $result = $pageSnippets->buildPageContent('root');
+        $result = $pageSnippets->buildPageContent(new SnippetCode('root'));
         $this->assertSame('AAABBB', $result);
     }
 
@@ -153,7 +159,7 @@ class PageBuilderSnippetsTest extends TestCase
         ];
         $containers = [];
         $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
-        $pageSnippets->buildPageContent('root');
+        $pageSnippets->buildPageContent(new SnippetCode('root'));
     }
 
     public function testThrowsExceptionIfNestingIsTooDepp()
@@ -171,6 +177,6 @@ class PageBuilderSnippetsTest extends TestCase
 
         $containers = [];
         $pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
-        $pageSnippets->buildPageContent('root');
+        $pageSnippets->buildPageContent(new SnippetCode('root'));
     }
 }

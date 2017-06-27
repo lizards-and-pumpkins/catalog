@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ContentBlockImportTest extends AbstractIntegrationTest
 {
@@ -50,17 +51,17 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         return $page->getBody();
     }
 
-    private function importContentBlockViaApiV1(string $snippetCode, string $httpRequestBodyString)
+    private function importContentBlockViaApiV1(SnippetCode $snippetCode, string $httpRequestBodyString)
     {
         $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString, 'v1');
     }
 
-    private function importContentBlockViaApiV2(string $snippetCode, string $httpRequestBodyString)
+    private function importContentBlockViaApiV2(SnippetCode $snippetCode, string $httpRequestBodyString)
     {
         $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString, 'v2');
     }
 
-    private function importContentBlockViaApi(string $snippetCode, string $httpRequestBodyString, string $version)
+    private function importContentBlockViaApi(SnippetCode $snippetCode, string $httpRequestBodyString, string $version)
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/' . $snippetCode);
         $httpHeaders = HttpHeaders::fromArray([
@@ -88,12 +89,12 @@ class ContentBlockImportTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string $snippetCode
+     * @param SnippetCode $snippetCode
      * @param mixed[] $keyGeneratorParameters
      * @return string
      */
     private function getContentBlockSnippetCodeForCurrentDataVersion(
-        string $snippetCode,
+        SnippetCode $snippetCode,
         array $keyGeneratorParameters
     ): string {
         $dataPoolReader = $this->factory->createDataPoolReader();
@@ -103,13 +104,13 @@ class ContentBlockImportTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string $snippetCode
+     * @param SnippetCode $snippetCode
      * @param mixed[] $keyGeneratorParameters
      * @param DataVersion $version
      * @return string
      */
     private function getContentBlockSnippetContent(
-        string $snippetCode,
+        SnippetCode $snippetCode,
         array $keyGeneratorParameters,
         DataVersion $version
     ): string {
@@ -122,7 +123,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
     }
 
     private function getContentBlockSnippetKey(
-        string $snippetCode,
+        SnippetCode $snippetCode,
         array $keyGeneratorParameters,
         DataVersion $version
     ): string {
@@ -148,7 +149,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
 
     public function testContentBlockSnippetIsWrittenIntoDataPool()
     {
-        $snippetCode = 'content_block_foo';
+        $snippetCode = new SnippetCode('content_block_foo');
         $contentBlockContent = 'bar';
 
         $httpRequestBodyString = json_encode([
@@ -168,7 +169,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
     {
         $productListingUrlKey = 'foo';
         $contentBlockContent = 'bar';
-        $snippetCode = 'product_listing_content_block_baz';
+        $snippetCode = new SnippetCode('product_listing_content_block_baz');
 
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
@@ -188,7 +189,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
     {
         $productListingUrlKey = 'sale';
         $contentBlockContent = '<p>foo</p>';
-        $snippetCode = 'product_listing_content_block_top';
+        $snippetCode = new SnippetCode('product_listing_content_block_top');
 
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
@@ -212,7 +213,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $factory = $this->prepareIntegrationTestMasterFactory();
         $factory->createDataPoolWriter()->setCurrentDataVersion((string) $currentDataVersion);
 
-        $snippetCode = 'content_block_foo';
+        $snippetCode = new SnippetCode('content_block_foo');
         
         $httpRequestBodyString = json_encode([
             'content'      => 'bar',

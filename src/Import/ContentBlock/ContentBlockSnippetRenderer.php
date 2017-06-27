@@ -8,6 +8,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class ContentBlockSnippetRenderer implements SnippetRenderer
 {
@@ -33,7 +34,7 @@ class ContentBlockSnippetRenderer implements SnippetRenderer
             );
         }
 
-        $snippetCode = (string) $contentBlockSource->getContentBlockId();
+        $snippetCode = new SnippetCode((string) $contentBlockSource->getContentBlockId());
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $keyGeneratorParameters = $contentBlockSource->getKeyGeneratorParams();

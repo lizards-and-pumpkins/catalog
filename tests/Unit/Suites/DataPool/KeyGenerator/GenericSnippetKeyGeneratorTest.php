@@ -6,19 +6,19 @@ namespace LizardsAndPumpkins\DataPool\KeyGenerator;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\MissingSnippetKeyGenerationDataException;
-use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
- * @covers \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class GenericSnippetKeyGeneratorTest extends TestCase
 {
     /**
-     * @var string
+     * @var SnippetCode
      */
-    private $dummySnippetCode = 'test_snippet_code';
+    private $dummySnippetCode;
 
     /**
      * @var string[]
@@ -42,6 +42,8 @@ class GenericSnippetKeyGeneratorTest extends TestCase
 
     public function setUp()
     {
+        $this->dummySnippetCode = new SnippetCode('test_snippet_code');
+
         $this->keyGenerator = new GenericSnippetKeyGenerator(
             $this->dummySnippetCode,
             $this->dummyContextParts,
@@ -56,24 +58,10 @@ class GenericSnippetKeyGeneratorTest extends TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $this->keyGenerator);
     }
 
-    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromNonString()
-    {
-        $this->expectException(\TypeError::class);
-        $snippetCode = 1;
-        new GenericSnippetKeyGenerator($snippetCode, $this->dummyContextParts, $this->dummyUsedDataParts);
-    }
-
-    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromAnEmptyString()
-    {
-        $this->expectException(InvalidSnippetCodeException::class);
-        $snippetCode = '';
-        new GenericSnippetKeyGenerator($snippetCode, $this->dummyContextParts, $this->dummyUsedDataParts);
-    }
-
     public function testSnippetKeyContainsSnippetCode()
     {
         $result = $this->keyGenerator->getKeyForContext($this->stubContext, ['foo' => 'bar']);
-        $this->assertContains($this->dummySnippetCode, $result);
+        $this->assertContains((string) $this->dummySnippetCode, $result);
     }
 
     public function testSnippetKeyContainsContextPartValue()

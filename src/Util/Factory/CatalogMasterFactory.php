@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
@@ -29,6 +30,7 @@ use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandl
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 /**
  * @method DataPoolWriter createDataPoolWriter
@@ -66,6 +68,8 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method callable getProductDetailsViewTranslatorFactory
  * @method TranslatorRegistry getTranslatorRegistry
  * @method UrlToWebsiteMap createUrlToWebsiteMap
+ * @method SnippetKeyGenerator createContentBlockSnippetKeyGenerator(SnippetCode $snippetCode)
+ * @method SnippetKeyGenerator createProductListingContentBlockSnippetKeyGenerator(SnippetCode $snippetCode)
  */
 class CatalogMasterFactory implements MasterFactory
 {

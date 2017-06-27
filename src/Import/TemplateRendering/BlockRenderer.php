@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Import\TemplateRendering\Exception\BlockRendererMustHaveO
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\CanNotInstantiateBlockException;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\MethodNotYetAvailableException;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 abstract class BlockRenderer
 {
@@ -177,9 +178,9 @@ abstract class BlockRenderer
         return $this->blockStructure->getBlock($childName)->render();
     }
 
-    public function getRootSnippetCode(): string
+    public function getRootSnippetCode(): SnippetCode
     {
-        return $this->getLayoutHandle();
+        return new SnippetCode($this->getLayoutHandle());
     }
 
     /**

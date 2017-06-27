@@ -8,10 +8,12 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\Exception\SnippetCodeCanNotBeProcessedException;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
@@ -43,26 +45,26 @@ class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategyTest extends T
 
     public function testFalseIsReturnedIfSnippetCodeIsNotSupported()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->assertFalse($this->strategy->canHandle($unsupportedSnippetCode));
     }
 
     public function testTrueIsReturnedIfSnippetCodeIsSupported()
     {
-        $snippetCode = 'product_listing_content_block_foo';
+        $snippetCode = new SnippetCode('product_listing_content_block_foo');
         $this->assertTrue($this->strategy->canHandle($snippetCode));
     }
 
     public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
     {
-        $unsupportedSnippetCode = 'foo';
+        $unsupportedSnippetCode = new SnippetCode('foo');
         $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 
     public function testSnippetKeyGeneratorIsReturned()
     {
-        $snippetCode = 'product_listing_content_block_foo';
+        $snippetCode = new SnippetCode('product_listing_content_block_foo');
         $result = $this->strategy->getKeyGeneratorForSnippetCode($snippetCode);
         $this->assertSame($this->stubSnippetKeyGenerator, $result);
     }

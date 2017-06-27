@@ -36,6 +36,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class FrontendFactory implements Factory
 {
@@ -145,67 +146,67 @@ class FrontendFactory implements Factory
     {
         $registrySnippetKeyGeneratorLocator = new RegistrySnippetKeyGeneratorLocatorStrategy;
         $registrySnippetKeyGeneratorLocator->register(
-            ProductDetailMetaSnippetRenderer::CODE,
+            new SnippetCode(ProductDetailMetaSnippetRenderer::CODE),
             function () {
                 return $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductDetailTemplateSnippetRenderer::CODE,
+            new SnippetCode(ProductDetailTemplateSnippetRenderer::CODE),
             function () {
                 return $this->getMasterFactory()->createProductDetailTemplateSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductInListingSnippetRenderer::CODE,
+            new SnippetCode(ProductInListingSnippetRenderer::CODE),
             function () {
                 return $this->getMasterFactory()->createProductInListingSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductListingTemplateSnippetRenderer::CODE,
+            new SnippetCode(ProductListingTemplateSnippetRenderer::CODE),
             function () {
                 return $this->getMasterFactory()->createProductListingTemplateSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            PriceSnippetRenderer::PRICE,
+            new SnippetCode(PriceSnippetRenderer::PRICE),
             function () {
                 return $this->getMasterFactory()->createPriceSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            PriceSnippetRenderer::SPECIAL_PRICE,
+            new SnippetCode(PriceSnippetRenderer::SPECIAL_PRICE),
             function () {
                 return $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductListingSnippetRenderer::CODE,
+            new SnippetCode(ProductListingSnippetRenderer::CODE),
             function () {
                 return $this->getMasterFactory()->createProductListingSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductSearchResultMetaSnippetRenderer::CODE,
+            new SnippetCode(ProductSearchResultMetaSnippetRenderer::CODE),
             function () {
                 return $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductJsonSnippetRenderer::CODE,
+            new SnippetCode(ProductJsonSnippetRenderer::CODE),
             function () {
                 return $this->getMasterFactory()->createProductJsonSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
+            new SnippetCode(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE),
             function () {
                 return $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
+            new SnippetCode(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE),
             function () {
                 return $this->getMasterFactory()->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
             }
@@ -236,26 +237,8 @@ class FrontendFactory implements Factory
     private function registerSnippetTransformations(PageBuilder $pageBuilder)
     {
         $pageBuilder->registerSnippetTransformation(
-            ProductJsonSnippetRenderer::CODE,
+            new SnippetCode(ProductJsonSnippetRenderer::CODE),
             $this->getMasterFactory()->createProductJsonSnippetTransformation()
-        );
-
-        // Todo: remove when product detail page uses product json only
-        $pageBuilder->registerSnippetTransformation(
-            PriceSnippetRenderer::PRICE,
-            $this->getMasterFactory()->createPriceSnippetTransformation()
-        );
-
-        // Todo: remove when product detail page uses product json only
-        $pageBuilder->registerSnippetTransformation(
-            PriceSnippetRenderer::SPECIAL_PRICE,
-            $this->getMasterFactory()->createPriceSnippetTransformation()
-        );
-
-        // Todo: remove when product listing page uses ProductJsonService
-        $pageBuilder->registerSnippetTransformation(
-            'product_prices',
-            $this->getMasterFactory()->createPricesJsonSnippetTransformation()
         );
     }
 

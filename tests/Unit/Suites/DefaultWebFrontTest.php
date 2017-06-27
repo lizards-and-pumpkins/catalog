@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \LizardsAndPumpkins\DefaultWebFront
  * @covers \LizardsAndPumpkins\Http\WebFront
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory

@@ -8,10 +8,12 @@ use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJson
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageSnippets;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductJsonSnippetTransformationTest extends TestCase
 {
@@ -66,14 +68,19 @@ class ProductJsonSnippetTransformationTest extends TestCase
         $inputJson = json_encode([]);
         $enrichedProductData = ['dummy enriched product data'];
         
-        $this->stubPageSnippets->method('hasSnippetCode')->willReturnMap([
-            [PriceSnippetRenderer::SPECIAL_PRICE, true],
-        ]);
-        $this->stubPageSnippets->method('getSnippetByCode')->willReturnMap([
-            [PriceSnippetRenderer::PRICE, '999'],
-            [PriceSnippetRenderer::SPECIAL_PRICE, '799'],
-        ]);
-        
+        $this->stubPageSnippets->method('hasSnippetCode')->willReturn(true);
+        $this->stubPageSnippets->method('getSnippetByCode')->willReturnCallback(function (SnippetCode $snippetCode) {
+            if (PriceSnippetRenderer::PRICE === (string) $snippetCode) {
+                return '999';
+            }
+
+            if (PriceSnippetRenderer::SPECIAL_PRICE === (string) $snippetCode) {
+                return '799';
+            }
+
+            throw new \LogicException(sprintf('Test is not expecting snippet code "%s".', $snippetCode));
+        });
+
         $this->mockEnrichesProductJsonWithPrices->expects($this->once())
             ->method('addPricesToProductData')
             ->willReturn($enrichedProductData);
@@ -86,12 +93,14 @@ class ProductJsonSnippetTransformationTest extends TestCase
         $inputJson = json_encode([]);
         $enrichedProductData = ['dummy enriched product data'];
 
-        $this->stubPageSnippets->method('hasSnippetCode')->willReturnMap([
-            [PriceSnippetRenderer::SPECIAL_PRICE, false],
-        ]);
-        $this->stubPageSnippets->method('getSnippetByCode')->willReturnMap([
-            [PriceSnippetRenderer::PRICE, '999'],
-        ]);
+        $this->stubPageSnippets->method('hasSnippetCode')->willReturn(false);
+        $this->stubPageSnippets->method('getSnippetByCode')->willReturnCallback(function (SnippetCode $snippetCode) {
+            if (PriceSnippetRenderer::PRICE === (string) $snippetCode) {
+                return '999';
+            }
+
+            throw new \LogicException(sprintf('Test is not expecting snippet code "%s".', $snippetCode));
+        });
 
         $this->mockEnrichesProductJsonWithPrices->expects($this->once())
             ->method('addPricesToProductData')->with($this->stubContext, [], '999', null)

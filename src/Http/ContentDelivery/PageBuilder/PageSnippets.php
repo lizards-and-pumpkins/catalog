@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http\ContentDelivery\PageBuilder;
 
+use LizardsAndPumpkins\Import\SnippetCode;
+
 interface PageSnippets
 {
     /**
-     * @return string[]
+     * @return SnippetCode[]
      */
-    public function getSnippetCodes() : array;
+    public function getSnippetCodes(): array;
 
-    public function hasSnippetCode(string $snippetCode) : bool;
+    public function hasSnippetCode(SnippetCode $snippetCode): bool;
 
-    public function getSnippetByCode(string $snippetCode) : string;
+    public function getSnippetByCode(SnippetCode $snippetCode): string;
 }

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductDetail;
 
-use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 {
@@ -21,9 +21,9 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     private $pageMetaInfo;
 
     /**
-     * @var string
+     * @var SnippetCode
      */
-    private $rootSnippetCode = 'root-snippet-code';
+    private $rootSnippetCode;
 
     /**
      * @var string
@@ -34,6 +34,8 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 
     protected function setUp()
     {
+        $this->rootSnippetCode = new SnippetCode('root-snippet-code');
+
         $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             $this->sourceId,
             $this->rootSnippetCode,
@@ -66,23 +68,14 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
     {
         $this->expectException(\TypeError::class);
-        ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], []);
-    }
-
-    public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
-    {
-        $this->expectException(\TypeError::class);
-        ProductDetailPageMetaInfoSnippetContent::create('foo', 1.0, [], []);
+        ProductDetailPageMetaInfoSnippetContent::create([], new SnippetCode('test'), [], []);
     }
 
     public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()
     {
-        $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, [], []);
-        $this->assertContains(
-            $rootSnippetCode,
-            $pageMetaInfo->getPageSnippetCodes()
-        );
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $this->rootSnippetCode, [], []);
+
+        $this->assertContains($this->rootSnippetCode, $pageMetaInfo->getPageSnippetCodes());
     }
 
     public function testFromJsonConstructorIsPresent()
@@ -141,8 +134,6 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     {
         $pageSnippetCodes = $this->pageMetaInfo->getPageSnippetCodes();
         $this->assertContains(ProductJsonSnippetRenderer::CODE, $pageSnippetCodes);
-        $this->assertContains(PriceSnippetRenderer::PRICE, $pageSnippetCodes);
-        $this->assertContains(PriceSnippetRenderer::SPECIAL_PRICE, $pageSnippetCodes);
     }
 
     public function testItReturnsThePageSnippetContainers()

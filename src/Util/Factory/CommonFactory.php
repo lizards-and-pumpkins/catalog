@@ -109,6 +109,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
+use LizardsAndPumpkins\Import\SnippetCode;
 
 class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
@@ -293,7 +294,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
-            ProductJsonSnippetRenderer::CODE,
+            new SnippetCode(ProductJsonSnippetRenderer::CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -312,7 +313,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = ['product_id'];
 
         return new GenericSnippetKeyGenerator(
-            ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE,
+            new SnippetCode(ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -323,7 +324,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = ['product_id'];
 
         return new GenericSnippetKeyGenerator(
-            ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE,
+            new SnippetCode(ConfigurableProductJsonSnippetRenderer::ASSOCIATED_PRODUCTS_CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -362,7 +363,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingTemplateSnippetKeyGenerator() : SnippetKeyGenerator
     {
         return new GenericSnippetKeyGenerator(
-            ProductListingTemplateSnippetRenderer::CODE,
+            new SnippetCode(ProductListingTemplateSnippetRenderer::CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts = []
         );
@@ -420,7 +421,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductListingSnippetRenderer::CODE,
+            new SnippetCode(ProductListingSnippetRenderer::CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -463,7 +464,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductDetailTemplateSnippetKeyGenerator(): SnippetKeyGenerator
     {
         return new GenericSnippetKeyGenerator(
-            ProductDetailTemplateSnippetRenderer::CODE,
+            new SnippetCode(ProductDetailTemplateSnippetRenderer::CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts = []
         );
@@ -485,7 +486,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductDetailMetaSnippetRenderer::CODE,
+            new SnippetCode(ProductDetailMetaSnippetRenderer::CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -529,7 +530,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
-            ProductInListingSnippetRenderer::CODE,
+            new SnippetCode(ProductInListingSnippetRenderer::CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -540,7 +541,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
-            PriceSnippetRenderer::PRICE,
+            new SnippetCode(PriceSnippetRenderer::PRICE),
             $this->getPriceSnippetKeyContextPartCodes(),
             $usedDataParts
         );
@@ -551,7 +552,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [Product::ID];
 
         return new GenericSnippetKeyGenerator(
-            PriceSnippetRenderer::SPECIAL_PRICE,
+            new SnippetCode(PriceSnippetRenderer::SPECIAL_PRICE),
             $this->getPriceSnippetKeyContextPartCodes(),
             $usedDataParts
         );
@@ -565,7 +566,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return [Website::CONTEXT_CODE, Country::CONTEXT_CODE];
     }
 
-    public function createContentBlockSnippetKeyGenerator(string $snippetCode) : SnippetKeyGenerator
+    public function createContentBlockSnippetKeyGenerator(SnippetCode $snippetCode) : SnippetKeyGenerator
     {
         $usedDataParts = [];
 
@@ -576,7 +577,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingContentBlockSnippetKeyGenerator(string $snippetCode) : SnippetKeyGenerator
+    public function createProductListingContentBlockSnippetKeyGenerator(SnippetCode $snippetCode) : SnippetKeyGenerator
     {
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
@@ -590,10 +591,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createContentBlockSnippetKeyGeneratorLocatorStrategy() : SnippetKeyGeneratorLocator
     {
         return new CompositeSnippetKeyGeneratorLocatorStrategy(
-            new ContentBlockSnippetKeyGeneratorLocatorStrategy(function ($snippetCode) {
+            new ContentBlockSnippetKeyGeneratorLocatorStrategy(function (SnippetCode $snippetCode) {
                 return $this->getMasterFactory()->createContentBlockSnippetKeyGenerator($snippetCode);
             }),
-            new ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy(function ($snippetCode) {
+            new ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy(function (SnippetCode $snippetCode) {
                 return $this->getMasterFactory()->createProductListingContentBlockSnippetKeyGenerator($snippetCode);
             })
         );
@@ -984,7 +985,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createContentBlockInProductListingSnippetKeyGenerator() : SnippetKeyGenerator
     {
         return new GenericSnippetKeyGenerator(
-            'content_block_in_product_listing',
+            new SnippetCode('content_block_in_product_listing'),
             $this->getMasterFactory()->getRequiredContextParts(),
             [PageMetaInfoSnippetContent::URL_KEY]
         );
@@ -1004,7 +1005,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [];
 
         return new GenericSnippetKeyGenerator(
-            ProductSearchResultMetaSnippetRenderer::CODE,
+            new SnippetCode(ProductSearchResultMetaSnippetRenderer::CODE),
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );

@@ -72,6 +72,7 @@ use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -154,7 +155,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Util\FileSystem\LocalFilesystem
  * @uses   \LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
@@ -610,7 +611,7 @@ class CommonFactoryTest extends TestCase
 
     public function testSnippetKeyGeneratorForContentBlockIsReturned()
     {
-        $snippetCode = 'content_block_foo';
+        $snippetCode = new SnippetCode('content_block_foo');
         $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
@@ -619,7 +620,7 @@ class CommonFactoryTest extends TestCase
 
     public function testSnippetKeyGeneratorForProductListingContentBlockIsReturned()
     {
-        $snippetCode = 'product_listing_content_block_foo';
+        $snippetCode = new SnippetCode('product_listing_content_block_foo');
         $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 

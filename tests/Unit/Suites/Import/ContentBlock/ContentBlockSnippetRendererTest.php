@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
+ * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ContentBlockSnippetRendererTest extends TestCase
 {
@@ -48,6 +50,7 @@ class ContentBlockSnippetRendererTest extends TestCase
     private function createStubContentBlockSource(string $contentBlockContent): ContentBlockSource
     {
         $stubContentBlockSource = $this->createMock(ContentBlockSource::class);
+        $stubContentBlockSource->method('getContentBlockId')->willReturn(ContentBlockId::fromString('whatever'));
         $stubContentBlockSource->method('getContent')->willReturn($contentBlockContent);
         $stubContentBlockSource->method('getContext')->willReturn($this->createMock(Context::class));
         $stubContentBlockSource->method('getKeyGeneratorParams')->willReturn([]);

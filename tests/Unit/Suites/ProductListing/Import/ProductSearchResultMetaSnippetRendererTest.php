@@ -12,13 +12,14 @@ use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
+use LizardsAndPumpkins\Import\SnippetCode;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
- * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Import\SnippetCode
  */
 class ProductSearchResultMetaSnippetRendererTest extends TestCase
 {
@@ -28,9 +29,9 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
     private $dummySnippetKey = 'foo';
 
     /**
-     * @var string
+     * @var SnippetCode
      */
-    private $dummyRootSnippetCode = 'bar';
+    private $rootSnippetCode;
 
     /**
      * @var ProductSearchResultMetaSnippetRenderer
@@ -39,13 +40,15 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
 
     protected function setUp()
     {
+        $this->rootSnippetCode = new SnippetCode('bar');
+
         /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummySnippetKey);
 
         /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->createMock(BlockRenderer::class);
-        $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->dummyRootSnippetCode);
+        $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->rootSnippetCode);
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
         $stubContext = $this->createMock(Context::class);
@@ -77,8 +80,8 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
     public function testSnippetWithValidJsonAsContentAddedToList()
     {
         $expectedSnippetContent = [
-            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
-            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
+            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->rootSnippetCode],
             ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
         ];
         $expectedSnippet = Snippet::create($this->dummySnippetKey, json_encode($expectedSnippetContent));
