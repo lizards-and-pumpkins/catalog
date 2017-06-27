@@ -60,7 +60,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         string $rootSnippetCode,
         array $pageSnippetCodes,
         array $containerData
-    ) : ProductDetailPageMetaInfoSnippetContent {
+    ): ProductDetailPageMetaInfoSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
         $pageSnippetCodes = array_unique(array_merge(
             [
@@ -71,6 +71,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
             ],
             $pageSnippetCodes
         ));
+
         return new self($productId, $rootSnippetCode, $pageSnippetCodes, self::createSnippetContainers($containerData));
     }
 
@@ -78,17 +79,18 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      * @param array[] $containerArray
      * @return SnippetContainer[]
      */
-    private static function createSnippetContainers(array $containerArray) : array
+    private static function createSnippetContainers(array $containerArray): array
     {
         return array_map(function ($code) use ($containerArray) {
             return new SnippetContainer($code, $containerArray[$code]);
         }, array_keys($containerArray));
     }
 
-    public static function fromJson(string $json) : ProductDetailPageMetaInfoSnippetContent
+    public static function fromJson(string $json): ProductDetailPageMetaInfoSnippetContent
     {
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
+
         return static::create(
             $pageInfo[self::KEY_PRODUCT_ID],
             $pageInfo[self::KEY_ROOT_SNIPPET_CODE],
@@ -113,7 +115,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
      * @param string $json
      * @return mixed[]
      */
-    private static function decodeJson(string $json) : array
+    private static function decodeJson(string $json): array
     {
         $result = json_decode($json, true);
 
@@ -127,7 +129,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return mixed[]
      */
-    public function getInfo() : array
+    public function jsonSerialize(): array
     {
         return [
             self::KEY_PRODUCT_ID => $this->productId,
@@ -137,15 +139,12 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getProductId() : string
+    public function getProductId(): string
     {
         return $this->productId;
     }
 
-    public function getRootSnippetCode() : string
+    public function getRootSnippetCode(): string
     {
         return $this->rootSnippetCode;
     }
@@ -153,7 +152,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return string[]
      */
-    public function getPageSnippetCodes() : array
+    public function getPageSnippetCodes(): array
     {
         return $this->pageSnippetCodes;
     }
@@ -161,7 +160,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @return array[]
      */
-    public function getContainerSnippets() : array
+    public function getContainerSnippets(): array
     {
         return array_reduce($this->containers, function ($carry, SnippetContainer $container) {
             return array_merge($carry, $container->toArray());

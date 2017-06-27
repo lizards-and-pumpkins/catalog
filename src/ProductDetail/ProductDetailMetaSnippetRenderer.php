@@ -61,23 +61,16 @@ class ProductDetailMetaSnippetRenderer implements SnippetRenderer
         }, $this->getAllProductUrlKeys($productView));
     }
 
-    /**
-     * @param ProductView $productView
-     * @return mixed[]
-     */
-    private function getPageMetaSnippetContent(ProductView $productView): array
+    private function getPageMetaSnippetContent(ProductView $productView): ProductDetailPageMetaInfoSnippetContent
     {
         $this->blockRenderer->render($productView, $productView->getContext());
 
-        $rootBlockName = $this->blockRenderer->getRootSnippetCode();
-        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
+        return ProductDetailPageMetaInfoSnippetContent::create(
             (string) $productView->getId(),
-            $rootBlockName,
+            $this->blockRenderer->getRootSnippetCode(),
             $this->blockRenderer->getNestedSnippetCodes(),
             []
         );
-
-        return $pageMetaInfo->getInfo();
     }
 
     private function createPageMetaSnippetKey(string $urlKey, ProductView $productView): string

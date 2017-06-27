@@ -62,7 +62,7 @@ class ProductListingSnippetRenderer implements SnippetRenderer
     private function createPageMetaSnippet(ProductListing $productListing): Snippet
     {
         $metaDataSnippetKey = $this->getProductListingMetaDataSnippetKey($productListing);
-        $metaDataSnippetContent = $this->getProductListingPageMetaInfoSnippetContent($productListing);
+        $metaDataSnippetContent = json_encode($this->getPageMetaInfoSnippetContent($productListing));
         return Snippet::create($metaDataSnippetKey, $metaDataSnippetContent);
     }
 
@@ -77,16 +77,14 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return $snippetKey;
     }
 
-    private function getProductListingPageMetaInfoSnippetContent(ProductListing $productListing): string
+    private function getPageMetaInfoSnippetContent(ProductListing $productListing): ProductListingSnippetContent
     {
-        $metaSnippetContent = ProductListingSnippetContent::create(
+        return ProductListingSnippetContent::create(
             $productListing->getCriteria(),
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getPageSnippetCodes($productListing),
             []
         );
-
-        return json_encode($metaSnippetContent->getInfo());
     }
 
     /**

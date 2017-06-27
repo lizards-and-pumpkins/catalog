@@ -91,7 +91,7 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     /**
      * @return mixed[]
      */
-    public function getInfo() : array
+    public function jsonSerialize(): array
     {
         return [
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,

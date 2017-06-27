@@ -60,9 +60,9 @@ class ProductListingSnippetContentTest extends TestCase
         );
     }
 
-    public function testArrayIsReturned()
+    public function testCanBeJsonSerializes()
     {
-        $this->assertInternalType('array', $this->pageMetaInfo->getInfo());
+        $this->assertInternalType('array', $this->pageMetaInfo->jsonSerialize());
     }
 
     public function testExpectedArrayKeysArePresentInJsonContent()
@@ -74,7 +74,7 @@ class ProductListingSnippetContentTest extends TestCase
             ProductListingSnippetContent::KEY_CONTAINER_SNIPPETS,
         ];
 
-        $result = $this->pageMetaInfo->getInfo();
+        $result = $this->pageMetaInfo->jsonSerialize();
 
         foreach ($keys as $key) {
             $this->assertArrayHasKey($key, $result, sprintf('Page meta info array is lacking "%s" key', $key));
@@ -98,13 +98,13 @@ class ProductListingSnippetContentTest extends TestCase
         );
         $this->assertContains(
             $rootSnippetCode,
-            $pageMetaInfo->getInfo()[ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES]
+            $pageMetaInfo->jsonSerialize()[ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES]
         );
     }
 
     public function testJsonConstructorIsPresent()
     {
-        $pageMetaInfo = ProductListingSnippetContent::fromJson(json_encode($this->pageMetaInfo->getInfo()));
+        $pageMetaInfo = ProductListingSnippetContent::fromJson(json_encode($this->pageMetaInfo));
         $this->assertInstanceOf(ProductListingSnippetContent::class, $pageMetaInfo);
     }
 
@@ -121,7 +121,7 @@ class ProductListingSnippetContentTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Missing key in input JSON');
-        $pageInfo = $this->pageMetaInfo->getInfo();
+        $pageInfo = $this->pageMetaInfo->jsonSerialize();
         unset($pageInfo[$key]);
         ProductListingSnippetContent::fromJson(json_encode($pageInfo));
     }
