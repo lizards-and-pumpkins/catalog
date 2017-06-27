@@ -115,7 +115,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param mixed[] $pageInfo
      */
-    protected static function validateRequiredKeysArePresent(array $pageInfo)
+    private static function validateRequiredKeysArePresent(array $pageInfo)
     {
         foreach (self::$requiredKeys as $key) {
             if (! array_key_exists($key, $pageInfo)) {
