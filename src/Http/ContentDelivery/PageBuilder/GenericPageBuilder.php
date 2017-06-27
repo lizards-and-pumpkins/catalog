@@ -138,7 +138,9 @@ class GenericPageBuilder implements PageBuilder
      */
     private function getFlattenedContainerSnippetCodes(): array
     {
-        return array_merge([], ...$this->containerSnippets);
+        return array_reduce($this->containerSnippets, function (array $flattened, array $snippetsInContainer) {
+            return array_merge($flattened, $snippetsInContainer);
+        }, []);
     }
 
     public function registerSnippetTransformation(SnippetCode $snippetCode, callable $transformation)
