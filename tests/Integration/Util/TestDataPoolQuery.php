@@ -9,22 +9,29 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class TestDataPoolQuery
 {
-    public static function getProductJsonSnippetForId(MasterFactory $factory, string $productIdString, string $version = '-1'): string
-    {
-        $key = self::getProductJsonSnippetKeyForId($factory, $productIdString, $version);
+    public static function getProductJsonSnippetForId(
+        MasterFactory $masterFactory,
+        string $productId,
+        string $version = '-1'
+    ): string {
+        $key = self::getProductJsonSnippetKeyForId($masterFactory, $productId, $version);
 
-        return self::getSnippetFromDataPool($factory, $key);
+        return self::getSnippetFromDataPool($masterFactory, $key);
     }
 
-    private static function getProductJsonSnippetKeyForId(MasterFactory $factory, string $productIdString, $version): string
-    {
-        $keyGenerator = $factory->createProductJsonSnippetKeyGenerator();
-        $context = $factory->createContextBuilder()->createContext([DataVersion::CONTEXT_CODE => $version]);
+    private static function getProductJsonSnippetKeyForId(
+        MasterFactory $masterFactory,
+        string $productIdString,
+        string $version
+    ): string {
+        $keyGenerator = $masterFactory->createProductJsonSnippetKeyGenerator();
+        $context = $masterFactory->createContextBuilder()->createContext([DataVersion::CONTEXT_CODE => $version]);
+
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
-    private static function getSnippetFromDataPool(MasterFactory $factory, string $key): string
+    private static function getSnippetFromDataPool(MasterFactory $masterFactory, string $key): string
     {
-        return $factory->createDataPoolReader()->getSnippet($key);
+        return $masterFactory->createDataPoolReader()->getSnippet($key);
     }
 }

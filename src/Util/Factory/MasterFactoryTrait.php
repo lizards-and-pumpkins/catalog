@@ -69,7 +69,7 @@ trait MasterFactoryTrait
 
     private function checkFactoryIsNotYetRegistered(Factory $factory)
     {
-        if (in_array(get_class($factory), $this->registeredFactoryClasses)) {
+        if (in_array(get_class($factory), $this->registeredFactoryClasses, true)) {
             throw new FactoryAlreadyRegisteredException(
                 sprintf('Can not register "%s" more than once', get_class($factory))
             );

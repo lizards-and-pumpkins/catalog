@@ -20,6 +20,7 @@ use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommand
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
@@ -50,27 +51,87 @@ abstract class AbstractIntegrationTest extends TestCase
      * @var UrlKeyStore
      */
     private $urlKeyStore;
-    
-    final protected function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request) : CatalogMasterFactory
+
+    /**
+     * @var IntegrationTestFactory
+     */
+    private $integrationTestFactory;
+
+    final protected function prepareIntegrationTestMasterFactoryForRequest(HttpRequest $request): CatalogMasterFactory
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $factory->register(new FrontendFactory($request));
 
         return $factory;
     }
-    
-    final protected function prepareIntegrationTestMasterFactory() : CatalogMasterFactory
-    {
-        $factory = new CatalogMasterFactory();
-        $factory->register(new CommonFactory());
-        $factory->register(new RestApiFactory());
-        $factory->register(new UpdatingProductImportCommandFactory());
-        $factory->register(new NullProductImageImportCommandFactory());
-        $factory->register(new UpdatingProductListingImportCommandFactory());
-        $this->getIntegrationTestFactory($factory);
-        $factory->register(new ProductSearchFactory());
 
-        return $factory;
+    final protected function prepareIntegrationTestMasterFactory(): CatalogMasterFactory
+    {
+        return $this->prepareIntegrationTestMasterFactoryExcludingFactories($factoriesToExclude = []);
+    }
+
+    /**
+     * @param Factory[] $factoriesToExclude
+     * @return CatalogMasterFactory
+     */
+    final protected function prepareIntegrationTestMasterFactoryExcludingFactories(
+        array $factoriesToExclude
+    ): CatalogMasterFactory {
+
+        $factoriesToRegister = [
+            new CommonFactory(),
+            new RestApiFactory(),
+            new UpdatingProductImportCommandFactory(),
+            new NullProductImageImportCommandFactory(),
+            new UpdatingProductListingImportCommandFactory(),
+        ];
+        
+        $masterFactory = new CatalogMasterFactory();
+        
+        every($factoriesToRegister, function (Factory $factoryToRegister) use ($masterFactory, $factoriesToExclude) {
+            $this->registerFactoryIfNotExcluded($masterFactory, $factoriesToExclude, $factoryToRegister);
+        });
+
+        $this->prepareIntegrationTestFactory($masterFactory);
+        
+        $this->registerFactoryIfNotExcluded($masterFactory, $factoriesToExclude, new ProductSearchFactory());
+
+        return $masterFactory;
+    }
+
+    /**
+     * @param MasterFactory $masterFactory
+     * @param Factory[] $factoriesToExclude
+     * @param Factory $factoryToRegister
+     */
+    private function registerFactoryIfNotExcluded(
+        MasterFactory $masterFactory,
+        array $factoriesToExclude,
+        Factory $factoryToRegister
+    ) {
+        if (! in_array($factoryToRegister, $factoriesToExclude, false)) {
+            $masterFactory->register($factoryToRegister);
+        }
+    }
+
+    private function prepareIntegrationTestFactory(MasterFactory $masterFactory)
+    {
+        $this->integrationTestFactory = new IntegrationTestFactory();
+        $masterFactory->register($this->integrationTestFactory);
+        if ($this->isFirstInstantiationOfFactory()) {
+            $this->storeInMemoryObjects($this->integrationTestFactory);
+        } else {
+            $this->persistInMemoryObjectsOnFactory($this->integrationTestFactory);
+        }
+    }
+
+    final protected function getIntegrationTestFactory(MasterFactory $masterFactory): IntegrationTestFactory
+    {
+        if (null === $this->integrationTestFactory) {
+            $this->prepareIntegrationTestFactory($masterFactory);
+        }
+
+        return $this->integrationTestFactory;
     }
 
     final protected function failIfMessagesWhereLogged(Logger $logger)
@@ -83,8 +144,10 @@ abstract class AbstractIntegrationTest extends TestCase
                 if (isset($messageContext['exception'])) {
                     /** @var \Exception $exception */
                     $exception = $messageContext['exception'];
+
                     return (string) $logMessage . ' ' . $exception->getFile() . ':' . $exception->getLine();
                 }
+
                 return (string) $logMessage;
             }, $messages);
             $failMessageString = implode(PHP_EOL, $failMessages);
@@ -93,22 +156,11 @@ abstract class AbstractIntegrationTest extends TestCase
         }
     }
 
-    final protected function getIntegrationTestFactory(MasterFactory $masterFactory) : IntegrationTestFactory
-    {
-        $factory = new IntegrationTestFactory($masterFactory);
-        if ($this->isFirstInstantiationOfFactory()) {
-            $this->storeInMemoryObjects($factory);
-        } else {
-            $this->persistInMemoryObjectsOnFactory($factory);
-        }
-        return $factory;
-    }
-
-    private function isFirstInstantiationOfFactory() : bool
+    private function isFirstInstantiationOfFactory(): bool
     {
         return null === $this->keyValueStore;
     }
-    
+
     private function storeInMemoryObjects(IntegrationTestFactory $factory)
     {
         $this->keyValueStore = $factory->getKeyValueStore();
@@ -131,17 +183,17 @@ abstract class AbstractIntegrationTest extends TestCase
     {
         /** @var CatalogImport $import */
         $import = $factory->createCatalogImport();
-        $dataVersion = DataVersion::fromVersionString('-1'); 
+        $dataVersion = DataVersion::fromVersionString('-1');
         if (count($fixtureCatalogFiles) === 0) {
             throw new \RuntimeException('No catalog fixture file specified.');
         }
-        every($fixtureCatalogFiles, function(string $fixtureCatalogFile) use ($import, $dataVersion) {
+        every($fixtureCatalogFiles, function (string $fixtureCatalogFile) use ($import, $dataVersion) {
             $import->importFile(__DIR__ . '/../../shared-fixture/' . $fixtureCatalogFile, $dataVersion);
         });
-        
+
         $this->processAllMessages($factory);
     }
-    
+
     final protected function processAllMessages(MasterFactory $factory)
     {
         while ($factory->getCommandMessageQueue()->count() > 0 ||

@@ -101,12 +101,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
      * @var ProductsPerPage
      */
     private $memoizedProductsPerPageConfig;
-
-    public function __construct(MasterFactory $masterFactory)
-    {
-        $masterFactory->register($this);
-    }
-
+    
     /**
      * @return string[]
      */

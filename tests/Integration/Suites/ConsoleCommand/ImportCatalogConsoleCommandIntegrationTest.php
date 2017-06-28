@@ -9,7 +9,11 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\AbstractIntegrationTest;
 use LizardsAndPumpkins\CatalogFixtureFileQuery;
 use LizardsAndPumpkins\ConsoleCommand\Command\ImportCatalogConsoleCommand;
+use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
+use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
+use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\TestDataPoolQuery;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
 {
@@ -35,15 +39,31 @@ class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
     private function createTestCliMate(array $argumentMap): CLImate
     {
         /** @var CLImate|\PHPUnit_Framework_MockObject_MockObject $stubCliMate */
-        $stubCliMate = $this->createMock(CLImate::class);
+        $stubCliMate = $this->getMockBuilder(CLImate::class)->setMethods(['get', 'output', 'error'])->getMock();
         $stubCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
         $stubCliMate->arguments->method('get')->willReturnMap($argumentMap);
+        $stubCliMate->expects($this->any())->method('error')->with('');
         return $stubCliMate;
+    }
+
+    /**
+     * @return CatalogMasterFactory
+     */
+    private function createMasterFactory(): CatalogMasterFactory
+    {
+        $factoriesToExclude = [
+            new UpdatingProductImportCommandFactory(),
+            new UpdatingProductListingImportCommandFactory(),
+            new NullProductImageImportCommandFactory(),
+        ];
+
+        return $this->prepareIntegrationTestMasterFactoryExcludingFactories($factoriesToExclude);
     }
 
     public function testRunImportsCatalogCommand()
     {
-        $factory = $this->prepareIntegrationTestMasterFactory();
+        $factory = $this->createMasterFactory();
+        
         $command = new ImportCatalogConsoleCommand($factory, $this->createTestCliMate($this->getCommandArgumentMap()));
         $command->run();
 
