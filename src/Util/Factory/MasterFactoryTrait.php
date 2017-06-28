@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Util\Factory;
 
+use LizardsAndPumpkins\Util\Factory\Exception\FactoryAlreadyRegisteredException;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
 
 trait MasterFactoryTrait
@@ -13,8 +14,15 @@ trait MasterFactoryTrait
      */
     private $methods = [];
 
+    /**
+     * @var string[]
+     */
+    private $registeredFactoryClasses = [];
+
     final public function register(Factory $factory)
     {
+        $this->checkFactoryIsNotYetRegistered($factory);
+
         if ($factory instanceof FactoryWithCallback) {
             $factory->beforeFactoryRegistrationCallback($this);
         }
@@ -57,5 +65,16 @@ trait MasterFactoryTrait
         }
 
         return call_user_func_array([$this->methods[$method], $method], $parameters);
+    }
+
+    private function checkFactoryIsNotYetRegistered(Factory $factory)
+    {
+        if (in_array(get_class($factory), $this->registeredFactoryClasses)) {
+            throw new FactoryAlreadyRegisteredException(
+                sprintf('Can not register "%s" more than once', get_class($factory))
+            );
+        }
+
+        $this->registeredFactoryClasses[] = get_class($factory);
     }
 }

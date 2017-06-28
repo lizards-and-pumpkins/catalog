@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Util\Factory;
 
+use LizardsAndPumpkins\Util\Factory\Exception\FactoryAlreadyRegisteredException;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
 use PHPUnit\Framework\TestCase;
 
@@ -23,23 +24,23 @@ class CatalogMasterFactoryTest extends TestCase
     /**
      * @var StubFactory
      */
-    private $stubFactory;
+    private $dummyFactory;
 
     protected function setUp()
     {
         $this->catalogMasterFactory = new CatalogMasterFactory;
-        $this->stubFactory = new StubFactory;
-        $this->catalogMasterFactory->register($this->stubFactory);
+        $this->dummyFactory = new StubFactory;
+        $this->catalogMasterFactory->register($this->dummyFactory);
     }
 
     public function testMasterFactoryIsSetOnChildFactory()
     {
-        $this->assertAttributeEquals($this->catalogMasterFactory, 'masterFactory', $this->stubFactory);
+        $this->assertAttributeEquals($this->catalogMasterFactory, 'masterFactory', $this->dummyFactory);
     }
 
     public function testOnlyPublicFactoryMethodsStartingWithGetOrCreateAreRegisteredOnMasterFactory()
     {
-        $expectedMethods = ['createSomething' => $this->stubFactory, 'getSomething' => $this->stubFactory];
+        $expectedMethods = ['createSomething' => $this->dummyFactory, 'getSomething' => $this->dummyFactory];
         $this->assertAttributeSame($expectedMethods, 'methods', $this->catalogMasterFactory);
     }
 
@@ -92,5 +93,13 @@ class CatalogMasterFactoryTest extends TestCase
         $this->catalogMasterFactory->register($factoryWithCallbacks);
         $this->assertTrue($factoryWithCallbacks->beforeFactoryRegistrationCallbackWasCalled);
         $this->assertTrue($factoryWithCallbacks->factoryRegistrationCallbackWasCalled);
+    }
+
+    public function testThrowsAnExceptionIfFactoryHasBeenAlreadyRegistered()
+    {
+        $this->expectException(FactoryAlreadyRegisteredException::class);
+
+        $this->catalogMasterFactory->register(new StubFactory());
+        $this->catalogMasterFactory->register(new StubFactory());
     }
 }
