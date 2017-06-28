@@ -156,11 +156,10 @@ class CliFactoryBootstrapTest extends TestCase
 
     public function testRegistersAnySpecifiedFactories()
     {
-        $spyFactoryA = $this->createSpyFactory();
-        $spyFactoryB = $this->createSpyFactory();
-        CliFactoryBootstrap::createMasterFactory($spyFactoryA, $spyFactoryB);
-        $this->assertTrue($spyFactoryA->wasRegistered);
-        $this->assertTrue($spyFactoryB->wasRegistered);
+        $spyFactory = $this->createSpyFactory();
+        CliFactoryBootstrap::createMasterFactory($spyFactory);
+
+        $this->assertTrue($spyFactory->wasRegistered);
     }
 
     public function testRegistersCommonFactoryWithoutItBeingSpecified()
