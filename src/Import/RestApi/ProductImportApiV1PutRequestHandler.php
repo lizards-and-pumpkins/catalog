@@ -46,7 +46,7 @@ class ProductImportApiV1PutRequestHandler implements HttpRequestHandler
 
         $this->catalogImport->addProductsAndProductImagesToQueue($productXml, $dataVersion);
 
-        return $this->getResponse($request);
+        return GenericHttpResponse::create($body = '', $headers = [], HttpResponse::STATUS_ACCEPTED);
     }
 
     private function getProductDataFromRequest(HttpRequest $request): string
@@ -70,14 +70,6 @@ class ProductImportApiV1PutRequestHandler implements HttpRequestHandler
     private function hasArgument($requestArguments, string $argument): bool
     {
         return is_array($requestArguments) && isset($requestArguments[$argument]) && $requestArguments[$argument];
-    }
-
-    final protected function getResponse(HttpRequest $request): HttpResponse
-    {
-        $headers = [];
-        $body = '';
-
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
     }
 
     private function createDataVersion(HttpRequest $request): DataVersion
