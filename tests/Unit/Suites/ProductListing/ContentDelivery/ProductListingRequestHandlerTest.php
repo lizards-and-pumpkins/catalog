@@ -76,7 +76,8 @@ class ProductListingRequestHandlerTest extends TestCase
             $stubSelectionCriteria,
             'root-snippet-code',
             $pageSnippetCodes,
-            []
+            $containers = [],
+            $pageSpecificData = []
         )->toArray());
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);

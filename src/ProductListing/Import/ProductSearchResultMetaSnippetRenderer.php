@@ -80,6 +80,6 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
         string $rootSnippetCode,
         array $pageSnippetCodes
     ) : ProductSearchResultMetaSnippetContent {
-        return ProductSearchResultMetaSnippetContent::create($rootSnippetCode, $pageSnippetCodes, []);
+        return ProductSearchResultMetaSnippetContent::create($rootSnippetCode, $pageSnippetCodes, [], []);
     }
 }

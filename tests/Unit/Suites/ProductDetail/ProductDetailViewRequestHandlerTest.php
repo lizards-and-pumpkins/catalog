@@ -94,7 +94,8 @@ class ProductDetailViewRequestHandlerTest extends TestCase
             $this->testProductId,
             'root-snippet-code',
             ['child-snippet1'],
-            []
+            $containers = [],
+            $pageSpecificData = []
         )->toArray());
     }
 

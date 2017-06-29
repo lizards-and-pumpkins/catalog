@@ -69,7 +69,8 @@ class ProductDetailMetaSnippetRenderer implements SnippetRenderer
             (string) $productView->getId(),
             $this->blockRenderer->getRootSnippetCode(),
             $this->blockRenderer->getNestedSnippetCodes(),
-            []
+            $containers = [],
+            $pageSpecificData = []
         );
     }
 

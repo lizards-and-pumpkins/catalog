@@ -9,6 +9,7 @@ interface PageMetaInfoSnippetContent
     const KEY_ROOT_SNIPPET_CODE = 'root_snippet_code';
     const KEY_PAGE_SNIPPET_CODES = 'page_snippet_codes';
     const KEY_CONTAINER_SNIPPETS = 'container_snippets';
+    const KEY_PAGE_SPECIFIC_DATA = 'page_specific_data';
     const URL_KEY = 'url_key';
 
     /**
@@ -27,4 +28,9 @@ interface PageMetaInfoSnippetContent
      * @return array[]
      */
     public function getContainerSnippets(): array;
+
+    /**
+     * @return array[]
+     */
+    public function getPageSpecificData(): array;
 }

@@ -83,7 +83,8 @@ class ProductListingSnippetRenderer implements SnippetRenderer
             $productListing->getCriteria(),
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getPageSnippetCodes($productListing),
-            []
+            $containers = [],
+            $pageSpecificData = []
         );
     }
 

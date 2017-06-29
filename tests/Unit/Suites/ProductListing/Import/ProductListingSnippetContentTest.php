@@ -32,6 +32,8 @@ class ProductListingSnippetContentTest extends TestCase
 
     private $containerSnippets = ['additional-info' => []];
 
+    private $pageSpecificData = [['foo' => 'bar'], ['baz' => 'qux']];
+
     /**
      * @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -56,7 +58,8 @@ class ProductListingSnippetContentTest extends TestCase
             $this->stubSelectionCriteria,
             $this->rootSnippetCode,
             $pageSnippetCodes,
-            $this->containerSnippets
+            $this->containerSnippets,
+            $this->pageSpecificData
         );
     }
 
@@ -84,21 +87,17 @@ class ProductListingSnippetContentTest extends TestCase
     public function testExceptionIsThrownIfTheRootSnippetCodeIsAnEmptyString()
     {
         $this->expectException(InvalidSnippetCodeException::class);
-        ProductListingSnippetContent::create($this->stubSelectionCriteria, '', [], []);
+        ProductListingSnippetContent::create($this->stubSelectionCriteria, '', [], [], []);
     }
 
     public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfNotPresent()
     {
         $rootSnippetCode = 'root-snippet-code';
-        $pageMetaInfo = ProductListingSnippetContent::create(
-            $this->stubSelectionCriteria,
-            $rootSnippetCode,
-            [],
-            []
-        );
+        $pageMeta = ProductListingSnippetContent::create($this->stubSelectionCriteria, $rootSnippetCode, [], [], []);
+
         $this->assertContains(
             $rootSnippetCode,
-            $pageMetaInfo->toArray()[ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES]
+            $pageMeta->toArray()[ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES]
         );
     }
 
@@ -282,6 +281,7 @@ class ProductListingSnippetContentTest extends TestCase
             ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
             ProductListingSnippetContent::KEY_ROOT_SNIPPET_CODE => 'root',
             ProductListingSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            ProductListingSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
         ]);
 
         $metaSnippetContent = ProductListingSnippetContent::fromJson($json);
