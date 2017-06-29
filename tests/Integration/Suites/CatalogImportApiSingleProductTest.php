@@ -65,15 +65,15 @@ Flasher abnehmbar.',
         $commandQueue = $factory->getCommandMessageQueue();
         $this->assertEquals(0, $commandQueue->count());
 
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $response = $website->processRequest();
+
+        $this->assertSame(202, $response->getStatusCode());
+        $this->assertSame('', $response->getBody());
 
         $message = $this->getNextMessageFromQueue($commandQueue);
         $this->assertSame(UpdateProductCommand::CODE, $message->getName());
         $this->assertSame($testDataVersionString, $message->getMetadata()['data_version']);
-
-        $this->assertSame(202, $response->getStatusCode());
-        $this->assertSame('', $response->getBody());
 
         $this->processAllMessages($factory);
 

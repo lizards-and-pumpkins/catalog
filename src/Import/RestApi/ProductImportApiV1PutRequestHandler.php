@@ -8,13 +8,13 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportProductDataNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
-class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
+class ProductImportApiV1PutRequestHandler implements HttpRequestHandler
 {
     /**
      * @var ProductJsonToXml
@@ -37,7 +37,7 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         return $request->getMethod() === HttpRequest::METHOD_PUT;
     }
 
-    public function processRequest(HttpRequest $request): HttpResponse
+    public function process(HttpRequest $request): HttpResponse
     {
         $productData = $this->getProductDataFromRequest($request);
         $productXml = $this->productJsonToXml->toXml($productData);

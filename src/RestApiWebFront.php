@@ -39,7 +39,7 @@ class RestApiWebFront extends WebFront
         return new CatalogMasterFactory();
     }
 
-    final protected function registerFactories(MasterFactory $masterFactory)
+    protected function registerFactories(MasterFactory $masterFactory)
     {
         $masterFactory->register(new RestApiFactory());
         $masterFactory->register(new ProductSearchApiFactory());

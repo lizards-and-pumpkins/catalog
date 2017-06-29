@@ -6,6 +6,9 @@ namespace LizardsAndPumpkins\Import\XmlParser;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml
+ */
 class ProductJsonToXmlTest extends TestCase
 {
     private $sku = '118235-251';

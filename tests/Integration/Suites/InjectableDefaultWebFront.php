@@ -25,4 +25,9 @@ class InjectableDefaultWebFront extends DefaultWebFront
     {
         return $this->testMasterFactory;
     }
+
+    final protected function registerFactories(MasterFactory $masterFactory)
+    {
+        // All factories must already have been registered with the injected testing master factory.
+    }
 }
