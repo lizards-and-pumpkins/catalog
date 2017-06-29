@@ -7,13 +7,13 @@ namespace LizardsAndPumpkins\Import\RootTemplate\Import;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\InvalidTemplateApiRequestBodyException;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 
-class TemplatesApiV2PutRequestHandler extends ApiRequestHandler
+class TemplatesApiV2PutRequestHandler implements HttpRequestHandler
 {
     /**
      * @var CommandQueue
@@ -38,20 +38,14 @@ class TemplatesApiV2PutRequestHandler extends ApiRequestHandler
         return true;
     }
 
-    final protected function getResponse(HttpRequest $request) : HttpResponse
-    {
-        $headers = [];
-        $body = '';
-
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
-    }
-
-    final protected function processRequest(HttpRequest $request)
+    final public function process(HttpRequest $request): HttpResponse
     {
         $templateId = $this->extractTemplateIdFromRequest($request);
         $templateContent = $this->getContent($request);
         $dataVersion = $this->getDataVersion($request);
         $this->commandQueue->add(new UpdateTemplateCommand($templateId, $templateContent, $dataVersion));
+
+        return GenericHttpResponse::create($body = '', $headers = [], HttpResponse::STATUS_ACCEPTED);
     }
 
     protected function getContent(HttpRequest $request): string
@@ -92,7 +86,12 @@ class TemplatesApiV2PutRequestHandler extends ApiRequestHandler
         return (string) ($this->extractDataFromRequest($request)['content'] ?? '');
     }
 
-    private function hasValue($dataFromRequest, $key): bool
+    /**
+     * @param mixed[] $dataFromRequest
+     * @param string $key
+     * @return bool
+     */
+    private function hasValue(array $dataFromRequest, string $key): bool
     {
         return is_array($dataFromRequest) && isset($dataFromRequest[$key]);
     }

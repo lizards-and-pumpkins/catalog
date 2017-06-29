@@ -85,7 +85,7 @@ class RestApiFactory implements Factory
         });
     }
 
-    public function createCatalogImportApiV1PutRequestHandler(): CatalogImportApiV1PutRequestHandler
+    public function createCatalogImportApiV1PutRequestHandler(): CatalogImportApiV2PutRequestHandler
     {
         return new CatalogImportApiV1PutRequestHandler(
             $this->getCatalogImportDirectoryConfig(),

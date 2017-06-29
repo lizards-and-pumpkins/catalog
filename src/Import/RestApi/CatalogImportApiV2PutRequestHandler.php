@@ -7,17 +7,17 @@ namespace LizardsAndPumpkins\Import\RestApi;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryIsNotDirectoryException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 
-class CatalogImportApiV2PutRequestHandler extends ApiRequestHandler
+class CatalogImportApiV2PutRequestHandler implements HttpRequestHandler
 {
     /**
      * @var string
@@ -62,19 +62,13 @@ class CatalogImportApiV2PutRequestHandler extends ApiRequestHandler
         return HttpRequest::METHOD_PUT === $request->getMethod();
     }
 
-    final protected function getResponse(HttpRequest $request): HttpResponse
-    {
-        $headers = [];
-        $body = '';
-
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
-    }
-
-    final protected function processRequest(HttpRequest $request)
+    final public function process(HttpRequest $request): HttpResponse
     {
         $filePath = $this->getValidImportFilePathFromRequest($request);
         $dataVersion = $this->createDataVersion($request);
         $this->commandQueue->add(new ImportCatalogCommand($dataVersion, $filePath));
+
+        return GenericHttpResponse::create($body = '', $headers = [], HttpResponse::STATUS_ACCEPTED);
     }
 
     private function getValidImportFilePathFromRequest(HttpRequest $request): string

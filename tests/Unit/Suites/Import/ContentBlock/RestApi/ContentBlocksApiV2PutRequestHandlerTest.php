@@ -7,16 +7,21 @@ namespace LizardsAndPumpkins\Import\ContentBlock\RestApi;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockBodyIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockContextIsMissingInRequestBodyException;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockContextException;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
+use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\MissingContentBlockDataVersionException;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockId
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand
@@ -65,9 +70,9 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testExtendsApiRequestHandler()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
     public function testCanNotProcessRequestIfMethodIsNotPut()
@@ -98,66 +103,70 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
 
     public function testThrowsExceptionIfContentBlockContentIsMissingInRequestBody()
     {
+        $this->expectException(ContentBlockBodyIsMissingInRequestBodyException::class);
+        $this->expectExceptionMessage('Content block content is missing in request body.');
+
         $this->mockRequest->method('getRawBody')->willReturn(json_encode([]));
 
-        $response = $this->requestHandler->process($this->mockRequest);
-        $expectedResponseBody = json_encode(['error' => 'Content block content is missing in request body.']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testThrowsExceptionIfContentBlockContextIsMissingInRequestBody()
     {
+        $this->expectException(ContentBlockContextIsMissingInRequestBodyException::class);
+        $this->expectExceptionMessage('Content block context is missing in request body.');
+
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '']));
 
-        $response = $this->requestHandler->process($this->mockRequest);
-        $expectedResponseBody = json_encode(['error' => 'Content block context is missing in request body.']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testThrowsExceptionIfContentBlockContextIsNotAnArray()
     {
+        $this->expectException(InvalidContentBlockContextException::class);
+        $this->expectExceptionMessage('Content block context supposed to be an array, got string.');
+
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['content' => '', 'context' => '']));
 
-        $response = $this->requestHandler->process($this->mockRequest);
-        $expectedResponseBody = json_encode(['error' => 'Content block context supposed to be an array, got string.']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testThrowsExceptionIfContentBlockUrlKeyIsInvalid()
     {
+        $this->expectException(InvalidContentBlockUrlKey::class);
+        $this->expectExceptionMessage('Content block URL key must be a string, got integer.');
+
         $this->mockRequest->method('getRawBody')
             ->willReturn(json_encode(['content' => '', 'context' => [], 'url_key' => 1]));
 
-        $response = $this->requestHandler->process($this->mockRequest);
-        $expectedResponseBody = json_encode(['error' => 'Content block URL key must be a string, got integer.']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testThrowsExceptionIfDataVersionIsMissing()
     {
+        $this->expectException(MissingContentBlockDataVersionException::class);
+        $this->expectExceptionMessage('The content block data version must be specified.');
+
         $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
         $this->mockRequest->method('getUrl')->willReturn($url);
         $this->mockRequest->method('getRawBody')
             ->willReturn(json_encode(['content' => '', 'context' => []]));
-        $httpResponse = $this->requestHandler->process($this->mockRequest);
-        $response = json_decode($httpResponse->getBody(), true);
-        $this->assertSame('The content block data version must be specified.', $response['error']);
+
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testValidatesTheDataVersion()
     {
+        $this->expectException(EmptyVersionException::class);
+        $this->expectExceptionMessage('The specified version is empty.');
+
         $url = HttpUrl::fromString('http://example.com/api/content_blocks/foo_bar');
         $this->mockRequest->method('getUrl')->willReturn($url);
         $this->mockRequest->method('getRawBody')
             ->willReturn(json_encode(['content' => '', 'context' => [], 'data_version' => '']));
-        $httpResponse = $this->requestHandler->process($this->mockRequest);
-        $response = json_decode($httpResponse->getBody(), true);
-        $this->assertSame('The specified version is empty.', $response['error']);
-        
+
+        $this->requestHandler->process($this->mockRequest);
+
     }
 
     public function testEmitsUpdateContentBlockCommand()

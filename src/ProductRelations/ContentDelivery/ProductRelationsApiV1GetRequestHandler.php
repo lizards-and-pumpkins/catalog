@@ -8,12 +8,12 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\Product\ProductId;
 
-class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
+class ProductRelationsApiV1GetRequestHandler implements HttpRequestHandler
 {
     /**
      * @var ProductRelationsService
@@ -51,7 +51,7 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
         return count($parts) > 4 && 'products' === $parts[1] && 'relations' === $parts[3];
     }
 
-    final protected function getResponse(HttpRequest $request): HttpResponse
+    public function process(HttpRequest $request): HttpResponse
     {
         if (! $this->canProcess($request)) {
             throw $this->getUnableToProcessRequestException($request);
@@ -65,10 +65,9 @@ class ProductRelationsApiV1GetRequestHandler extends ApiRequestHandler
             $context
         );
 
-        $headers = [];
         $body = json_encode(['data' => $relatedProductsData]);
 
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_OK);
+        return GenericHttpResponse::create($body, $headers = [], HttpResponse::STATUS_OK);
     }
 
     /**

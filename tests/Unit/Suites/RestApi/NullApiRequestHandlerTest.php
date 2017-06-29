@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\RestApi\NullApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class NullApiRequestHandlerTest extends TestCase
 {
@@ -31,9 +31,9 @@ class NullApiRequestHandlerTest extends TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testApiRequestHandlerIsExtended()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
     public function testRequestCanNotBeProcessed()
@@ -43,11 +43,9 @@ class NullApiRequestHandlerTest extends TestCase
 
     public function testExceptionIsThrownDuringAttemptToProcess()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('NullApiRequestHandler should never be processed.');
+
         $this->requestHandler->process($this->stubRequest);
-
-        $response = $this->requestHandler->process($this->stubRequest);
-        $expectedResponseBody = json_encode(['error' => 'NullApiRequestHandler should never be processed.']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
     }
 }

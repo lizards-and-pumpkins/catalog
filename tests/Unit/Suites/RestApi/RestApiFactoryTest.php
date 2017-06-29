@@ -33,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\QueueImportCommands
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\RestApi;
 
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryIsNotDirectoryException;
+use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
@@ -16,7 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpResponse
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
@@ -70,9 +71,9 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testClassIsDerivedFromApiRequestHandler()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
     public function testRequestCanNotBeProcessedIfMethodIsNotPut()
@@ -101,24 +102,22 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
 
     public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
     {
-        $response = $this->requestHandler->process($this->mockRequest);
-        $expectedResponseBody = json_encode(['error' => 'Import file name is not found in request body.']);
+        $this->expectException(CatalogImportFileNameNotFoundInRequestBodyException::class);
+        $this->expectExceptionMessage('Import file name is not found in request body.');
 
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testExceptionIsThrownIfDataVersionIsNotFoundInRequestBody()
     {
+        $this->expectException(DataVersionNotFoundInRequestBodyException::class);
+        $this->expectExceptionMessage('The catalog import data version is not found in request body.');
+
         $importFileName = 'import-file.xml';
         $this->createFixtureFile($this->testImportDirectoryPath . '/' . $importFileName, '');
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['fileName' => $importFileName]));
 
-        $response = $this->requestHandler->process($this->mockRequest);
-        $expectedResponseBody = json_encode(
-            ['error' => 'The catalog import data version is not found in request body.']
-        );
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->mockRequest);
     }
 
     public function testAddsImportCatalogCommandToCommandQueue()

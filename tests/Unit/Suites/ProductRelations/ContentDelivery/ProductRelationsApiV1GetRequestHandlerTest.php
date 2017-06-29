@@ -7,13 +7,13 @@ namespace LizardsAndPumpkins\ProductRelations\ContentDelivery;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationTypeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductId
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
@@ -70,9 +70,9 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testItIsAnApiRequestHandler()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->requestHandler);
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
     /**
@@ -129,19 +129,17 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
 
     public function testItThrowsAnExceptionIfANonProcessableRequestIsPassed()
     {
+        $this->expectException(UnableToProcessProductRelationsRequestException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Unable to process a %s request to "%s"',
+            HttpRequest::METHOD_POST,
+            $this->testMatchingRequestPath
+        ));
+
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
 
-        $response = $this->requestHandler->process($this->stubRequest);
-        $expectedResponseBody = json_encode([
-            'error' => sprintf(
-                'Unable to process a %s request to "%s"',
-                HttpRequest::METHOD_POST,
-                $this->testMatchingRequestPath
-            )
-        ]);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->requestHandler->process($this->stubRequest);
     }
 
     public function testItDelegatesToTheProductRelationsServiceToFetchRelatedProducts()

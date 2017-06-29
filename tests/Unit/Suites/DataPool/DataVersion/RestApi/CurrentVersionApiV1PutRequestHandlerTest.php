@@ -4,14 +4,16 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\DataPool\DataVersion\RestApi;
 
+use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\TargetDataVersionMissingInRequestException;
+use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\UnableToDeserializeRequestBodyJsonException;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,7 +28,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandler
  */
 class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
 {
@@ -60,9 +61,9 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
     }
 
-    public function testInheritsFromApiRequestHandler()
+    public function testIsHttpRequestHandler()
     {
-        $this->assertInstanceOf(ApiRequestHandler::class, $this->createHandler());
+        $this->assertInstanceOf(HttpRequestHandler::class, $this->createHandler());
     }
 
     /**
@@ -93,17 +94,17 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
      */
     public function testThrowsExceptionIfTargetDataVersionIsMissing($missingTargetVersionRequestData)
     {
+        $this->expectException(TargetDataVersionMissingInRequestException::class);
+        $this->expectExceptionMessage('The target data version is missing in the request body');
+
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_PUT,
             HttpUrl::fromString('https://example.com/api/current_version'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody(json_encode($missingTargetVersionRequestData))
         );
-        $response = $this->createHandler()->process($request);
 
-        $expectedResponseBody = json_encode(['error' => 'The target data version is missing in the request body']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->createHandler()->process($request);
     }
 
     public function requestDataWithoutTargetVersionDataProvider(): array
@@ -118,17 +119,17 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
 
     public function testThrowsExceptionIfRequestBodyIsNotJson()
     {
+        $this->expectException(UnableToDeserializeRequestBodyJsonException::class);
+        $this->expectExceptionMessage('Unable to deserialize request body JSON: Syntax error');
+
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_PUT,
             HttpUrl::fromString('https://example.com/api/current_version'),
             HttpHeaders::fromArray([]),
             new HttpRequestBody('???')
         );
-        $response = $this->createHandler()->process($request);
 
-        $expectedResponseBody = json_encode(['error' => 'Unable to deserialize request body JSON: Syntax error']);
-
-        $this->assertSame($expectedResponseBody, $response->getBody());
+        $this->createHandler()->process($request);
     }
 
     public function testAddsSetCurrentDataVersionCommandToCommandQueue()

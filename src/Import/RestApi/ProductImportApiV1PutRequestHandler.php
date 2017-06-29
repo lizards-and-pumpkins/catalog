@@ -8,13 +8,13 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportProductDataNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
-class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
+class ProductImportApiV1PutRequestHandler implements HttpRequestHandler
 {
     /**
      * @var ProductJsonToXml
@@ -37,7 +37,7 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
         return $request->getMethod() === HttpRequest::METHOD_PUT;
     }
 
-    public function processRequest(HttpRequest $request): HttpResponse
+    public function process(HttpRequest $request): HttpResponse
     {
         $productData = $this->getProductDataFromRequest($request);
         $productXml = $this->productJsonToXml->toXml($productData);
@@ -46,7 +46,7 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
 
         $this->catalogImport->addProductsAndProductImagesToQueue($productXml, $dataVersion);
 
-        return $this->getResponse($request);
+        return GenericHttpResponse::create($body = '', $headers = [], HttpResponse::STATUS_ACCEPTED);
     }
 
     private function getProductDataFromRequest(HttpRequest $request): string
@@ -70,14 +70,6 @@ class ProductImportApiV1PutRequestHandler extends ApiRequestHandler
     private function hasArgument($requestArguments, string $argument): bool
     {
         return is_array($requestArguments) && isset($requestArguments[$argument]) && $requestArguments[$argument];
-    }
-
-    final protected function getResponse(HttpRequest $request): HttpResponse
-    {
-        $headers = [];
-        $body = '';
-
-        return GenericHttpResponse::create($body, $headers, HttpResponse::STATUS_ACCEPTED);
     }
 
     private function createDataVersion(HttpRequest $request): DataVersion

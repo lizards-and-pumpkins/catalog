@@ -15,6 +15,8 @@ use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
 {
+    use ProductListingTemplateIntegrationTestTrait;
+
     /**
      * @var CatalogMasterFactory
      */
@@ -53,6 +55,11 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
                 return$this->factory->createProductSearchResultMetaSnippetKeyGenerator();
             }
         );
+    }
+
+    final protected function setUp()
+    {
+        $this->importProductListingTemplateFixtureViaApi();
     }
 
     public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()

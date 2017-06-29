@@ -17,14 +17,14 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnableToProcessProductSearchRequestException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\Exception\UnsupportedSortOrderException;
 use LizardsAndPumpkins\ProductSearch\Exception\InvalidNumberOfProductsPerPageException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
-use LizardsAndPumpkins\RestApi\ApiRequestHandler;
 
-class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
+class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
 {
     const ENDPOINT_NAME = 'product';
 
@@ -118,7 +118,7 @@ class ProductSearchApiV1GetRequestHandler extends ApiRequestHandler
         return true;
     }
 
-    final protected function getResponse(HttpRequest $request) : HttpResponse
+    public function process(HttpRequest $request): HttpResponse
     {
         if (! $this->canProcess($request)) {
             throw new UnableToProcessProductSearchRequestException('Invalid product search API request.');

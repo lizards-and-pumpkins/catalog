@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\RestApi;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Http\Exception\HeaderNotPresentException;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -85,12 +86,12 @@ class ApiRouterTest extends TestCase
 
     public function testNullIsReturnedIfApiRequestHandlerCanNotProcessRequest()
     {
-        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
-        $stubApiRequestHandler->method('canProcess')->willReturn(false);
+        $stubRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $stubRequestHandler->method('canProcess')->willReturn(false);
 
         $this->stubApiRequestHandlerLocator->expects($this->once())
             ->method('getApiRequestHandler')
-            ->willReturn($stubApiRequestHandler);
+            ->willReturn($stubRequestHandler);
 
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('api/foo');
         $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
@@ -101,14 +102,14 @@ class ApiRouterTest extends TestCase
         $this->assertNull($result);
     }
 
-    public function testApiRequestHandlerIsReturned()
+    public function testReturnsHttpRequestHandler()
     {
-        $stubApiRequestHandler = $this->createMock(ApiRequestHandler::class);
-        $stubApiRequestHandler->method('canProcess')->willReturn(true);
+        $stubRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $stubRequestHandler->method('canProcess')->willReturn(true);
 
         $this->stubApiRequestHandlerLocator->expects($this->once())
             ->method('getApiRequestHandler')
-            ->willReturn($stubApiRequestHandler);
+            ->willReturn($stubRequestHandler);
 
         $this->stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
         $this->stubHttpRequest->method('getHeader')->with('Accept')
@@ -116,6 +117,6 @@ class ApiRouterTest extends TestCase
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('api/foo');
         $result = $this->apiRouter->route($this->stubHttpRequest);
 
-        $this->assertInstanceOf(ApiRequestHandler::class, $result);
+        $this->assertInstanceOf(HttpRequestHandler::class, $result);
     }
 }

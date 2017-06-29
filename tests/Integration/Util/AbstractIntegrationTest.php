@@ -17,7 +17,7 @@ use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\Factory;
@@ -94,7 +94,7 @@ abstract class AbstractIntegrationTest extends TestCase
 
         $this->prepareIntegrationTestFactory($masterFactory);
         
-        $this->registerFactoryIfNotExcluded($masterFactory, $factoriesToExclude, new ProductSearchFactory());
+        $this->registerFactoryIfNotExcluded($masterFactory, $factoriesToExclude, new ProductSearchApiFactory());
 
         return $masterFactory;
     }

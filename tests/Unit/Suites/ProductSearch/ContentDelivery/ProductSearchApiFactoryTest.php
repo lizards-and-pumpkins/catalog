@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory
+ * @covers \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\DefaultFullTextCriteriaBuilder
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
@@ -41,21 +42,21 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler
  */
-class ProductSearchFactoryTest extends TestCase
+class ProductSearchApiFactoryTest extends TestCase
 {
     /**
-     * @var ProductSearchFactory
+     * @var ProductSearchApiFactory
      */
     private $factory;
 
-    protected function setUp()
+    final protected function setUp()
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new RestApiFactory());
         $masterFactory->register(new UnitTestFactory($this));
 
-        $this->factory = new ProductSearchFactory();
+        $this->factory = new ProductSearchApiFactory();
 
         $masterFactory->register($this->factory);
     }

@@ -69,7 +69,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
         $this->processAllMessages($this->factory);
@@ -129,7 +129,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $factory->createDataPoolWriter()->setCurrentDataVersion($dataVersion);
 
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $website->processRequest();
         $this->processAllMessages($factory);
         $this->failIfMessagesWhereLogged($factory->getLogger());

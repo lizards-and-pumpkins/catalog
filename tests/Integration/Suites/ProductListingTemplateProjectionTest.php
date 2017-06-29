@@ -9,7 +9,6 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
-use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
@@ -25,7 +24,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
     private function processRequest(CatalogMasterFactory $factory, HttpRequest $request)
     {
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
-        $website = new InjectableDefaultWebFront($request, $factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
         $website->processRequest();
         $this->processAllMessages($factory);
         $this->failIfMessagesWhereLogged($factory->getLogger());
