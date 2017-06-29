@@ -4,22 +4,20 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
-class ProductSearchFactory implements FactoryWithCallback
+class ProductSearchApiFactory implements FactoryWithCallback
 {
     use FactoryWithCallbackTrait;
 
     public function factoryRegistrationCallback(MasterFactory $masterFactory)
     {
-        if (method_exists($masterFactory, 'getApiRequestHandlerLocator')) {
-            $this->registerProductSearchApiEndpoint($masterFactory);
-        }
+        $masterFactory->register(new ProductSearchSharedFactory());
+        $this->registerProductSearchApiEndpoint($masterFactory);
     }
 
     public function createProductSearchApiV1GetRequestHandler(): ProductSearchApiV1GetRequestHandler
@@ -35,15 +33,6 @@ class ProductSearchFactory implements FactoryWithCallback
         );
     }
 
-    public function createProductSearchService(): ProductSearchService
-    {
-        return new ProductSearchService(
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createGlobalProductListingCriteria(),
-            $this->getMasterFactory()->createProductJsonService()
-        );
-    }
-
     public function createSelectedFiltersParser(): SelectedFiltersParser
     {
         return new DefaultSelectedFiltersParser();
@@ -52,18 +41,6 @@ class ProductSearchFactory implements FactoryWithCallback
     public function createCriteriaParser(): CriteriaParser
     {
         return new DefaultCriteriaParser();
-    }
-
-    public function createFullTextCriteriaBuilder(): FullTextCriteriaBuilder
-    {
-        return new DefaultFullTextCriteriaBuilder(
-            $this->getMasterFactory()->getFullTextSearchWordCombinationOperator()
-        );
-    }
-
-    public function getFullTextSearchWordCombinationOperator(): string
-    {
-        return CompositeSearchCriterion::OR_CONDITION;
     }
 
     public function createDefaultSearchEngineConfiguration(): SearchEngineConfiguration

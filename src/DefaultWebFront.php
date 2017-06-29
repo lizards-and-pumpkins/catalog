@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Http\WebFront;
 use LizardsAndPumpkins\Logging\LoggingQueueFactory;
 use LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory;
 use LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
@@ -25,7 +25,7 @@ class DefaultWebFront extends WebFront
     protected function registerFactories(MasterFactory $masterFactory)
     {
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new ProductSearchFactory());
+        $masterFactory->register(new ProductSearchSharedFactory());
         $masterFactory->register(new FrontendFactory($this->getRequest()));
         $masterFactory->register($this->getImplementationSpecificFactory());
         //$this->enableDebugLogging($masterFactory, $commonFactory, $implementationFactory);

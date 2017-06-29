@@ -25,7 +25,7 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -84,8 +84,9 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator
  * @uses   \LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
- * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
+ * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
@@ -109,7 +110,7 @@ class FrontendFactoryTest extends TestCase
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new UnitTestFactory($this));
         $masterFactory->register(new RestApiFactory());
-        $masterFactory->register(new ProductSearchFactory());
+        $masterFactory->register(new ProductSearchSharedFactory());
 
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,

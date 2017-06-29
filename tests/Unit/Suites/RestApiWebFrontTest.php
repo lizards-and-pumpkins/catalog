@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Http\WebFront;
 use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchFactory;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -143,7 +143,7 @@ class RestApiWebFrontTest extends TestCase
     {
         $this->mockMasterFactory->expects($this->exactly(6))->method('register')->withConsecutive(
             $this->isInstanceOf(RestApiFactory::class),
-            $this->isInstanceOf(ProductSearchFactory::class),
+            $this->isInstanceOf(ProductSearchApiFactory::class),
             $this->isInstanceOf(UpdatingProductImportCommandFactory::class),
             $this->isInstanceOf(UpdatingProductImageImportCommandFactory::class),
             $this->isInstanceOf(UpdatingProductListingImportCommandFactory::class),
