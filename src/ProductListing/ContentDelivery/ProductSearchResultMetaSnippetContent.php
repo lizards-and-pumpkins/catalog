@@ -107,6 +107,7 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     public function toArray(): array
     {
         return [
+            self::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE,
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
             self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets(),

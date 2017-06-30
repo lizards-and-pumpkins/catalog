@@ -8,6 +8,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetContainer;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
@@ -153,6 +154,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     public function toArray() : array
     {
         return [
+            self::KEY_HANDLER_CODE => ProductListingRequestHandler::CODE,
             self::KEY_CRITERIA => $this->selectionCriteria,
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,

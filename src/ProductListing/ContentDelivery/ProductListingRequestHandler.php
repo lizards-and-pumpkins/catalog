@@ -23,6 +23,8 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {
+    const CODE = 'product_listing';
+
     /**
      * @var DataPoolReader
      */

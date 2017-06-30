@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import;
 
 interface PageMetaInfoSnippetContent
 {
+    const KEY_HANDLER_CODE = 'handler_code';
     const KEY_ROOT_SNIPPET_CODE = 'root_snippet_code';
     const KEY_PAGE_SNIPPET_CODES = 'page_snippet_codes';
     const KEY_CONTAINER_SNIPPETS = 'container_snippets';

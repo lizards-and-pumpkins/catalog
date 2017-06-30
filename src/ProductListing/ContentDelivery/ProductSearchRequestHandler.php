@@ -21,6 +21,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
 {
+    const CODE = 'product_search';
     const SEARCH_RESULTS_SLUG = 'catalogsearch/result';
     const QUERY_STRING_PARAMETER_NAME = 'q';
 

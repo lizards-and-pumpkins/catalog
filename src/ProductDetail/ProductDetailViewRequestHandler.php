@@ -22,6 +22,8 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductDetailViewRequestHandler implements HttpRequestHandler
 {
+    const CODE = 'product_detail';
+
     /**
      * @var ProductDetailPageMetaInfoSnippetContent
      */

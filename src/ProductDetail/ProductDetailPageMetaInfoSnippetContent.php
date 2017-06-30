@@ -157,6 +157,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     public function toArray(): array
     {
         return [
+            self::KEY_HANDLER_CODE => ProductDetailViewRequestHandler::CODE,
             self::KEY_PRODUCT_ID => $this->productId,
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,

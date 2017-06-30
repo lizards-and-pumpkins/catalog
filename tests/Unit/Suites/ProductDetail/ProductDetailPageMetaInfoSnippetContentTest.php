@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductDetail;
 
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -157,5 +159,13 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     public function testReturnsPageSpecificData()
     {
         $this->assertSame($this->pageSpecificData, $this->pageMetaInfo->getPageSpecificData());
+    }
+
+    public function testContainsRequestHandlerCode()
+    {
+        $result = $this->pageMetaInfo->toArray();
+
+        $this->assertArrayHasKey(PageMetaInfoSnippetContent::KEY_HANDLER_CODE, $result);
+        $this->assertSame($result[PageMetaInfoSnippetContent::KEY_HANDLER_CODE], ProductDetailViewRequestHandler::CODE);
     }
 }
