@@ -16,8 +16,6 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
@@ -357,18 +355,6 @@ class CommonFactoryTest extends TestCase
         $resultB = $this->commonFactory->getLogger();
         $this->assertInstanceOf(Logger::class, $resultA);
         $this->assertSame($resultA, $resultB);
-    }
-
-    public function testResourceNotFoundRouterIsReturned()
-    {
-        $result = $this->commonFactory->createResourceNotFoundRouter();
-        $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
-    }
-
-    public function testHttpRouterChainIsReturned()
-    {
-        $result = $this->commonFactory->createHttpRouterChain();
-        $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
 
     public function testImageImportEventDomainHandlerIsReturned()

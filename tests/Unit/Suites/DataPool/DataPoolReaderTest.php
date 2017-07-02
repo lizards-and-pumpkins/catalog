@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool;
 
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
@@ -12,6 +13,8 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
  * @covers \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
+ * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  */
 class DataPoolReaderTest extends AbstractDataPoolTest
 {
@@ -20,6 +23,8 @@ class DataPoolReaderTest extends AbstractDataPoolTest
      */
     private $dataPoolReader;
 
+    private $testContextParts = ['bar'];
+
     protected function setUp()
     {
         parent::setUp();
@@ -27,7 +32,8 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $this->dataPoolReader = new DataPoolReader(
             $this->getMockKeyValueStore(),
             $this->getMockSearchEngine(),
-            $this->getMockUrlKeyStore()
+            $this->getMockUrlKeyStore(),
+            ...$this->testContextParts
         );
     }
 
@@ -160,5 +166,17 @@ class DataPoolReaderTest extends AbstractDataPoolTest
         $expected = ['test.html'];
         $this->getMockUrlKeyStore()->expects($this->once())->method('getForDataVersion')->willReturn($expected);
         $this->assertSame($expected, $this->dataPoolReader->getUrlKeysForVersion('1.0'));
+    }
+
+    public function testRequestsPageMetaSnippetFromKeyValueStore()
+    {
+        $urlKey = 'foo';
+        $context = SelfContainedContextBuilder::rehydrateContext(['bar' => 'baz']);
+
+        $expectedSnippetKey = 'meta_' . $urlKey . '_' . $context->getIdForParts(...$this->testContextParts);
+
+        $this->getMockKeyValueStore()->expects($this->once())->method('get')->with($expectedSnippetKey)->willReturn('');
+
+        $this->dataPoolReader->getPageMetaSnippet($urlKey, $context);
     }
 }

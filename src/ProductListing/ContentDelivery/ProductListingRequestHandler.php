@@ -6,39 +6,30 @@ namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchResult;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
-use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {
     const CODE = 'product_listing';
 
     /**
-     * @var DataPoolReader
+     * @var ProductListingSnippetContent
      */
-    private $dataPoolReader;
+    private $pageMetaInfo;
 
     /**
      * @var Context
      */
     private $context;
-
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $metaInfoSnippetKeyGenerator;
 
     /**
      * @var FacetFiltersToIncludeInResult
@@ -77,8 +68,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     public function __construct(
         Context $context,
-        DataPoolReader $dataPoolReader,
-        SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
+        string $metaInfoJson,
         FacetFiltersToIncludeInResult $facetFilterRequest,
         UrlToWebsiteMap $urlToWebsiteMap,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
@@ -88,8 +78,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         SortBy ...$availableSortBy
     ) {
         $this->context = $context;
-        $this->dataPoolReader = $dataPoolReader;
-        $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
+        $this->pageMetaInfo = ProductListingSnippetContent::fromJson($metaInfoJson);
         $this->facetFilterRequest = $facetFilterRequest;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
@@ -99,22 +88,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
-    /**
-     * @var ProductListingSnippetContent|bool
-     */
-    private $memoizedPageMetaInfo;
-
-    public function canProcess(HttpRequest $request) : bool
+    public function process(HttpRequest $request): HttpResponse
     {
-        return $this->getPageMetaInfoSnippet($request) !== false;
-    }
-
-    public function process(HttpRequest $request) : HttpResponse
-    {
-        if (!$this->canProcess($request)) {
-            throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
-        }
-
         $this->productListingPageRequest->processCookies($request);
 
         $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
@@ -124,15 +99,14 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ...$this->availableSortBy
         );
         $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
-        
-        $metaInfo = $this->getPageMetaInfoSnippet($request);
+
         $requestUrlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $keyGeneratorParams = [
             PageMetaInfoSnippetContent::URL_KEY => ltrim($requestUrlKey, '/'),
         ];
 
         return $this->productListingPageContentBuilder->buildPageContent(
-            $metaInfo,
+            $this->pageMetaInfo,
             $this->context,
             $keyGeneratorParams,
             $productSearchResult,
@@ -142,43 +116,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
         );
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return bool|ProductListingSnippetContent
-     */
-    private function getPageMetaInfoSnippet(HttpRequest $request)
-    {
-        if (null === $this->memoizedPageMetaInfo) {
-            $this->memoizedPageMetaInfo = false;
-            $metaInfoSnippetKey = $this->getMetaInfoSnippetKey($request);
-            $json = $this->getPageMetaInfoJsonIfExists($metaInfoSnippetKey);
-            if ($json) {
-                $this->memoizedPageMetaInfo = ProductListingSnippetContent::fromJson($json);
-            }
-        }
-
-        return $this->memoizedPageMetaInfo;
-    }
-
-    /**
-     * @param string $metaInfoSnippetKey
-     * @return mixed
-     */
-    private function getPageMetaInfoJsonIfExists(string $metaInfoSnippetKey)
-    {
-        try {
-            $snippet = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
-        } catch (KeyNotFoundException $e) {
-            $snippet = '';
-        }
-        return $snippet;
-    }
-
     private function getSearchResults(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
         SortBy $selectedSortBy
-    ) : ProductSearchResult {
+    ): ProductSearchResult {
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
         $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
 
@@ -198,8 +140,8 @@ class ProductListingRequestHandler implements HttpRequestHandler
         int $numberOfProductsPerPage,
         int $currentPageNumber,
         SortBy $selectedSortBy
-    ) : ProductSearchResult {
-        $criteria = $this->getPageMetaInfoSnippet($request)->getSelectionCriteria();
+    ): ProductSearchResult {
+        $criteria = $this->pageMetaInfo->getSelectionCriteria();
 
         $queryOptions = QueryOptions::create(
             $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFilterRequest),
@@ -217,23 +159,12 @@ class ProductListingRequestHandler implements HttpRequestHandler
         ProductSearchResult $productSearchResult,
         int $currentPageNumber,
         int $numberOfProductsPerPage
-    ) : bool {
+    ): bool {
         return $currentPageNumber <= $this->getLastPageNumber($productSearchResult, $numberOfProductsPerPage);
     }
 
-    private function getLastPageNumber(ProductSearchResult $productSearchResult, int $numberOfProductsPerPage) : int
+    private function getLastPageNumber(ProductSearchResult $productSearchResult, int $numberOfProductsPerPage): int
     {
         return max(0, (int) ceil($productSearchResult->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1);
-    }
-
-    private function getMetaInfoSnippetKey(HttpRequest $request) : string
-    {
-        $urlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
-        $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext(
-            $this->context,
-            [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
-        );
-
-        return $metaInfoSnippetKey;
     }
 }

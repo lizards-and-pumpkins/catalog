@@ -6,9 +6,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
-use LizardsAndPumpkins\Context\Website\IntegrationTestUrlToWebsiteMap;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
@@ -41,11 +39,6 @@ class FrontendRenderingTest extends AbstractIntegrationTest
      * @var RegistrySnippetKeyGeneratorLocatorStrategy
      */
     private $snippetKeyGeneratorLocator;
-
-    /**
-     * @var HttpRequest
-     */
-    private $request;
 
     private function addSnippetsFixtureToKeyValueStorage(string $productDetailPageMetaSnippetKey, Context $context)
     {
@@ -133,31 +126,28 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     }
 
     private function createProductDetailViewRequestHandler(
+        string $urlKey,
         Context $context,
-        Logger $logger,
-        SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
+        Logger $logger
     ) : ProductDetailViewRequestHandler {
         $dataPoolReader = $this->factory->createDataPoolReader();
 
         return new ProductDetailViewRequestHandler(
             $context,
-            $dataPoolReader,
             new GenericPageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
-            new IntegrationTestUrlToWebsiteMap(),
             $this->factory->getTranslatorRegistry(),
-            $productDetailPageMetaSnippetKeyGenerator
+            $dataPoolReader->getPageMetaSnippet($urlKey, $context)
         );
-    }
-
-    protected function setUp()
-    {
-        $this->request = $this->createDummyRequest(HttpUrl::fromString('http://example.com/product1'));
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($this->request);
-        $this->snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
     }
 
     public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
     {
+        $urlKey = 'product1';
+        $request = $this->createDummyRequest(HttpUrl::fromString('http://example.com/' . $urlKey));
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $this->snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
+
         $context = SelfContainedContextBuilder::rehydrateContext([
             DataVersion::CONTEXT_CODE => '-1',
             Locale::CONTEXT_CODE => 'foo_BAR'
@@ -165,7 +155,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         
         $urlToWebsiteMap = $this->factory->createUrlToWebsiteMap();
         $metaSnippetKeyGenerator = $this->factory->createProductDetailPageMetaSnippetKeyGenerator();
-        $pathWithoutWebsitePrefix = $urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $this->request->getUrl());
+        $pathWithoutWebsitePrefix = $urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $productDetailPageMetaSnippetKey = $metaSnippetKeyGenerator->getKeyForContext(
             $context,
             [PageMetaInfoSnippetContent::URL_KEY => $pathWithoutWebsitePrefix]
@@ -175,9 +165,9 @@ class FrontendRenderingTest extends AbstractIntegrationTest
 
         $logger = $this->factory->getLogger();
 
-        $pageBuilder = $this->createProductDetailViewRequestHandler($context, $logger, $metaSnippetKeyGenerator);
+        $pageBuilder = $this->createProductDetailViewRequestHandler($urlKey, $context, $logger);
         
-        $page = $pageBuilder->process($this->request);
+        $page = $pageBuilder->process($request);
         
         $this->failIfMessagesWhereLogged($logger);
 

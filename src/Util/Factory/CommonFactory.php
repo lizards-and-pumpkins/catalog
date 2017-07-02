@@ -54,8 +54,6 @@ use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
@@ -288,7 +286,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductJsonSnippetKeyGenerator() : GenericSnippetKeyGenerator
+    public function createProductJsonSnippetKeyGenerator() : SnippetKeyGenerator
     {
         $usedDataParts = [Product::ID];
 
@@ -420,7 +418,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductListingSnippetRenderer::CODE,
+            'meta',
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -485,7 +483,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductDetailMetaSnippetRenderer::CODE,
+            'meta',
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -766,7 +764,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new DataPoolReader(
             $this->getMasterFactory()->getKeyValueStore(),
             $this->getMasterFactory()->getSearchEngine(),
-            $this->getMasterFactory()->getUrlKeyStore()
+            $this->getMasterFactory()->getUrlKeyStore(),
+            ...$this->getMasterFactory()->getRequiredContextParts()
         );
     }
 
@@ -794,16 +793,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         }
 
         return $instance;
-    }
-
-    public function createResourceNotFoundRouter() : ResourceNotFoundRouter
-    {
-        return new ResourceNotFoundRouter();
-    }
-
-    public function createHttpRouterChain() : HttpRouterChain
-    {
-        return new HttpRouterChain();
     }
 
     public function createProductSearchDocumentBuilder() : ProductSearchDocumentBuilder
@@ -1001,10 +990,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createProductSearchResultMetaSnippetKeyGenerator() : SnippetKeyGenerator
     {
-        $usedDataParts = [];
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductSearchResultMetaSnippetRenderer::CODE,
+            'meta',
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );

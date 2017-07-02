@@ -24,29 +24,23 @@ class RestApiFactory implements Factory
     use FactoryTrait;
 
     /**
-     * @var ApiRequestHandlerLocator
+     * @var RestApiRequestHandlerLocator
      */
     private $memoizedApiRequestHandlerLocator;
 
-    public function createApiRouter(): ApiRouter
-    {
-        return new ApiRouter(
-            $this->getApiRequestHandlerLocator(),
-            $this->getMasterFactory()->createUrlToWebsiteMap()
-        );
-    }
-
-    public function getApiRequestHandlerLocator(): ApiRequestHandlerLocator
+    public function getRestApiRequestHandlerLocator(): RestApiRequestHandlerLocator
     {
         if (null === $this->memoizedApiRequestHandlerLocator) {
-            $this->memoizedApiRequestHandlerLocator = new ApiRequestHandlerLocator();
+            $this->memoizedApiRequestHandlerLocator = new RestApiRequestHandlerLocator(
+                $this->getMasterFactory()->createUrlToWebsiteMap()
+            );
             $this->registerApiRequestHandlers($this->memoizedApiRequestHandlerLocator);
         }
 
         return $this->memoizedApiRequestHandlerLocator;
     }
 
-    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
+    private function registerApiRequestHandlers(RestApiRequestHandlerLocator $requestHandlerLocator)
     {
         $requestHandlerLocator->register('put_catalog_import', $version = 1, function () {
             return $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler();
@@ -154,7 +148,7 @@ class RestApiFactory implements Factory
     public function createCurrentVersionApiV1PutRequestHandler(): CurrentVersionApiV1PutRequestHandler
     {
         return new CurrentVersionApiV1PutRequestHandler(
-            $this->getMasterFactory()->createCommandQueue()
+            $this->getMasterFactory()->getCommandQueue()
         );
     }
 

@@ -9,7 +9,5 @@ use LizardsAndPumpkins\Http\HttpResponse;
 
 interface HttpRequestHandler
 {
-    public function canProcess(HttpRequest $request): bool;
-
     public function process(HttpRequest $request): HttpResponse;
 }

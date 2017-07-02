@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Http;
 
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
@@ -19,11 +19,6 @@ abstract class WebFront
      * @var HttpRequest
      */
     private $request;
-
-    /**
-     * @var HttpRouterChain
-     */
-    private $routerChain;
 
     /**
      * @var Factory
@@ -46,11 +41,7 @@ abstract class WebFront
     public function processRequest() : HttpResponse
     {
         $this->buildFactory();
-        $this->buildRouterChain();
-
-        $requestHandler = $this->routerChain->route($this->request);
-
-        return $requestHandler->process($this->request);
+        return $this->getHandlerForRequest($this->request)->process($this->request);
     }
 
     final public function registerFactory(Factory $factory)
@@ -59,11 +50,11 @@ abstract class WebFront
         $this->masterFactory->register($factory);
     }
 
+    abstract protected function getHandlerForRequest(HttpRequest $request): HttpRequestHandler;
+
     abstract protected function createMasterFactory() : MasterFactory;
 
     abstract protected function registerFactories(MasterFactory $factory);
-
-    abstract protected function registerRouters(HttpRouterChain $routerChain);
 
     final protected function getRequest() : HttpRequest
     {
@@ -84,12 +75,6 @@ abstract class WebFront
         $this->masterFactory = $this->createMasterFactory();
         $this->validateMasterFactory();
         $this->registerFactories($this->masterFactory);
-    }
-
-    private function buildRouterChain()
-    {
-        $this->routerChain = $this->masterFactory->createHttpRouterChain();
-        $this->registerRouters($this->routerChain);
     }
 
     public function getMasterFactory() : MasterFactory

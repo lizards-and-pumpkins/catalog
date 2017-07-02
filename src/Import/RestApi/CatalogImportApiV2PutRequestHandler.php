@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\Import\RestApi;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryIsNotDirectoryException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
@@ -16,8 +15,9 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryNotReadableException;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandler;
 
-class CatalogImportApiV2PutRequestHandler implements HttpRequestHandler
+class CatalogImportApiV2PutRequestHandler implements RestApiRequestHandler
 {
     /**
      * @var string

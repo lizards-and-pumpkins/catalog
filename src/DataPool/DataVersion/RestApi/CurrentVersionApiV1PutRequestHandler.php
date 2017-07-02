@@ -11,10 +11,10 @@ use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandler;
 
-class CurrentVersionApiV1PutRequestHandler implements HttpRequestHandler
+class CurrentVersionApiV1PutRequestHandler implements RestApiRequestHandler
 {
     const TARGET_VERSION_PARAM = 'current_version';
 

@@ -6,9 +6,8 @@ namespace LizardsAndPumpkins\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
-class NullApiRequestHandler implements HttpRequestHandler
+class NullApiRequestHandler implements RestApiRequestHandler
 {
     public function canProcess(HttpRequest $request) : bool
     {

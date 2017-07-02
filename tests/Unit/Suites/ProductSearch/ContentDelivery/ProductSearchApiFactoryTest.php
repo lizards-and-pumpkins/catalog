@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
-use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @uses   \LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
@@ -76,15 +76,15 @@ class ProductSearchApiFactoryTest extends TestCase
         $endpointKey = 'get_product';
         $apiVersion = 1;
 
-        $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
+        $mockApiRequestHandlerLocator = $this->createMock(RestApiRequestHandlerLocator::class);
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
             ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
         /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
-            array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator'])
+            array_merge(get_class_methods(MasterFactory::class), ['getRestApiRequestHandlerLocator'])
         )->getMock();
-        $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
+        $stubMasterFactory->method('getRestApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
 
         $this->factory->factoryRegistrationCallback($stubMasterFactory);
     }

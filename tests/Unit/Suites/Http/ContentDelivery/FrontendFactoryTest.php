@@ -8,19 +8,27 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
+use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler;
 use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
@@ -58,7 +66,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
@@ -76,6 +83,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
+ * @uses   \LizardsAndPumpkins\Http\Routing\WebRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
@@ -87,7 +95,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @uses   \LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
@@ -96,6 +104,10 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\DefaultFullTextCriteriaBuilder
+ * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent
+ * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
+ * @uses   \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent
  */
 class FrontendFactoryTest extends TestCase
 {
@@ -123,28 +135,10 @@ class FrontendFactoryTest extends TestCase
         $masterFactory->register($this->frontendFactory);
     }
 
-    public function testProductDetailViewRouterIsReturned()
-    {
-        $result = $this->frontendFactory->createProductDetailViewRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
-    }
-
-    public function testReturnsUnknownHttpRequestMethodRouter()
-    {
-        $result = $this->frontendFactory->createUnknownHttpRequestMethodRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
-    }
-
     public function testReturnsUnknownHttpRequestMethodHandler()
     {
         $result = $this->frontendFactory->createUnknownHttpRequestMethodHandler();
         $this->assertInstanceOf(UnknownHttpRequestMethodHandler::class, $result);
-    }
-
-    public function testProductListingRouterIsReturned()
-    {
-        $result = $this->frontendFactory->createProductListingRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 
     public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
@@ -170,12 +164,6 @@ class FrontendFactoryTest extends TestCase
     public function testItReturnsAContext()
     {
         $this->assertInstanceOf(Context::class, $this->frontendFactory->createContext());
-    }
-
-    public function testProductSearchResultRouterIsReturned()
-    {
-        $result = $this->frontendFactory->createProductSearchResultRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 
     public function testItReturnsASimpleEuroPriceSnippetTransformation()
@@ -224,5 +212,48 @@ class FrontendFactoryTest extends TestCase
     {
         $result = $this->frontendFactory->createProductJsonSnippetTransformation();
         $this->assertInstanceOf(ProductJsonSnippetTransformation::class, $result);
+    }
+
+    public function testReturnsResourceNotFoundRequestHandlerByDefault()
+    {
+        $locator = $this->frontendFactory->createWebRequestHandlerLocator();
+        $result = $locator->getRequestHandlerForCode('unsupported code', $metaJson = json_encode(''));
+
+        $this->assertInstanceOf(ResourceNotFoundRequestHandler::class, $result);
+
+    }
+
+    /**
+     * @dataProvider expectedWebRequestHandlersProvider
+     */
+    public function testRegistersWebRequestHandlers(
+        string $code,
+        string $handlerClass,
+        PageMetaInfoSnippetContent $pageMeta
+    ) {
+        $locator = $this->frontendFactory->createWebRequestHandlerLocator();
+        $metaJson = json_encode($pageMeta->toArray());
+
+        $this->assertInstanceOf($handlerClass, $locator->getRequestHandlerForCode($code, $metaJson));
+    }
+
+    public function expectedWebRequestHandlersProvider(): array
+    {
+        $productDetailMeta = ProductDetailPageMetaInfoSnippetContent::create('product-id', 'root-snippet', [], [], []);
+
+        $selectionCriteria = CompositeSearchCriterion::createAnd();
+        $productListingMeta = ProductListingSnippetContent::create($selectionCriteria, 'root-snippet', [], [], []);
+
+        $productSearchMeta = ProductSearchResultMetaSnippetContent::create('root-snippet-code', [], [], []);
+
+        $unknownRequestMeta = $this->createMock(PageMetaInfoSnippetContent::class);
+        $unknownRequestMeta->method('toArray')->willReturn([]);
+
+        return [
+            [ProductDetailViewRequestHandler::CODE, ProductDetailViewRequestHandler::class, $productDetailMeta],
+            [ProductListingRequestHandler::CODE, ProductListingRequestHandler::class, $productListingMeta],
+            [ProductSearchRequestHandler::CODE, ProductSearchRequestHandler::class, $productSearchMeta],
+            [UnknownHttpRequestMethodHandler::CODE, UnknownHttpRequestMethodHandler::class, $unknownRequestMeta],
+        ];
     }
 }

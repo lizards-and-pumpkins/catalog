@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Context\ContextBuilder;
+use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
+use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
@@ -14,10 +19,11 @@ use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
-use LizardsAndPumpkins\UnitTestFactory;
-use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
-use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,8 +42,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
- * @uses   \LizardsAndPumpkins\RestApi\ApiRouter
+ * @uses   \LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
@@ -57,22 +62,84 @@ class RestApiFactoryTest extends TestCase
      */
     private $factory;
 
-    public function assertApiRequestHandlerIsRegistered(ApiRequestHandlerLocator $locator, string $code, int $version)
+    /**
+     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stubUrlToWebsiteMap;
+
+    /**
+     * @return MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createStubMasterFactory()
     {
-        $handler = $locator->getApiRequestHandler($code, $version);
-        $message = sprintf('No API request handler "%s" for version "%s" registered', $code, $version);
-        $this->assertNotInstanceOf(NullApiRequestHandler::class, $handler, $message);
+        $apiRequestHandlerMethods = [
+            'createCatalogImportApiV1PutRequestHandler',
+            'createProductImportApiV1PutRequestHandler',
+            'createContentBlocksApiV1PutRequestHandler',
+            'createTemplatesApiV1PutRequestHandler',
+            'createCurrentVersionApiV1GetRequestHandler',
+            'createCurrentVersionApiV1PutRequestHandler',
+        ];
+
+        $stubMasterFactoryMethods = [
+            'createUrlToWebsiteMap',
+            'createConfigReader',
+            'getCommandQueue',
+            'getLogger',
+            'getCurrentDataVersion',
+            'createContextBuilder',
+            'createDataPoolReader',
+            'createProductJsonToXml',
+            'createCatalogImport',
+        ];
+
+        $stubFactoryMethods = array_merge(
+            get_class_methods(MasterFactory::class),
+            $stubMasterFactoryMethods,
+            $apiRequestHandlerMethods
+        );
+
+        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods($stubFactoryMethods)->getMock();
+
+        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
+        $stubMasterFactory->method('createUrlToWebsiteMap')->willReturn($this->stubUrlToWebsiteMap);
+
+        $dummyConfigReader = $this->createMock(ConfigReader::class);
+        $dummyConfigReader->method('get')->with('catalog_import_directory')->willReturn(sys_get_temp_dir());
+        $stubMasterFactory->method('createConfigReader')->willReturn($dummyConfigReader);
+
+        $dummyCommandQueue = $this->createMock(CommandQueue::class);
+        $stubMasterFactory->method('getCommandQueue')->willReturn($dummyCommandQueue);
+
+        $dummyLogger = $this->createMock(Logger::class);
+        $stubMasterFactory->method('getLogger')->willReturn($dummyLogger);
+
+        $dummyContextBuilder = $this->createMock(ContextBuilder::class);
+        $stubMasterFactory->method('createContextBuilder')->willReturn($dummyContextBuilder);
+
+        $dummyDataPoolReader = $this->createMock(DataPoolReader::class);
+        $stubMasterFactory->method('createDataPoolReader')->willReturn($dummyDataPoolReader);
+
+        $dummyProductJsonToXml = $this->createMock(ProductJsonToXml::class);
+        $stubMasterFactory->method('createProductJsonToXml')->willReturn($dummyProductJsonToXml);
+
+        $dummyCatalogImport = $this->createMock(CatalogImport::class);
+        $stubMasterFactory->method('createCatalogImport')->willReturn($dummyCatalogImport);
+
+        $stubMasterFactory->method('getCurrentDataVersion')->willReturn('foo');
+
+        every($apiRequestHandlerMethods, function ($method) use ($stubMasterFactory) {
+            $stubMasterFactory->method($method)->willReturn($this->createMock(RestApiRequestHandler::class));
+        });
+
+        return $stubMasterFactory;
     }
 
     public function setUp()
     {
-        $masterFactory = new CatalogMasterFactory();
-        $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new UnitTestFactory($this));
-
         $this->factory = new RestApiFactory();
-
-        $masterFactory->register($this->factory);
+        $this->factory->setMasterFactory($this->createStubMasterFactory());
     }
 
     public function testFactoryInterfaceIsImplemented()
@@ -82,24 +149,31 @@ class RestApiFactoryTest extends TestCase
 
     public function testApiRequestHandlerLocatorIsReturned()
     {
-        $result = $this->factory->getApiRequestHandlerLocator();
-        $this->assertInstanceOf(ApiRequestHandlerLocator::class, $result);
-    }
-
-    public function testApiRouterIsReturned()
-    {
-        $result = $this->factory->createApiRouter();
-        $this->assertInstanceOf(ApiRouter::class, $result);
+        $result = $this->factory->getRestApiRequestHandlerLocator();
+        $this->assertInstanceOf(RestApiRequestHandlerLocator::class, $result);
     }
 
     /**
      * @dataProvider registeredRequestHandlerProvider
      */
-    public function testRegistersExpectedHandlersWithApiRouter(string $code, int $version)
+    public function testRegistersExpectedHandlersWithApiRouter(string $requestMethod, string $endpoint, int $version)
     {
-        $locator = $this->factory->getApiRequestHandlerLocator();
+        $locator = $this->factory->getRestApiRequestHandlerLocator();
+        $code = sprintf('%s_%s', strtolower($requestMethod), $endpoint);
 
-        $this->assertApiRequestHandlerIsRegistered($locator, $code, $version);
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->createMock(HttpRequest::class);
+        $stubHttpRequest->method('hasHeader')->with('Accept')->willReturn(true);
+        $stubHttpRequest->method('getHeader')->with('Accept')
+            ->willReturn('application/vnd.lizards-and-pumpkins.foo.v1+json');
+        $stubHttpRequest->method('getMethod')->willReturn($requestMethod);
+
+        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
+            ->willReturn(RestApiRequestHandlerLocator::API_URL_PREFIX . '/' . $endpoint);
+
+        $handler = $locator->getApiRequestHandler($stubHttpRequest);
+        $message = sprintf('No API request handler "%s" for version "%s" registered', $code, $version);
+        $this->assertNotInstanceOf(NullApiRequestHandler::class, $handler, $message);
     }
 
     /**
@@ -108,15 +182,15 @@ class RestApiFactoryTest extends TestCase
     public function registeredRequestHandlerProvider() : array
     {
         return [
-            'put_catalog_import v1'  => ['put_catalog_import', 1],
-            'put_catalog_import v2'  => ['put_catalog_import', 2],
-            'put_product_import v1'  => ['put_product_import', 1],
-            'put_content_blocks v1'  => ['put_content_blocks', 1],
-            'put_content_blocks v2'  => ['put_content_blocks', 2],
-            'put_templates v1'       => ['put_templates', 1],
-            'put_templates v2'       => ['put_templates', 2],
-            'get_current_version v1' => ['get_current_version', 1],
-            'get_current_version v2' => ['put_current_version', 1],
+            'put_catalog_import v1'  => ['PUT', 'catalog_import', 1],
+            'put_catalog_import v2'  => ['PUT', 'catalog_import', 2],
+            'put_product_import v1'  => ['PUT', 'product_import', 1],
+            'put_content_blocks v1'  => ['PUT', 'content_blocks', 1],
+            'put_content_blocks v2'  => ['PUT', 'content_blocks', 2],
+            'put_templates v1'       => ['PUT', 'templates', 1],
+            'put_templates v2'       => ['PUT', 'templates', 2],
+            'get_current_version v1' => ['GET', 'current_version', 1],
+            'get_current_version v2' => ['PUT', 'current_version', 1],
         ];
     }
 

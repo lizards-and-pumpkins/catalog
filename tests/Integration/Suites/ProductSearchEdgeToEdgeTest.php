@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -34,7 +36,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
         $this->processAllMessages($this->factory);
@@ -44,7 +46,12 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
 
     private function getProductSearchRequestHandler() : ProductSearchRequestHandler
     {
-        return $this->factory->createProductSearchRequestHandler();
+        $urlKey = 'catalogsearch/result';
+        $context = $this->getFirstAvailableContext();
+
+        $metaJson = $this->factory->createDataPoolReader()->getPageMetaSnippet($urlKey, $context);
+
+        return $this->factory->createProductSearchRequestHandler($metaJson);
     }
 
     private function registerProductSearchResultMetaSnippetKeyGenerator()
@@ -57,6 +64,11 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         );
     }
 
+    private function getFirstAvailableContext(): Context
+    {
+        return $this->factory->createContextSource()->getAllAvailableContexts()[1];
+    }
+
     final protected function setUp()
     {
         $this->importProductListingTemplateFixtureViaApi();
@@ -66,11 +78,11 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[1];
+        $context = $this->getFirstAvailableContext();
 
+        $keyGeneratorParams = [PageMetaInfoSnippetContent::URL_KEY => 'catalogsearch/result'];
         $metaInfoSnippetKeyGenerator = $this->factory->createProductSearchResultMetaSnippetKeyGenerator();
-        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($context, []);
+        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($context, $keyGeneratorParams);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
         $metaInfoSnippetJson = $dataPoolReader->getSnippet($metaInfoSnippetKey);
@@ -96,7 +108,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->importCatalogFixture($this->factory, 'simple_product_armflasher-v1.xml', 'simple_product_adilette.xml');
 
         $this->registerProductSearchResultMetaSnippetKeyGenerator();
-        
+
         $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();
         $page = $productSearchResultRequestHandler->process($request);
         $body = $page->getBody();

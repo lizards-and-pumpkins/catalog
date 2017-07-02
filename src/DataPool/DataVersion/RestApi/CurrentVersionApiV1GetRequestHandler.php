@@ -8,9 +8,9 @@ use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandler;
 
-class CurrentVersionApiV1GetRequestHandler implements HttpRequestHandler
+class CurrentVersionApiV1GetRequestHandler implements RestApiRequestHandler
 {
     /**
      * @var DataPoolReader

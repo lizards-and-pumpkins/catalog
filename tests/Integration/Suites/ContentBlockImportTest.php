@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -35,7 +36,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->processAllMessages($this->factory);
     }
 
-    private function getProductListingPageHtmlByUrlKey(string $urlKey): string
+    private function getProductListingPageHtmlByUrlKey(string $urlKey, Context $context): string
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -44,7 +45,9 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             new HttpRequestBody('')
         );
 
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
+        $metaJson = $this->factory->createDataPoolReader()->getPageMetaSnippet($urlKey, $context);
+
+        $productListingRequestHandler = $this->factory->createProductListingRequestHandler($metaJson);
         $page = $productListingRequestHandler->process($request);
 
         return $page->getBody();
@@ -189,10 +192,11 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $productListingUrlKey = 'sale';
         $contentBlockContent = '<p>foo</p>';
         $snippetCode = 'product_listing_content_block_top';
+        $contextDataSet = ['website' => 'fr', 'locale' => 'fr_FR'];
 
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
-            'context' => ['website' => 'fr', 'locale' => 'fr_FR'],
+            'context' => $contextDataSet,
             'url_key' => $productListingUrlKey,
         ]);
 
@@ -200,8 +204,10 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->renderProductListingTemplate();
         $this->importCatalogFixture($this->factory, 'product_listings.xml');
 
-        $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));
-        $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics'));
+        $context = $this->factory->createContextBuilder()->createContext($contextDataSet);
+
+        $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale', $context));
+        $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics', $context));
     }
 
     public function testContentBlockSnippetIsWrittenIntoDataPoolWithTheSpecifiedDataVersion()

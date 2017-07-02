@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class FilterNavigationTest extends AbstractIntegrationTest
 {
     use ProductListingTemplateIntegrationTestTrait;
-    
-    private $testUrl = 'http://example.com/sale';
 
-    /**
-     * @var MasterFactory
-     */
-    private $factory;
-    
+    private $testUrlKey = 'sale';
+
+    private $testUrl;
+
     /**
      * @param string $html
      * @return mixed[]
@@ -38,8 +38,20 @@ class FilterNavigationTest extends AbstractIntegrationTest
         return $filterNavigation;
     }
 
+    private function createProductListingRequestHandler(CatalogMasterFactory $factory): ProductListingRequestHandler
+    {
+        $context = $factory->createContextBuilder()->createContext(['website' => 'ru', 'locale' => 'de_DE']);
+        $metaJson = $factory->createDataPoolReader()->getPageMetaSnippet($this->testUrlKey, $context);
+
+        $productListingRequestHandler = $factory->createProductListingRequestHandler($metaJson);
+
+        return $productListingRequestHandler;
+    }
+
     protected function setUp()
     {
+        $this->testUrl = 'http://example.com/' . $this->testUrlKey;
+
         $factory = $this->prepareIntegrationTestMasterFactory();
         $fixtures = ['product_listings.xml', 'simple_product_adilette.xml', 'simple_product_armflasher-v1.xml'];
         $this->importCatalogFixture($factory, ...$fixtures);
@@ -60,8 +72,7 @@ class FilterNavigationTest extends AbstractIntegrationTest
 
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $factory->createProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($request);
+        $page = $this->createProductListingRequestHandler($factory)->process($request);
 
         return $this->extractFilterNavigation($page->getBody());
     }
@@ -83,10 +94,9 @@ class FilterNavigationTest extends AbstractIntegrationTest
             new HttpRequestBody('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($request);
+        $page = $this->createProductListingRequestHandler($factory)->process($request);
         $filterNavigation = $this->extractFilterNavigation($page->getBody());
 
         $this->assertNotEquals($initialFilterNavigation, $filterNavigation);
@@ -109,10 +119,9 @@ class FilterNavigationTest extends AbstractIntegrationTest
             new HttpRequestBody('')
         );
 
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+        $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
-        $page = $productListingRequestHandler->process($request);
+        $page = $this->createProductListingRequestHandler($factory)->process($request);
         $filterNavigation = $this->extractFilterNavigation($page->getBody());
 
         $this->assertEquals($initialFilterNavigation[$filterCode], $filterNavigation[$filterCode]);

@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ProductRelations;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -42,8 +42,8 @@ class ProductRelationsFactory implements FactoryWithCallback
     {
         $apiVersion = 1;
 
-        /** @var ApiRequestHandlerLocator $apiRequestHandlerLocator */
-        $apiRequestHandlerLocator = $masterFactory->getApiRequestHandlerLocator();
+        /** @var RestApiRequestHandlerLocator $apiRequestHandlerLocator */
+        $apiRequestHandlerLocator = $masterFactory->getRestApiRequestHandlerLocator();
         $apiRequestHandlerLocator->register('get_products', $apiVersion, function () {
             return $this->getMasterFactory()->createProductRelationsApiV1GetRequestHandler();
         });

@@ -9,7 +9,6 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockId;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSource;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\MissingContentBlockDataVersionException;
@@ -20,8 +19,9 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\ContentBlockContext
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockContextException;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\Exception\InvalidContentBlockUrlKey;
 use LizardsAndPumpkins\Http\HttpRequest;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandler;
 
-class ContentBlocksApiV2PutRequestHandler implements HttpRequestHandler
+class ContentBlocksApiV2PutRequestHandler implements RestApiRequestHandler
 {
     /**
      * @var CommandQueue

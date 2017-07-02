@@ -8,13 +8,13 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportProductDataNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandler;
 
-class ProductImportApiV1PutRequestHandler implements HttpRequestHandler
+class ProductImportApiV1PutRequestHandler implements RestApiRequestHandler
 {
     /**
      * @var ProductJsonToXml

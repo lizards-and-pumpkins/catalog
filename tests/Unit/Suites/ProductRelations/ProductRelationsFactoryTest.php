@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
-use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -34,7 +34,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService
- * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @uses   \LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
@@ -105,15 +105,15 @@ class ProductRelationsFactoryTest extends TestCase
         $endpointKey = 'get_products';
         $apiVersion = 1;
 
-        $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
-        $mockApiRequestHandlerLocator->expects($this->once())->method('register')
+        $mockRestApiRequestHandlerLocator = $this->createMock(RestApiRequestHandlerLocator::class);
+        $mockRestApiRequestHandlerLocator->expects($this->once())->method('register')
             ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
         /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
-            array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator'])
+            array_merge(get_class_methods(MasterFactory::class), ['getRestApiRequestHandlerLocator'])
         )->getMock();
-        $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
+        $stubMasterFactory->method('getRestApiRequestHandlerLocator')->willReturn($mockRestApiRequestHandlerLocator);
 
         $this->factory->factoryRegistrationCallback($stubMasterFactory);
     }

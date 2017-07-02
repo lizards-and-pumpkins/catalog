@@ -7,16 +7,11 @@ namespace LizardsAndPumpkins\Http\Routing;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\HttpUnknownMethodRequest;
 
 class UnknownHttpRequestMethodHandler implements HttpRequestHandler
 {
     const STATUSCODE_METHOD_NOT_ALLOWED = 405;
-
-    public function canProcess(HttpRequest $request): bool
-    {
-        return $request instanceof HttpUnknownMethodRequest;
-    }
+    const CODE = 'unknown_http_request';
 
     public function process(HttpRequest $request): HttpResponse
     {

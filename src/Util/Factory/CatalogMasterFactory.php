@@ -59,8 +59,8 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method ProductsPerPage getProductsPerPageConfig
  * @method SortBy[] getProductListingSortBy
  * @method SortBy[] getProductSearchSortBy
- * @method ProductListingRequestHandler createProductListingRequestHandler
- * @method ProductSearchRequestHandler createProductSearchRequestHandler
+ * @method ProductListingRequestHandler createProductListingRequestHandler(string $metaJson)
+ * @method ProductSearchRequestHandler createProductSearchRequestHandler(string $metaJson)
  * @method TaxableCountries createTaxableCountries
  * @method SearchEngine getSearchEngine
  * @method callable getProductDetailsViewTranslatorFactory

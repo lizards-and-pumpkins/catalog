@@ -8,12 +8,12 @@ use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\ProductRelations\Exception\UnableToProcessProductRelationsRequestException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\Product\ProductId;
+use LizardsAndPumpkins\RestApi\RestApiRequestHandler;
 
-class ProductRelationsApiV1GetRequestHandler implements HttpRequestHandler
+class ProductRelationsApiV1GetRequestHandler implements RestApiRequestHandler
 {
     /**
      * @var ProductRelationsService
