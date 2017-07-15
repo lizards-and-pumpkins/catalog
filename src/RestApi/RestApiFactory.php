@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestH
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\TemplateApiV1GetRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
@@ -82,6 +83,10 @@ class RestApiFactory implements Factory
 
         $requestHandlerLocator->register('put_current_version', $version = 1, function () {
             return $this->getMasterFactory()->createCurrentVersionApiV1PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('get_templates', $version = 1, function () {
+            return $this->getMasterFactory()->createTemplateApiV1GetRequestHandler();
         });
     }
 
@@ -169,5 +174,10 @@ class RestApiFactory implements Factory
     public function createProductJsonToXml(): ProductJsonToXml
     {
         return new ProductJsonToXml();
+    }
+
+    public function createTemplateApiV1GetRequestHandler()
+    {
+        return new TemplateApiV1GetRequestHandler($this->getMasterFactory()->createTemplateProjectorLocator());
     }
 }
