@@ -18,12 +18,12 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
 class ProductListingTest extends AbstractIntegrationTest
 {
     use ProductListingTemplateIntegrationTestTrait;
-    
+
     /**
      * @var MasterFactory
      */
     private $factory;
-    
+
     public function testProductListingSnippetIsWrittenIntoDataPool()
     {
         $this->factory = $this->prepareIntegrationTestMasterFactory();
@@ -46,7 +46,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
         $metaInfoSnippetJson = $dataPoolReader->getSnippet($pageInfoSnippetKey);
         $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
-        
+
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             new SearchCriterionGreaterThan('stock_qty', '0'),
             new SearchCriterionEqual('category', 'sale'),
@@ -62,7 +62,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactory();
         $this->importProductListingTemplateFixtureViaApi();
         $this->importCatalogFixture($this->factory, 'simple_product_adilette.xml', 'product_listings.xml');
-        
+
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
             HttpUrl::fromString('http://example.com/sale'),
@@ -81,5 +81,32 @@ class ProductListingTest extends AbstractIntegrationTest
 
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
+    }
+
+    public function testProductListingWithEmptyUrlKeyReturnsHomepage()
+    {
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importProductListingTemplateFixtureViaApi();
+        $this->importCatalogFixture($this->factory, 'product_listings.xml');
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://example.com/'),
+            HttpHeaders::fromArray([]),
+            new HttpRequestBody('')
+        );
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($request);
+        $body = $page->getBody();
+
+        $expectedListingName = 'Homepage';
+        $expectedDescription = 'This is a cool homepage';
+
+        $this->assertSame(200, $page->getStatusCode());
+        $this->assertContains($expectedListingName, $body);
+        $this->assertContains($expectedDescription, $body);
     }
 }
