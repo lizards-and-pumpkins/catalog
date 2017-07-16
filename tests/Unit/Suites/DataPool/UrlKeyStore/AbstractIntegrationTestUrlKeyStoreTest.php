@@ -36,7 +36,7 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends TestCase
         $this->assertInstanceOf(Clearable::class, $this->urlKeyStore);
     }
 
-    public function testItThrowsAnExceptionIfTheUrkKeyToAddIsNotAString()
+    public function testItThrowsAnExceptionIfTheUrlKeyToAddIsNotAString()
     {
         $this->expectException(\TypeError::class);
         $this->urlKeyStore->addUrlKeyForVersion('1.0', 123, 'dummy-context-string', 'type-string');
