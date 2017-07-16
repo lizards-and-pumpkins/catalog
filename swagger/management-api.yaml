@@ -135,7 +135,19 @@ paths:
       responses:
         "202":
           description: The current_version update action was successfully queued.
-    
+
+  /templates:
+    get:
+      summary: Returns list of template IDs
+      description: Lizards & Pumpkins has different root templates which can be imported via /templates/{template_id}
+      responses:
+        "200":
+          description: List was successfully delivered
+          schema:
+            type: array
+            "items":
+              type: "string"
+              example: "product_listing"
       
 definitions:
   CatalogImportSpec:
