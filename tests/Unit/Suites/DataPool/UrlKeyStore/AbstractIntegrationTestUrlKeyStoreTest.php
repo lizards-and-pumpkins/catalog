@@ -48,11 +48,17 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends TestCase
         $this->urlKeyStore->addUrlKeyForVersion(123, 'test.html', 'dummy-context-string', 'type-string');
     }
 
-    public function testItThrowsAnExceptionIfTheUrlKeyIsEmpty()
+    public function testThatEmptyUrlKeysAreAllowed()
     {
-        $this->expectException(UrlKeyToWriteIsEmptyStringException::class);
-        $this->expectExceptionMessage('Invalid URL key: url key strings have to be one or more characters long');
-        $this->urlKeyStore->addUrlKeyForVersion('1.0', '', 'dummy-context-string', 'type-string');
+        $testUrlKey = '';
+        $testVersion = '1.0';
+        $testContext = 'dummy-context-string';
+        $testUrlKeyType = 'type-string';
+        $this->urlKeyStore->addUrlKeyForVersion($testVersion, $testUrlKey, $testContext, $testUrlKeyType);
+        $this->assertSame(
+            [[$testUrlKey, $testContext, $testUrlKeyType]],
+            $this->urlKeyStore->getForDataVersion($testVersion)
+        );
     }
 
     public function testItThrowsAnExceptionIfADataVersionToGetUrlKeysForIsNotAString()
