@@ -17,36 +17,51 @@ class TemplateApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var TemplateApiV1GetRequestHandler
      */
-    private $handler;
+    private $requestHandler;
 
-    protected function setUp()
+    final protected function setUp()
     {
-        $templateProjectLocator = $this->createMock(TemplateProjectorLocator::class);
-        $templateProjectLocator->method('getRegisteredProjectorCodes')->willReturn($this->expectedTemplateCodes);
-        $this->handler = new TemplateApiV1GetRequestHandler($templateProjectLocator);
+        $stubTemplateProjectLocator = $this->createMock(TemplateProjectorLocator::class);
+        $stubTemplateProjectLocator->method('getRegisteredProjectorCodes')->willReturn($this->expectedTemplateCodes);
+        $this->requestHandler = new TemplateApiV1GetRequestHandler($stubTemplateProjectLocator);
     }
 
-    public function testCanProcessGet()
+    public function testCanProcessGetRequest()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $httpRequest */
-        $httpRequest = $this->createMock(HttpRequest::class);
-        $httpRequest->method('getMethod')->willReturn('GET');
-        $this->assertTrue($this->handler->canProcess($httpRequest));
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->createMock(HttpRequest::class);
+        $stubHttpRequest->method('getMethod')->willReturn('GET');
+
+        $this->assertTrue($this->requestHandler->canProcess($stubHttpRequest));
     }
 
-    public function testCanNotProcessPut()
+    public function provideNonGetHttpVerbs()
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $httpRequest */
-        $httpRequest = $this->createMock(HttpRequest::class);
-        $httpRequest->method('getMethod')->willReturn('PUT');
-        $this->assertFalse($this->handler->canProcess($httpRequest));
+        return [
+            ['PUT'],
+            ['POST'],
+            ['HEADER'],
+            ['DELETE'],
+        ];
     }
 
-    public function testProcessReturnsValidTemplateList()
+    /**
+     * @dataProvider provideNonGetHttpVerbs
+     */
+    public function testCanProcessNonGetRequest(string $httpVerb)
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $httpRequest */
-        $httpRequest = $this->createMock(HttpRequest::class);
-        $response = $this->handler->process($httpRequest);
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->createMock(HttpRequest::class);
+        $stubHttpRequest->method('getMethod')->willReturn($httpVerb);
+
+        $this->assertFalse($this->requestHandler->canProcess($stubHttpRequest));
+    }
+
+    public function testReturnsTemplateList()
+    {
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->createMock(HttpRequest::class);
+        $response = $this->requestHandler->process($stubHttpRequest);
 
         $this->assertEquals($this->expectedTemplateCodes, json_decode($response->getBody()));
     }
