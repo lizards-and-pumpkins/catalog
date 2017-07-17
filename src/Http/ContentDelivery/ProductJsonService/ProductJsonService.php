@@ -126,18 +126,17 @@ class ProductJsonService
         $snippets = $this->getSnippets($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
 
         return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($context, $snippets) {
-            if ($snippets[$productJsonSnippetKey] === null) {
+            if (null === $snippets[$productJsonSnippetKey]) {
                 throw new ProductSnippetNotFoundInKeyValueStorageException(
                     sprintf('Snippet with key %s not found.', $productJsonSnippetKey)
                 );
             }
-            $productData = $this->enrichProductJsonWithPrices->addPricesToProductData(
+            return $this->enrichProductJsonWithPrices->addPricesToProductData(
                 $context,
                 json_decode($snippets[$productJsonSnippetKey], true),
                 $snippets[$priceKey],
                 $snippets[$specialPriceKey] ?? null
             );
-            return $productData;
         }, $productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
     }
 
