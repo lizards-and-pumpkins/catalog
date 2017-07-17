@@ -9,14 +9,6 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\UrlKeyToWriteIsEmptyString
 
 class IntegrationTestUrlKeyStoreAbstract
 {
-    final protected function validateUrlKeyString(string $urlKey)
-    {
-        if ('' === $urlKey) {
-            $message = 'Invalid URL key: url key strings have to be one or more characters long';
-            throw new UrlKeyToWriteIsEmptyStringException($message);
-        }
-    }
-
     final protected function validateDataVersionString(string $dataVersionString)
     {
         if ('' === $dataVersionString) {

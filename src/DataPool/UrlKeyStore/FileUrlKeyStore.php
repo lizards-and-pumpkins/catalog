@@ -32,7 +32,6 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
         string $contextDataString,
         string $urlKeyTypeString
     ) {
-        $this->validateUrlKeyString($urlKeyString);
         $this->validateDataVersionString($dataVersionString);
         $this->ensureDirectoryExists($this->storageDirectoryPath);
         $this->appendRecordToFile(
