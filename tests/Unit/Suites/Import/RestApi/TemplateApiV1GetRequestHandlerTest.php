@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 
 class TemplateApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    private $expectedTemplates = [
+    private $expectedTemplateCodes = [
         'product_detail_view',
         'product_detail_meta',
     ];
@@ -22,7 +22,7 @@ class TemplateApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $templateProjectLocator = $this->createMock(TemplateProjectorLocator::class);
-        $templateProjectLocator->method('getRegisteredProjectorCodes')->willReturn($this->expectedTemplates);
+        $templateProjectLocator->method('getRegisteredProjectorCodes')->willReturn($this->expectedTemplateCodes);
         $this->handler = new TemplateApiV1GetRequestHandler($templateProjectLocator);
     }
 
@@ -48,6 +48,6 @@ class TemplateApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $httpRequest = $this->createMock(HttpRequest::class);
         $response = $this->handler->process($httpRequest);
 
-        $this->assertEquals($this->expectedTemplates, json_decode($response->getBody()));
+        $this->assertEquals($this->expectedTemplateCodes, json_decode($response->getBody()));
     }
 }
