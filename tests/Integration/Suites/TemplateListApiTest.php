@@ -18,25 +18,6 @@ class TemplateListApiTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    public function testTemplateListFromApi()
-    {
-        $expectedTemplates = [
-            'product_listing',
-            'product_detail_view',
-        ];
-
-        $request = $this->createGetTemplateRequest();
-        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-
-        $responseData = json_decode($this->getResponseBody($request), true);
-
-        $this->assertInternalType('array', $responseData);
-        $this->assertNotEmpty($responseData);
-        $this->assertSame($expectedTemplates, $responseData);
-
-        $this->failIfMessagesWhereLogged($this->factory->getLogger());
-    }
-
     private function createGetTemplateRequest(): HttpRequest
     {
         return HttpRequest::fromParameters(
@@ -47,15 +28,27 @@ class TemplateListApiTest extends AbstractIntegrationTest
         );
     }
 
-    private function processRequest($request): HttpResponse
+    private function processRequest(HttpRequest $request): HttpResponse
     {
         $website = new InjectableRestApiWebFront($request, $this->factory, $this->getIntegrationTestFactory($this->factory));
 
         return $website->processRequest();
     }
 
-    private function getResponseBody($request): string
+    public function testReturnsTemplatesList()
     {
-        return $this->processRequest($request)->getBody();
+        $expectedTemplateCodes = [
+            'product_listing',
+            'product_detail_view',
+        ];
+
+        $request = $this->createGetTemplateRequest();
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $responseData = json_decode($this->processRequest($request)->getBody(), true);
+
+        $this->assertSame($expectedTemplateCodes, $responseData);
+
+        $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 }
