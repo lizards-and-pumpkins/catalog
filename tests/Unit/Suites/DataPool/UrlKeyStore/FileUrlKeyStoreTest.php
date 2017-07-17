@@ -24,6 +24,11 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
      */
     private $temporaryStoragePath;
 
+    private static function isDirectoryExpected()
+    {
+        return self::$createDirectory;
+    }
+
     final protected function createUrlKeyStoreInstance(): FileUrlKeyStore
     {
         $this->temporaryStoragePath = $this->prepareTemporaryStorage();
@@ -43,7 +48,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         return $temporaryStoragePath;
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         self::$createDirectory = true;
         parent::setUp();
@@ -54,7 +59,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         try {
             (new LocalFilesystem())->removeDirectoryAndItsContent($this->temporaryStoragePath);
         } catch (DirectoryDoesNotExistException $e) {
-            if (self::$createDirectory) {
+            if (self::isDirectoryExpected()) {
                 throw $e;
             }
         }
@@ -94,11 +99,16 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
 
     public function testItThrowsAnExceptionIfDirectoryIsNotCreated()
     {
-        $this->expectException(DirectoryDoesNotExistException::class);
-        $this->expectExceptionMessageRegExp('#Directory ".*?" was not found and could not be created.#');
-
         $urlKeyStore = $this->createUrlKeyStoreInstance();
         rmdir($this->temporaryStoragePath);
+
+        $this->expectException(DirectoryDoesNotExistException::class);
+        $this->expectExceptionMessage(
+            sprintf('Directory "%s" was not found and could not be created to store urls in %s',
+                $this->temporaryStoragePath,
+                get_class($urlKeyStore)
+            )
+        );
 
         self::$createDirectory = false;
         $urlKeyStore->addUrlKeyForVersion('1.0', 'example.html', 'context-data', 'type-string');
