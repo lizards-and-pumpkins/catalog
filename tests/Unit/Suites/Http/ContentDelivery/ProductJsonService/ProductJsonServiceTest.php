@@ -127,17 +127,18 @@ class ProductJsonServiceTest extends TestCase
         $this->assertContains($expected, $result);
     }
 
-    /**
-     * @dataProvider providesSnippets
-     */
-    public function testItThrowsAnExceptionIfKeyValueDoesNotContainSnippet(string $jsonSnippet, string $priceSnippet, string $specialPriceSnippet)
+    public function testItThrowsAnExceptionIfKeyValueDoesNotContainSnippet()
     {
+        $jsonSnippet = null;
+        $priceSnippet = '99';
+        $specialPriceSnippet = '89';
+
         $jsonSnippetKey = 'dummy_json_snippet';
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
 
         $this->expectException(ProductSnippetNotFoundInKeyValueStorageException::class);
-        $this->expectExceptionMessage(sprintf('Snippet with key .%s not found.', $jsonSnippetKey));
+        $this->expectExceptionMessage(sprintf('Snippet with key %s not found.', $jsonSnippetKey));
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
@@ -158,13 +159,5 @@ class ProductJsonServiceTest extends TestCase
         $stubProductId = $this->createMock(ProductId::class);
 
         $this->productJsonService->get($stubContext, $stubProductId);
-    }
-
-    public function providesSnippets()
-    {
-        return [
-            [null, '99', '89'],
-            [null, null, null],
-        ];
     }
 }
