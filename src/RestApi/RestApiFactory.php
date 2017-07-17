@@ -176,7 +176,7 @@ class RestApiFactory implements Factory
         return new ProductJsonToXml();
     }
 
-    public function createTemplateApiV1GetRequestHandler()
+    public function createTemplateApiV1GetRequestHandler(): TemplateApiV1GetRequestHandler
     {
         return new TemplateApiV1GetRequestHandler($this->getMasterFactory()->createTemplateProjectorLocator());
     }
