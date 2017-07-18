@@ -105,13 +105,11 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
     private function ensureDirectoryExists(string $directoryPath)
     {
         if (! @mkdir($directoryPath, 0700, true) && ! is_dir($directoryPath)) {
-            throw new DirectoryDoesNotExistException(
-                sprintf(
-                    'Directory "%s" was not found and could not be created to store urls in %s',
-                    $directoryPath,
-                    __CLASS__
-                )
-            );
+            throw new DirectoryDoesNotExistException(sprintf(
+                'Directory "%s" was not found and could not be created to store urls in %s',
+                $directoryPath,
+                __CLASS__
+            ));
         }
     }
 }
