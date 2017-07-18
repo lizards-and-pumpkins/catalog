@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\ProductSnippetNotFoundInKeyValueStorageException;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\SnippetNotFoundException;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use PHPUnit\Framework\TestCase;
 
@@ -137,7 +137,7 @@ class ProductJsonServiceTest extends TestCase
         $priceSnippetKey = 'dummy_price_snippet_key';
         $specialPriceSnippetKey = 'dummy_special_price_snippet_key';
 
-        $this->expectException(ProductSnippetNotFoundInKeyValueStorageException::class);
+        $this->expectException(SnippetNotFoundException::class);
         $this->expectExceptionMessage(sprintf('Snippet with key %s not found.', $jsonSnippetKey));
 
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */

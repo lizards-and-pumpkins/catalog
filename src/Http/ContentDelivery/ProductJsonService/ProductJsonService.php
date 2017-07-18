@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\ProductSnippetNotFoundInKeyValueStorageException;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\SnippetNotFoundException;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
 
@@ -127,7 +127,7 @@ class ProductJsonService
 
         return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($context, $snippets) {
             if (null === $snippets[$productJsonSnippetKey]) {
-                throw new ProductSnippetNotFoundInKeyValueStorageException(
+                throw new SnippetNotFoundException(
                     sprintf('Snippet with key %s not found.', $productJsonSnippetKey)
                 );
             }
