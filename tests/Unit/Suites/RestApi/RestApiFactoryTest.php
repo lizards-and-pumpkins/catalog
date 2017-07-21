@@ -50,6 +50,18 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
+ * @uses   \LizardsAndPumpkins\Import\RestApi\TemplateApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class RestApiFactoryTest extends TestCase
 {
