@@ -26,9 +26,10 @@ class TemplateApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
 
     final protected function setUp()
     {
-        $stubTemplateProjectLocator = $this->createMock(TemplateProjectorLocator::class);
-        $stubTemplateProjectLocator->method('getRegisteredProjectorCodes')->willReturn($this->expectedTemplateCodes);
-        $this->requestHandler = new TemplateApiV1GetRequestHandler($stubTemplateProjectLocator);
+        /** @var TemplateProjectorLocator|\PHPUnit_Framework_MockObject_MockObject $stubTemplateProjectorLocator */
+        $stubTemplateProjectorLocator = $this->createMock(TemplateProjectorLocator::class);
+        $stubTemplateProjectorLocator->method('getRegisteredProjectorCodes')->willReturn($this->expectedTemplateCodes);
+        $this->requestHandler = new TemplateApiV1GetRequestHandler($stubTemplateProjectorLocator);
     }
 
     public function testCanProcessGetRequest()
