@@ -142,7 +142,7 @@ paths:
       description: Lizards & Pumpkins has different root templates which can be imported via /templates/{template_id}
       responses:
         "200":
-          description: List was successfully delivered
+          description: List was successfully delivered. Response containing list of available template identifiers has been created.
           schema:
             type: array
             "items":
