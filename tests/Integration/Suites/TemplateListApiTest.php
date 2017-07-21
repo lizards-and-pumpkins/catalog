@@ -37,10 +37,10 @@ class TemplateListApiTest extends AbstractIntegrationTest
 
     public function testReturnsTemplatesList()
     {
-        $expectedTemplateCodes = [
+        $expectedTemplateCodes = ['template_ids' => [
             'product_listing',
             'product_detail_view',
-        ];
+        ]];
 
         $request = $this->createGetTemplateRequest();
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);

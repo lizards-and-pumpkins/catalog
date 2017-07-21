@@ -30,7 +30,7 @@ class TemplateApiV1GetRequestHandler implements HttpRequestHandler
     public function process(HttpRequest $request): HttpResponse
     {
         return GenericHttpResponse::create(
-            $body = json_encode($this->templateProjectorLocator->getRegisteredProjectorCodes()),
+            $body = json_encode(['template_ids' => $this->templateProjectorLocator->getRegisteredProjectorCodes()]),
             $headers = [],
             HttpResponse::STATUS_OK
         );

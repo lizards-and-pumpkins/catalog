@@ -63,6 +63,6 @@ class TemplateApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
         $stubHttpRequest = $this->createMock(HttpRequest::class);
         $response = $this->requestHandler->process($stubHttpRequest);
 
-        $this->assertEquals($this->expectedTemplateCodes, json_decode($response->getBody()));
+        $this->assertEquals(['template_ids' => $this->expectedTemplateCodes], json_decode($response->getBody(), true));
     }
 }
