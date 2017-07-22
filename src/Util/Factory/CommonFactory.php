@@ -73,7 +73,7 @@ use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingProjector;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
@@ -402,13 +402,13 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingSnippetRendererList(): array
     {
         return [
-            $this->getMasterFactory()->createProductListingSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingMetaSnippetRenderer(),
         ];
     }
 
-    public function createProductListingSnippetRenderer() : ProductListingSnippetRenderer
+    public function createProductListingMetaSnippetRenderer(): ProductListingMetaSnippetRenderer
     {
-        return new ProductListingSnippetRenderer(
+        return new ProductListingMetaSnippetRenderer(
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
@@ -420,7 +420,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductListingSnippetRenderer::CODE,
+            ProductListingMetaSnippetRenderer::CODE,
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );

@@ -16,7 +16,7 @@ use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlo
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
+ * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
-class ProductListingSnippetRendererTest extends TestCase
+class ProductListingMetaSnippetRendererTest extends TestCase
 {
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
@@ -32,7 +32,7 @@ class ProductListingSnippetRendererTest extends TestCase
     private $stubMetaSnippetKeyGenerator;
 
     /**
-     * @var ProductListingSnippetRenderer
+     * @var ProductListingMetaSnippetRenderer
      */
     private $renderer;
 
@@ -105,7 +105,7 @@ class ProductListingSnippetRendererTest extends TestCase
         $stubContextBuilder = $this->createMock(ContextBuilder::class);
         $stubContextBuilder->method('createContext')->willReturn($this->createMock(Context::class));
 
-        $this->renderer = new ProductListingSnippetRenderer(
+        $this->renderer = new ProductListingMetaSnippetRenderer(
             $stubListingBlockRenderer,
             $this->stubMetaSnippetKeyGenerator,
             $stubContextBuilder,
