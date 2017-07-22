@@ -38,7 +38,7 @@ class ProductListingTest extends TestCase
      */
     private $productListing;
 
-    protected function setUp()
+    final protected function setUp()
     {
         $this->stubUrlKey = $this->createMock(UrlKey::class);
         $this->stubCriteria = $this->createMock(SearchCriteria::class);
@@ -54,37 +54,22 @@ class ProductListingTest extends TestCase
 
     public function testProductListingUrlKeyIsReturned()
     {
-        $result = $this->productListing->getUrlKey();
-        $this->assertSame($this->stubUrlKey, $result);
+        $this->assertSame($this->stubUrlKey, $this->productListing->getUrlKey());
     }
 
     public function testProductListingContextDataIsReturned()
     {
-        $result = $this->productListing->getContextData();
-        $this->assertSame($this->dummyContextData, $result);
+        $this->assertSame($this->dummyContextData, $this->productListing->getContextData());
     }
 
     public function testProductListingIsReturned()
     {
-        $result = $this->productListing->getCriteria();
-        $this->assertSame($this->stubCriteria, $result);
+        $this->assertSame($this->stubCriteria, $this->productListing->getCriteria());
     }
 
-    public function testCheckingForProductListingAttributeExistenceIsDelegatedToProductAttributeList()
+    public function testReturnsProductListingAttributesList()
     {
-        $this->stubProductListingAttributeList->method('hasAttribute')->willReturn(false);
-        $this->assertFalse($this->productListing->hasAttribute('foo'));
-    }
-
-    public function testProductListingAttributeValueIsReturned()
-    {
-        $attributeCode = 'foo';
-        $attributeValue = 'bar';
-
-        $this->stubProductListingAttributeList->method('hasAttribute')->willReturn(true);
-        $this->stubProductListingAttributeList->method('getAttributeValueByCode')->willReturn($attributeValue);
-
-        $this->assertSame($attributeValue, $this->productListing->getAttributeValueByCode($attributeCode));
+        $this->assertSame($this->stubProductListingAttributeList, $this->productListing->getAttributesList());
     }
 
     public function testCanBeSerializedAndRehydrated()

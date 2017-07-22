@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeCodeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeValueException;
-use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 
 class ProductListingAttributeList
 {
@@ -35,26 +34,6 @@ class ProductListingAttributeList
         });
 
         return new self($attributes);
-    }
-
-    public function hasAttribute(string $code) : bool
-    {
-        return isset($this->attributes[$code]);
-    }
-
-    /**
-     * @param string $code
-     * @return int|float|string|bool
-     */
-    public function getAttributeValueByCode(string $code)
-    {
-        if (!$this->hasAttribute($code)) {
-            throw new ProductListingAttributeNotFoundException(
-                sprintf('Product list attribute with code "%s" is not found.', $code)
-            );
-        }
-
-        return $this->attributes[$code];
     }
 
     private static function validateAttributeCode(string $code)

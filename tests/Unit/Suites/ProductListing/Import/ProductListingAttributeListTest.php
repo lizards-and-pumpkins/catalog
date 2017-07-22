@@ -6,7 +6,6 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeCodeException;
 use LizardsAndPumpkins\Import\Product\Listing\Exception\InvalidProductListingAttributeValueException;
-use LizardsAndPumpkins\ProductListing\Import\Exception\ProductListingAttributeNotFoundException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,37 +42,6 @@ class ProductListingAttributeListTest extends TestCase
         $nonScalarAttributeValue = [];
 
         ProductListingAttributeList::fromArray([$attributeCode => $nonScalarAttributeValue]);
-    }
-
-    public function testFalseIsReturnedIfRequestedAttributeCodeIsAbsentInTheList()
-    {
-        $productListingAttributeList = ProductListingAttributeList::fromArray([]);
-        $this->assertFalse($productListingAttributeList->hasAttribute('foo'));
-    }
-
-    public function testTrueIsReturnedIfListContainsAttributeWithARequestedCode()
-    {
-        $attributeCode = 'foo';
-        $attributeValue = 'bar';
-        $productListingAttributeList = ProductListingAttributeList::fromArray([$attributeCode => $attributeValue]);
-
-        $this->assertTrue($productListingAttributeList->hasAttribute($attributeCode));
-    }
-
-    public function testExceptionIsThrownDuringAttemptToRetrieveAttributeWhichIsAbsentInTheList()
-    {
-        $this->expectException(ProductListingAttributeNotFoundException::class);
-        $productListingAttributeList = ProductListingAttributeList::fromArray([]);
-        $productListingAttributeList->getAttributeValueByCode('foo');
-    }
-
-    public function testAttributeIsReturnedByGivenCode()
-    {
-        $attributeCode = 'foo';
-        $attributeValue = 'bar';
-        $productListingAttributeList = ProductListingAttributeList::fromArray([$attributeCode => $attributeValue]);
-
-        $this->assertSame($attributeValue, $productListingAttributeList->getAttributeValueByCode($attributeCode));
     }
 
     public function testReturnsAttributesArray()
