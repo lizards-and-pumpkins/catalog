@@ -922,8 +922,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createContentBlockSnippetRenderer() : ContentBlockSnippetRenderer
     {
         return new ContentBlockSnippetRenderer(
-            $this->getMasterFactory()->createContentBlockSnippetKeyGeneratorLocatorStrategy(),
-            $this->getMasterFactory()->createContextBuilder()
+            $this->getMasterFactory()->createContentBlockSnippetKeyGeneratorLocatorStrategy()
         );
     }
 
