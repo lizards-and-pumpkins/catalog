@@ -44,7 +44,7 @@ class ProductListingMetaSnippetRendererTest extends TestCase
     /**
      * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListing() : ProductListing
+    private function createStubProductListing(): ProductListing
     {
         $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
         $stubProductListing = $this->createMock(ProductListing::class);
@@ -108,17 +108,16 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         $this->renderer = new ProductListingMetaSnippetRenderer(
             $stubListingBlockRenderer,
             $this->stubMetaSnippetKeyGenerator,
-            $stubContextBuilder,
-            $this->stubHtmlHeadMetaKeyGenerator
+            $stubContextBuilder
         );
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testIsSnippetRenderer()
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testSnippetWithValidJsonAsContentInAListIsReturned()
+    public function testReturnsSnippetWithValidJsonAsContent()
     {
         $metaSnippetKey = 'foo';
         $this->prepareKeyGeneratorsForProductListing($metaSnippetKey, 'dummy_meta_key');
@@ -128,6 +127,7 @@ class ProductListingMetaSnippetRendererTest extends TestCase
 
         $metaSnippet = $this->findSnippetByKey($metaSnippetKey, ...$result);
         $pageData = json_decode($metaSnippet->getContent(), true);
+
         $this->assertSame('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE]);
         $this->assertContains('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]);
     }

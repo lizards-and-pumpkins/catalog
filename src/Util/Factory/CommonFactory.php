@@ -66,7 +66,6 @@ use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\Import\GenericSnippetProjector;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
@@ -1176,17 +1175,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingImportCommandLocator() : ProductListingImportCommandLocator
     {
         return new ProductListingImportCommandLocator($this->getMasterFactory());
-    }
-
-    public function createProductListingDescriptionBlockRenderer() : ProductListingDescriptionBlockRenderer
-    {
-        return new ProductListingDescriptionBlockRenderer(
-            $this->getMasterFactory()->getThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createBaseUrlBuilder(),
-            $this->getMasterFactory()->createAssetsBaseUrlBuilder()
-        );
     }
 
     public function createProductJsonService() : ProductJsonService

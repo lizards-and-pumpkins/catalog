@@ -61,7 +61,6 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
@@ -875,12 +874,6 @@ class CommonFactoryTest extends TestCase
         return [
             [ContentBlockSnippetRenderer::class],
         ];
-    }
-
-    public function testItReturnsAProductListingDescriptionBlockRenderer()
-    {
-        $result = $this->commonFactory->createProductListingDescriptionBlockRenderer();
-        $this->assertInstanceOf(ProductListingDescriptionBlockRenderer::class, $result);
     }
 
     public function testItReturnsAProductJsonService()
