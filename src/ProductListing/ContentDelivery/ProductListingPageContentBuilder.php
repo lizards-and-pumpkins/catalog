@@ -118,10 +118,10 @@ class ProductListingPageContentBuilder
 
     private function addProductListingAttributesSnippetToPageBuilder(PageMetaInfoSnippetContent $metaSnippetContent)
     {
-        $this->addDynamicSnippetToPageBuilder(
-            'product_listing_attributes',
-            json_encode($metaSnippetContent->getPageSpecificData())
-        );
+        $pageSpecificData = $metaSnippetContent->getPageSpecificData();
+        $productListingAttributes = json_encode($pageSpecificData['product_listing_attributes'] ?? []);
+
+        $this->addDynamicSnippetToPageBuilder('product_listing_attributes', $productListingAttributes);
     }
 
     /**

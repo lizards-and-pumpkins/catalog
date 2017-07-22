@@ -123,8 +123,10 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         $metaSnippet = $this->findSnippetByKey($metaSnippetKey, ...$result);
         $pageData = json_decode($metaSnippet->getContent(), true);
 
+        $expectedPageSpecificData = ['product_listing_attributes' => $productListingAttributes];
+
         $this->assertSame('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE]);
         $this->assertContains('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]);
-        $this->assertSame($productListingAttributes, $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA]);
+        $this->assertSame($expectedPageSpecificData, $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA]);
     }
 }

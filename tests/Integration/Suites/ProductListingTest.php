@@ -47,7 +47,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $dataPoolReader = $this->factory->createDataPoolReader();
         $metaSnippetJson = $dataPoolReader->getSnippet($pageInfoSnippetKey);
         $metaSnippet = json_decode($metaSnippetJson, true);
-        
+
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             new SearchCriterionGreaterThan('stock_qty', '0'),
             new SearchCriterionEqual('category', 'sale'),
@@ -63,8 +63,10 @@ class ProductListingTest extends AbstractIntegrationTest
                 'product_listing_content_block_top'
             ],
             PageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA => [
-                'meta_title' => 'Adidas Rausverkauf!',
-                'meta_description' => 'Adidas Rausverkauf! Greifen Sie jetzt zu!',
+                'product_listing_attributes' => [
+                    'meta_title' => 'Adidas Rausverkauf!',
+                    'meta_description' => 'Adidas Rausverkauf! Greifen Sie jetzt zu!',
+                ]
             ],
             PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
         ];

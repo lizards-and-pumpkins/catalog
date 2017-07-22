@@ -325,7 +325,9 @@ class ProductListingPageContentBuilderTest extends TestCase
     public function testAddsProductListingAttributesSnippetToPageBuilder()
     {
         $productListingAttributes = ['foo' => 'bar'];
-        $this->stubPageMetaInfoSnippetContent->method('getPageSpecificData')->willReturn($productListingAttributes);
+        $this->stubPageMetaInfoSnippetContent->method('getPageSpecificData')->willReturn([
+            'product_listing_attributes' => $productListingAttributes
+        ]);
 
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
