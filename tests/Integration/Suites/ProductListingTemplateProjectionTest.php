@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
@@ -33,9 +33,9 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
     private function createContextWithVersion(CatalogMasterFactory $factory, string $versionString): Context
     {
         return $factory->createContextBuilder()->createContext(array_merge(
-                $factory->createContext()->jsonSerialize(),
-                [DataVersion::CONTEXT_CODE => $versionString])
-        );
+            $factory->createContext()->jsonSerialize(),
+            [DataVersion::CONTEXT_CODE => $versionString]
+        ));
     }
 
     private function buildProductListingTemplatesApiHttpRequestForV1(): HttpRequest
@@ -46,7 +46,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
     private function buildProductListingTemplatesApiHttpRequestForV2WithTargetDataVersion(string $version): HttpRequest
     {
         $requestBodyContent = json_encode(['data_version' => $version]);
-        
+
         return $this->buildProductListingTemplatesApiHttpRequest('2', new HttpRequestBody($requestBodyContent));
     }
 
@@ -85,12 +85,12 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
     public function testV1TemplatesApiHandlerProjectsWithCurrentDataVersion()
     {
         $currentVersionForTest = 'foo';
-        
+
         $request = $this->buildProductListingTemplatesApiHttpRequestForV1();
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        
+
         $factory->createDataPoolWriter()->setCurrentDataVersion($currentVersionForTest);
-        
+
         $this->processRequest($factory, $request);
 
         $context = $this->createContextWithVersion($factory, $currentVersionForTest);
@@ -104,7 +104,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
     {
         $currentVersion = 'foo';
         $projectionVersion = 'bar';
-        
+
         $request = $this->buildProductListingTemplatesApiHttpRequestForV2WithTargetDataVersion($projectionVersion);
         $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $factory->createDataPoolWriter()->setCurrentDataVersion($currentVersion);
