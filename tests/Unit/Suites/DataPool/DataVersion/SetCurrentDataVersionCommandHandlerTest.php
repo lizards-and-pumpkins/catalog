@@ -64,7 +64,7 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
 
     public function testIsACommandHandler()
     {
-        $this->assertInstanceOf(CommandHandler::class, $this->createCommandHandler($this->createMessage()));
+        $this->assertInstanceOf(CommandHandler::class, $this->createCommandHandler());
     }
 
     public function testAddsCurrentDataVersionWasSetDomainEventToQueue()
