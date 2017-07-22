@@ -30,7 +30,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($factory->getLogger());
     }
 
-    private function createContextWithVersion($factory, $versionString): Context
+    private function createContextWithVersion(CatalogMasterFactory $factory, string $versionString): Context
     {
         return $factory->createContextBuilder()->createContext(array_merge(
                 $factory->createContext()->jsonSerialize(),
