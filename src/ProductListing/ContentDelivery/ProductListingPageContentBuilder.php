@@ -65,6 +65,7 @@ class ProductListingPageContentBuilder
         $this->addProductsInListingToPageBuilder($productSearchResult);
         $this->addPaginationSnippetsToPageBuilder($productSearchResult, $productsPerPage);
         $this->addSortOrderSnippetsToPageBuilder($selectedSortBy, ...$availableSortBy);
+        $this->addProductListingAttributesSnippetToPageBuilder($metaInfo);
         $this->addTranslationsToPageBuilder($context);
 
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
@@ -113,6 +114,14 @@ class ProductListingPageContentBuilder
     {
         $this->addDynamicSnippetToPageBuilder('available_sort_orders', json_encode($availableSortBy));
         $this->addDynamicSnippetToPageBuilder('selected_sort_order', json_encode($selectedSortBy));
+    }
+
+    private function addProductListingAttributesSnippetToPageBuilder(PageMetaInfoSnippetContent $metaSnippetContent)
+    {
+        $this->addDynamicSnippetToPageBuilder(
+            'product_listing_attributes',
+            json_encode($metaSnippetContent->getPageSpecificData())
+        );
     }
 
     /**

@@ -91,9 +91,15 @@ class ProductListingTest extends AbstractIntegrationTest
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 
+        $expectedPageTitle = 'Vendre';
+        $expectedMetaDescription = json_encode('Acheter des chaussures de sport moins chères ? C’est possible grâce à
+                    nos offres à prix discount. Commandez très simplement vos futures chaussures de course qui vous
+                    seront expédiées rapidement.');
         $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
 
+        $this->assertContains($expectedPageTitle, $body);
+        $this->assertContains($expectedMetaDescription, $body);
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
     }
