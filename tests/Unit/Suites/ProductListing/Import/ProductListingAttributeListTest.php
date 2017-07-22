@@ -75,4 +75,17 @@ class ProductListingAttributeListTest extends TestCase
 
         $this->assertSame($attributeValue, $productListingAttributeList->getAttributeValueByCode($attributeCode));
     }
+
+    public function testReturnsAttributesArray()
+    {
+        $attributesArray = [
+            'foo' => 'bar',
+            'baz' => 18,
+            'qux' => false,
+        ];
+
+        $productListingAttributeList = ProductListingAttributeList::fromArray($attributesArray);
+
+        $this->assertSame($attributesArray, $productListingAttributeList->toArray());
+    }
 }

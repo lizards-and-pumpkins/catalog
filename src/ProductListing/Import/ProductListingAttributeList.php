@@ -77,4 +77,12 @@ class ProductListingAttributeList
             );
         }
     }
+
+    /**
+     * @return bool[]|float[]|int[]|string[]
+     */
+    public function toArray(): array
+    {
+        return $this->attributes;
+    }
 }
