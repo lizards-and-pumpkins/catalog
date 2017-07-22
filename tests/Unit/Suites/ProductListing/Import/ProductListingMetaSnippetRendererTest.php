@@ -42,19 +42,6 @@ class ProductListingMetaSnippetRendererTest extends TestCase
     private $stubHtmlHeadMetaKeyGenerator;
 
     /**
-     * @return ProductListing|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubProductListing(): ProductListing
-    {
-        $stubSearchCriteria = $this->createMock(CompositeSearchCriterion::class);
-        $stubProductListing = $this->createMock(ProductListing::class);
-        $stubProductListing->method('getContextData')->willReturn([]);
-        $stubProductListing->method('getCriteria')->willReturn($stubSearchCriteria);
-
-        return $stubProductListing;
-    }
-
-    /**
      * @param string $snippetKey
      * @param Snippet[] $result
      * @return Snippet|null
@@ -122,7 +109,15 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         $metaSnippetKey = 'foo';
         $this->prepareKeyGeneratorsForProductListing($metaSnippetKey, 'dummy_meta_key');
 
-        $stubProductListing = $this->createStubProductListing();
+        $productListingAttributes = ['bar' => 'baz'];
+        $productListingAttributeList = ProductListingAttributeList::fromArray($productListingAttributes);
+
+        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        $stubProductListing = $this->createMock(ProductListing::class);
+        $stubProductListing->method('getContextData')->willReturn([]);
+        $stubProductListing->method('getCriteria')->willReturn($this->createMock(CompositeSearchCriterion::class));
+        $stubProductListing->method('getAttributesList')->willReturn($productListingAttributeList);
+
         $result = $this->renderer->render($stubProductListing);
 
         $metaSnippet = $this->findSnippetByKey($metaSnippetKey, ...$result);
@@ -130,5 +125,6 @@ class ProductListingMetaSnippetRendererTest extends TestCase
 
         $this->assertSame('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE]);
         $this->assertContains('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]);
+        $this->assertSame($productListingAttributes, $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA]);
     }
 }

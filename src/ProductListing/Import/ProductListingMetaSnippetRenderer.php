@@ -84,7 +84,7 @@ class ProductListingMetaSnippetRenderer implements SnippetRenderer
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getPageSnippetCodes($productListing),
             $containers = [],
-            $pageSpecificData = []
+            $pageSpecificData = $productListing->getAttributesList()->toArray()
         );
     }
 
