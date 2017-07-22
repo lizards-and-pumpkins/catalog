@@ -77,9 +77,9 @@ class ProductListingMetaSnippetRenderer implements SnippetRenderer
         return $snippetKey;
     }
 
-    private function getPageMetaInfoSnippetContent(ProductListing $productListing): ProductListingSnippetContent
+    private function getPageMetaInfoSnippetContent(ProductListing $productListing): ProductListingMetaSnippetContent
     {
-        return ProductListingSnippetContent::create(
+        return ProductListingMetaSnippetContent::create(
             $productListing->getCriteria(),
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getPageSnippetCodes($productListing),

@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetContent
  * @uses   \LizardsAndPumpkins\DataPool\KeyValueStore\Snippet
  * @uses   \LizardsAndPumpkins\Import\SnippetContainer
  * @uses   \LizardsAndPumpkins\Import\Product\UrlKey\UrlKey

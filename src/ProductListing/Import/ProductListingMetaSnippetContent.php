@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Import\SnippetContainer;
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
-class ProductListingSnippetContent implements PageMetaInfoSnippetContent
+class ProductListingMetaSnippetContent implements PageMetaInfoSnippetContent
 {
     const KEY_CRITERIA = 'product_selection_criteria';
 
@@ -74,7 +74,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      * @param string[] $pageSnippetCodes
      * @param array[] $containerData
      * @param array[] $pageSpecificData
-     * @return ProductListingSnippetContent
+     * @return ProductListingMetaSnippetContent
      */
     public static function create(
         SearchCriteria $selectionCriteria,
@@ -82,7 +82,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         array $pageSnippetCodes,
         array $containerData,
         array $pageSpecificData
-    ) : ProductListingSnippetContent {
+    ) : ProductListingMetaSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
 
         if (! in_array($rootSnippetCode, $pageSnippetCodes)) {
@@ -105,7 +105,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         }, array_keys($containerArray));
     }
 
-    public static function fromJson(string $json) : ProductListingSnippetContent
+    public static function fromJson(string $json) : ProductListingMetaSnippetContent
     {
         $pageInfo = self::decodeJson($json);
         self::validateRequiredKeysArePresent($pageInfo);
