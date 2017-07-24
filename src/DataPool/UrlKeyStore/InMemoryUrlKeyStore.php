@@ -30,7 +30,6 @@ class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements 
 
     private function validateParameters(string $dataVersionString, string $urlKeyString)
     {
-        $this->validateUrlKeyString($urlKeyString);
         $this->validateDataVersionString($dataVersionString);
     }
 

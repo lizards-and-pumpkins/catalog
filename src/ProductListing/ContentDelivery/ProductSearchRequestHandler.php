@@ -14,6 +14,7 @@ use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
 {
@@ -25,11 +26,6 @@ class ProductSearchRequestHandler implements HttpRequestHandler
      * @var Context
      */
     private $context;
-
-    /**
-     * @var ProductSearchResultMetaSnippetContent
-     */
-    private $pageMetaInfo;
 
     /**
      * @var FacetFiltersToIncludeInResult
@@ -57,6 +53,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $fullTextCriteriaBuilder;
 
     /**
+     * @var ProductSearchResultMetaSnippetContent
+     */
+    private $pageMetaInfo;
+
+    /**
      * @var SortBy
      */
     private $defaultSortBy;
@@ -68,28 +69,37 @@ class ProductSearchRequestHandler implements HttpRequestHandler
 
     public function __construct(
         Context $context,
-        string $metaInfoJson,
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
         ProductSearchService $productSearchService,
         FullTextCriteriaBuilder $fullTextCriteriaBuilder,
+        string $metaInfoJson,
         SortBy $defaultSortBy,
         SortBy ...$availableSortBy
     ) {
         $this->context = $context;
-        $this->pageMetaInfo = ProductSearchResultMetaSnippetContent::fromJson($metaInfoJson);
         $this->facetFiltersToIncludeInResult = $facetFiltersToIncludeInResult;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->productSearchService = $productSearchService;
         $this->fullTextCriteriaBuilder = $fullTextCriteriaBuilder;
+        $this->pageMetaInfo = ProductSearchResultMetaSnippetContent::fromJson($metaInfoJson);
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
     }
 
-    public function process(HttpRequest $request): HttpResponse
+    public function canProcess(HttpRequest $request) : bool
     {
+        return $this->isValidSearchRequest($request);
+    }
+
+    public function process(HttpRequest $request) : HttpResponse
+    {
+        if (!$this->canProcess($request)) {
+            throw new UnableToHandleRequestException(sprintf('Unable to process request with handler %s', __CLASS__));
+        }
+
         $this->productListingPageRequest->processCookies($request);
 
         $productsPerPage = $this->productListingPageRequest->getProductsPerPage($request);
@@ -111,11 +121,26 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
     }
 
+    private function isValidSearchRequest(HttpRequest $request) : bool
+    {
+        if (HttpRequest::METHOD_GET !== $request->getMethod()) {
+            return false;
+        }
+
+        if (! $request->hasQueryParameter(self::QUERY_STRING_PARAMETER_NAME) ||
+            strlen((string) $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME)) < 1
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function getSearchResults(
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
         SortBy $selectedSortBy
-    ): ProductSearchResult {
+    ) : ProductSearchResult {
         $queryOptions = QueryOptions::create(
             $this->productListingPageRequest->getSelectedFilterValues($request, $this->facetFiltersToIncludeInResult),
             $this->context,

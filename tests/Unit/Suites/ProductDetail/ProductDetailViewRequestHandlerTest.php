@@ -84,7 +84,7 @@ class ProductDetailViewRequestHandlerTest extends TestCase
         ));
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         $metaJson = $this->createProductDetailPageMetaInfoContentJson();
 
@@ -116,6 +116,11 @@ class ProductDetailViewRequestHandlerTest extends TestCase
     public function testRequestHandlerInterfaceIsImplemented()
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
+    }
+
+    public function testCanProcessAnyRequest()
+    {
+        $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
     public function testPageIsReturned()

@@ -6,9 +6,10 @@ namespace LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\Exception\SnippetNotFoundException;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\ProductId;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductJsonService
 {
@@ -56,7 +57,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return array[]
      */
-    public function get(Context $context, ProductId ...$productIds) : array
+    public function get(Context $context, ProductId ...$productIds): array
     {
         return $this->buildProductData(
             $context,
@@ -71,7 +72,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getProductJsonSnippetKeys(Context $context, array $productIds) : array
+    private function getProductJsonSnippetKeys(Context $context, array $productIds): array
     {
         return $this->getSnippetKeys($context, $productIds, $this->productJsonSnippetKeyGenerator);
     }
@@ -81,7 +82,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getPriceSnippetKeys(Context $context, array $productIds) : array
+    private function getPriceSnippetKeys(Context $context, array $productIds): array
     {
         return $this->getSnippetKeys($context, $productIds, $this->priceSnippetKeyGenerator);
     }
@@ -91,7 +92,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return string[]
      */
-    private function getSpecialPriceSnippetKeys(Context $context, array $productIds) : array
+    private function getSpecialPriceSnippetKeys(Context $context, array $productIds): array
     {
         return $this->getSnippetKeys($context, $productIds, $this->specialPriceSnippetKeyGenerator);
     }
@@ -102,7 +103,7 @@ class ProductJsonService
      * @param SnippetKeyGenerator $keyGenerator
      * @return string[]
      */
-    private function getSnippetKeys(Context $context, array $productIds, SnippetKeyGenerator $keyGenerator) : array
+    private function getSnippetKeys(Context $context, array $productIds, SnippetKeyGenerator $keyGenerator): array
     {
         return array_map(function (ProductId $productId) use ($context, $keyGenerator) {
             return $keyGenerator->getKeyForContext($context, [Product::ID => $productId]);
@@ -121,15 +122,20 @@ class ProductJsonService
         array $productJsonSnippetKeys,
         array $priceSnippetKeys,
         array $specialPriceSnippetKeys
-    ) : array {
+    ): array {
         $snippets = $this->getSnippets($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
 
         return array_map(function ($productJsonSnippetKey, $priceKey, $specialPriceKey) use ($context, $snippets) {
+            if (null === $snippets[$productJsonSnippetKey]) {
+                throw new SnippetNotFoundException(
+                    sprintf('Snippet with key %s not found.', $productJsonSnippetKey)
+                );
+            }
             return $this->enrichProductJsonWithPrices->addPricesToProductData(
                 $context,
                 json_decode($snippets[$productJsonSnippetKey], true),
                 $snippets[$priceKey],
-                @$snippets[$specialPriceKey]
+                $snippets[$specialPriceKey] ?? null
             );
         }, $productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
     }
@@ -144,7 +150,7 @@ class ProductJsonService
         array $productJsonSnippetKeys,
         array $priceSnippetKeys,
         array $specialPriceSnippetKeys
-    ) : array {
+    ): array {
         $keys = array_merge($productJsonSnippetKeys, $priceSnippetKeys, $specialPriceSnippetKeys);
         return $this->dataPoolReader->getSnippets($keys);
     }

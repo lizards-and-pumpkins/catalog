@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\InvalidKeyValueStoreKeyException;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -35,21 +34,11 @@ class DataPoolReader
      */
     private $urlKeyStore;
 
-    /**
-     * @var string[]
-     */
-    private $contextParts;
-
-    public function __construct(
-        KeyValueStore $keyValueStore,
-        SearchEngine $searchEngine,
-        UrlKeyStore $urlKeyStore,
-        string ...$contextParts
-    ) {
+    public function __construct(KeyValueStore $keyValueStore, SearchEngine $searchEngine, UrlKeyStore $urlKeyStore)
+    {
         $this->keyValueStore = $keyValueStore;
         $this->searchEngine = $searchEngine;
         $this->urlKeyStore = $urlKeyStore;
-        $this->contextParts = $contextParts;
     }
 
     public function hasSnippet(string $key) : bool
@@ -148,11 +137,5 @@ class DataPoolReader
     public function getUrlKeysForVersion(string $dataVersionString) : array
     {
         return $this->urlKeyStore->getForDataVersion($dataVersionString);
-    }
-
-    public function getPageMetaSnippet(string $urlKey, Context $context): string
-    {
-        $snippetKey = 'meta_' . $urlKey . '_' . $context->getIdForParts(...$this->contextParts);
-        return $this->getSnippet($snippetKey);
     }
 }

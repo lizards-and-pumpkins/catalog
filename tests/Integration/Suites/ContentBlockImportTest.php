@@ -45,7 +45,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             new HttpRequestBody('')
         );
 
-        $metaJson = $this->factory->createDataPoolReader()->getPageMetaSnippet($urlKey, $context);
+        $metaJson = $this->factory->createSnippetReader()->getPageMetaSnippet($urlKey, $context);
 
         $productListingRequestHandler = $this->factory->createProductListingRequestHandler($metaJson);
         $page = $productListingRequestHandler->process($request);

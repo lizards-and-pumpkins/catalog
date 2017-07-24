@@ -54,7 +54,7 @@ class ProductListingRequestHandlerTest extends TestCase
     /**
      * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingPageRequest() : ProductListingPageRequest
+    private function createStubProductListingPageRequest(): ProductListingPageRequest
     {
         $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
@@ -72,7 +72,7 @@ class ProductListingRequestHandlerTest extends TestCase
     /**
      * @return ProductListingPageContentBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingPageContentBuilder() : ProductListingPageContentBuilder
+    private function createStubProductListingPageContentBuilder(): ProductListingPageContentBuilder
     {
         $stubHttpResponse = $this->createMock(HttpResponse::class);
         $stubPageContentBuilder = $this->createMock(ProductListingPageContentBuilder::class);
@@ -81,7 +81,7 @@ class ProductListingRequestHandlerTest extends TestCase
         return $stubPageContentBuilder;
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
@@ -94,7 +94,7 @@ class ProductListingRequestHandlerTest extends TestCase
         $this->mockProductListingPageRequest = $this->createStubProductListingPageRequest();
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
-        
+
         $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
 
         /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubDefaultSortBy */
@@ -114,14 +114,19 @@ class ProductListingRequestHandlerTest extends TestCase
 
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
-            $metaJson,
             $stubFacetFilterRequest,
             $this->stubUrlToWebsiteMap,
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest,
             $this->mockProductSearchService,
+            $metaJson,
             $stubDefaultSortBy
         );
+    }
+
+    public function testCanProcessAnyRequest()
+    {
+        $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
     public function testCookieProcessingIsTriggered()
@@ -162,7 +167,6 @@ class ProductListingRequestHandlerTest extends TestCase
     public function testNoSubsequentRequestToDataPoolIsMadeIfNoProductsAreFound()
     {
         $stubSortBy = $this->createMock(SortBy::class);
-
         $this->mockProductListingPageRequest->method('createSortByForRequest')->willReturn($stubSortBy);
         $this->mockProductListingPageRequest->method('getCurrentPageNumber')->willReturn(0);
 

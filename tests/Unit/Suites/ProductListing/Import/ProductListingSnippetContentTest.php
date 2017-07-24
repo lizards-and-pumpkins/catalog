@@ -6,9 +6,7 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
-use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 use PHPUnit\Framework\TestCase;
@@ -301,11 +299,8 @@ class ProductListingSnippetContentTest extends TestCase
         $this->assertSame($this->containerSnippets, $this->pageMetaInfo->getContainerSnippets());
     }
 
-    public function testContainsRequestHandlerCode()
+    public function testReturnsPageSpecificData()
     {
-        $result = $this->pageMetaInfo->toArray();
-
-        $this->assertArrayHasKey(PageMetaInfoSnippetContent::KEY_HANDLER_CODE, $result);
-        $this->assertSame($result[PageMetaInfoSnippetContent::KEY_HANDLER_CODE], ProductListingRequestHandler::CODE);
+        $this->assertSame($this->pageSpecificData, $this->pageMetaInfo->getPageSpecificData());
     }
 }

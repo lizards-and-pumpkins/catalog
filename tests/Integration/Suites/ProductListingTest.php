@@ -19,7 +19,7 @@ use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 class ProductListingTest extends AbstractIntegrationTest
 {
     use ProductListingTemplateIntegrationTestTrait;
-    
+
     /**
      * @var CatalogMasterFactory
      */
@@ -81,7 +81,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
         $context = $this->getFirstAvailableContext();
-        $metaJson = $this->factory->createDataPoolReader()->getPageMetaSnippet($urlKey, $context);
+        $metaJson = $this->factory->createSnippetReader()->getPageMetaSnippet($urlKey, $context);
         $productListingRequestHandler = $this->factory->createProductListingRequestHandler($metaJson);
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();

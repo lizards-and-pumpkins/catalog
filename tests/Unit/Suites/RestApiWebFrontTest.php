@@ -8,14 +8,15 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\WebFront;
 use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
+use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
-use LizardsAndPumpkins\RestApi\RestApiRequestHandler;
-use LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +34,11 @@ class RestApiWebFrontTest extends TestCase
     private $webFront;
 
     /**
+     * @var HttpRouterChain|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockRouterChain;
+
+    /**
      * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mockMasterFactory;
@@ -42,22 +48,21 @@ class RestApiWebFrontTest extends TestCase
      */
     private $stubHttpResponse;
 
-    private function initMasterFactoryMock(RestApiRequestHandler $requestHandler)
+    private function initMasterFactoryMock(HttpRequestHandler $httpRequestHandler)
     {
         $stubFactoryMethods = array_merge(
             get_class_methods(MasterFactory::class),
-            ['getContext', 'createHttpRouterChain', 'createApiRouter', 'getRestApiRequestHandlerLocator']
+            ['getContext', 'createHttpRouterChain', 'createApiRouter']
         );
+
+        $this->mockRouterChain = $this->createMock(HttpRouterChain::class);
+        $this->mockRouterChain->method('route')->willReturn($httpRequestHandler);
 
         $this->mockMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods($stubFactoryMethods)->getMock();
         $this->mockMasterFactory->method('getContext')->willReturn($this->createMock(Context::class));
-
-        $stubRestApiRequestHandlerLocator = $this->createMock(RestApiRequestHandlerLocator::class);
-        $stubRestApiRequestHandlerLocator->method('getApiRequestHandler')->willReturn($requestHandler);
-
-        $this->mockMasterFactory->method('getRestApiRequestHandlerLocator')
-            ->willReturn($stubRestApiRequestHandlerLocator);
+        $this->mockMasterFactory->method('createHttpRouterChain')->willReturn($this->mockRouterChain);
+        $this->mockMasterFactory->method('createApiRouter')->willReturn($this->createMock(ApiRouter::class));
     }
 
     final protected function setUp()
@@ -68,11 +73,11 @@ class RestApiWebFrontTest extends TestCase
         $this->stubHttpResponse = $this->createMock(HttpResponse::class);
         $this->stubHttpResponse->method('getStatusCode')->willReturn(HttpResponse::STATUS_OK);
 
-        /** @var RestApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubRequestHandler */
-        $stubRequestHandler = $this->createMock(RestApiRequestHandler::class);
-        $stubRequestHandler->method('process')->willReturn($this->stubHttpResponse);
+        /** @var HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequestHandler */
+        $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $stubHttpRequestHandler->method('process')->willReturn($this->stubHttpResponse);
 
-        $this->initMasterFactoryMock($stubRequestHandler);
+        $this->initMasterFactoryMock($stubHttpRequestHandler);
 
         $this->webFront = new TestRestApiWebFront(
             $stubHttpRequest,
@@ -115,17 +120,23 @@ class RestApiWebFrontTest extends TestCase
         /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->createMock(HttpRequest::class);
 
-        /** @var RestApiRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubRequestHandler */
-        $stubRequestHandler = $this->createMock(RestApiRequestHandler::class);
-        $stubRequestHandler->method('process')->willThrowException(new \Exception($exceptionMessage));
+        /** @var HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequestHandler */
+        $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $stubHttpRequestHandler->method('process')->willThrowException(new \Exception($exceptionMessage));
 
-        $this->initMasterFactoryMock($stubRequestHandler);
+        $this->initMasterFactoryMock($stubHttpRequestHandler);
 
         $webFront = new TestRestApiWebFront($stubHttpRequest, $this->mockMasterFactory, new UnitTestFactory($this));
         $response = $webFront->processRequest();
 
         $this->assertSame(HttpResponse::STATUS_BAD_REQUEST, $response->getStatusCode());
         $this->assertSame(json_encode(['error' => $exceptionMessage]), $response->getBody());
+    }
+
+    public function testRegistersApiRouter()
+    {
+        $this->mockRouterChain->expects($this->once())->method('register')->with($this->isInstanceOf(ApiRouter::class));
+        $this->webFront->processRequest();
     }
 
     public function testRegistersFactoriesRequiredForRestApiRequestHandling()

@@ -22,11 +22,6 @@ class ProductListingRequestHandler implements HttpRequestHandler
     const CODE = 'product_listing';
 
     /**
-     * @var ProductListingSnippetContent
-     */
-    private $pageMetaInfo;
-
-    /**
      * @var Context
      */
     private $context;
@@ -52,6 +47,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $productSearchService;
 
     /**
+     * @var ProductListingSnippetContent
+     */
+    private $pageMetaInfo;
+
+    /**
      * @var SortBy
      */
     private $defaultSortBy;
@@ -68,27 +68,32 @@ class ProductListingRequestHandler implements HttpRequestHandler
 
     public function __construct(
         Context $context,
-        string $metaInfoJson,
         FacetFiltersToIncludeInResult $facetFilterRequest,
         UrlToWebsiteMap $urlToWebsiteMap,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
         ProductSearchService $productSearchService,
+        string $metaInfoJson,
         SortBy $defaultSortBy,
         SortBy ...$availableSortBy
     ) {
         $this->context = $context;
-        $this->pageMetaInfo = ProductListingSnippetContent::fromJson($metaInfoJson);
         $this->facetFilterRequest = $facetFilterRequest;
+        $this->urlToWebsiteMap = $urlToWebsiteMap;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->productSearchService = $productSearchService;
+        $this->pageMetaInfo = ProductListingSnippetContent::fromJson($metaInfoJson);
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
-        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
-    public function process(HttpRequest $request): HttpResponse
+    public function canProcess(HttpRequest $request) : bool
+    {
+        return true;
+    }
+
+    public function process(HttpRequest $request) : HttpResponse
     {
         $this->productListingPageRequest->processCookies($request);
 
@@ -99,7 +104,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ...$this->availableSortBy
         );
         $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
-
+        
         $requestUrlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $keyGeneratorParams = [
             PageMetaInfoSnippetContent::URL_KEY => ltrim($requestUrlKey, '/'),
@@ -120,7 +125,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         HttpRequest $request,
         ProductsPerPage $productsPerPage,
         SortBy $selectedSortBy
-    ): ProductSearchResult {
+    ) : ProductSearchResult {
         $currentPageNumber = $this->productListingPageRequest->getCurrentPageNumber($request);
         $numberOfProductsPerPage = $productsPerPage->getSelectedNumberOfProductsPerPage();
 
@@ -140,7 +145,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         int $numberOfProductsPerPage,
         int $currentPageNumber,
         SortBy $selectedSortBy
-    ): ProductSearchResult {
+    ) : ProductSearchResult {
         $criteria = $this->pageMetaInfo->getSelectionCriteria();
 
         $queryOptions = QueryOptions::create(
@@ -159,11 +164,11 @@ class ProductListingRequestHandler implements HttpRequestHandler
         ProductSearchResult $productSearchResult,
         int $currentPageNumber,
         int $numberOfProductsPerPage
-    ): bool {
+    ) : bool {
         return $currentPageNumber <= $this->getLastPageNumber($productSearchResult, $numberOfProductsPerPage);
     }
 
-    private function getLastPageNumber(ProductSearchResult $productSearchResult, int $numberOfProductsPerPage): int
+    private function getLastPageNumber(ProductSearchResult $productSearchResult, int $numberOfProductsPerPage) : int
     {
         return max(0, (int) ceil($productSearchResult->getTotalNumberOfResults() / $numberOfProductsPerPage) - 1);
     }

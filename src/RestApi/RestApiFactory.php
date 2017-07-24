@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestH
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\TemplateApiV1GetRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
@@ -24,23 +25,29 @@ class RestApiFactory implements Factory
     use FactoryTrait;
 
     /**
-     * @var RestApiRequestHandlerLocator
+     * @var ApiRequestHandlerLocator
      */
     private $memoizedApiRequestHandlerLocator;
 
-    public function getRestApiRequestHandlerLocator(): RestApiRequestHandlerLocator
+    public function createApiRouter(): ApiRouter
+    {
+        return new ApiRouter(
+            $this->getApiRequestHandlerLocator(),
+            $this->getMasterFactory()->createUrlToWebsiteMap()
+        );
+    }
+
+    public function getApiRequestHandlerLocator(): ApiRequestHandlerLocator
     {
         if (null === $this->memoizedApiRequestHandlerLocator) {
-            $this->memoizedApiRequestHandlerLocator = new RestApiRequestHandlerLocator(
-                $this->getMasterFactory()->createUrlToWebsiteMap()
-            );
+            $this->memoizedApiRequestHandlerLocator = new ApiRequestHandlerLocator();
             $this->registerApiRequestHandlers($this->memoizedApiRequestHandlerLocator);
         }
 
         return $this->memoizedApiRequestHandlerLocator;
     }
 
-    private function registerApiRequestHandlers(RestApiRequestHandlerLocator $requestHandlerLocator)
+    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
     {
         $requestHandlerLocator->register('put_catalog_import', $version = 1, function () {
             return $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler();
@@ -76,6 +83,10 @@ class RestApiFactory implements Factory
 
         $requestHandlerLocator->register('put_current_version', $version = 1, function () {
             return $this->getMasterFactory()->createCurrentVersionApiV1PutRequestHandler();
+        });
+
+        $requestHandlerLocator->register('get_templates', $version = 1, function () {
+            return $this->getMasterFactory()->createTemplateApiV1GetRequestHandler();
         });
     }
 
@@ -148,7 +159,7 @@ class RestApiFactory implements Factory
     public function createCurrentVersionApiV1PutRequestHandler(): CurrentVersionApiV1PutRequestHandler
     {
         return new CurrentVersionApiV1PutRequestHandler(
-            $this->getMasterFactory()->getCommandQueue()
+            $this->getMasterFactory()->createCommandQueue()
         );
     }
 
@@ -163,5 +174,10 @@ class RestApiFactory implements Factory
     public function createProductJsonToXml(): ProductJsonToXml
     {
         return new ProductJsonToXml();
+    }
+
+    public function createTemplateApiV1GetRequestHandler(): TemplateApiV1GetRequestHandler
+    {
+        return new TemplateApiV1GetRequestHandler($this->getMasterFactory()->createTemplateProjectorLocator());
     }
 }

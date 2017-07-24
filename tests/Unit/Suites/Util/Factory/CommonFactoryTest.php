@@ -14,8 +14,11 @@ use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SnippetReader;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
+use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
@@ -124,6 +127,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\DataPool\SnippetReader
  * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
@@ -355,6 +359,18 @@ class CommonFactoryTest extends TestCase
         $resultB = $this->commonFactory->getLogger();
         $this->assertInstanceOf(Logger::class, $resultA);
         $this->assertSame($resultA, $resultB);
+    }
+
+    public function testResourceNotFoundRouterIsReturned()
+    {
+        $result = $this->commonFactory->createResourceNotFoundRouter();
+        $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
+    }
+
+    public function testHttpRouterChainIsReturned()
+    {
+        $result = $this->commonFactory->createHttpRouterChain();
+        $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
 
     public function testImageImportEventDomainHandlerIsReturned()
@@ -879,5 +895,10 @@ class CommonFactoryTest extends TestCase
     {
         $result = $this->commonFactory->createEnrichProductJsonWithPrices();
         $this->assertInstanceOf(EnrichProductJsonWithPrices::class, $result);
+    }
+
+    public function testReturnsSnippetReader()
+    {
+        $this->assertInstanceOf(SnippetReader::class, $this->commonFactory->createSnippetReader());
     }
 }

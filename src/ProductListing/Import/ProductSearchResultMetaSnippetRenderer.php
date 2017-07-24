@@ -12,6 +12,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
 
 class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
@@ -66,7 +67,7 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $keyGeneratorParams = [PageMetaInfoSnippetContent::URL_KEY => 'catalogsearch/result'];
+        $keyGeneratorParams = [PageMetaInfoSnippetContent::URL_KEY => ProductSearchRequestHandler::SEARCH_RESULTS_SLUG];
         $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, $keyGeneratorParams);
         $metaSnippetContent = json_encode($this->getMetaSnippetContent($rootSnippetCode, $pageSnippetCodes)->toArray());
 

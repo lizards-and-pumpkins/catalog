@@ -5,20 +5,11 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\HttpUnknownMethodRequest;
-use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler;
-use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler;
-use LizardsAndPumpkins\Http\Routing\WebRequestHandlerLocator;
-use LizardsAndPumpkins\Import\Exception\MalformedMetaSnippetException;
-use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRouter;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -52,10 +43,10 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\Import\CatalogImport
+ * @uses   \LizardsAndPumpkins\Http\Routing\MetaSnippetBasedRouter
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
@@ -69,12 +60,15 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy
+ * @uses   \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter
  * @uses   \LizardsAndPumpkins\Http\Routing\ResourceNotFoundRequestHandler
+ * @uses   \LizardsAndPumpkins\Http\Routing\HttpRouterChain
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  * @uses   \LizardsAndPumpkins\Context\ContextSource
- * @uses   \LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRouter
+ * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
@@ -88,188 +82,61 @@ class DefaultWebFrontTest extends TestCase
     private $webFront;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpResponse|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $stubRequest;
-
-    /**
-     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubUrlToWebsiteMap;
-
-    /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubDataPoolReader;
-
-    /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $dummyContext;
-
-    /**
-     * @var WebRequestHandlerLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubWebRequestHandlerLocator;
+    private $mockHttpResponse;
 
     /**
      * @return MasterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createStubMasterFactory()
     {
+        $routerFactoryMethods = [
+            'createApiRouter',
+            'createMetaSnippetBasedRouter',
+            'createResourceNotFoundRouter',
+            'createUnknownHttpRequestMethodRouter',
+        ];
+
         $stubFactoryMethods = array_merge(
             get_class_methods(MasterFactory::class),
-            ['createContext', 'createUrlToWebsiteMap', 'createDataPoolReader', 'createWebRequestHandlerLocator']
+            ['getContext', 'createHttpRouterChain'],
+            $routerFactoryMethods
         );
 
         /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods($stubFactoryMethods)->getMock();
 
-        $this->dummyContext = $this->createMock(Context::class);
-        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
-        $this->stubDataPoolReader = $this->createMock(DataPoolReader::class);
-        $this->stubWebRequestHandlerLocator = $this->createMock(WebRequestHandlerLocator::class);
+        $mockRouterChain = $this->createMock(HttpRouterChain::class);
+        $mockHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
+        $this->mockHttpResponse = $this->createMock(HttpResponse::class);
 
-        $stubMasterFactory->method('createContext')->willReturn($this->dummyContext);
-        $stubMasterFactory->method('createUrlToWebsiteMap')->willReturn($this->stubUrlToWebsiteMap);
-        $stubMasterFactory->method('createDataPoolReader')->willReturn($this->stubDataPoolReader);
-        $stubMasterFactory->method('createWebRequestHandlerLocator')->willReturn($this->stubWebRequestHandlerLocator);
+        array_map(function ($methodName) use ($stubMasterFactory) {
+            $stubMasterFactory->method($methodName)->willReturn($this->createMock(HttpRouter::class));
+        }, $routerFactoryMethods);
+
+        $stubMasterFactory->method('getContext')->willReturn($this->createMock(Context::class));
+
+        $stubMasterFactory->method('createHttpRouterChain')->willReturn($mockRouterChain);
+        $mockRouterChain->method('route')->willReturn($mockHttpRequestHandler);
+        $mockHttpRequestHandler->method('process')->willReturn($this->mockHttpResponse);
 
         return $stubMasterFactory;
     }
 
-    /**
-     * @return HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getStubRequestHandler()
-    {
-        $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
-        $stubHttpRequestHandler->method('process')->willReturn($this->createMock(HttpResponse::class));
-
-        return $stubHttpRequestHandler;
-    }
-
     final protected function setUp()
     {
-        $this->stubRequest = $this->createMock(HttpRequest::class);
+        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        $stubHttpRequest = $this->createMock(HttpRequest::class);
+
         $stubMasterFactory = $this->createStubMasterFactory();
 
-        $this->webFront = new TestDefaultWebFront($this->stubRequest, $stubMasterFactory, new UnitTestFactory($this));
-    }
-
-    public function testThrowsAnExceptionIfMetaSnippetHasNoRequestHandlerCode()
-    {
-        $this->expectException(MalformedMetaSnippetException::class);
-        $this->webFront->run();
-    }
-
-    public function testTriggersUnknownHttpRequestMethodHandlerForUnknownHttpMethods()
-    {
-        /** @var HttpUnknownMethodRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
-        $stubRequest = $this->createMock(HttpUnknownMethodRequest::class);
-        $stubMasterFactory = $this->createStubMasterFactory();
-
-        $this->stubWebRequestHandlerLocator->expects($this->once())->method('getRequestHandlerForCode')
-            ->with(UnknownHttpRequestMethodHandler::CODE);
-
-        (new TestDefaultWebFront($stubRequest, $stubMasterFactory, new UnitTestFactory($this)))->run();
-    }
-
-    public function testTriggersResourceNotFoundRequestHandlerIfMetaSnippetDoesNotExist()
-    {
-        $this->stubDataPoolReader->method('getPageMetaSnippet')->willThrowException(new KeyNotFoundException());
-
-        $this->stubWebRequestHandlerLocator->expects($this->once())->method('getRequestHandlerForCode')
-            ->with(ResourceNotFoundRequestHandler::CODE)->willReturn($this->getStubRequestHandler());
-
-        $this->webFront->run();
-    }
-
-    public function testTriggersResourceNotFoundRequestHandlerIfSearchResultsPageIsRequestedWithInvalidMethod()
-    {
-        $this->stubDataPoolReader->method('getPageMetaSnippet')->willReturn(
-            json_encode([PageMetaInfoSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE])
-        );
-
-        $this->stubWebRequestHandlerLocator->expects($this->once())->method('getRequestHandlerForCode')
-            ->with(ResourceNotFoundRequestHandler::CODE)->willReturn($this->getStubRequestHandler());
-
-        $this->webFront->run();
-    }
-
-    public function testTriggersResourceNotFoundRequestHandlerIfSearchResultsPageIsRequestedWithoutQueryParameter()
-    {
-        $this->stubDataPoolReader->method('getPageMetaSnippet')->willReturn(
-            json_encode([PageMetaInfoSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE])
-        );
-
-        $this->stubWebRequestHandlerLocator->expects($this->once())->method('getRequestHandlerForCode')
-            ->with(ResourceNotFoundRequestHandler::CODE)->willReturn($this->getStubRequestHandler());
-
-        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-
-        $this->webFront->run();
-    }
-
-    public function testTriggersResourceNotFoundRequestHandlerIfSearchResultsPageIsRequestedWithEmptyQueryParameter()
-    {
-        $this->stubDataPoolReader->method('getPageMetaSnippet')->willReturn(
-            json_encode([PageMetaInfoSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE])
-        );
-
-        $this->stubWebRequestHandlerLocator->expects($this->once())->method('getRequestHandlerForCode')
-            ->with(ResourceNotFoundRequestHandler::CODE)->willReturn($this->getStubRequestHandler());
-
-        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('hasQueryParameter')->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn(true);
-
-        $this->webFront->run();
-    }
-
-    public function testTriggersProductSearchRequestHandler()
-    {
-        $this->stubDataPoolReader->method('getPageMetaSnippet')->willReturn(
-            json_encode([PageMetaInfoSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE])
-        );
-
-        $this->stubWebRequestHandlerLocator->expects($this->once())->method('getRequestHandlerForCode')
-            ->with(ProductSearchRequestHandler::CODE)->willReturn($this->getStubRequestHandler());
-
-        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-        $this->stubRequest->method('hasQueryParameter')->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn(true);
-        $this->stubRequest->method('getQueryParameter')->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn('foo');
-
-        $this->webFront->run();
+        $this->webFront = new TestDefaultWebFront($stubHttpRequest, $stubMasterFactory, new UnitTestFactory($this));
     }
 
     public function testSendMethodOfResponseIsCalled()
     {
-        $urlKey = 'bar';
-        $url = 'http://example.com/' . $urlKey;
-        $requestHandlerCode = 'qux';
-
-        $stubUrl = $this->createMock(HttpUrl::class);
-        $stubUrl->method('__toString')->willReturn($url);
-
-        $snippetContents = json_encode([PageMetaInfoSnippetContent::KEY_HANDLER_CODE => $requestHandlerCode]);
-
-        $mockHttpResponse = $this->createMock(HttpResponse::class);
-
-        $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
-        $stubHttpRequestHandler->method('process')->willReturn($mockHttpResponse);
-
-        $this->stubRequest->method('getUrl')->willReturn($stubUrl);
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->with($url)->willReturn($urlKey);
-        $this->stubDataPoolReader->method('getPageMetaSnippet')->with($urlKey, $this->dummyContext)
-            ->willReturn($snippetContents);
-        $this->stubWebRequestHandlerLocator->method('getRequestHandlerForCode')->with($requestHandlerCode)
-            ->willReturn($stubHttpRequestHandler);
-
-        $mockHttpResponse->expects($this->once())->method('send');
-
+        $this->mockHttpResponse->expects($this->once())->method('send');
         $this->webFront->run();
     }
 }

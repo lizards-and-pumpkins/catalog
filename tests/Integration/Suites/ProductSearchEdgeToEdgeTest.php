@@ -40,16 +40,21 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $website->processRequest();
 
         $this->processAllMessages($this->factory);
-        
+
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
-    private function getProductSearchRequestHandler() : ProductSearchRequestHandler
+    private function getFirstAvailableContext(): Context
+    {
+        return $this->factory->createContextSource()->getAllAvailableContexts()[1];
+    }
+
+    private function getProductSearchRequestHandler(): ProductSearchRequestHandler
     {
         $urlKey = 'catalogsearch/result';
         $context = $this->getFirstAvailableContext();
 
-        $metaJson = $this->factory->createDataPoolReader()->getPageMetaSnippet($urlKey, $context);
+        $metaJson = $this->factory->createSnippetReader()->getPageMetaSnippet($urlKey, $context);
 
         return $this->factory->createProductSearchRequestHandler($metaJson);
     }
@@ -59,14 +64,9 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
             function () {
-                return$this->factory->createProductSearchResultMetaSnippetKeyGenerator();
+                return $this->factory->createProductSearchResultMetaSnippetKeyGenerator();
             }
         );
-    }
-
-    private function getFirstAvailableContext(): Context
-    {
-        return $this->factory->createContextSource()->getAllAvailableContexts()[1];
     }
 
     final protected function setUp()
@@ -94,7 +94,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->assertContains($expectedRootSnippetCode, $metaInfoSnippet['page_snippet_codes']);
     }
 
-    public function testProductListingPageHtmlIsReturned() : HttpResponse
+    public function testProductListingPageHtmlIsReturned(): HttpResponse
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 

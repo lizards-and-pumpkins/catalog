@@ -47,23 +47,28 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->translatorRegistry = $translatorRegistry;
-        $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson($metaInfoJson);
+        $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson($metaInfoJson);;
     }
 
-    public function process(HttpRequest $request) : HttpResponse
+    public function canProcess(HttpRequest $request): bool
+    {
+        return true;
+    }
+
+    public function process(HttpRequest $request): HttpResponse
     {
         $keyGeneratorParams = [Product::ID => $this->pageMetaInfo->getProductId()];
 
-        $this->addTranslationsToPageBuilder($this->context);
+        $this->addTranslationsToPageBuilder();
 
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
     }
 
-    private function addTranslationsToPageBuilder(Context $context)
+    private function addTranslationsToPageBuilder()
     {
         $translator = $this->translatorRegistry->getTranslator(
             ProductDetailTemplateSnippetRenderer::CODE,
-            $context->getValue(Locale::CONTEXT_CODE)
+            $this->context->getValue(Locale::CONTEXT_CODE)
         );
         $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
     }

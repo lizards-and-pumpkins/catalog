@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
-use LizardsAndPumpkins\Util\Storage\Clearable;
+use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryDoesNotExistException;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
+use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlKeyStore, Clearable
 {
@@ -32,7 +33,6 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
         string $contextDataString,
         string $urlKeyTypeString
     ) {
-        $this->validateUrlKeyString($urlKeyString);
         $this->validateDataVersionString($dataVersionString);
         $this->ensureDirectoryExists($this->storageDirectoryPath);
         $this->appendRecordToFile(
@@ -55,11 +55,11 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
      * @param string $dataVersionString
      * @return string[]
      */
-    public function getForDataVersion(string $dataVersionString) : array
+    public function getForDataVersion(string $dataVersionString): array
     {
         $this->validateDataVersionString($dataVersionString);
         $urlKeyStorageFileForVersion = $this->getUrlKeyStorageFilePathForVersion($dataVersionString);
-        if (!file_exists($urlKeyStorageFileForVersion)) {
+        if (! file_exists($urlKeyStorageFileForVersion)) {
             return [];
         }
         return $this->readUrlKeysFromFile($urlKeyStorageFileForVersion);
@@ -69,7 +69,7 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
      * @param string $filePath
      * @return string[]
      */
-    private function readUrlKeysFromFile(string $filePath) : array
+    private function readUrlKeysFromFile(string $filePath): array
     {
         $f = fopen($filePath, 'r');
         flock($f, LOCK_SH);
@@ -83,18 +83,18 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
      * @param string $record
      * @return string[]
      */
-    public function parseRecord(string $record) : array
+    public function parseRecord(string $record): array
     {
         list($urlKey, $encodedContextData, $urlKeyType) = explode(self::FIELD_SEPARATOR, $record);
         return [$urlKey, base64_decode($encodedContextData), $urlKeyType];
     }
 
-    private function getUrlKeyStorageFilePathForVersion(string $dataVersionString) : string
+    private function getUrlKeyStorageFilePathForVersion(string $dataVersionString): string
     {
         return $this->storageDirectoryPath . '/' . $dataVersionString;
     }
 
-    private function formatRecordToWrite(string $urlKey, string $contextData, string $urlKeyType) : string
+    private function formatRecordToWrite(string $urlKey, string $contextData, string $urlKeyType): string
     {
         return
             $urlKey . self::FIELD_SEPARATOR .
@@ -104,8 +104,12 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
 
     private function ensureDirectoryExists(string $directoryPath)
     {
-        if (!file_exists($directoryPath)) {
-            mkdir($directoryPath, 0700, true);
+        if (! @mkdir($directoryPath, 0700, true) && ! is_dir($directoryPath)) {
+            throw new DirectoryDoesNotExistException(sprintf(
+                'Directory "%s" was not found and could not be created to store urls in %s',
+                $directoryPath,
+                __CLASS__
+            ));
         }
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
-use LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator;
+use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -57,8 +57,8 @@ class ProductSearchApiFactory implements FactoryWithCallback
     {
         $apiVersion = 1;
 
-        /** @var RestApiRequestHandlerLocator $apiRequestHandlerLocator */
-        $apiRequestHandlerLocator = $masterFactory->getRestApiRequestHandlerLocator();
+        /** @var ApiRequestHandlerLocator $apiRequestHandlerLocator */
+        $apiRequestHandlerLocator = $masterFactory->getApiRequestHandlerLocator();
         $apiRequestHandlerLocator->register('get_product', $apiVersion, function () {
             return $this->getMasterFactory()->createProductSearchApiV1GetRequestHandler();
         });

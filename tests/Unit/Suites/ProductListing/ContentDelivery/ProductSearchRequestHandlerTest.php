@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\FullTextCriteriaBuilder;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +40,7 @@ class ProductSearchRequestHandlerTest extends TestCase
     /**
      * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingPageRequest() : ProductListingPageRequest
+    private function createStubProductListingPageRequest(): ProductListingPageRequest
     {
         $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
@@ -58,7 +59,7 @@ class ProductSearchRequestHandlerTest extends TestCase
     /**
      * @return ProductListingPageContentBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingPageContentBuilder() : ProductListingPageContentBuilder
+    private function createStubProductListingPageContentBuilder(): ProductListingPageContentBuilder
     {
         $stubHttpResponse = $this->createMock(HttpResponse::class);
         $stubPageContentBuilder = $this->createMock(ProductListingPageContentBuilder::class);
@@ -67,7 +68,7 @@ class ProductSearchRequestHandlerTest extends TestCase
         return $stubPageContentBuilder;
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
@@ -98,36 +99,99 @@ class ProductSearchRequestHandlerTest extends TestCase
 
         $this->requestHandler = new ProductSearchRequestHandler(
             $stubContext,
-            $metaJson,
             $stubFacetFilterRequest,
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest,
             $stubProductSearchService,
             $stubFullTextCriteriaBuilder,
+            $metaJson,
             $stubDefaultSortBy
         );
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
-        $this->stubRequest->method('getQueryParameter')->with(ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME)
-            ->willReturn('whatever');
     }
 
-    public function testCookieProcessingIsTriggered()
+    public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
-        $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
+
+        $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
+    }
+
+    public function testRequestCanNotBeProcessedIfQueryStringParameterIsNotPresent()
+    {
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, false],
+        ]);
+
+        $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
+    }
+
+    public function testRequestCanNotBeProcessedIfQueryStringIsEmpty()
+    {
+        $queryString = '';
+
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, true],
+        ]);
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, $queryString],
+        ]);
+
+        $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
+    }
+
+    /**
+     * @depends testRequestCanNotBeProcessedIfRequestMethodIsNotGet
+     */
+    public function testExceptionIsThrownDuringAttemptToProcessInvalidRequest()
+    {
+        $this->expectException(UnableToHandleRequestException::class);
         $this->requestHandler->process($this->stubRequest);
     }
 
-    public function testHttpResponseIsReturned()
+    public function testTrueIsReturnedIfRequestCanBeProcessed(): HttpRequest
     {
-        $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($this->stubRequest));
+        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
+        $this->stubRequest->method('hasQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, true],
+        ]);
+        $this->stubRequest->method('getQueryParameter')->willReturnMap([
+            [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, 'foo'],
+        ]);
+
+        $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
+
+        return $this->stubRequest;
     }
 
-    public function testSortByAttributeCodesAreMappedBeforePassedToSearchEngine()
+    /**
+     * @depends testTrueIsReturnedIfRequestCanBeProcessed
+     */
+    public function testCookieProcessingIsTriggered(HttpRequest $stubRequest)
+    {
+        $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
+        $this->requestHandler->process($stubRequest);
+    }
+
+    /**
+     * @depends testTrueIsReturnedIfRequestCanBeProcessed
+     */
+    public function testHttpResponseIsReturned(HttpRequest $stubRequest)
+    {
+        $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($stubRequest));
+    }
+
+    /**
+     * @depends testTrueIsReturnedIfRequestCanBeProcessed
+     */
+    public function testSortByAttributeCodesAreMappedBeforePassedToSearchEngine(HttpRequest $stubRequest)
     {
         $this->mockProductListingPageRequest->expects($this->once())->method('createSortByForRequest')
             ->willReturn($this->createMock(SortBy::class));
 
-        $this->requestHandler->process($this->stubRequest);
+        $this->requestHandler->process($stubRequest);
     }
 }

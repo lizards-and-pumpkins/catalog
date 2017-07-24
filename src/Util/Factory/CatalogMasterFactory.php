@@ -15,6 +15,7 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
+use LizardsAndPumpkins\DataPool\SnippetReader;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
@@ -66,6 +67,7 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method callable getProductDetailsViewTranslatorFactory
  * @method TranslatorRegistry getTranslatorRegistry
  * @method UrlToWebsiteMap createUrlToWebsiteMap
+ * @method SnippetReader createSnippetReader
  */
 class CatalogMasterFactory implements MasterFactory
 {

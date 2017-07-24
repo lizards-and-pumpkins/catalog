@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace LizardsAndPumpkins\Import\Exception;
+namespace LizardsAndPumpkins\Http\Routing\Exception;
 
 class MalformedMetaSnippetException extends \RuntimeException
 {

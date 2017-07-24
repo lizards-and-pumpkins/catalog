@@ -5,15 +5,13 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
-use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\WebFront;
 use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
-use LizardsAndPumpkins\RestApi\RestApiRequestHandlerLocator;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
@@ -51,9 +49,9 @@ class RestApiWebFront extends WebFront
         $masterFactory->register($this->getImplementationSpecificFactory());
     }
 
-    final protected function getHandlerForRequest(HttpRequest $request): HttpRequestHandler
+    final protected function registerRouters(HttpRouterChain $routerChainChain)
     {
-        return $this->getApiRequestHandlerLocator()->getApiRequestHandler($request);
+        $routerChainChain->register($this->getMasterFactory()->createApiRouter());
     }
 
     /**
@@ -71,10 +69,5 @@ class RestApiWebFront extends WebFront
         ];
 
         return GenericHttpResponse::create($body, array_merge($headers, $corsHeaders), $statusCode);
-    }
-
-    private function getApiRequestHandlerLocator(): RestApiRequestHandlerLocator
-    {
-        return $this->getMasterFactory()->getRestApiRequestHandlerLocator();
     }
 }

@@ -36,6 +36,32 @@ class UnknownHttpRequestMethodHandlerTest extends TestCase
         $this->assertInstanceOf(HttpRequestHandler::class, new UnknownHttpRequestMethodHandler());
     }
 
+    public function testCanHandleUnknownHttpMethodRequests()
+    {
+        $unknownMethodHttpRequest = $this->createHttpRequestWithMethod('FOO');
+        $this->assertTrue((new UnknownHttpRequestMethodHandler())->canProcess($unknownMethodHttpRequest));
+    }
+
+    /**
+     * @param HttpRequest $httpRequestWithKnownMethod
+     * @dataProvider knownHttpRequestMethodCodesProvider 
+     */
+    public function testCanNotHandleKnownHttpMethodRequests(HttpRequest $httpRequestWithKnownMethod)
+    {
+        $this->assertFalse((new UnknownHttpRequestMethodHandler())->canProcess($httpRequestWithKnownMethod));
+    }
+
+    public function knownHttpRequestMethodCodesProvider(): array
+    {
+        return array_map(function (string $code) { return [$this->createHttpRequestWithMethod($code)]; }, [
+            HttpRequest::METHOD_GET,
+            HttpRequest::METHOD_POST,
+            HttpRequest::METHOD_PUT,
+            HttpRequest::METHOD_DELETE,
+            HttpRequest::METHOD_HEAD,
+        ]);
+    }
+
     public function testReturnsMethodNotAllowedHttpResponse()
     {
         $unknownMethodRequest = $this->createHttpRequestWithMethod('FOO');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\DataPool\UrlKeyStore;
 
+use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryDoesNotExistException;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 
 /**
@@ -14,18 +15,28 @@ use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
 {
     /**
+     * @var bool
+     */
+    public static $createDirectory = true;
+
+    /**
      * @var string
      */
     private $temporaryStoragePath;
 
-    final protected function createUrlKeyStoreInstance() : FileUrlKeyStore
+    private static function isDirectoryExpected()
+    {
+        return self::$createDirectory;
+    }
+
+    final protected function createUrlKeyStoreInstance(): FileUrlKeyStore
     {
         $this->temporaryStoragePath = $this->prepareTemporaryStorage();
 
         return new FileUrlKeyStore($this->temporaryStoragePath);
     }
 
-    private function prepareTemporaryStorage() : string
+    private function prepareTemporaryStorage(): string
     {
         $temporaryStoragePath = sys_get_temp_dir() . '/lizards-and-pumpkins-test-url-key-storage';
 
@@ -37,9 +48,22 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         return $temporaryStoragePath;
     }
 
+    final protected function setUp()
+    {
+        self::$createDirectory = true;
+        parent::setUp();
+    }
+
     protected function tearDown()
     {
-        (new LocalFilesystem())->removeDirectoryAndItsContent($this->temporaryStoragePath);
+        try {
+            (new LocalFilesystem())->removeDirectoryAndItsContent($this->temporaryStoragePath);
+        } catch (DirectoryDoesNotExistException $e) {
+            if (self::isDirectoryExpected()) {
+                throw $e;
+            }
+        }
+
     }
 
     public function testAddOnOneInstanceReadFromOther()
@@ -72,4 +96,32 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         $this->assertFileExists($this->temporaryStoragePath);
         $this->assertTrue(is_dir($this->temporaryStoragePath));
     }
+
+    public function testItThrowsAnExceptionIfDirectoryIsNotCreated()
+    {
+        $urlKeyStore = $this->createUrlKeyStoreInstance();
+        rmdir($this->temporaryStoragePath);
+
+        $this->expectException(DirectoryDoesNotExistException::class);
+        $this->expectExceptionMessage(
+            sprintf('Directory "%s" was not found and could not be created to store urls in %s',
+                $this->temporaryStoragePath,
+                get_class($urlKeyStore)
+            )
+        );
+
+        self::$createDirectory = false;
+        $urlKeyStore->addUrlKeyForVersion('1.0', 'example.html', 'context-data', 'type-string');
+    }
+}
+
+function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
+{
+    if (! FileUrlKeyStoreTest::$createDirectory) {
+        return false;
+    }
+    if ($context !== null) {
+        return \mkdir($pathname, $mode, $recursive, $context);
+    }
+    return \mkdir($pathname, $mode, $recursive);
 }
