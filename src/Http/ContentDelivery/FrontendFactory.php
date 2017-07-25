@@ -100,7 +100,7 @@ class FrontendFactory implements Factory
         );
     }
 
-    public function createProductListingRequestHandler(string $metaJson): ProductListingRequestHandler
+    private function createProductListingRequestHandler(string $metaJson): ProductListingRequestHandler
     {
         return new ProductListingRequestHandler(
             $this->createContext(),
@@ -115,7 +115,7 @@ class FrontendFactory implements Factory
         );
     }
 
-    public function createProductSearchRequestHandler(string $metaJson): ProductSearchRequestHandler
+    private function createProductSearchRequestHandler(string $metaJson): ProductSearchRequestHandler
     {
         return new ProductSearchRequestHandler(
             $this->createContext(),

@@ -106,6 +106,6 @@ class MetaSnippetBasedRouter implements HttpRouter
 
     private function getPathWithoutPrefix(HttpRequest $request): string
     {
-        return $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
+        return rtrim($this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl()), '/');
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionEqual;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionGreaterThan;
@@ -25,14 +24,6 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    private function getFirstAvailableContext(): Context
-    {
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[0];
-
-        return $context;
-    }
-
     public function testProductListingSnippetIsWrittenIntoDataPool()
     {
         $this->factory = $this->prepareIntegrationTestMasterFactory();
@@ -43,9 +34,12 @@ class ProductListingTest extends AbstractIntegrationTest
         $logger = $this->factory->getLogger();
         $this->failIfMessagesWhereLogged($logger);
 
+        $contextSource = $this->factory->createContextSource();
+        $context = $contextSource->getAllAvailableContexts()[0];
+
         $productListingSnippetKeyGenerator = $this->factory->createProductListingSnippetKeyGenerator();
         $pageInfoSnippetKey = $productListingSnippetKeyGenerator->getKeyForContext(
-            $this->getFirstAvailableContext(),
+            $context,
             [PageMetaInfoSnippetContent::URL_KEY => $urlKey]
         );
 
@@ -80,9 +74,7 @@ class ProductListingTest extends AbstractIntegrationTest
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $context = $this->getFirstAvailableContext();
-        $metaJson = $this->factory->createSnippetReader()->getPageMetaSnippet($urlKey, $context);
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler($metaJson);
+        $productListingRequestHandler = $this->factory->createMetaSnippetBasedRouter()->route($request);
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 

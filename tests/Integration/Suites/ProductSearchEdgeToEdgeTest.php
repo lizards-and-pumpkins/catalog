@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -44,21 +42,6 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
-    private function getFirstAvailableContext(): Context
-    {
-        return $this->factory->createContextSource()->getAllAvailableContexts()[1];
-    }
-
-    private function getProductSearchRequestHandler(): ProductSearchRequestHandler
-    {
-        $urlKey = 'catalogsearch/result';
-        $context = $this->getFirstAvailableContext();
-
-        $metaJson = $this->factory->createSnippetReader()->getPageMetaSnippet($urlKey, $context);
-
-        return $this->factory->createProductSearchRequestHandler($metaJson);
-    }
-
     private function registerProductSearchResultMetaSnippetKeyGenerator()
     {
         $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
@@ -69,16 +52,11 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         );
     }
 
-    final protected function setUp()
-    {
-        $this->importProductListingTemplateFixtureViaApi();
-    }
-
     public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
-        $context = $this->getFirstAvailableContext();
+        $context = $this->factory->createContextSource()->getAllAvailableContexts()[1];
 
         $keyGeneratorParams = [PageMetaInfoSnippetContent::URL_KEY => 'catalogsearch/result'];
         $metaInfoSnippetKeyGenerator = $this->factory->createProductSearchResultMetaSnippetKeyGenerator();
@@ -104,12 +82,14 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
+
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $this->importCatalogFixture($this->factory, 'simple_product_armflasher-v1.xml', 'simple_product_adilette.xml');
+        $this->importProductListingTemplateFixtureViaApi();
 
         $this->registerProductSearchResultMetaSnippetKeyGenerator();
 
-        $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();
+        $productSearchResultRequestHandler = $this->factory->createMetaSnippetBasedRouter()->route($request);
         $page = $productSearchResultRequestHandler->process($request);
         $body = $page->getBody();
 

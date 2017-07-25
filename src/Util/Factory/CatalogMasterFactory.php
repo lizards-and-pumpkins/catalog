@@ -16,6 +16,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\SnippetReader;
+use LizardsAndPumpkins\Http\Routing\MetaSnippetBasedRouter;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
@@ -26,9 +27,7 @@ use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
 /**
@@ -60,8 +59,7 @@ use LizardsAndPumpkins\Translation\TranslatorRegistry;
  * @method ProductsPerPage getProductsPerPageConfig
  * @method SortBy[] getProductListingSortBy
  * @method SortBy[] getProductSearchSortBy
- * @method ProductListingRequestHandler createProductListingRequestHandler(string $metaJson)
- * @method ProductSearchRequestHandler createProductSearchRequestHandler(string $metaJson)
+ * @method MetaSnippetBasedRouter createMetaSnippetBasedRouter
  * @method TaxableCountries createTaxableCountries
  * @method SearchEngine getSearchEngine
  * @method callable getProductDetailsViewTranslatorFactory

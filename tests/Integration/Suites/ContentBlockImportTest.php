@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -36,7 +35,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->processAllMessages($this->factory);
     }
 
-    private function getProductListingPageHtmlByUrlKey(string $urlKey, Context $context): string
+    private function getProductListingPageHtmlByUrlKey(string $urlKey): string
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -45,9 +44,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             new HttpRequestBody('')
         );
 
-        $metaJson = $this->factory->createSnippetReader()->getPageMetaSnippet($urlKey, $context);
-
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler($metaJson);
+        $productListingRequestHandler = $this->factory->createMetaSnippetBasedRouter()->route($request);
         $page = $productListingRequestHandler->process($request);
 
         return $page->getBody();
@@ -204,10 +201,8 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->renderProductListingTemplate();
         $this->importCatalogFixture($this->factory, 'product_listings.xml');
 
-        $context = $this->factory->createContextBuilder()->createContext($contextDataSet);
-
-        $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale', $context));
-        $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics', $context));
+        $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));
+        $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics'));
     }
 
     public function testContentBlockSnippetIsWrittenIntoDataPoolWithTheSpecifiedDataVersion()
