@@ -77,7 +77,7 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
     public function testSnippetWithValidJsonAsContentAddedToList()
     {
         $expectedSnippetContent = [
-            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
+            ProductSearchResultMetaSnippetContent::KEY_HANDLER_CODE => $this->dummyRootSnippetCode,
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
             ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
