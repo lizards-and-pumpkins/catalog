@@ -11,6 +11,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
 use PHPUnit\Framework\TestCase;
 
@@ -77,7 +78,8 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
     public function testSnippetWithValidJsonAsContentAddedToList()
     {
         $expectedSnippetContent = [
-            ProductSearchResultMetaSnippetContent::KEY_HANDLER_CODE => $this->dummyRootSnippetCode,
+            ProductSearchResultMetaSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE,
+            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => $this->dummyRootSnippetCode,
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [$this->dummyRootSnippetCode],
             ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
