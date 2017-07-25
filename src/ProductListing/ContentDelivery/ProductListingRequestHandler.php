@@ -107,7 +107,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         
         $requestUrlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $keyGeneratorParams = [
-            PageMetaInfoSnippetContent::URL_KEY => ltrim($requestUrlKey, '/'),
+            PageMetaInfoSnippetContent::URL_KEY => $requestUrlKey,
         ];
 
         return $this->productListingPageContentBuilder->buildPageContent(

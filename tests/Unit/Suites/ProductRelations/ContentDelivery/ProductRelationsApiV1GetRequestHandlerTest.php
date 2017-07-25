@@ -36,7 +36,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
      */
     private $mockProductRelationsService;
 
-    private $testMatchingRequestPath = '/api/products/test-sku/relations/test-relation';
+    private $testMatchingRequestPath = 'api/products/test-sku/relations/test-relation';
 
     private $testNonMatchingRequestPaths = [
         '/api/products/test-sku',
