@@ -90,7 +90,6 @@ use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
 use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilder;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Import\CatalogImport;
@@ -273,7 +272,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return [
             $this->getMasterFactory()->createProductDetailMetaSnippetRenderer(),
-            $this->getMasterFactory()->createProductInListingSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
@@ -491,13 +489,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductInListingSnippetRenderer() : ProductInListingSnippetRenderer
-    {
-        return new ProductInListingSnippetRenderer(
-            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
-        );
-    }
-
     public function createPriceSnippetRenderer() : PriceSnippetRenderer
     {
         $productRegularPriceAttributeCode = AttributeCode::fromString('price');
@@ -521,17 +512,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
             $this->createContextBuilder(),
             $productSpecialPriceAttributeCode
-        );
-    }
-
-    public function createProductInListingSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductInListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
         );
     }
 

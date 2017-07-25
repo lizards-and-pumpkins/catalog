@@ -24,7 +24,6 @@ use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
@@ -208,7 +207,6 @@ class FrontendFactoryTest extends TestCase
     {
         return [
             [ProductDetailMetaSnippetRenderer::CODE],
-            [ProductInListingSnippetRenderer::CODE],
             [ProductListingTemplateSnippetRenderer::CODE],
             [PriceSnippetRenderer::PRICE],
             [PriceSnippetRenderer::SPECIAL_PRICE],

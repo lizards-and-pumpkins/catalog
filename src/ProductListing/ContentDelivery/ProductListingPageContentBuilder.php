@@ -62,7 +62,7 @@ class ProductListingPageContentBuilder
         SortBy ...$availableSortBy
     ) : HttpResponse {
         $this->addFilterNavigationSnippetToPageBuilder($productSearchResult);
-        $this->addProductsInListingToPageBuilder($productSearchResult);
+        $this->addProductsToPageBuilder($productSearchResult);
         $this->addPaginationSnippetsToPageBuilder($productSearchResult, $productsPerPage);
         $this->addSortOrderSnippetsToPageBuilder($selectedSortBy, ...$availableSortBy);
         $this->addTranslationsToPageBuilder($context);
@@ -93,7 +93,7 @@ class ProductListingPageContentBuilder
         }, []);
     }
 
-    private function addProductsInListingToPageBuilder(ProductSearchResult $productSearchResult)
+    private function addProductsToPageBuilder(ProductSearchResult $productSearchResult)
     {
         $this->addDynamicSnippetToPageBuilder('product_grid', json_encode($productSearchResult->getData()));
     }

@@ -6,13 +6,14 @@ namespace LizardsAndPumpkins\Import\RestApi;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\RestApi\TemplateApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
-class TemplateApiV1GetRequestHandlerTest extends \PHPUnit_Framework_TestCase
+class TemplateApiV1GetRequestHandlerTest extends TestCase
 {
     private $expectedTemplateCodes = [
         'product_detail_view',

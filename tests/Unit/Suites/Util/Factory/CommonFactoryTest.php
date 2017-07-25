@@ -11,7 +11,6 @@ use LizardsAndPumpkins\Context\DataVersion\ContextVersion;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
-use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
@@ -62,7 +61,6 @@ use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
@@ -126,7 +124,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
- * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
@@ -375,12 +372,6 @@ class CommonFactoryTest extends TestCase
     {
         $result = $this->commonFactory->createImageWasAddedDomainEventHandler();
         $this->assertInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
-    }
-
-    public function testSnippetKeyGeneratorIsReturned()
-    {
-        $result = $this->commonFactory->createProductInListingSnippetKeyGenerator();
-        $this->assertInstanceOf(GenericSnippetKeyGenerator::class, $result);
     }
 
     public function testCommandConsumerIsReturned()
@@ -788,7 +779,6 @@ class CommonFactoryTest extends TestCase
     {
         return [
             [ProductDetailMetaSnippetRenderer::class],
-            [ProductInListingSnippetRenderer::class],
             [PriceSnippetRenderer::class],
             [ProductJsonSnippetRenderer::class],
             [ConfigurableProductJsonSnippetRenderer::class],

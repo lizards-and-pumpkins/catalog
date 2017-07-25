@@ -19,7 +19,6 @@ use LizardsAndPumpkins\Logging\LogMessage;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Price\Price;
 use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -192,18 +191,6 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $productName,
             $productJson,
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
-        );
-
-        $listingPageKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode(
-            ProductInListingSnippetRenderer::CODE
-        );
-        $listingPageKey = $listingPageKeyGenerator->getKeyForContext($context, [Product::ID => $productId]);
-        $productListingHtml = $dataPoolReader->getSnippet($listingPageKey);
-
-        $this->assertContains(
-            $productName,
-            $productListingHtml,
-            sprintf('Product in listing snippet HTML does not contain the expected product name "%s"', $productName)
         );
 
         foreach ($this->factory->createTaxableCountries() as $country) {
