@@ -82,11 +82,11 @@ class MetaSnippetBasedRouterTest extends TestCase
         $this->assertNull($this->router->route($this->stubRequest));
     }
 
-    public function testThrowsAnExceptionIfPageMEtaSnippetDoesNotContainRequestHandlerCode()
+    public function testThrowsAnExceptionIfPageMetaSnippetDoesNotContainRequestHandlerCode()
     {
         $this->expectException(MalformedMetaSnippetException::class);
 
-        $metaJson = '{}';
+        $metaJson = '["foo"]';
         $this->mockMetaJsonSnippet($metaJson);
 
         $this->router->route($this->stubRequest);

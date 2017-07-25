@@ -38,16 +38,22 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
      */
     private $translatorRegistry;
 
+    /**
+     * @param Context $context
+     * @param PageBuilder $pageBuilder
+     * @param TranslatorRegistry $translatorRegistry
+     * @param mixed $pageMeta
+     */
     public function __construct(
         Context $context,
         PageBuilder $pageBuilder,
         TranslatorRegistry $translatorRegistry,
-        string $metaInfoJson
+        array $pageMeta
     ) {
         $this->context = $context;
         $this->pageBuilder = $pageBuilder;
         $this->translatorRegistry = $translatorRegistry;
-        $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson($metaInfoJson);;
+        $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromArray($pageMeta);
     }
 
     public function canProcess(HttpRequest $request): bool

@@ -106,20 +106,23 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         }, array_keys($containerArray));
     }
 
-    public static function fromJson(string $json) : ProductListingSnippetContent
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductListingSnippetContent
+     */
+    public static function fromArray(array $pageMeta) : ProductListingSnippetContent
     {
-        $pageInfo = self::decodeJson($json);
-        self::validateRequiredKeysArePresent($pageInfo);
+        self::validateRequiredKeysArePresent($pageMeta);
 
-        self::validateProductListingSearchCriteria($pageInfo[self::KEY_CRITERIA]);
-        $searchCriteria = self::createSearchCriteriaFromMetaInfo($pageInfo[self::KEY_CRITERIA]);
+        self::validateProductListingSearchCriteria($pageMeta[self::KEY_CRITERIA]);
+        $searchCriteria = self::createSearchCriteriaFromMetaInfo($pageMeta[self::KEY_CRITERIA]);
 
         return static::create(
             $searchCriteria,
-            $pageInfo[self::KEY_ROOT_SNIPPET_CODE],
-            $pageInfo[self::KEY_PAGE_SNIPPET_CODES],
-            $pageInfo[self::KEY_CONTAINER_SNIPPETS],
-            $pageInfo[self::KEY_PAGE_SPECIFIC_DATA]
+            $pageMeta[self::KEY_ROOT_SNIPPET_CODE],
+            $pageMeta[self::KEY_PAGE_SNIPPET_CODES],
+            $pageMeta[self::KEY_CONTAINER_SNIPPETS],
+            $pageMeta[self::KEY_PAGE_SPECIFIC_DATA]
         );
     }
 
@@ -130,22 +133,9 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
     {
         foreach (self::$requiredKeys as $key) {
             if (! array_key_exists($key, $pageInfo)) {
-                throw new \RuntimeException(sprintf('Missing key in input JSON: "%s"', $key));
+                throw new \RuntimeException(sprintf('Missing key in input array: "%s"', $key));
             }
         }
-    }
-
-    /**
-     * @param string $json
-     * @return mixed[]
-     */
-    private static function decodeJson(string $json) : array
-    {
-        $result = json_decode($json, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \OutOfBoundsException(sprintf('JSON decode error: %s', json_last_error_msg()));
-        }
-        return $result;
     }
 
     /**

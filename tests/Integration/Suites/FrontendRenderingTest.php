@@ -135,7 +135,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
             $context,
             new GenericPageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator),
             $this->factory->getTranslatorRegistry(),
-            $snippetReader->getPageMetaSnippet($urlKey, $context)
+            json_decode($snippetReader->getPageMetaSnippet($urlKey, $context), true)
         );
     }
 

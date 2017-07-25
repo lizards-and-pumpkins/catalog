@@ -101,16 +101,17 @@ class ProductListingRequestHandlerTest extends TestCase
         $stubDefaultSortBy = $this->createMock(SortBy::class);
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
 
-        $metaJson = json_encode([
+        $pageMeta = [
             ProductListingSnippetContent::KEY_HANDLER_CODE => ProductListingRequestHandler::CODE,
-            ProductListingSnippetContent::KEY_CRITERIA => CompositeSearchCriterion::createAnd(
-                new SearchCriterionAnything()
-            ),
+            ProductListingSnippetContent::KEY_CRITERIA => [
+                'condition' => CompositeSearchCriterion::AND_CONDITION,
+                'criteria' => [(new SearchCriterionAnything())->toArray()]
+            ],
             ProductListingSnippetContent::KEY_ROOT_SNIPPET_CODE => 'root-snippet-code',
             ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
             ProductListingSnippetContent::KEY_CONTAINER_SNIPPETS => [],
             ProductListingSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
-        ]);
+        ];
 
         $this->requestHandler = new ProductListingRequestHandler(
             $stubContext,
@@ -119,7 +120,7 @@ class ProductListingRequestHandlerTest extends TestCase
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest,
             $this->mockProductSearchService,
-            $metaJson,
+            $pageMeta,
             $stubDefaultSortBy
         );
     }

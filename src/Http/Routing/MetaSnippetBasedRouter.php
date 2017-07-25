@@ -52,19 +52,19 @@ class MetaSnippetBasedRouter implements HttpRouter
      */
     public function route(HttpRequest $request)
     {
-        $metaJson = $this->getMetaJson($request);
+        $pageMeta = $this->getPageMeta($request);
 
-        if ('' === $metaJson) {
+        if ([] === $pageMeta) {
             return null;
         }
 
-        $requestHandlerCode = $this->getRequestHandlerCode($metaJson);
+        $requestHandlerCode = $this->getRequestHandlerCode($pageMeta);
 
         if (! $this->isRequestHandlerRegistered($requestHandlerCode)) {
             return null;
         }
 
-        $requestHandler = $this->getRequestHandler($requestHandlerCode, $metaJson);
+        $requestHandler = $this->getRequestHandler($requestHandlerCode, $pageMeta);
 
         if (! $requestHandler->canProcess($request)) {
             return null;
@@ -73,14 +73,18 @@ class MetaSnippetBasedRouter implements HttpRouter
         return $requestHandler;
     }
 
-    private function getMetaJson(HttpRequest $request): string
+    /**
+     * @param HttpRequest $request
+     * @return mixed[]
+     */
+    private function getPageMeta(HttpRequest $request): array
     {
         $urlKey = $this->getPathWithoutPrefix($request);
 
         try {
-            return $this->snippetReader->getPageMetaSnippet($urlKey, $this->context);
+            return json_decode($this->snippetReader->getPageMetaSnippet($urlKey, $this->context), true);
         } catch (KeyNotFoundException $exception) {
-            return '';
+            return [];
         }
     }
 
@@ -89,19 +93,27 @@ class MetaSnippetBasedRouter implements HttpRouter
         return isset($this->requestHandlerRegistry[$requestHandlerCode]);
     }
 
-    private function getRequestHandler(string $requestHandlerCode, string $metaJson): HttpRequestHandler
+    /**
+     * @param string $requestHandlerCode
+     * @param mixed[] $pageMeta
+     * @return HttpRequestHandler
+     */
+    private function getRequestHandler(string $requestHandlerCode, array $pageMeta): HttpRequestHandler
     {
-        return $this->requestHandlerRegistry[$requestHandlerCode]($metaJson);
+        return $this->requestHandlerRegistry[$requestHandlerCode]($pageMeta);
     }
 
-    private function getRequestHandlerCode(string $metaInfoJson): string
+    /**
+     * @param mixed[] $pageMeta
+     * @return string
+     */
+    private function getRequestHandlerCode(array $pageMeta): string
     {
-        $metaData = json_decode($metaInfoJson, true);
-        if (! isset($metaData[PageMetaInfoSnippetContent::KEY_HANDLER_CODE])) {
+        if (! isset($pageMeta[PageMetaInfoSnippetContent::KEY_HANDLER_CODE])) {
             throw new MalformedMetaSnippetException('Request handler code is missing in meta snippet.');
         }
 
-        return $metaData[PageMetaInfoSnippetContent::KEY_HANDLER_CODE];
+        return $pageMeta[PageMetaInfoSnippetContent::KEY_HANDLER_CODE];
     }
 
     private function getPathWithoutPrefix(HttpRequest $request): string

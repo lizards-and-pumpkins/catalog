@@ -65,16 +65,16 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createContext()
         );
 
-        $router->registerHandlerCallback(ProductDetailViewRequestHandler::CODE, function (string $metaJson) {
-            return $this->createProductDetailViewRequestHandler($metaJson);
+        $router->registerHandlerCallback(ProductDetailViewRequestHandler::CODE, function (array $pageMeta) {
+            return $this->createProductDetailViewRequestHandler($pageMeta);
         });
 
-        $router->registerHandlerCallback(ProductListingRequestHandler::CODE, function (string $metaJson) {
-            return $this->createProductListingRequestHandler($metaJson);
+        $router->registerHandlerCallback(ProductListingRequestHandler::CODE, function (array $pageMeta) {
+            return $this->createProductListingRequestHandler($pageMeta);
         });
 
-        $router->registerHandlerCallback(ProductSearchRequestHandler::CODE, function (string $metaJson) {
-            return $this->createProductSearchRequestHandler($metaJson);
+        $router->registerHandlerCallback(ProductSearchRequestHandler::CODE, function (array $pageMeta) {
+            return $this->createProductSearchRequestHandler($pageMeta);
         });
 
         return $router;
@@ -90,17 +90,25 @@ class FrontendFactory implements Factory
         return new UnknownHttpRequestMethodHandler();
     }
 
-    private function createProductDetailViewRequestHandler(string $metaJson): ProductDetailViewRequestHandler
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductDetailViewRequestHandler
+     */
+    private function createProductDetailViewRequestHandler(array $pageMeta): ProductDetailViewRequestHandler
     {
         return new ProductDetailViewRequestHandler(
             $this->createContext(),
             $this->getMasterFactory()->createPageBuilder(),
             $this->getMasterFactory()->getTranslatorRegistry(),
-            $metaJson
+            $pageMeta
         );
     }
 
-    private function createProductListingRequestHandler(string $metaJson): ProductListingRequestHandler
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductListingRequestHandler
+     */
+    private function createProductListingRequestHandler(array $pageMeta): ProductListingRequestHandler
     {
         return new ProductListingRequestHandler(
             $this->createContext(),
@@ -109,13 +117,17 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest(),
             $this->getMasterFactory()->createProductSearchService(),
-            $metaJson,
+            $pageMeta,
             $this->getMasterFactory()->getProductListingDefaultSortBy(),
             ...$this->getMasterFactory()->getProductListingAvailableSortBy()
         );
     }
 
-    private function createProductSearchRequestHandler(string $metaJson): ProductSearchRequestHandler
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductSearchRequestHandler
+     */
+    private function createProductSearchRequestHandler(array $pageMeta): ProductSearchRequestHandler
     {
         return new ProductSearchRequestHandler(
             $this->createContext(),
@@ -124,7 +136,7 @@ class FrontendFactory implements Factory
             $this->getMasterFactory()->createProductListingPageRequest(),
             $this->getMasterFactory()->createProductSearchService(),
             $this->getMasterFactory()->createFullTextCriteriaBuilder(),
-            $metaJson,
+            $pageMeta,
             $this->getMasterFactory()->getProductSearchDefaultSortBy(),
             ...$this->getMasterFactory()->getProductSearchAvailableSortBy()
         );

@@ -66,6 +66,17 @@ class ProductListingRequestHandler implements HttpRequestHandler
      */
     private $urlToWebsiteMap;
 
+    /**
+     * @param Context $context
+     * @param FacetFiltersToIncludeInResult $facetFilterRequest
+     * @param UrlToWebsiteMap $urlToWebsiteMap
+     * @param ProductListingPageContentBuilder $productListingPageContentBuilder
+     * @param ProductListingPageRequest $productListingPageRequest
+     * @param ProductSearchService $productSearchService
+     * @param mixed[] $pageMeta
+     * @param SortBy $defaultSortBy
+     * @param SortBy[] ...$availableSortBy
+     */
     public function __construct(
         Context $context,
         FacetFiltersToIncludeInResult $facetFilterRequest,
@@ -73,7 +84,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
         ProductSearchService $productSearchService,
-        string $metaInfoJson,
+        array $pageMeta,
         SortBy $defaultSortBy,
         SortBy ...$availableSortBy
     ) {
@@ -83,7 +94,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->productSearchService = $productSearchService;
-        $this->pageMetaInfo = ProductListingSnippetContent::fromJson($metaInfoJson);
+        $this->pageMetaInfo = ProductListingSnippetContent::fromArray($pageMeta);
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
     }

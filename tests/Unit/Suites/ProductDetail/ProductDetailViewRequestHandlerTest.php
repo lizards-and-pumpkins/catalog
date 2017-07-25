@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use PHPUnit\Framework\TestCase;
@@ -43,11 +44,6 @@ class ProductDetailViewRequestHandlerTest extends TestCase
     private $stubRequest;
 
     /**
-     * @var string
-     */
-    private $testProductId = '123';
-
-    /**
      * @var Translator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubTranslator;
@@ -56,17 +52,6 @@ class ProductDetailViewRequestHandlerTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
      */
     private $addSnippetsToPageSpy;
-
-    private function createProductDetailPageMetaInfoContentJson(): string
-    {
-        return json_encode(ProductDetailPageMetaInfoSnippetContent::create(
-            $this->testProductId,
-            'root-snippet-code',
-            ['child-snippet1'],
-            $containers = [],
-            $pageSpecificData = []
-        )->toArray());
-    }
 
     private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
     {
@@ -86,7 +71,13 @@ class ProductDetailViewRequestHandlerTest extends TestCase
 
     final protected function setUp()
     {
-        $metaJson = $this->createProductDetailPageMetaInfoContentJson();
+        $pageMeta = [
+            ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID => 'foo',
+            PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE => 'root-snippet-code',
+            PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES => ['child-snippet1'],
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            PageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
+        ];
 
         $this->stubContext = $this->createMock(Context::class);
         $this->mockPageBuilder = $this->createMock(PageBuilder::class);
@@ -104,7 +95,7 @@ class ProductDetailViewRequestHandlerTest extends TestCase
             $this->stubContext,
             $this->mockPageBuilder,
             $stubTranslatorRegistry,
-            $metaJson
+            $pageMeta
         );
 
         $stubUrl = $this->createMock(HttpUrl::class);

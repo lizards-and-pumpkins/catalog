@@ -89,13 +89,13 @@ class ProductSearchRequestHandlerTest extends TestCase
         /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubDefaultSortBy */
         $stubDefaultSortBy = $this->createMock(SortBy::class);
 
-        $metaJson = json_encode([
+        $pageMeta = [
             ProductSearchResultMetaSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE,
             ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => 'foo',
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
             ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
             ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
-        ]);
+        ];
 
         $this->requestHandler = new ProductSearchRequestHandler(
             $stubContext,
@@ -104,7 +104,7 @@ class ProductSearchRequestHandlerTest extends TestCase
             $this->mockProductListingPageRequest,
             $stubProductSearchService,
             $stubFullTextCriteriaBuilder,
-            $metaJson,
+            $pageMeta,
             $stubDefaultSortBy
         );
 
