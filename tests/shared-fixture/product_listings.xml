@@ -43,5 +43,14 @@
                 <attribute name="brand" is="Equal">Asics</attribute>
             </criteria>
         </listing>
+        <listing url_key="" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+            </criteria>
+            <attributes>
+                <attribute name="meta_title">Homepage</attribute>
+                <attribute name="meta_description">This is a cool homepage</attribute>
+            </attributes>
+        </listing>
     </listings>
 </catalog>

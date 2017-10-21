@@ -45,8 +45,8 @@ class ProductListingTest extends AbstractIntegrationTest
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();
-        $metaSnippetJson = $dataPoolReader->getSnippet($pageInfoSnippetKey);
-        $metaSnippet = json_decode($metaSnippetJson, true);
+        $metaInfoSnippetJson = $dataPoolReader->getSnippet($pageInfoSnippetKey);
+        $metaInfoSnippet = json_decode($metaInfoSnippetJson, true);
 
         $expectedCriteriaJson = json_encode(CompositeSearchCriterion::createAnd(
             new SearchCriterionGreaterThan('stock_qty', '0'),
@@ -71,7 +71,7 @@ class ProductListingTest extends AbstractIntegrationTest
             PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
         ];
 
-        $this->assertEquals($expectedMetaSnippetContent, $metaSnippet);
+        $this->assertEquals($expectedMetaSnippetContent, $metaInfoSnippet);
     }
 
     public function testProductListingPageHtmlIsReturned()
@@ -104,5 +104,32 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertContains($expectedMetaDescription, $body);
         $this->assertContains($expectedProductName, $body);
         $this->assertNotContains($unExpectedProductName, $body);
+    }
+
+    public function testProductListingWithEmptyUrlKeyReturnsHomepage()
+    {
+        $this->factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importProductListingTemplateFixtureViaApi();
+        $this->importCatalogFixture($this->factory, 'product_listings.xml');
+
+        $request = HttpRequest::fromParameters(
+            HttpRequest::METHOD_GET,
+            HttpUrl::fromString('http://example.com/'),
+            HttpHeaders::fromArray([]),
+            new HttpRequestBody('')
+        );
+
+        $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
+        $page = $productListingRequestHandler->process($request);
+        $body = $page->getBody();
+
+        $expectedListingName = 'Homepage';
+        $expectedDescription = 'This is a cool homepage';
+
+        $this->assertSame(200, $page->getStatusCode());
+        $this->assertContains($expectedListingName, $body);
+        $this->assertContains($expectedDescription, $body);
     }
 }
