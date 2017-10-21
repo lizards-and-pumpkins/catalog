@@ -67,14 +67,13 @@ use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\Import\GenericSnippetProjector;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingProjector;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
@@ -91,7 +90,6 @@ use LizardsAndPumpkins\Import\Product\QueueImportCommands;
 use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
 use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilder;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\Import\CatalogImport;
@@ -274,7 +272,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     {
         return [
             $this->getMasterFactory()->createProductDetailMetaSnippetRenderer(),
-            $this->getMasterFactory()->createProductInListingSnippetRenderer(),
             $this->getMasterFactory()->createPriceSnippetRenderer(),
             $this->getMasterFactory()->createSpecialPriceSnippetRenderer(),
             $this->getMasterFactory()->createProductJsonSnippetRenderer(),
@@ -403,13 +400,13 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingSnippetRendererList(): array
     {
         return [
-            $this->getMasterFactory()->createProductListingSnippetRenderer(),
+            $this->getMasterFactory()->createProductListingMetaSnippetRenderer(),
         ];
     }
 
-    public function createProductListingSnippetRenderer() : ProductListingSnippetRenderer
+    public function createProductListingMetaSnippetRenderer(): ProductListingMetaSnippetRenderer
     {
-        return new ProductListingSnippetRenderer(
+        return new ProductListingMetaSnippetRenderer(
             $this->getMasterFactory()->createProductListingBlockRenderer(),
             $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createContextBuilder()
@@ -492,13 +489,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductInListingSnippetRenderer() : ProductInListingSnippetRenderer
-    {
-        return new ProductInListingSnippetRenderer(
-            $this->getMasterFactory()->createProductInListingSnippetKeyGenerator()
-        );
-    }
-
     public function createPriceSnippetRenderer() : PriceSnippetRenderer
     {
         $productRegularPriceAttributeCode = AttributeCode::fromString('price');
@@ -522,17 +512,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createSpecialPriceSnippetKeyGenerator(),
             $this->createContextBuilder(),
             $productSpecialPriceAttributeCode
-        );
-    }
-
-    public function createProductInListingSnippetKeyGenerator() : SnippetKeyGenerator
-    {
-        $usedDataParts = [Product::ID];
-
-        return new GenericSnippetKeyGenerator(
-            ProductInListingSnippetRenderer::CODE,
-            $this->getMasterFactory()->getRequiredContextParts(),
-            $usedDataParts
         );
     }
 
@@ -1184,17 +1163,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createProductListingImportCommandLocator() : ProductListingImportCommandLocator
     {
         return new ProductListingImportCommandLocator($this->getMasterFactory());
-    }
-
-    public function createProductListingDescriptionBlockRenderer() : ProductListingDescriptionBlockRenderer
-    {
-        return new ProductListingDescriptionBlockRenderer(
-            $this->getMasterFactory()->getThemeLocator(),
-            $this->getMasterFactory()->createBlockStructure(),
-            $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createBaseUrlBuilder(),
-            $this->getMasterFactory()->createAssetsBaseUrlBuilder()
-        );
     }
 
     public function createProductJsonService() : ProductJsonService

@@ -13,7 +13,7 @@ use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
 
-class ProductListingSnippetRenderer implements SnippetRenderer
+class ProductListingMetaSnippetRenderer implements SnippetRenderer
 {
     const CODE = 'product_listing_meta';
 
@@ -77,14 +77,14 @@ class ProductListingSnippetRenderer implements SnippetRenderer
         return $snippetKey;
     }
 
-    private function getPageMetaInfoSnippetContent(ProductListing $productListing): ProductListingSnippetContent
+    private function getPageMetaInfoSnippetContent(ProductListing $productListing): ProductListingMetaSnippetContent
     {
-        return ProductListingSnippetContent::create(
+        return ProductListingMetaSnippetContent::create(
             $productListing->getCriteria(),
             ProductListingTemplateSnippetRenderer::CODE,
             $this->getPageSnippetCodes($productListing),
             $containers = [],
-            $pageSpecificData = []
+            $pageSpecificData = ['product_listing_attributes' => $productListing->getAttributesList()->toArray()]
         );
     }
 

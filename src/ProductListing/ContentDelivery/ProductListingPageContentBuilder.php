@@ -62,9 +62,10 @@ class ProductListingPageContentBuilder
         SortBy ...$availableSortBy
     ) : HttpResponse {
         $this->addFilterNavigationSnippetToPageBuilder($productSearchResult);
-        $this->addProductsInListingToPageBuilder($productSearchResult);
+        $this->addProductsToPageBuilder($productSearchResult);
         $this->addPaginationSnippetsToPageBuilder($productSearchResult, $productsPerPage);
         $this->addSortOrderSnippetsToPageBuilder($selectedSortBy, ...$availableSortBy);
+        $this->addProductListingAttributesSnippetToPageBuilder($metaInfo);
         $this->addTranslationsToPageBuilder($context);
 
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
@@ -93,7 +94,7 @@ class ProductListingPageContentBuilder
         }, []);
     }
 
-    private function addProductsInListingToPageBuilder(ProductSearchResult $productSearchResult)
+    private function addProductsToPageBuilder(ProductSearchResult $productSearchResult)
     {
         $this->addDynamicSnippetToPageBuilder('product_grid', json_encode($productSearchResult->getData()));
     }
@@ -113,6 +114,14 @@ class ProductListingPageContentBuilder
     {
         $this->addDynamicSnippetToPageBuilder('available_sort_orders', json_encode($availableSortBy));
         $this->addDynamicSnippetToPageBuilder('selected_sort_order', json_encode($selectedSortBy));
+    }
+
+    private function addProductListingAttributesSnippetToPageBuilder(PageMetaInfoSnippetContent $metaSnippetContent)
+    {
+        $pageSpecificData = $metaSnippetContent->getPageSpecificData();
+        $productListingAttributes = json_encode($pageSpecificData['product_listing_attributes'] ?? []);
+
+        $this->addDynamicSnippetToPageBuilder('product_listing_attributes', $productListingAttributes);
     }
 
     /**

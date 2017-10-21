@@ -167,6 +167,11 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $page = $pageBuilder->process($request);
 
         $logger = $this->factory->getLogger();
+
+        $pageBuilder = $this->createProductDetailViewRequestHandler($context, $metaSnippetKeyGenerator);
+        
+        $page = $pageBuilder->process($this->request);
+        
         $this->failIfMessagesWhereLogged($logger);
 
         $expected = '<html><head><title>Page Title</title></head><body><h1>Headline</h1></body></html>';

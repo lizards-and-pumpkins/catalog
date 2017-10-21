@@ -15,7 +15,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetContent;
 
 class ProductListingRequestHandler implements HttpRequestHandler
 {
@@ -115,7 +115,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             ...$this->availableSortBy
         );
         $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
-        
+
         $requestUrlKey = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $keyGeneratorParams = [
             PageMetaInfoSnippetContent::URL_KEY => $requestUrlKey,

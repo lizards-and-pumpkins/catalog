@@ -184,7 +184,7 @@ class ProductListingPageContentBuilderTest extends TestCase
         );
     }
 
-    public function testProductsInListingAreAddedToPageBuilder()
+    public function testProductsAreAddedToPageBuilder()
     {
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
@@ -318,6 +318,29 @@ class ProductListingPageContentBuilderTest extends TestCase
 
         $snippetCode = 'selected_sort_order';
         $expectedSnippetValue = json_encode($selectedSortByRepresentation);
+
+        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
+    }
+
+    public function testAddsProductListingAttributesSnippetToPageBuilder()
+    {
+        $productListingAttributes = ['foo' => 'bar'];
+        $this->stubPageMetaInfoSnippetContent->method('getPageSpecificData')->willReturn([
+            'product_listing_attributes' => $productListingAttributes
+        ]);
+
+        $this->pageContentBuilder->buildPageContent(
+            $this->stubPageMetaInfoSnippetContent,
+            $this->stubContext,
+            $this->stubKeyGeneratorParams,
+            $this->stubProductSearchResult,
+            $this->stubProductsPerPage,
+            $this->stubSelectedSortBy,
+            ...$this->stubListOfAvailableSortBy
+        );
+
+        $snippetCode = 'product_listing_attributes';
+        $expectedSnippetValue = json_encode($productListingAttributes);
 
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }

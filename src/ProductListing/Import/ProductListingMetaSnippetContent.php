@@ -12,7 +12,7 @@ use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandl
 use LizardsAndPumpkins\ProductListing\Import\Exception\MalformedSearchCriteriaMetaException;
 use LizardsAndPumpkins\Util\SnippetCodeValidator;
 
-class ProductListingSnippetContent implements PageMetaInfoSnippetContent
+class ProductListingMetaSnippetContent implements PageMetaInfoSnippetContent
 {
     const KEY_CRITERIA = 'product_selection_criteria';
 
@@ -75,7 +75,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      * @param string[] $pageSnippetCodes
      * @param array[] $containerData
      * @param array[] $pageSpecificData
-     * @return ProductListingSnippetContent
+     * @return ProductListingMetaSnippetContent
      */
     public static function create(
         SearchCriteria $selectionCriteria,
@@ -83,7 +83,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
         array $pageSnippetCodes,
         array $containerData,
         array $pageSpecificData
-    ) : ProductListingSnippetContent {
+    ) : ProductListingMetaSnippetContent {
         SnippetCodeValidator::validate($rootSnippetCode);
 
         if (! in_array($rootSnippetCode, $pageSnippetCodes)) {
@@ -110,7 +110,7 @@ class ProductListingSnippetContent implements PageMetaInfoSnippetContent
      * @param mixed[] $pageMeta
      * @return ProductListingSnippetContent
      */
-    public static function fromArray(array $pageMeta) : ProductListingSnippetContent
+    public static function fromArray(array $pageMeta) : ProductListingMetaSnippetContent
     {
         self::validateRequiredKeysArePresent($pageMeta);
 

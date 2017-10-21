@@ -12,13 +12,13 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetContent;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything
@@ -50,6 +50,31 @@ class ProductListingRequestHandlerTest extends TestCase
      * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
      */
     private $stubUrlToWebsiteMap;
+
+    private function prepareMockDataPoolReader(int $numberOfResults)
+    {
+        /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
+        $stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
+        $stubSelectionCriteria->method('jsonSerialize')
+            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
+        $pageSnippetCodes = ['child-snippet1'];
+
+        $testMetaInfoSnippetJson = json_encode(ProductListingMetaSnippetContent::create(
+            $stubSelectionCriteria,
+            'root-snippet-code',
+            $pageSnippetCodes,
+            $containers = [],
+            $pageSpecificData = []
+        )->toArray());
+
+        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
+        $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn($numberOfResults);
+
+        $this->mockDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
+        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
+            [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
+        ]);
+    }
 
     /**
      * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject

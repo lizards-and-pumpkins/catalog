@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\ContentBlock;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
@@ -30,18 +29,6 @@ class ContentBlockSnippetRendererTest extends TestCase
     private $renderer;
 
     /**
-     * @return ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubContextBuilder(): ContextBuilder
-    {
-        $stubContext = $this->createMock(Context::class);
-        $stubContextBuilder = $this->createMock(ContextBuilder::class);
-        $stubContextBuilder->method('createContext')->willReturn($stubContext);
-
-        return $stubContextBuilder;
-    }
-
-    /**
      * @param string $contentBlockContent
      * @return ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -58,9 +45,7 @@ class ContentBlockSnippetRendererTest extends TestCase
     final protected function setUp()
     {
         $this->stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
-        $stubContextBuilder = $this->createStubContextBuilder();
-
-        $this->renderer = new ContentBlockSnippetRenderer($this->stubSnippetKeyGeneratorLocator, $stubContextBuilder);
+        $this->renderer = new ContentBlockSnippetRenderer($this->stubSnippetKeyGeneratorLocator);
     }
 
     public function testSnippetRendererInterfaceIsImplemented()

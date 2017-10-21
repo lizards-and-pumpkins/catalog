@@ -23,12 +23,12 @@ use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
@@ -202,11 +202,10 @@ class FrontendFactoryTest extends TestCase
     {
         return [
             [ProductDetailMetaSnippetRenderer::CODE],
-            [ProductInListingSnippetRenderer::CODE],
             [ProductListingTemplateSnippetRenderer::CODE],
             [PriceSnippetRenderer::PRICE],
             [PriceSnippetRenderer::SPECIAL_PRICE],
-            [ProductListingSnippetRenderer::CODE],
+            [ProductListingMetaSnippetRenderer::CODE],
             [ProductSearchResultMetaSnippetRenderer::CODE],
             [ProductJsonSnippetRenderer::CODE],
             [ConfigurableProductJsonSnippetRenderer::VARIATION_ATTRIBUTES_CODE],

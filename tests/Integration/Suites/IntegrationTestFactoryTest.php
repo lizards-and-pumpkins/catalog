@@ -37,7 +37,7 @@ class IntegrationTestFactoryTest extends TestCase
     public function setUp()
     {
         $masterFactory = new CatalogMasterFactory();
-        $this->factory = new IntegrationTestFactory($masterFactory);
+        $this->factory = new IntegrationTestFactory();
         $masterFactory->register($this->factory);
         $masterFactory->register(new CommonFactory);
     }
