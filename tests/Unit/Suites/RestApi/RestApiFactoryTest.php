@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestH
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\ProductImportApiV1PutRequestHandler;
+use LizardsAndPumpkins\Import\RestApi\TemplateApiV1GetRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
@@ -49,6 +50,18 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContext
  * @uses   \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
+ * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
+ * @uses   \LizardsAndPumpkins\Import\RestApi\TemplateApiV1GetRequestHandler
+ * @uses   \LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
+ * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
+ * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
+ * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class RestApiFactoryTest extends TestCase
 {
@@ -105,18 +118,19 @@ class RestApiFactoryTest extends TestCase
     /**
      * @return array[]
      */
-    public function registeredRequestHandlerProvider() : array
+    public function registeredRequestHandlerProvider(): array
     {
         return [
-            'put_catalog_import v1'  => ['put_catalog_import', 1],
-            'put_catalog_import v2'  => ['put_catalog_import', 2],
-            'put_product_import v1'  => ['put_product_import', 1],
-            'put_content_blocks v1'  => ['put_content_blocks', 1],
-            'put_content_blocks v2'  => ['put_content_blocks', 2],
-            'put_templates v1'       => ['put_templates', 1],
-            'put_templates v2'       => ['put_templates', 2],
+            'put_catalog_import v1' => ['put_catalog_import', 1],
+            'put_catalog_import v2' => ['put_catalog_import', 2],
+            'put_product_import v1' => ['put_product_import', 1],
+            'put_content_blocks v1' => ['put_content_blocks', 1],
+            'put_content_blocks v2' => ['put_content_blocks', 2],
+            'put_templates v1' => ['put_templates', 1],
+            'put_templates v2' => ['put_templates', 2],
             'get_current_version v1' => ['get_current_version', 1],
             'get_current_version v2' => ['put_current_version', 1],
+            'get_templates v1' => ['get_templates', 1],
         ];
     }
 
@@ -178,5 +192,11 @@ class RestApiFactoryTest extends TestCase
     {
         $result = $this->factory->createProductJsonToXml();
         $this->assertInstanceOf(ProductJsonToXml::class, $result);
+    }
+
+    public function testReturnsTemplateApiV1GetRequestHandler()
+    {
+        $result = $this->factory->createTemplateApiV1GetRequestHandler();
+        $this->assertInstanceOf(TemplateApiV1GetRequestHandler::class, $result);
     }
 }

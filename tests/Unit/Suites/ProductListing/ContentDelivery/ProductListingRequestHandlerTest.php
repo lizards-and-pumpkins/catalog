@@ -16,13 +16,13 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetContent;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetContent
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetContent
  * @uses   \LizardsAndPumpkins\ProductSearch\QueryOptions
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCriterion
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
@@ -72,7 +72,7 @@ class ProductListingRequestHandlerTest extends TestCase
             ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
         $pageSnippetCodes = ['child-snippet1'];
 
-        $testMetaInfoSnippetJson = json_encode(ProductListingSnippetContent::create(
+        $testMetaInfoSnippetJson = json_encode(ProductListingMetaSnippetContent::create(
             $stubSelectionCriteria,
             'root-snippet-code',
             $pageSnippetCodes,

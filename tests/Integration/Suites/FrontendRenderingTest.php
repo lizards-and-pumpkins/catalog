@@ -19,7 +19,6 @@ use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
@@ -134,7 +133,6 @@ class FrontendRenderingTest extends AbstractIntegrationTest
 
     private function createProductDetailViewRequestHandler(
         Context $context,
-        Logger $logger,
         SnippetKeyGenerator $productDetailPageMetaSnippetKeyGenerator
     ) : ProductDetailViewRequestHandler {
         $dataPoolReader = $this->factory->createDataPoolReader();
@@ -142,7 +140,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         return new ProductDetailViewRequestHandler(
             $context,
             $dataPoolReader,
-            new GenericPageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator, $logger),
+            new GenericPageBuilder($dataPoolReader, $this->snippetKeyGeneratorLocator),
             new IntegrationTestUrlToWebsiteMap(),
             $this->factory->getTranslatorRegistry(),
             $productDetailPageMetaSnippetKeyGenerator
@@ -175,7 +173,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
 
         $logger = $this->factory->getLogger();
 
-        $pageBuilder = $this->createProductDetailViewRequestHandler($context, $logger, $metaSnippetKeyGenerator);
+        $pageBuilder = $this->createProductDetailViewRequestHandler($context, $metaSnippetKeyGenerator);
         
         $page = $pageBuilder->process($this->request);
         
