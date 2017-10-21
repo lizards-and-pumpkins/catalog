@@ -15,6 +15,7 @@ use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventH
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\SnippetReader;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
@@ -285,7 +286,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductJsonSnippetKeyGenerator() : GenericSnippetKeyGenerator
+    public function createProductJsonSnippetKeyGenerator() : SnippetKeyGenerator
     {
         $usedDataParts = [Product::ID];
 
@@ -417,7 +418,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductListingMetaSnippetRenderer::CODE,
+            'meta',
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -482,7 +483,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductDetailMetaSnippetRenderer::CODE,
+            'meta',
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );
@@ -749,6 +750,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
+    public function createSnippetReader() : SnippetReader
+    {
+        return new SnippetReader(
+            $this->getMasterFactory()->getKeyValueStore(),
+            ...$this->getMasterFactory()->getRequiredContextParts()
+        );
+    }
+
     public function getLogger() : Logger
     {
         if (null === $this->logger) {
@@ -979,10 +988,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createProductSearchResultMetaSnippetKeyGenerator() : SnippetKeyGenerator
     {
-        $usedDataParts = [];
+        $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
         return new GenericSnippetKeyGenerator(
-            ProductSearchResultMetaSnippetRenderer::CODE,
+            'meta',
             $this->getMasterFactory()->getRequiredContextParts(),
             $usedDataParts
         );

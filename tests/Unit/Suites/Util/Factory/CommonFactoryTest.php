@@ -13,6 +13,7 @@ use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventH
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SnippetReader;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
@@ -123,6 +124,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\DataPool\SnippetReader
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
@@ -876,5 +878,10 @@ class CommonFactoryTest extends TestCase
     {
         $result = $this->commonFactory->createEnrichProductJsonWithPrices();
         $this->assertInstanceOf(EnrichProductJsonWithPrices::class, $result);
+    }
+
+    public function testReturnsSnippetReader()
+    {
+        $this->assertInstanceOf(SnippetReader::class, $this->commonFactory->createSnippetReader());
     }
 }

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\FullTextCriteriaBuilder;
@@ -17,27 +15,17 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 
 class ProductSearchRequestHandler implements HttpRequestHandler
 {
+    const CODE = 'product_search';
     const SEARCH_RESULTS_SLUG = 'catalogsearch/result';
     const QUERY_STRING_PARAMETER_NAME = 'q';
-
-    /**
-     * @var DataPoolReader
-     */
-    private $dataPoolReader;
 
     /**
      * @var Context
      */
     private $context;
-
-    /**
-     * @var SnippetKeyGenerator
-     */
-    private $metaInfoSnippetKeyGenerator;
 
     /**
      * @var FacetFiltersToIncludeInResult
@@ -65,6 +53,11 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $fullTextCriteriaBuilder;
 
     /**
+     * @var ProductSearchResultMetaSnippetContent
+     */
+    private $pageMetaInfo;
+
+    /**
      * @var SortBy
      */
     private $defaultSortBy;
@@ -75,34 +68,36 @@ class ProductSearchRequestHandler implements HttpRequestHandler
     private $availableSortBy;
 
     /**
-     * @var UrlToWebsiteMap
+     * @param Context $context
+     * @param FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult
+     * @param ProductListingPageContentBuilder $productListingPageContentBuilder
+     * @param ProductListingPageRequest $productListingPageRequest
+     * @param ProductSearchService $productSearchService
+     * @param FullTextCriteriaBuilder $fullTextCriteriaBuilder
+     * @param mixed[] $pageMeta
+     * @param SortBy $defaultSortBy
+     * @param SortBy[] ...$availableSortBy
      */
-    private $urlToWebsiteMap;
-
     public function __construct(
         Context $context,
-        DataPoolReader $dataPoolReader,
-        SnippetKeyGenerator $metaInfoSnippetKeyGenerator,
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
-        UrlToWebsiteMap $urlToWebsiteMap,
         ProductListingPageContentBuilder $productListingPageContentBuilder,
         ProductListingPageRequest $productListingPageRequest,
         ProductSearchService $productSearchService,
         FullTextCriteriaBuilder $fullTextCriteriaBuilder,
+        array $pageMeta,
         SortBy $defaultSortBy,
         SortBy ...$availableSortBy
     ) {
-        $this->dataPoolReader = $dataPoolReader;
         $this->context = $context;
-        $this->metaInfoSnippetKeyGenerator = $metaInfoSnippetKeyGenerator;
         $this->facetFiltersToIncludeInResult = $facetFiltersToIncludeInResult;
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->productSearchService = $productSearchService;
         $this->fullTextCriteriaBuilder = $fullTextCriteriaBuilder;
+        $this->pageMetaInfo = ProductSearchResultMetaSnippetContent::fromArray($pageMeta);
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
-        $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
     public function canProcess(HttpRequest $request) : bool
@@ -126,10 +121,8 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         );
         $productSearchResult = $this->getSearchResults($request, $productsPerPage, $selectedSortBy);
 
-        $metaInfoSnippetContent = $this->getPageMetaInfo();
-
         return $this->productListingPageContentBuilder->buildPageContent(
-            $metaInfoSnippetContent,
+            $this->pageMetaInfo,
             $this->context,
             $keyGeneratorParams = [],
             $productSearchResult,
@@ -141,13 +134,6 @@ class ProductSearchRequestHandler implements HttpRequestHandler
 
     private function isValidSearchRequest(HttpRequest $request) : bool
     {
-        $pathWithoutWebsitePrefix = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
-        $urlPathWithoutTrailingSlash = rtrim($pathWithoutWebsitePrefix, '/');
-
-        if (self::SEARCH_RESULTS_SLUG !== $urlPathWithoutTrailingSlash) {
-            return false;
-        }
-
         if (HttpRequest::METHOD_GET !== $request->getMethod()) {
             return false;
         }
@@ -179,14 +165,5 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $criteria = $this->fullTextCriteriaBuilder->createFromString($queryString);
 
         return $this->productSearchService->query($criteria, $queryOptions);
-    }
-
-    private function getPageMetaInfo() : ProductSearchResultMetaSnippetContent
-    {
-        $metaInfoSnippetKey = $this->metaInfoSnippetKeyGenerator->getKeyForContext($this->context, []);
-        $metaInfoSnippetJson = $this->dataPoolReader->getSnippet($metaInfoSnippetKey);
-        $metaInfoSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($metaInfoSnippetJson);
-
-        return $metaInfoSnippetContent;
     }
 }

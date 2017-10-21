@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Http\Routing;
 
 use LizardsAndPumpkins\Http\HttpRequest;
 
-class GenericHttpRouter implements HttpRouter
+class UnknownHttpRequestMethodRouter implements HttpRouter
 {
     /**
      * @var HttpRequestHandler

@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Http\ContentDelivery;
 
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodRouter;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
+use LizardsAndPumpkins\Http\Routing\HttpRouter;
+use LizardsAndPumpkins\Http\Routing\MetaSnippetBasedRouter;
 use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler;
 use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
@@ -19,9 +22,7 @@ use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\Pr
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
-use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Http\Routing\HttpRouter;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
@@ -55,14 +56,32 @@ class FrontendFactory implements Factory
         $this->request = $request;
     }
 
-    public function createProductDetailViewRouter() : HttpRouter
+    public function createMetaSnippetBasedRouter(): HttpRouter
     {
-        return new GenericHttpRouter($this->createProductDetailViewRequestHandler());
+        $router = new MetaSnippetBasedRouter(
+            $this->getMasterFactory()->createUrlToWebsiteMap(),
+            $this->getMasterFactory()->createSnippetReader(),
+            $this->getMasterFactory()->createContext()
+        );
+
+        $router->registerHandlerCallback(ProductDetailViewRequestHandler::CODE, function (array $pageMeta) {
+            return $this->createProductDetailViewRequestHandler($pageMeta);
+        });
+
+        $router->registerHandlerCallback(ProductListingRequestHandler::CODE, function (array $pageMeta) {
+            return $this->createProductListingRequestHandler($pageMeta);
+        });
+
+        $router->registerHandlerCallback(ProductSearchRequestHandler::CODE, function (array $pageMeta) {
+            return $this->createProductSearchRequestHandler($pageMeta);
+        });
+
+        return $router;
     }
 
     public function createUnknownHttpRequestMethodRouter(): HttpRouter
     {
-        return new GenericHttpRouter($this->createUnknownHttpRequestMethodHandler());
+        return new UnknownHttpRequestMethodRouter($this->createUnknownHttpRequestMethodHandler());
     }
 
     public function createUnknownHttpRequestMethodHandler(): HttpRequestHandler
@@ -70,52 +89,71 @@ class FrontendFactory implements Factory
         return new UnknownHttpRequestMethodHandler();
     }
 
-    public function createProductListingRouter() : HttpRouter
-    {
-        return new GenericHttpRouter($this->createProductListingRequestHandler());
-    }
-
-    private function createProductDetailViewRequestHandler() : ProductDetailViewRequestHandler
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductDetailViewRequestHandler
+     */
+    private function createProductDetailViewRequestHandler(array $pageMeta): ProductDetailViewRequestHandler
     {
         return new ProductDetailViewRequestHandler(
             $this->createContext(),
-            $this->getMasterFactory()->createDataPoolReader(),
             $this->getMasterFactory()->createPageBuilder(),
-            $this->getMasterFactory()->createUrlToWebsiteMap(),
             $this->getMasterFactory()->getTranslatorRegistry(),
-            $this->getMasterFactory()->createProductDetailPageMetaSnippetKeyGenerator()
+            $pageMeta
         );
     }
 
-    public function createProductListingRequestHandler() : ProductListingRequestHandler
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductListingRequestHandler
+     */
+    private function createProductListingRequestHandler(array $pageMeta): ProductListingRequestHandler
     {
         return new ProductListingRequestHandler(
             $this->createContext(),
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductListingSnippetKeyGenerator(),
             $this->getMasterFactory()->createProductListingFacetFiltersToIncludeInResult(),
             $this->getMasterFactory()->createUrlToWebsiteMap(),
             $this->getMasterFactory()->createProductListingPageContentBuilder(),
             $this->getMasterFactory()->createProductListingPageRequest(),
             $this->getMasterFactory()->createProductSearchService(),
+            $pageMeta,
             $this->getMasterFactory()->getProductListingDefaultSortBy(),
             ...$this->getMasterFactory()->getProductListingAvailableSortBy()
         );
     }
 
-    public function createProductListingFacetFiltersToIncludeInResult() : FacetFiltersToIncludeInResult
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductSearchRequestHandler
+     */
+    private function createProductSearchRequestHandler(array $pageMeta): ProductSearchRequestHandler
+    {
+        return new ProductSearchRequestHandler(
+            $this->createContext(),
+            $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
+            $this->getMasterFactory()->createProductListingPageContentBuilder(),
+            $this->getMasterFactory()->createProductListingPageRequest(),
+            $this->getMasterFactory()->createProductSearchService(),
+            $this->getMasterFactory()->createFullTextCriteriaBuilder(),
+            $pageMeta,
+            $this->getMasterFactory()->getProductSearchDefaultSortBy(),
+            ...$this->getMasterFactory()->getProductSearchAvailableSortBy()
+        );
+    }
+
+    public function createProductListingFacetFiltersToIncludeInResult(): FacetFiltersToIncludeInResult
     {
         $facetFields = $this->getMasterFactory()->getProductListingFacetFilterRequestFields($this->createContext());
         return new FacetFiltersToIncludeInResult(...$facetFields);
     }
 
-    public function createProductSearchFacetFiltersToIncludeInResult() : FacetFiltersToIncludeInResult
+    public function createProductSearchFacetFiltersToIncludeInResult(): FacetFiltersToIncludeInResult
     {
         $facetFields = $this->getMasterFactory()->getProductSearchFacetFilterRequestFields($this->createContext());
         return new FacetFiltersToIncludeInResult(...$facetFields);
     }
 
-    public function createProductListingPageContentBuilder() : ProductListingPageContentBuilder
+    public function createProductListingPageContentBuilder(): ProductListingPageContentBuilder
     {
         return new ProductListingPageContentBuilder(
             $this->getMasterFactory()->createPageBuilder(),
@@ -124,7 +162,7 @@ class FrontendFactory implements Factory
         );
     }
 
-    public function createProductListingPageRequest() : ProductListingPageRequest
+    public function createProductListingPageRequest(): ProductListingPageRequest
     {
         return new ProductListingPageRequest(
             $this->getMasterFactory()->getProductsPerPageConfig(),
@@ -132,7 +170,7 @@ class FrontendFactory implements Factory
         );
     }
 
-    public function createSnippetKeyGeneratorLocator() : SnippetKeyGeneratorLocator
+    public function createSnippetKeyGeneratorLocator(): SnippetKeyGeneratorLocator
     {
         return new CompositeSnippetKeyGeneratorLocatorStrategy(
             $this->getMasterFactory()->createContentBlockSnippetKeyGeneratorLocatorStrategy(),
@@ -140,7 +178,7 @@ class FrontendFactory implements Factory
         );
     }
 
-    public function createRegistrySnippetKeyGeneratorLocatorStrategy() : RegistrySnippetKeyGeneratorLocatorStrategy
+    public function createRegistrySnippetKeyGeneratorLocatorStrategy(): RegistrySnippetKeyGeneratorLocatorStrategy
     {
         $registrySnippetKeyGeneratorLocator = new RegistrySnippetKeyGeneratorLocatorStrategy;
         $registrySnippetKeyGeneratorLocator->register(
@@ -207,15 +245,16 @@ class FrontendFactory implements Factory
         return $registrySnippetKeyGeneratorLocator;
     }
 
-    public function getSnippetKeyGeneratorLocator() : SnippetKeyGeneratorLocator
+    public function getSnippetKeyGeneratorLocator(): SnippetKeyGeneratorLocator
     {
         if (is_null($this->snippetKeyGeneratorLocator)) {
             $this->snippetKeyGeneratorLocator = $this->createSnippetKeyGeneratorLocator();
         }
+
         return $this->snippetKeyGeneratorLocator;
     }
 
-    public function createPageBuilder() : PageBuilder
+    public function createPageBuilder(): PageBuilder
     {
         $pageBuilder = new GenericPageBuilder(
             $this->getMasterFactory()->createDataPoolReader(),
@@ -252,46 +291,24 @@ class FrontendFactory implements Factory
         );
     }
 
-    public function createContext() : Context
+    public function createContext(): Context
     {
         /** @var ContextBuilder $contextBuilder */
         $contextBuilder = $this->getMasterFactory()->createContextBuilder();
         return $contextBuilder->createFromRequest($this->request);
     }
 
-    public function createProductSearchResultRouter() : HttpRouter
-    {
-        return new GenericHttpRouter($this->createProductSearchRequestHandler());
-    }
-
-    public function createProductSearchRequestHandler() : ProductSearchRequestHandler
-    {
-        return new ProductSearchRequestHandler(
-            $this->createContext(),
-            $this->getMasterFactory()->createDataPoolReader(),
-            $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
-            $this->getMasterFactory()->createProductSearchFacetFiltersToIncludeInResult(),
-            $this->getMasterFactory()->createUrlToWebsiteMap(),
-            $this->getMasterFactory()->createProductListingPageContentBuilder(),
-            $this->getMasterFactory()->createProductListingPageRequest(),
-            $this->getMasterFactory()->createProductSearchService(),
-            $this->getMasterFactory()->createFullTextCriteriaBuilder(),
-            $this->getMasterFactory()->getProductSearchDefaultSortBy(),
-            ...$this->getMasterFactory()->getProductSearchAvailableSortBy()
-        );
-    }
-
-    public function createPriceSnippetTransformation() : SimpleEuroPriceSnippetTransformation
+    public function createPriceSnippetTransformation(): SimpleEuroPriceSnippetTransformation
     {
         return new SimpleEuroPriceSnippetTransformation();
     }
 
-    public function createPricesJsonSnippetTransformation() : PricesJsonSnippetTransformation
+    public function createPricesJsonSnippetTransformation(): PricesJsonSnippetTransformation
     {
         return new PricesJsonSnippetTransformation($this->getMasterFactory()->createPriceSnippetTransformation());
     }
 
-    public function createProductJsonSnippetTransformation() : ProductJsonSnippetTransformation
+    public function createProductJsonSnippetTransformation(): ProductJsonSnippetTransformation
     {
         return new ProductJsonSnippetTransformation($this->getMasterFactory()->createEnrichProductJsonWithPrices());
     }

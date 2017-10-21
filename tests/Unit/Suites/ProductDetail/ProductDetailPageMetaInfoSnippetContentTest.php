@@ -90,14 +90,9 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 
     public function testFromJsonConstructorIsPresent()
     {
-        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($this->pageMetaInfo->toArray()));
+        $pageMeta = json_decode(json_encode($this->pageMetaInfo->toArray()), true);
+        $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromArray($pageMeta);
         $this->assertInstanceOf(ProductDetailPageMetaInfoSnippetContent::class, $pageMetaInfo);
-    }
-
-    public function testExceptionIsThrownInCaseOfJsonErrors()
-    {
-        $this->expectException(\OutOfBoundsException::class);
-        ProductDetailPageMetaInfoSnippetContent::fromJson('malformed-json');
     }
 
     /**
@@ -106,10 +101,12 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
     public function testExceptionIsThrownIfRequiredKeyIsMissing(string $key)
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Missing key in input JSON');
-        $pageInfo = $this->pageMetaInfo->toArray();
-        unset($pageInfo[$key]);
-        ProductDetailPageMetaInfoSnippetContent::fromJson(json_encode($pageInfo));
+        $this->expectExceptionMessage('Missing key in input array');
+
+        $pageMeta = $this->pageMetaInfo->toArray();
+        unset($pageMeta[$key]);
+
+        ProductDetailPageMetaInfoSnippetContent::fromArray($pageMeta);
     }
 
     /**

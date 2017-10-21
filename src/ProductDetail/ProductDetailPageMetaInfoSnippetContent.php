@@ -102,17 +102,20 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
         }, array_keys($containerArray));
     }
 
-    public static function fromJson(string $json): ProductDetailPageMetaInfoSnippetContent
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductDetailPageMetaInfoSnippetContent
+     */
+    public static function fromArray(array $pageMeta): ProductDetailPageMetaInfoSnippetContent
     {
-        $pageInfo = self::decodeJson($json);
-        self::validateRequiredKeysArePresent($pageInfo);
+        self::validateRequiredKeysArePresent($pageMeta);
 
         return static::create(
-            $pageInfo[self::KEY_PRODUCT_ID],
-            $pageInfo[self::KEY_ROOT_SNIPPET_CODE],
-            $pageInfo[self::KEY_PAGE_SNIPPET_CODES],
-            $pageInfo[self::KEY_CONTAINER_SNIPPETS],
-            $pageInfo[self::KEY_PAGE_SPECIFIC_DATA]
+            $pageMeta[self::KEY_PRODUCT_ID],
+            $pageMeta[self::KEY_ROOT_SNIPPET_CODE],
+            $pageMeta[self::KEY_PAGE_SNIPPET_CODES],
+            $pageMeta[self::KEY_CONTAINER_SNIPPETS],
+            $pageMeta[self::KEY_PAGE_SPECIFIC_DATA]
         );
     }
 
@@ -131,24 +134,9 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
 
         foreach ($requiredKeys as $key) {
             if (! array_key_exists($key, $pageInfo)) {
-                throw new \RuntimeException(sprintf('Missing key in input JSON: "%s"', $key));
+                throw new \RuntimeException(sprintf('Missing key in input array: "%s"', $key));
             }
         }
-    }
-
-    /**
-     * @param string $json
-     * @return mixed[]
-     */
-    private static function decodeJson(string $json): array
-    {
-        $result = json_decode($json, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \OutOfBoundsException(sprintf('JSON decode error: %s', json_last_error_msg()));
-        }
-
-        return $result;
     }
 
     /**
@@ -157,6 +145,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     public function toArray(): array
     {
         return [
+            self::KEY_HANDLER_CODE => ProductDetailViewRequestHandler::CODE,
             self::KEY_PRODUCT_ID => $this->productId,
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,

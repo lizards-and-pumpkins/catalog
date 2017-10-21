@@ -6,11 +6,13 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextSource;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchResultMetaSnippetContent;
 
 class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
@@ -65,7 +67,8 @@ class ProductSearchResultMetaSnippetRenderer implements SnippetRenderer
         $rootSnippetCode = $this->blockRenderer->getRootSnippetCode();
         $pageSnippetCodes = $this->blockRenderer->getNestedSnippetCodes();
 
-        $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, []);
+        $keyGeneratorParams = [PageMetaInfoSnippetContent::URL_KEY => ProductSearchRequestHandler::SEARCH_RESULTS_SLUG];
+        $metaSnippetKey = $this->snippetKeyGenerator->getKeyForContext($context, $keyGeneratorParams);
         $metaSnippetContent = json_encode($this->getMetaSnippetContent($rootSnippetCode, $pageSnippetCodes)->toArray());
 
         return Snippet::create($metaSnippetKey, $metaSnippetContent);

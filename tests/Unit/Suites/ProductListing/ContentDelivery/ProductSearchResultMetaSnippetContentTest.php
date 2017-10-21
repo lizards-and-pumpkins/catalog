@@ -87,8 +87,8 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
 
     public function testCanBeCreatedFromJson()
     {
-        $jsonEncodedPageMetaInfo = json_encode($this->metaSnippetContent->toArray());
-        $metaSnippetContent = ProductSearchResultMetaSnippetContent::fromJson($jsonEncodedPageMetaInfo);
+        $metaSnippetContent = ProductSearchResultMetaSnippetContent::fromArray($this->metaSnippetContent->toArray());
+
         $this->assertInstanceOf(ProductSearchResultMetaSnippetContent::class, $metaSnippetContent);
     }
 
@@ -97,13 +97,13 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
      */
     public function testExceptionIsThrownIfJsonDoesNotContainRequiredData(string $missingKey)
     {
-        $pageMetaInfo = $this->metaSnippetContent->toArray();
-        unset($pageMetaInfo[$missingKey]);
+        $pageMeta = $this->metaSnippetContent->toArray();
+        unset($pageMeta[$missingKey]);
 
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage(sprintf('Missing "%s" in input JSON', $missingKey));
+        $this->expectExceptionMessage(sprintf('Missing "%s" in input array', $missingKey));
 
-        ProductSearchResultMetaSnippetContent::fromJson(json_encode($pageMetaInfo));
+        ProductSearchResultMetaSnippetContent::fromArray($pageMeta);
     }
 
     /**
@@ -117,12 +117,6 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
             [ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS],
             [ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA],
         ];
-    }
-
-    public function testExceptionIsThrownInCaseOfJsonErrors()
-    {
-        $this->expectException(\OutOfBoundsException::class);
-        ProductSearchResultMetaSnippetContent::fromJson('malformed-json');
     }
 
     public function testItReturnsThePageSnippetContainers()

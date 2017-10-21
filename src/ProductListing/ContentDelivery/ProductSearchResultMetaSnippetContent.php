@@ -83,21 +83,19 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
         }, array_keys($containerArray));
     }
 
-    public static function fromJson(string $json): ProductSearchResultMetaSnippetContent
+    /**
+     * @param mixed[] $pageMeta
+     * @return ProductSearchResultMetaSnippetContent
+     */
+    public static function fromArray(array $pageMeta): ProductSearchResultMetaSnippetContent
     {
-        $pageMetaInfo = json_decode($json, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \OutOfBoundsException(sprintf('JSON decode error: %s', json_last_error_msg()));
-        }
-
-        self::validateRequiredKeysArePresent($pageMetaInfo);
+        self::validateRequiredKeysArePresent($pageMeta);
 
         return self::create(
-            $pageMetaInfo[self::KEY_ROOT_SNIPPET_CODE],
-            $pageMetaInfo[self::KEY_PAGE_SNIPPET_CODES],
-            $pageMetaInfo[self::KEY_CONTAINER_SNIPPETS],
-            $pageMetaInfo[self::KEY_PAGE_SPECIFIC_DATA]
+            $pageMeta[self::KEY_ROOT_SNIPPET_CODE],
+            $pageMeta[self::KEY_PAGE_SNIPPET_CODES],
+            $pageMeta[self::KEY_CONTAINER_SNIPPETS],
+            $pageMeta[self::KEY_PAGE_SPECIFIC_DATA]
         );
     }
 
@@ -107,6 +105,7 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     public function toArray(): array
     {
         return [
+            self::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE,
             self::KEY_ROOT_SNIPPET_CODE => $this->rootSnippetCode,
             self::KEY_PAGE_SNIPPET_CODES => $this->pageSnippetCodes,
             self::KEY_CONTAINER_SNIPPETS => $this->getContainerSnippets(),
@@ -159,7 +158,7 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
 
         foreach ($requiredKeys as $key) {
             if (! array_key_exists($key, $pageMetaInfo)) {
-                throw new \RuntimeException(sprintf('Missing "%s" in input JSON', $key));
+                throw new \RuntimeException(sprintf('Missing "%s" in input array', $key));
             }
         }
     }

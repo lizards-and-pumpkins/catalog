@@ -9,10 +9,10 @@ use LizardsAndPumpkins\Http\HttpUrl;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
+ * @covers \LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodRouter
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  */
-class GenericHttpRouterTest extends TestCase
+class UnknownHttpRequestMethodRouterTest extends TestCase
 {
     /**
      * @var HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject
@@ -20,14 +20,14 @@ class GenericHttpRouterTest extends TestCase
     private $mockRequestHandler;
 
     /**
-     * @var GenericHttpRouter
+     * @var UnknownHttpRequestMethodRouter
      */
     private $router;
 
     public function setUp()
     {
         $this->mockRequestHandler = $this->createMock(HttpRequestHandler::class);
-        $this->router = new GenericHttpRouter($this->mockRequestHandler);
+        $this->router = new UnknownHttpRequestMethodRouter($this->mockRequestHandler);
     }
 
     public function testHttpRouterInterfaceIsImplemented()

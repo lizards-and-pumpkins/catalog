@@ -44,7 +44,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
             new HttpRequestBody('')
         );
 
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
+        $productListingRequestHandler = $this->factory->createMetaSnippetBasedRouter()->route($request);
         $page = $productListingRequestHandler->process($request);
 
         return $page->getBody();
@@ -189,10 +189,11 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $productListingUrlKey = 'sale';
         $contentBlockContent = '<p>foo</p>';
         $snippetCode = 'product_listing_content_block_top';
+        $contextDataSet = ['website' => 'fr', 'locale' => 'fr_FR'];
 
         $httpRequestBodyString = json_encode([
             'content' => $contentBlockContent,
-            'context' => ['website' => 'fr', 'locale' => 'fr_FR'],
+            'context' => $contextDataSet,
             'url_key' => $productListingUrlKey,
         ]);
 

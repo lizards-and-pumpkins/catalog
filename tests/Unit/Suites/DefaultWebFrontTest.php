@@ -46,7 +46,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
  * @uses   \LizardsAndPumpkins\Import\CatalogImport
- * @uses   \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Http\Routing\MetaSnippetBasedRouter
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
@@ -93,10 +93,8 @@ class DefaultWebFrontTest extends TestCase
     {
         $routerFactoryMethods = [
             'createApiRouter',
-            'createProductDetailViewRouter',
-            'createProductListingRouter',
+            'createMetaSnippetBasedRouter',
             'createResourceNotFoundRouter',
-            'createProductSearchResultRouter',
             'createUnknownHttpRequestMethodRouter',
         ];
 

@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductListing\ContentDelivery;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\Exception\UnableToHandleRequestException;
@@ -32,19 +28,9 @@ class ProductSearchRequestHandlerTest extends TestCase
     private $mockProductListingPageRequest;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubDataPoolReader;
-
-    /**
      * @var ProductListingRequestHandler
      */
     private $requestHandler;
-
-    /**
-     * @var string
-     */
-    private $testMetaInfoKey = 'stub-meta-info-key';
 
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
@@ -52,37 +38,9 @@ class ProductSearchRequestHandlerTest extends TestCase
     private $stubRequest;
 
     /**
-     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubUrlToWebsiteMap;
-
-    /**
-     * @return DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubDataPoolReader() : DataPoolReader
-    {
-        $pageSnippetCodes = ['child-snippet1'];
-
-        $testMetaInfoSnippetJson = json_encode(ProductSearchResultMetaSnippetContent::create(
-            'root-snippet-code',
-            $pageSnippetCodes,
-            $containers = [],
-            $pageSpecificData = []
-        )->toArray());
-
-        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
-
-        $stubDataPoolReader = $this->createMock(DataPoolReader::class);
-        $stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
-        $stubDataPoolReader->method('getSnippet')->willReturnMap([[$this->testMetaInfoKey, $testMetaInfoSnippetJson]]);
-
-        return $stubDataPoolReader;
-    }
-
-    /**
      * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingPageRequest() : ProductListingPageRequest
+    private function createStubProductListingPageRequest(): ProductListingPageRequest
     {
         $stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $stubProductsPerPage->method('getSelectedNumberOfProductsPerPage')->willReturn(1);
@@ -101,7 +59,7 @@ class ProductSearchRequestHandlerTest extends TestCase
     /**
      * @return ProductListingPageContentBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function createStubProductListingPageContentBuilder() : ProductListingPageContentBuilder
+    private function createStubProductListingPageContentBuilder(): ProductListingPageContentBuilder
     {
         $stubHttpResponse = $this->createMock(HttpResponse::class);
         $stubPageContentBuilder = $this->createMock(ProductListingPageContentBuilder::class);
@@ -110,16 +68,10 @@ class ProductSearchRequestHandlerTest extends TestCase
         return $stubPageContentBuilder;
     }
 
-    protected function setUp()
+    final protected function setUp()
     {
         /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
-
-        $this->stubDataPoolReader = $this->createStubDataPoolReader();
-
-        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
-        $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
-        $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->testMetaInfoKey);
 
         /** @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject $stubFacetFilterRequest */
         $stubFacetFilterRequest = $this->createMock(FacetFiltersToIncludeInResult::class);
@@ -137,38 +89,30 @@ class ProductSearchRequestHandlerTest extends TestCase
         /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubDefaultSortBy */
         $stubDefaultSortBy = $this->createMock(SortBy::class);
 
-        $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
+        $pageMeta = [
+            ProductSearchResultMetaSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE,
+            ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => 'foo',
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductSearchResultMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            ProductSearchResultMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
+        ];
 
         $this->requestHandler = new ProductSearchRequestHandler(
             $stubContext,
-            $this->stubDataPoolReader,
-            $stubSnippetKeyGenerator,
             $stubFacetFilterRequest,
-            $this->stubUrlToWebsiteMap,
             $stubProductListingPageContentBuilder,
             $this->mockProductListingPageRequest,
             $stubProductSearchService,
             $stubFullTextCriteriaBuilder,
+            $pageMeta,
             $stubDefaultSortBy
         );
 
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl() : HttpRequest
-    {
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn('foo');
-        $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
-
-        $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
-
-        return $this->stubRequest;
-    }
-
     public function testRequestCanNotBeProcessedIfRequestMethodIsNotGet()
     {
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
-            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_POST);
 
         $this->assertFalse($this->requestHandler->canProcess($this->stubRequest));
@@ -176,8 +120,6 @@ class ProductSearchRequestHandlerTest extends TestCase
 
     public function testRequestCanNotBeProcessedIfQueryStringParameterIsNotPresent()
     {
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
-            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, false],
@@ -190,8 +132,6 @@ class ProductSearchRequestHandlerTest extends TestCase
     {
         $queryString = '';
 
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
-            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, true],
@@ -204,18 +144,16 @@ class ProductSearchRequestHandlerTest extends TestCase
     }
 
     /**
-     * @depends testRequestCanNotBeProcessedIfRequestUrlIsNotEqualToSearchPageUrl
+     * @depends testRequestCanNotBeProcessedIfRequestMethodIsNotGet
      */
-    public function testExceptionIsThrownDuringAttemptToProcessInvalidRequest(HttpRequest $stubHttpRequest)
+    public function testExceptionIsThrownDuringAttemptToProcessInvalidRequest()
     {
         $this->expectException(UnableToHandleRequestException::class);
-        $this->requestHandler->process($stubHttpRequest);
+        $this->requestHandler->process($this->stubRequest);
     }
 
-    public function testTrueIsReturnedIfRequestCanBeProcessed() : HttpRequest
+    public function testTrueIsReturnedIfRequestCanBeProcessed(): HttpRequest
     {
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
-            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubRequest->method('hasQueryParameter')->willReturnMap([
             [ProductSearchRequestHandler::QUERY_STRING_PARAMETER_NAME, true],
@@ -234,9 +172,6 @@ class ProductSearchRequestHandlerTest extends TestCase
      */
     public function testCookieProcessingIsTriggered(HttpRequest $stubRequest)
     {
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
-            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
-        
         $this->mockProductListingPageRequest->expects($this->once())->method('processCookies');
         $this->requestHandler->process($stubRequest);
     }
@@ -246,9 +181,6 @@ class ProductSearchRequestHandlerTest extends TestCase
      */
     public function testHttpResponseIsReturned(HttpRequest $stubRequest)
     {
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
-            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
-        
         $this->assertInstanceOf(HttpResponse::class, $this->requestHandler->process($stubRequest));
     }
 
@@ -257,9 +189,6 @@ class ProductSearchRequestHandlerTest extends TestCase
      */
     public function testSortByAttributeCodesAreMappedBeforePassedToSearchEngine(HttpRequest $stubRequest)
     {
-        $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')
-            ->willReturn(ProductSearchRequestHandler::SEARCH_RESULTS_SLUG);
-        
         $this->mockProductListingPageRequest->expects($this->once())->method('createSortByForRequest')
             ->willReturn($this->createMock(SortBy::class));
 

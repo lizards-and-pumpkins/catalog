@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins;
 
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductSearchRequestHandler;
+use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
@@ -34,17 +34,12 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $website = new InjectableRestApiWebFront($request, $this->factory, $implementationSpecificFactory);
         $website->processRequest();
 
         $this->processAllMessages($this->factory);
-        
-        $this->failIfMessagesWhereLogged($this->factory->getLogger());
-    }
 
-    private function getProductSearchRequestHandler() : ProductSearchRequestHandler
-    {
-        return $this->factory->createProductSearchRequestHandler();
+        $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
     private function registerProductSearchResultMetaSnippetKeyGenerator()
@@ -52,25 +47,20 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
             function () {
-                return$this->factory->createProductSearchResultMetaSnippetKeyGenerator();
+                return $this->factory->createProductSearchResultMetaSnippetKeyGenerator();
             }
         );
-    }
-
-    final protected function setUp()
-    {
-        $this->importProductListingTemplateFixtureViaApi();
     }
 
     public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
-        $contextSource = $this->factory->createContextSource();
-        $context = $contextSource->getAllAvailableContexts()[1];
+        $context = $this->factory->createContextSource()->getAllAvailableContexts()[1];
 
+        $keyGeneratorParams = [PageMetaInfoSnippetContent::URL_KEY => 'catalogsearch/result'];
         $metaInfoSnippetKeyGenerator = $this->factory->createProductSearchResultMetaSnippetKeyGenerator();
-        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($context, []);
+        $metaInfoSnippetKey = $metaInfoSnippetKeyGenerator->getKeyForContext($context, $keyGeneratorParams);
 
         $dataPoolReader = $this->factory->createDataPoolReader();
         $metaInfoSnippetJson = $dataPoolReader->getSnippet($metaInfoSnippetKey);
@@ -82,7 +72,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->assertContains($expectedRootSnippetCode, $metaInfoSnippet['page_snippet_codes']);
     }
 
-    public function testProductListingPageHtmlIsReturned() : HttpResponse
+    public function testProductListingPageHtmlIsReturned(): HttpResponse
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
@@ -92,12 +82,14 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
+
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $this->importCatalogFixture($this->factory, 'simple_product_armflasher-v1.xml', 'simple_product_adilette.xml');
+        $this->importProductListingTemplateFixtureViaApi();
 
         $this->registerProductSearchResultMetaSnippetKeyGenerator();
-        
-        $productSearchResultRequestHandler = $this->getProductSearchRequestHandler();
+
+        $productSearchResultRequestHandler = $this->factory->createMetaSnippetBasedRouter()->route($request);
         $page = $productSearchResultRequestHandler->process($request);
         $body = $page->getBody();
 

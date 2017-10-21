@@ -8,20 +8,25 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\PricesJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\SnippetTransformation\ProductJsonSnippetTransformation;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Http\Routing\GenericHttpRouter;
+use LizardsAndPumpkins\Http\Routing\MetaSnippetBasedRouter;
 use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodHandler;
+use LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodRouter;
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ContentDelivery\SimpleEuroPriceSnippetTransformation;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageContentBuilder;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory;
@@ -57,9 +62,11 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  * @uses   \LizardsAndPumpkins\Import\Product\AttributeCode
  * @uses   \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
- * @uses   \LizardsAndPumpkins\Http\Routing\GenericHttpRouter
+ * @uses   \LizardsAndPumpkins\Http\Routing\MetaSnippetBasedRouter
+ * @uses   \LizardsAndPumpkins\Http\Routing\UnknownHttpRequestMethodRouter
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult
  * @uses   \LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField
+ * @uses   \LizardsAndPumpkins\DataPool\SnippetReader
  * @uses   \LizardsAndPumpkins\Util\Config\EnvironmentConfigReader
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -101,7 +108,7 @@ class FrontendFactoryTest extends TestCase
     /**
      * @var FrontendFactory
      */
-    private $frontendFactory;
+    private $factory;
 
     public function setUp()
     {
@@ -118,74 +125,62 @@ class FrontendFactoryTest extends TestCase
             new HttpRequestBody('')
         );
 
-        $this->frontendFactory = new FrontendFactory($request);
-        $masterFactory->register($this->frontendFactory);
+        $this->factory = new FrontendFactory($request);
+        $masterFactory->register($this->factory);
     }
 
-    public function testProductDetailViewRouterIsReturned()
+    public function testReturnsMetaSnippetBasedRouter()
     {
-        $result = $this->frontendFactory->createProductDetailViewRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
+        $result = $this->factory->createMetaSnippetBasedRouter();
+        $this->assertInstanceOf(MetaSnippetBasedRouter::class, $result);
     }
 
     public function testReturnsUnknownHttpRequestMethodRouter()
     {
-        $result = $this->frontendFactory->createUnknownHttpRequestMethodRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
+        $result = $this->factory->createUnknownHttpRequestMethodRouter();
+        $this->assertInstanceOf(UnknownHttpRequestMethodRouter::class, $result);
     }
 
     public function testReturnsUnknownHttpRequestMethodHandler()
     {
-        $result = $this->frontendFactory->createUnknownHttpRequestMethodHandler();
+        $result = $this->factory->createUnknownHttpRequestMethodHandler();
         $this->assertInstanceOf(UnknownHttpRequestMethodHandler::class, $result);
-    }
-
-    public function testProductListingRouterIsReturned()
-    {
-        $result = $this->frontendFactory->createProductListingRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
     }
 
     public function testProductListingFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
-        $result = $this->frontendFactory->createProductListingFacetFiltersToIncludeInResult();
+        $result = $this->factory->createProductListingFacetFiltersToIncludeInResult();
         $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testProductSearchResultsFilterNavigationConfigIsInstanceOfFacetFilterRequest()
     {
-        $result = $this->frontendFactory->createProductSearchFacetFiltersToIncludeInResult();
+        $result = $this->factory->createProductSearchFacetFiltersToIncludeInResult();
         $this->assertInstanceOf(FacetFiltersToIncludeInResult::class, $result);
     }
 
     public function testSameKeyGeneratorLocatorIsReturnedViaGetter()
     {
-        $result1 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
-        $result2 = $this->frontendFactory->getSnippetKeyGeneratorLocator();
+        $result1 = $this->factory->getSnippetKeyGeneratorLocator();
+        $result2 = $this->factory->getSnippetKeyGeneratorLocator();
         $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $result1);
         $this->assertSame($result1, $result2);
     }
 
     public function testItReturnsAContext()
     {
-        $this->assertInstanceOf(Context::class, $this->frontendFactory->createContext());
-    }
-
-    public function testProductSearchResultRouterIsReturned()
-    {
-        $result = $this->frontendFactory->createProductSearchResultRouter();
-        $this->assertInstanceOf(GenericHttpRouter::class, $result);
+        $this->assertInstanceOf(Context::class, $this->factory->createContext());
     }
 
     public function testItReturnsASimpleEuroPriceSnippetTransformation()
     {
-        $result = $this->frontendFactory->createPriceSnippetTransformation();
+        $result = $this->factory->createPriceSnippetTransformation();
         $this->assertInstanceOf(SimpleEuroPriceSnippetTransformation::class, $result);
     }
 
     public function testItReturnsAProductPricesJsonSnippetTransformation()
     {
-        $result = $this->frontendFactory->createPricesJsonSnippetTransformation();
+        $result = $this->factory->createPricesJsonSnippetTransformation();
         $this->assertInstanceOf(PricesJsonSnippetTransformation::class, $result);
     }
 
@@ -194,7 +189,7 @@ class FrontendFactoryTest extends TestCase
      */
     public function testSnippetKeyGeneratorForGivenCodeIsReturned(string $snippetCode)
     {
-        $snippetKeyGeneratorLocator = $this->frontendFactory->createRegistrySnippetKeyGeneratorLocatorStrategy();
+        $snippetKeyGeneratorLocator = $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy();
         $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
@@ -203,7 +198,7 @@ class FrontendFactoryTest extends TestCase
     /**
      * @return array[]
      */
-    public function registeredSnippetCodeDataProvider() : array
+    public function registeredSnippetCodeDataProvider(): array
     {
         return [
             [ProductDetailMetaSnippetRenderer::CODE],
@@ -220,7 +215,25 @@ class FrontendFactoryTest extends TestCase
 
     public function testItReturnsAProductJsonSnippetTransformation()
     {
-        $result = $this->frontendFactory->createProductJsonSnippetTransformation();
+        $result = $this->factory->createProductJsonSnippetTransformation();
         $this->assertInstanceOf(ProductJsonSnippetTransformation::class, $result);
+    }
+
+    public function testReturnsProductListingPageContentBuilder()
+    {
+        $this->assertInstanceOf(
+            ProductListingPageContentBuilder::class,
+            $this->factory->createProductListingPageContentBuilder()
+        );
+    }
+
+    public function testReturnsProductListingPageRequest()
+    {
+        $this->assertInstanceOf(ProductListingPageRequest::class, $this->factory->createProductListingPageRequest());
+    }
+
+    public function testReturnsPageBuilder()
+    {
+        $this->assertInstanceOf(PageBuilder::class, $this->factory->createPageBuilder());
     }
 }

@@ -12,16 +12,17 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingRequestHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetContent;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ProductListingTest extends AbstractIntegrationTest
 {
     use ProductListingTemplateIntegrationTestTrait;
 
     /**
-     * @var MasterFactory
+     * @var CatalogMasterFactory
      */
     private $factory;
 
@@ -68,7 +69,8 @@ class ProductListingTest extends AbstractIntegrationTest
                     'meta_description' => 'Adidas Rausverkauf! Greifen Sie jetzt zu!',
                 ]
             ],
-            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
+            PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            PageMetaInfoSnippetContent::KEY_HANDLER_CODE => ProductListingRequestHandler::CODE,
         ];
 
         $this->assertEquals($expectedMetaSnippetContent, $metaInfoSnippet);
@@ -79,17 +81,17 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactory();
         $this->importProductListingTemplateFixtureViaApi();
         $this->importCatalogFixture($this->factory, 'simple_product_adilette.xml', 'product_listings.xml');
-
+        $urlKey = 'sale';
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
-            HttpUrl::fromString('http://example.com/sale'),
+            HttpUrl::fromString('http://example.com/' . $urlKey),
             HttpHeaders::fromArray([]),
             new HttpRequestBody('')
         );
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
+        $productListingRequestHandler = $this->factory->createMetaSnippetBasedRouter()->route($request);
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 
@@ -121,7 +123,7 @@ class ProductListingTest extends AbstractIntegrationTest
 
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
 
-        $productListingRequestHandler = $this->factory->createProductListingRequestHandler();
+        $productListingRequestHandler = $this->factory->createMetaSnippetBasedRouter()->route($request);
         $page = $productListingRequestHandler->process($request);
         $body = $page->getBody();
 

@@ -141,9 +141,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
      */
     private function getRequestPathParts(HttpRequest $request) : array
     {
-        $pathWithoutWebsitePrefix = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
-
-        return explode('/', trim($pathWithoutWebsitePrefix, '/'));
+        return explode('/', $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl()));
     }
 
     private function createQueryOptions(HttpRequest $request) : QueryOptions

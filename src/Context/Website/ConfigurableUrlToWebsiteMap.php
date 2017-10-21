@@ -103,7 +103,7 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 
         $relevantUrlParts = $this->removeQueryAndAnchor($url);
 
-        return substr($relevantUrlParts, strlen($urlPrefix));
+        return trim(substr($relevantUrlParts, strlen($urlPrefix)), '/');
     }
 
     private function removeQueryAndAnchor(string $url): string
