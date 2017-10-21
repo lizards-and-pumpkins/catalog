@@ -322,6 +322,29 @@ class ProductListingPageContentBuilderTest extends TestCase
         $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }
 
+    public function testAddsProductListingAttributesSnippetToPageBuilder()
+    {
+        $productListingAttributes = ['foo' => 'bar'];
+        $this->stubPageMetaInfoSnippetContent->method('getPageSpecificData')->willReturn([
+            'product_listing_attributes' => $productListingAttributes
+        ]);
+
+        $this->pageContentBuilder->buildPageContent(
+            $this->stubPageMetaInfoSnippetContent,
+            $this->stubContext,
+            $this->stubKeyGeneratorParams,
+            $this->stubProductSearchResult,
+            $this->stubProductsPerPage,
+            $this->stubSelectedSortBy,
+            ...$this->stubListOfAvailableSortBy
+        );
+
+        $snippetCode = 'product_listing_attributes';
+        $expectedSnippetValue = json_encode($productListingAttributes);
+
+        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
+    }
+
     public function testTranslationsAreAddedToPageBuilder()
     {
         $translations = ['foo' => 'bar'];

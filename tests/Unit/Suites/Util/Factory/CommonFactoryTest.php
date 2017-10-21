@@ -57,10 +57,9 @@ use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingDescriptionBlockRenderer;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
 use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
@@ -103,7 +102,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\Product\ProductProjector
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder
@@ -124,6 +123,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator
+ * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor
  * @uses   \LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection
@@ -753,7 +753,7 @@ class CommonFactoryTest extends TestCase
     public function productListSnippetRenderersProvider() : array
     {
         return [
-            [ProductListingSnippetRenderer::class],
+            [ProductListingMetaSnippetRenderer::class],
         ];
     }
 
@@ -865,12 +865,6 @@ class CommonFactoryTest extends TestCase
         return [
             [ContentBlockSnippetRenderer::class],
         ];
-    }
-
-    public function testItReturnsAProductListingDescriptionBlockRenderer()
-    {
-        $result = $this->commonFactory->createProductListingDescriptionBlockRenderer();
-        $this->assertInstanceOf(ProductListingDescriptionBlockRenderer::class, $result);
     }
 
     public function testItReturnsAProductJsonService()

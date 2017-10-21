@@ -193,8 +193,7 @@ EOX;
 EOX;
         $productListing = $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
 
-        $this->assertTrue($productListing->hasAttribute('foo'));
-        $this->assertSame('bar', $productListing->getAttributeValueByCode('foo'));
+        $this->assertSame(['foo' => 'bar'], $productListing->getAttributesList()->toArray());
     }
 
     public function testExceptionIsThrownIfSameAttributeIsSpecifiedMoreThenOnceForTheSameListing()

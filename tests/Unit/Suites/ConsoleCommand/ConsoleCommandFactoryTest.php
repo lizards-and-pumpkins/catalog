@@ -34,7 +34,7 @@ class ConsoleCommandFactoryTest extends TestCase
 
     public function testReturnsADomainEventProcesingTimesLogFileReader()
     {
-        $logFileReader = (new ConsoleCommandFactory())->createDomainEventProcessingTimesLogFileReader(__FILE__);
+        $logFileReader = (new ConsoleCommandFactory())->createDomainEventProcessingTimesLogFileReader();
         $this->assertInstanceOf(LogfileReader::class, $logFileReader);
     }
 }

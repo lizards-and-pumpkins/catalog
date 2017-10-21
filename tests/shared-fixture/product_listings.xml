@@ -33,8 +33,7 @@
                 <attribute name="meta_title">Vendre</attribute>
                 <attribute name="meta_description">Acheter des chaussures de sport moins chères ? C’est possible grâce à
                     nos offres à prix discount. Commandez très simplement vos futures chaussures de course qui vous
-                    seront expédiées rapidement.
-                </attribute>
+                    seront expédiées rapidement.</attribute>
                 <attribute name="meta_keywords">vendre, offre, proposition</attribute>
             </attributes>
         </listing>
@@ -43,6 +42,15 @@
                 <attribute name="stock_qty" is="GreaterThan">0</attribute>
                 <attribute name="brand" is="Equal">Asics</attribute>
             </criteria>
+        </listing>
+        <listing url_key="" website="fr" locale="fr_FR">
+            <criteria type="and">
+                <attribute name="stock_qty" is="GreaterThan">0</attribute>
+            </criteria>
+            <attributes>
+                <attribute name="meta_title">Homepage</attribute>
+                <attribute name="meta_description">This is a cool homepage</attribute>
+            </attributes>
         </listing>
     </listings>
 </catalog>

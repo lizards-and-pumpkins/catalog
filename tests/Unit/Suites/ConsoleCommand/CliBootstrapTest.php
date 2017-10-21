@@ -67,7 +67,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingProjector
- * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer
+ * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer

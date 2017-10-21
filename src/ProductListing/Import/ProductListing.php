@@ -47,7 +47,7 @@ class ProductListing
         $this->attributeList = $attributeList;
     }
 
-    public function getUrlKey() : UrlKey
+    public function getUrlKey(): UrlKey
     {
         return $this->urlKey;
     }
@@ -55,37 +55,28 @@ class ProductListing
     /**
      * @return string[]
      */
-    public function getContextData() : array
+    public function getContextData(): array
     {
         return $this->contextData;
     }
 
-    public function getCriteria() : SearchCriteria
+    public function getCriteria(): SearchCriteria
     {
         return $this->criteria;
     }
 
-    public function hasAttribute(string $code) : bool
-    {
-        return $this->attributeList->hasAttribute($code);
-    }
-
-    /**
-     * @param string $code
-     * @return bool|float|int|string
-     */
-    public function getAttributeValueByCode(string $code)
-    {
-        return $this->attributeList->getAttributeValueByCode($code);
-    }
-
-    public function serialize() : string
+    public function serialize(): string
     {
         return serialize($this); // TODO: Use json_encode for serialization
     }
 
-    public static function rehydrate($serialized) : ProductListing
+    public static function rehydrate($serialized): ProductListing
     {
         return unserialize($serialized); // TODO: Use json_decode for unserialization
+    }
+
+    public function getAttributesList(): ProductListingAttributeList
+    {
+        return $this->attributeList;
     }
 }
