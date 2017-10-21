@@ -47,7 +47,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
     private $productSearchService;
 
     /**
-     * @var ProductListingSnippetContent
+     * @var ProductListingMetaSnippetContent
      */
     private $pageMetaInfo;
 
@@ -94,7 +94,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
         $this->productListingPageContentBuilder = $productListingPageContentBuilder;
         $this->productListingPageRequest = $productListingPageRequest;
         $this->productSearchService = $productSearchService;
-        $this->pageMetaInfo = ProductListingSnippetContent::fromArray($pageMeta);
+        $this->pageMetaInfo = ProductListingMetaSnippetContent::fromArray($pageMeta);
         $this->defaultSortBy = $defaultSortBy;
         $this->availableSortBy = $availableSortBy;
     }

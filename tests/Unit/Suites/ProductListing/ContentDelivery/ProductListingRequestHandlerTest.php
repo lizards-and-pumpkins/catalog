@@ -51,31 +51,6 @@ class ProductListingRequestHandlerTest extends TestCase
      */
     private $stubUrlToWebsiteMap;
 
-    private function prepareMockDataPoolReader(int $numberOfResults)
-    {
-        /** @var CompositeSearchCriterion|\PHPUnit_Framework_MockObject_MockObject $stubSelectionCriteria */
-        $stubSelectionCriteria = $this->createMock(CompositeSearchCriterion::class);
-        $stubSelectionCriteria->method('jsonSerialize')
-            ->willReturn(['condition' => CompositeSearchCriterion::AND_CONDITION, 'criteria' => []]);
-        $pageSnippetCodes = ['child-snippet1'];
-
-        $testMetaInfoSnippetJson = json_encode(ProductListingMetaSnippetContent::create(
-            $stubSelectionCriteria,
-            'root-snippet-code',
-            $pageSnippetCodes,
-            $containers = [],
-            $pageSpecificData = []
-        )->toArray());
-
-        $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
-        $stubSearchEngineResponse->method('getTotalNumberOfResults')->willReturn($numberOfResults);
-
-        $this->mockDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
-        $this->mockDataPoolReader->method('getSnippet')->willReturnMap([
-            [$this->testMetaInfoKey, $testMetaInfoSnippetJson],
-        ]);
-    }
-
     /**
      * @return ProductListingPageRequest|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -127,15 +102,15 @@ class ProductListingRequestHandlerTest extends TestCase
         $this->mockProductSearchService = $this->createMock(ProductSearchService::class);
 
         $pageMeta = [
-            ProductListingSnippetContent::KEY_HANDLER_CODE => ProductListingRequestHandler::CODE,
-            ProductListingSnippetContent::KEY_CRITERIA => [
+            ProductListingMetaSnippetContent::KEY_HANDLER_CODE => ProductListingRequestHandler::CODE,
+            ProductListingMetaSnippetContent::KEY_CRITERIA => [
                 'condition' => CompositeSearchCriterion::AND_CONDITION,
                 'criteria' => [(new SearchCriterionAnything())->toArray()]
             ],
-            ProductListingSnippetContent::KEY_ROOT_SNIPPET_CODE => 'root-snippet-code',
-            ProductListingSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
-            ProductListingSnippetContent::KEY_CONTAINER_SNIPPETS => [],
-            ProductListingSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
+            ProductListingMetaSnippetContent::KEY_ROOT_SNIPPET_CODE => 'root-snippet-code',
+            ProductListingMetaSnippetContent::KEY_PAGE_SNIPPET_CODES => [],
+            ProductListingMetaSnippetContent::KEY_CONTAINER_SNIPPETS => [],
+            ProductListingMetaSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
         ];
 
         $this->requestHandler = new ProductListingRequestHandler(

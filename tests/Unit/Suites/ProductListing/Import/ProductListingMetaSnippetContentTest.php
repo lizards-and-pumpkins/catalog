@@ -104,9 +104,9 @@ class ProductListingMetaSnippetContentTest extends TestCase
     public function testJsonConstructorIsPresent()
     {
         $pageMeta = json_decode(json_encode($this->pageMetaInfo->toArray()), true);
-        $pageMetaSnippet = ProductListingSnippetContent::fromArray($pageMeta);
+        $pageMetaSnippet = ProductListingMetaSnippetContent::fromArray($pageMeta);
 
-        $this->assertInstanceOf(ProductListingSnippetContent::class, $pageMetaSnippet);
+        $this->assertInstanceOf(ProductListingMetaSnippetContent::class, $pageMetaSnippet);
     }
 
     /**
