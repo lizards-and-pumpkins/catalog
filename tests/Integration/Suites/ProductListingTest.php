@@ -71,7 +71,7 @@ class ProductListingTest extends AbstractIntegrationTest
             PageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS => []
         ];
 
-        $this->assertEquals($expectedMetaSnippetContent, $metaSnippet);
+        $this->assertEquals($expectedMetaSnippetContent, $metaInfoSnippet);
     }
 
     public function testProductListingPageHtmlIsReturned()
