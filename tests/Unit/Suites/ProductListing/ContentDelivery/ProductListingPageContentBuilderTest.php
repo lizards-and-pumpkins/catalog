@@ -184,7 +184,7 @@ class ProductListingPageContentBuilderTest extends TestCase
         );
     }
 
-    public function testProductsInListingAreAddedToPageBuilder()
+    public function testProductsAreAddedToPageBuilder()
     {
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,

@@ -71,7 +71,6 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\GenericSnippetProjector
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
- * @uses   \LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer
  * @uses   \LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
