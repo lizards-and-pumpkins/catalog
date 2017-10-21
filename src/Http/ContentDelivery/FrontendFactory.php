@@ -26,7 +26,7 @@ use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRender
 use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
 use LizardsAndPumpkins\ProductListing\ProductInListingSnippetRenderer;
@@ -181,7 +181,7 @@ class FrontendFactory implements Factory
             }
         );
         $registrySnippetKeyGeneratorLocator->register(
-            ProductListingSnippetRenderer::CODE,
+            ProductListingMetaSnippetRenderer::CODE,
             function () {
                 return $this->getMasterFactory()->createProductListingSnippetKeyGenerator();
             }
