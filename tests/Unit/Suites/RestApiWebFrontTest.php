@@ -17,6 +17,7 @@ use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommand
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -141,7 +142,8 @@ class RestApiWebFrontTest extends TestCase
 
     public function testRegistersFactoriesRequiredForRestApiRequestHandling()
     {
-        $this->mockMasterFactory->expects($this->exactly(6))->method('register')->withConsecutive(
+        $this->mockMasterFactory->expects($this->exactly(7))->method('register')->withConsecutive(
+            $this->isInstanceOf(CommonFactory::class),
             $this->isInstanceOf(RestApiFactory::class),
             $this->isInstanceOf(ProductSearchApiFactory::class),
             $this->isInstanceOf(UpdatingProductImportCommandFactory::class),

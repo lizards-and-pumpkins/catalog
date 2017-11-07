@@ -14,6 +14,7 @@ use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommand
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
+use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class RestApiWebFront extends WebFront
@@ -41,6 +42,7 @@ class RestApiWebFront extends WebFront
 
     protected function registerFactories(MasterFactory $masterFactory)
     {
+        $masterFactory->register(new CommonFactory());
         $masterFactory->register(new RestApiFactory());
         $masterFactory->register(new ProductSearchApiFactory());
         $masterFactory->register(new UpdatingProductImportCommandFactory());
