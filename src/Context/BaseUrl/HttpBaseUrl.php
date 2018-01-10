@@ -30,7 +30,7 @@ class HttpBaseUrl implements BaseUrl
         if (substr($baseUrlString, -1) !== '/') {
             throw self::createException('The base URL input string does not end with the required trailing slash');
         }
-        if (! preg_match('#^(?:https?:)?//[a-z0-9.-]+/#i', $baseUrlString)) {
+        if (! preg_match('#^(?:https?:)?//[a-z0-9.-]+(?::[0-9]+)?/#i', $baseUrlString)) {
             throw self::createException(sprintf('The base URL "%s" is invalid', $baseUrlString));
         }
     }
