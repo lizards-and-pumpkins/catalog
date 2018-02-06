@@ -37,6 +37,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\RestApi\ApiRouter;
 use LizardsAndPumpkins\Util\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\TestCase;
 
 class UnitTestFactory implements Factory, MessageQueueFactory
@@ -80,7 +81,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
 
     private function createMock(string $className) : \PHPUnit_Framework_MockObject_MockObject
     {
-        return (new \PHPUnit_Framework_MockObject_MockBuilder($this->testCase, $className))
+        return (new MockBuilder($this->testCase, $className))
             ->disableOriginalConstructor()
             ->disableOriginalClone()
             ->getMock();

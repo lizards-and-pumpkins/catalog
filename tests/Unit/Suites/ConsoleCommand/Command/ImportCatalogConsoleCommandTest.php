@@ -18,6 +18,8 @@ use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -48,7 +50,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
     private $mockCatalogImport;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder
+     * @var AnyInvokedCount
      */
     private $registerFactorySpy;
 
@@ -96,8 +98,8 @@ class ImportCatalogConsoleCommandTest extends TestCase
 
     private function getRegisteredFactoryClassNames()
     {
-        return array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
-            return get_class($invocation->parameters[0]);
+        return array_map(function (ObjectInvocation $invocation) {
+            return get_class($invocation->getParameters()[0]);
         }, $this->registerFactorySpy->getInvocations());
     }
 
@@ -118,7 +120,7 @@ class ImportCatalogConsoleCommandTest extends TestCase
         $this->mockMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), get_class_methods(CommonFactory::class)))
             ->getMock();
-        $this->registerFactorySpy = $this->any();
+        $this->registerFactorySpy = new AnyInvokedCount();
         $this->mockMasterFactory->expects($this->registerFactorySpy)->method('register');
 
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);

@@ -13,6 +13,8 @@ use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,16 +51,16 @@ class ProductDetailViewRequestHandlerTest extends TestCase
     private $stubTranslator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     * @var AnyInvokedCount
      */
     private $addSnippetsToPageSpy;
 
     private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
-            array_map(function ($invocation) use ($snippetCode, $snippetValue) {
-                return (int) ([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
-                              [$snippetCode => $snippetValue] === $invocation->parameters[1]);
+            array_map(function (ObjectInvocation $invocation) use ($snippetCode, $snippetValue) {
+                return (int) ([$snippetCode => $snippetCode] === $invocation->getParameters()[0] &&
+                              [$snippetCode => $snippetValue] === $invocation->getParameters()[1]);
             }, $this->addSnippetsToPageSpy->getInvocations())
         );
 
@@ -82,7 +84,7 @@ class ProductDetailViewRequestHandlerTest extends TestCase
         $this->stubContext = $this->createMock(Context::class);
         $this->mockPageBuilder = $this->createMock(PageBuilder::class);
 
-        $this->addSnippetsToPageSpy = $this->any();
+        $this->addSnippetsToPageSpy = new AnyInvokedCount();
         $this->mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
 
         $this->stubTranslator = $this->createMock(Translator::class);

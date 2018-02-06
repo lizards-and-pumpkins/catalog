@@ -6,6 +6,8 @@ namespace LizardsAndPumpkins\Messaging\Command;
 
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +29,7 @@ class CommandQueueTest extends TestCase
     private $mockQueue;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     * @var AnyInvokedCount
      */
     private $addToQueueSpy;
 
@@ -36,8 +38,8 @@ class CommandQueueTest extends TestCase
      */
     private function getMessagesAddedToQueue() : array
     {
-        return array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
-            return $invocation->parameters[0];
+        return array_map(function (ObjectInvocation $invocation) {
+            return $invocation->getParameters()[0];
         }, $this->addToQueueSpy->getInvocations());
     }
 
@@ -51,7 +53,7 @@ class CommandQueueTest extends TestCase
     protected function setUp()
     {
         $this->mockQueue = $this->createMock(Queue::class);
-        $this->addToQueueSpy = $this->any();
+        $this->addToQueueSpy = new AnyInvokedCount();
         $this->mockQueue->expects($this->addToQueueSpy)->method('add');
 
         $this->commandQueue = new CommandQueue($this->mockQueue);

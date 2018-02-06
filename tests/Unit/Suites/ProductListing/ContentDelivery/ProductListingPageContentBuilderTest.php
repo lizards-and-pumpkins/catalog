@@ -14,6 +14,8 @@ use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -63,7 +65,7 @@ class ProductListingPageContentBuilderTest extends TestCase
     private $stubSelectedSortBy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     * @var AnyInvokedCount
      */
     private $addSnippetsToPageSpy;
 
@@ -94,7 +96,7 @@ class ProductListingPageContentBuilderTest extends TestCase
     {
         $mockPageBuilder = $this->createMock(PageBuilder::class);
 
-        $this->addSnippetsToPageSpy = $this->any();
+        $this->addSnippetsToPageSpy = new AnyInvokedCount();
         $mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
 
         return $mockPageBuilder;
@@ -102,13 +104,13 @@ class ProductListingPageContentBuilderTest extends TestCase
 
     private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder(string $snippetCode)
     {
-        $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(array_map(function ($invocation) use ($snippetCode) {
-            return (int) ([$snippetCode => $snippetCode] === $invocation->parameters[0]);
-        }, $this->addSnippetsToPageSpy->getInvocations()));
+        $snippetsAddedToPageBuilder = array_map(function (ObjectInvocation $invocation) use ($snippetCode) {
+            return (int) ([$snippetCode => $snippetCode] === $invocation->getParameters()[0]);
+        }, $this->addSnippetsToPageSpy->getInvocations());
 
         $this->assertEquals(
             1,
-            $numberOfTimesSnippetWasAddedToPageBuilder,
+            array_sum($snippetsAddedToPageBuilder),
             sprintf('Failed to assert "%s" snippet was added to page builder.', $snippetCode)
         );
     }
@@ -116,9 +118,9 @@ class ProductListingPageContentBuilderTest extends TestCase
     private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
     {
         $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
-            array_map(function ($invocation) use ($snippetCode, $snippetValue) {
-                return (int) ([$snippetCode => $snippetCode] === $invocation->parameters[0] &&
-                              [$snippetCode => $snippetValue] === $invocation->parameters[1]);
+            array_map(function (ObjectInvocation $invocation) use ($snippetCode, $snippetValue) {
+                return (int) ([$snippetCode => $snippetCode] === $invocation->getParameters()[0] &&
+                              [$snippetCode => $snippetValue] === $invocation->getParameters()[1]);
             }, $this->addSnippetsToPageSpy->getInvocations())
         );
 
