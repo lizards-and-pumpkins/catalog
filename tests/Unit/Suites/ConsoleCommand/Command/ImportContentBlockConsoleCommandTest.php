@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,7 +49,7 @@ class ImportContentBlockConsoleCommandTest extends TestCase
     private $testImportDirectory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     * @var AnyInvokedCount
      */
     private $contextSourceSpy;
 
@@ -73,7 +74,7 @@ class ImportContentBlockConsoleCommandTest extends TestCase
         if (count($invocations) === 0) {
             $this->fail(sprintf('Method getAllAvailableContextsWithVersionApplied was not called on context source'));
         }
-        $dataVersion = $invocations[0]->parameters[0];
+        $dataVersion = $invocations[0]->getParameters()[0];
         $this->assertEquals($expectedDataVersionString, $dataVersion);
     }
 
@@ -87,7 +88,7 @@ class ImportContentBlockConsoleCommandTest extends TestCase
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods($methods)->getMock();
 
         $stubContextSource = $this->createMock(ContextSource::class);
-        $this->contextSourceSpy = $this->any();
+        $this->contextSourceSpy = new AnyInvokedCount();
         $stubContextSource->expects($this->contextSourceSpy)->method('getAllAvailableContextsWithVersionApplied')
             ->willReturn([$this->createMock(Context::class)]);
         $this->stubMasterFactory->method('createContextSource')->willReturn($stubContextSource);

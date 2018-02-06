@@ -10,6 +10,8 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +25,14 @@ class ConsumeEventsConsoleCommandTest extends TestCase
     private $stubMasterFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_InvokedRecorder
+     * @var AnyInvokedCount
      */
     private $registerFactorySpy;
 
     private function getRegisteredFactoryClassNames()
     {
-        return array_map(function (\PHPUnit_Framework_MockObject_Invocation_Static $invocation) {
-            return get_class($invocation->parameters[0]);
+        return array_map(function (ObjectInvocation $invocation) {
+            return get_class($invocation->getParameters()[0]);
         }, $this->registerFactorySpy->getInvocations());
     }
 
@@ -40,7 +42,7 @@ class ConsumeEventsConsoleCommandTest extends TestCase
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['createDomainEventConsumer']))
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registerFactorySpy = $this->any();
+        $this->registerFactorySpy = new AnyInvokedCount();
         $this->stubMasterFactory->expects($this->registerFactorySpy)->method('register');
     }
 

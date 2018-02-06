@@ -8,6 +8,8 @@ use League\CLImate\Argument\Manager as ArgumentManager;
 use League\CLImate\CLImate;
 use League\CLImate\Util\Output as CliOutput;
 use LizardsAndPumpkins\ConsoleCommand\TestDouble\StubCliCommand;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,7 +28,7 @@ class BaseCliCommandTest extends TestCase
     private $cliCommand;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_Matcher_AnyInvokedCount
+     * @var AnyInvokedCount
      */
     private $writeOutputSpy;
     
@@ -43,12 +45,12 @@ class BaseCliCommandTest extends TestCase
 
     private function assertStringWasOutput(string $expectedString)
     {
-        $callCountWithMatchingStringParam = array_sum(array_map(function ($invocation) use ($expectedString) {
-            return intval($this->checkStringMatchesIgnoreCtrlChars($invocation->parameters[0], $expectedString));
-        }, $this->writeOutputSpy->getInvocations()));
+        $callCountWithMatchingStringParam = array_map(function (ObjectInvocation $invocation) use ($expectedString) {
+            return intval($this->checkStringMatchesIgnoreCtrlChars($invocation->getParameters()[0], $expectedString));
+        }, $this->writeOutputSpy->getInvocations());
 
         $message = sprintf('The expected string was not output: "%s"', $expectedString);
-        $this->assertTrue($callCountWithMatchingStringParam > 0, $message);
+        $this->assertTrue(array_sum($callCountWithMatchingStringParam) > 0, $message);
     }
 
     private function checkStringMatchesIgnoreCtrlChars(string $haystack, string $needle) : bool
@@ -60,7 +62,7 @@ class BaseCliCommandTest extends TestCase
     {
         $this->climate = new CLImate();
 
-        $this->writeOutputSpy = $this->any();
+        $this->writeOutputSpy = new AnyInvokedCount();
         $mockOutput = $this->createMock(CliOutput::class);
         $mockOutput->expects($this->writeOutputSpy)->method('write');
         $this->climate->output = $mockOutput;

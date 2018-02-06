@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -142,8 +143,8 @@ class ImportTemplateConsoleCommandTest extends TestCase
 
         $expectationFulfilled = array_reduce(
             $errorOutputSpy->getInvocations(),
-            function ($found, \PHPUnit_Framework_MockObject_Invocation $invocation) {
-                return $found || strpos($invocation->parameters[0], 'Invalid template ID "invalid foo"') === false;
+            function ($found, ObjectInvocation $invocation) {
+                return $found || strpos($invocation->getParameters()[0], 'Invalid template ID "invalid foo"') === false;
             }
         );
         $this->assertTrue($expectationFulfilled, "Expected message not output as error.");
