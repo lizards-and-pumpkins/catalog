@@ -116,6 +116,46 @@ class FunctionsTest extends TestCase
         ];
     }
 
+    /**
+     * @param mixed $input
+     * @param bool $expectedOutput
+     * @dataProvider voidDataProvider
+     */
+    public function testIsEmptyReturnsExpectedBooleanValue($input, $expectedOutput)
+    {
+        $this->assertEquals($expectedOutput, isEmpty($input));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function voidDataProvider()
+    {
+        return [
+            'Test 1' => ['', true],
+            'Test 2' => ["", true],
+            'Test 3' => [null, true],
+            'Test 4' => [[], true],
+            'Test 5' => [false, false],
+            'Test 6' => [true, false],
+            'Test 7' => [1, false],
+            'Test 8' => [42, false],
+            'Test 9' => [0, false],
+            'Test 10' => [-1, false],
+            'Test 11' => ["1", false],
+            'Test 12' => ["0", false],
+            'Test 13' => ["-1", false],
+            'Test 14' => ["php", false],
+            'Test 15' => ["true", false],
+            'Test 16' => ["false", false],
+            'Test 17' => [0.0, false],
+            'Test 18' => ["0.0", false],
+            'Test 19' => [0.00, false],
+            'Test 20' => ["0.00", false],
+            'Test 21' => [10/10-1, false]
+        ];
+    }
+
     public function testPipelineSingleFunction()
     {
         $this->assertSame('FOO BAR', pipeline('strtoupper')('foo bar'));

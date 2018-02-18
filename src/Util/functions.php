@@ -24,6 +24,20 @@ function typeof($var) : string
         gettype($var);
 }
 
+/**
+ * @param mixed $var
+ * @return bool
+ */
+function isEmpty($var): bool
+{
+    if (false === is_bool($var) && false === is_array($var) && true === empty($var)) {
+        return (($var === 0) || ($var === 0.0) || ($var === '0')) ? false : true;
+    } elseif (true === is_array($var) && 0 === count($var)) {
+        return true;
+    }
+    return false;
+}
+
 function shutdown(int $exitCode = null)
 {
     exit($exitCode);
