@@ -192,11 +192,11 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
 
     public function castableDataVersionsProvider(): array
     {
-        return [[12], [.2]];
+        return ['int' => [12], 'float' => [.2]];
     }
 
     public function nonCastableDataVersionProvider()
     {
-        return [[true], [['foo']]];
+        return ['boolean' => [true], 'array' => [['foo']]];
     }
 }
