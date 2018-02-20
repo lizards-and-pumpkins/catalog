@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportApiDirectoryIsNotDirectoryException;
 use LizardsAndPumpkins\Import\RestApi\Exception\CatalogImportFileNameNotFoundInRequestBodyException;
 use LizardsAndPumpkins\Import\RestApi\Exception\DataVersionNotFoundInRequestBodyException;
+use LizardsAndPumpkins\Import\RestApi\Exception\InvalidDataVersionTypeException;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
@@ -122,21 +123,80 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
 
     public function testAddsImportCatalogCommandToCommandQueue()
     {
+        $dataVersion = 'foo-bar';
         $importFileName = 'import-file.xml';
+
         $this->createFixtureFile($this->testImportDirectoryPath . '/' . $importFileName, '');
+
         $this->mockRequest->method('getRawBody')->willReturn(json_encode([
             'fileName' => $importFileName,
-            'dataVersion' => 'foo-bar'
+            'dataVersion' => $dataVersion
         ]));
 
         $this->mockCommandQueue->expects($this->once())->method('add')
-            ->willReturnCallback(function (ImportCatalogCommand $command) {
-                $this->assertEquals('foo-bar', $command->getDataVersion());
+            ->willReturnCallback(function (ImportCatalogCommand $command) use ($dataVersion) {
+                $this->assertEquals($dataVersion, $command->getDataVersion());
             });
 
         $response = $this->requestHandler->process($this->mockRequest);
         
         $this->assertSame(202, $response->getStatusCode());
         $this->assertSame('', $response->getBody());
+    }
+
+    /**
+     * @dataProvider nonCastableDataVersionProvider
+     * @param mixed $dataVersion
+     */
+    public function testExceptionIsThrownIfRequestBodyContainsDataVersionOfInvalidType($dataVersion)
+    {
+        $this->expectException(InvalidDataVersionTypeException::class);
+
+        $importFileName = 'import-file.xml';
+
+        $this->createFixtureFile($this->testImportDirectoryPath . '/' . $importFileName, '');
+
+        $this->mockRequest->method('getRawBody')->willReturn(json_encode([
+            'fileName' => $importFileName,
+            'dataVersion' => $dataVersion
+        ]));
+
+        $this->requestHandler->process($this->mockRequest);
+    }
+
+    /**
+     * @dataProvider castableDataVersionsProvider
+     * @param int|float $dataVersion
+     */
+    public function testDataVersionIsCastedToString($dataVersion)
+    {
+        $importFileName = 'import-file.xml';
+
+        $this->createFixtureFile($this->testImportDirectoryPath . '/' . $importFileName, '');
+
+        $this->mockRequest->method('getRawBody')->willReturn(json_encode([
+            'fileName' => $importFileName,
+            'dataVersion' => $dataVersion
+        ]));
+
+        $this->mockCommandQueue->expects($this->once())->method('add')
+                               ->willReturnCallback(function (ImportCatalogCommand $command) use ($dataVersion) {
+                                   $this->assertEquals((string) $dataVersion, $command->getDataVersion());
+                               });
+
+        $response = $this->requestHandler->process($this->mockRequest);
+
+        $this->assertSame(202, $response->getStatusCode());
+        $this->assertSame('', $response->getBody());
+    }
+
+    public function castableDataVersionsProvider(): array
+    {
+        return ['int' => [12], 'float' => [.2]];
+    }
+
+    public function nonCastableDataVersionProvider()
+    {
+        return ['boolean' => [true], 'array' => [['foo']]];
     }
 }
