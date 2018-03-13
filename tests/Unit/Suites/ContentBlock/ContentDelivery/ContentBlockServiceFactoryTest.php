@@ -15,6 +15,7 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
  * Class ContentBlockServiceFactoryTest
  *
  * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
+ * @covers \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory
  */
 class ContentBlockServiceFactoryTest extends \PHPUnit\Framework\TestCase
 {

@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  * Class ContentBlockApiV2GetRequestHandlerTest
  *
  * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
+ * @covers  \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockApiV2GetRequestHandler
  */
 class ContentBlockApiV2GetRequestHandlerTest extends TestCase
 {

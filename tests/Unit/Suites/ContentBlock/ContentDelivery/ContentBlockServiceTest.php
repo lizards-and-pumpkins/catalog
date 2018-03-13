@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
  * Class ContentBlockServiceTest
  *
  * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
+ * @covers \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockService
  */
 class ContentBlockServiceTest extends TestCase
 {
