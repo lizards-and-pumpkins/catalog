@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
@@ -44,6 +45,7 @@ class RestApiWebFront extends WebFront
     {
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new RestApiFactory());
+        $masterFactory->register(new ContentBlockServiceFactory());
         $masterFactory->register(new ProductSearchApiFactory());
         $masterFactory->register(new UpdatingProductImportCommandFactory());
         $masterFactory->register(new UpdatingProductImageImportCommandFactory());

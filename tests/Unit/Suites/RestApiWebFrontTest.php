@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins;
 
+use LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
@@ -142,9 +143,10 @@ class RestApiWebFrontTest extends TestCase
 
     public function testRegistersFactoriesRequiredForRestApiRequestHandling()
     {
-        $this->mockMasterFactory->expects($this->exactly(7))->method('register')->withConsecutive(
+        $this->mockMasterFactory->expects($this->exactly(8))->method('register')->withConsecutive(
             $this->isInstanceOf(CommonFactory::class),
             $this->isInstanceOf(RestApiFactory::class),
+            $this->isInstanceOf(ContentBlockServiceFactory::class),
             $this->isInstanceOf(ProductSearchApiFactory::class),
             $this->isInstanceOf(UpdatingProductImportCommandFactory::class),
             $this->isInstanceOf(UpdatingProductImageImportCommandFactory::class),
