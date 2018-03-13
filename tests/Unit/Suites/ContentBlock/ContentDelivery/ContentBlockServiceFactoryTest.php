@@ -15,7 +15,22 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
  * Class ContentBlockServiceFactoryTest
  *
  * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
- * @covers \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory
+ * @covers  \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory
+ * @uses    \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
+ * @uses    \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses    \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
+ * @uses    \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockApiV2GetRequestHandler
+ * @uses    \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockService
+ * @uses    \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
+ * @uses    \LizardsAndPumpkins\Context\SelfContainedContextBuilder
+ * @uses    \LizardsAndPumpkins\Context\DataVersion\ContextVersion
+ * @uses    \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
+ * @uses    \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses    \LizardsAndPumpkins\Context\DataVersion\DataVersion
+ * @uses    \LizardsAndPumpkins\Util\Factory\CommonFactory
+ * @uses    \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses    \LizardsAndPumpkins\DataPool\DataPoolReader
+ * @uses    \LizardsAndPumpkins\RestApi\RestApiFactory
  */
 class ContentBlockServiceFactoryTest extends \PHPUnit\Framework\TestCase
 {
