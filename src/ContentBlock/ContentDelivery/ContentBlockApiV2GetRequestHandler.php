@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ContentBlock\ContentDelivery;
 
+use LizardsAndPumpkins\ContentBlock\ContentDelivery\Exception\ContentBlockNotFoundException;
 use LizardsAndPumpkins\ContentBlock\ContentDelivery\Exception\UnableToProcessContentBlockApiGetRequestException;
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
@@ -10,15 +12,9 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 
-/**
- * Class ContentBlockApiV2GetRequestHandler
- *
- * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
- */
 class ContentBlockApiV2GetRequestHandler implements HttpRequestHandler
 {
-
-    const QUERY_PARAMETER_NAME = 'content_block_id';
+    const ENDPOINT = 'content_blocks';
 
     /**
      * @var ContentBlockService
@@ -30,64 +26,41 @@ class ContentBlockApiV2GetRequestHandler implements HttpRequestHandler
      */
     private $contextBuilder;
 
-    /**
-     * @var string|null
-     */
-    private $blockContent;
-
-    /**
-     * ContentBlockApiV2GetRequestHandler constructor.
-     *
-     * @param ContentBlockService $contentBlockService
-     * @param ContextBuilder      $contextBuilder
-     */
     public function __construct(ContentBlockService $contentBlockService, ContextBuilder $contextBuilder)
     {
         $this->contentBlockService = $contentBlockService;
         $this->contextBuilder = $contextBuilder;
     }
 
-    /**
-     * @param HttpRequest $request
-     *
-     * @return bool
-     */
     public function canProcess(HttpRequest $request): bool
     {
-        if ($this->blockContent !== null) {
-            return true;
-        }
-
-        if (!$request->hasQueryParameter(self::QUERY_PARAMETER_NAME)) {
-            return false;
-        }
-
-        $queryParameter = trim($request->getQueryParameter(self::QUERY_PARAMETER_NAME));
-        if ($queryParameter === '') {
-            return false;
-        }
-
-        try {
-            $context = $this->contextBuilder->createFromRequest($request);
-            $this->blockContent = $this->contentBlockService->getContentBlock($queryParameter, $context);
-        } catch (Exception\ContentBlockNotFoundException $e) {
-            return false;
-        }
-
-        return true;
+        return '' !== $this->getBlockIdFromRequest($request);
     }
 
-    /**
-     * @param HttpRequest $request
-     *
-     * @return HttpResponse
-     */
     public function process(HttpRequest $request): HttpResponse
     {
-        if (!$this->canProcess($request)) {
-            throw new UnableToProcessContentBlockApiGetRequestException('canProcess must be checked before process');
-        };
+        if (! $this->canProcess($request)) {
+            throw new UnableToProcessContentBlockApiGetRequestException('canProcess must be called before process');
+        }
 
-        return GenericHttpResponse::create($this->blockContent, [], HttpResponse::STATUS_OK);
+        $contentBlockId = $this->getBlockIdFromRequest($request);
+        $context = $this->contextBuilder->createFromRequest($request);
+
+        try {
+            $responseBody = $this->contentBlockService->getContentBlock($contentBlockId, $context);
+            $statusCode = HttpResponse::STATUS_OK;
+        } catch (ContentBlockNotFoundException $e) {
+            $responseBody = sprintf('Content block "%s" does not exist.', $contentBlockId);
+            $statusCode = HttpResponse::STATUS_NOT_FOUND;
+        }
+
+        return GenericHttpResponse::create($responseBody, [], $statusCode);
+    }
+
+    private function getBlockIdFromRequest(HttpRequest $request): string
+    {
+        $encodedBlockId = preg_replace('/.*\/' . self::ENDPOINT . '\/|\?.*|#.*/', '', $request->getUrl());
+
+        return trim(urldecode($encodedBlockId), "/ \t\n\r\0\x0B");
     }
 }

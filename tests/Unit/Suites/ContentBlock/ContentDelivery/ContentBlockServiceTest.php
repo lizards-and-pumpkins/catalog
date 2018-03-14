@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ContentBlock\ContentDelivery;
@@ -12,71 +13,66 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\Exception\KeyNotFoundException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ContentBlockServiceTest
- *
- * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
  * @covers \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockService
- * @uses \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
+ * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
  */
 class ContentBlockServiceTest extends TestCase
 {
-
-    /**
-     * @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $snippetKeyGeneratorLocator;
-
     /**
      * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $snippetKeyGenerator;
+    private $stubSnippetKeyGenerator;
 
     /**
      * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mockDataPoolReader;
+    private $mockDataPoolReader;
 
     /**
      * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $context;
+    private $dummyContext;
 
     /**
      * @var ContentBlockService
      */
-    protected $contentBlockService;
+    private $service;
 
     public function setUp()
     {
-        $this->context = $this->createMock(Context::class);
-        $this->snippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
+        $this->dummyContext = $this->createMock(Context::class);
+        $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
-        $this->snippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
 
-        $this->contentBlockService = new ContentBlockService($this->mockDataPoolReader, $this->snippetKeyGeneratorLocator);
+        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
+        $stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
+        $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
+            ->willReturn($this->stubSnippetKeyGenerator);
+
+        $this->service = new ContentBlockService($this->mockDataPoolReader, $stubSnippetKeyGeneratorLocator);
     }
 
     public function testThrowsExceptionIfBlockDoesNotExist()
     {
-        $this->mockDataPoolReader->method('getSnippet')
-                                 ->willThrowException(new KeyNotFoundException());
-
-        $this->snippetKeyGenerator->method('getKeyForContext')->with($this->context, [])->willReturn('');
-        $this->snippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($this->snippetKeyGenerator);
-
         $this->expectException(ContentBlockNotFoundException::class);
 
-        $this->contentBlockService->getContentBlock('foo', $this->context);
+        $this->mockDataPoolReader->method('getSnippet')->willThrowException(new KeyNotFoundException());
+        $this->stubSnippetKeyGenerator->method('getKeyForContext')->with($this->dummyContext, [])->willReturn('');
+
+        $this->service->getContentBlock('foo', $this->dummyContext);
     }
 
     public function testReturnsSnippet()
     {
-        $snippetContentValue = '{"hello":"world"}';
-        $contentBlockName = 'block_name';
-        $this->mockDataPoolReader->method('getSnippet')->with($contentBlockName)->willReturn($snippetContentValue);
-        $this->snippetKeyGenerator->method('getKeyForContext')->with($this->context, [])->willReturn($contentBlockName);
-        $this->snippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturn($this->snippetKeyGenerator);
+        $contentBlockName = 'foo';
+        $snippetContentValue = 'bar';
 
-        $this->assertSame($snippetContentValue, $this->contentBlockService->getContentBlock($contentBlockName, $this->context));
+        $this->mockDataPoolReader->method('getSnippet')->with($contentBlockName)->willReturn($snippetContentValue);
+        $this->stubSnippetKeyGenerator->method('getKeyForContext')->with($this->dummyContext, [])
+            ->willReturn($contentBlockName);
+
+        $result = $this->service->getContentBlock($contentBlockName, $this->dummyContext);
+
+        $this->assertSame($snippetContentValue, $result);
     }
 }
