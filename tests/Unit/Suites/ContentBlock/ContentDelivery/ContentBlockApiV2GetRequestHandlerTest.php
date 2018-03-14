@@ -96,8 +96,7 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
     {
         $this->expectException(UnableToProcessContentBlockApiGetRequestException::class);
 
-        $this->stubRequest->method('hasQueryParameter')->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-            ->willReturn(false);
+        $this->stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/content_blocks/'));
 
         $this->handler->process($this->stubRequest);
     }
