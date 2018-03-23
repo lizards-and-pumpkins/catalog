@@ -56,6 +56,11 @@ class ContentBlockApiTest extends AbstractIntegrationTest
             'data_version' => '-1',
         ]));
 
+        $getRequest = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+        $getResponse = $this->processRequest($getRequest);
+
+        $this->assertSame(HttpResponse::STATUS_NOT_FOUND, $getResponse->getStatusCode());
+
         $putRequest = HttpRequest::fromParameters(HttpRequest::METHOD_PUT, $httpUrl, $httpHeaders, $httpRequestBody);
 
         $domainCommandQueue = $this->factory->getCommandMessageQueue();
