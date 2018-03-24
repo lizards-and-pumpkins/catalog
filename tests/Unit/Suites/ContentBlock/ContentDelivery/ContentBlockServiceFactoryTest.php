@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ContentBlock\ContentDelivery;
@@ -10,11 +11,9 @@ use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ContentBlockServiceFactoryTest
- *
- * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
  * @covers  \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory
  * @uses    \LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy
  * @uses    \LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy
@@ -32,15 +31,14 @@ use LizardsAndPumpkins\Util\Factory\MasterFactory;
  * @uses    \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses    \LizardsAndPumpkins\RestApi\RestApiFactory
  */
-class ContentBlockServiceFactoryTest extends \PHPUnit\Framework\TestCase
+class ContentBlockServiceFactoryTest extends TestCase
 {
-
     /**
      * @var ContentBlockServiceFactory
      */
-    protected $factory;
+    private $factory;
 
-    public function setUp()
+    final protected function setUp()
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
@@ -50,8 +48,6 @@ class ContentBlockServiceFactoryTest extends \PHPUnit\Framework\TestCase
         $this->factory = new ContentBlockServiceFactory();
 
         $masterFactory->register($this->factory);
-
-        parent::setUp();
     }
 
     public function testImplementsFactoryWithCallback()
@@ -59,33 +55,28 @@ class ContentBlockServiceFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(FactoryWithCallback::class, $this->factory);
     }
 
-    /**
-     *
-     */
     public function testRegistersApiHandler()
     {
         $apiVersion = 2;
-        $apiRequestHandlerLocatorStub = $this->createMock(ApiRequestHandlerLocator::class);
+        $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
 
-        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $masterFactory */
-        $masterFactory = $this->getMockBuilder(MasterFactory::class)
-                              ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator']))
-                              ->getMock();
-        $masterFactory->method('getApiRequestHandlerLocator')
-                      ->willReturn($apiRequestHandlerLocatorStub);
+        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
+            ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator']))
+            ->getMock();
+        $stubMasterFactory->method('getApiRequestHandlerLocator')->willReturn($mockApiRequestHandlerLocator);
 
-        $apiRequestHandlerLocatorStub->expects($this->once())
-                                     ->method('register')
-                                     ->with('get_content_block', $apiVersion, $this->isInstanceOf(\Closure::class));
+        $mockApiRequestHandlerLocator->expects($this->once())->method('register')
+            ->with('get_' . ContentBlockApiV2GetRequestHandler::ENDPOINT, $apiVersion);
 
-        $this->factory->factoryRegistrationCallback($masterFactory);
+        $this->factory->factoryRegistrationCallback($stubMasterFactory);
     }
 
-    /**
-     *
-     */
-    public function testCreateContentBlockApiV2GetRequestHandler()
+    public function testCreatesContentBlockApiV2GetRequestHandler()
     {
-        $this->assertInstanceOf(ContentBlockApiV2GetRequestHandler::class, $this->factory->createContentBlockApiV2GetRequestHandler());
+        $this->assertInstanceOf(
+            ContentBlockApiV2GetRequestHandler::class,
+            $this->factory->createContentBlockApiV2GetRequestHandler()
+        );
     }
 }

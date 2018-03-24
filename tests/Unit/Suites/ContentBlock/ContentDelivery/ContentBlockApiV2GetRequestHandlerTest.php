@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ContentBlock\ContentDelivery;
@@ -8,156 +9,127 @@ use LizardsAndPumpkins\ContentBlock\ContentDelivery\Exception\UnableToProcessCon
 use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
+use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ContentBlockApiV2GetRequestHandlerTest
- *
- * @package LizardsAndPumpkins\ContentBlock\ContentDelivery
  * @covers  \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockApiV2GetRequestHandler
  * @uses    \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
  * @uses    \LizardsAndPumpkins\Http\HttpHeaders
+ * @uses    \LizardsAndPumpkins\Http\HttpUrl
  */
 class ContentBlockApiV2GetRequestHandlerTest extends TestCase
 {
-
     /**
      * @var ContentBlockApiV2GetRequestHandler
      */
-    protected $handler;
+    private $handler;
 
     /**
      * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $request;
+    private $stubRequest;
 
     /**
      * @var ContentBlockService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contentBlockService;
+    private $stubContentBlockService;
 
-    /**
-     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $contextBuilder;
-
-    public function setUp()
+    private function prepareValidContentBlock(string $blockName, string $blockContents)
     {
+        $this->stubRequest->method('getUrl')
+            ->willReturn(HttpUrl::fromString(sprintf('http://example.com/api/content_blocks/%s/', $blockName)));
 
-        $this->contentBlockService = $this->createMock(ContentBlockService::class);
-        $this->contextBuilder = $this->createMock(ContextBuilder::class);
-        $this->handler = new ContentBlockApiV2GetRequestHandler($this->contentBlockService, $this->contextBuilder);
-        $this->request = $this->createMock(HttpRequest::class);
-
-        parent::setUp();
+        $this->stubContentBlockService->method('getContentBlock')->with($blockName)->willReturn($blockContents);
     }
 
-    public function testImplementsInterface()
+    final protected function setUp()
+    {
+        $this->stubContentBlockService = $this->createMock(ContentBlockService::class);
+
+        /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $dummyContextBuilder */
+        $dummyContextBuilder = $this->createMock(ContextBuilder::class);
+
+        $this->handler = new ContentBlockApiV2GetRequestHandler($this->stubContentBlockService, $dummyContextBuilder);
+
+        $this->stubRequest = $this->createMock(HttpRequest::class);
+    }
+
+    public function testIsHttpRequestHandler()
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->handler);
     }
 
-    public function testCanNotProcessIfQueryParameterIsMissing()
+    public function testCanNotProcessIfContentBlockIdIsMissing()
     {
-        $this->request->method('hasQueryParameter')->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)->willReturn(false);
+        $this->stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/content_blocks/'));
 
-        $this->assertFalse($this->handler->canProcess($this->request));
+        $this->assertFalse($this->handler->canProcess($this->stubRequest));
     }
 
     /**
      * @dataProvider emptyBlockIdProvider
-     *
-     * @param $emptyBlockId
+     * @param string $emptyBlockId
      */
-    public function testCanNotProcessIfContentBlockIdIsEmpty($emptyBlockId)
+    public function testCanNotProcessIfContentBlockIdIsEmpty(string $emptyBlockId)
     {
-        $this->request->method('hasQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn(true);
-        $this->request->method('getQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn($emptyBlockId);
+        $this->stubRequest->method('getUrl')
+            ->willReturn(HttpUrl::fromString(sprintf('http://example.com/api/content_blocks/%s/', $emptyBlockId)));
 
-        $this->assertFalse($this->handler->canProcess($this->request));
+        $this->assertFalse($this->handler->canProcess($this->stubRequest));
     }
 
-    /**
-     * @return array[]
-     */
     public function emptyBlockIdProvider(): array
     {
-        return [[""], [" "], [PHP_EOL]];
-    }
-
-    public function testCanNotProcessIfContentBlockDoesNotExist()
-    {
-        $constantBlockId = 'foo';
-        $this->request->method('hasQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn(true);
-        $this->request->method('getQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn($constantBlockId);
-        $this->contentBlockService->method('getContentBlock')
-                                  ->willThrowException(new ContentBlockNotFoundException());
-        $this->assertFalse($this->handler->canProcess($this->request));
+        return [[''], ['%20']];
     }
 
     public function testCanProcess()
     {
-        $this->prepareValidContentBlock('block_content');
-        $this->assertTrue($this->handler->canProcess($this->request));
+        $this->prepareValidContentBlock('block_id', 'block_content');
+
+        $this->assertTrue($this->handler->canProcess($this->stubRequest));
+    }
+
+    public function testThrowsExceptionDuringAttemptToProcessInvalidRequest()
+    {
+        $this->expectException(UnableToProcessContentBlockApiGetRequestException::class);
+
+        $this->stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/content_blocks/'));
+
+        $this->handler->process($this->stubRequest);
     }
 
     public function testReturnsHttpResponse()
     {
-        $contentBlockValue = '';
-        $this->prepareValidContentBlock($contentBlockValue);
+        $this->prepareValidContentBlock('block_id', 'block_content');
 
-        $this->assertInstanceOf(HttpResponse::class, $this->handler->process($this->request));
+        $this->assertInstanceOf(HttpResponse::class, $this->handler->process($this->stubRequest));
+    }
+
+    public function testReturnsHttpResponseWithNotFoundCodeAndMessageIfContentBlockDoesNotExist()
+    {
+        $contentBlockId = 'foo';
+
+        $this->stubRequest->method('getUrl')
+            ->willReturn(HttpUrl::fromString(sprintf('http://example.com/api/content_blocks/%s/', $contentBlockId)));
+
+        $this->stubContentBlockService->method('getContentBlock')
+            ->willThrowException(new ContentBlockNotFoundException());
+
+        $response = $this->handler->process($this->stubRequest);
+
+        $this->assertSame(HttpResponse::STATUS_NOT_FOUND, $response->getStatusCode());
+        $this->assertSame(sprintf('Content block "%s" does not exist.', $contentBlockId), $response->getBody());
     }
 
     public function testReturnsHttpResponseWithBlockContent()
     {
-        $contentBlockValue = 'block_content';
-        $this->prepareValidContentBlock($contentBlockValue);
+        $this->prepareValidContentBlock('block_id', 'block_content');
 
-        $httpResponse = $this->handler->process($this->request);
-        $this->assertEquals($contentBlockValue, $httpResponse->getBody());
-    }
+        $response = $this->handler->process($this->stubRequest);
 
-    public function testThrowsException()
-    {
-        $constantBlockId = 'foo';
-        $this->request->method('hasQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn(true);
-        $this->request->method('getQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn($constantBlockId);
-        $this->contentBlockService->method('getContentBlock')
-                                  ->willThrowException(new ContentBlockNotFoundException());
-        $this->expectException(UnableToProcessContentBlockApiGetRequestException::class);
-
-        $this->handler->process($this->request);
-    }
-
-    /**
-     * @param $contentBlockValue
-     */
-    private function prepareValidContentBlock(string $contentBlockValue)
-    {
-        $contentBlockName = 'block_name';
-        $this->request->method('hasQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn(true);
-        $this->request->method('getQueryParameter')
-                      ->with(ContentBlockApiV2GetRequestHandler::QUERY_PARAMETER_NAME)
-                      ->willReturn($contentBlockName);
-
-        $this->contentBlockService->method('getContentBlock')
-                                  ->with($contentBlockName)
-                                  ->willReturn($contentBlockValue);
+        $this->assertEquals('block_content', $response->getBody());
     }
 }
