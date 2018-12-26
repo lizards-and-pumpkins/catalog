@@ -11,20 +11,27 @@ class ThemeLocator
      */
     private $themeDirectoryPath;
 
-    public function __construct(string $themeDirectoryPath)
+    /**
+     * @var LayoutXmlFileReader
+     */
+    private $layoutReader;
+
+    public function __construct(string $themeDirectoryPath, LayoutReader $layoutReader)
     {
         // TODO: Validate
         $this->themeDirectoryPath = $themeDirectoryPath . '/theme';
+        $this->layoutReader       = $layoutReader;
     }
 
-    public function getThemeDirectory() : string
+    public function getThemeDirectory(): string
     {
         return $this->themeDirectoryPath;
     }
 
-    public function getLayoutForHandle(string $layoutHandle) : Layout
+    public function getLayoutForHandle(string $layoutHandle): Layout
     {
         $layoutFile = $this->themeDirectoryPath . '/layout/' . $layoutHandle . '.xml';
-        return (new LayoutReader())->loadLayoutFromXmlFile($layoutFile);
+
+        return $this->layoutReader->loadLayout($layoutFile);
     }
 }

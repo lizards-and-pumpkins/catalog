@@ -9,7 +9,7 @@ use LizardsAndPumpkins\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\Import\TemplateRendering\LayoutReader
+ * @covers \LizardsAndPumpkins\Import\TemplateRendering\LayoutXmlFileReader
  * @uses   \LizardsAndPumpkins\Import\XPathParser
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\Layout
  */
@@ -18,19 +18,19 @@ class LayoutReaderTest extends TestCase
     use TestFileFixtureTrait;
     
     /**
-     * @var LayoutReader
+     * @var LayoutXmlFileReader
      */
     private $layoutReader;
 
     protected function setUp()
     {
-        $this->layoutReader = new LayoutReader();
+        $this->layoutReader = new LayoutXmlFileReader();
     }
 
     public function testExceptionIsThrownIfFileDesNotExist()
     {
         $this->expectException(LayoutFileNotReadableException::class);
-        $this->layoutReader->loadLayoutFromXmlFile('some-non-existing-file-name.xml');
+        $this->layoutReader->loadLayout('some-non-existing-file-name.xml');
     }
 
     public function testExceptionIsThrownIfFileIsNotReadable()
@@ -39,13 +39,13 @@ class LayoutReaderTest extends TestCase
         $this->createFixtureFile($filePath, '', 0000);
         $this->expectException(LayoutFileNotReadableException::class);
 
-        $this->layoutReader->loadLayoutFromXmlFile($filePath);
+        $this->layoutReader->loadLayout($filePath);
     }
 
     public function testExceptionIsThrownIfPathIsADirectory()
     {
         $this->expectException(LayoutFileNotReadableException::class);
-        $this->layoutReader->loadLayoutFromXmlFile(sys_get_temp_dir());
+        $this->layoutReader->loadLayout(sys_get_temp_dir());
     }
 
     public function testLayoutIsReturned()
@@ -54,7 +54,7 @@ class LayoutReaderTest extends TestCase
         $layoutXML = '<?xml version="1.0"?><snippet><block name="foo" class="Bar\Baz" template="qux.phtml"/></snippet>';
         $this->createFixtureFile($layoutFile, $layoutXML);
 
-        $snippetLayout = $this->layoutReader->loadLayoutFromXmlFile($layoutFile);
+        $snippetLayout = $this->layoutReader->loadLayout($layoutFile);
         $topmostChildBlockLayoutArray = $snippetLayout->getNodeChildren();
         
         /** @var Layout $topmostChildBlockLayout */

@@ -18,6 +18,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\InMemoryKeyValueStore;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
+use LizardsAndPumpkins\Import\TemplateRendering\LayoutXmlFileReader;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\MessageQueueFactory;
@@ -423,7 +424,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
 
     public function createThemeLocator() : ThemeLocator
     {
-        return new ThemeLocator(__DIR__ . '/../fixture');
+        return new ThemeLocator(__DIR__ . '/../fixture', new LayoutXmlFileReader());
     }
 
     public function createContextSource() : ContextSource
