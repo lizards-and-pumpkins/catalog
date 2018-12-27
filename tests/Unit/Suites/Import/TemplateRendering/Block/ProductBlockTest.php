@@ -11,7 +11,9 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\Import\TemplateRendering\Block;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\Template;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -43,8 +45,11 @@ class ProductBlockTest extends TestCase
     {
         $this->stubBlockRenderer = $this->createMock(BlockRenderer::class);
         $this->stubProductView = $this->createMock(ProductView::class);
+        /** @var Template|MockObject $template */
+        $template = $this->createMock(Template::class);
+        $template->method('__toString')->willReturn('foo.phtml');
 
-        $this->productBlock = new ProductBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProductView);
+        $this->productBlock = new ProductBlock($this->stubBlockRenderer, $template, 'foo', $this->stubProductView);
     }
 
     public function testBlockClassIsExtended()

@@ -44,6 +44,7 @@ use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateFactory;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
@@ -456,13 +457,13 @@ class CommonFactoryTest extends TestCase
         $result = $this->commonFactory->createShutdownWorkerCommandHandler();
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
-    
+
     public function testReturnsAnImportCatalogCommandHandler()
     {
         $result = $this->commonFactory->createImportCatalogCommandHandler();
         $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
     }
-    
+
     public function testReturnsASetCurrentDataVersionCommandHandler()
     {
         $result = $this->commonFactory->createSetCurrentDataVersionCommandHandler();
@@ -494,7 +495,7 @@ class CommonFactoryTest extends TestCase
 
         $this->assertSame($resultA, $resultB);
     }
-    
+
     public function testCatalogImportIsReturned()
     {
         $result = $this->commonFactory->createCatalogImport();
@@ -602,18 +603,18 @@ class CommonFactoryTest extends TestCase
 
     public function testSnippetKeyGeneratorForContentBlockIsReturned()
     {
-        $snippetCode = 'content_block_foo';
+        $snippetCode                = 'content_block_foo';
         $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
-        $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+        $result                     = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
     public function testSnippetKeyGeneratorForProductListingContentBlockIsReturned()
     {
-        $snippetCode = 'product_listing_content_block_foo';
+        $snippetCode                = 'product_listing_content_block_foo';
         $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
-        $result = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
+        $result                     = $snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($snippetCode);
 
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
@@ -665,7 +666,7 @@ class CommonFactoryTest extends TestCase
 
     public function testItReturnsTheDefaultMediaBaseDirectoryConfiguration()
     {
-        $path = preg_replace('#tests/Unit/Suites#', 'src', __DIR__);
+        $path          = preg_replace('#tests/Unit/Suites#', 'src', __DIR__);
         $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
 
         $this->assertSame($path . '/../pub/media', $baseDirectory);
@@ -675,7 +676,7 @@ class CommonFactoryTest extends TestCase
     {
         $configuredBaseMediaPath = '/foo/bar';
 
-        $originalState = $_SERVER;
+        $originalState                 = $_SERVER;
         $_SERVER['LP_MEDIA_BASE_PATH'] = $configuredBaseMediaPath;
 
         $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
@@ -738,7 +739,7 @@ class CommonFactoryTest extends TestCase
      */
     public function testContainsProductListingPageSnippetRenderersInSnippetRendererList(string $expected)
     {
-        $found = array_reduce(
+        $found   = array_reduce(
             $this->commonFactory->createProductListingSnippetRendererList(),
             function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
                 return $found || is_a($snippetRenderer, $expected);
@@ -751,7 +752,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @return array[]
      */
-    public function productListSnippetRenderersProvider() : array
+    public function productListSnippetRenderersProvider(): array
     {
         return [
             [ProductListingMetaSnippetRenderer::class],
@@ -763,7 +764,7 @@ class CommonFactoryTest extends TestCase
      */
     public function testContainsProductSnippetRenderersInSnippetRendererList(string $expected)
     {
-        $found = array_reduce(
+        $found   = array_reduce(
             $this->commonFactory->createProductDetailPageSnippetRendererList(),
             function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
                 return $found || is_a($snippetRenderer, $expected);
@@ -776,7 +777,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @return array[]
      */
-    public function productSnippetRenderersProvider() : array
+    public function productSnippetRenderersProvider(): array
     {
         return [
             [ProductDetailMetaSnippetRenderer::class],
@@ -791,7 +792,7 @@ class CommonFactoryTest extends TestCase
      */
     public function testContainsProductListingTemplateSnippetRenderersInSnippetRendererList(string $expected)
     {
-        $found = array_reduce(
+        $found   = array_reduce(
             $this->commonFactory->createProductListingTemplateSnippetRendererList(),
             function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
                 return $found || is_a($snippetRenderer, $expected);
@@ -807,7 +808,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @return array[]
      */
-    public function productListingTemplateSnippetRenderersProvider() : array
+    public function productListingTemplateSnippetRenderersProvider(): array
     {
         return [
             [ProductListingTemplateSnippetRenderer::class],
@@ -820,7 +821,7 @@ class CommonFactoryTest extends TestCase
      */
     public function testContainsProductDetailTemplateSnippetRenderersInSnippetRendererList(string $expected)
     {
-        $found = array_reduce(
+        $found   = array_reduce(
             $this->commonFactory->createProductDetailTemplateSnippetRendererList(),
             function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
                 return $found || is_a($snippetRenderer, $expected);
@@ -836,7 +837,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @return array[]
      */
-    public function productDetailTemplateSnippetRenderersProvider() : array
+    public function productDetailTemplateSnippetRenderersProvider(): array
     {
         return [
             [ProductDetailTemplateSnippetRenderer::class],
@@ -848,7 +849,7 @@ class CommonFactoryTest extends TestCase
      */
     public function testContainsContentBlockSnippetRenderersInSnippetRendererList(string $expected)
     {
-        $found = array_reduce(
+        $found   = array_reduce(
             $this->commonFactory->createContentBlockSnippetRendererList(),
             function ($found, SnippetRenderer $snippetRenderer) use ($expected) {
                 return $found || is_a($snippetRenderer, $expected);
@@ -861,7 +862,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @return array[]
      */
-    public function contentBlockSnippetRenderersProvider() : array
+    public function contentBlockSnippetRenderersProvider(): array
     {
         return [
             [ContentBlockSnippetRenderer::class],
@@ -883,5 +884,10 @@ class CommonFactoryTest extends TestCase
     public function testReturnsSnippetReader()
     {
         $this->assertInstanceOf(SnippetReader::class, $this->commonFactory->createSnippetReader());
+    }
+
+    public function testReturnsTemplateFactory()
+    {
+        $this->assertInstanceOf(TemplateFactory::class, $this->commonFactory->createTemplateFactory());
     }
 }

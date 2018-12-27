@@ -39,6 +39,7 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateFileFactory;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
@@ -373,7 +374,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder(),
-            $this->getMasterFactory()->createAssetsBaseUrlBuilder()
+            $this->getMasterFactory()->createAssetsBaseUrlBuilder(),
+            $this->getMasterFactory()->createTemplateFactory()
         );
     }
 
@@ -474,7 +476,8 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             $this->getMasterFactory()->createBlockStructure(),
             $this->getMasterFactory()->getTranslatorRegistry(),
             $this->getMasterFactory()->createBaseUrlBuilder(),
-            $this->getMasterFactory()->createAssetsBaseUrlBuilder()
+            $this->getMasterFactory()->createAssetsBaseUrlBuilder(),
+            $this->getMasterFactory()->createTemplateFactory()
         );
     }
 
@@ -1179,5 +1182,10 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createEnrichProductJsonWithPrices() : EnrichProductJsonWithPrices
     {
         return new EnrichProductJsonWithPrices();
+    }
+
+    public function createTemplateFactory()
+    {
+        return new TemplateFileFactory();
     }
 }

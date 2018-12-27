@@ -61,18 +61,25 @@ abstract class BlockRenderer
      */
     private $assetsBaseUrlBuilder;
 
+    /**
+     * @var TemplateFactory
+     */
+    private $templateFactory;
+
     public function __construct(
         ThemeLocator $themeLocator,
         BlockStructure $blockStructure,
         TranslatorRegistry $translatorRegistry,
         BaseUrlBuilder $baseUrlBuilder,
-        BaseUrlBuilder $assetsBaseUrlBuilder
+        BaseUrlBuilder $assetsBaseUrlBuilder,
+        TemplateFactory $templateFactory
     ) {
-        $this->themeLocator = $themeLocator;
-        $this->blockStructure = $blockStructure;
-        $this->translatorRegistry = $translatorRegistry;
-        $this->baseUrlBuilder = $baseUrlBuilder;
+        $this->themeLocator         = $themeLocator;
+        $this->blockStructure       = $blockStructure;
+        $this->translatorRegistry   = $translatorRegistry;
+        $this->baseUrlBuilder       = $baseUrlBuilder;
         $this->assetsBaseUrlBuilder = $assetsBaseUrlBuilder;
+        $this->templateFactory      = $templateFactory;
     }
 
     abstract public function getLayoutHandle(): string;
@@ -80,12 +87,13 @@ abstract class BlockRenderer
     /**
      * @param mixed $dataObject
      * @param Context $context
+     *
      * @return string
      */
     public function render($dataObject, Context $context): string
     {
-        $this->dataObject = $dataObject;
-        $this->context = $context;
+        $this->dataObject        = $dataObject;
+        $this->context           = $context;
         $this->missingBlockNames = [];
 
         $outermostBlockLayout = $this->getOuterMostBlockLayout();
@@ -104,14 +112,16 @@ abstract class BlockRenderer
 
     private function getOuterMostBlockLayout(): Layout
     {
-        $layout = $this->getLayout();
+        $layout     = $this->getLayout();
         $rootBlocks = $layout->getNodeChildren();
 
-        if (! is_array($rootBlocks) || 1 !== count($rootBlocks)) {
-            throw new BlockRendererMustHaveOneRootBlockException(sprintf(
-                'Exactly one root block must be assigned to BlockRenderer "%s"',
-                $this->getLayoutHandle()
-            ));
+        if (!is_array($rootBlocks) || 1 !== count($rootBlocks)) {
+            throw new BlockRendererMustHaveOneRootBlockException(
+                sprintf(
+                    'Exactly one root block must be assigned to BlockRenderer "%s"',
+                    $this->getLayoutHandle()
+                )
+            );
         }
 
         return $rootBlocks[0];
@@ -122,8 +132,10 @@ abstract class BlockRenderer
         $blockClass = $layout->getAttribute('class');
         $this->validateBlockClass($blockClass);
 
-        $template = $this->themeLocator->getThemeDirectory() . '/' . $layout->getAttribute('template');
-        $name = $layout->getAttribute('name');
+        $template = $this->templateFactory->createTemplate(
+            $this->themeLocator->getThemeDirectory() . '/' . $layout->getAttribute('template')
+        );
+        $name     = $layout->getAttribute('name');
 
         /** @var Block $blockInstance */
         $blockInstance = new $blockClass($this, $template, $name, $this->dataObject);
@@ -150,11 +162,11 @@ abstract class BlockRenderer
             throw new CanNotInstantiateBlockException('Block class is not specified.');
         }
 
-        if (! class_exists($blockClass)) {
+        if (!class_exists($blockClass)) {
             throw new CanNotInstantiateBlockException(sprintf('Block class does not exist "%s".', $blockClass));
         }
 
-        if (Block::class !== $blockClass && ! in_array(Block::class, class_parents($blockClass))) {
+        if (Block::class !== $blockClass && !in_array(Block::class, class_parents($blockClass))) {
             $message = sprintf('Block class "%s" must extend "%s"', $blockClass, Block::class);
             throw new CanNotInstantiateBlockException(sprintf($message));
         }
@@ -167,8 +179,8 @@ abstract class BlockRenderer
 
     public function getChildBlockOutput(string $parentName, string $childName): string
     {
-        if (! $this->blockStructure->hasChildBlock($parentName, $childName)) {
-            $placeholder = $this->getBlockPlaceholder($childName);
+        if (!$this->blockStructure->hasChildBlock($parentName, $childName)) {
+            $placeholder               = $this->getBlockPlaceholder($childName);
             $this->missingBlockNames[] = $childName;
 
             return $placeholder;

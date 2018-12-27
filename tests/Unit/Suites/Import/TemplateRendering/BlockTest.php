@@ -42,14 +42,23 @@ class BlockTest extends TestCase
      */
     private $block;
 
+    /**
+     * @var Template
+     */
+    private $templateFileMock;
+
     public function setUp()
     {
         $this->testTemplateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
+
+        $this->templateFileMock = $this->createMock(Template::class);
+        $this->templateFileMock->method('__toString')->willReturn($this->testTemplateFilePath);
+
         $this->mockBlockRenderer = $this->createMock(BlockRenderer::class);
 
         $this->block = new Block(
             $this->mockBlockRenderer,
-            $this->testTemplateFilePath,
+            $this->templateFileMock,
             $this->testBlockName,
             $this->testProjectionSourceData
         );
@@ -93,7 +102,7 @@ class BlockTest extends TestCase
     {
         $childName = 'child-name';
         $this->mockBlockRenderer->expects($this->once())->method('getChildBlockOutput')
-            ->with($this->testBlockName, $childName);
+                                ->with($this->testBlockName, $childName);
 
         $this->block->getChildOutput($childName);
     }
@@ -108,7 +117,7 @@ class BlockTest extends TestCase
 
     public function testTranslationIsDelegatedToBlockRenderer()
     {
-        $testSourceString = 'foo';
+        $testSourceString     = 'foo';
         $testTranslatedString = 'bar';
         $this->mockBlockRenderer->method('translate')->with($testSourceString)->willReturn($testTranslatedString);
 
@@ -119,7 +128,7 @@ class BlockTest extends TestCase
     {
         $baseUrl = new HttpBaseUrl('http://example.com/');
         $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
-        
+
         $this->assertSame($baseUrl, $this->block->getBaseUrl());
     }
 
@@ -134,7 +143,7 @@ class BlockTest extends TestCase
     {
         $dummyWebsiteCode = 'foo';
         $this->mockBlockRenderer->expects($this->once())->method('getWebsiteCode')->willReturn($dummyWebsiteCode);
-        
+
         $this->assertSame($dummyWebsiteCode, $this->block->getWebsiteCode());
     }
 }

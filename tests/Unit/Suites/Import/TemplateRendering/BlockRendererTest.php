@@ -25,14 +25,16 @@ class BlockRendererTest extends AbstractBlockRendererTest
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
         BaseUrlBuilder $baseUrlBuilder,
-        BaseUrlBuilder $stubAssetsBaseUrlBuilder
+        BaseUrlBuilder $stubAssetsBaseUrlBuilder,
+        TemplateFactory $templateFactory
     ): BlockRenderer {
         return new StubBlockRenderer(
             $stubThemeLocator,
             $stubBlockStructure,
             $stubTranslatorRegistry,
             $baseUrlBuilder,
-            $stubAssetsBaseUrlBuilder
+            $stubAssetsBaseUrlBuilder,
+            $templateFactory
         );
     }
 
@@ -81,6 +83,8 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testBlockSpecifiedInLayoutIsRendered()
     {
         $template = sys_get_temp_dir() . '/' . uniqid() . '/test-template.php';
+        $this->templateMock->method('__toString')->willReturn($template);
+
         $templateContent = 'test template content';
         $this->createFixtureFile($template, $templateContent);
         $this->addStubRootBlock(StubBlock::class, $template);
@@ -91,14 +95,16 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testChildrenBlocksAreRenderedRecursively()
     {
-        $childBlockName = 'child-block';
+        $childBlockName            = 'child-block';
         $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
-        $rootTemplateContent = 'Root template with ::' . $outputChildBlockStatement . '::';
-        $childTemplateContent = 'Child template content';
-        $combinedTemplateContent = 'Root template with ::Child template content::';
+        $rootTemplateContent       = 'Root template with ::' . $outputChildBlockStatement . '::';
+        $childTemplateContent      = 'Child template content';
+        $combinedTemplateContent   = 'Root template with ::Child template content::';
 
-        $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
+        $rootTemplate  = $this->getUniqueTempDir() . '/root-template.php';
         $childTemplate = $this->getUniqueTempDir() . '/child-template.php';
+        $this->templateMock->method('__toString')->willReturnOnConsecutiveCalls($rootTemplate, $childTemplate);
+
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);
         $this->createFixtureFile($childTemplate, $childTemplateContent);
 
@@ -112,12 +118,13 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testPlaceholderIsInsertedIfChildBlockIsMissing()
     {
-        $childBlockName = 'child-block';
-        $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
-        $rootTemplateContent = 'Root template with ::' . $outputChildBlockStatement . '::';
+        $childBlockName                      = 'child-block';
+        $outputChildBlockStatement           = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
+        $rootTemplateContent                 = 'Root template with ::' . $outputChildBlockStatement . '::';
         $templateContentWithChildPlaceholder = 'Root template with ::{{snippet ' . $childBlockName . '}}::';
 
         $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
+        $this->templateMock->method('__toString')->willReturn($rootTemplate);
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);
 
         $this->addStubRootBlock(StubBlock::class, $rootTemplate);
@@ -137,13 +144,14 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testArrayOfMissingChildBlockNamesIsReturned()
     {
-        $childBlockName1 = 'child-block1';
-        $childBlockName2 = 'child-block2';
+        $childBlockName1            = 'child-block1';
+        $childBlockName2            = 'child-block2';
         $outputChildBlockStatement1 = '<?= $this->getChildOutput("' . $childBlockName1 . '") ?>';
         $outputChildBlockStatement2 = '<?= $this->getChildOutput("' . $childBlockName2 . '") ?>';
-        $rootTemplateContent = '::' . $outputChildBlockStatement1 . $outputChildBlockStatement2 . '::';
+        $rootTemplateContent        = '::' . $outputChildBlockStatement1 . $outputChildBlockStatement2 . '::';
 
         $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
+        $this->templateMock->method('__toString')->willReturn($rootTemplate);
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);
 
         $this->addStubRootBlock(StubBlock::class, $rootTemplate);
@@ -154,13 +162,14 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testFreshListOfMissingChildrenBlockNamesIsReturnedIfRenderIsCalledTwice()
     {
-        $childBlockName1 = 'child-block1';
-        $childBlockName2 = 'child-block2';
+        $childBlockName1            = 'child-block1';
+        $childBlockName2            = 'child-block2';
         $outputChildBlockStatement1 = '<?= $this->getChildOutput("' . $childBlockName1 . '") ?>';
         $outputChildBlockStatement2 = '<?= $this->getChildOutput("' . $childBlockName2 . '") ?>';
-        $rootTemplateContent = '::' . $outputChildBlockStatement1 . $outputChildBlockStatement2 . '::';
+        $rootTemplateContent        = '::' . $outputChildBlockStatement1 . $outputChildBlockStatement2 . '::';
 
         $rootTemplate = $this->getUniqueTempDir() . '/root-template.php';
+        $this->templateMock->method('__toString')->willReturn($rootTemplate);
         $this->createFixtureFile($rootTemplate, $rootTemplateContent);
 
         $this->addStubRootBlock(StubBlock::class, $rootTemplate);
@@ -180,7 +189,9 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testDataObjectPassedToRenderIsReturned()
     {
         $testProjectionSourceData = 'test-projection-source-data';
-        $template = $this->getUniqueTempDir() . '/template.phtml';
+        $template                 = $this->getUniqueTempDir() . '/template.phtml';
+        $this->templateMock->method('__toString')->willReturn($template);
+
         $this->createFixtureFile($template, '');
         $this->addStubRootBlock(StubBlock::class, $template);
         $this->getBlockRenderer()->render($testProjectionSourceData, $this->getStubContext());
@@ -189,10 +200,12 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
     public function testStringTranslationIsDelegatedToTranslator()
     {
-        $originalString = 'foo';
+        $originalString   = 'foo';
         $translatedString = 'bar';
 
         $template = sys_get_temp_dir() . '/' . uniqid() . '/test-template.php';
+        $this->templateMock->method('__toString')->willReturn($template);
+
         $templateContent = 'test template content';
         $this->createFixtureFile($template, $templateContent);
         $this->addStubRootBlock(StubBlock::class, $template);
@@ -209,8 +222,10 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
         $testDir = $this->getUniqueTempDir();
         $this->createFixtureDirectory($testDir);
-        $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
-        $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
+        $template = $testDir . '/test-template.php';
+        $this->createFixtureFile($template, 'test template content');
+        $this->addStubRootBlock(StubBlock::class, $template);
+        $this->templateMock->method('__toString')->willReturn($template);
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
 
         $this->getBlockRenderer()->getBaseUrl();
@@ -219,14 +234,16 @@ class BlockRendererTest extends AbstractBlockRendererTest
     public function testWebsiteCodeIsReturned()
     {
         $testWebsiteCode = 'foo';
-        $stubContext = $this->getStubContext();
+        $stubContext     = $this->getStubContext();
         $stubContext->method('getValue')->with(Website::CONTEXT_CODE)->willReturn($testWebsiteCode);
 
         $dataObject = [];
-        $testDir = $this->getUniqueTempDir();
+        $testDir    = $this->getUniqueTempDir();
         $this->createFixtureDirectory($testDir);
-        $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
-        $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
+        $template = $testDir . '/test-template.php';
+        $this->createFixtureFile($template, 'test template content');
+        $this->addStubRootBlock(StubBlock::class, $template);
+        $this->templateMock->method('__toString')->willReturn($template);
 
         $this->getBlockRenderer()->render($dataObject, $stubContext);
 
@@ -239,8 +256,11 @@ class BlockRendererTest extends AbstractBlockRendererTest
 
         $testDir = $this->getUniqueTempDir();
         $this->createFixtureDirectory($testDir);
-        $this->createFixtureFile($testDir . '/test-template.php', 'test template content');
-        $this->addStubRootBlock(StubBlock::class, $testDir . '/test-template.php');
+        $template = $testDir . '/test-template.php';
+        $this->createFixtureFile($template, 'test template content');
+        $this->addStubRootBlock(StubBlock::class, $template);
+        $this->templateMock->method('__toString')->willReturn($template);
+
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
 
         $this->getBlockRenderer()->getAssetsBaseUrl();

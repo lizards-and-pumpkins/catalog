@@ -31,17 +31,17 @@ class Block
 
     /**
      * @param BlockRenderer $blockRenderer
-     * @param string $template
+     * @param Template $template
      * @param string $name
      * @param mixed $dataObject
      */
-    final public function __construct(BlockRenderer $blockRenderer, string $template, string $name, $dataObject)
+    final public function __construct(BlockRenderer $blockRenderer, Template $template, string $name, $dataObject)
     {
         // TODO Decouple from template rendering logic
         $this->blockRenderer = $blockRenderer;
-        $this->template = $template;
-        $this->blockName = $name;
-        $this->dataObject = $dataObject;
+        $this->template      = $template;
+        $this->blockName     = $name;
+        $this->dataObject    = $dataObject;
     }
 
     public function getBlockName(): string
@@ -79,10 +79,12 @@ class Block
 
     final public function render(): string
     {
-        $templatePath = realpath($this->template);
+        $templatePath = realpath((string)$this->template);
 
-        if (false === $templatePath || ! is_readable($templatePath) || is_dir($templatePath)) {
-            throw new TemplateFileNotReadableException(sprintf('Template "%s" is not readable.', $this->template));
+        if (false === $templatePath || !is_readable($templatePath) || is_dir($templatePath)) {
+            throw new TemplateFileNotReadableException(
+                sprintf('Template "%s" is not readable.', (string)$this->template)
+            );
         }
 
         ob_start();

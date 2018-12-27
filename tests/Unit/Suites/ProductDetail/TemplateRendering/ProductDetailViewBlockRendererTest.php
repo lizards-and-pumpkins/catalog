@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Import\TemplateRendering\AbstractBlockRendererTest;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
+use LizardsAndPumpkins\Import\TemplateRendering\TemplateFactory;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
 
@@ -24,14 +25,16 @@ class ProductDetailViewBlockRendererTest extends AbstractBlockRendererTest
         BlockStructure $stubBlockStructure,
         TranslatorRegistry $stubTranslatorRegistry,
         BaseUrlBuilder $stubBaseUrlBuilder,
-        BaseUrlBuilder $stubAssetsBaseUrlBuilder
+        BaseUrlBuilder $stubAssetsBaseUrlBuilder,
+        TemplateFactory $templateFactory
     ) : BlockRenderer {
         return new ProductDetailViewBlockRenderer(
             $stubThemeLocator,
             $stubBlockStructure,
             $stubTranslatorRegistry,
             $stubBaseUrlBuilder,
-            $stubAssetsBaseUrlBuilder
+            $stubAssetsBaseUrlBuilder,
+            $templateFactory
         );
     }
 }
