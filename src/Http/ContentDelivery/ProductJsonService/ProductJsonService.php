@@ -57,7 +57,7 @@ class ProductJsonService
      * @param ProductId[] $productIds
      * @return array[]
      */
-    public function get(Context $context, ProductId ...$productIds): array
+    public function get(Context $context, string $snippetName, ProductId ...$productIds): array
     {
         return $this->buildProductData(
             $context,

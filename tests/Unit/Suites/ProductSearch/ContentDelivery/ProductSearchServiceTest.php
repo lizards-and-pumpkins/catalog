@@ -117,4 +117,11 @@ class ProductSearchServiceTest extends TestCase
 
         $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
     }
+
+    public function testSnippetNameIsPassedtoJsonService()
+    {
+        $snippetName = 'testSnippetName';
+        $this->stubProductJsonService->method('get')->with($this->anything(), $snippetName);
+        $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions, $snippetName);
+    }
 }
