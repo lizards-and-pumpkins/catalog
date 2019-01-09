@@ -98,7 +98,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
-    public function canProcess(HttpRequest $request) : bool
+    public function canProcess(HttpRequest $request): bool
     {
         if ($request->getMethod() !== HttpRequest::METHOD_GET) {
             return false;
@@ -127,9 +127,9 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
 
         $searchCriteria = $this->createSearchCriteria($request);
         $queryOptions = $this->createQueryOptions($request);
-        $snippetName = $request->getQueryParameter(ProductJsonService::SNIPPET_NAME);
+        $snippetName = $this->getSnippetName($request);
 
-        $searchResult = $this->productSearchService->query($searchCriteria, $queryOptions);
+        $searchResult = $this->productSearchService->query($searchCriteria, $queryOptions, $snippetName);
 
         $body = json_encode($searchResult);
         $headers = [];
@@ -141,12 +141,12 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
      * @param HttpRequest $request
      * @return string[]
      */
-    private function getRequestPathParts(HttpRequest $request) : array
+    private function getRequestPathParts(HttpRequest $request): array
     {
         return explode('/', $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl()));
     }
 
-    private function createQueryOptions(HttpRequest $request) : QueryOptions
+    private function createQueryOptions(HttpRequest $request): QueryOptions
     {
         $filterSelection = $this->getSelectedFilters($request);
 
@@ -172,7 +172,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         );
     }
 
-    private function getNumberOfProductPerPage(HttpRequest $request) : int
+    private function getNumberOfProductPerPage(HttpRequest $request): int
     {
         if ($request->hasQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER)) {
             return (int) $request->getQueryParameter(self::NUMBER_OF_PRODUCTS_PER_PAGE_PARAMETER);
@@ -181,7 +181,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         return $this->searchEngineConfiguration->getProductsPerPage();
     }
 
-    private function getPageNumber(HttpRequest $request) : int
+    private function getPageNumber(HttpRequest $request): int
     {
         if ($request->hasQueryParameter(self::PAGE_NUMBER_PARAMETER)) {
             return (int) $request->getQueryParameter(self::PAGE_NUMBER_PARAMETER);
@@ -190,7 +190,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         return 0;
     }
 
-    private function getSortBy(HttpRequest $request) : SortBy
+    private function getSortBy(HttpRequest $request): SortBy
     {
         if ($request->hasQueryParameter(self::SORT_ORDER_PARAMETER)) {
             return new SortBy(
@@ -202,7 +202,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         return $this->searchEngineConfiguration->getSortBy();
     }
 
-    private function getSortDirectionString(HttpRequest $request) : string
+    private function getSortDirectionString(HttpRequest $request): string
     {
         if ($request->hasQueryParameter(self::SORT_DIRECTION_PARAMETER)) {
             return $request->getQueryParameter(self::SORT_DIRECTION_PARAMETER);
@@ -283,5 +283,17 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         }, $attributeCodes);
 
         return new FacetFiltersToIncludeInResult(...$facetFields);
+    }
+
+    /**
+     * @param HttpRequest $request
+     * @return string
+     */
+    private function getSnippetName(HttpRequest $request)
+    {
+        if ($request->hasQueryParameter(ProductJsonService::SNIPPET_NAME)) {
+            return $request->getQueryParameter(ProductJsonService::SNIPPET_NAME);
+        }
+        return '';
     }
 }
