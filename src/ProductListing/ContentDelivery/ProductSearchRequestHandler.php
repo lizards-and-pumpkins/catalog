@@ -164,6 +164,6 @@ class ProductSearchRequestHandler implements HttpRequestHandler
         $queryString = $request->getQueryParameter(self::QUERY_STRING_PARAMETER_NAME);
         $criteria = $this->fullTextCriteriaBuilder->createFromString($queryString);
 
-        return $this->productSearchService->query($criteria, $queryOptions);
+        return $this->productSearchService->query($criteria, $queryOptions, '');
     }
 }

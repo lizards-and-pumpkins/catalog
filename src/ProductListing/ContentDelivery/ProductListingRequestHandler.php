@@ -168,7 +168,7 @@ class ProductListingRequestHandler implements HttpRequestHandler
             $this->productListingPageRequest->createSortByForRequest($selectedSortBy)
         );
 
-        return $this->productSearchService->query($criteria, $queryOptions);
+        return $this->productSearchService->query($criteria, $queryOptions, '');
     }
 
     private function isPageWithinBounds(
