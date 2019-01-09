@@ -15,6 +15,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
@@ -126,6 +127,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
 
         $searchCriteria = $this->createSearchCriteria($request);
         $queryOptions = $this->createQueryOptions($request);
+        $snippetName = $request->getQueryParameter(ProductJsonService::SNIPPET_NAME);
 
         $searchResult = $this->productSearchService->query($searchCriteria, $queryOptions);
 

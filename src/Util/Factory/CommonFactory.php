@@ -288,7 +288,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createProductJsonSnippetKeyGenerator(): SnippetKeyGenerator
     {
-        $usedDataParts = [Product::ID, 'snippetName'];
+        $usedDataParts = [Product::ID, ProductJsonService::SNIPPET_NAME];
 
         return new GenericSnippetKeyGenerator(
             ProductJsonSnippetRenderer::CODE,

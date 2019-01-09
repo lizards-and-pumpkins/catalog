@@ -13,6 +13,8 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 
 class ProductJsonService
 {
+    const SNIPPET_NAME = 'snippetName';
+
     /**
      * @var DataPoolReader
      */
@@ -90,7 +92,10 @@ class ProductJsonService
         SnippetKeyGenerator $keyGenerator
     ): array {
         return array_map(function (ProductId $productId) use ($context, $keyGenerator, $snippetName) {
-            return $keyGenerator->getKeyForContext($context, [Product::ID => $productId, 'snippetName' => $snippetName]);
+            return $keyGenerator->getKeyForContext(
+                $context,
+                [Product::ID => $productId, ProductJsonService::SNIPPET_NAME => $snippetName]
+            );
         }, $productIds);
     }
 

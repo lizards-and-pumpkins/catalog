@@ -172,7 +172,7 @@ class ProductJsonServiceTest extends TestCase
         $stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
 
         $this->stubProductJsonSnippetKeyGenerator->method('getKeyForContext')
-            ->with($this->anything(),$this->arrayHasKey('snippetName'))
+            ->with($this->anything(),$this->arrayHasKey(ProductJsonService::SNIPPET_NAME))
             ->willReturn($jsonSnippetKey);
         $this->stubPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($priceSnippetKey);
         $this->stubSpecialPriceSnippetKeyGenerator->method('getKeyForContext')->willReturn($specialPriceSnippetKey);
