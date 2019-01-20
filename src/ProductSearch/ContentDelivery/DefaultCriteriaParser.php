@@ -102,7 +102,7 @@ class DefaultCriteriaParser implements CriteriaParser
 
     private function validateSingleValue(string $valuesString)
     {
-        if (! preg_match('/^[^\[\]\{\}: ,]+$/', $valuesString)) {
+        if (preg_match('/^\s|\s$/', $valuesString) || ! preg_match('/^[^\[\]\{\}:,]+$/', $valuesString)) {
             throw new MalformedCriteriaQueryStringException(
                 sprintf('Criteria value string %s is malformed.', $valuesString)
             );

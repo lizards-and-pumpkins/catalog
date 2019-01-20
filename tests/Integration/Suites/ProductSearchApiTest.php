@@ -107,4 +107,50 @@ class ProductSearchApiTest extends AbstractIntegrationTest
 
         $this->assertEquals($expectedFacets, $responseJson['facets']);
     }
+
+    public function testAllowsWhitespacesInSearchTerm()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=Armer%20Conduit');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
+        $httpRequestBody = new HttpRequestBody('');
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
+        $this->importCatalogFixture($factory, 'simple_product_armflasher-v1.xml');
+
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
+        $response = $website->processRequest();
+
+        $responseJson = json_decode($response->getBody(), true);
+
+        $this->assertCount(1, $responseJson['data']);
+        $this->assertSame(1, $responseJson['total']);
+
+        $this->assertEquals('118235-251', $responseJson['data'][0]['product_id']);
+    }
+
+    public function testAllowsWhitespacesInCriteria()
+    {
+        $httpUrl = HttpUrl::fromString('http://example.com/api/product/?criteria=brand:Pro%20Touch');
+        $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
+        $httpRequestBody = new HttpRequestBody('');
+        $request = HttpRequest::fromParameters(HttpRequest::METHOD_GET, $httpUrl, $httpHeaders, $httpRequestBody);
+
+        $factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
+
+        $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
+        $this->importCatalogFixture($factory, 'simple_product_armflasher-v1.xml');
+
+        $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
+        $response = $website->processRequest();
+
+        $responseJson = json_decode($response->getBody(), true);
+
+        $this->assertCount(1, $responseJson['data']);
+        $this->assertSame(1, $responseJson['total']);
+
+        $this->assertEquals('118235-251', $responseJson['data'][0]['product_id']);
+    }
 }
