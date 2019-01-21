@@ -11,6 +11,12 @@
     "require": {
         "php": "^7.0.0",
         "ext-intl": "*",
+        "ext-json": "*",
+        "ext-xmlreader": "*",
+        "ext-xmlwriter": "*",
+        "ext-ctype": "*",
+        "ext-dom": "*",
+        "ext-libxml": "*",
         "sebastian/money": "^1.5",
         "league/climate": "^3.2.0"
     },

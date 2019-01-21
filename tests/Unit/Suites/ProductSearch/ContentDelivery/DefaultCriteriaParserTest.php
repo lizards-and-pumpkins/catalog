@@ -46,6 +46,12 @@ class DefaultCriteriaParserTest extends TestCase
         $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:bar'));
     }
 
+    public function testCanParseValueContainingWhitespace()
+    {
+        $expectedCriteria = new SearchCriterionEqual('foo', 'bar baz');
+        $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:bar baz'));
+    }
+
     public function testCanParseMultipleValuesFilterWithAndCriteria()
     {
         $expectedCriteria = CompositeSearchCriterion::createAnd(
@@ -123,6 +129,9 @@ class DefaultCriteriaParserTest extends TestCase
             'invalid-nesting' => ['foo:[[]]'],
             'fuzz-test' => ['foo: ,bar'],
             'another-fuzz-test' => ['foo:[ ,bar]'],
+            'leading-whitespace' => ['foo: bar'],
+            'trailing-whitespace' => ['foo:bar '],
+            'multiple-leading-whitespaces' => ['foo:  bar'],
         ];
     }
 
