@@ -124,7 +124,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
                     ...$attributeCodes
                 );
             }
-            return array_merge($carry, [(string) $product->getId() => $attributeValuesForProduct]);
+            return ($carry + [(string) $product->getId() => $attributeValuesForProduct]);
         }, []);
     }
 
