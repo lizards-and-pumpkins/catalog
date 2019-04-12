@@ -195,7 +195,7 @@ class AssociatedProductListTest extends TestCase
     {
         $this->expectException(ProductAttributeValueCombinationNotUniqueException::class);
         $this->expectExceptionMessage(
-            'The associated products "test1" and "test2" have the same value combination ' .
+            'The associated products "4711" and "1337" have the same value combination ' .
             'for the attributes "code_a" and "code_b"'
         );
 

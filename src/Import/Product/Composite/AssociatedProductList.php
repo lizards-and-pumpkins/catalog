@@ -119,7 +119,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
             $otherProductId = array_search($attributeValuesForProduct, $carry);
             if (false !== $otherProductId) {
                 throw $this->createProductAttributeValueCombinationNotUniqueException(
-                    $otherProductId,
+                    (string) $otherProductId,
                     (string) $product->getId(),
                     ...$attributeCodes
                 );
