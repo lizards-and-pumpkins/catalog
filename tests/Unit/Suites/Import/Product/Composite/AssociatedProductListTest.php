@@ -191,6 +191,33 @@ class AssociatedProductListTest extends TestCase
         );
     }
 
+    public function testItThrowsAnExceptionIfTheValueCombinationsForTheGivenAttributesAreNotUniqueAndSkuIsNumeric()
+    {
+        $this->expectException(ProductAttributeValueCombinationNotUniqueException::class);
+        $this->expectExceptionMessage(
+            'The associated products "4711" and "1337" have the same value combination ' .
+            'for the attributes "code_a" and "code_b"'
+        );
+
+        $dummyAttributeCodeA = AttributeCode::fromString('code_a');
+        $dummyAttributeCodeB = AttributeCode::fromString('code_b');
+
+        $fooAttribute1 = $this->createStubAttribute($dummyAttributeCodeA, 'foo1');
+        $fooAttribute2 = $this->createStubAttribute($dummyAttributeCodeA, 'foo1');
+        $barAttribute1 = $this->createStubAttribute($dummyAttributeCodeB, 'bar1');
+        $barAttribute2 = $this->createStubAttribute($dummyAttributeCodeB, 'bar1');
+
+        $stubProductOne = $this->createStubProduct('4711', $fooAttribute1, $barAttribute1);
+        $stubProductTwo = $this->createStubProduct('1337', $fooAttribute2, $barAttribute2);
+
+        $associatedProductList = new AssociatedProductList($stubProductOne, $stubProductTwo);
+
+        $associatedProductList->validateUniqueValueCombinationForEachProductAttribute(
+            $dummyAttributeCodeA,
+            $dummyAttributeCodeB
+        );
+    }
+
     public function testItThrowsNoExceptionIfTheValueCombinationsForTheGivenAttributesAreUnique()
     {
         $dummyAttributeCodeA = AttributeCode::fromString('code_a');
