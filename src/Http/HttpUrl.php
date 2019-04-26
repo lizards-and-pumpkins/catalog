@@ -59,7 +59,7 @@ class HttpUrl
             throw new InvalidUrlStringException(sprintf('Host name can not be parsed from "%s" URL.', $urlString));
         }
 
-        $host = idn_to_utf8($components['host']);
+        $host = idn_to_utf8($components['host'], 0, INTL_IDNA_VARIANT_UTS46);
 
         $schema = $components['scheme'] ?? '';
         self::validateSchema($schema);
