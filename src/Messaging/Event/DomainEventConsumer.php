@@ -13,8 +13,6 @@ use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 class DomainEventConsumer implements QueueMessageConsumer, MessageReceiver
 {
-    private $maxNumberOfMessagesToProcess = 200;
-
     /**
      * @var Queue
      */
@@ -37,29 +35,20 @@ class DomainEventConsumer implements QueueMessageConsumer, MessageReceiver
         $this->logger = $logger;
     }
 
-    public function process()
-    {
-        $this->processNumberOfMessages($this->maxNumberOfMessagesToProcess);
-    }
-
-    public function processAll()
+    public function processAll(): void
     {
         if (($n = $this->queue->count()) > 0) {
-            $this->processNumberOfMessages($n);
+            try {
+                $messageReceiver = $this;
+                $this->queue->consume($messageReceiver);
+            } catch (\Exception $e) {
+                $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
+            }
+
         }
     }
 
-    private function processNumberOfMessages(int $numberOfMessagesToProcess)
-    {
-        try {
-            $messageReceiver = $this;
-            $this->queue->consume($messageReceiver, $numberOfMessagesToProcess);
-        } catch (\Exception $e) {
-            $this->logger->log(new FailedToReadFromDomainEventQueueMessage($e));
-        }
-    }
-
-    public function receive(Message $message)
+    public function receive(Message $message): void
     {
         try {
             $domainEventHandler = $this->handlerLocator->getHandlerFor($message);

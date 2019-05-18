@@ -12,8 +12,6 @@ use LizardsAndPumpkins\Messaging\QueueMessageConsumer;
 
 class CommandConsumer implements QueueMessageConsumer, MessageReceiver
 {
-    private $maxNumberOfMessagesToProcess = 200;
-
     /**
      * @var Queue
      */
@@ -36,29 +34,19 @@ class CommandConsumer implements QueueMessageConsumer, MessageReceiver
         $this->logger = $logger;
     }
 
-    public function process()
-    {
-        $this->processNumberOfMessages($this->maxNumberOfMessagesToProcess);
-    }
-
-    public function processAll()
+    public function processAll(): void
     {
         while (($n = $this->commandQueue->count()) > 0) {
-            $this->processNumberOfMessages($n);
-        }
-    }
-    
-    private function processNumberOfMessages(int $numberOfMessagesToProcess)
-    {
-        try {
-            $messageReceiver = $this;
-            $this->commandQueue->consume($messageReceiver, $numberOfMessagesToProcess);
-        } catch (\Exception $e) {
-            $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
+            try {
+                $messageReceiver = $this;
+                $this->commandQueue->consume($messageReceiver);
+            } catch (\Exception $e) {
+                $this->logger->log(new FailedToReadFromCommandQueueMessage($e));
+            }
         }
     }
 
-    public function receive(Message $message)
+    public function receive(Message $message): void
     {
         try {
             $commandHandler = $this->commandHandlerLocator->getHandlerFor($message);

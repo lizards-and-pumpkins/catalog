@@ -21,12 +21,12 @@ class CatalogImportApiTest extends AbstractIntegrationTest
         {
             public $message;
 
-            public function receive(Message $message)
+            public function receive(Message $message): void
             {
                 $this->message = $message;
             }
         };
-        $queue->consume($receiver, 1);
+        $queue->consume($receiver);
 
         return $receiver->message;
     }

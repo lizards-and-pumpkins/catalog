@@ -70,10 +70,9 @@ class LoggingQueueDecoratorTest extends TestCase
     {
         /** @var MessageReceiver|\PHPUnit_Framework_MockObject_MockObject $stubMessageReceiver */
         $stubMessageReceiver = $this->createMock(MessageReceiver::class);
-        $maxNumberOfMessagesToConsume = 1;
-        $this->decoratedQueue->expects($this->once())->method('consume')
-            ->with($stubMessageReceiver, $maxNumberOfMessagesToConsume);
-        $this->decorator->consume($stubMessageReceiver, $maxNumberOfMessagesToConsume);
+        $this->decoratedQueue->expects($this->once())->method('consume')->with($stubMessageReceiver);
+
+        $this->decorator->consume($stubMessageReceiver);
     }
 
     public function testItLogsAddedMessages()

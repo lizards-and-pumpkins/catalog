@@ -24,6 +24,6 @@ class ConsumeCommandsConsoleCommand implements ConsoleCommand
     {
         /** @var CommandConsumer $commandConsumer */
         $commandConsumer = $this->masterFactory->createCommandConsumer();
-        $commandConsumer->process();
+        $commandConsumer->processAll();
     }
 }

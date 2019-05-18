@@ -30,6 +30,6 @@ class ConsumeEventsConsoleCommand implements ConsoleCommand
     {
         /** @var DomainEventConsumer $eventConsumer */
         $eventConsumer = $this->masterFactory->createDomainEventConsumer();
-        $eventConsumer->process();
+        $eventConsumer->processAll();
     }
 }

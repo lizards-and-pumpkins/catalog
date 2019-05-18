@@ -67,7 +67,7 @@ class ConsumeEventsConsoleCommandTest extends TestCase
     public function testCallsProcessOnDomainEventConsumer()
     {
         $mockDomainEventConsumer = $this->createMock(DomainEventConsumer::class);
-        $mockDomainEventConsumer->expects($this->once())->method('process');
+        $mockDomainEventConsumer->expects($this->once())->method('processAll');
         $this->stubMasterFactory->method('createDomainEventConsumer')->willReturn($mockDomainEventConsumer);
         
         (new ConsumeEventsConsoleCommand($this->stubMasterFactory))->run();

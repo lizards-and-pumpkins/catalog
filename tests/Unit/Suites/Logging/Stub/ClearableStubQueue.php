@@ -16,17 +16,17 @@ class ClearableStubQueue implements Queue, Clearable
         // Intentionally left empty
     }
 
-    public function count() : int
+    public function count(): int
     {
         // Intentionally left empty
     }
 
-    public function add(Message $message)
+    public function add(Message $message): void
     {
         // Intentionally left empty
     }
 
-    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsume)
+    public function consume(MessageReceiver $messageReceiver): void
     {
         // Intentionally left empty
     }

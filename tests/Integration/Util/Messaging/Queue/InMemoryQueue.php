@@ -15,22 +15,17 @@ class InMemoryQueue implements Queue, Clearable
      */
     private $queue = [];
 
-    public function count() : int
+    public function count(): int
     {
         return count($this->queue);
     }
 
-    private function isReadyForNext() : bool
-    {
-        return $this->count() > 0;
-    }
-
-    public function add(Message $message)
+    public function add(Message $message): void
     {
         $this->queue[] = $message->serialize();
     }
 
-    private function next() : Message
+    private function next(): Message
     {
         if ([] === $this->queue) {
             throw new \UnderflowException('Trying to get next message of an empty queue');
@@ -46,13 +41,10 @@ class InMemoryQueue implements Queue, Clearable
         $this->queue = [];
     }
 
-    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsumeBeforeReturn)
+    public function consume(MessageReceiver $messageReceiver): void
     {
-        while ($numberOfMessagesToConsumeBeforeReturn > 0) {
-            if ($this->isReadyForNext()) {
-                $messageReceiver->receive($this->next());
-                $numberOfMessagesToConsumeBeforeReturn--;
-            }
+        while ($this->count() > 0) {
+            $messageReceiver->receive($this->next());
         }
     }
 }

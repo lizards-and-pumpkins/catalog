@@ -36,7 +36,7 @@ class ConsumeCommandsConsoleCommandTest extends TestCase
     public function testCallsProcessOnTheCommandConsumer()
     {
         $mockCommandConsumer = $this->createMock(CommandConsumer::class);
-        $mockCommandConsumer->expects($this->once())->method('process');
+        $mockCommandConsumer->expects($this->once())->method('processAll');
         $this->stubMasterFactory->method('createCommandConsumer')->willReturn($mockCommandConsumer);
         (new ConsumeCommandsConsoleCommand($this->stubMasterFactory))->run();
     }

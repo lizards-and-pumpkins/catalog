@@ -53,26 +53,20 @@ class DomainEventConsumerTest extends TestCase
         $this->assertInstanceOf(QueueMessageConsumer::class, $this->domainEventConsumer);
     }
 
-    public function testConsumesMessagesFromQueue()
-    {
-        $this->mockQueue->expects($this->once())->method('consume')->with($this->domainEventConsumer);
-
-        $this->domainEventConsumer->process();
-    }
-
     public function testCallsConsumeWithTheNumberOdMessagesOnTheQueue()
     {
         $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(2, 0);
-        $this->mockQueue->expects($this->once())->method('consume')->with($this->domainEventConsumer, 2);
+        $this->mockQueue->expects($this->once())->method('consume')->with($this->domainEventConsumer);
         $this->domainEventConsumer->processAll();
     }
 
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
         $this->mockQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
         $this->mockLogger->expects($this->once())->method('log');
 
-        $this->domainEventConsumer->process();
+        $this->domainEventConsumer->processAll();
     }
     
     public function testLogEntryIsWrittenOnQueueReadFailureDuringProcessAll()
@@ -90,6 +84,7 @@ class DomainEventConsumerTest extends TestCase
         $mockEventHandler->expects($this->once())->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($mockEventHandler);
 
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
         $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
@@ -97,13 +92,14 @@ class DomainEventConsumerTest extends TestCase
                 $messageReceiver->receive($stubMessage);
             });
 
-        $this->domainEventConsumer->process();
+        $this->domainEventConsumer->processAll();
     }
 
     public function testLogsExceptionIfEventHandlerIsNotFound()
     {
         $this->mockLogger->expects($this->once())->method('log');
 
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
         $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
@@ -113,6 +109,6 @@ class DomainEventConsumerTest extends TestCase
 
         $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindDomainEventHandlerException());
 
-        $this->domainEventConsumer->process();
+        $this->domainEventConsumer->processAll();
     }
 }

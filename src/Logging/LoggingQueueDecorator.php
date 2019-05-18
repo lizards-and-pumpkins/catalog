@@ -27,12 +27,12 @@ class LoggingQueueDecorator implements Queue, Clearable
         $this->logger = $logger;
     }
 
-    public function count() : int
+    public function count(): int
     {
         return $this->decoratedQueue->count();
     }
 
-    public function add(Message $message)
+    public function add(Message $message): void
     {
         $this->logger->log(new QueueAddLogMessage($message->getName(), $this->decoratedQueue));
         $this->decoratedQueue->add($message);
@@ -45,8 +45,8 @@ class LoggingQueueDecorator implements Queue, Clearable
         }
     }
 
-    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsume)
+    public function consume(MessageReceiver $messageReceiver): void
     {
-        $this->decoratedQueue->consume($messageReceiver, $numberOfMessagesToConsume);
+        $this->decoratedQueue->consume($messageReceiver);
     }
 }

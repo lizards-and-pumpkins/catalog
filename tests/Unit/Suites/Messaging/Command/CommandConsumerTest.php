@@ -53,26 +53,20 @@ class CommandConsumerTest extends TestCase
         $this->assertInstanceOf(QueueMessageConsumer::class, $this->commandConsumer);
     }
 
-    public function testConsumesMessagesFromQueue()
-    {
-        $this->mockQueue->expects($this->once())->method('consume')->with($this->commandConsumer);
-
-        $this->commandConsumer->process();
-    }
-    
-    public function testCallsConsumeWithTheNumberOdMessagesOnTheQueue()
+    public function testConsumesAllMessagesInQueue()
     {
         $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(2, 0);
-        $this->mockQueue->expects($this->once())->method('consume')->with($this->commandConsumer, 2);
+        $this->mockQueue->expects($this->once())->method('consume')->with($this->commandConsumer);
         $this->commandConsumer->processAll();
     }
 
     public function testLogEntryIsWrittenOnQueueReadFailure()
     {
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
         $this->mockQueue->expects($this->once())->method('consume')->willThrowException(new \UnderflowException);
         $this->mockLogger->expects($this->once())->method('log');
 
-        $this->commandConsumer->process();
+        $this->commandConsumer->processAll();
     }
 
     public function testLogEntryIsWrittenOnQueueReadFailureDuringProcessAll()
@@ -90,6 +84,7 @@ class CommandConsumerTest extends TestCase
         $mockCommandHandler->expects($this->once())->method('process');
         $this->mockLocator->method('getHandlerFor')->willReturn($mockCommandHandler);
 
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
         $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
@@ -97,13 +92,14 @@ class CommandConsumerTest extends TestCase
                 $messageReceiver->receive($stubMessage);
             });
         
-        $this->commandConsumer->process();
+        $this->commandConsumer->processAll();
     }
 
     public function testLogsExceptionIfCommandHandlerIsNotFound()
     {
         $this->mockLogger->expects($this->once())->method('log');
 
+        $this->mockQueue->method('count')->willReturnOnConsecutiveCalls(1, 0);
         $this->mockQueue->method('consume')
             ->willReturnCallback(function (MessageReceiver $messageReceiver) {
                 /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
@@ -113,6 +109,6 @@ class CommandConsumerTest extends TestCase
 
         $this->mockLocator->method('getHandlerFor')->willThrowException(new UnableToFindCommandHandlerException);
 
-        $this->commandConsumer->process();
+        $this->commandConsumer->processAll();
     }
 }
