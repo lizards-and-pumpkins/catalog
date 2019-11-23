@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailViewRequestHandler;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder;
@@ -84,7 +85,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
     private function getSnippetKey(string $code, Context $context) : string
     {
         $keyGenerator = $this->snippetKeyGeneratorLocator->getKeyGeneratorForSnippetCode($code);
-        return $keyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId]);
+        return $keyGenerator->getKeyForContext($context, [Product::ID => $this->testProductId, ProductJsonService::SNIPPET_NAME => '']);
     }
 
     /**

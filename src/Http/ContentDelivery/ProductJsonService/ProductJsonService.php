@@ -13,6 +13,8 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 
 class ProductJsonService
 {
+    const SNIPPET_NAME = 'snippetName';
+
     /**
      * @var DataPoolReader
      */
@@ -54,14 +56,15 @@ class ProductJsonService
 
     /**
      * @param Context $context
+     * @param string $snippetName
      * @param ProductId[] $productIds
      * @return array[]
      */
-    public function get(Context $context, ProductId ...$productIds): array
+    public function get(Context $context, string $snippetName, ProductId ...$productIds): array
     {
         return $this->buildProductData(
             $context,
-            $this->getProductJsonSnippetKeys($context, $productIds),
+            $this->getProductJsonSnippetKeys($context, $productIds, $snippetName),
             $this->getPriceSnippetKeys($context, $productIds),
             $this->getSpecialPriceSnippetKeys($context, $productIds)
         );
@@ -70,11 +73,28 @@ class ProductJsonService
     /**
      * @param Context $context
      * @param ProductId[] $productIds
+     * @param string $snippetName
      * @return string[]
      */
-    private function getProductJsonSnippetKeys(Context $context, array $productIds): array
+    private function getProductJsonSnippetKeys(Context $context, array $productIds, string $snippetName): array
     {
-        return $this->getSnippetKeys($context, $productIds, $this->productJsonSnippetKeyGenerator);
+        return $this->getSnippetKeysForJson($context, $productIds, $snippetName);
+    }
+
+    /**
+     * @param Context $context
+     * @param ProductId[] $productIds
+     * @param string $snippetName
+     * @return string[]
+     */
+    private function getSnippetKeysForJson(Context $context, array $productIds, string $snippetName): array
+    {
+        return array_map(function (ProductId $productId) use ($context, $snippetName) {
+            return $this->productJsonSnippetKeyGenerator->getKeyForContext(
+                $context,
+                [Product::ID => $productId, self::SNIPPET_NAME => $snippetName]
+            );
+        }, $productIds);
     }
 
     /**

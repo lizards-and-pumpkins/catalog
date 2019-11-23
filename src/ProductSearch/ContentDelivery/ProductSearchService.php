@@ -37,13 +37,16 @@ class ProductSearchService
         $this->productJsonService = $productJsonService;
     }
 
-    public function query(SearchCriteria $searchCriteria, QueryOptions $queryOptions) : ProductSearchResult
-    {
+    public function query(
+        SearchCriteria $searchCriteria,
+        QueryOptions $queryOptions,
+        string $snippetName
+    ): ProductSearchResult {
         $criteria = CompositeSearchCriterion::createAnd($searchCriteria, $this->globalProductListingCriteria);
         $searchEngineResponse = $this->dataPoolReader->getSearchResults($criteria, $queryOptions);
 
         $productIds = $searchEngineResponse->getProductIds();
-        $productData = $this->productJsonService->get($queryOptions->getContext(), ...$productIds);
+        $productData = $this->productJsonService->get($queryOptions->getContext(), $snippetName, ...$productIds);
 
         return new ProductSearchResult(
             $searchEngineResponse->getTotalNumberOfResults(),

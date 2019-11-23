@@ -54,6 +54,6 @@ class ProductRelationsService
      */
     private function getProductDataByProductIds(Context $context, array $productIds) : array
     {
-        return $this->productJsonService->get($context, ...$productIds);
+        return $this->productJsonService->get($context, '', ...$productIds);
     }
 }

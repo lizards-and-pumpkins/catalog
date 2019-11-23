@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Util\Factory\MasterFactory;
 
 class TestDataPoolQuery
@@ -27,7 +28,10 @@ class TestDataPoolQuery
         $keyGenerator = $masterFactory->createProductJsonSnippetKeyGenerator();
         $context = $masterFactory->createContextBuilder()->createContext([DataVersion::CONTEXT_CODE => $version]);
 
-        return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
+        return $keyGenerator->getKeyForContext(
+            $context,
+            ['product_id' => $productIdString, ProductJsonService::SNIPPET_NAME => '']
+        );
     }
 
     private static function getSnippetFromDataPool(MasterFactory $masterFactory, string $key): string

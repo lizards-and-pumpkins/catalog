@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\Product;
 
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\Product\View\ProductView;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
@@ -45,7 +46,7 @@ class ProductJsonSnippetRenderer implements SnippetRenderer
     {
         $key = $this->productJsonKeyGenerator->getKeyForContext(
             $product->getContext(),
-            ['product_id' => $product->getId()]
+            ['product_id' => $product->getId(), ProductJsonService::SNIPPET_NAME => '']
         );
 
         return Snippet::create($key, json_encode($product));

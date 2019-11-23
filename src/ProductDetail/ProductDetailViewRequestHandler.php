@@ -7,6 +7,7 @@ namespace LizardsAndPumpkins\ProductDetail;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -63,7 +64,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
 
     public function process(HttpRequest $request): HttpResponse
     {
-        $keyGeneratorParams = [Product::ID => $this->pageMetaInfo->getProductId()];
+        $keyGeneratorParams = [Product::ID => $this->pageMetaInfo->getProductId(), ProductJsonService::SNIPPET_NAME => ''];
 
         $this->addTranslationsToPageBuilder();
 

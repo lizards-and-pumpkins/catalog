@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortDirection;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
@@ -178,7 +179,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
         $productJsonSnippetKey = $productJsonSnippetKeyGenerator->getKeyForContext(
             $context,
-            [Product::ID => $productId]
+            [Product::ID => $productId, ProductJsonService::SNIPPET_NAME => '']
         );
         $productJson = $dataPoolReader->getSnippet($productJsonSnippetKey);
 
@@ -200,7 +201,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $priceSnippetKeyGenerator = $keyGeneratorLocator->getKeyGeneratorForSnippetCode('price');
             $priceSnippetKey = $priceSnippetKeyGenerator->getKeyForContext(
                 $contextWithCountry,
-                [Product::ID => $productId]
+                [Product::ID => $productId, ProductJsonService::SNIPPET_NAME => '']
             );
             $priceSnippetContents = $dataPoolReader->getSnippet($priceSnippetKey);
             $this->assertEquals($expectedProductPrice, $priceSnippetContents);
@@ -290,13 +291,13 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $validProductId = new ProductId('288193NEU');
         $validProductJsonSnippetKey = $productJsonSnippetKeyGenerator->getKeyForContext(
             $context,
-            [Product::ID => $validProductId]
+            [Product::ID => $validProductId, ProductJsonService::SNIPPET_NAME => '']
         );
 
         $invalidProductId = new ProductId('T4H2N-4701');
         $invalidProductJsonSnippetKey = $productJsonSnippetKeyGenerator->getKeyForContext(
             $context,
-            [Product::ID => $invalidProductId]
+            [Product::ID => $invalidProductId, ProductJsonService::SNIPPET_NAME => '']
         );
 
         $dataPoolReader = $this->factory->createDataPoolReader();

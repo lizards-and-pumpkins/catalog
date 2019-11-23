@@ -6,40 +6,74 @@ namespace LizardsAndPumpkins\Util\Factory;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder;
+use LizardsAndPumpkins\Context\ContextBuilder;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
+use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\Country\Country;
+use LizardsAndPumpkins\Context\DataVersion\ContextVersion as VersionContextPartBuilder;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
+use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\DataPool\DataPoolReader;
+use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
+use LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
+use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
+use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\SnippetReader;
+use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
+use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
+use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\Context\ContextBuilder;
-use LizardsAndPumpkins\Context\DataVersion\ContextVersion as VersionContextPartBuilder;
-use LizardsAndPumpkins\Context\ContextSource;
-use LizardsAndPumpkins\Context\SelfContainedContextBuilder;
-use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\DataPool\DataPoolWriter;
-use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
-use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
+use LizardsAndPumpkins\Import\GenericSnippetProjector;
+use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
+use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
+use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
+use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
 use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
+use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
+use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\Product;
+use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
+use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
+use LizardsAndPumpkins\Import\Product\ProductProjector;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilder;
+use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
+use LizardsAndPumpkins\Import\Product\QueueImportCommands;
+use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
 use LizardsAndPumpkins\Import\Projector;
+use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
+use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
+use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
@@ -51,68 +85,34 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingProjector;
+use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
+use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
+use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
+use LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder;
+use LizardsAndPumpkins\Translation\CsvTranslator;
+use LizardsAndPumpkins\Translation\TranslatorRegistry;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
-use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
-use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Import\Price\PriceSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\Product;
-use LizardsAndPumpkins\ProductDetail\TemplateRendering\ProductDetailViewBlockRenderer;
-use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\ProductJsonSnippetRenderer;
-use LizardsAndPumpkins\Import\GenericSnippetProjector;
-use LizardsAndPumpkins\ProductSearch\Import\ConfigurableProductAttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
-use LizardsAndPumpkins\ProductSearch\Import\AttributeValueCollectorLocator;
-use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingProjector;
-use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
-use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\Image\ProductImageImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\ProductImportCommandLocator;
-use LizardsAndPumpkins\Import\Product\Listing\ProductListingImportCommandLocator;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingTemplateSnippetRenderer;
-use LizardsAndPumpkins\Import\Product\ProductProjector;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer;
-use LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder;
-use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
-use LizardsAndPumpkins\Import\Product\QueueImportCommands;
-use LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder;
-use LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder;
-use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilder;
-use LizardsAndPumpkins\Import\Product\UpdateProductCommandHandler;
-use LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler;
-use LizardsAndPumpkins\Import\CatalogImport;
-use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
-use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
-use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
-use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
-use LizardsAndPumpkins\Translation\CsvTranslator;
-use LizardsAndPumpkins\Translation\TranslatorRegistry;
-use LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocatorStrategy;
-use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetKeyGeneratorLocatorStrategy;
-use LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy;
-use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
-use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
-use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
-use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
 
 class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
 {
     use FactoryTrait;
-    
+
     /**
      * @var KeyValueStore
      */
@@ -198,21 +198,21 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      */
     private $websiteContextPartBuilder;
 
-    public function createProductWasUpdatedDomainEventHandler() : DomainEventHandler
+    public function createProductWasUpdatedDomainEventHandler(): DomainEventHandler
     {
         return new ProductWasUpdatedDomainEventHandler(
             $this->getMasterFactory()->createProductProjector()
         );
     }
 
-    public function createTemplateWasUpdatedDomainEventHandler() : DomainEventHandler
+    public function createTemplateWasUpdatedDomainEventHandler(): DomainEventHandler
     {
         return new TemplateWasUpdatedDomainEventHandler(
             $this->getMasterFactory()->createTemplateProjectorLocator()
         );
     }
 
-    public function createTemplateProjectorLocator() : TemplateProjectorLocator
+    public function createTemplateProjectorLocator(): TemplateProjectorLocator
     {
         $templateProjectorLocator = new TemplateProjectorLocator();
         $templateProjectorLocator->register(
@@ -227,19 +227,19 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $templateProjectorLocator;
     }
 
-    public function createProductListingWasAddedDomainEventHandler() : DomainEventHandler
+    public function createProductListingWasAddedDomainEventHandler(): DomainEventHandler
     {
         return new ProductListingWasAddedDomainEventHandler(
             $this->getMasterFactory()->createProductListingProjector()
         );
     }
 
-    public function createProductListingBuilder() : ProductListingBuilder
+    public function createProductListingBuilder(): ProductListingBuilder
     {
         return new ProductListingBuilder();
     }
 
-    public function createProductProjector() : ProductProjector
+    public function createProductProjector(): ProductProjector
     {
         return new ProductProjector(
             $this->getMasterFactory()->createProductViewLocator(),
@@ -258,7 +258,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createUrlKeyForContextCollector() : UrlKeyForContextCollector
+    public function createUrlKeyForContextCollector(): UrlKeyForContextCollector
     {
         return new UrlKeyForContextCollector(
             $this->getContextSource()
@@ -279,16 +279,16 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         ];
     }
 
-    public function createProductJsonSnippetRenderer() : ProductJsonSnippetRenderer
+    public function createProductJsonSnippetRenderer(): ProductJsonSnippetRenderer
     {
         return new ProductJsonSnippetRenderer(
             $this->getMasterFactory()->createProductJsonSnippetKeyGenerator()
         );
     }
 
-    public function createProductJsonSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createProductJsonSnippetKeyGenerator(): SnippetKeyGenerator
     {
-        $usedDataParts = [Product::ID];
+        $usedDataParts = [Product::ID, ProductJsonService::SNIPPET_NAME];
 
         return new GenericSnippetKeyGenerator(
             ProductJsonSnippetRenderer::CODE,
@@ -297,7 +297,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createConfigurableProductJsonSnippetRenderer() : ConfigurableProductJsonSnippetRenderer
+    public function createConfigurableProductJsonSnippetRenderer(): ConfigurableProductJsonSnippetRenderer
     {
         return new ConfigurableProductJsonSnippetRenderer(
             $this->getMasterFactory()->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator(),
@@ -305,7 +305,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createConfigurableProductVariationAttributesJsonSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createConfigurableProductVariationAttributesJsonSnippetKeyGenerator(): SnippetKeyGenerator
     {
         $usedDataParts = ['product_id'];
 
@@ -316,7 +316,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator(): SnippetKeyGenerator
     {
         $usedDataParts = ['product_id'];
 
@@ -346,7 +346,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         ];
     }
 
-    public function createProductListingTemplateSnippetRenderer() : ProductListingTemplateSnippetRenderer
+    public function createProductListingTemplateSnippetRenderer(): ProductListingTemplateSnippetRenderer
     {
         $templateSnippetRenderer = new TemplateSnippetRenderer(
             $this->getMasterFactory()->createProductListingTemplateSnippetKeyGenerator(),
@@ -357,7 +357,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new ProductListingTemplateSnippetRenderer($templateSnippetRenderer);
     }
 
-    public function createProductListingTemplateSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createProductListingTemplateSnippetKeyGenerator(): SnippetKeyGenerator
     {
         return new GenericSnippetKeyGenerator(
             ProductListingTemplateSnippetRenderer::CODE,
@@ -366,7 +366,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingBlockRenderer() : ProductListingBlockRenderer
+    public function createProductListingBlockRenderer(): ProductListingBlockRenderer
     {
         return new ProductListingBlockRenderer(
             $this->getMasterFactory()->getThemeLocator(),
@@ -377,7 +377,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingProjector() : ProductListingProjector
+    public function createProductListingProjector(): ProductListingProjector
     {
         return new ProductListingProjector(
             $this->createProductListingSnippetProjector(),
@@ -413,7 +413,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createProductListingSnippetKeyGenerator(): SnippetKeyGenerator
     {
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
@@ -424,7 +424,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductDetailMetaSnippetRenderer() : ProductDetailMetaSnippetRenderer
+    public function createProductDetailMetaSnippetRenderer(): ProductDetailMetaSnippetRenderer
     {
         return new ProductDetailMetaSnippetRenderer(
             $this->getMasterFactory()->createProductDetailViewBlockRenderer(),
@@ -478,7 +478,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductDetailPageMetaSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createProductDetailPageMetaSnippetKeyGenerator(): SnippetKeyGenerator
     {
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
@@ -489,7 +489,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createPriceSnippetRenderer() : PriceSnippetRenderer
+    public function createPriceSnippetRenderer(): PriceSnippetRenderer
     {
         $productRegularPriceAttributeCode = AttributeCode::fromString('price');
 
@@ -502,7 +502,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createSpecialPriceSnippetRenderer() : PriceSnippetRenderer
+    public function createSpecialPriceSnippetRenderer(): PriceSnippetRenderer
     {
         $productSpecialPriceAttributeCode = AttributeCode::fromString('special_price');
 
@@ -515,7 +515,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createPriceSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createPriceSnippetKeyGenerator(): SnippetKeyGenerator
     {
         $usedDataParts = [Product::ID];
 
@@ -526,7 +526,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createSpecialPriceSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createSpecialPriceSnippetKeyGenerator(): SnippetKeyGenerator
     {
         $usedDataParts = [Product::ID];
 
@@ -540,12 +540,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     /**
      * @return string[]
      */
-    private function getPriceSnippetKeyContextPartCodes() : array
+    private function getPriceSnippetKeyContextPartCodes(): array
     {
         return [Website::CONTEXT_CODE, Country::CONTEXT_CODE];
     }
 
-    public function createContentBlockSnippetKeyGenerator(string $snippetCode) : SnippetKeyGenerator
+    public function createContentBlockSnippetKeyGenerator(string $snippetCode): SnippetKeyGenerator
     {
         $usedDataParts = [];
 
@@ -556,7 +556,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductListingContentBlockSnippetKeyGenerator(string $snippetCode) : SnippetKeyGenerator
+    public function createProductListingContentBlockSnippetKeyGenerator(string $snippetCode): SnippetKeyGenerator
     {
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
@@ -567,7 +567,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createContentBlockSnippetKeyGeneratorLocatorStrategy() : SnippetKeyGeneratorLocator
+    public function createContentBlockSnippetKeyGeneratorLocatorStrategy(): SnippetKeyGeneratorLocator
     {
         return new CompositeSnippetKeyGeneratorLocatorStrategy(
             new ContentBlockSnippetKeyGeneratorLocatorStrategy(function ($snippetCode) {
@@ -579,12 +579,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createBlockStructure() : BlockStructure
+    public function createBlockStructure(): BlockStructure
     {
         return new BlockStructure();
     }
 
-    public function createProductXmlToProductBuilderLocator() : ProductXmlToProductBuilderLocator
+    public function createProductXmlToProductBuilderLocator(): ProductXmlToProductBuilderLocator
     {
         $productXmlToProductTypeBuilders = $this->getMasterFactory()->createProductXmlToProductTypeBuilders();
         return new ProductXmlToProductBuilderLocator(...$productXmlToProductTypeBuilders);
@@ -593,7 +593,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     /**
      * @return ProductXmlToProductBuilder[]
      */
-    public function createProductXmlToProductTypeBuilders() : array
+    public function createProductXmlToProductTypeBuilders(): array
     {
         return [
             $this->getMasterFactory()->createSimpleProductXmlToProductBuilder(),
@@ -601,26 +601,26 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         ];
     }
 
-    public function createSimpleProductXmlToProductBuilder() : SimpleProductXmlToProductBuilder
+    public function createSimpleProductXmlToProductBuilder(): SimpleProductXmlToProductBuilder
     {
         return new SimpleProductXmlToProductBuilder();
     }
 
-    public function createConfigurableProductXmlToProductBuilder() : ConfigurableProductXmlToProductBuilder
+    public function createConfigurableProductXmlToProductBuilder(): ConfigurableProductXmlToProductBuilder
     {
         $productTypeBuilderFactoryProxy = $this->getMasterFactory()
             ->createProductXmlToProductBuilderLocatorProxyFactoryMethod();
         return new ConfigurableProductXmlToProductBuilder($productTypeBuilderFactoryProxy);
     }
 
-    public function createProductXmlToProductBuilderLocatorProxyFactoryMethod() : \Closure
+    public function createProductXmlToProductBuilderLocatorProxyFactoryMethod(): \Closure
     {
         return function () {
             return $this->createProductXmlToProductBuilderLocator();
         };
     }
 
-    public function getThemeLocator() : ThemeLocator
+    public function getThemeLocator(): ThemeLocator
     {
         if (null === $this->themeLocator) {
             $this->themeLocator = $this->callExternalCreateMethod('ThemeLocator');
@@ -629,7 +629,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->themeLocator;
     }
 
-    public function getContextSource() : ContextSource
+    public function getContextSource(): ContextSource
     {
         if (null === $this->contextSource) {
             $this->contextSource = $this->callExternalCreateMethod('ContextSource');
@@ -638,7 +638,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->contextSource;
     }
 
-    public function createContextBuilder() : ContextBuilder
+    public function createContextBuilder(): ContextBuilder
     {
         return new SelfContainedContextBuilder(
             $this->getMasterFactory()->createVersionContextPartBuilder(),
@@ -648,13 +648,13 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createVersionContextPartBuilder() : VersionContextPartBuilder
+    public function createVersionContextPartBuilder(): VersionContextPartBuilder
     {
         $dataVersion = $this->getCurrentDataVersion();
         return new VersionContextPartBuilder(DataVersion::fromVersionString($dataVersion));
     }
 
-    public function getWebsiteContextPartBuilder() : ContextPartBuilder
+    public function getWebsiteContextPartBuilder(): ContextPartBuilder
     {
         if (null === $this->websiteContextPartBuilder) {
             $this->websiteContextPartBuilder = $this->callExternalCreateMethod('WebsiteContextPartBuilder');
@@ -663,7 +663,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->websiteContextPartBuilder;
     }
 
-    public function getLocaleContextPartBuilder() : ContextPartBuilder
+    public function getLocaleContextPartBuilder(): ContextPartBuilder
     {
         if (null === $this->localeContextPartBuilder) {
             $this->localeContextPartBuilder = $this->callExternalCreateMethod('LocaleContextPartBuilder');
@@ -672,7 +672,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->localeContextPartBuilder;
     }
 
-    public function getCountryContextPartBuilder() : ContextPartBuilder
+    public function getCountryContextPartBuilder(): ContextPartBuilder
     {
         if (null === $this->countryContextPartBuilder) {
             $this->countryContextPartBuilder = $this->callExternalCreateMethod('CountryContextPartBuilder');
@@ -681,7 +681,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->countryContextPartBuilder;
     }
 
-    public function getCurrentDataVersion() : string
+    public function getCurrentDataVersion(): string
     {
         if (null === $this->currentDataVersion) {
             /** @var DataPoolReader $dataPoolReader */
@@ -692,12 +692,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->currentDataVersion;
     }
 
-    public function createDomainEventHandlerLocator() : DomainEventHandlerLocator
+    public function createDomainEventHandlerLocator(): DomainEventHandlerLocator
     {
         return new DomainEventHandlerLocator($this->getMasterFactory());
     }
 
-    public function createDataPoolWriter() : DataPoolWriter
+    public function createDataPoolWriter(): DataPoolWriter
     {
         return new DataPoolWriter(
             $this->getMasterFactory()->getKeyValueStore(),
@@ -706,7 +706,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function getKeyValueStore() : KeyValueStore
+    public function getKeyValueStore(): KeyValueStore
     {
         if (null === $this->keyValueStore) {
             $this->keyValueStore = $this->callExternalCreateMethod('KeyValueStore');
@@ -715,7 +715,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->keyValueStore;
     }
 
-    public function createDomainEventConsumer() : DomainEventConsumer
+    public function createDomainEventConsumer(): DomainEventConsumer
     {
         return new DomainEventConsumer(
             $this->getMasterFactory()->getEventMessageQueue(),
@@ -724,7 +724,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function getEventQueue() : DomainEventQueue
+    public function getEventQueue(): DomainEventQueue
     {
         if (null === $this->eventQueue) {
             $this->eventQueue = $this->callExternalCreateMethod('EventQueue');
@@ -733,7 +733,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->eventQueue;
     }
 
-    public function getEventMessageQueue() : Queue
+    public function getEventMessageQueue(): Queue
     {
         if (null === $this->eventMessageQueue) {
             $this->eventMessageQueue = $this->callExternalCreateMethod('EventMessageQueue');
@@ -741,7 +741,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->eventMessageQueue;
     }
 
-    public function createDataPoolReader() : DataPoolReader
+    public function createDataPoolReader(): DataPoolReader
     {
         return new DataPoolReader(
             $this->getMasterFactory()->getKeyValueStore(),
@@ -750,7 +750,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createSnippetReader() : SnippetReader
+    public function createSnippetReader(): SnippetReader
     {
         return new SnippetReader(
             $this->getMasterFactory()->getKeyValueStore(),
@@ -758,7 +758,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function getLogger() : Logger
+    public function getLogger(): Logger
     {
         if (null === $this->logger) {
             $this->logger = $this->callExternalCreateMethod('Logger');
@@ -784,17 +784,17 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $instance;
     }
 
-    public function createResourceNotFoundRouter() : ResourceNotFoundRouter
+    public function createResourceNotFoundRouter(): ResourceNotFoundRouter
     {
         return new ResourceNotFoundRouter();
     }
 
-    public function createHttpRouterChain() : HttpRouterChain
+    public function createHttpRouterChain(): HttpRouterChain
     {
         return new HttpRouterChain();
     }
 
-    public function createProductSearchDocumentBuilder() : ProductSearchDocumentBuilder
+    public function createProductSearchDocumentBuilder(): ProductSearchDocumentBuilder
     {
         $indexAttributeCodes = array_unique(array_merge(
             $this->getMasterFactory()->getSearchableAttributeCodes(),
@@ -810,7 +810,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function getSearchEngine() : SearchEngine
+    public function getSearchEngine(): SearchEngine
     {
         if (null === $this->searchEngine) {
             $this->searchEngine = $this->callExternalCreateMethod('SearchEngine');
@@ -819,14 +819,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->searchEngine;
     }
 
-    public function createImageWasAddedDomainEventHandler() : DomainEventHandler
+    public function createImageWasAddedDomainEventHandler(): DomainEventHandler
     {
         return new ImageWasAddedDomainEventHandler(
             $this->getMasterFactory()->createImageProcessorCollection()
         );
     }
 
-    public function getImageProcessorCollection() : ImageProcessorCollection
+    public function getImageProcessorCollection(): ImageProcessorCollection
     {
         if (null === $this->imageProcessorCollection) {
             $this->imageProcessorCollection = $this->callExternalCreateMethod('ImageProcessorCollection');
@@ -835,7 +835,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->imageProcessorCollection;
     }
 
-    public function createCommandConsumer() : CommandConsumer
+    public function createCommandConsumer(): CommandConsumer
     {
         return new CommandConsumer(
             $this->getMasterFactory()->getCommandMessageQueue(),
@@ -844,7 +844,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function getCommandQueue() : CommandQueue
+    public function getCommandQueue(): CommandQueue
     {
         if (null === $this->commandQueue) {
             $this->commandQueue = $this->callExternalCreateMethod('CommandQueue');
@@ -853,7 +853,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->commandQueue;
     }
 
-    public function getCommandMessageQueue() : Queue
+    public function getCommandMessageQueue(): Queue
     {
         if (null === $this->commandMessageQueue) {
             $this->commandMessageQueue = $this->callExternalCreateMethod('CommandMessageQueue');
@@ -861,12 +861,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->commandMessageQueue;
     }
 
-    public function createCommandHandlerLocator() : CommandHandlerLocator
+    public function createCommandHandlerLocator(): CommandHandlerLocator
     {
         return new CommandHandlerLocator($this->getMasterFactory());
     }
 
-    public function createUpdateContentBlockCommandHandler() : CommandHandler
+    public function createUpdateContentBlockCommandHandler(): CommandHandler
     {
         return new UpdateContentBlockCommandHandler($this->getMasterFactory()->getEventQueue());
     }
@@ -876,14 +876,14 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new UpdateTemplateCommandHandler($this->getMasterFactory()->getEventQueue());
     }
 
-    public function createContentBlockWasUpdatedDomainEventHandler() : DomainEventHandler
+    public function createContentBlockWasUpdatedDomainEventHandler(): DomainEventHandler
     {
         return new ContentBlockWasUpdatedDomainEventHandler(
             $this->getMasterFactory()->createContentBlockProjector()
         );
     }
 
-    public function createContentBlockProjector() : ContentBlockProjector
+    public function createContentBlockProjector(): ContentBlockProjector
     {
         return new ContentBlockProjector(
             $this->createContentBlockSnippetProjector()
@@ -908,49 +908,49 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         ];
     }
 
-    public function createContentBlockSnippetRenderer() : ContentBlockSnippetRenderer
+    public function createContentBlockSnippetRenderer(): ContentBlockSnippetRenderer
     {
         return new ContentBlockSnippetRenderer(
             $this->getMasterFactory()->createContentBlockSnippetKeyGeneratorLocatorStrategy()
         );
     }
 
-    public function createUpdateProductCommandHandler() : CommandHandler
+    public function createUpdateProductCommandHandler(): CommandHandler
     {
         return new UpdateProductCommandHandler(
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
-    public function createAddProductListingCommandHandler() : CommandHandler
+    public function createAddProductListingCommandHandler(): CommandHandler
     {
         return new AddProductListingCommandHandler(
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
-    public function createAddImageCommandHandler() : CommandHandler
+    public function createAddImageCommandHandler(): CommandHandler
     {
         return new AddImageCommandHandler(
             $this->getMasterFactory()->getEventQueue()
         );
     }
 
-    public function createShutdownWorkerCommandHandler() : CommandHandler
+    public function createShutdownWorkerCommandHandler(): CommandHandler
     {
         return new ShutdownWorkerDirectiveHandler(
             Queue\EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue()),
             $this->getMasterFactory()->getLogger()
         );
     }
-    
+
     public function createImportCatalogCommandHandler(): CommandHandler
     {
         return new ImportCatalogCommandHandler(
             $this->getMasterFactory()->getEventQueue()
         );
     }
-    
+
     public function createSetCurrentDataVersionCommandHandler(): CommandHandler
     {
         return new SetCurrentDataVersionCommandHandler(
@@ -963,12 +963,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     /**
      * @return string[]
      */
-    public function getRequiredContextParts() : array
+    public function getRequiredContextParts(): array
     {
         return [Website::CONTEXT_CODE, Locale::CONTEXT_CODE, DataVersion::CONTEXT_CODE];
     }
 
-    public function createContentBlockInProductListingSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createContentBlockInProductListingSnippetKeyGenerator(): SnippetKeyGenerator
     {
         return new GenericSnippetKeyGenerator(
             'content_block_in_product_listing',
@@ -977,7 +977,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductSearchResultMetaSnippetRenderer() : ProductSearchResultMetaSnippetRenderer
+    public function createProductSearchResultMetaSnippetRenderer(): ProductSearchResultMetaSnippetRenderer
     {
         return new ProductSearchResultMetaSnippetRenderer(
             $this->getMasterFactory()->createProductSearchResultMetaSnippetKeyGenerator(),
@@ -986,7 +986,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductSearchResultMetaSnippetKeyGenerator() : SnippetKeyGenerator
+    public function createProductSearchResultMetaSnippetKeyGenerator(): SnippetKeyGenerator
     {
         $usedDataParts = [PageMetaInfoSnippetContent::URL_KEY];
 
@@ -997,7 +997,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createCatalogImport() : CatalogImport
+    public function createCatalogImport(): CatalogImport
     {
         return new CatalogImport(
             $this->getMasterFactory()->createQueueImportCommands(),
@@ -1009,7 +1009,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function getUrlKeyStore() : UrlKeyStore
+    public function getUrlKeyStore(): UrlKeyStore
     {
         if (null === $this->urlKeyStore) {
             $this->urlKeyStore = $this->getMasterFactory()->createUrlKeyStore();
@@ -1017,7 +1017,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->urlKeyStore;
     }
 
-    public function getTranslatorRegistry() : TranslatorRegistry
+    public function getTranslatorRegistry(): TranslatorRegistry
     {
         if (null === $this->translatorRegistry) {
             $this->translatorRegistry = new TranslatorRegistry();
@@ -1036,7 +1036,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->translatorRegistry;
     }
 
-    public function getProductListingTranslatorFactory() : callable
+    public function getProductListingTranslatorFactory(): callable
     {
         return function ($locale) {
             $files = ['common.csv', 'attributes.csv', 'product-listing.csv'];
@@ -1044,7 +1044,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         };
     }
 
-    public function getProductDetailsViewTranslatorFactory() : callable
+    public function getProductDetailsViewTranslatorFactory(): callable
     {
         return function ($locale) {
             $files = ['common.csv', 'attributes.csv', 'product-details.csv'];
@@ -1052,17 +1052,17 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         };
     }
 
-    public function createConfigReader() : EnvironmentConfigReader
+    public function createConfigReader(): EnvironmentConfigReader
     {
         return EnvironmentConfigReader::fromGlobalState();
     }
 
-    public function createCatalogWasImportedDomainEventHandler() : DomainEventHandler
+    public function createCatalogWasImportedDomainEventHandler(): DomainEventHandler
     {
         return new CatalogWasImportedDomainEventHandler();
     }
 
-    public function createShutdownWorkerDomainEventHandler() : DomainEventHandler
+    public function createShutdownWorkerDomainEventHandler(): DomainEventHandler
     {
         return new ShutdownWorkerDirectiveHandler(
             Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue()),
@@ -1082,17 +1082,17 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return new CurrentDataVersionWasSetDomainEventHandler();
     }
 
-    public function createBaseUrlBuilder() : BaseUrlBuilder
+    public function createBaseUrlBuilder(): BaseUrlBuilder
     {
         return new WebsiteBaseUrlBuilder($this->getMasterFactory()->createConfigReader());
     }
 
-    public function createAssetsBaseUrlBuilder() : BaseUrlBuilder
+    public function createAssetsBaseUrlBuilder(): BaseUrlBuilder
     {
         return new WebsiteBaseUrlBuilder($this->getMasterFactory()->createConfigReader());
     }
 
-    public function getFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry
+    public function getFacetFieldTransformationRegistry(): FacetFieldTransformationRegistry
     {
         if (null === $this->memoizedFacetFieldTransformationRegistry) {
             $this->memoizedFacetFieldTransformationRegistry = $this->getMasterFactory()
@@ -1102,12 +1102,12 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         return $this->memoizedFacetFieldTransformationRegistry;
     }
 
-    public function createFilesystemFileStorage() : FilesystemFileStorage
+    public function createFilesystemFileStorage(): FilesystemFileStorage
     {
         return new FilesystemFileStorage($this->getMasterFactory()->getMediaBaseDirectoryConfig());
     }
 
-    public function getMediaBaseDirectoryConfig() : string
+    public function getMediaBaseDirectoryConfig(): string
     {
         /** @var ConfigReader $configReader */
         $configReader = $this->getMasterFactory()->createConfigReader();
@@ -1117,7 +1117,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
             __DIR__ . '/../pub/media';
     }
 
-    public function createMediaBaseUrlBuilder() : MediaBaseUrlBuilder
+    public function createMediaBaseUrlBuilder(): MediaBaseUrlBuilder
     {
         return new MediaDirectoryBaseUrlBuilder(
             $this->getMasterFactory()->createBaseUrlBuilder(),
@@ -1125,22 +1125,22 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createAttributeValueCollectorLocator() : AttributeValueCollectorLocator
+    public function createAttributeValueCollectorLocator(): AttributeValueCollectorLocator
     {
         return new AttributeValueCollectorLocator($this->getMasterFactory());
     }
 
-    public function createDefaultAttributeValueCollector() : DefaultAttributeValueCollector
+    public function createDefaultAttributeValueCollector(): DefaultAttributeValueCollector
     {
         return new DefaultAttributeValueCollector();
     }
 
-    public function createConfigurableProductAttributeValueCollector() : ConfigurableProductAttributeValueCollector
+    public function createConfigurableProductAttributeValueCollector(): ConfigurableProductAttributeValueCollector
     {
         return new ConfigurableProductAttributeValueCollector();
     }
 
-    public function createQueueImportCommands() : QueueImportCommands
+    public function createQueueImportCommands(): QueueImportCommands
     {
         return new QueueImportCommands(
             $this->getMasterFactory()->getCommandQueue(),
@@ -1150,22 +1150,22 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createProductImportCommandLocator() : ProductImportCommandLocator
+    public function createProductImportCommandLocator(): ProductImportCommandLocator
     {
         return new ProductImportCommandLocator($this->getMasterFactory());
     }
 
-    public function createProductImageImportCommandLocator() : ProductImageImportCommandLocator
+    public function createProductImageImportCommandLocator(): ProductImageImportCommandLocator
     {
         return new ProductImageImportCommandLocator($this->getMasterFactory());
     }
 
-    public function createProductListingImportCommandLocator() : ProductListingImportCommandLocator
+    public function createProductListingImportCommandLocator(): ProductListingImportCommandLocator
     {
         return new ProductListingImportCommandLocator($this->getMasterFactory());
     }
 
-    public function createProductJsonService() : ProductJsonService
+    public function createProductJsonService(): ProductJsonService
     {
         return new ProductJsonService(
             $this->getMasterFactory()->createDataPoolReader(),
@@ -1176,7 +1176,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         );
     }
 
-    public function createEnrichProductJsonWithPrices() : EnrichProductJsonWithPrices
+    public function createEnrichProductJsonWithPrices(): EnrichProductJsonWithPrices
     {
         return new EnrichProductJsonWithPrices();
     }

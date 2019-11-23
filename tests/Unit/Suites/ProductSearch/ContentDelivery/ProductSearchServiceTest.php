@@ -74,7 +74,7 @@ class ProductSearchServiceTest extends TestCase
 
         $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
 
-        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
+        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions, '');
 
         $this->assertSame(0, $result->getTotalNumberOfResults());
     }
@@ -95,7 +95,7 @@ class ProductSearchServiceTest extends TestCase
         $this->stubDataPoolReader->method('getSearchResults')->willReturn($stubSearchEngineResponse);
         $this->stubProductJsonService->method('get')->willReturn($dummyProductDataArray);
 
-        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
+        $result = $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions, '');
         $expectedResult = new ProductSearchResult(
             count($dummyProductDataArray),
             $dummyProductDataArray,
@@ -115,6 +115,6 @@ class ProductSearchServiceTest extends TestCase
         $this->stubDataPoolReader->expects($this->once())->method('getSearchResults')
             ->with($expectedCriteria);
 
-        $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions);
+        $this->service->query($this->stubSearchCriteria, $this->stubQueryOptions, '');
     }
 }
