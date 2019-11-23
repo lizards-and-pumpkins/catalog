@@ -56,6 +56,7 @@ class ProductJsonService
 
     /**
      * @param Context $context
+     * @param string $snippetName
      * @param ProductId[] $productIds
      * @return array[]
      */
@@ -72,29 +73,26 @@ class ProductJsonService
     /**
      * @param Context $context
      * @param ProductId[] $productIds
+     * @param string $snippetName
      * @return string[]
      */
     private function getProductJsonSnippetKeys(Context $context, array $productIds, string $snippetName): array
     {
-        return $this->getSnippetKeysForJson($context, $productIds, $snippetName, $this->productJsonSnippetKeyGenerator);
+        return $this->getSnippetKeysForJson($context, $productIds, $snippetName);
     }
 
     /**
      * @param Context $context
      * @param ProductId[] $productIds
-     * @param SnippetKeyGenerator $keyGenerator
+     * @param string $snippetName
      * @return string[]
      */
-    private function getSnippetKeysForJson(
-        Context $context,
-        array $productIds,
-        string $snippetName,
-        SnippetKeyGenerator $keyGenerator
-    ): array {
-        return array_map(function (ProductId $productId) use ($context, $keyGenerator, $snippetName) {
-            return $keyGenerator->getKeyForContext(
+    private function getSnippetKeysForJson(Context $context, array $productIds, string $snippetName): array
+    {
+        return array_map(function (ProductId $productId) use ($context, $snippetName) {
+            return $this->productJsonSnippetKeyGenerator->getKeyForContext(
                 $context,
-                [Product::ID => $productId, ProductJsonService::SNIPPET_NAME => $snippetName]
+                [Product::ID => $productId, self::SNIPPET_NAME => $snippetName]
             );
         }, $productIds);
     }

@@ -285,15 +285,12 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         return new FacetFiltersToIncludeInResult(...$facetFields);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string
-     */
-    private function getSnippetName(HttpRequest $request)
+    private function getSnippetName(HttpRequest $request): string
     {
         if ($request->hasQueryParameter(ProductJsonService::SNIPPET_NAME)) {
             return $request->getQueryParameter(ProductJsonService::SNIPPET_NAME);
         }
+
         return '';
     }
 }
