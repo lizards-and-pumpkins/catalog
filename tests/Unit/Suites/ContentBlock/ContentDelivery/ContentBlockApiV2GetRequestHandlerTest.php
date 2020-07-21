@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers  \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockApiV2GetRequestHandler
- * @uses    \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses    \LizardsAndPumpkins\Http\GenericHttpResponse
  * @uses    \LizardsAndPumpkins\Http\HttpHeaders
  * @uses    \LizardsAndPumpkins\Http\HttpUrl
  */

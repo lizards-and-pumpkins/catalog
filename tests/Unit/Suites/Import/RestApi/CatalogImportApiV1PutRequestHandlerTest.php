@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class CatalogImportApiV1PutRequestHandlerTest extends TestCase

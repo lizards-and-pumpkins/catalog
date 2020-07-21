@@ -16,8 +16,6 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetField
 use LizardsAndPumpkins\DataPool\SnippetReader;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
 use LizardsAndPumpkins\Import\CatalogWasImportedDomainEventHandler;
@@ -68,16 +66,15 @@ use LizardsAndPumpkins\ProductSearch\Import\DefaultAttributeValueCollector;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
-use LizardsAndPumpkins\Util\Factory\Exception\NoMasterFactorySetException;
-use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
+use LizardsAndPumpkins\Core\Factory\Exception\NoMasterFactorySetException;
+use LizardsAndPumpkins\Core\Factory\Exception\UndefinedFactoryMethodException;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @covers \LizardsAndPumpkins\Util\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Context\BaseUrl\WebsiteBaseUrlBuilder
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
- * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Import\Image\AddImageCommandHandler
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
@@ -355,18 +352,6 @@ class CommonFactoryTest extends TestCase
         $resultB = $this->commonFactory->getLogger();
         $this->assertInstanceOf(Logger::class, $resultA);
         $this->assertSame($resultA, $resultB);
-    }
-
-    public function testResourceNotFoundRouterIsReturned()
-    {
-        $result = $this->commonFactory->createResourceNotFoundRouter();
-        $this->assertInstanceOf(ResourceNotFoundRouter::class, $result);
-    }
-
-    public function testHttpRouterChainIsReturned()
-    {
-        $result = $this->commonFactory->createHttpRouterChain();
-        $this->assertInstanceOf(HttpRouterChain::class, $result);
     }
 
     public function testImageImportEventDomainHandlerIsReturned()

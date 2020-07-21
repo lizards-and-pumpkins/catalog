@@ -6,15 +6,15 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ProductSearchApiFactory implements FactoryWithCallback
 {
     use FactoryWithCallbackTrait;
 
-    public function factoryRegistrationCallback(MasterFactory $masterFactory)
+    public function factoryRegistrationCallback(MasterFactory $masterFactory): void
     {
         $masterFactory->register(new ProductSearchSharedFactory());
         $this->registerProductSearchApiEndpoint($masterFactory);

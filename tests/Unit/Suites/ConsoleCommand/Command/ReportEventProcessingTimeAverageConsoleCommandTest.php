@@ -10,7 +10,7 @@ use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\Logfile
 use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\ProcessingTimeTableDataBuilder;
 use LizardsAndPumpkins\ConsoleCommand\ConsoleCommandFactory;
 use LizardsAndPumpkins\TestFileFixtureTrait;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -8,11 +8,11 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\Command\TestStubConsoleCommand;
 use LizardsAndPumpkins\ConsoleCommand\Exception\NoConsoleCommandSpecifiedException;
 use LizardsAndPumpkins\ConsoleCommand\TestDouble\MockCliCommand;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait;
 use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -77,9 +77,9 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\ConsoleCommand\ConsoleCommandFactory
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class CliBootstrapTest extends TestCase
@@ -111,7 +111,7 @@ class CliBootstrapTest extends TestCase
 
             public $wasRegistered = false;
 
-            public function factoryRegistrationCallback(MasterFactory $masterFactory)
+            public function factoryRegistrationCallback(MasterFactory $masterFactory): void
             {
                 $this->wasRegistered = true;
             }

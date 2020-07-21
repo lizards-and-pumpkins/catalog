@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\ContentBlock\ContentDelivery;
 
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,14 +20,14 @@ use PHPUnit\Framework\TestCase;
  * @uses    \LizardsAndPumpkins\ProductListing\Import\ProductListingContentBlockSnippetKeyGeneratorLocatorStrategy
  * @uses    \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockApiV2GetRequestHandler
  * @uses    \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockService
- * @uses    \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
+ * @uses    \LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait
  * @uses    \LizardsAndPumpkins\Context\SelfContainedContextBuilder
  * @uses    \LizardsAndPumpkins\Context\DataVersion\ContextVersion
  * @uses    \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
- * @uses    \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses    \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses    \LizardsAndPumpkins\Context\DataVersion\DataVersion
  * @uses    \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses    \LizardsAndPumpkins\Util\Factory\FactoryTrait
+ * @uses    \LizardsAndPumpkins\Core\Factory\FactoryTrait
  * @uses    \LizardsAndPumpkins\DataPool\DataPoolReader
  * @uses    \LizardsAndPumpkins\RestApi\RestApiFactory
  */

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockService
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait
  */
 class ContentBlockServiceTest extends TestCase
 {

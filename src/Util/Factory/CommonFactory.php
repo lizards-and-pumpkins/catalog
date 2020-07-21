@@ -11,6 +11,8 @@ use LizardsAndPumpkins\Context\Country\Country;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
@@ -54,9 +56,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
-use LizardsAndPumpkins\Util\Factory\Exception\UndefinedFactoryMethodException;
-use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
-use LizardsAndPumpkins\Http\Routing\ResourceNotFoundRouter;
+use LizardsAndPumpkins\Core\Factory\Exception\UndefinedFactoryMethodException;
 use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEventHandler;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
 use LizardsAndPumpkins\Import\Image\AddImageCommandHandler;
@@ -782,16 +782,6 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
         }
 
         return $instance;
-    }
-
-    public function createResourceNotFoundRouter() : ResourceNotFoundRouter
-    {
-        return new ResourceNotFoundRouter();
-    }
-
-    public function createHttpRouterChain() : HttpRouterChain
-    {
-        return new HttpRouterChain();
     }
 
     public function createProductSearchDocumentBuilder() : ProductSearchDocumentBuilder

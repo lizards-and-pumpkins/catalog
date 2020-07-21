@@ -71,7 +71,10 @@ class ProductRehydrationTest extends TestCase
         ProductVariationAttributeList $sourceVariationAttributeList,
         ProductVariationAttributeList $rehydratedVariationAttributeList
     ) {
-        $this->assertSame(count($sourceVariationAttributeList), count($rehydratedVariationAttributeList));
+        $this->assertSame(
+            $sourceVariationAttributeList->getIterator()->count(),
+            $rehydratedVariationAttributeList->getIterator()->count()
+        );
         
         /**
          * @var AttributeCode $attribute

@@ -6,8 +6,8 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\Exception\NoConsoleCommandSpecifiedException;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class CliBootstrap
 {

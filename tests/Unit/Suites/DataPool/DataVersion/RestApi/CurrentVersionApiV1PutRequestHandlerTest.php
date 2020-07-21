@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  */
 class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
 {

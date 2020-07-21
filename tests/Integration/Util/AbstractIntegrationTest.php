@@ -9,6 +9,7 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory;
+use LizardsAndPumpkins\Http\HttpFactory;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
@@ -20,8 +21,8 @@ use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommand
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -61,6 +62,7 @@ abstract class AbstractIntegrationTest extends TestCase
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $factory->register(new FrontendFactory($request));
+        $factory->register(new HttpFactory());
 
         return $factory;
     }

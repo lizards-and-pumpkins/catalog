@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 
 use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\LogfileReader;
 use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\ProcessingTimeTableDataBuilder;
-use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**

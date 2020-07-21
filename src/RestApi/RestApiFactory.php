@@ -17,8 +17,8 @@ use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV1PutRequestHandle
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplatesApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 
 class RestApiFactory implements Factory
 {

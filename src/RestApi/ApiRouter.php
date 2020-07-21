@@ -29,11 +29,7 @@ class ApiRouter implements HttpRouter
         $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpRequestHandler|null
-     */
-    public function route(HttpRequest $request)
+    public function route(HttpRequest $request): ?HttpRequestHandler
     {
         $urlPath = $this->urlToWebsiteMap->getRequestPathWithoutWebsitePrefix((string) $request->getUrl());
         $urlToken = explode('/', $urlPath);

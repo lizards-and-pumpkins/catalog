@@ -10,7 +10,7 @@ use LizardsAndPumpkins\AbstractIntegrationTest;
 use LizardsAndPumpkins\ConsoleCommand\Command\ImportTemplateConsoleCommand;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ImportTemplateConsoleCommandIntegrationTest extends AbstractIntegrationTest
 {

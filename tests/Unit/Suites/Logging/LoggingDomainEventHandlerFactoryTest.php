@@ -68,8 +68,8 @@ use PHPUnit\Framework\TestCase;
  * @uses \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
  * @uses \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses \LizardsAndPumpkins\Util\Factory\FactoryTrait
- * @uses \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses \LizardsAndPumpkins\Core\Factory\FactoryTrait
+ * @uses \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class LoggingDomainEventHandlerFactoryTest extends TestCase

@@ -17,6 +17,8 @@
         "ext-ctype": "*",
         "ext-dom": "*",
         "ext-libxml": "*",
+        "lizards-and-pumpkins/core": "dev-master",
+        "lizards-and-pumpkins/http": "dev-master",
         "sebastian/money": "^1.5",
         "league/climate": "^3.2.0"
     },
@@ -25,8 +27,7 @@
         "lizards-and-pumpkins/coding-standards": "dev-master"
     },
     "autoload": {
-        "psr-4": {"LizardsAndPumpkins\\": "src/"},
-        "files" : ["src/Util/functions.php"]
+        "psr-4": {"LizardsAndPumpkins\\": "src/"}
     },
     "autoload-dev": {
         "psr-4": {

@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
 use LizardsAndPumpkins\ConsoleCommand\ConsoleCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

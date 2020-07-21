@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ReportQueueCountConsoleCommand extends BaseCliCommand
 {

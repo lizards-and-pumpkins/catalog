@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 use function array_filter as filter;
 use function array_map as map;

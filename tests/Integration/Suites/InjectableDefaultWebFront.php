@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class InjectableDefaultWebFront extends DefaultWebFront
 {
@@ -26,7 +26,7 @@ class InjectableDefaultWebFront extends DefaultWebFront
         return $this->testMasterFactory;
     }
 
-    final protected function registerFactories(MasterFactory $masterFactory)
+    final protected function registerFactories(MasterFactory $masterFactory): void
     {
         // All factories must already have been registered with the injected testing master factory.
     }

@@ -5,7 +5,8 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory;
-use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\GenericHttpResponse;
+use LizardsAndPumpkins\Http\HttpFactory;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Http\WebFront;
@@ -16,7 +17,7 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class RestApiWebFront extends WebFront
 {
@@ -41,9 +42,10 @@ class RestApiWebFront extends WebFront
         return new CatalogMasterFactory();
     }
 
-    protected function registerFactories(MasterFactory $masterFactory)
+    protected function registerFactories(MasterFactory $masterFactory): void
     {
         $masterFactory->register(new CommonFactory());
+        $masterFactory->register(new HttpFactory());
         $masterFactory->register(new RestApiFactory());
         $masterFactory->register(new ContentBlockServiceFactory());
         $masterFactory->register(new ProductSearchApiFactory());
@@ -53,7 +55,7 @@ class RestApiWebFront extends WebFront
         $masterFactory->register($this->getImplementationSpecificFactory());
     }
 
-    final protected function registerRouters(HttpRouterChain $routerChainChain)
+    final protected function registerRouters(HttpRouterChain $routerChainChain): void
     {
         $routerChainChain->register($this->getMasterFactory()->createApiRouter());
     }

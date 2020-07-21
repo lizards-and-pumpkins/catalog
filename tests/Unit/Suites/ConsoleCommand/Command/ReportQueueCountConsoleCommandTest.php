@@ -8,7 +8,7 @@ use League\CLImate\Argument\Manager as CliMateArgumentManager;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

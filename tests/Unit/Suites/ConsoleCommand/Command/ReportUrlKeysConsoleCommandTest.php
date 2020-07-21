@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 use League\CLImate\Argument\Manager as CliMateArgumentManager;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

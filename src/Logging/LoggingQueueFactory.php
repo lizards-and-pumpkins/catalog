@@ -6,9 +6,9 @@ namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class LoggingQueueFactory implements Factory, MessageQueueFactory
 {

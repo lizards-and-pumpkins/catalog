@@ -9,7 +9,7 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\ConsoleCommand;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

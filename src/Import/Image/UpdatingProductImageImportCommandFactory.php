@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Command\Command;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 
 class UpdatingProductImageImportCommandFactory implements ProductImageImportCommandFactory
 {

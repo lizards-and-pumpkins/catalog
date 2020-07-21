@@ -4,14 +4,14 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ConsoleCommand;
 
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -75,9 +75,9 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductSearch\Import\ProductSearchDocumentBuilder
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  */
 class CliFactoryBootstrapTest extends TestCase
@@ -90,7 +90,7 @@ class CliFactoryBootstrapTest extends TestCase
 
             public $wasRegistered = false;
 
-            public function factoryRegistrationCallback(MasterFactory $masterFactory)
+            public function factoryRegistrationCallback(MasterFactory $masterFactory): void
             {
                 $this->wasRegistered = true;
             }
@@ -105,7 +105,7 @@ class CliFactoryBootstrapTest extends TestCase
 
             private static $registrationCount = 0;
 
-            public function factoryRegistrationCallback(MasterFactory $masterFactory)
+            public function factoryRegistrationCallback(MasterFactory $masterFactory): void
             {
                 static::$registrationCount++;
             }
