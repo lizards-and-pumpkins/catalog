@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\RestApi;
 
+use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
+use LizardsAndPumpkins\Http\UrlToWebsiteMapBasedUrlParser;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
@@ -18,11 +20,10 @@ use LizardsAndPumpkins\Import\XmlParser\ProductJsonToXml;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Core\Factory\Factory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\RestApi\RestApiFactory
+ * @covers \LizardsAndPumpkins\RestApi\CatalogRestApiFactory
  * @uses   \LizardsAndPumpkins\Import\CatalogImport
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
@@ -62,8 +63,9 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductListing\Import\ProductSearchResultMetaSnippetRenderer
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
+ * @uses   \LizardsAndPumpkins\Http\UrlToWebsiteMapBasedUrlParser
  */
-class RestApiFactoryTest extends TestCase
+class CatalogRestApiFactoryTest extends TestCase
 {
     /**
      * @var RestApiFactory
@@ -83,7 +85,7 @@ class RestApiFactoryTest extends TestCase
         $masterFactory->register(new CommonFactory());
         $masterFactory->register(new UnitTestFactory($this));
 
-        $this->factory = new RestApiFactory();
+        $this->factory = new CatalogRestApiFactory();
 
         $masterFactory->register($this->factory);
     }
@@ -99,10 +101,9 @@ class RestApiFactoryTest extends TestCase
         $this->assertInstanceOf(ApiRequestHandlerLocator::class, $result);
     }
 
-    public function testApiRouterIsReturned()
+    public function testUrlToWebsiteMapBasedUrlParserIsReturned(): void
     {
-        $result = $this->factory->createApiRouter();
-        $this->assertInstanceOf(ApiRouter::class, $result);
+        $this->assertInstanceOf(UrlToWebsiteMapBasedUrlParser::class, $this->factory->createHttpUrlParser());
     }
 
     /**

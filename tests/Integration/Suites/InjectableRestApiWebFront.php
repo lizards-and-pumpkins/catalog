@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
-class InjectableRestApiWebFront extends RestApiWebFront
+class InjectableRestApiWebFront extends CatalogRestApiWebFront
 {
     /**
      * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject

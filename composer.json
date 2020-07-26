@@ -19,6 +19,7 @@
         "ext-libxml": "*",
         "lizards-and-pumpkins/core": "dev-master",
         "lizards-and-pumpkins/http": "dev-master",
+        "lizards-and-pumpkins/rest-api": "dev-master",
         "sebastian/money": "^1.5",
         "league/climate": "^3.2.0"
     },

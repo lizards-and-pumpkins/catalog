@@ -19,6 +19,7 @@ use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
+use LizardsAndPumpkins\RestApi\CatalogRestApiFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\Factory;
@@ -83,6 +84,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $factoriesToRegister = [
             new CommonFactory(),
             new RestApiFactory(),
+            new CatalogRestApiFactory(),
             new UpdatingProductImportCommandFactory(),
             new NullProductImageImportCommandFactory(),
             new UpdatingProductListingImportCommandFactory(),

@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ContentBlock\ContentDelivery;
 
 use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\RestApi\RestApiFactory;
+use LizardsAndPumpkins\RestApi\CatalogRestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  * @uses    \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses    \LizardsAndPumpkins\Core\Factory\FactoryTrait
  * @uses    \LizardsAndPumpkins\DataPool\DataPoolReader
- * @uses    \LizardsAndPumpkins\RestApi\RestApiFactory
+ * @uses    \LizardsAndPumpkins\RestApi\CatalogRestApiFactory
  */
 class ContentBlockServiceFactoryTest extends TestCase
 {
@@ -42,7 +42,7 @@ class ContentBlockServiceFactoryTest extends TestCase
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new RestApiFactory());
+        $masterFactory->register(new CatalogRestApiFactory());
         $masterFactory->register(new UnitTestFactory($this));
 
         $this->factory = new ContentBlockServiceFactory();

@@ -77,7 +77,7 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 
     /**
      * @param string $url
-     * @return string[]
+     * @return Website[]
      */
     private function getWebsiteUrlPrefixAndCodeByUrl(string $url): array
     {

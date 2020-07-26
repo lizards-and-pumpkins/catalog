@@ -17,21 +17,20 @@ use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\ApiRouter;
-use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\RestApiWebFront
+ * @covers \LizardsAndPumpkins\CatalogRestApiWebFront
  * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  * @uses   \LizardsAndPumpkins\Http\WebFront
  */
-class RestApiWebFrontTest extends TestCase
+class CatalogRestApiWebFrontTest extends TestCase
 {
     /**
-     * @var RestApiWebFront
+     * @var CatalogRestApiWebFront
      */
     private $webFront;
 
@@ -143,15 +142,14 @@ class RestApiWebFrontTest extends TestCase
 
     public function testRegistersFactoriesRequiredForRestApiRequestHandling()
     {
-        $this->mockMasterFactory->expects($this->exactly(8))->method('register')->withConsecutive(
+        $this->mockMasterFactory->expects($this->atLeast(7))->method('register')->withConsecutive(
             $this->isInstanceOf(CommonFactory::class),
-            $this->isInstanceOf(RestApiFactory::class),
+            $this->isInstanceOf(CatalogRestApiFactory::class),
             $this->isInstanceOf(ContentBlockServiceFactory::class),
             $this->isInstanceOf(ProductSearchApiFactory::class),
             $this->isInstanceOf(UpdatingProductImportCommandFactory::class),
             $this->isInstanceOf(UpdatingProductImageImportCommandFactory::class),
-            $this->isInstanceOf(UpdatingProductListingImportCommandFactory::class),
-            $this->isInstanceOf(UnitTestFactory::class)
+            $this->isInstanceOf(UpdatingProductListingImportCommandFactory::class)
         );
 
         $this->webFront->processRequest();

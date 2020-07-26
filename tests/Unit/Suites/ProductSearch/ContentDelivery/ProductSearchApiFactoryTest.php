@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\RestApi\RestApiFactory;
+use LizardsAndPumpkins\RestApi\CatalogRestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\Factory;
@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
- * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
+ * @uses   \LizardsAndPumpkins\RestApi\CatalogRestApiFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait
@@ -53,7 +53,7 @@ class ProductSearchApiFactoryTest extends TestCase
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new RestApiFactory());
+        $masterFactory->register(new CatalogRestApiFactory());
         $masterFactory->register(new UnitTestFactory($this));
 
         $this->factory = new ProductSearchApiFactory();

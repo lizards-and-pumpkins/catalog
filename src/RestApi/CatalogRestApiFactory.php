@@ -7,6 +7,8 @@ namespace LizardsAndPumpkins\RestApi;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1GetRequestHandler;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\CurrentVersionApiV1PutRequestHandler;
+use LizardsAndPumpkins\Http\HttpUrlParser;
+use LizardsAndPumpkins\Http\UrlToWebsiteMapBasedUrlParser;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV1PutRequestHandler;
 use LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler;
 use LizardsAndPumpkins\Import\RestApi\CatalogImportApiV1PutRequestHandler;
@@ -20,7 +22,7 @@ use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 
-class RestApiFactory implements Factory
+class CatalogRestApiFactory implements Factory
 {
     use FactoryTrait;
 
@@ -28,14 +30,6 @@ class RestApiFactory implements Factory
      * @var ApiRequestHandlerLocator
      */
     private $memoizedApiRequestHandlerLocator;
-
-    public function createApiRouter(): ApiRouter
-    {
-        return new ApiRouter(
-            $this->getApiRequestHandlerLocator(),
-            $this->getMasterFactory()->createUrlToWebsiteMap()
-        );
-    }
 
     public function getApiRequestHandlerLocator(): ApiRequestHandlerLocator
     {
@@ -45,6 +39,11 @@ class RestApiFactory implements Factory
         }
 
         return $this->memoizedApiRequestHandlerLocator;
+    }
+
+    public function createHttpUrlParser(): HttpUrlParser
+    {
+        return new UrlToWebsiteMapBasedUrlParser($this->getMasterFactory()->createUrlToWebsiteMap());
     }
 
     private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
