@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use LizardsAndPumpkins\Messaging\Event\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 
 class LoggingDomainEventHandlerFactory implements Factory, DomainEventHandlerFactory
 {

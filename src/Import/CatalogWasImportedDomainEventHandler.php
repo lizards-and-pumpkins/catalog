@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CatalogWasImportedDomainEventHandler implements DomainEventHandler
 {
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         // Left empty till data versioning and event sourcing is implemented.
         // Version is already present in event and can be get by $event->getDataVersion()

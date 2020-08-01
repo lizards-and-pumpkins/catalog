@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Messaging\MessageQueueFactory;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator;
+use LizardsAndPumpkins\Messaging\Queue\MessageQueueFactory;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
@@ -15,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \LizardsAndPumpkins\Logging\LoggingQueueFactory
  * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
  * @uses   \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
- * @uses   \LizardsAndPumpkins\Logging\LoggingQueueDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
  * @uses   \LizardsAndPumpkins\UnitTestFactory
  */

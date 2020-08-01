@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Queue;
 
-use LizardsAndPumpkins\Messaging\MessageReceiver;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 use PHPUnit\Framework\TestCase;
 

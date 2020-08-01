@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
 use League\CLImate\Argument\Manager as CliMateArgumentManager;
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;

@@ -10,7 +10,7 @@ use LizardsAndPumpkins\ConsoleCommand\Exception\NoConsoleCommandSpecifiedExcepti
 use LizardsAndPumpkins\ConsoleCommand\TestDouble\MockCliCommand;
 use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
+use LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
@@ -57,7 +57,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
  * @uses   \LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory
  * @uses   \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
- * @uses   \LizardsAndPumpkins\Logging\LoggingQueueDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator
  * @uses   \LizardsAndPumpkins\Logging\LoggingQueueFactory
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope

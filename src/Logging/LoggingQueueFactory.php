@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Logging;
 
-use LizardsAndPumpkins\Messaging\MessageQueueFactory;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator;
+use LizardsAndPumpkins\Messaging\Queue\MessageQueueFactory;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 
 class LoggingQueueFactory implements Factory, MessageQueueFactory
 {

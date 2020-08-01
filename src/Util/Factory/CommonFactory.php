@@ -13,17 +13,23 @@ use LizardsAndPumpkins\Context\Locale\Locale;
 use LizardsAndPumpkins\Context\Website\Website;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\FactoryTrait;
+use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEvent;
 use LizardsAndPumpkins\DataPool\DataVersion\CurrentDataVersionWasSetDomainEventHandler;
+use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommandHandler;
 use LizardsAndPumpkins\DataPool\KeyGenerator\GenericSnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\SnippetReader;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\EnrichProductJsonWithPrices;
 use LizardsAndPumpkins\Http\ContentDelivery\ProductJsonService\ProductJsonService;
+use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEvent;
 use LizardsAndPumpkins\Import\CatalogImportWasTriggeredDomainEventHandler;
+use LizardsAndPumpkins\Import\CatalogWasImportedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockProjector;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockSnippetRenderer;
+use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Import\ContentBlock\ContentBlockWasUpdatedDomainEventHandler;
+use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommand;
 use LizardsAndPumpkins\Import\ContentBlock\UpdateContentBlockCommandHandler;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\Context\ContextBuilder;
@@ -35,10 +41,17 @@ use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Import\Image\AddImageCommand;
+use LizardsAndPumpkins\Import\Image\ImageWasAddedDomainEvent;
+use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Import\ImportCatalogCommandHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
 use LizardsAndPumpkins\Import\Projector;
+use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
+use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommand;
 use LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
@@ -47,13 +60,18 @@ use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
+use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
+use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEvent;
 use LizardsAndPumpkins\Util\Config\ConfigReader;
 use LizardsAndPumpkins\Util\Config\EnvironmentConfigReader;
 use LizardsAndPumpkins\Core\Factory\Exception\UndefinedFactoryMethodException;
@@ -96,7 +114,6 @@ use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\Product\UrlKey\UrlKeyForContextCollector;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Import\TemplateRendering\BlockStructure;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Translation\CsvTranslator;
@@ -197,6 +214,16 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
      * @var ContextPartBuilder
      */
     private $websiteContextPartBuilder;
+
+    /**
+     * @var CommandHandlerLocator
+     */
+    private $commandHandlerLocator;
+
+    /**
+     * @var DomainEventHandlerLocator
+     */
+    private $domainEventHandlerLocator;
 
     public function createProductWasUpdatedDomainEventHandler() : DomainEventHandler
     {
@@ -694,7 +721,56 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createDomainEventHandlerLocator() : DomainEventHandlerLocator
     {
-        return new DomainEventHandlerLocator($this->getMasterFactory());
+        if (null === $this->domainEventHandlerLocator) {
+            $this->domainEventHandlerLocator = new DomainEventHandlerLocator();
+
+            $this->domainEventHandlerLocator->register(
+                ProductWasUpdatedDomainEvent::CODE,
+                $this->createProductWasUpdatedDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                TemplateWasUpdatedDomainEvent::CODE,
+                $this->createTemplateWasUpdatedDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                ImageWasAddedDomainEvent::CODE,
+                $this->createImageWasAddedDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                ProductListingWasAddedDomainEvent::CODE,
+                $this->createProductListingWasAddedDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                ContentBlockWasUpdatedDomainEvent::CODE,
+                $this->createContentBlockWasUpdatedDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                CatalogWasImportedDomainEvent::CODE,
+                $this->createCatalogWasImportedDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                ShutdownWorkerDirective::CODE,
+                $this->createShutdownWorkerDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                CatalogImportWasTriggeredDomainEvent::CODE,
+                $this->createCatalogImportWasTriggeredDomainEventHandler()
+            );
+
+            $this->domainEventHandlerLocator->register(
+                CurrentDataVersionWasSetDomainEvent::CODE,
+                $this->createCurrentDataVersionWasSetDomainEventHandler()
+            );
+        }
+
+        return $this->domainEventHandlerLocator;
     }
 
     public function createDataPoolWriter() : DataPoolWriter
@@ -853,7 +929,51 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
 
     public function createCommandHandlerLocator() : CommandHandlerLocator
     {
-        return new CommandHandlerLocator($this->getMasterFactory());
+        if (null === $this->commandHandlerLocator) {
+            $this->commandHandlerLocator = new CommandHandlerLocator();
+
+            $this->commandHandlerLocator->register(
+                UpdateContentBlockCommand::CODE,
+                $this->createUpdateContentBlockCommandHandler()
+            );
+
+            $this->commandHandlerLocator->register(
+                UpdateProductCommand::CODE,
+                $this->createUpdateProductCommandHandler()
+            );
+
+            $this->commandHandlerLocator->register(
+                AddProductListingCommand::CODE,
+                $this->createAddProductListingCommandHandler()
+            );
+
+            $this->commandHandlerLocator->register(
+                AddImageCommand::CODE,
+                $this->createAddImageCommandHandler()
+            );
+
+            $this->commandHandlerLocator->register(
+                ShutdownWorkerDirective::CODE,
+                $this->createShutdownWorkerCommandHandler()
+            );
+
+            $this->commandHandlerLocator->register(
+                ImportCatalogCommand::CODE,
+                $this->createImportCatalogCommandHandler()
+            );
+
+            $this->commandHandlerLocator->register(
+                SetCurrentDataVersionCommand::CODE,
+                $this->createSetCurrentDataVersionCommandHandler()
+            );
+
+            $this->commandHandlerLocator->register(
+                UpdateTemplateCommand::CODE,
+                $this->createUpdateTemplateCommandHandler()
+            );
+        }
+
+        return $this->commandHandlerLocator;
     }
 
     public function createUpdateContentBlockCommandHandler() : CommandHandler
@@ -929,7 +1049,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createShutdownWorkerCommandHandler() : CommandHandler
     {
         return new ShutdownWorkerDirectiveHandler(
-            Queue\EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue()),
+            EnqueuesMessageEnvelope::fromCommandQueue($this->getMasterFactory()->getCommandQueue()),
             $this->getMasterFactory()->getLogger()
         );
     }
@@ -1055,7 +1175,7 @@ class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandle
     public function createShutdownWorkerDomainEventHandler() : DomainEventHandler
     {
         return new ShutdownWorkerDirectiveHandler(
-            Queue\EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue()),
+            EnqueuesMessageEnvelope::fromDomainEventQueue($this->getMasterFactory()->getEventQueue()),
             $this->getMasterFactory()->getLogger()
         );
     }

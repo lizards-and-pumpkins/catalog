@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Import\Product\ProductWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
+use LizardsAndPumpkins\Messaging\Event\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\ProductListing\ProductListingWasAddedDomainEventHandler;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
@@ -51,7 +52,7 @@ use PHPUnit\Framework\TestCase;
  * @uses \LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEventHandler
  * @uses \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
- * @uses \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses \LizardsAndPumpkins\Messaging\Event\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  * @uses \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer

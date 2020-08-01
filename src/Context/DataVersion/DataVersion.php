@@ -9,7 +9,8 @@ use LizardsAndPumpkins\Context\DataVersion\Exception\EmptyVersionException;
 class DataVersion
 {
     const CONTEXT_CODE = 'version';
-    
+    const VERSION_KEY = 'data_version';
+
     /**
      * @var string
      */

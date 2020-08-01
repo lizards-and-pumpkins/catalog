@@ -20,7 +20,7 @@ class AddImageCommandHandler implements CommandHandler
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $command = AddImageCommand::fromMessage($message);
         $event = new ImageWasAddedDomainEvent($command->getImageFilePath(), $command->getDataVersion());

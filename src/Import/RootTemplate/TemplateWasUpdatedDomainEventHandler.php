@@ -21,7 +21,7 @@ class TemplateWasUpdatedDomainEventHandler implements DomainEventHandler
         $this->projectorLocator = $projectorLocator;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $domainEvent = TemplateWasUpdatedDomainEvent::fromMessage($message);
         $projector = $this->projectorLocator->getTemplateProjectorForCode($domainEvent->getTemplateId());

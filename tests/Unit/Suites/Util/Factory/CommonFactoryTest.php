@@ -50,7 +50,7 @@ use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\Import\ProductDetailTemplateSnippetRenderer;
 use LizardsAndPumpkins\ProductDetail\ProductDetailMetaSnippetRenderer;

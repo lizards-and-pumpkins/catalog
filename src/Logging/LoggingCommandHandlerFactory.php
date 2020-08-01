@@ -9,6 +9,7 @@ use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use LizardsAndPumpkins\Messaging\Command\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 
 class LoggingCommandHandlerFactory implements CommandHandlerFactory, Factory
 {

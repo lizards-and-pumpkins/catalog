@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\Logging;
 
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
+use LizardsAndPumpkins\Messaging\Command\Logging\ProcessTimeLoggingCommandHandlerDecorator;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
@@ -28,7 +29,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  * @uses   \LizardsAndPumpkins\ProductListing\AddProductListingCommandHandler
  * @uses   \LizardsAndPumpkins\DataPool\DataPoolWriter
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Command\Logging\ProcessTimeLoggingCommandHandlerDecorator
  */
 class LoggingCommandHandlerFactoryTest extends TestCase
 {

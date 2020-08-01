@@ -16,7 +16,7 @@ class CatalogImportWasTriggeredDomainEventHandler implements DomainEventHandler
         $this->catalogImport = $catalogImport;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $catalogImportWasTriggeredEvent = CatalogImportWasTriggeredDomainEvent::fromMessage($message);
         $this->catalogImport->importFile(

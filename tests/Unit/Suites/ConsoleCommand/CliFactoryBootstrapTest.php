@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace LizardsAndPumpkins\ConsoleCommand;
 
 use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Logging\LoggingQueueDecorator;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator;
-use LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
+use LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator;
+use LizardsAndPumpkins\Messaging\Command\Logging\ProcessTimeLoggingCommandHandlerDecorator;
+use LizardsAndPumpkins\Messaging\Event\Logging\ProcessTimeLoggingDomainEventHandlerDecorator;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait;
@@ -53,10 +53,10 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses   \LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory
  * @uses   \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
- * @uses   \LizardsAndPumpkins\Logging\LoggingQueueDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator
  * @uses   \LizardsAndPumpkins\Logging\LoggingQueueFactory
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingCommandHandlerDecorator
- * @uses   \LizardsAndPumpkins\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Command\Logging\ProcessTimeLoggingCommandHandlerDecorator
+ * @uses   \LizardsAndPumpkins\Messaging\Event\Logging\ProcessTimeLoggingDomainEventHandlerDecorator
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer

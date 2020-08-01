@@ -2,4 +2,4 @@
 
 # Lizards & Pumpkins Catalog
 
-Please refer to [Wiki](https://github.com/lizards-and-pumpkins/catalog/wiki/) for installation and usage instructions.
+Please refer to [dev docs](http://lizardsandpumpkins.com/dev-docs/) for installation and usage instructions.

@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\DataPool\DataVersion;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\Exception\NotCurrentDataVersionWasSetMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use PHPUnit\Framework\TestCase;
 
@@ -58,7 +57,7 @@ class CurrentDataVersionWasSetDomainEventTest extends TestCase
         $message = (new CurrentDataVersionWasSetDomainEvent($testDataVersion))->toMessage();
         
         $this->assertInstanceOf(Message::class, $message);
-        $this->assertEquals((string) $testDataVersion, $message->getMetadata()[DomainEventQueue::VERSION_KEY]);
+        $this->assertEquals((string) $testDataVersion, $message->getMetadata()[DataVersion::VERSION_KEY]);
     }
 
     public function testCanBeRehydratedFromMessage()

@@ -9,9 +9,9 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpUrl;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
-use LizardsAndPumpkins\Messaging\MessageReceiver;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use LizardsAndPumpkins\Messaging\Queue\MessageReceiver;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 
 class CatalogImportApiSingleProductTest extends AbstractIntegrationTest
 {
@@ -22,7 +22,7 @@ class CatalogImportApiSingleProductTest extends AbstractIntegrationTest
         {
             public $message;
 
-            public function receive(Message $message)
+            public function receive(Message $message): void
             {
                 $this->message = $message;
             }

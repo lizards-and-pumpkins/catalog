@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\Import\RootTemplate;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 use PHPUnit\Framework\TestCase;
 
@@ -88,7 +87,7 @@ class TemplateWasUpdatedDomainEventTest extends TestCase
     public function testReturnsMessageWithMetadata()
     {
         $metadata = $this->domainEvent->toMessage()->getMetadata();
-        $this->assertSame((string) $this->dummyDataVersion, $metadata[DomainEventQueue::VERSION_KEY]);
+        $this->assertSame((string) $this->dummyDataVersion, $metadata[DataVersion::VERSION_KEY]);
     }
 
     public function testCanBeRehydratedFromMessage()

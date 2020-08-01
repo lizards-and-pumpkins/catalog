@@ -20,7 +20,7 @@ class UpdateTemplateCommandHandler implements CommandHandler
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $command = UpdateTemplateCommand::fromMessage($message);
         $templateId = $command->getTemplateId();

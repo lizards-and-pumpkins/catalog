@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Messaging\Queue;
 
-use LizardsAndPumpkins\Messaging\MessageReceiver;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class InMemoryQueue implements Queue, Clearable
@@ -25,7 +23,7 @@ class InMemoryQueue implements Queue, Clearable
         return $this->count() > 0;
     }
 
-    public function add(Message $message)
+    public function add(Message $message): void
     {
         $this->queue[] = $message->serialize();
     }
@@ -46,7 +44,7 @@ class InMemoryQueue implements Queue, Clearable
         $this->queue = [];
     }
 
-    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsumeBeforeReturn)
+    public function consume(MessageReceiver $messageReceiver, int $numberOfMessagesToConsumeBeforeReturn): void
     {
         while ($numberOfMessagesToConsumeBeforeReturn > 0) {
             if ($this->isReadyForNext()) {

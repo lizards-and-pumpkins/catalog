@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\DataPool\DataVersion;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\Exception\NotCurrentDataVersionWasSetMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CurrentDataVersionWasSetDomainEvent implements DomainEvent
@@ -27,7 +26,7 @@ class CurrentDataVersionWasSetDomainEvent implements DomainEvent
     public function toMessage(): Message
     {
         $payload = [];
-        $metadata = [DomainEventQueue::VERSION_KEY => (string) $this->dataVersion];
+        $metadata = [DataVersion::VERSION_KEY => (string) $this->dataVersion];
         return Message::withCurrentTime(self::CODE, $payload, $metadata);
     }
 
@@ -38,7 +37,7 @@ class CurrentDataVersionWasSetDomainEvent implements DomainEvent
             throw new NotCurrentDataVersionWasSetMessageException($message);
         }
 
-        return new self(DataVersion::fromVersionString($message->getMetadata()[DomainEventQueue::VERSION_KEY]));
+        return new self(DataVersion::fromVersionString($message->getMetadata()[DataVersion::VERSION_KEY]));
     }
 
     public function getDataVersion(): DataVersion
