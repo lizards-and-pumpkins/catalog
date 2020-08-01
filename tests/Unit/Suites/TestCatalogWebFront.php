@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
-class TestDefaultWebFront extends DefaultWebFront
+class TestCatalogWebFront extends CatalogWebFront
 {
     /**
      * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject

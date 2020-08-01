@@ -14,7 +14,7 @@ class UnknownHttpRequestTest extends AbstractIntegrationTest
     private function processRequest($request): Http\HttpResponse
     {
         $masterFactory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
-        $webFront = new DefaultWebFront($request, $this->getIntegrationTestFactory($masterFactory));
+        $webFront = new CatalogWebFront($request, $this->getIntegrationTestFactory($masterFactory));
 
         return $webFront->processRequest();
     }

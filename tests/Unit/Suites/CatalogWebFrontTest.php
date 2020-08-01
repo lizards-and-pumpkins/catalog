@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LizardsAndPumpkins\DefaultWebFront
+ * @covers \LizardsAndPumpkins\CatalogWebFront
  * @covers \LizardsAndPumpkins\Http\WebFront
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
@@ -74,10 +74,10 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Translation\TranslatorRegistry
  * @uses   \LizardsAndPumpkins\Util\FileSystem\Directory
  */
-class DefaultWebFrontTest extends TestCase
+class CatalogWebFrontTest extends TestCase
 {
     /**
-     * @var DefaultWebFront
+     * @var CatalogWebFront
      */
     private $webFront;
 
@@ -131,7 +131,7 @@ class DefaultWebFrontTest extends TestCase
 
         $stubMasterFactory = $this->createStubMasterFactory();
 
-        $this->webFront = new TestDefaultWebFront($stubHttpRequest, $stubMasterFactory, new UnitTestFactory($this));
+        $this->webFront = new TestCatalogWebFront($stubHttpRequest, $stubMasterFactory, new UnitTestFactory($this));
     }
 
     public function testSendMethodOfResponseIsCalled()

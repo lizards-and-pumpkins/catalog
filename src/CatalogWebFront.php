@@ -16,7 +16,7 @@ use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
-class DefaultWebFront extends WebFront
+class CatalogWebFront extends WebFront
 {
     protected function createMasterFactory() : MasterFactory
     {
