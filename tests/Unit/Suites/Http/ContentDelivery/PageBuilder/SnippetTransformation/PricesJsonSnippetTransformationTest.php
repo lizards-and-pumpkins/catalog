@@ -19,17 +19,17 @@ class PricesJsonSnippetTransformationTest extends TestCase
     private $pricesJsonSnippetTransformation;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
     /**
-     * @var SnippetTransformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetTransformation|MockObject
      */
     private $stubPriceSnippetTransformation;
 
     /**
-     * @var PageSnippets|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageSnippets|MockObject
      */
     private $stubPageSnippets;
 
@@ -37,14 +37,14 @@ class PricesJsonSnippetTransformationTest extends TestCase
      * @param mixed $expected
      * @param mixed $input
      */
-    private function assertTransformation($expected, $input)
+    private function assertTransformation($expected, $input): void
     {
         $callable = $this->pricesJsonSnippetTransformation;
         $result = call_user_func($callable, $input, $this->stubContext, $this->stubPageSnippets);
         $this->assertSame($expected, $result);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubPageSnippets = $this->createMock(PageSnippets::class);
         $this->stubContext = $this->createMock(Context::class);
@@ -54,27 +54,27 @@ class PricesJsonSnippetTransformationTest extends TestCase
         );
     }
 
-    public function testItIsASnippetTransformation()
+    public function testItIsASnippetTransformation(): void
     {
         $this->assertInstanceOf(SnippetTransformation::class, $this->pricesJsonSnippetTransformation);
     }
 
-    public function testItReturnsAnEmptyStringIfInputIsNotString()
+    public function testItReturnsAnEmptyStringIfInputIsNotString(): void
     {
         $this->assertTransformation('', 123);
     }
 
-    public function testItReturnsAnEmptyStringIfInputIsNotValidJsonArray()
+    public function testItReturnsAnEmptyStringIfInputIsNotValidJsonArray(): void
     {
         $this->assertTransformation('', '"a json string"');
     }
 
-    public function testItReturnsAnEmptyJsonArrayIfTheInputJsonArrayIsEmpty()
+    public function testItReturnsAnEmptyJsonArrayIfTheInputJsonArrayIsEmpty(): void
     {
         $this->assertTransformation('[]', '[]');
     }
 
-    public function testItDelegatesToThePriceSnippetTransformationForEachArrayElement()
+    public function testItDelegatesToThePriceSnippetTransformationForEachArrayElement(): void
     {
         $transformedPrice = '9000 EUR';
         $this->stubPriceSnippetTransformation->method('__invoke')->willReturn($transformedPrice);

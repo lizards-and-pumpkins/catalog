@@ -25,7 +25,7 @@ class ProductBlockTest extends TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductView|MockObject
      */
     private $stubProductView;
 
@@ -35,11 +35,11 @@ class ProductBlockTest extends TestCase
     private $productBlock;
 
     /**
-     * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockRenderer|MockObject
      */
     private $stubBlockRenderer;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubBlockRenderer = $this->createMock(BlockRenderer::class);
         $this->stubProductView = $this->createMock(ProductView::class);
@@ -47,12 +47,12 @@ class ProductBlockTest extends TestCase
         $this->productBlock = new ProductBlock($this->stubBlockRenderer, 'foo.phtml', 'foo', $this->stubProductView);
     }
 
-    public function testBlockClassIsExtended()
+    public function testBlockClassIsExtended(): void
     {
         $this->assertInstanceOf(Block::class, $this->productBlock);
     }
 
-    public function testFirstValueOfProductAttributeIsReturned()
+    public function testFirstValueOfProductAttributeIsReturned(): void
     {
         $attributeCode = 'name';
         $attributeValue = 'foo';
@@ -63,7 +63,7 @@ class ProductBlockTest extends TestCase
         $this->assertEquals($attributeValue, $result);
     }
 
-    public function testImplodedValuesOfProductAttributeAreReturned()
+    public function testImplodedValuesOfProductAttributeAreReturned(): void
     {
         $attributeCode = 'foo';
         $attributeValueA = 'bar';
@@ -78,7 +78,7 @@ class ProductBlockTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testProductIdIsReturned()
+    public function testProductIdIsReturned(): void
     {
         $stubProductId = $this->createMock(ProductId::class);
 
@@ -88,7 +88,7 @@ class ProductBlockTest extends TestCase
         $this->assertEquals($stubProductId, $result);
     }
 
-    public function testProductUrlIsReturned()
+    public function testProductUrlIsReturned(): void
     {
         $urlKey = 'foo';
         $testBaseUrl = new HttpBaseUrl('http://example.com/');
@@ -100,7 +100,7 @@ class ProductBlockTest extends TestCase
         $this->assertEquals($testBaseUrl . $urlKey, $result);
     }
 
-    public function testGettingMainImageLabelIsDelegatedToProduct()
+    public function testGettingMainImageLabelIsDelegatedToProduct(): void
     {
         $testImageLabel = 'foo';
         $this->stubProductView->method('getMainImageLabel')->willReturn($testImageLabel);
@@ -108,7 +108,7 @@ class ProductBlockTest extends TestCase
         $this->assertSame($testImageLabel, $this->productBlock->getMainProductImageLabel());
     }
 
-    public function testGettingMainImageFileNameIsDelegatedToProduct()
+    public function testGettingMainImageFileNameIsDelegatedToProduct(): void
     {
         $testImageUrl = $this->createMock(HttpUrl::class);
         $this->stubProductView->method('getMainImageUrl')->willReturn($testImageUrl);
@@ -117,7 +117,7 @@ class ProductBlockTest extends TestCase
         $this->assertSame($testImageUrl, $this->productBlock->getMainProductImageUrl($variantCode));
     }
 
-    public function testGettingProductImageCountIsDelegatedToProduct()
+    public function testGettingProductImageCountIsDelegatedToProduct(): void
     {
         $testImagesCount = 3;
         $this->stubProductView->method('getImageCount')->willReturn($testImagesCount);
@@ -125,7 +125,7 @@ class ProductBlockTest extends TestCase
         $this->assertSame($testImagesCount, $this->productBlock->getProductImageCount());
     }
 
-    public function testGettingProductImageFileNameIsDelegatedToProduct()
+    public function testGettingProductImageFileNameIsDelegatedToProduct(): void
     {
         $testUrl = $this->createMock(HttpUrl::class);
         $variantCode = 'medium';
@@ -134,7 +134,7 @@ class ProductBlockTest extends TestCase
         $this->assertSame($testUrl, $this->productBlock->getProductImageUrlByNumber(0, $variantCode));
     }
 
-    public function testProductStockQuantityIsReturned()
+    public function testProductStockQuantityIsReturned(): void
     {
         $testStockQuantity = '3';
         $this->stubProductView->method('getFirstValueOfAttribute')->with('stock_qty')->willReturn($testStockQuantity);

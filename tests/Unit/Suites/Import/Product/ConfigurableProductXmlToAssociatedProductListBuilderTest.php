@@ -25,7 +25,7 @@ class ConfigurableProductXmlToAssociatedProductListBuilderTest extends TestCase
 </product>
     ';
 
-    public function testItReturnsAnAssociatedProductListBuilderInstance()
+    public function testItReturnsAnAssociatedProductListBuilderInstance(): void
     {
         $stubXmlToProductTypeBuilderLocator = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $stubXmlToProductTypeBuilderLocator->method('createProductBuilderFromXml')

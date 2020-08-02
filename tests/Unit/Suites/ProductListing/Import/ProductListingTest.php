@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class ProductListingTest extends TestCase
 {
     /**
-     * @var UrlKey|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlKey|MockObject
      */
     private $stubUrlKey;
 
@@ -24,12 +24,12 @@ class ProductListingTest extends TestCase
     private $dummyContextData = ['foo' => 'bar', 'baz' => 'qux'];
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|MockObject
      */
     private $stubCriteria;
 
     /**
-     * @var ProductListingAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingAttributeList|MockObject
      */
     private $stubProductListingAttributeList;
 
@@ -38,7 +38,7 @@ class ProductListingTest extends TestCase
      */
     private $productListing;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubUrlKey = $this->createMock(UrlKey::class);
         $this->stubCriteria = $this->createMock(SearchCriteria::class);
@@ -52,27 +52,27 @@ class ProductListingTest extends TestCase
         );
     }
 
-    public function testProductListingUrlKeyIsReturned()
+    public function testProductListingUrlKeyIsReturned(): void
     {
         $this->assertSame($this->stubUrlKey, $this->productListing->getUrlKey());
     }
 
-    public function testProductListingContextDataIsReturned()
+    public function testProductListingContextDataIsReturned(): void
     {
         $this->assertSame($this->dummyContextData, $this->productListing->getContextData());
     }
 
-    public function testProductListingIsReturned()
+    public function testProductListingIsReturned(): void
     {
         $this->assertSame($this->stubCriteria, $this->productListing->getCriteria());
     }
 
-    public function testReturnsProductListingAttributesList()
+    public function testReturnsProductListingAttributesList(): void
     {
         $this->assertSame($this->stubProductListingAttributeList, $this->productListing->getAttributesList());
     }
 
-    public function testCanBeSerializedAndRehydrated()
+    public function testCanBeSerializedAndRehydrated(): void
     {
         $rehydrated = ProductListing::rehydrate($this->productListing->serialize());
         $this->assertEquals($rehydrated, $this->productListing);

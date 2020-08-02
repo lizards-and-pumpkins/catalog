@@ -21,22 +21,22 @@ class DefaultAttributeValueCollectorTest extends TestCase
     private $attributeValueCollector;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $mockProduct;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProduct = $this->createMock(Product::class);
         $this->attributeValueCollector = new DefaultAttributeValueCollector();
     }
 
-    public function testItImplementsTheSearchableProductAttributeValueCollectorInterface()
+    public function testItImplementsTheSearchableProductAttributeValueCollectorInterface(): void
     {
         $this->assertInstanceOf(AttributeValueCollector::class, $this->attributeValueCollector);
     }
 
-    public function testItReturnsTheProductAttributeValues()
+    public function testItReturnsTheProductAttributeValues(): void
     {
         $testAttributeCode = AttributeCode::fromString('foo');
         $attributeValues = ['a', 'b', 'c'];
@@ -51,7 +51,7 @@ class DefaultAttributeValueCollectorTest extends TestCase
      * @dataProvider invalidAttributeValueProvider
      * @param mixed $invalidAttributesValue
      */
-    public function testItFiltersInvalidResultValues($invalidAttributesValue)
+    public function testItFiltersInvalidResultValues($invalidAttributesValue): void
     {
         $testAttributeCode = AttributeCode::fromString('foo');
         $attributeValues = ['c', 'd', $invalidAttributesValue];
@@ -72,7 +72,7 @@ class DefaultAttributeValueCollectorTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheProductSpecialPriceInsteadOfPriceIfPresent()
+    public function testItReturnsTheProductSpecialPriceInsteadOfPriceIfPresent(): void
     {
         $priceAttributeCode = AttributeCode::fromString(PriceSnippetRenderer::PRICE);
         $specialPriceAttributeCode = AttributeCode::fromString(PriceSnippetRenderer::SPECIAL_PRICE);

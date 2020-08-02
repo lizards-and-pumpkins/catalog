@@ -19,7 +19,7 @@ class UnknownHttpRequestTest extends AbstractIntegrationTest
         return $webFront->processRequest();
     }
 
-    public function testWebFrontReturnsA405MethodNotAllowedResponseForUnknownRequestMethods()
+    public function testWebFrontReturnsA405MethodNotAllowedResponseForUnknownRequestMethods(): void
     {
         $request = HttpRequest::fromParameters(
             'FOO',

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class XPathParserTest extends TestCase
 {
-    public function testRequestedDomNodeArrayIsReturnedFromXmlWithNoNamespace()
+    public function testRequestedDomNodeArrayIsReturnedFromXmlWithNoNamespace(): void
     {
         $xml = '<root><child><grandChild>foo</grandChild></child></root>';
         $parser = new XPathParser($xml);
@@ -22,7 +22,7 @@ class XPathParserTest extends TestCase
         $this->assertEquals($expectation, $result);
     }
 
-    public function testRequestedDomNodeArrayIsReturnedFromXmlWithNamespace()
+    public function testRequestedDomNodeArrayIsReturnedFromXmlWithNamespace(): void
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
         $parser = new XPathParser($xml);
@@ -33,7 +33,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testRequestedDomNodeRelativeToACurrentNodeIsReturned()
+    public function testRequestedDomNodeRelativeToACurrentNodeIsReturned(): void
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo><bar>baz</bar></foo></root>';
         $parser = new XPathParser($xml);
@@ -44,7 +44,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testCurrentDomNodeIsReturned()
+    public function testCurrentDomNodeIsReturned(): void
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo>bar</foo></root>';
         $parser = new XPathParser($xml);
@@ -67,7 +67,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testParentDomNodeIsReturned()
+    public function testParentDomNodeIsReturned(): void
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><foo>bar</foo></root>';
         $parser = new XPathParser($xml);
@@ -90,7 +90,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testMultipleNodeArraysAreReturned()
+    public function testMultipleNodeArraysAreReturned(): void
     {
         $xml = '<root><child>foo</child><child>bar</child></root>';
         $parser = new XPathParser($xml);
@@ -104,7 +104,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testArrayOfNodeWithAttributesIsReturned()
+    public function testArrayOfNodeWithAttributesIsReturned(): void
     {
         $xml = '<root><child bar="baz" qux="waldo">foo</child></root>';
         $parser = new XPathParser($xml);
@@ -121,7 +121,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testNodeXmlIsReturned()
+    public function testNodeXmlIsReturned(): void
     {
         $xml = '<root><child>foo</child><child>bar</child></root>';
         $parser = new XPathParser($xml);
@@ -132,13 +132,13 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testExceptionIsThrownIfXmlIsNotValid()
+    public function testExceptionIsThrownIfXmlIsNotValid(): void
     {
         $this->expectException(\OutOfBoundsException::class);
         (new XPathParser('<root xmlns="blah"></root>'));
     }
 
-    public function testNodeAttributeIsReturned()
+    public function testNodeAttributeIsReturned(): void
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child foo="bar" /></root>';
         $parser = new XPathParser($xml);
@@ -147,7 +147,7 @@ class XPathParserTest extends TestCase
         $this->assertSame('bar', $result[0]['value']);
     }
 
-    public function testNodeIsReturnedByAbsolutePath()
+    public function testNodeIsReturnedByAbsolutePath(): void
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
         $parser = new XPathParser($xml);
@@ -158,7 +158,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testWildcardsInPathAreTolerated()
+    public function testWildcardsInPathAreTolerated(): void
     {
         $xml = '<root xmlns="http://www.w3.org/2001/XMLSchema-instance"><child>foo</child></root>';
         $parser = new XPathParser($xml);
@@ -169,7 +169,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testArrayWithNestedXmlNodeRepresentationIsReturned()
+    public function testArrayWithNestedXmlNodeRepresentationIsReturned(): void
     {
         $xml = '<root><child>foo</child><child baz="qux">bar</child></root>';
         $parser = new XPathParser($xml);
@@ -189,7 +189,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testCommentNodesAreRemovedFromDom()
+    public function testCommentNodesAreRemovedFromDom(): void
     {
         $xml = '<root><!-- comment1 --><child>foo</child><!-- comment2 --><child baz="qux">bar</child></root>';
         $parser = new XPathParser($xml);
@@ -209,7 +209,7 @@ class XPathParserTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testAllAttributesAreReturned()
+    public function testAllAttributesAreReturned(): void
     {
         $xml = <<<EOX
 <root xmlns="http://www.w3.org/2001/XMLSchema-instance">

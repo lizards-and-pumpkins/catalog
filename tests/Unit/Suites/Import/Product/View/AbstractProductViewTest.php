@@ -16,6 +16,7 @@ use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\Import\Product\SimpleProduct;
 use LizardsAndPumpkins\Import\ImageStorage\Image;
 use LizardsAndPumpkins\Import\Product\View\Stub\StubProductView;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,19 +39,17 @@ class AbstractProductViewTest extends TestCase
     private $productView;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $mockProduct;
 
     /**
-     * @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductImageFileLocator
      */
     private $mockImageFileLocator;
 
     private function createProductViewInstance() : StubProductView
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
-        /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $mockImageFileLocator */
         $mockProduct = $this->createMock(Product::class);
         $mockProduct->method('getContext')->willReturn($this->createMock(Context::class));
 
@@ -74,28 +73,28 @@ class AbstractProductViewTest extends TestCase
         return new StubProductView($mockProduct, $mockImageFileLocator);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->productView = $this->createProductViewInstance();
         $this->mockProduct = $this->productView->getOriginalProduct();
         $this->mockImageFileLocator = $this->productView->imageFileLocator;
     }
 
-    public function testItIsJsonSerializable()
+    public function testItIsJsonSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->productView);
     }
 
-    public function testGettingProductIdIsDelegatedToOriginalProduct()
+    public function testGettingProductIdIsDelegatedToOriginalProduct(): void
     {
         $this->mockProduct->expects($this->once())->method('getId')->willReturn(new ProductId('foo'));
         $this->productView->getId();
     }
 
-    public function testGettingTheFirstValueOfAnAttributeUsesTheProcessedAttributeList()
+    public function testGettingTheFirstValueOfAnAttributeUsesTheProcessedAttributeList(): void
     {
         $attributeCode = 'foo';
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->expects($this->once())->method('getAllAttributes')->willReturn([
             new ProductAttribute($attributeCode, 'test', []),
@@ -103,11 +102,11 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame('test', $this->productView->getFirstValueOfAttribute($attributeCode));
     }
 
-    public function testCastsTheFirstValueOfAttributesToString()
+    public function testCastsTheFirstValueOfAttributesToString(): void
     {
         $attributeCode = 'foo';
         $integerAttributeValue = 1;
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->expects($this->once())->method('getAllAttributes')->willReturn([
             new ProductAttribute($attributeCode, $integerAttributeValue, []),
@@ -115,9 +114,9 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame("$integerAttributeValue", $this->productView->getFirstValueOfAttribute($attributeCode));
     }
 
-    public function testGettingTheFirstValueOfANonExistentAttributeReturnsAnEmptyString()
+    public function testGettingTheFirstValueOfANonExistentAttributeReturnsAnEmptyString(): void
     {
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->method('getAllAttributes')->willReturn([]);
         $this->assertSame('', $this->productView->getFirstValueOfAttribute('not_here'));
@@ -125,13 +124,14 @@ class AbstractProductViewTest extends TestCase
 
     /**
      * @dataProvider priceAttributeCodeProvider
+     * @param string $priceAttributeCode
      */
-    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString(string $priceAttributeCode)
+    public function testGettingFirstValueOfPriceAttributeReturnsEmptyString(string $priceAttributeCode): void
     {
         $testAttributeValue = 1000;
 
         $attribute = new ProductAttribute($priceAttributeCode, $testAttributeValue, []);
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->method('getAllAttributes')->willReturn([$attribute]);
 
@@ -149,10 +149,10 @@ class AbstractProductViewTest extends TestCase
         ];
     }
 
-    public function testGettingAllValuesOfProductAttributeUsesTheProcessedAttributeList()
+    public function testGettingAllValuesOfProductAttributeUsesTheProcessedAttributeList(): void
     {
         $attributeCode = 'foo';
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->expects($this->once())->method('getAllAttributes')->willReturn([
             new ProductAttribute($attributeCode, 'test1', []),
@@ -161,18 +161,18 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame(['test1', 'test2'], $this->productView->getAllValuesOfAttribute($attributeCode));
     }
 
-    public function testGettingAllValuesOfANonExistentAttributeReturnsAnEmptyArray()
+    public function testGettingAllValuesOfANonExistentAttributeReturnsAnEmptyArray(): void
     {
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->method('getAllAttributes')->willReturn([]);
         $this->assertSame([], $this->productView->getAllValuesOfAttribute('not_here'));
     }
 
-    public function testHasAttributeMethodUsesTheProcessedAttributeList()
+    public function testHasAttributeMethodUsesTheProcessedAttributeList(): void
     {
         $attributeCode = 'foo';
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->expects($this->once())->method('getAllAttributes')->willReturn([
             new ProductAttribute($attributeCode, 'test', []),
@@ -180,12 +180,12 @@ class AbstractProductViewTest extends TestCase
         $this->assertTrue($this->productView->hasAttribute($attributeCode));
     }
 
-    public function testItRemovesThePriceAndSpecialPriceFromAttributes()
+    public function testItRemovesThePriceAndSpecialPriceFromAttributes(): void
     {
         $priceAttribute = new ProductAttribute(PriceSnippetRenderer::PRICE, 122, []);
         $specialPriceAttribute = new ProductAttribute(PriceSnippetRenderer::SPECIAL_PRICE, 111, []);
         $nonPriceAttribute = new ProductAttribute('not_a_price', 111, []);
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $stubProductAttributeList */
+        /** @var ProductAttributeList|MockObject $stubProductAttributeList */
         $stubProductAttributeList = $this->mockProduct->getAttributes();
         $stubProductAttributeList->method('getAllAttributes')->willReturn([
             $priceAttribute,
@@ -199,13 +199,13 @@ class AbstractProductViewTest extends TestCase
         $this->assertContains($nonPriceAttribute, $result->getAllAttributes());
     }
 
-    public function testGettingProductContextIsDelegatedToOriginalProduct()
+    public function testGettingProductContextIsDelegatedToOriginalProduct(): void
     {
         $this->mockProduct->expects($this->once())->method('getContext');
         $this->productView->getContext();
     }
 
-    public function testGettingProductImagesIsDelegatedToOriginalProduct()
+    public function testGettingProductImagesIsDelegatedToOriginalProduct(): void
     {
         $variantCode = 'medium';
 
@@ -217,18 +217,19 @@ class AbstractProductViewTest extends TestCase
         $this->mockProduct->method('getImages')->willReturn($stubProductImageList);
 
         $result = $this->productView->getImages($variantCode);
-        $this->assertInternalType('array', $result);
+        
+        $this->assertIsArray($result);
         $this->assertContainsOnlyInstancesOf(Image::class, $result);
         $this->assertCount(1, $result);
     }
 
-    public function testGettingProductImageCountIsDelegatedToOriginalProduct()
+    public function testGettingProductImageCountIsDelegatedToOriginalProduct(): void
     {
         $this->mockProduct->expects($this->once())->method('getImageCount');
         $this->productView->getImageCount();
     }
 
-    public function testGettingProductImageByNumberIsDelegatedToOriginalProduct()
+    public function testGettingProductImageByNumberIsDelegatedToOriginalProduct(): void
     {
         $testImageNumber = 1;
         $variantCode = 'medium';
@@ -239,7 +240,7 @@ class AbstractProductViewTest extends TestCase
         $this->productView->getImageByNumber($testImageNumber, $variantCode);
     }
 
-    public function testGettingProductImageUrlByNumberReturnsAHttpUrlInstance()
+    public function testGettingProductImageUrlByNumberReturnsAHttpUrlInstance(): void
     {
         $testImageNumber = 1;
         $variantCode = 'medium';
@@ -251,7 +252,7 @@ class AbstractProductViewTest extends TestCase
         $this->assertInstanceOf(HttpUrl::class, $result);
     }
 
-    public function testGettingProductImageLabelByNumberIsDelegatedToOriginalProduct()
+    public function testGettingProductImageLabelByNumberIsDelegatedToOriginalProduct(): void
     {
         $testImageNumber = 1;
         $this->mockProduct->method('getImageCount')->willReturn(1);
@@ -259,7 +260,7 @@ class AbstractProductViewTest extends TestCase
         $this->productView->getImageLabelByNumber($testImageNumber);
     }
 
-    public function testGettingProductMainImageUrlReturnsAHttpUrlInstance()
+    public function testGettingProductMainImageUrlReturnsAHttpUrlInstance(): void
     {
         $variantCode = 'medium';
         $this->mockProduct->method('getImageCount')->willReturn(1);
@@ -270,20 +271,20 @@ class AbstractProductViewTest extends TestCase
         $this->assertInstanceOf(HttpUrl::class, $result);
     }
 
-    public function testGettingProductMainImageLabelIsDelegatedToOriginalProduct()
+    public function testGettingProductMainImageLabelIsDelegatedToOriginalProduct(): void
     {
         $this->mockProduct->method('getImageCount')->willReturn(1);
         $this->mockProduct->expects($this->once())->method('getMainImageLabel');
         $this->productView->getMainImageLabel();
     }
 
-    public function testGettingProductArrayRepresentationIsDelegatedToOriginalProduct()
+    public function testGettingProductArrayRepresentationIsDelegatedToOriginalProduct(): void
     {
         $this->mockProduct->expects($this->once())->method('jsonSerialize')->willReturn([]);
         $this->productView->jsonSerialize();
     }
 
-    public function testItFlattensAttributesInJson()
+    public function testItFlattensAttributesInJson(): void
     {
         $productJsonData = [
             'product_id' => 'test',
@@ -295,7 +296,7 @@ class AbstractProductViewTest extends TestCase
                 'foo' => 'bar',
             ],
         ];
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $stubProductAttributes */
+        /** @var ProductAttributeList|MockObject $stubProductAttributes */
         $stubProductAttributes = $this->mockProduct->getAttributes();
         $stubProductAttributes->method('getAllAttributes')->willReturn([new ProductAttribute('foo', 'bar', [])]);
         $this->mockProduct->method('getAttributes')->willReturn($stubProductAttributes);
@@ -304,7 +305,7 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
     }
 
-    public function testItCombinesTheValuesOfAttributesWithTheSameCodeIntoArraysInJson()
+    public function testItCombinesTheValuesOfAttributesWithTheSameCodeIntoArraysInJson(): void
     {
         $productJsonData = [
             'product_id' => 'test',
@@ -316,7 +317,7 @@ class AbstractProductViewTest extends TestCase
                 'foo' => ['bar', 'buz', 'qux'],
             ],
         ];
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $stubProductAttributes */
+        /** @var ProductAttributeList|MockObject $stubProductAttributes */
         $stubProductAttributes = $this->mockProduct->getAttributes();
         $stubProductAttributes->method('getAllAttributes')->willReturn([
             new ProductAttribute('foo', 'bar', []),
@@ -329,7 +330,7 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
     }
 
-    public function testItRemovesTheContextFromProductJson()
+    public function testItRemovesTheContextFromProductJson(): void
     {
         $productJsonData = [
             'product_id'           => 'test',
@@ -342,7 +343,7 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
     }
 
-    public function testItFlattensTheProductImagesInJson()
+    public function testItFlattensTheProductImagesInJson(): void
     {
         $testImageLabel = 'Test Label';
 
@@ -373,12 +374,12 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
     }
 
-    public function testItReturnsPlaceholdersIfTheProductHasNoImages()
+    public function testItReturnsPlaceholdersIfTheProductHasNoImages(): void
     {
         $placeholderUrl = 'http://example.com/placeholder.jpg';
         $stubPlaceholderUrl = $this->createMock(HttpUrl::class);
         $stubPlaceholderUrl->method('__toString')->willReturn($placeholderUrl);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
+        /** @var MockObject $placeholderImage */
         $placeholderImage = $this->mockImageFileLocator->getPlaceholder('dummy', $this->mockProduct->getContext());
         $placeholderImage->method('getUrl')->willReturn($stubPlaceholderUrl);
 
@@ -404,7 +405,7 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($expectedData, json_decode(json_encode($this->productView), true));
     }
 
-    public function testGettingAnImageByNumberHigherThenTheImageCountWillReturnThePlaceholderImage()
+    public function testGettingAnImageByNumberHigherThenTheImageCountWillReturnThePlaceholderImage(): void
     {
         $testImageNumber = 2;
         $this->mockProduct->method('getImageCount')->willReturn(1);
@@ -420,21 +421,21 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($expectedPlaceholderImage, $image);
     }
 
-    public function testGettingAnImageUrlByNumberHigherThenTheImageCountWillReturnThePlaceholderImageUrl()
+    public function testGettingAnImageUrlByNumberHigherThenTheImageCountWillReturnThePlaceholderImageUrl(): void
     {
         $testImageNumber = 2;
         $this->mockProduct->method('getImageCount')->willReturn(1);
 
         $variantCode = 'medium';
         $stubHttpUrl = $this->createMock(HttpUrl::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
+        /** @var MockObject $placeholderImage */
         $placeholderImage = $this->mockImageFileLocator->getPlaceholder($variantCode, $this->mockProduct->getContext());
         $placeholderImage->expects($this->once())->method('getUrl')->willReturn($stubHttpUrl);
 
         $this->assertSame($stubHttpUrl, $this->productView->getImageUrlByNumber($testImageNumber, $variantCode));
     }
 
-    public function testGettingAnImageLabelByNumberHigherThenTheImageCountWillReturnAnEmptyString()
+    public function testGettingAnImageLabelByNumberHigherThenTheImageCountWillReturnAnEmptyString(): void
     {
         $testImageNumber = 2;
         $this->mockProduct->method('getImageCount')->willReturn(1);
@@ -444,13 +445,13 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($this->expectedPlaceholderImageLabel, $imageLabel);
     }
 
-    public function testGettingTheMainImageUrlFromAProductWithoutImagesWillReturnThePlaceholderImageUrl()
+    public function testGettingTheMainImageUrlFromAProductWithoutImagesWillReturnThePlaceholderImageUrl(): void
     {
         $this->mockProduct->method('getImageCount')->willReturn(0);
 
         $variantCode = 'medium';
         $stubHttpUrl = $this->createMock(HttpUrl::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $placeholderImage */
+        /** @var MockObject $placeholderImage */
         $placeholderImage = $this->mockImageFileLocator->getPlaceholder($variantCode, $this->mockProduct->getContext());
         $placeholderImage->expects($this->once())->method('getUrl')->willReturn($stubHttpUrl);
 
@@ -459,7 +460,7 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($stubHttpUrl, $result);
     }
 
-    public function testGettingTheMainImageLabelFromAProductWithoutImagesWillReturnAnEmptyString()
+    public function testGettingTheMainImageLabelFromAProductWithoutImagesWillReturnAnEmptyString(): void
     {
         $this->mockProduct->method('getImageCount')->willReturn(0);
 
@@ -468,9 +469,9 @@ class AbstractProductViewTest extends TestCase
         $this->assertSame($this->expectedPlaceholderImageLabel, $imageLabel);
     }
 
-    public function testProductAttributeListIsMemoized()
+    public function testProductAttributeListIsMemoized(): void
     {
-        /** @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject $mockAttributeList */
+        /** @var ProductAttributeList|MockObject $mockAttributeList */
         $mockAttributeList = $this->mockProduct->getAttributes();
         $mockAttributeList->expects($this->once())->method('getAllAttributes')->willReturn([]);
 

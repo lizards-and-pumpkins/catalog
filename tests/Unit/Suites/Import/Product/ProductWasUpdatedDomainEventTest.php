@@ -43,7 +43,7 @@ class ProductWasUpdatedDomainEventTest extends TestCase
      */
     private $domainEvent;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testProduct = new SimpleProduct(
             new ProductId('foo'),
@@ -55,25 +55,25 @@ class ProductWasUpdatedDomainEventTest extends TestCase
         $this->domainEvent = new ProductWasUpdatedDomainEvent($this->testProduct);
     }
 
-    public function testDomainEventInterfaceIsImplemented()
+    public function testDomainEventInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testProductIsReturned()
+    public function testProductIsReturned(): void
     {
         $result = $this->domainEvent->getProduct();
         $this->assertSame($this->testProduct, $result);
     }
 
-    public function testReturnsProductWasUpdatedMessage()
+    public function testReturnsProductWasUpdatedMessage(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(ProductWasUpdatedDomainEvent::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithProductPayload()
+    public function testReturnsMessageWithProductPayload(): void
     {
         $message = $this->domainEvent->toMessage();
         $payload = $message->getPayload();
@@ -81,7 +81,7 @@ class ProductWasUpdatedDomainEventTest extends TestCase
         $this->assertArrayHasKey('product', $payload);
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $message = $this->domainEvent->toMessage();
         $rehydratedEvent = ProductWasUpdatedDomainEvent::fromMessage($message);
@@ -89,14 +89,14 @@ class ProductWasUpdatedDomainEventTest extends TestCase
         $this->assertSame((string) $this->testProduct->getId(), (string) $rehydratedEvent->getProduct()->getId());
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode()
+    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode(): void
     {
         $this->expectException(NoProductWasUpdatedDomainEventMessageException::class);
         $this->expectExceptionMessage(sprintf('Expected "product_was_updated" domain event, got "qux"'));
         ProductWasUpdatedDomainEvent::fromMessage(Message::withCurrentTime('qux', [], []));
     }
 
-    public function testReturnsDataVersion()
+    public function testReturnsDataVersion(): void
     {
         $dataVersion = $this->domainEvent->getDataVersion();
         $this->assertInstanceOf(DataVersion::class, $dataVersion);

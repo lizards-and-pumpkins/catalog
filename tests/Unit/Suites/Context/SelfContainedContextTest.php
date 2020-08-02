@@ -21,12 +21,12 @@ class SelfContainedContextTest extends TestCase
         return new SelfContainedContext($data);
     }
     
-    public function testItImplementsTheContextInterface()
+    public function testItImplementsTheContextInterface(): void
     {
         $this->assertInstanceOf(Context::class, $this->createContext([]));
     }
 
-    public function testItReturnsAStringRepresentationContainingTheDataParts()
+    public function testItReturnsAStringRepresentationContainingTheDataParts(): void
     {
         $this->assertSame('key1:value1', (string) $this->createContext(['key1' => 'value1']));
         $this->assertSame(
@@ -35,7 +35,7 @@ class SelfContainedContextTest extends TestCase
         );
     }
 
-    public function testItExtractsTheGivenParts()
+    public function testItExtractsTheGivenParts(): void
     {
         $this->assertSame('key1:value1', (string) $this->createContext(['key1' => 'value1'])->getIdForParts('key1'));
         $this->assertSame(
@@ -49,38 +49,38 @@ class SelfContainedContextTest extends TestCase
         );
     }
 
-    public function testItThrowsAnExceptionIfTheRequestedPartIsNotPresent()
+    public function testItThrowsAnExceptionIfTheRequestedPartIsNotPresent(): void
     {
         $this->expectException(ContextCodeNotFoundException::class);
         $this->expectExceptionMessage('No value found in the current context for the code "test"');
         $this->createContext([])->getValue('test');
     }
 
-    public function testItReturnsTheValueForTheGivenCode()
+    public function testItReturnsTheValueForTheGivenCode(): void
     {
         $this->assertSame('value', $this->createContext(['key' => 'value'])->getValue('key'));
         $this->assertSame('value2', $this->createContext(['key1' => 'value1', 'key2' => 'value2'])->getValue('key2'));
     }
 
-    public function testItReturnsTheSupportedContextPartCodes()
+    public function testItReturnsTheSupportedContextPartCodes(): void
     {
         $this->assertSame([], $this->createContext([])->getSupportedCodes());
         $this->assertSame(['key'], $this->createContext(['key' => 'value'])->getSupportedCodes());
     }
 
-    public function testItReturnsFalseIfTheGivenContextPartCodeIsNotPresent()
+    public function testItReturnsFalseIfTheGivenContextPartCodeIsNotPresent(): void
     {
         $this->assertFalse($this->createContext([])->supportsCode('key'));
     }
 
-    public function testItReturnsTrueIfTheGivenContextPartCodeIsPresent()
+    public function testItReturnsTrueIfTheGivenContextPartCodeIsPresent(): void
     {
         $this->assertTrue($this->createContext(['key' => 'value'])->supportsCode('key'));
         $this->assertTrue($this->createContext(['key' => '0'])->supportsCode('key'));
         $this->assertTrue($this->createContext(['key' => ''])->supportsCode('key'));
     }
 
-    public function testItIsNotASubsetIfTheGivenContextHasCodesThatWeDoNotHave()
+    public function testItIsNotASubsetIfTheGivenContextHasCodesThatWeDoNotHave(): void
     {
         $contextA = $this->createContext(['key1' => 'value1']);
         $contextB = $this->createContext(['key2' => 'value2']);
@@ -88,7 +88,7 @@ class SelfContainedContextTest extends TestCase
         $this->assertFalse($contextB->isSubsetOf($contextA));
     }
 
-    public function testItIsNotASubsetIfTheGivenContextHasCodesThatWeHaveButTheValueIsDifferent()
+    public function testItIsNotASubsetIfTheGivenContextHasCodesThatWeHaveButTheValueIsDifferent(): void
     {
         $contextA = $this->createContext(['key1' => 'value1']);
         $contextB = $this->createContext(['key1' => 'value2']);
@@ -96,7 +96,7 @@ class SelfContainedContextTest extends TestCase
         $this->assertFalse($contextB->isSubsetOf($contextA));
     }
 
-    public function testItIsASubsetIfTheGivenContextHasOnlyCodesThatWeAlsoHaveAndTheValuesAreTheSame()
+    public function testItIsASubsetIfTheGivenContextHasOnlyCodesThatWeAlsoHaveAndTheValuesAreTheSame(): void
     {
         $contextA = $this->createContext(['key1' => 'value1']);
         $contextB = $this->createContext(['key1' => 'value1']);
@@ -104,7 +104,7 @@ class SelfContainedContextTest extends TestCase
         $this->assertTrue($contextB->isSubsetOf($contextA));
     }
 
-    public function testItIsASubsetIfTheGivenContextHasMorePartsButTheSamePartsMatch()
+    public function testItIsASubsetIfTheGivenContextHasMorePartsButTheSamePartsMatch(): void
     {
         $contextA = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
         $contextB = $this->createContext(['key1' => 'value1']);
@@ -112,7 +112,7 @@ class SelfContainedContextTest extends TestCase
         $this->assertTrue($contextB->isSubsetOf($contextA));
     }
 
-    public function testItIsNotASubsetIfTheGivenContextLessParts()
+    public function testItIsNotASubsetIfTheGivenContextLessParts(): void
     {
         $contextA = $this->createContext(['key1' => 'value1']);
         $contextB = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
@@ -135,7 +135,7 @@ class SelfContainedContextTest extends TestCase
     /**
      * @return array[]
      */
-    public function matchingDataSetProvider()
+    public function matchingDataSetProvider(): array
     {
         return [
             [[], []],
@@ -169,13 +169,13 @@ class SelfContainedContextTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheContextPartsArrayToJsonSerialize()
+    public function testItReturnsTheContextPartsArrayToJsonSerialize(): void
     {
         $contextParts = ['key1' => 'value1', 'key2' => 'value2'];
         $this->assertSame($contextParts, $this->createContext($contextParts)->jsonSerialize());
     }
 
-    public function testItContainsOtherContextIfTheOtherContextIsASubsetOfTheCurrentContext()
+    public function testItContainsOtherContextIfTheOtherContextIsASubsetOfTheCurrentContext(): void
     {
         $contextA = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
         $contextB = $this->createContext(['key1' => 'value1']);
@@ -183,7 +183,7 @@ class SelfContainedContextTest extends TestCase
         $this->assertTrue($contextA->contains($contextB));
     }
 
-    public function testItNotContainsOtherContextIfTheOtherContextValueIsDifferent()
+    public function testItNotContainsOtherContextIfTheOtherContextValueIsDifferent(): void
     {
         $contextA = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
         $contextB = $this->createContext(['key1' => 'value2']);
@@ -191,7 +191,7 @@ class SelfContainedContextTest extends TestCase
         $this->assertFalse($contextA->contains($contextB));
     }
 
-    public function testItNotContainOtherContextIfTheOtherContextHasPartsTheCurrentContextDoesNotHave()
+    public function testItNotContainOtherContextIfTheOtherContextHasPartsTheCurrentContextDoesNotHave(): void
     {
         $contextA = $this->createContext(['key1' => 'value1', 'key2' => 'value2']);
         $contextB = $this->createContext(['key1' => 'value1']);

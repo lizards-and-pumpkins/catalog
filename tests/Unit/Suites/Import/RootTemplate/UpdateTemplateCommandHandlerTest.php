@@ -31,11 +31,11 @@ class UpdateTemplateCommandHandlerTest extends TestCase
     private $testDataVersion;
 
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|MockObject
      */
     private $mockEventQueue;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockEventQueue = $this->createMock(DomainEventQueue::class);
         $this->testDataVersion = DataVersion::fromVersionString('test');
@@ -46,12 +46,12 @@ class UpdateTemplateCommandHandlerTest extends TestCase
         return new UpdateTemplateCommandHandler($this->mockEventQueue);
     }
 
-    public function testIsACommandHandler()
+    public function testIsACommandHandler(): void
     {
         $this->assertInstanceOf(CommandHandler::class, $this->createCommandHandler());
     }
 
-    public function testEmitsATemplateWasUpdatedEvent()
+    public function testEmitsATemplateWasUpdatedEvent(): void
     {
         $this->mockEventQueue->expects($this->once())->method('add')
             ->willReturnCallback(function(TemplateWasUpdatedDomainEvent $event) {

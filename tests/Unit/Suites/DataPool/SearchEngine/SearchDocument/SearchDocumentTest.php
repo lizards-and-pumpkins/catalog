@@ -17,15 +17,15 @@ use PHPUnit\Framework\TestCase;
  */
 class SearchDocumentTest extends TestCase
 {
-    public function testSearchDocumentIsCreated()
+    public function testSearchDocumentIsCreated(): void
     {
-        /** @var SearchDocumentFieldCollection|\PHPUnit_Framework_MockObject_MockObject $stubDocumentFieldsCollection */
+        /** @var SearchDocumentFieldCollection|MockObject $stubDocumentFieldsCollection */
         $stubDocumentFieldsCollection = $this->createMock(SearchDocumentFieldCollection::class);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $testContext */
+        /** @var Context|MockObject $testContext */
         $testContext = $this->createMock(Context::class);
 
-        /** @var ProductId|\PHPUnit_Framework_MockObject_MockObject $stubProductId */
+        /** @var ProductId|MockObject $stubProductId */
         $stubProductId = $this->createMock(ProductId::class);
 
         $searchDocument = new SearchDocument($stubDocumentFieldsCollection, $testContext, $stubProductId);

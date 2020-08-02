@@ -192,7 +192,7 @@ class CommonFactoryTest extends TestCase
      */
     private $commonFactory;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new UnitTestFactory($this));
@@ -200,117 +200,117 @@ class CommonFactoryTest extends TestCase
         $masterFactory->register($this->commonFactory);
     }
 
-    public function testExceptionIsThrownIfNoMasterFactoryIsSet()
+    public function testExceptionIsThrownIfNoMasterFactoryIsSet(): void
     {
         $this->expectException(NoMasterFactorySetException::class);
         (new CommonFactory())->createDomainEventConsumer();
     }
 
-    public function testProductWasUpdatedDomainEventHandlerIsReturned()
+    public function testProductWasUpdatedDomainEventHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createProductWasUpdatedDomainEventHandler();
         $this->assertInstanceOf(ProductWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testTemplateWasUpdatedDomainEventHandlerIsReturned()
+    public function testTemplateWasUpdatedDomainEventHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createTemplateWasUpdatedDomainEventHandler();
         $this->assertInstanceOf(TemplateWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testProductListingWasAddedDomainEventHandlerIsReturned()
+    public function testProductListingWasAddedDomainEventHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createProductListingWasAddedDomainEventHandler();
         $this->assertInstanceOf(ProductListingWasAddedDomainEventHandler::class, $result);
     }
 
-    public function testProductProjectorIsReturned()
+    public function testProductProjectorIsReturned(): void
     {
         $result = $this->commonFactory->createProductProjector();
         $this->assertInstanceOf(ProductProjector::class, $result);
     }
 
-    public function testProductDetailMetaSnippetKeyGeneratorIsReturned()
+    public function testProductDetailMetaSnippetKeyGeneratorIsReturned(): void
     {
         $result = $this->commonFactory->createProductDetailPageMetaSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductXmlToProductBuilderLocatorIsReturned()
+    public function testProductXmlToProductBuilderLocatorIsReturned(): void
     {
         $result = $this->commonFactory->createProductXmlToProductBuilderLocator();
         $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $result);
     }
 
-    public function testProductXmlToProductBuilderLocatorProxyFactoryIsReturned()
+    public function testProductXmlToProductBuilderLocatorProxyFactoryIsReturned(): void
     {
         $proxy = $this->commonFactory->createProductXmlToProductBuilderLocatorProxyFactoryMethod();
         $this->assertInstanceOf(ProductXmlToProductBuilderLocator::class, $proxy());
     }
 
-    public function testProductListingBuilderIsReturned()
+    public function testProductListingBuilderIsReturned(): void
     {
         $result = $this->commonFactory->createProductListingBuilder();
         $this->assertInstanceOf(ProductListingBuilder::class, $result);
     }
 
-    public function testContextBuilderIsReturned()
+    public function testContextBuilderIsReturned(): void
     {
         $result = $this->commonFactory->createContextBuilder();
         $this->assertInstanceOf(ContextBuilder::class, $result);
     }
 
-    public function testDomainEventHandlerLocatorIsReturned()
+    public function testDomainEventHandlerLocatorIsReturned(): void
     {
         $result = $this->commonFactory->createDomainEventHandlerLocator();
         $this->assertInstanceOf(DomainEventHandlerLocator::class, $result);
     }
 
-    public function testDataPoolWriterIsReturned()
+    public function testDataPoolWriterIsReturned(): void
     {
         $result = $this->commonFactory->createDomainEventHandlerLocator();
         $this->assertInstanceOf(DomainEventHandlerLocator::class, $result);
     }
 
-    public function testDomainEventConsumerIsReturned()
+    public function testDomainEventConsumerIsReturned(): void
     {
         $result = $this->commonFactory->createDomainEventConsumer();
         $this->assertInstanceOf(DomainEventConsumer::class, $result);
     }
 
-    public function testDomainEventQueueIsReturned()
+    public function testDomainEventQueueIsReturned(): void
     {
         $result = $this->commonFactory->getEventQueue();
         $this->assertInstanceOf(DomainEventQueue::class, $result);
     }
 
-    public function testSameDomainEventQueueInstanceIsReturned()
+    public function testSameDomainEventQueueInstanceIsReturned(): void
     {
         $result1 = $this->commonFactory->getEventQueue();
         $result2 = $this->commonFactory->getEventQueue();
         $this->assertSame($result1, $result2);
     }
 
-    public function testDomainEventMessageQueueIsReturned()
+    public function testDomainEventMessageQueueIsReturned(): void
     {
         $result = $this->commonFactory->getEventMessageQueue();
         $this->assertInstanceOf(Queue::class, $result);
     }
 
-    public function testSameDomainEventMessageQueueInstanceIsReturned()
+    public function testSameDomainEventMessageQueueInstanceIsReturned(): void
     {
         $result1 = $this->commonFactory->getEventMessageQueue();
         $result2 = $this->commonFactory->getEventMessageQueue();
         $this->assertSame($result1, $result2);
     }
 
-    public function testDataPoolReaderIsReturned()
+    public function testDataPoolReaderIsReturned(): void
     {
         $result = $this->commonFactory->createDataPoolReader();
         $this->assertInstanceOf(DataPoolReader::class, $result);
     }
 
-    public function testExceptionWithHelpfulMessageIsThrownIfNoKeyValueStoreFactoryIsRegistered()
+    public function testExceptionWithHelpfulMessageIsThrownIfNoKeyValueStoreFactoryIsRegistered(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $commonFactory = new CommonFactory();
@@ -322,7 +322,7 @@ class CommonFactoryTest extends TestCase
         $commonFactory->createDataPoolReader();
     }
 
-    public function testExceptionWithHelpfulMessageIsThrownIfNoEventQueueFactoryIsRegistered()
+    public function testExceptionWithHelpfulMessageIsThrownIfNoEventQueueFactoryIsRegistered(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $commonFactory = new CommonFactory();
@@ -334,7 +334,7 @@ class CommonFactoryTest extends TestCase
         $commonFactory->getEventQueue();
     }
 
-    public function testExceptionWithHelpfulMessageIsThrownIfNoLoggerFactoryIsRegistered()
+    public function testExceptionWithHelpfulMessageIsThrownIfNoLoggerFactoryIsRegistered(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $commonFactory = new CommonFactory();
@@ -346,7 +346,7 @@ class CommonFactoryTest extends TestCase
         $commonFactory->getLogger();
     }
 
-    public function testLoggerInstanceIsReturned()
+    public function testLoggerInstanceIsReturned(): void
     {
         $resultA = $this->commonFactory->getLogger();
         $resultB = $this->commonFactory->getLogger();
@@ -354,25 +354,25 @@ class CommonFactoryTest extends TestCase
         $this->assertSame($resultA, $resultB);
     }
 
-    public function testImageImportEventDomainHandlerIsReturned()
+    public function testImageImportEventDomainHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createImageWasAddedDomainEventHandler();
         $this->assertInstanceOf(ImageWasAddedDomainEventHandler::class, $result);
     }
 
-    public function testCommandConsumerIsReturned()
+    public function testCommandConsumerIsReturned(): void
     {
         $result = $this->commonFactory->createCommandConsumer();
         $this->assertInstanceOf(CommandConsumer::class, $result);
     }
 
-    public function testCommandQueueIsReturned()
+    public function testCommandQueueIsReturned(): void
     {
         $result = $this->commonFactory->getCommandQueue();
         $this->assertInstanceOf(CommandQueue::class, $result);
     }
 
-    public function testSameCommandQueueInstanceIsReturned()
+    public function testSameCommandQueueInstanceIsReturned(): void
     {
         $result1 = $this->commonFactory->getCommandQueue();
         $result2 = $this->commonFactory->getCommandQueue();
@@ -380,13 +380,13 @@ class CommonFactoryTest extends TestCase
         $this->assertSame($result1, $result2);
     }
 
-    public function testReturnsCommandMessageQueue()
+    public function testReturnsCommandMessageQueue(): void
     {
         $result = $this->commonFactory->getCommandMessageQueue();
         $this->assertInstanceOf(Queue::class, $result);
     }
 
-    public function testReturnsSameCommandMessageQueueInstance()
+    public function testReturnsSameCommandMessageQueueInstance(): void
     {
         $result1 = $this->commonFactory->getCommandMessageQueue();
         $result2 = $this->commonFactory->getCommandMessageQueue();
@@ -394,85 +394,85 @@ class CommonFactoryTest extends TestCase
         $this->assertSame($result1, $result2);
     }
 
-    public function testCommandHandlerLocatorIsReturned()
+    public function testCommandHandlerLocatorIsReturned(): void
     {
         $result = $this->commonFactory->createCommandHandlerLocator();
         $this->assertInstanceOf(CommandHandlerLocator::class, $result);
     }
 
-    public function testUpdateContentBlockCommandHandlerIsReturned()
+    public function testUpdateContentBlockCommandHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createUpdateContentBlockCommandHandler();
         $this->assertInstanceOf(UpdateContentBlockCommandHandler::class, $result);
     }
 
-    public function testReturnsAnUpdateTemplateCommandHandler()
+    public function testReturnsAnUpdateTemplateCommandHandler(): void
     {
         $result = $this->commonFactory->createUpdateTemplateCommandHandler();
         $this->assertInstanceOf(UpdateTemplateCommandHandler::class, $result);
     }
 
-    public function testContentBlockWasUpdatedDomainEventHandlerIsReturned()
+    public function testContentBlockWasUpdatedDomainEventHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createContentBlockWasUpdatedDomainEventHandler();
         $this->assertInstanceOf(ContentBlockWasUpdatedDomainEventHandler::class, $result);
     }
 
-    public function testUpdateProductCommandHandlerIsReturned()
+    public function testUpdateProductCommandHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createUpdateProductCommandHandler();
         $this->assertInstanceOf(UpdateProductCommandHandler::class, $result);
     }
 
-    public function testAddProductListingCommandHandlerIsReturned()
+    public function testAddProductListingCommandHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createAddProductListingCommandHandler();
         $this->assertInstanceOf(AddProductListingCommandHandler::class, $result);
     }
 
-    public function testAddImageCommandHandlerIsReturned()
+    public function testAddImageCommandHandlerIsReturned(): void
     {
         $result = $this->commonFactory->createAddImageCommandHandler();
         $this->assertInstanceOf(AddImageCommandHandler::class, $result);
     }
 
-    public function testReturnsShutdownWorkerCommandHandler()
+    public function testReturnsShutdownWorkerCommandHandler(): void
     {
         $result = $this->commonFactory->createShutdownWorkerCommandHandler();
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
     
-    public function testReturnsAnImportCatalogCommandHandler()
+    public function testReturnsAnImportCatalogCommandHandler(): void
     {
         $result = $this->commonFactory->createImportCatalogCommandHandler();
         $this->assertInstanceOf(ImportCatalogCommandHandler::class, $result);
     }
     
-    public function testReturnsASetCurrentDataVersionCommandHandler()
+    public function testReturnsASetCurrentDataVersionCommandHandler(): void
     {
         $result = $this->commonFactory->createSetCurrentDataVersionCommandHandler();
         $this->assertInstanceOf(SetCurrentDataVersionCommandHandler::class, $result);
     }
 
-    public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned()
+    public function testContentBlockInProductListingSnippetKeyGeneratorIsReturned(): void
     {
         $result = $this->commonFactory->createContentBlockInProductListingSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testProductSearchResultMetaSnippetKeyGeneratorIsReturned()
+    public function testProductSearchResultMetaSnippetKeyGeneratorIsReturned(): void
     {
         $result = $this->commonFactory->createProductSearchResultMetaSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testImageProcessorCollectionIsReturned()
+    public function testImageProcessorCollectionIsReturned(): void
     {
         $result = $this->commonFactory->getImageProcessorCollection();
         $this->assertInstanceOf(ImageProcessorCollection::class, $result);
     }
 
-    public function testSameInstanceOfImageProcessorCollectionIsReturnedOnConsecutiveCalls()
+    public function testSameInstanceOfImageProcessorCollectionIsReturnedOnConsecutiveCalls(): void
     {
         $resultA = $this->commonFactory->getImageProcessorCollection();
         $resultB = $this->commonFactory->getImageProcessorCollection();
@@ -480,104 +480,104 @@ class CommonFactoryTest extends TestCase
         $this->assertSame($resultA, $resultB);
     }
     
-    public function testCatalogImportIsReturned()
+    public function testCatalogImportIsReturned(): void
     {
         $result = $this->commonFactory->createCatalogImport();
         $this->assertInstanceOf(CatalogImport::class, $result);
     }
 
-    public function testUrlKeyCollectorIsReturned()
+    public function testUrlKeyCollectorIsReturned(): void
     {
         $result = $this->commonFactory->createUrlKeyForContextCollector();
         $this->assertInstanceOf(UrlKeyForContextCollector::class, $result);
     }
 
-    public function testItReturnsTheSameUrlKeyStoreInstance()
+    public function testItReturnsTheSameUrlKeyStoreInstance(): void
     {
         $result1 = $this->commonFactory->getUrlKeyStore();
         $result2 = $this->commonFactory->getUrlKeyStore();
         $this->assertSame($result1, $result2);
     }
 
-    public function testProductDetailsViewTranslatorFactoryIsReturningATranslator()
+    public function testProductDetailsViewTranslatorFactoryIsReturningATranslator(): void
     {
         $translatorFactory = $this->commonFactory->getProductDetailsViewTranslatorFactory();
         $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
     }
 
-    public function testProductListingTranslatorFactoryIsReturningATranslator()
+    public function testProductListingTranslatorFactoryIsReturningATranslator(): void
     {
         $translatorFactory = $this->commonFactory->getProductListingTranslatorFactory();
         $this->assertInstanceOf(Translator::class, $translatorFactory('en_US'));
     }
 
-    public function testItReturnsAConfigReader()
+    public function testItReturnsAConfigReader(): void
     {
         $result = $this->commonFactory->createConfigReader();
         $this->assertInstanceOf(ConfigReader::class, $result);
     }
 
-    public function testItReturnsACatalogWasImportedDomainEventHandler()
+    public function testItReturnsACatalogWasImportedDomainEventHandler(): void
     {
         $result = $this->commonFactory->createCatalogWasImportedDomainEventHandler();
         $this->assertInstanceOf(CatalogWasImportedDomainEventHandler::class, $result);
     }
 
-    public function testReturnsAShutdownWorkerDomainEventHandler()
+    public function testReturnsAShutdownWorkerDomainEventHandler(): void
     {
         $result = $this->commonFactory->createShutdownWorkerDomainEventHandler();
         $this->assertInstanceOf(ShutdownWorkerDirectiveHandler::class, $result);
     }
 
-    public function testReturnsACatalogImportWasTriggeredDomainEventHandler()
+    public function testReturnsACatalogImportWasTriggeredDomainEventHandler(): void
     {
         $result = $this->commonFactory->createCatalogImportWasTriggeredDomainEventHandler();
         $this->assertInstanceOf(CatalogImportWasTriggeredDomainEventHandler::class, $result);
     }
 
-    public function testReturnsACurrentDataVersionWasSetDomainEventHandler()
+    public function testReturnsACurrentDataVersionWasSetDomainEventHandler(): void
     {
         $result = $this->commonFactory->createCurrentDataVersionWasSetDomainEventHandler();
         $this->assertInstanceOf(CurrentDataVersionWasSetDomainEventHandler::class, $result);
     }
 
-    public function testItReturnsAProductJsonSnippetRenderer()
+    public function testItReturnsAProductJsonSnippetRenderer(): void
     {
         $result = $this->commonFactory->createProductJsonSnippetRenderer();
         $this->assertInstanceOf(ProductJsonSnippetRenderer::class, $result);
     }
 
-    public function testItReturnsAProductJsonSnippetKeyGenerator()
+    public function testItReturnsAProductJsonSnippetKeyGenerator(): void
     {
         $result = $this->commonFactory->createProductJsonSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testItReturnsAConfigurableProductJsonSnippetRenderer()
+    public function testItReturnsAConfigurableProductJsonSnippetRenderer(): void
     {
         $result = $this->commonFactory->createConfigurableProductJsonSnippetRenderer();
         $this->assertInstanceOf(ConfigurableProductJsonSnippetRenderer::class, $result);
     }
 
-    public function testItReturnsAConfigurableProductVariationAttributesJsonSnippetKeyGenerator()
+    public function testItReturnsAConfigurableProductVariationAttributesJsonSnippetKeyGenerator(): void
     {
         $result = $this->commonFactory->createConfigurableProductVariationAttributesJsonSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testItReturnsAConfigurableProductAssociatedProductsJsonSnippetKeyGenerator()
+    public function testItReturnsAConfigurableProductAssociatedProductsJsonSnippetKeyGenerator(): void
     {
         $result = $this->commonFactory->createConfigurableProductAssociatedProductsJsonSnippetKeyGenerator();
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testReturnsFacetFieldTransformationRegistry()
+    public function testReturnsFacetFieldTransformationRegistry(): void
     {
         $result = $this->commonFactory->getFacetFieldTransformationRegistry();
         $this->assertInstanceOf(FacetFieldTransformationRegistry::class, $result);
     }
 
-    public function testMemoizesFacetFieldTransformationRegistry()
+    public function testMemoizesFacetFieldTransformationRegistry(): void
     {
         $resultA = $this->commonFactory->getFacetFieldTransformationRegistry();
         $resultB = $this->commonFactory->getFacetFieldTransformationRegistry();
@@ -585,7 +585,7 @@ class CommonFactoryTest extends TestCase
         $this->assertSame($resultA, $resultB);
     }
 
-    public function testSnippetKeyGeneratorForContentBlockIsReturned()
+    public function testSnippetKeyGeneratorForContentBlockIsReturned(): void
     {
         $snippetCode = 'content_block_foo';
         $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
@@ -594,7 +594,7 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testSnippetKeyGeneratorForProductListingContentBlockIsReturned()
+    public function testSnippetKeyGeneratorForProductListingContentBlockIsReturned(): void
     {
         $snippetCode = 'product_listing_content_block_foo';
         $snippetKeyGeneratorLocator = $this->commonFactory->createContentBlockSnippetKeyGeneratorLocatorStrategy();
@@ -603,20 +603,20 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(SnippetKeyGenerator::class, $result);
     }
 
-    public function testItReturnsABaseUrlBuilder()
+    public function testItReturnsABaseUrlBuilder(): void
     {
         $result = $this->commonFactory->createBaseUrlBuilder();
         $this->assertInstanceOf(BaseUrlBuilder::class, $result);
     }
 
-    public function testItReturnsAVersionContextPartBuilder()
+    public function testItReturnsAVersionContextPartBuilder(): void
     {
         $result = $this->commonFactory->createVersionContextPartBuilder();
         $this->assertInstanceOf(ContextPartBuilder::class, $result);
         $this->assertInstanceOf(ContextVersion::class, $result);
     }
 
-    public function testItReturnsSameInstanceOfWebsiteContextPartBuilder()
+    public function testItReturnsSameInstanceOfWebsiteContextPartBuilder(): void
     {
         $builderA = $this->commonFactory->getWebsiteContextPartBuilder();
         $builderB = $this->commonFactory->getWebsiteContextPartBuilder();
@@ -625,7 +625,7 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
-    public function testItReturnsSameInstanceOfLocaleContextPartBuilder()
+    public function testItReturnsSameInstanceOfLocaleContextPartBuilder(): void
     {
         $builderA = $this->commonFactory->getLocaleContextPartBuilder();
         $builderB = $this->commonFactory->getLocaleContextPartBuilder();
@@ -634,7 +634,7 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
-    public function testItReturnsSameInstanceOfCountryContextPartBuilder()
+    public function testItReturnsSameInstanceOfCountryContextPartBuilder(): void
     {
         $builderA = $this->commonFactory->getCountryContextPartBuilder();
         $builderB = $this->commonFactory->getCountryContextPartBuilder();
@@ -643,12 +643,12 @@ class CommonFactoryTest extends TestCase
         $this->assertInstanceOf(ContextPartBuilder::class, $builderA);
     }
 
-    public function testItReturnsAFilesystemFileStorage()
+    public function testItReturnsAFilesystemFileStorage(): void
     {
         $this->assertInstanceOf(FilesystemFileStorage::class, $this->commonFactory->createFilesystemFileStorage());
     }
 
-    public function testItReturnsTheDefaultMediaBaseDirectoryConfiguration()
+    public function testItReturnsTheDefaultMediaBaseDirectoryConfiguration(): void
     {
         $path = preg_replace('#tests/Unit/Suites#', 'src', __DIR__);
         $baseDirectory = $this->commonFactory->getMediaBaseDirectoryConfig();
@@ -656,7 +656,7 @@ class CommonFactoryTest extends TestCase
         $this->assertSame($path . '/../pub/media', $baseDirectory);
     }
 
-    public function testItReturnsTheConfiguredMediaBaseDirectoryConfiguration()
+    public function testItReturnsTheConfiguredMediaBaseDirectoryConfiguration(): void
     {
         $configuredBaseMediaPath = '/foo/bar';
 
@@ -670,49 +670,49 @@ class CommonFactoryTest extends TestCase
         $this->assertSame($configuredBaseMediaPath, $baseDirectory);
     }
 
-    public function testItReturnsAMediaDirectoryBaseUrlBuilderinstance()
+    public function testItReturnsAMediaDirectoryBaseUrlBuilderinstance(): void
     {
         $result = $this->commonFactory->createMediaBaseUrlBuilder();
         $this->assertInstanceOf(MediaBaseUrlBuilder::class, $result);
     }
 
-    public function testItReturnsAnAttributeValueCollectorLocator()
+    public function testItReturnsAnAttributeValueCollectorLocator(): void
     {
         $result = $this->commonFactory->createAttributeValueCollectorLocator();
         $this->assertInstanceOf(AttributeValueCollectorLocator::class, $result);
     }
 
-    public function testItReturnsADefaultAttributeValueCollector()
+    public function testItReturnsADefaultAttributeValueCollector(): void
     {
         $result = $this->commonFactory->createDefaultAttributeValueCollector();
         $this->assertInstanceOf(DefaultAttributeValueCollector::class, $result);
     }
 
-    public function testItReturnsAConfigurableProductAttributeValueCollector()
+    public function testItReturnsAConfigurableProductAttributeValueCollector(): void
     {
         $result = $this->commonFactory->createConfigurableProductAttributeValueCollector();
         $this->assertInstanceOf(ConfigurableProductAttributeValueCollector::class, $result);
     }
 
-    public function testItReturnsAQueueImportCommandsInstance()
+    public function testItReturnsAQueueImportCommandsInstance(): void
     {
         $result = $this->commonFactory->createQueueImportCommands();
         $this->assertInstanceOf(QueueImportCommands::class, $result);
     }
 
-    public function testItReturnsAProductImportCommandLocator()
+    public function testItReturnsAProductImportCommandLocator(): void
     {
         $result = $this->commonFactory->createProductImportCommandLocator();
         $this->assertInstanceOf(ProductImportCommandLocator::class, $result);
     }
 
-    public function testItReturnsAProductImageImportCommandLocator()
+    public function testItReturnsAProductImageImportCommandLocator(): void
     {
         $result = $this->commonFactory->createProductImageImportCommandLocator();
         $this->assertInstanceOf(ProductImageImportCommandLocator::class, $result);
     }
 
-    public function testItReturnsAProductListingImportCommandLocator()
+    public function testItReturnsAProductListingImportCommandLocator(): void
     {
         $result = $this->commonFactory->createProductListingImportCommandLocator();
         $this->assertInstanceOf(ProductListingImportCommandLocator::class, $result);
@@ -721,7 +721,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @dataProvider productListSnippetRenderersProvider
      */
-    public function testContainsProductListingPageSnippetRenderersInSnippetRendererList(string $expected)
+    public function testContainsProductListingPageSnippetRenderersInSnippetRendererList(string $expected): void
     {
         $found = array_reduce(
             $this->commonFactory->createProductListingSnippetRendererList(),
@@ -746,7 +746,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @dataProvider productSnippetRenderersProvider
      */
-    public function testContainsProductSnippetRenderersInSnippetRendererList(string $expected)
+    public function testContainsProductSnippetRenderersInSnippetRendererList(string $expected): void
     {
         $found = array_reduce(
             $this->commonFactory->createProductDetailPageSnippetRendererList(),
@@ -774,7 +774,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @dataProvider productListingTemplateSnippetRenderersProvider
      */
-    public function testContainsProductListingTemplateSnippetRenderersInSnippetRendererList(string $expected)
+    public function testContainsProductListingTemplateSnippetRenderersInSnippetRendererList(string $expected): void
     {
         $found = array_reduce(
             $this->commonFactory->createProductListingTemplateSnippetRendererList(),
@@ -803,7 +803,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @dataProvider productDetailTemplateSnippetRenderersProvider
      */
-    public function testContainsProductDetailTemplateSnippetRenderersInSnippetRendererList(string $expected)
+    public function testContainsProductDetailTemplateSnippetRenderersInSnippetRendererList(string $expected): void
     {
         $found = array_reduce(
             $this->commonFactory->createProductDetailTemplateSnippetRendererList(),
@@ -831,7 +831,7 @@ class CommonFactoryTest extends TestCase
     /**
      * @dataProvider contentBlockSnippetRenderersProvider
      */
-    public function testContainsContentBlockSnippetRenderersInSnippetRendererList(string $expected)
+    public function testContainsContentBlockSnippetRenderersInSnippetRendererList(string $expected): void
     {
         $found = array_reduce(
             $this->commonFactory->createContentBlockSnippetRendererList(),
@@ -853,19 +853,19 @@ class CommonFactoryTest extends TestCase
         ];
     }
 
-    public function testItReturnsAProductJsonService()
+    public function testItReturnsAProductJsonService(): void
     {
         $result = $this->commonFactory->createProductJsonService();
         $this->assertInstanceOf(ProductJsonService::class, $result);
     }
 
-    public function testItReturnsAnEnrichProductJsonWithPrices()
+    public function testItReturnsAnEnrichProductJsonWithPrices(): void
     {
         $result = $this->commonFactory->createEnrichProductJsonWithPrices();
         $this->assertInstanceOf(EnrichProductJsonWithPrices::class, $result);
     }
 
-    public function testReturnsSnippetReader()
+    public function testReturnsSnippetReader(): void
     {
         $this->assertInstanceOf(SnippetReader::class, $this->commonFactory->createSnippetReader());
     }

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class IntegrationTestContextSourceTest extends TestCase
 {
-    public function testExpectedContextMatrixIsReturned()
+    public function testExpectedContextMatrixIsReturned(): void
     {
         $expectedContextMatrix = [
             [Website::CONTEXT_CODE => 'ru', Locale::CONTEXT_CODE => 'de_DE'],
@@ -24,7 +24,7 @@ class IntegrationTestContextSourceTest extends TestCase
             [Website::CONTEXT_CODE => 'fr', Locale::CONTEXT_CODE => 'fr_FR'],
         ];
 
-        /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
+        /** @var ContextBuilder|MockObject $stubContextBuilder */
         $stubContextBuilder = $this->createMock(ContextBuilder::class);
         $stubContextBuilder->expects($this->once())
             ->method('createContextsFromDataSets')

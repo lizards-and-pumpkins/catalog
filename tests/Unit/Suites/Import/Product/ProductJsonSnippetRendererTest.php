@@ -23,13 +23,13 @@ class ProductJsonSnippetRendererTest extends TestCase
     private $renderer;
 
     /**
-     * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductView|MockObject
      */
     private $stubProductView;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubProductJsonKeyGenerator */
+        /** @var SnippetKeyGenerator|MockObject $stubProductJsonKeyGenerator */
         $stubProductJsonKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubProductJsonKeyGenerator->method('getKeyForContext')->willReturn('test-key');
 
@@ -39,7 +39,7 @@ class ProductJsonSnippetRendererTest extends TestCase
         $this->stubProductView->method('getContext')->willReturn($this->createMock(Context::class));
     }
 
-    public function testThrowsExceptionIfDataObjectIsNotProductView()
+    public function testThrowsExceptionIfDataObjectIsNotProductView(): void
     {
         $this->expectException(InvalidDataObjectTypeException::class);
         $this->expectExceptionMessage('Data object must be ProductView, got string.');
@@ -47,12 +47,12 @@ class ProductJsonSnippetRendererTest extends TestCase
         $this->renderer->render('foo');
     }
 
-    public function testIsSnippetRenderer()
+    public function testIsSnippetRenderer(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testReturnsJsonSerializedProduct()
+    public function testReturnsJsonSerializedProduct(): void
     {
         $expectedSnippetContent = ['product_id' => 'test-dummy'];
 

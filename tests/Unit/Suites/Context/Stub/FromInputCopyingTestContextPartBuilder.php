@@ -22,7 +22,7 @@ class FromInputCopyingTestContextPartBuilder implements ContextPartBuilder
      * @param mixed[] $inputDataSet
      * @return string|null
      */
-    public function getValue(array $inputDataSet)
+    public function getValue(array $inputDataSet): ?string
     {
         return isset($inputDataSet[$this->code]) ?
             $inputDataSet[$this->code] :

@@ -38,19 +38,19 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
      */
     private $renderer;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
+        /** @var SnippetKeyGenerator|MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn($this->dummySnippetKey);
 
-        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
+        /** @var BlockRenderer|MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->createMock(BlockRenderer::class);
         $stubBlockRenderer->method('getRootSnippetCode')->willReturn($this->dummyRootSnippetCode);
         $stubBlockRenderer->method('getNestedSnippetCodes')->willReturn([]);
 
         $stubContext = $this->createMock(Context::class);
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        /** @var ContextSource|MockObject $stubContextSource */
         $stubContextSource = $this->createMock(ContextSource::class);
         $stubContextSource->method('getAllAvailableContextsWithVersionApplied')->willReturn([$stubContext]);
 
@@ -61,12 +61,12 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
         );
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testSnippetRendererInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testArrayOfSnippetsIsReturned()
+    public function testArrayOfSnippetsIsReturned(): void
     {
         $dummyDataObject = $this->createMock(TemplateProjectionData::class);
         $result = $this->renderer->render($dummyDataObject);
@@ -75,7 +75,7 @@ class ProductSearchResultMetaSnippetRendererTest extends TestCase
         $this->assertContainsOnly(Snippet::class, $result);
     }
 
-    public function testSnippetWithValidJsonAsContentAddedToList()
+    public function testSnippetWithValidJsonAsContentAddedToList(): void
     {
         $expectedSnippetContent = [
             ProductSearchResultMetaSnippetContent::KEY_HANDLER_CODE => ProductSearchRequestHandler::CODE,

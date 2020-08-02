@@ -41,13 +41,13 @@ class ProductListingBuilderTest extends TestCase
      */
     private $testDataVersion;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->productListingBuilder = new ProductListingBuilder();
         $this->testDataVersion = DataVersion::fromVersionString('-1');
     }
 
-    public function testProductListingWithAndCriteriaTypeIsCreatedFromXml()
+    public function testProductListingWithAndCriteriaTypeIsCreatedFromXml(): void
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
@@ -73,7 +73,7 @@ EOX;
         $this->assertEquals($expectedCriteria, $productListing->getCriteria());
     }
 
-    public function testProductListingWithOrCriteriaTypeIsCreatedFromXml()
+    public function testProductListingWithOrCriteriaTypeIsCreatedFromXml(): void
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
@@ -94,7 +94,7 @@ EOX;
         $this->assertEquals($expectedCriteria, $productListing->getCriteria());
     }
 
-    public function testProductListingWithMultiLevelCriteriaIsCreatedFromXml()
+    public function testProductListingWithMultiLevelCriteriaIsCreatedFromXml(): void
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
@@ -121,49 +121,49 @@ EOX;
         $this->assertEquals($expectedCriteria, $productListing->getCriteria());
     }
 
-    public function testExceptionIsThrownIfUrlKeyAttributeIsMissing()
+    public function testExceptionIsThrownIfUrlKeyAttributeIsMissing(): void
     {
         $this->expectException(MissingUrlKeyXmlAttributeException::class);
         $xml = '<listing />';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfCriteriaNodeDoesNotExist()
+    public function testExceptionIsThrownIfCriteriaNodeDoesNotExist(): void
     {
         $this->expectException(InvalidNumberOfCriteriaXmlNodesException::class);
         $xml = '<listing url_key="foo"/>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfTypeAttributeOfListingNodeIsMissing()
+    public function testExceptionIsThrownIfTypeAttributeOfListingNodeIsMissing(): void
     {
         $this->expectException(MissingTypeXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria/></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfCriterionNodeDoesNotHaveAttributeName()
+    public function testExceptionIsThrownIfCriterionNodeDoesNotHaveAttributeName(): void
     {
         $this->expectException(MissingCriterionAttributeNameXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute/></criteria></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute()
+    public function testExceptionIsThrownIfCriterionNodeDoesNotHaveOperationAttribute(): void
     {
         $this->expectException(MissingCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute name="bar"/></criteria></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass()
+    public function testExceptionIsThrownIfCriterionOperationAttributeIsNotAValidClass(): void
     {
         $this->expectException(InvalidCriterionOperationXmlAttributeException::class);
         $xml = '<listing url_key="foo"><criteria type="and"><attribute name="bar" is="baz"/></criteria></listing>';
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfNameAttributeIsMissingInProductListingAttributeNode()
+    public function testExceptionIsThrownIfNameAttributeIsMissingInProductListingAttributeNode(): void
     {
         $this->expectException(MissingProductListingAttributeNameXmlAttributeException::class);
         $xml = <<<EOX
@@ -179,7 +179,7 @@ EOX;
         $this->productListingBuilder->createProductListingFromXml($xml, $this->testDataVersion);
     }
 
-    public function testProductListingWithGivenAttributeIsReturned()
+    public function testProductListingWithGivenAttributeIsReturned(): void
     {
         $xml = <<<EOX
 <listing url_key="men-accessories" website="ru" locale="en_US">
@@ -196,7 +196,7 @@ EOX;
         $this->assertSame(['foo' => 'bar'], $productListing->getAttributesList()->toArray());
     }
 
-    public function testExceptionIsThrownIfSameAttributeIsSpecifiedMoreThenOnceForTheSameListing()
+    public function testExceptionIsThrownIfSameAttributeIsSpecifiedMoreThenOnceForTheSameListing(): void
     {
         $this->expectException(DuplicateProductListingAttributeException::class);
 

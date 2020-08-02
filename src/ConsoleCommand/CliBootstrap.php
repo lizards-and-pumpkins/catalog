@@ -43,14 +43,7 @@ class CliBootstrap
 
     private static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
     {
-        return self::isLoggingActive() ?
-            CliFactoryBootstrap::createLoggingMasterFactory(...$factoriesToRegister) :
-            CliFactoryBootstrap::createMasterFactory(...$factoriesToRegister);
-    }
-
-    private static function isLoggingActive(): bool
-    {
-        return ($_SERVER[self::ENV_DEBUG_VAR] ?? false) || ($_ENV[self::ENV_DEBUG_VAR] ?? false);
+        return CliFactoryBootstrap::createMasterFactory(...$factoriesToRegister);
     }
 
     private static function getConsoleCommandLocator(MasterFactory $masterFactory): ConsoleCommandLocator

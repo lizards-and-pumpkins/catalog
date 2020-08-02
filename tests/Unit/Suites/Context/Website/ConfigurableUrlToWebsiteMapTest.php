@@ -16,28 +16,28 @@ use PHPUnit\Framework\TestCase;
 class ConfigurableUrlToWebsiteMapTest extends TestCase
 {
     /**
-     * @var ConfigReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigReader|MockObject
      */
     private $stubConfigReader;
 
-    private function assertWebsiteEqual(Website $expected, Website $actual)
+    private function assertWebsiteEqual(Website $expected, Website $actual): void
     {
         $message = sprintf('Expected website "%s", got "%s"', $expected, $actual);
         $this->assertTrue($actual->isEqual($expected), $message);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubConfigReader = $this->createMock(ConfigReader::class);
     }
 
-    public function testWebsiteMapCanBeCreatedFromConfigValue()
+    public function testWebsiteMapCanBeCreatedFromConfigValue(): void
     {
         $result = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
         $this->assertInstanceOf(ConfigurableUrlToWebsiteMap::class, $result);
     }
 
-    public function testThrowsExceptionIfGivenUrlMatchesNoneOfWebsites()
+    public function testThrowsExceptionIfGivenUrlMatchesNoneOfWebsites(): void
     {
         $url = 'http://www.example.com/';
 
@@ -48,7 +48,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         $websiteMap->getWebsiteCodeByUrl($url);
     }
 
-    public function testExceptionIsThrownIfMapConfigurationFormatIsMalformed()
+    public function testExceptionIsThrownIfMapConfigurationFormatIsMalformed(): void
     {
         $this->expectException(InvalidWebsiteMapConfigRecordException::class);
         $this->expectExceptionMessage('Unable to parse the website to code mapping record "test="');
@@ -62,7 +62,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
     /**
      * @dataProvider websiteMapProvider
      */
-    public function testFirstMatchingWebsiteCodeIsReturned(string $testMap, string $testUrl, string $expectedCode)
+    public function testFirstMatchingWebsiteCodeIsReturned(string $testMap, string $testUrl, string $expectedCode): void
     {
         $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
         $websiteMap = ConfigurableUrlToWebsiteMap::fromConfig($this->stubConfigReader);
@@ -88,7 +88,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         ];
     }
 
-    public function testReturnsTheRequestPathWithoutUrlPrefix()
+    public function testReturnsTheRequestPathWithoutUrlPrefix(): void
     {
         $testMap = 'http://example.com/aa/=foo|http://example.com/=bar';
         $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
@@ -98,7 +98,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         $this->assertSame('foo', $websiteMap->getRequestPathWithoutWebsitePrefix('http://example.com/foo'));
     }
 
-    public function testReturnsTheRequestPathWithoutUrlPrefixWithoutQueryArguments()
+    public function testReturnsTheRequestPathWithoutUrlPrefixWithoutQueryArguments(): void
     {
         $testMap = 'http://example.com/aa/=foo|http://example.com/=bar';
         $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
@@ -107,7 +107,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         $this->assertSame('a/b/c', $websiteMap->getRequestPathWithoutWebsitePrefix('http://example.com/aa/a/b/c?a=b'));
     }
 
-    public function testReturnsTheRequestPathWithoutUrlPrefixWithoutLeadingSlash()
+    public function testReturnsTheRequestPathWithoutUrlPrefixWithoutLeadingSlash(): void
     {
         $testMap = 'http://example.com/aa=foo|http://example.com=bar';
         $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);
@@ -116,7 +116,7 @@ class ConfigurableUrlToWebsiteMapTest extends TestCase
         $this->assertSame('a/b/c', $websiteMap->getRequestPathWithoutWebsitePrefix('http://example.com/aa/a/b/c'));
     }
 
-    public function testReturnsTheRequestPathWithoutUrlPrefixWithoutTrailingSlash()
+    public function testReturnsTheRequestPathWithoutUrlPrefixWithoutTrailingSlash(): void
     {
         $testMap = 'http://example.com/aa/=foo|http://example.com/=bar';
         $this->stubConfigReader->method('get')->with(ConfigurableUrlToWebsiteMap::CONFIG_KEY)->willReturn($testMap);

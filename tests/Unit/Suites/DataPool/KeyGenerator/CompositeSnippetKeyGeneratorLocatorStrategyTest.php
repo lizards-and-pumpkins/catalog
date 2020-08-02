@@ -15,7 +15,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
     private $supportedSnippetCode = 'bar';
 
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|MockObject
      */
     private $stubSnippetKeyGenerator;
 
@@ -24,7 +24,7 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
      */
     private $strategy;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
@@ -39,30 +39,30 @@ class CompositeSnippetKeyGeneratorLocatorStrategyTest extends TestCase
         $this->strategy = new CompositeSnippetKeyGeneratorLocatorStrategy($stubSnippetKeyGeneratorLocatorStrategy);
     }
 
-    public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()
+    public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $this->strategy);
     }
 
-    public function testFalseIsReturnedIfNoUnderlyingStrategyCanHandleSnippetCode()
+    public function testFalseIsReturnedIfNoUnderlyingStrategyCanHandleSnippetCode(): void
     {
         $unsupportedSnippetCode = 'foo';
         $this->assertFalse($this->strategy->canHandle($unsupportedSnippetCode));
     }
 
-    public function testTrueIsReturnedIfSnippetCodeCanBeHandled()
+    public function testTrueIsReturnedIfSnippetCodeCanBeHandled(): void
     {
         $this->assertTrue($this->strategy->canHandle($this->supportedSnippetCode));
     }
 
-    public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
+    public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode(): void
     {
         $unsupportedSnippetCode = 'foo';
         $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 
-    public function testFirstSnippetKeyGeneratorWhichCanHandleSnippetCodeIsReturned()
+    public function testFirstSnippetKeyGeneratorWhichCanHandleSnippetCodeIsReturned(): void
     {
         $result = $this->strategy->getKeyGeneratorForSnippetCode($this->supportedSnippetCode);
         $this->assertSame($this->stubSnippetKeyGenerator, $result);

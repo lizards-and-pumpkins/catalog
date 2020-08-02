@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Import\Exception\InvalidDataObjectTypeException;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\ProductListing\Import\TemplateRendering\ProductListingBlockRenderer;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 class ProductListingMetaSnippetRendererTest extends TestCase
 {
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator
      */
     private $stubMetaSnippetKeyGenerator;
 
@@ -38,16 +39,11 @@ class ProductListingMetaSnippetRendererTest extends TestCase
     private $renderer;
 
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator
      */
     private $stubHtmlHeadMetaKeyGenerator;
 
-    /**
-     * @param string $snippetKey
-     * @param Snippet[] $result
-     * @return Snippet|null
-     */
-    private function findSnippetByKey(string $snippetKey, Snippet ...$result)
+    private function findSnippetByKey(string $snippetKey, Snippet ...$result): ?Snippet
     {
         return array_reduce($result, function ($carry, Snippet $snippet) use ($snippetKey) {
             if ($carry) {
@@ -64,13 +60,13 @@ class ProductListingMetaSnippetRendererTest extends TestCase
      * @param string $metaSnippetKey
      * @param string $htmlHeadMetaKey
      */
-    private function prepareKeyGeneratorsForProductListing($metaSnippetKey, $htmlHeadMetaKey)
+    private function prepareKeyGeneratorsForProductListing($metaSnippetKey, $htmlHeadMetaKey): void
     {
         $this->stubMetaSnippetKeyGenerator->method('getKeyForContext')->willReturn($metaSnippetKey);
         $this->stubHtmlHeadMetaKeyGenerator->method('getKeyForContext')->willReturn($htmlHeadMetaKey);
     }
 
-    public function testThrowsExceptionIfDataObjectIsNotProductListing()
+    public function testThrowsExceptionIfDataObjectIsNotProductListing(): void
     {
         $this->expectException(InvalidDataObjectTypeException::class);
         $this->expectExceptionMessage('Data object must be ProductListing, got string.');
@@ -78,9 +74,9 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         $this->renderer->render('foo');
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var ProductListingBlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubListingBlockRenderer */
+        /** @var ProductListingBlockRenderer|MockObject $stubListingBlockRenderer */
         $stubListingBlockRenderer = $this->createMock(ProductListingBlockRenderer::class);
         $stubListingBlockRenderer->method('render')->willReturn('dummy content');
         $stubListingBlockRenderer->method('getRootSnippetCode')->willReturn('dummy root block code');
@@ -89,7 +85,7 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         $this->stubMetaSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->stubHtmlHeadMetaKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
 
-        /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $stubContextBuilder */
+        /** @var ContextBuilder|MockObject $stubContextBuilder */
         $stubContextBuilder = $this->createMock(ContextBuilder::class);
         $stubContextBuilder->method('createContext')->willReturn($this->createMock(Context::class));
 
@@ -100,12 +96,12 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         );
     }
 
-    public function testIsSnippetRenderer()
+    public function testIsSnippetRenderer(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testReturnsSnippetWithValidJsonAsContent()
+    public function testReturnsSnippetWithValidJsonAsContent(): void
     {
         $metaSnippetKey = 'foo';
         $this->prepareKeyGeneratorsForProductListing($metaSnippetKey, 'dummy_meta_key');
@@ -113,7 +109,7 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         $productListingAttributes = ['bar' => 'baz'];
         $productListingAttributeList = ProductListingAttributeList::fromArray($productListingAttributes);
 
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        /** @var ProductListing|MockObject $stubProductListing */
         $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([]);
         $stubProductListing->method('getCriteria')->willReturn($this->createMock(CompositeSearchCriterion::class));
@@ -127,7 +123,7 @@ class ProductListingMetaSnippetRendererTest extends TestCase
         $expectedPageSpecificData = ['product_listing_attributes' => $productListingAttributes];
 
         $this->assertSame('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_ROOT_SNIPPET_CODE]);
-        $this->assertContains('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]);
+        $this->assertTrue(in_array('product_listing', $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES]));
         $this->assertSame($expectedPageSpecificData, $pageData[PageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA]);
     }
 }

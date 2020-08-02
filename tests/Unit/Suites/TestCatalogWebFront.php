@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Core\Factory\MasterFactory;
 class TestCatalogWebFront extends CatalogWebFront
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|MockObject
      */
     private $testMasterFactory;
 

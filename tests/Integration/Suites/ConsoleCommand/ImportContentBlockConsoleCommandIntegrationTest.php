@@ -35,14 +35,14 @@ class ImportContentBlockConsoleCommandIntegrationTest extends AbstractIntegratio
 
     private function createTestCliMate(array $argumentMap): CLImate
     {
-        /** @var CLImate|\PHPUnit_Framework_MockObject_MockObject $stubCliMate */
+        /** @var CLImate|MockObject $stubCliMate */
         $stubCliMate = $this->createMock(CLImate::class);
         $stubCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
         $stubCliMate->arguments->method('get')->willReturnMap($argumentMap);
         return $stubCliMate;
     }
 
-    public function testRunImportsContentBlocksCommand()
+    public function testRunImportsContentBlocksCommand(): void
     {
         $importDirectory = $this->getUniqueTempDir();
         $argumentMap = $this->getCommandArgumentMap(['importDirectory' => $importDirectory]);

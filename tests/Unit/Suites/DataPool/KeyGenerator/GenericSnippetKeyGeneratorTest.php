@@ -36,11 +36,11 @@ class GenericSnippetKeyGeneratorTest extends TestCase
     private $keyGenerator;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context
      */
     private $stubContext;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $this->keyGenerator = new GenericSnippetKeyGenerator(
             $this->dummySnippetCode,
@@ -51,52 +51,52 @@ class GenericSnippetKeyGeneratorTest extends TestCase
         $this->stubContext = $this->createMock(Context::class);
     }
 
-    public function testSnippetKeyGeneratorInterfaceIsImplemented()
+    public function testSnippetKeyGeneratorInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SnippetKeyGenerator::class, $this->keyGenerator);
     }
 
-    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromNonString()
+    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromNonString(): void
     {
         $this->expectException(\TypeError::class);
         $snippetCode = 1;
         new GenericSnippetKeyGenerator($snippetCode, $this->dummyContextParts, $this->dummyUsedDataParts);
     }
 
-    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromAnEmptyString()
+    public function testExceptionIsThrownDuringAttemptToCreateASnippetKeyFromAnEmptyString(): void
     {
         $this->expectException(InvalidSnippetCodeException::class);
         $snippetCode = '';
         new GenericSnippetKeyGenerator($snippetCode, $this->dummyContextParts, $this->dummyUsedDataParts);
     }
 
-    public function testSnippetKeyContainsSnippetCode()
+    public function testSnippetKeyContainsSnippetCode(): void
     {
         $result = $this->keyGenerator->getKeyForContext($this->stubContext, ['foo' => 'bar']);
-        $this->assertContains($this->dummySnippetCode, $result);
+        $this->assertStringContainsString($this->dummySnippetCode, $result);
     }
 
-    public function testSnippetKeyContainsContextPartValue()
+    public function testSnippetKeyContainsContextPartValue(): void
     {
         $dummyContextId = 'foo';
         $this->stubContext->method('getIdForParts')->willReturn($dummyContextId);
         $result = $this->keyGenerator->getKeyForContext($this->stubContext, ['foo' => 'bar']);
 
-        $this->assertContains($dummyContextId, $result);
+        $this->assertStringContainsString($dummyContextId, $result);
     }
 
-    public function testExceptionIsThrownIfUsedDataPartIsNotPresent()
+    public function testExceptionIsThrownIfUsedDataPartIsNotPresent(): void
     {
         $this->expectException(MissingSnippetKeyGenerationDataException::class);
         $this->keyGenerator->getKeyForContext($this->stubContext, []);
     }
 
-    public function testSnippetKeyContainsOnlySpecifiedPartsOfDataValue()
+    public function testSnippetKeyContainsOnlySpecifiedPartsOfDataValue(): void
     {
         $dummyData = ['foo' => 'bar', 'baz' => 'qux'];
         $result = $this->keyGenerator->getKeyForContext($this->stubContext, $dummyData);
 
-        $this->assertContains('bar', $result);
-        $this->assertNotContains('qux', $result);
+        $this->assertStringContainsString('bar', $result);
+        $this->assertStringNotContainsString('qux', $result);
     }
 }

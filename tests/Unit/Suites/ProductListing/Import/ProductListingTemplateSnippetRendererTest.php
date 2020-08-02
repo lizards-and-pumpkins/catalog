@@ -21,24 +21,24 @@ class ProductListingTemplateSnippetRendererTest extends TestCase
     private $renderer;
 
     /**
-     * @var TemplateSnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemplateSnippetRenderer|MockObject
      */
     private $mockTemplateSnippetRenderer;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockTemplateSnippetRenderer = $this->createMock(TemplateSnippetRenderer::class);
         $this->renderer = new ProductListingTemplateSnippetRenderer($this->mockTemplateSnippetRenderer);
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testSnippetRendererInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testDelegatesSnippetRenderingToTemplateSnippetRenderer()
+    public function testDelegatesSnippetRenderingToTemplateSnippetRenderer(): void
     {
-        /** @var TemplateProjectionData|\PHPUnit_Framework_MockObject_MockObject $dummyTemplateProjectionData */
+        /** @var TemplateProjectionData|MockObject $dummyTemplateProjectionData */
         $dummyTemplateProjectionData = $this->createMock(TemplateProjectionData::class);
 
         $this->mockTemplateSnippetRenderer->expects($this->once())->method('render')

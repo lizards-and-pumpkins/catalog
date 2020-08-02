@@ -21,17 +21,17 @@ use PHPUnit\Framework\TestCase;
 class ConfigurableProductBuilderTest extends TestCase
 {
     /**
-     * @var SimpleProductBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SimpleProductBuilder|MockObject
      */
     private $mockSimpleProductBuilder;
 
     /**
-     * @var ProductVariationAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductVariationAttributeList|MockObject
      */
     private $mockVariationAttributeList;
 
     /**
-     * @var AssociatedProductListBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssociatedProductListBuilder|MockObject
      */
     private $mockAssociatedProductListBuilder;
 
@@ -40,7 +40,7 @@ class ConfigurableProductBuilderTest extends TestCase
      */
     private $configurableProductBuilder;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockSimpleProductBuilder = $this->createMock(SimpleProductBuilder::class);
         $this->mockSimpleProductBuilder->method('getProductForContext')->willReturn(
@@ -63,19 +63,19 @@ class ConfigurableProductBuilderTest extends TestCase
         );
     }
 
-    public function testItImplementsTheProductBuilderInterface()
+    public function testItImplementsTheProductBuilderInterface(): void
     {
         $this->assertInstanceOf(ProductBuilder::class, $this->configurableProductBuilder);
     }
 
-    public function testItReturnsAConfigurableProductInstanceForTheGivenContext()
+    public function testItReturnsAConfigurableProductInstanceForTheGivenContext(): void
     {
         $stubContext = $this->createMock(Context::class);
         $result = $this->configurableProductBuilder->getProductForContext($stubContext);
         $this->assertInstanceOf(ConfigurableProduct::class, $result);
     }
 
-    public function testProductIsNotAvailableIfTheSimpleProductBuilderReturnsFalse()
+    public function testProductIsNotAvailableIfTheSimpleProductBuilderReturnsFalse(): void
     {
         $this->mockSimpleProductBuilder->method('isAvailableForContext')->willReturn(false);
         $stubContext = $this->createMock(Context::class);
@@ -83,34 +83,34 @@ class ConfigurableProductBuilderTest extends TestCase
         $this->assertFalse($this->configurableProductBuilder->isAvailableForContext($stubContext));
     }
 
-    public function testProductIsNotAvailableIfAssociatedProductsMissVariationAttributes()
+    public function testProductIsNotAvailableIfAssociatedProductsMissVariationAttributes(): void
     {
         $stubContext = $this->createMock(Context::class);
         
         $this->mockSimpleProductBuilder->method('isAvailableForContext')->willReturn(true);
 
-        /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
+        /** @var SimpleProduct|MockObject $mockProduct */
         $mockProduct = $this->mockSimpleProductBuilder->getProductForContext($stubContext);
         $mockProduct->method('hasAttribute')->willReturn(false);
 
-        /** @var AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject $mockProductList */
+        /** @var AssociatedProductList|MockObject $mockProductList */
         $mockProductList = $this->mockAssociatedProductListBuilder->getAssociatedProductListForContext($stubContext);
         $mockProductList->method('getProducts')->willReturn([$mockProduct]);
 
         $this->assertFalse($this->configurableProductBuilder->isAvailableForContext($stubContext));
     }
 
-    public function testProductIsAvailableIfAssociatedProductsHaveAllVariationAttributes()
+    public function testProductIsAvailableIfAssociatedProductsHaveAllVariationAttributes(): void
     {
         $stubContext = $this->createMock(Context::class);
         
         $this->mockSimpleProductBuilder->method('isAvailableForContext')->willReturn(true);
 
-        /** @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject $mockProduct */
+        /** @var SimpleProduct|MockObject $mockProduct */
         $mockProduct = $this->mockSimpleProductBuilder->getProductForContext($stubContext);
         $mockProduct->method('hasAttribute')->willReturn(true);
 
-        /** @var AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject $mockProductList */
+        /** @var AssociatedProductList|MockObject $mockProductList */
         $mockProductList = $this->mockAssociatedProductListBuilder->getAssociatedProductListForContext($stubContext);
         $mockProductList->method('getProducts')->willReturn([$mockProduct]);
 

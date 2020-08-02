@@ -28,17 +28,17 @@ class ProductDetailMeatSnippetRendererTest extends TestCase
     private $renderer;
 
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|MockObject
      */
     private $stubSnippetKeyGenerator;
 
     /**
-     * @var ProductView|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductView|MockObject
      */
     private $stubProductView;
 
     /**
-     * @return ProductDetailViewBlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductDetailViewBlockRenderer|MockObject
      */
     private function createStubProductDetailViewBlockRenderer(): ProductDetailViewBlockRenderer
     {
@@ -52,7 +52,7 @@ class ProductDetailMeatSnippetRendererTest extends TestCase
         return $blockRenderer;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $blockRenderer = $this->createStubProductDetailViewBlockRenderer();
         $this->stubProductDetailViewSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
@@ -64,12 +64,12 @@ class ProductDetailMeatSnippetRendererTest extends TestCase
         $this->stubProductView->method('getContext')->willReturn($this->createMock(Context::class));
     }
 
-    public function testIsSnippetRenderer()
+    public function testIsSnippetRenderer(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testThrowsExceptionIfDataObjectIsNotProductView()
+    public function testThrowsExceptionIfDataObjectIsNotProductView(): void
     {
         $this->expectException(InvalidDataObjectTypeException::class);
         $this->expectExceptionMessage('Data object must be ProductView, got string.');
@@ -77,7 +77,7 @@ class ProductDetailMeatSnippetRendererTest extends TestCase
         $this->renderer->render('foo');
     }
 
-    public function testRendersProductDetailViewSnippets()
+    public function testRendersProductDetailViewSnippets(): void
     {
         $testMetaSnippetKey = 'stub-meta-key';
 

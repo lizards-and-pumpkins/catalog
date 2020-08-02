@@ -20,22 +20,22 @@ class SearchCriterionLessThanTest extends TestCase
      */
     private $criteria;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->criteria = new SearchCriterionLessThan($this->testFieldName, $this->testFieldValue);
     }
 
-    public function testItImplementsTheSearchCriteriaInterface()
+    public function testItImplementsTheSearchCriteriaInterface(): void
     {
         $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
     }
 
-    public function testItImplementsJsonSerializable()
+    public function testItImplementsJsonSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
     }
 
-    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized(): void
     {
         $expectation = [
             'fieldName'  => $this->testFieldName,
@@ -46,7 +46,7 @@ class SearchCriterionLessThanTest extends TestCase
         $this->assertSame($expectation, $this->criteria->jsonSerialize());
     }
 
-    public function testReturnsArrayRepresentationOfCriteria()
+    public function testReturnsArrayRepresentationOfCriteria(): void
     {
         $expectation = [
             'fieldName'  => $this->testFieldName,

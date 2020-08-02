@@ -12,6 +12,7 @@ use LizardsAndPumpkins\Import\Product\Exception\ProductTypeCodeMissingException;
 use LizardsAndPumpkins\Import\Product\Image\ProductImage;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,31 +35,31 @@ class SimpleProductTest extends TestCase
     private $product;
 
     /**
-     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductId|MockObject
      */
     private $stubProductId;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
     /**
-     * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeList|MockObject
      */
     private $stubProductAttributeList;
 
     /**
-     * @var ProductImageList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductImageList|MockObject
      */
     private $stubProductImages;
 
     /**
-     * @var ProductTaxClass|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductTaxClass|MockObject
      */
     private $stubTaxClass;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $this->stubProductId = $this->createMock(ProductId::class);
         $this->stubTaxClass = $this->createMock(ProductTaxClass::class);
@@ -74,22 +75,22 @@ class SimpleProductTest extends TestCase
         );
     }
 
-    public function testJsonSerializableInterfaceIsImplemented()
+    public function testJsonSerializableInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->product);
     }
 
-    public function testProductIdIsReturned()
+    public function testProductIdIsReturned(): void
     {
         $this->assertSame($this->stubProductId, $this->product->getId());
     }
 
-    public function testItReturnsTheProductTaxClass()
+    public function testItReturnsTheProductTaxClass(): void
     {
         $this->assertSame($this->stubTaxClass, $this->product->getTaxClass());
     }
 
-    public function testAttributeValueIsReturned()
+    public function testAttributeValueIsReturned(): void
     {
         $dummyAttributeCode = 'foo';
         $dummyAttributeValue = 'bar';
@@ -107,7 +108,7 @@ class SimpleProductTest extends TestCase
         $this->assertSame($dummyAttributeValue, $this->product->getFirstValueOfAttribute($dummyAttributeCode));
     }
 
-    public function testAllValuesOfProductAttributeAreReturned()
+    public function testAllValuesOfProductAttributeAreReturned(): void
     {
         $dummyAttributeCode = 'foo';
 
@@ -132,7 +133,7 @@ class SimpleProductTest extends TestCase
         $this->assertSame($expectedValues, $result);
     }
 
-    public function testArrayContainingOneEmptyStringIsReturnedIfAttributeIsNotFound()
+    public function testArrayContainingOneEmptyStringIsReturnedIfAttributeIsNotFound(): void
     {
         $stubProductAttribute = $this->createMock(ProductAttribute::class);
         $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
@@ -144,7 +145,7 @@ class SimpleProductTest extends TestCase
         $this->assertSame([], $result);
     }
 
-    public function testEmptyStringIsReturnedIfAttributeIsNotFound()
+    public function testEmptyStringIsReturnedIfAttributeIsNotFound(): void
     {
         $stubProductAttribute = $this->createMock(ProductAttribute::class);
         $stubProductAttribute->method('getValue')->willThrowException(new ProductAttributeNotFoundException);
@@ -156,7 +157,7 @@ class SimpleProductTest extends TestCase
         $this->assertSame('', $result);
     }
 
-    public function testArrayRepresentationOfProductIsReturned()
+    public function testArrayRepresentationOfProductIsReturned(): void
     {
         $testProductIdString = 'foo';
         $this->stubProductId->method('__toString')->willReturn($testProductIdString);
@@ -166,7 +167,7 @@ class SimpleProductTest extends TestCase
 
         $result = $this->product->jsonSerialize();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEquals($testProductIdString, $result['product_id']);
         $this->assertEquals($testTaxClass, $result['tax_class']);
         $this->assertEquals(SimpleProduct::TYPE_CODE, $result['type_code']);
@@ -175,7 +176,7 @@ class SimpleProductTest extends TestCase
         $this->assertArrayHasKey('context', $result);
     }
 
-    public function testItCanBeCreatedFromAnArray()
+    public function testItCanBeCreatedFromAnArray(): void
     {
         $result = SimpleProduct::fromArray([
             Product::TYPE_KEY => SimpleProduct::TYPE_CODE,
@@ -188,7 +189,7 @@ class SimpleProductTest extends TestCase
         $this->assertInstanceOf(SimpleProduct::class, $result);
     }
 
-    public function testItThrowsAnExceptionIfTheTypeCodeFieldIsMissingFromSourceArray()
+    public function testItThrowsAnExceptionIfTheTypeCodeFieldIsMissingFromSourceArray(): void
     {
         $allFieldsExceptTypeCode = [
             'product_id' => '',
@@ -206,7 +207,7 @@ class SimpleProductTest extends TestCase
      * @param string $typeCodeString
      * @dataProvider invalidProductTypeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch($invalidTypeCode, $typeCodeString)
+    public function testItThrowsAnExceptionIfTheTypeCodeInSourceArrayDoesNotMatch($invalidTypeCode, $typeCodeString): void
     {
         $this->expectException(ProductTypeCodeMismatchException::class);
         $this->expectExceptionMessage(
@@ -233,30 +234,30 @@ class SimpleProductTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheInjectedContext()
+    public function testItReturnsTheInjectedContext(): void
     {
         $this->assertSame($this->stubContext, $this->product->getContext());
     }
 
-    public function testItReturnsTheInjectedProductImages()
+    public function testItReturnsTheInjectedProductImages(): void
     {
         $this->assertSame($this->stubProductImages, $this->product->getImages());
     }
 
-    public function testItReturnsTheNumberOfImages()
+    public function testItReturnsTheNumberOfImages(): void
     {
         $this->stubProductImages->method('count')->willReturn(3);
         $this->assertSame(3, $this->product->getImageCount());
     }
 
-    public function testItReturnsTheSpecifiedImage()
+    public function testItReturnsTheSpecifiedImage(): void
     {
         $stubImage = $this->createMock(ProductImage::class);
         $this->stubProductImages->method('offsetGet')->with(0)->willReturn($stubImage);
         $this->assertSame($stubImage, $this->product->getImageByNumber(0));
     }
 
-    public function testItReturnsTheGivenProductImageFile()
+    public function testItReturnsTheGivenProductImageFile(): void
     {
         $stubImage = $this->createMock(ProductImage::class);
         $stubImage->method('getFileName')->willReturn('test.jpg');
@@ -265,7 +266,7 @@ class SimpleProductTest extends TestCase
         $this->assertSame('test.jpg', $this->product->getMainImageFileName());
     }
 
-    public function testItReturnsTheGivenProductImageLabel()
+    public function testItReturnsTheGivenProductImageLabel(): void
     {
         $stubImage = $this->createMock(ProductImage::class);
         $stubImage->method('getLabel')->willReturn('Foo bar buz');
@@ -274,21 +275,21 @@ class SimpleProductTest extends TestCase
         $this->assertSame('Foo bar buz', $this->product->getMainImageLabel());
     }
 
-    public function testItReturnsTrueIfTheProductAttributeIsPresent()
+    public function testItReturnsTrueIfTheProductAttributeIsPresent(): void
     {
         $dummyAttributeCode = AttributeCode::fromString('test');
         $this->stubProductAttributeList->method('hasAttribute')->with($dummyAttributeCode)->willReturn(true);
         $this->assertTrue($this->product->hasAttribute($dummyAttributeCode));
     }
 
-    public function testItReturnsFalseIfTheProductAttributeIsMissing()
+    public function testItReturnsFalseIfTheProductAttributeIsMissing(): void
     {
         $dummyAttributeCode = AttributeCode::fromString('test');
         $this->stubProductAttributeList->method('hasAttribute')->with($dummyAttributeCode)->willReturn(false);
         $this->assertFalse($this->product->hasAttribute($dummyAttributeCode));
     }
 
-    public function testItReturnsTheAttributeList()
+    public function testItReturnsTheAttributeList(): void
     {
         $this->assertInstanceOf(ProductAttributeList::class, $this->product->getAttributes());
     }

@@ -18,14 +18,14 @@ class HttpRouterChainTest extends TestCase
      */
     private $routerChain;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->routerChain = new HttpRouterChain();
     }
 
-    public function testUnableToRouteRequestExceptionIsThrown()
+    public function testUnableToRouteRequestExceptionIsThrown(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        /** @var HttpRequest|MockObject $stubHttpRequest */
         $stubHttpRequest = $this->createMock(HttpRequest::class);
 
         $this->expectException(UnableToRouteRequestException::class);
@@ -33,13 +33,13 @@ class HttpRouterChainTest extends TestCase
         $this->routerChain->route($stubHttpRequest);
     }
 
-    public function testRequestIsRouted()
+    public function testRequestIsRouted(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
+        /** @var HttpRequest|MockObject $stubHttpRequest */
         $stubHttpRequest = $this->createMock(HttpRequest::class);
         $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
 
-        /** @var HttpRouter|\PHPUnit_Framework_MockObject_MockObject $mockHttpRouter */
+        /** @var HttpRouter|MockObject $mockHttpRouter */
         $mockHttpRouter = $this->createMock(HttpRouter::class);
         $mockHttpRouter->expects($this->once())
             ->method('route')

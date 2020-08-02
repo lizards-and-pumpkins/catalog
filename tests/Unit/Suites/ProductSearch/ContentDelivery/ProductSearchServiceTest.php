@@ -22,17 +22,17 @@ use PHPUnit\Framework\TestCase;
 class ProductSearchServiceTest extends TestCase
 {
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolReader|MockObject
      */
     private $stubDataPoolReader;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|MockObject
      */
     private $stubGlobalProductListingCriteria;
 
     /**
-     * @var ProductJsonService|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductJsonService|MockObject
      */
     private $stubProductJsonService;
 
@@ -42,16 +42,16 @@ class ProductSearchServiceTest extends TestCase
     private $service;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|MockObject
      */
     private $stubSearchCriteria;
 
     /**
-     * @var QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryOptions|MockObject
      */
     private $stubQueryOptions;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubDataPoolReader = $this->createMock(DataPoolReader::class);
         $this->stubGlobalProductListingCriteria = $this->createMock(SearchCriteria::class);
@@ -67,7 +67,7 @@ class ProductSearchServiceTest extends TestCase
         $this->stubQueryOptions = $this->createMock(QueryOptions::class);
     }
 
-    public function testReturnsAnEmptyResultIfNoProductsMatchQueryString()
+    public function testReturnsAnEmptyResultIfNoProductsMatchQueryString(): void
     {
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
         $stubSearchEngineResponse->method('getProductIds')->willReturn([]);
@@ -79,12 +79,12 @@ class ProductSearchServiceTest extends TestCase
         $this->assertSame(0, $result->getTotalNumberOfResults());
     }
 
-    public function testReturnsSetOfMatchingProductsData()
+    public function testReturnsSetOfMatchingProductsData(): void
     {
         $stubProductIds = [$this->createMock(ProductId::class), $this->createMock(ProductId::class)];
         $dummyProductDataArray = [['Dummy product A data'], ['Dummy product B data']];
 
-        /** @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject $stubFacetFieldCollection */
+        /** @var FacetFieldCollection|MockObject $stubFacetFieldCollection */
         $stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
 
         $stubSearchEngineResponse = $this->createMock(SearchEngineResponse::class);
@@ -105,7 +105,7 @@ class ProductSearchServiceTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testAppliesGlobalProductListingCriteriaToCriteriaSentToDataPool()
+    public function testAppliesGlobalProductListingCriteriaToCriteriaSentToDataPool(): void
     {
         $expectedCriteria = CompositeSearchCriterion::createAnd(
             $this->stubSearchCriteria,

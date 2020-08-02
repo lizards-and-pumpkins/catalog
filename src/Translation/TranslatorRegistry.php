@@ -18,12 +18,12 @@ class TranslatorRegistry
      */
     private $translators = [];
 
-    public function register(string $pageCode, callable $translatorFactory)
+    public function register(string $pageCode, callable $translatorFactory): void
     {
         $this->translatorFactories[$pageCode] = $translatorFactory;
     }
 
-    public function getTranslator(string $pageCode, string $locale) : Translator
+    public function getTranslator(string $pageCode, string $locale): Translator
     {
         if (! isset($this->translatorFactories[$pageCode])) {
             throw new UndefinedTranslatorException(sprintf('No translator found for page "%s".', $pageCode));

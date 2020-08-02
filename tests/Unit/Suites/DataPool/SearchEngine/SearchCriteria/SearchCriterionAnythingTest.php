@@ -16,22 +16,22 @@ class SearchCriterionAnythingTest extends TestCase
      */
     private $criteria;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->criteria = new SearchCriterionAnything();
     }
 
-    public function testItImplementsTheSearchCriteriaInterface()
+    public function testItImplementsTheSearchCriteriaInterface(): void
     {
         $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
     }
 
-    public function testItImplementsJsonSerializable()
+    public function testItImplementsJsonSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
     }
 
-    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized(): void
     {
         $expectation = [
             'fieldName'  => '',
@@ -42,7 +42,7 @@ class SearchCriterionAnythingTest extends TestCase
         $this->assertSame($expectation, $this->criteria->jsonSerialize());
     }
 
-    public function testReturnsArrayRepresentationOfCriteria()
+    public function testReturnsArrayRepresentationOfCriteria(): void
     {
         $expectation = [
             'fieldName'  => '',

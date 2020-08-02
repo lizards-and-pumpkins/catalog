@@ -13,17 +13,17 @@ use PHPUnit\Framework\TestCase;
  */
 class SnippetReaderTest extends TestCase
 {
-    public function testReturnsPageMetaSnippet()
+    public function testReturnsPageMetaSnippet(): void
     {
         $testUrlKey = 'foo';
         $testSnippetContent = 'bar';
         $testContextParts = ['baz', 'qux'];
 
-        /** @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject $stubKeyValueStore */
+        /** @var KeyValueStore|MockObject $stubKeyValueStore */
         $stubKeyValueStore = $this->createMock(KeyValueStore::class);
         $stubKeyValueStore->method('get')->with('meta_foo_baz:bazValue_qux:quxValue')->willReturn($testSnippetContent);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('getIdForParts')->with(...$testContextParts)->willReturn('baz:bazValue_qux:quxValue');
 

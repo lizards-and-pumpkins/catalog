@@ -39,7 +39,7 @@ class InMemoryQueue implements Queue, Clearable
         return Message::rehydrate($data);
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->queue = [];
     }

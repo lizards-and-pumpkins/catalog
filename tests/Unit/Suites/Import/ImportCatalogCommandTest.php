@@ -31,12 +31,12 @@ class ImportCatalogCommandTest extends TestCase
         return new ImportCatalogCommand(DataVersion::fromVersionString($dataVersionString), $catalogData);
     }
 
-    public function testImplementsCommandInterface()
+    public function testImplementsCommandInterface(): void
     {
         $this->assertInstanceOf(Command::class, $this->createCommand('123test', __FILE__));
     }
 
-    public function testReturnsCatalogImportMessage()
+    public function testReturnsCatalogImportMessage(): void
     {
         $message = $this->createCommand('123test', __FILE__)->toMessage();
 
@@ -50,7 +50,7 @@ class ImportCatalogCommandTest extends TestCase
         $this->assertSame(__FILE__, $message->getPayload()['catalog_data_file']);
     }
 
-    public function testCanBeRehydratedFromImportCatalogCommandMessage()
+    public function testCanBeRehydratedFromImportCatalogCommandMessage(): void
     {
         $sourceMessage = $this->createCommand('test123', __FILE__)->toMessage();
         $rehydratedCommand = ImportCatalogCommand::fromMessage($sourceMessage);
@@ -62,7 +62,7 @@ class ImportCatalogCommandTest extends TestCase
         $this->assertSame('test123', (string) $rehydratedCommand->getDataVersion());
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatch()
+    public function testThrowsExceptionIfMessageNameDoesNotMatch(): void
     {
         $this->expectException(NotImportCatalogCommandMessageException::class);
         $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "import_catalog"');
@@ -72,7 +72,7 @@ class ImportCatalogCommandTest extends TestCase
         ImportCatalogCommand::fromMessage($message);
     }
 
-    public function testThrowsExceptionIfImportFileDoesNotExist()
+    public function testThrowsExceptionIfImportFileDoesNotExist(): void
     {
         $fakeFileName = '/foo/does/not/exist';
         $this->expectException(CatalogImportFileDoesNotExistException::class);
@@ -80,7 +80,7 @@ class ImportCatalogCommandTest extends TestCase
         $this->createCommand('test-test', $fakeFileName);
     }
 
-    public function testThrowsExceptionIfImportFileIsNotReadable()
+    public function testThrowsExceptionIfImportFileIsNotReadable(): void
     {
         $tmpFilePath = $this->getUniqueTempDir() . uniqid('test-');
         $this->createFixtureFile($tmpFilePath, '', 0000);
@@ -89,7 +89,7 @@ class ImportCatalogCommandTest extends TestCase
         $this->createCommand('another bogus name', $tmpFilePath);
     }
 
-    public function testThrowsExceptionIfImportFileIsDirectory()
+    public function testThrowsExceptionIfImportFileIsDirectory(): void
     {
         $tmpFilePath = $this->getUniqueTempDir();
         mkdir($tmpFilePath, 0777, true);

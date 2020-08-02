@@ -72,14 +72,14 @@ class CatalogRestApiFactoryTest extends TestCase
      */
     private $factory;
 
-    public function assertApiRequestHandlerIsRegistered(ApiRequestHandlerLocator $locator, string $code, int $version)
+    public function assertApiRequestHandlerIsRegistered(ApiRequestHandlerLocator $locator, string $code, int $version): void
     {
         $handler = $locator->getApiRequestHandler($code, $version);
         $message = sprintf('No API request handler "%s" for version "%s" registered', $code, $version);
         $this->assertNotInstanceOf(NullApiRequestHandler::class, $handler, $message);
     }
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
@@ -90,12 +90,12 @@ class CatalogRestApiFactoryTest extends TestCase
         $masterFactory->register($this->factory);
     }
 
-    public function testFactoryInterfaceIsImplemented()
+    public function testFactoryInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testApiRequestHandlerLocatorIsReturned()
+    public function testApiRequestHandlerLocatorIsReturned(): void
     {
         $result = $this->factory->getApiRequestHandlerLocator();
         $this->assertInstanceOf(ApiRequestHandlerLocator::class, $result);
@@ -109,7 +109,7 @@ class CatalogRestApiFactoryTest extends TestCase
     /**
      * @dataProvider registeredRequestHandlerProvider
      */
-    public function testRegistersExpectedHandlersWithApiRouter(string $code, int $version)
+    public function testRegistersExpectedHandlersWithApiRouter(string $code, int $version): void
     {
         $locator = $this->factory->getApiRequestHandlerLocator();
 
@@ -135,67 +135,67 @@ class CatalogRestApiFactoryTest extends TestCase
         ];
     }
 
-    public function testCatalogImportV1ApiRequestHandlerIsReturned()
+    public function testCatalogImportV1ApiRequestHandlerIsReturned(): void
     {
         $result = $this->factory->createCatalogImportApiV1PutRequestHandler();
         $this->assertInstanceOf(CatalogImportApiV1PutRequestHandler::class, $result);
     }
 
-    public function testReturnsCatalogImportV2ApiRequestHandler()
+    public function testReturnsCatalogImportV2ApiRequestHandler(): void
     {
         $result = $this->factory->createCatalogImportApiV2PutRequestHandler();
         $this->assertInstanceOf(CatalogImportApiV2PutRequestHandler::class, $result);
     }
 
-    public function testContentBlocksApiV1RequestHandlerIsReturned()
+    public function testContentBlocksApiV1RequestHandlerIsReturned(): void
     {
         $result = $this->factory->createContentBlocksApiV1PutRequestHandler();
         $this->assertInstanceOf(ContentBlocksApiV1PutRequestHandler::class, $result);
     }
 
-    public function testContentBlocksApiV2RequestHandlerIsReturned()
+    public function testContentBlocksApiV2RequestHandlerIsReturned(): void
     {
         $result = $this->factory->createContentBlocksApiV2PutRequestHandler();
         $this->assertInstanceOf(ContentBlocksApiV2PutRequestHandler::class, $result);
     }
 
-    public function testReturnsCurrentVersionApiV1GetRequestHandler()
+    public function testReturnsCurrentVersionApiV1GetRequestHandler(): void
     {
         $result = $this->factory->createCurrentVersionApiV1GetRequestHandler();
         $this->assertInstanceOf(CurrentVersionApiV1GetRequestHandler::class, $result);
     }
 
-    public function testReturnsCurrentVersionApiV1PutRequestHandler()
+    public function testReturnsCurrentVersionApiV1PutRequestHandler(): void
     {
         $result = $this->factory->createCurrentVersionApiV1PutRequestHandler();
         $this->assertInstanceOf(CurrentVersionApiV1PutRequestHandler::class, $result);
     }
 
-    public function testReturnsTemplatesApiV1PutRequestHandler()
+    public function testReturnsTemplatesApiV1PutRequestHandler(): void
     {
         $result = $this->factory->createTemplatesApiV1PutRequestHandler();
         $this->assertInstanceOf(TemplatesApiV1PutRequestHandler::class, $result);
     }
 
-    public function testReturnsTemplatesApiV2PutRequestHandler()
+    public function testReturnsTemplatesApiV2PutRequestHandler(): void
     {
         $result = $this->factory->createTemplatesApiV2PutRequestHandler();
         $this->assertInstanceOf(TemplatesApiV2PutRequestHandler::class, $result);
     }
 
-    public function testReturnsProductImportApiV1PutRequestHandler()
+    public function testReturnsProductImportApiV1PutRequestHandler(): void
     {
         $result = $this->factory->createProductImportApiV1PutRequestHandler();
         $this->assertInstanceOf(ProductImportApiV1PutRequestHandler::class, $result);
     }
 
-    public function testReturnsProductJsonToXml()
+    public function testReturnsProductJsonToXml(): void
     {
         $result = $this->factory->createProductJsonToXml();
         $this->assertInstanceOf(ProductJsonToXml::class, $result);
     }
 
-    public function testReturnsTemplateApiV1GetRequestHandler()
+    public function testReturnsTemplateApiV1GetRequestHandler(): void
     {
         $result = $this->factory->createTemplateApiV1GetRequestHandler();
         $this->assertInstanceOf(TemplateApiV1GetRequestHandler::class, $result);

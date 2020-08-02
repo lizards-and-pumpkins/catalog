@@ -34,7 +34,7 @@ class FilterNavigationTest extends AbstractIntegrationTest
         return $filterNavigation;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->testUrl = 'http://example.com/' . $this->testUrlKey;
 
@@ -67,7 +67,7 @@ class FilterNavigationTest extends AbstractIntegrationTest
      * @depends testListingPageContainsValidFilterNavigationJson
      * @param mixed[] $initialFilterNavigation
      */
-    public function testFilterNavigationIsChangedIfFilterIsSelected(array $initialFilterNavigation)
+    public function testFilterNavigationIsChangedIfFilterIsSelected(array $initialFilterNavigation): void
     {
         $filterCode = key($initialFilterNavigation);
         $filterValue = $initialFilterNavigation[$filterCode][0]['value'];
@@ -92,7 +92,7 @@ class FilterNavigationTest extends AbstractIntegrationTest
      * @depends testListingPageContainsValidFilterNavigationJson
      * @param array[] $initialFilterNavigation
      */
-    public function testSiblingOptionsValuesOfSelectedFilterValueArePresent(array $initialFilterNavigation)
+    public function testSiblingOptionsValuesOfSelectedFilterValueArePresent(array $initialFilterNavigation): void
     {
         $filterCode = key($initialFilterNavigation);
         $filterValue = $initialFilterNavigation[$filterCode][0]['value'];

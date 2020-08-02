@@ -118,7 +118,7 @@ abstract class AbstractIntegrationTest extends TestCase
         }
     }
 
-    private function prepareIntegrationTestFactory(MasterFactory $masterFactory)
+    private function prepareIntegrationTestFactory(MasterFactory $masterFactory): void
     {
         $this->integrationTestFactory = new IntegrationTestFactory();
         $masterFactory->register($this->integrationTestFactory);
@@ -138,7 +138,7 @@ abstract class AbstractIntegrationTest extends TestCase
         return $this->integrationTestFactory;
     }
 
-    final protected function failIfMessagesWhereLogged(Logger $logger)
+    final protected function failIfMessagesWhereLogged(Logger $logger): void
     {
         $messages = $logger->getMessages();
 
@@ -165,7 +165,7 @@ abstract class AbstractIntegrationTest extends TestCase
         return null === $this->keyValueStore;
     }
 
-    private function storeInMemoryObjects(IntegrationTestFactory $factory)
+    private function storeInMemoryObjects(IntegrationTestFactory $factory): void
     {
         $this->keyValueStore = $factory->getKeyValueStore();
         $this->eventMessageQueue = $factory->getEventMessageQueue();
@@ -174,7 +174,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $this->urlKeyStore = $factory->getUrlKeyStore();
     }
 
-    private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory)
+    private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory): void
     {
         $factory->setKeyValueStore($this->keyValueStore);
         $factory->setEventMessageQueue($this->eventMessageQueue);
@@ -183,7 +183,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $factory->setUrlKeyStore($this->urlKeyStore);
     }
 
-    final protected function importCatalogFixture(MasterFactory $factory, string ...$fixtureCatalogFiles)
+    final protected function importCatalogFixture(MasterFactory $factory, string ...$fixtureCatalogFiles): void
     {
         /** @var CatalogImport $import */
         $import = $factory->createCatalogImport();
@@ -198,7 +198,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $this->processAllMessages($factory);
     }
 
-    final protected function processAllMessages(MasterFactory $factory)
+    final protected function processAllMessages(MasterFactory $factory): void
     {
         while ($factory->getCommandMessageQueue()->count() > 0 ||
                $factory->getEventMessageQueue()->count() > 0) {

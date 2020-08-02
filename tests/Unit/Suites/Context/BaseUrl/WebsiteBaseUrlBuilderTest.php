@@ -24,17 +24,17 @@ class WebsiteBaseUrlBuilderTest extends TestCase
     private $websiteBaseUrlBuilder;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
     /**
-     * @var ConfigReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigReader|MockObject
      */
     private $stubConfigReader;
 
     /**
-     * @return ConfigReader|\PHPUnit_Framework_MockObject_MockObject
+     * @return ConfigReader|MockObject
      */
     private function createStubConfigReader() : ConfigReader
     {
@@ -51,7 +51,7 @@ class WebsiteBaseUrlBuilderTest extends TestCase
     }
 
     /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     * @return Context|MockObject
      */
     private function createStubContext() : Context
     {
@@ -60,7 +60,7 @@ class WebsiteBaseUrlBuilderTest extends TestCase
         return $stubContext;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubConfigReader = $this->createStubConfigReader();
         $this->websiteBaseUrlBuilder = new WebsiteBaseUrlBuilder($this->stubConfigReader);
@@ -68,27 +68,27 @@ class WebsiteBaseUrlBuilderTest extends TestCase
         $this->stubContext = $this->createStubContext();
     }
 
-    public function testItReturnsABaseUrlInstance()
+    public function testItReturnsABaseUrlInstance(): void
     {
         $this->assertInstanceOf(BaseUrl::class, $this->websiteBaseUrlBuilder->create($this->stubContext));
     }
 
-    public function testItCreatesTheBaseUrlBasedOnTheValueReturnedByTheConfigReader()
+    public function testItCreatesTheBaseUrlBasedOnTheValueReturnedByTheConfigReader(): void
     {
         $this->assertSame($this->testBaseUrl, (string) $this->websiteBaseUrlBuilder->create($this->stubContext));
     }
 
-    public function testItImplementsTheBaseUrlBuilderInterface()
+    public function testItImplementsTheBaseUrlBuilderInterface(): void
     {
         $this->assertInstanceOf(BaseUrlBuilder::class, $this->websiteBaseUrlBuilder);
     }
 
-    public function testItThrowsAnExceptionIfTheConfigReaderReturnsNoValue()
+    public function testItThrowsAnExceptionIfTheConfigReaderReturnsNoValue(): void
     {
         $this->expectException(NoConfiguredBaseUrlException::class);
         $this->expectExceptionMessage('No base URL configuration found for the website "test_website"');
 
-        /** @var ConfigReader|\PHPUnit_Framework_MockObject_MockObject $emptyStubConfigReader */
+        /** @var ConfigReader|MockObject $emptyStubConfigReader */
         $emptyStubConfigReader = $this->createMock(ConfigReader::class);
         $emptyStubConfigReader->method('has')->willReturn(false);
 

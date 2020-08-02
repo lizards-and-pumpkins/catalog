@@ -27,12 +27,12 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     private $requestHandler;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $stubRequest;
 
     /**
-     * @var ProductRelationsService|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelationsService|MockObject
      */
     private $mockProductRelationsService;
 
@@ -46,16 +46,16 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     ];
 
     /**
-     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextBuilder|MockObject
      */
     private $stubContextBuilder;
 
     /**
-     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlToWebsiteMap|MockObject
      */
     private $stubUrlToWebsiteMap;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProductRelationsService = $this->createMock(ProductRelationsService::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
@@ -70,7 +70,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testIsHttpRequestHandler()
+    public function testIsHttpRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
@@ -78,7 +78,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     /**
      * @dataProvider nonGetRequestMethodProvider
      */
-    public function testItCanNotProcessNonHttpGetRequestTypes(string $nonGetRequestMethod)
+    public function testItCanNotProcessNonHttpGetRequestTypes(string $nonGetRequestMethod): void
     {
         $this->stubRequest->method('getMethod')->willReturn($nonGetRequestMethod);
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
@@ -101,7 +101,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
     /**
      * @dataProvider nonMatchingRequestPathProvider
      */
-    public function testItCanNotProcessNonMatchingGetRequests(string $nonMatchingRequestPath)
+    public function testItCanNotProcessNonMatchingGetRequests(string $nonMatchingRequestPath): void
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($nonMatchingRequestPath);
@@ -119,7 +119,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
         }, $this->testNonMatchingRequestPaths);
     }
 
-    public function testItCanProcessMatchingGetRequests()
+    public function testItCanProcessMatchingGetRequests(): void
     {
         $this->stubRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->stubUrlToWebsiteMap->method('getRequestPathWithoutWebsitePrefix')->willReturn($this->testMatchingRequestPath);
@@ -127,7 +127,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest), $message);
     }
 
-    public function testItThrowsAnExceptionIfANonProcessableRequestIsPassed()
+    public function testItThrowsAnExceptionIfANonProcessableRequestIsPassed(): void
     {
         $this->expectException(UnableToProcessProductRelationsRequestException::class);
         $this->expectExceptionMessage(sprintf(
@@ -142,7 +142,7 @@ class ProductRelationsApiV1GetRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->stubRequest);
     }
 
-    public function testItDelegatesToTheProductRelationsServiceToFetchRelatedProducts()
+    public function testItDelegatesToTheProductRelationsServiceToFetchRelatedProducts(): void
     {
         $testProductData = [
             ['Dummy Product Data'],

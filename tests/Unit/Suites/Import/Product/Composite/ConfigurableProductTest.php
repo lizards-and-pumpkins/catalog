@@ -44,17 +44,17 @@ class ConfigurableProductTest extends TestCase
     private $configurableProduct;
 
     /**
-     * @var SimpleProduct|\PHPUnit_Framework_MockObject_MockObject
+     * @var SimpleProduct|MockObject
      */
     private $mockSimpleProduct;
 
     /**
-     * @var ProductVariationAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductVariationAttributeList|MockObject
      */
     private $mockVariationAttributeList;
 
     /**
-     * @var AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssociatedProductList|MockObject
      */
     private $mockAssociatedProductList;
 
@@ -67,7 +67,7 @@ class ConfigurableProductTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockSimpleProduct = $this->createMock(SimpleProduct::class);
         $this->mockVariationAttributeList = $this->createMock(ProductVariationAttributeList::class);
@@ -76,24 +76,24 @@ class ConfigurableProductTest extends TestCase
         $this->configurableProduct = $this->createConfigurableProductInstance();
     }
 
-    public function testItImplementsTheProductInterface()
+    public function testItImplementsTheProductInterface(): void
     {
         $this->assertInstanceOf(Product::class, $this->configurableProduct);
     }
 
-    public function testCompositeProductInterfaceIsImplemented()
+    public function testCompositeProductInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(CompositeProduct::class, $this->configurableProduct);
     }
 
-    public function testItDelegatesToTheSimpleProductToFetchTheId()
+    public function testItDelegatesToTheSimpleProductToFetchTheId(): void
     {
         $testId = new ProductId('foo');
         $this->mockSimpleProduct->method('getId')->willReturn($testId);
         $this->assertSame($testId, $this->configurableProduct->getId());
     }
 
-    public function testItDelegatesToTheSimpleProductToGetAFirstAttributeValueByCode()
+    public function testItDelegatesToTheSimpleProductToGetAFirstAttributeValueByCode(): void
     {
         $this->mockSimpleProduct->method('getFirstValueOfAttribute')->willReturnMap(
             [
@@ -105,7 +105,7 @@ class ConfigurableProductTest extends TestCase
         $this->assertSame('value B', $this->configurableProduct->getFirstValueOfAttribute('attribute_b'));
     }
 
-    public function testItDelegatesToTheSimpleProductToGetAttributeValuesByCode()
+    public function testItDelegatesToTheSimpleProductToGetAttributeValuesByCode(): void
     {
         $attributeCode = 'attribute_code';
         $testValues = ['value A', 'value B', 'value C'];
@@ -113,21 +113,21 @@ class ConfigurableProductTest extends TestCase
         $this->assertSame($testValues, $this->configurableProduct->getAllValuesOfAttribute($attributeCode));
     }
 
-    public function testItDelegatesToTheSimpleProductToCheckIfAnAttributeIsPresent()
+    public function testItDelegatesToTheSimpleProductToCheckIfAnAttributeIsPresent(): void
     {
         $dummyAttributeCode = AttributeCode::fromString('test');
         $this->mockSimpleProduct->method('hasAttribute')->with($dummyAttributeCode)->willReturn(true);
         $this->assertTrue($this->configurableProduct->hasAttribute($dummyAttributeCode));
     }
 
-    public function testItDelegatesToTheSimpleProductToGetAllAttributes()
+    public function testItDelegatesToTheSimpleProductToGetAllAttributes(): void
     {
         $dummyAttributeList = $this->createMock(ProductAttributeList::class);
         $this->mockSimpleProduct->method('getAttributes')->willReturn($dummyAttributeList);
         $this->assertSame($dummyAttributeList, $this->configurableProduct->getAttributes());
     }
 
-    public function testItIncludesTheCompositeObjectsInTheJsonRepresentation()
+    public function testItIncludesTheCompositeObjectsInTheJsonRepresentation(): void
     {
         $this->mockSimpleProduct->expects($this->once())->method('jsonSerialize')->willReturn([]);
         $this->mockAssociatedProductList->expects($this->once())->method('jsonSerialize')->willReturn([]);
@@ -137,7 +137,7 @@ class ConfigurableProductTest extends TestCase
         $this->assertSame(ConfigurableProduct::TYPE_CODE, $result[Product::TYPE_KEY]);
     }
 
-    public function testItCanBeCreatedFromAnArray()
+    public function testItCanBeCreatedFromAnArray(): void
     {
         $result = ConfigurableProduct::fromArray([
             Product::TYPE_KEY => ConfigurableProduct::TYPE_CODE,
@@ -158,7 +158,7 @@ class ConfigurableProductTest extends TestCase
         $this->assertInstanceOf(ConfigurableProduct::class, $result);
     }
 
-    public function testItThrowsAnExceptionIfTheTypeCodeIsMissingFromSourceArray()
+    public function testItThrowsAnExceptionIfTheTypeCodeIsMissingFromSourceArray(): void
     {
         $allFieldsExceptTypeCode = [
             ConfigurableProduct::SIMPLE_PRODUCT => [],
@@ -203,62 +203,62 @@ class ConfigurableProductTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheContextFromTheSimpleProductComponent()
+    public function testItReturnsTheContextFromTheSimpleProductComponent(): void
     {
         $stubContext = $this->createMock(Context::class);
         $this->mockSimpleProduct->method('getContext')->willReturn($stubContext);
         $this->assertSame($stubContext, $this->configurableProduct->getContext());
     }
 
-    public function testItDelegatesToTheSimpleProductToFetchTheImagesList()
+    public function testItDelegatesToTheSimpleProductToFetchTheImagesList(): void
     {
         $stubImageList = $this->createMock(ProductImageList::class);
         $this->mockSimpleProduct->method('getImages')->willReturn($stubImageList);
         $this->assertSame($stubImageList, $this->configurableProduct->getImages());
     }
 
-    public function testItDelegatesToTheSimpleProductToGetTheImageCount()
+    public function testItDelegatesToTheSimpleProductToGetTheImageCount(): void
     {
         $this->mockSimpleProduct->method('getImageCount')->willReturn(42);
         $this->assertSame(42, $this->configurableProduct->getImageCount());
     }
 
-    public function testItDelegatesToTheSimpleProductToGetAnImageByNumber()
+    public function testItDelegatesToTheSimpleProductToGetAnImageByNumber(): void
     {
         $stubImage = $this->createMock(ProductImage::class);
         $this->mockSimpleProduct->method('getImageByNumber')->with(0)->willReturn($stubImage);
         $this->assertSame($stubImage, $this->configurableProduct->getImageByNumber(0));
     }
 
-    public function testItDelegatesToTheSimpleProductToGetAnImageFileNameByNumber()
+    public function testItDelegatesToTheSimpleProductToGetAnImageFileNameByNumber(): void
     {
         $testFileName = 'test.jpg';
         $this->mockSimpleProduct->method('getImageFileNameByNumber')->with(0)->willReturn($testFileName);
         $this->assertSame($testFileName, $this->configurableProduct->getImageFileNameByNumber(0));
     }
 
-    public function testItDelegatesToTheSimpleProductToGetAnImageLabelByNumber()
+    public function testItDelegatesToTheSimpleProductToGetAnImageLabelByNumber(): void
     {
         $testLabel = 'Test Label';
         $this->mockSimpleProduct->method('getImageLabelByNumber')->with(0)->willReturn($testLabel);
         $this->assertSame($testLabel, $this->configurableProduct->getImageLabelByNumber(0));
     }
 
-    public function testItDelegatesToTheSimpleProductToGetTheMainProductImageFileName()
+    public function testItDelegatesToTheSimpleProductToGetTheMainProductImageFileName(): void
     {
         $testFileName = 'test.jpg';
         $this->mockSimpleProduct->method('getMainImageFileName')->willReturn($testFileName);
         $this->assertSame($testFileName, $this->configurableProduct->getMainImageFileName());
     }
 
-    public function testItDelegatesToTheSimpleProductToGetTheMainProductImageLabel()
+    public function testItDelegatesToTheSimpleProductToGetTheMainProductImageLabel(): void
     {
         $testLabel = 'Test Label';
         $this->mockSimpleProduct->method('getMainImageLabel')->willReturn($testLabel);
         $this->assertSame($testLabel, $this->configurableProduct->getMainImageLabel());
     }
 
-    public function testItReturnsAProductVariationAttributeList()
+    public function testItReturnsAProductVariationAttributeList(): void
     {
         $this->assertSame(
             $this->mockVariationAttributeList,
@@ -266,7 +266,7 @@ class ConfigurableProductTest extends TestCase
         );
     }
 
-    public function testItReturnsTheAssociatedProductsList()
+    public function testItReturnsTheAssociatedProductsList(): void
     {
         $this->assertSame($this->mockAssociatedProductList, $this->configurableProduct->getAssociatedProducts());
     }
@@ -299,7 +299,7 @@ class ConfigurableProductTest extends TestCase
         ];
     }
 
-    public function testItDelegatesToTheSimpleProductToGetTheTaxClass()
+    public function testItDelegatesToTheSimpleProductToGetTheTaxClass(): void
     {
         $stubProductTaxClass = $this->createMock(ProductTaxClass::class);
         $this->mockSimpleProduct->method('getTaxClass')->willReturn($stubProductTaxClass);

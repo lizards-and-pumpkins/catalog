@@ -20,12 +20,12 @@ class FacetFieldValueTest extends TestCase
      */
     private $facetFieldValue;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->facetFieldValue = new FacetFieldValue($this->testFieldValue, $this->testFieldCount);
     }
 
-    public function testExceptionIsThrownIfFacetFieldValueIsNotAString()
+    public function testExceptionIsThrownIfFacetFieldValueIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -33,7 +33,7 @@ class FacetFieldValueTest extends TestCase
         new FacetFieldValue($invalidValue, $this->testFieldCount);
     }
 
-    public function testExceptionIsThrownIfFacetFieldValueCountIsNotInteger()
+    public function testExceptionIsThrownIfFacetFieldValueCountIsNotInteger(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -41,12 +41,12 @@ class FacetFieldValueTest extends TestCase
         new FacetFieldValue($this->testFieldValue, $invalidValueCount);
     }
 
-    public function testJsonSerializableInterfaceIsImplemented()
+    public function testJsonSerializableInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->facetFieldValue);
     }
 
-    public function testArrayRepresentationOfFacetFieldValueCountIsReturned()
+    public function testArrayRepresentationOfFacetFieldValueCountIsReturned(): void
     {
         $expectedArray = [
             'value' => $this->testFieldValue,

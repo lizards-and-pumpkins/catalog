@@ -29,7 +29,7 @@ class LocalFilesystemTest extends TestCase
      */
     private $nonWritableDirectoryPath;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->filesystem = new LocalFilesystem();
 
@@ -43,7 +43,7 @@ class LocalFilesystemTest extends TestCase
         chmod($this->nonWritableDirectoryPath, 0000);
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         $directoryIterator = new \RecursiveDirectoryIterator($this->testDirectoryPath, \FilesystemIterator::SKIP_DOTS);
 
@@ -57,7 +57,7 @@ class LocalFilesystemTest extends TestCase
         rmdir($this->nonWritableDirectoryPath);
     }
 
-    public function testDirectoryAndItsContentAreRemoved()
+    public function testDirectoryAndItsContentAreRemoved(): void
     {
         $directoryPath = $this->testDirectoryPath . '/directory-to-be-removed';
 
@@ -71,7 +71,7 @@ class LocalFilesystemTest extends TestCase
         $this->assertFalse(is_dir($directoryPath));
     }
 
-    public function testDirectoryContentsAreRemoved()
+    public function testDirectoryContentsAreRemoved(): void
     {
         $directoryPath = $this->testDirectoryPath . '/directory-to-be-remain';
 
@@ -88,25 +88,25 @@ class LocalFilesystemTest extends TestCase
         $this->assertFalse(file_exists($directoryPath . '/link-to-be-removed'));
     }
 
-    public function testExceptionIsThrownIfDirectoryDoesNotExist()
+    public function testExceptionIsThrownIfDirectoryDoesNotExist(): void
     {
         $this->expectException(DirectoryDoesNotExistException::class);
         $this->filesystem->removeDirectoryAndItsContent('/non-existing-directory');
     }
 
-    public function testExceptionIsThrownIfDirectoryIsNotWritable()
+    public function testExceptionIsThrownIfDirectoryIsNotWritable(): void
     {
         $this->expectException(DirectoryNotWritableException::class);
         $this->filesystem->removeDirectoryAndItsContent($this->nonWritableDirectoryPath);
     }
 
-    public function testItSilentlyReturnsIfTheDirectoryDoesNotExist()
+    public function testItSilentlyReturnsIfTheDirectoryDoesNotExist(): void
     {
         $this->filesystem->removeDirectoryContents('some-non-existent-directory');
         $this->assertTrue(true, 'Assert the code did not try to open a non-existent directory throwing an exception');
     }
 
-    public function testItThrowsAnExceptionIfTheDirectoryIsAFile()
+    public function testItThrowsAnExceptionIfTheDirectoryIsAFile(): void
     {
         $this->expectException(NotADirectoryException::class);
         $this->expectExceptionMessage('The given path is not a directory: "');
@@ -119,7 +119,7 @@ class LocalFilesystemTest extends TestCase
     /**
      * @dataProvider getRelativePath
      */
-    public function testRelativePathIsReturned(string $basePath, string $path, string $expected)
+    public function testRelativePathIsReturned(string $basePath, string $path, string $expected): void
     {
         $this->assertSame($expected, $this->filesystem->getRelativePath($basePath, $path));
     }

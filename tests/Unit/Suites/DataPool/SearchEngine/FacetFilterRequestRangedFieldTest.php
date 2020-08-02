@@ -13,12 +13,12 @@ use PHPUnit\Framework\TestCase;
 class FacetFilterRequestRangedFieldTest extends TestCase
 {
     /**
-     * @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCode|MockObject
      */
     private $stubAttributeCode;
 
     /**
-     * @var FacetFilterRange|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFilterRange|MockObject
      */
     private $stubFacetFilterRange;
 
@@ -27,29 +27,29 @@ class FacetFilterRequestRangedFieldTest extends TestCase
      */
     private $field;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubAttributeCode = $this->createMock(AttributeCode::class);
         $this->stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
         $this->field = new FacetFilterRequestRangedField($this->stubAttributeCode);
     }
 
-    public function testFacetFilterRequestFieldInterfaceIsImplemented()
+    public function testFacetFilterRequestFieldInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FacetFilterRequestField::class, $this->field);
     }
 
-    public function testFieldIsRanged()
+    public function testFieldIsRanged(): void
     {
         $this->assertTrue($this->field->isRanged());
     }
 
-    public function testAttributeCodeIsReturned()
+    public function testAttributeCodeIsReturned(): void
     {
         $this->assertSame($this->stubAttributeCode, $this->field->getAttributeCode());
     }
 
-    public function testArrayOfFacetFilterRangesIsReturned()
+    public function testArrayOfFacetFilterRangesIsReturned(): void
     {
         $this->assertContainsOnly(FacetFilterRange::class, $this->field->getRanges());
     }

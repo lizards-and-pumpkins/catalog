@@ -20,28 +20,28 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
     private $strategy;
 
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|MockObject
      */
     private $stubSnippetKeyGenerator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->strategy = new RegistrySnippetKeyGeneratorLocatorStrategy;
         $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
     }
 
-    public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()
+    public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $this->strategy);
     }
 
-    public function testFalseIsReturnedIfSnippetCodeCanNotBeHandled()
+    public function testFalseIsReturnedIfSnippetCodeCanNotBeHandled(): void
     {
         $unsupportedSnippetCode = 'foo';
         $this->assertFalse($this->strategy->canHandle($unsupportedSnippetCode));
     }
 
-    public function testTrueIsReturnedIfSnippetCodeCanBeHandled()
+    public function testTrueIsReturnedIfSnippetCodeCanBeHandled(): void
     {
         $snippetCode = 'foo';
         $testClosure = function () {
@@ -53,14 +53,14 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
         $this->assertTrue($this->strategy->canHandle($snippetCode));
     }
 
-    public function testExceptionIsThrownDuringAttemptToLocateSnippetKeyGeneratorForUnsupportedSnippetCode()
+    public function testExceptionIsThrownDuringAttemptToLocateSnippetKeyGeneratorForUnsupportedSnippetCode(): void
     {
         $unsupportedSnippetCode = 'foo';
         $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 
-    public function testExceptionIsThrownIfNonStringSnippetRendererCodeIsPassed()
+    public function testExceptionIsThrownIfNonStringSnippetRendererCodeIsPassed(): void
     {
         $this->expectException(\TypeError::class);
         $this->strategy->getKeyGeneratorForSnippetCode(new \stdClass());
@@ -69,7 +69,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
     /**
      * @dataProvider emptySnippetCodeDataProvider
      */
-    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed(string $emptySnippetCode)
+    public function testExceptionIsThrownIfEmptyStringSnippetRendererCodeIsPassed(string $emptySnippetCode): void
     {
         $this->expectException(InvalidSnippetCodeException::class);
         $this->expectExceptionMessage('Snippet code must not be empty.');
@@ -87,7 +87,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
         ];
     }
 
-    public function testKeyGeneratorForSnippetCodesIsReturned()
+    public function testKeyGeneratorForSnippetCodesIsReturned(): void
     {
         $snippetCode = 'foo';
         $testClosure = function () {
@@ -99,7 +99,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
         $this->assertSame($this->stubSnippetKeyGenerator, $this->strategy->getKeyGeneratorForSnippetCode($snippetCode));
     }
 
-    public function testExceptionIsThrownWhenRegisteringEmptyStringSnippetCode()
+    public function testExceptionIsThrownWhenRegisteringEmptyStringSnippetCode(): void
     {
         $invalidSnippetCode = '';
         $testClosure = function () {
@@ -111,7 +111,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
         $this->strategy->register($invalidSnippetCode, $testClosure);
     }
 
-    public function testSameInstanceForSameSnippetCodeIsReturned()
+    public function testSameInstanceForSameSnippetCodeIsReturned(): void
     {
         $snippetCode = 'foo';
         $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
@@ -127,7 +127,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategyTest extends TestCase
         $this->assertSame($result1, $result2);
     }
 
-    public function testDifferentInstancesAreReturnedForDifferentSnippetCodes()
+    public function testDifferentInstancesAreReturnedForDifferentSnippetCodes(): void
     {
         $snippetCodeA = 'foo';
         $stubSnippetKeyGeneratorA = $this->createMock(SnippetKeyGenerator::class);

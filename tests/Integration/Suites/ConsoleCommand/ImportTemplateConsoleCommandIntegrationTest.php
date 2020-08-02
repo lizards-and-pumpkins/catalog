@@ -47,14 +47,14 @@ class ImportTemplateConsoleCommandIntegrationTest extends AbstractIntegrationTes
 
     private function createTestCliMate(array $argumentMap): CLImate
     {
-        /** @var CLImate|\PHPUnit_Framework_MockObject_MockObject $stubCliMate */
+        /** @var CLImate|MockObject $stubCliMate */
         $stubCliMate = $this->createMock(CLImate::class);
         $stubCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
         $stubCliMate->arguments->method('get')->willReturnMap($argumentMap);
         return $stubCliMate;
     }
 
-    public function testRunImportsCommand()
+    public function testRunImportsCommand(): void
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $command = new ImportTemplateConsoleCommand($factory, $this->createTestCliMate($this->getCommandArgumentMap()));
@@ -63,6 +63,6 @@ class ImportTemplateConsoleCommandIntegrationTest extends AbstractIntegrationTes
         $this->failIfMessagesWhereLogged($factory->getLogger());
         $snippet = $this->getProductListingPageTemplateSnippet($factory);
 
-        $this->assertContains('{{snippet product_listing_content_block_top}}', $snippet);
+        $this->assertStringContainsString('{{snippet product_listing_content_block_top}}', $snippet);
     }
 }

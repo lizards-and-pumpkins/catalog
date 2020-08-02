@@ -19,16 +19,16 @@ use PHPUnit\Framework\TestCase;
 class DataversionGetConsoleCommandTest extends TestCase
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory
      */
     private $stubMasterFactory;
 
     /**
-     * @var CLImate|\PHPUnit_Framework_MockObject_MockObject
+     * @var CLImate
      */
     private $mockCliMate;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), get_class_methods(CommonFactory::class)))
@@ -41,13 +41,13 @@ class DataversionGetConsoleCommandTest extends TestCase
         $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
     }
 
-    public function testIsAConsoleCommand()
+    public function testIsAConsoleCommand(): void
     {
         $command = new DataversionGetConsoleCommand($this->stubMasterFactory, $this->mockCliMate);
         $this->assertInstanceOf(ConsoleCommand::class, $command);
     }
 
-    public function testOutputsTheCurrentDataVersion()
+    public function testOutputsTheCurrentDataVersion(): void
     {
         $stubDataPoolReader = $this->createMock(DataPoolReader::class);
         $stubDataPoolReader->method('getCurrentDataVersion')->willReturn('bar');

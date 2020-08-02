@@ -17,12 +17,12 @@ use PHPUnit\Framework\TestCase;
 class ReportUrlKeysConsoleCommandTest extends TestCase
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory
      */
     private $stubMasterFactory;
 
     /**
-     * @var CLImate|\PHPUnit_Framework_MockObject_MockObject
+     * @var CLImate
      */
     private $mockCliMate;
 
@@ -48,9 +48,8 @@ class ReportUrlKeysConsoleCommandTest extends TestCase
         return array_values($arguments);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
-
         $stubDataPoolReader = $this->createMock(DataPoolReader::class);
         $stubDataPoolReader->method('getCurrentDataVersion')->willReturn('xxx');
         $stubDataPoolReader->method('getUrlKeysForVersion')->willReturn($this->testUrlKeyRecords);
@@ -66,7 +65,7 @@ class ReportUrlKeysConsoleCommandTest extends TestCase
         $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
     }
 
-    public function testOutputsAllUrlKeysByDefault()
+    public function testOutputsAllUrlKeysByDefault(): void
     {
         $argumentsMap = $this->getCommandArgumentMap(['type' => ReportUrlKeysConsoleCommand::TYPE_ALL]);
         $this->mockCliMate->arguments->method('get')->willReturnMap($argumentsMap);
@@ -75,7 +74,7 @@ class ReportUrlKeysConsoleCommandTest extends TestCase
         (new ReportUrlKeysConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
     }
 
-    public function testOutputsProductUrlKeysIfSpecified()
+    public function testOutputsProductUrlKeysIfSpecified(): void
     {
         $argumentsMap = $this->getCommandArgumentMap(['type' => ReportUrlKeysConsoleCommand::TYPE_PRODUCT]);
         $this->mockCliMate->arguments->method('get')->willReturnMap($argumentsMap);
@@ -85,7 +84,7 @@ class ReportUrlKeysConsoleCommandTest extends TestCase
         (new ReportUrlKeysConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
     }
 
-    public function testOutputsListingUrlKeysIfSpecified()
+    public function testOutputsListingUrlKeysIfSpecified(): void
     {
         $argumentsMap = $this->getCommandArgumentMap(['type' => ReportUrlKeysConsoleCommand::TYPE_LISTING]);
         $this->mockCliMate->arguments->method('get')->willReturnMap($argumentsMap);

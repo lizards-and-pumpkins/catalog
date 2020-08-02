@@ -40,21 +40,21 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
     private $testImportDirectoryPath;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
     private $logger;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $mockRequest;
 
     /**
-     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|MockObject
      */
     private $mockCommandQueue;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testImportDirectoryPath = $this->getUniqueTempDir() . '/test/catalog-import-directory';
         $this->createFixtureDirectory($this->testImportDirectoryPath);
@@ -72,36 +72,36 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testIsHttpRequestHandler()
+    public function testIsHttpRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
+    public function testRequestCanNotBeProcessedIfMethodIsNotPut(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanBeProcessedIfMethodIsPut()
+    public function testRequestCanBeProcessedIfMethodIsPut(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testExceptionIsThrownIfImportDirectoryIsNotReadable()
+    public function testExceptionIsThrownIfImportDirectoryIsNotReadable(): void
     {
         $this->expectException(CatalogImportApiDirectoryNotReadableException::class);
         new CatalogImportApiV2PutRequestHandler('/some-not-existing-directory', $this->mockCommandQueue, $this->logger);
     }
 
-    public function testExceptionIsThrownIfImportDirectoryIsNotDirectory()
+    public function testExceptionIsThrownIfImportDirectoryIsNotDirectory(): void
     {
         $this->expectException(CatalogImportApiDirectoryIsNotDirectoryException::class);
         new CatalogImportApiV2PutRequestHandler(__FILE__, $this->mockCommandQueue, $this->logger);
     }
 
-    public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody()
+    public function testExceptionIsThrownIfCatalogImportFileNameIsNotFoundInRequestBody(): void
     {
         $this->expectException(CatalogImportFileNameNotFoundInRequestBodyException::class);
         $this->expectExceptionMessage('Import file name is not found in request body.');
@@ -109,7 +109,7 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testExceptionIsThrownIfDataVersionIsNotFoundInRequestBody()
+    public function testExceptionIsThrownIfDataVersionIsNotFoundInRequestBody(): void
     {
         $this->expectException(DataVersionNotFoundInRequestBodyException::class);
         $this->expectExceptionMessage('The catalog import data version is not found in request body.');
@@ -121,7 +121,7 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testAddsImportCatalogCommandToCommandQueue()
+    public function testAddsImportCatalogCommandToCommandQueue(): void
     {
         $dataVersion = 'foo-bar';
         $importFileName = 'import-file.xml';
@@ -148,7 +148,7 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
      * @dataProvider nonCastableDataVersionProvider
      * @param mixed $dataVersion
      */
-    public function testExceptionIsThrownIfRequestBodyContainsDataVersionOfInvalidType($dataVersion)
+    public function testExceptionIsThrownIfRequestBodyContainsDataVersionOfInvalidType($dataVersion): void
     {
         $this->expectException(InvalidDataVersionTypeException::class);
 
@@ -168,7 +168,7 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
      * @dataProvider castableDataVersionsProvider
      * @param int|float $dataVersion
      */
-    public function testDataVersionIsCastedToString($dataVersion)
+    public function testDataVersionIsCastedToString($dataVersion): void
     {
         $importFileName = 'import-file.xml';
 
@@ -195,7 +195,7 @@ class CatalogImportApiV2PutRequestHandlerTest extends TestCase
         return ['int' => [12], 'float' => [.2]];
     }
 
-    public function nonCastableDataVersionProvider()
+    public function nonCastableDataVersionProvider(): array
     {
         return ['boolean' => [true], 'array' => [['foo']]];
     }

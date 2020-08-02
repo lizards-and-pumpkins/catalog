@@ -19,33 +19,33 @@ class IntegrationTestContextLocaleTest extends TestCase
     private $contextLocale;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $stubRequest;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->contextLocale = new IntegrationTestContextLocale();
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testItIsAContextPartBuilder()
+    public function testItIsAContextPartBuilder(): void
     {
         $this->assertInstanceOf(ContextPartBuilder::class, $this->contextLocale);
     }
 
-    public function testItReturnsTheCode()
+    public function testItReturnsTheCode(): void
     {
         $this->assertSame(Locale::CONTEXT_CODE, $this->contextLocale->getCode());
     }
 
-    public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromTheInputDataSets()
+    public function testItReturnsTheDefaultLocaleIfItCanNotBeDeterminedFromTheInputDataSets(): void
     {
         $inputDataSet = [];
         $this->assertSame('fr_FR', $this->contextLocale->getValue($inputDataSet));
     }
 
-    public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent()
+    public function testItReturnsTheLocaleFromTheInputArrayIfItIsPresent(): void
     {
         $inputDataSet = [Locale::CONTEXT_CODE => 'xx_XX'];
         $this->assertSame('xx_XX', $this->contextLocale->getValue($inputDataSet));

@@ -17,7 +17,7 @@ class FilesystemFileUriTest extends TestCase
      * @param string $expectedType
      * @dataProvider invalidNonStringFileUriProvider
      */
-    public function testItThrowsAnExceptionIfTheFileUriIsNotAString($notStringURI, string $expectedType)
+    public function testItThrowsAnExceptionIfTheFileUriIsNotAString($notStringURI, string $expectedType): void
     {
         $this->expectException(InvalidFileURIException::class);
         $this->expectExceptionMessage(sprintf('The file URI has to be a string, got "%s"', $expectedType));
@@ -38,7 +38,7 @@ class FilesystemFileUriTest extends TestCase
     /**
      * @dataProvider emptyFileUriProvider
      */
-    public function testItThrowsAnExceptionIfTheUriIsEmpty(string $emptyURI)
+    public function testItThrowsAnExceptionIfTheUriIsEmpty(string $emptyURI): void
     {
         $this->expectException(InvalidFileURIException::class);
         $this->expectExceptionMessage('The file URI must not be an empty string');
@@ -56,7 +56,7 @@ class FilesystemFileUriTest extends TestCase
         ];
     }
 
-    public function testItReturnsAFilesystemFileUri()
+    public function testItReturnsAFilesystemFileUri(): void
     {
         $filesystemFileURI = FilesystemFileUri::fromString('/test');
         
@@ -64,12 +64,12 @@ class FilesystemFileUriTest extends TestCase
         $this->assertInstanceOf(StorageSpecificFileUri::class, $filesystemFileURI);
     }
 
-    public function testItReturnsTheURIString()
+    public function testItReturnsTheURIString(): void
     {
         $this->assertSame('test', (string) FilesystemFileUri::fromString('test'));
     }
 
-    public function testItReturnsAFileURIWhenGivenAFilesystemFileInstance()
+    public function testItReturnsAFileURIWhenGivenAFilesystemFileInstance(): void
     {
         $fileURIString = 'test';
         $sourceFilesystemFileURI = FilesystemFileUri::fromString($fileURIString);

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class HttpResourceNotFoundResponseTest extends TestCase
 {
-    public function test404ResponseCodeIsSet()
+    public function test404ResponseCodeIsSet(): void
     {
         ob_start();
         (new HttpResourceNotFoundResponse())->send();
@@ -21,7 +21,7 @@ class HttpResourceNotFoundResponseTest extends TestCase
         $this->assertEquals(404, http_response_code());
     }
 
-    public function testReturnsEmptyHeaders()
+    public function testReturnsEmptyHeaders(): void
     {
         $headers = (new HttpResourceNotFoundResponse())->getHeaders();
         $this->assertEmpty($headers->getAll());

@@ -21,7 +21,7 @@ class UrlKeyForContextTest extends TestCase
     private $testUrlKey;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
@@ -30,35 +30,35 @@ class UrlKeyForContextTest extends TestCase
      */
     private $urlKeyForContext;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testUrlKey = UrlKey::fromString('example.html');
         $this->stubContext = $this->createMock(Context::class);
         $this->urlKeyForContext = new UrlKeyForContext($this->testUrlKey, $this->stubContext, $this->urlKeyType);
     }
 
-    public function testItReturnsTheUrlKey()
+    public function testItReturnsTheUrlKey(): void
     {
         $this->assertSame($this->testUrlKey, $this->urlKeyForContext->getUrlKey());
     }
 
-    public function testItReturnsTheContext()
+    public function testItReturnsTheContext(): void
     {
         $this->assertSame($this->stubContext, $this->urlKeyForContext->getContext());
     }
 
-    public function testItReturnsTheUrlKeyString()
+    public function testItReturnsTheUrlKeyString(): void
     {
         $this->assertSame((string)$this->testUrlKey, (string)$this->urlKeyForContext);
     }
 
-    public function testItDelegatesToTheContextWhenGettingContextValues()
+    public function testItDelegatesToTheContextWhenGettingContextValues(): void
     {
         $this->stubContext->expects($this->once())->method('getValue')->with('test')->willReturn('result');
         $this->assertSame('result', $this->urlKeyForContext->getContextValue('test'));
     }
 
-    public function testItReturnsTheUrlKeyType()
+    public function testItReturnsTheUrlKeyType(): void
     {
         $this->assertSame($this->urlKeyType, $this->urlKeyForContext->getType());
     }

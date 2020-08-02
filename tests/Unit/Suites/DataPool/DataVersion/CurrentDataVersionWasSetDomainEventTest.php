@@ -20,13 +20,13 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrentDataVersionWasSetDomainEventTest extends TestCase
 {
-    public function testImplementDomainEvent()
+    public function testImplementDomainEvent(): void
     {
         $event = new CurrentDataVersionWasSetDomainEvent(DataVersion::fromVersionString('foo'));
         $this->assertInstanceOf(DomainEvent::class, $event);
     }
 
-    public function testReturnsTheDataVersion()
+    public function testReturnsTheDataVersion(): void
     {
         $testDataVersion = DataVersion::fromVersionString('bar');
         $currentDataVersionWasSetDomainEvent = new CurrentDataVersionWasSetDomainEvent($testDataVersion);
@@ -36,7 +36,7 @@ class CurrentDataVersionWasSetDomainEventTest extends TestCase
     /**
      * @dataProvider nonMatchingMessageNameProvider
      */
-    public function testThrowsExceptionIfMessageNameDoesNotMatch(string $nonMatchingMessageName)
+    public function testThrowsExceptionIfMessageNameDoesNotMatch(string $nonMatchingMessageName): void
     {
         $expectedName = CurrentDataVersionWasSetDomainEvent::CODE;
         $message = sprintf('Message name "%s" does not match %s', $nonMatchingMessageName, $expectedName);
@@ -51,7 +51,7 @@ class CurrentDataVersionWasSetDomainEventTest extends TestCase
         return [['foo'], ['bar']];
     }
 
-    public function testReturnsMessageWithDataVersion()
+    public function testReturnsMessageWithDataVersion(): void
     {
         $testDataVersion = DataVersion::fromVersionString('baz');
         $message = (new CurrentDataVersionWasSetDomainEvent($testDataVersion))->toMessage();
@@ -60,7 +60,7 @@ class CurrentDataVersionWasSetDomainEventTest extends TestCase
         $this->assertEquals((string) $testDataVersion, $message->getMetadata()[DataVersion::VERSION_KEY]);
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $testDataVersion = DataVersion::fromVersionString('baz');
         $sourceMessage = (new CurrentDataVersionWasSetDomainEvent($testDataVersion))->toMessage();

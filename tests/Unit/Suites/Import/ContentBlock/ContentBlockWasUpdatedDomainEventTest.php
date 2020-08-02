@@ -24,12 +24,12 @@ use PHPUnit\Framework\TestCase;
 class ContentBlockWasUpdatedDomainEventTest extends TestCase
 {
     /**
-     * @var ContentBlockId|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentBlockId|MockObject
      */
     private $stubContentBlockId;
 
     /**
-     * @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentBlockSource|MockObject
      */
     private $stubContentBlockSource;
 
@@ -38,7 +38,7 @@ class ContentBlockWasUpdatedDomainEventTest extends TestCase
      */
     private $domainEvent;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContentBlockId = $this->createMock(ContentBlockId::class);
         $this->stubContentBlockSource = $this->createMock(ContentBlockSource::class);
@@ -47,32 +47,32 @@ class ContentBlockWasUpdatedDomainEventTest extends TestCase
         $this->domainEvent = new ContentBlockWasUpdatedDomainEvent($this->stubContentBlockSource);
     }
 
-    public function testDomainEventInterfaceIsImplemented()
+    public function testDomainEventInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testContentBlockSourceIsReturned()
+    public function testContentBlockSourceIsReturned(): void
     {
         $result = $this->domainEvent->getContentBlockSource();
         $this->assertSame($this->stubContentBlockSource, $result);
     }
 
-    public function testReturnsContentBlockWasUpdatedMessage()
+    public function testReturnsContentBlockWasUpdatedMessage(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(ContentBlockWasUpdatedDomainEvent::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithContentBlockPayload()
+    public function testReturnsMessageWithContentBlockPayload(): void
     {
         $payload = $this->domainEvent->toMessage()->getPayload();
         $this->assertArrayHasKey('id', $payload);
         $this->assertArrayHasKey('source', $payload);
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $sourceContentBlock = new ContentBlockSource(
             ContentBlockId::fromString('test'),
@@ -89,7 +89,7 @@ class ContentBlockWasUpdatedDomainEventTest extends TestCase
         );
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatch()
+    public function testThrowsExceptionIfMessageNameDoesNotMatch(): void
     {
         $this->expectException(NoContentBlockWasUpdatedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "content_block_was_updated" domain event, got "foobar"');

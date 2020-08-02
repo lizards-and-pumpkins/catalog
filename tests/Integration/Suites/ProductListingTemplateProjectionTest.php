@@ -21,7 +21,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         ]);
     }
 
-    private function processRequest(CatalogMasterFactory $factory, HttpRequest $request)
+    private function processRequest(CatalogMasterFactory $factory, HttpRequest $request): void
     {
         $implementationSpecificFactory = $this->getIntegrationTestFactory($factory);
         $website = new InjectableRestApiWebFront($request, $factory, $implementationSpecificFactory);
@@ -66,7 +66,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         return $productListingTemplateSnippetKeyGenerator->getKeyForContext($context, []);
     }
 
-    private function assertHasProductListingTemplateForDataVersion(CatalogMasterFactory $factory, string $version)
+    private function assertHasProductListingTemplateForDataVersion(CatalogMasterFactory $factory, string $version): void
     {
         $key = $this->getProductListingTemplateSnippetKey($factory, $version);
 
@@ -74,7 +74,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         $this->assertTrue($factory->createDataPoolReader()->hasSnippet($key), $message);
     }
 
-    private function assertNotHasProductListingTemplateForDataVersion(CatalogMasterFactory $factory, string $version)
+    private function assertNotHasProductListingTemplateForDataVersion(CatalogMasterFactory $factory, string $version): void
     {
         $key = $this->getProductListingTemplateSnippetKey($factory, $version);
 
@@ -82,7 +82,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         $this->assertFalse($factory->createDataPoolReader()->hasSnippet($key), $message);
     }
 
-    public function testV1TemplatesApiHandlerProjectsWithCurrentDataVersion()
+    public function testV1TemplatesApiHandlerProjectsWithCurrentDataVersion(): void
     {
         $currentVersionForTest = 'foo';
 
@@ -100,7 +100,7 @@ class ProductListingTemplateProjectionTest extends AbstractIntegrationTest
         $this->assertTrue($factory->createDataPoolReader()->hasSnippet($key));
     }
 
-    public function testV2TemplatesApiHandlerProjectsWithCurrentDataVersion()
+    public function testV2TemplatesApiHandlerProjectsWithCurrentDataVersion(): void
     {
         $currentVersion = 'foo';
         $projectionVersion = 'bar';

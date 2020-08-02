@@ -29,7 +29,7 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
 
     private $pageSpecificData = [['foo' => 'bar'], ['baz' => 'qux']];
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->metaSnippetContent = ProductSearchResultMetaSnippetContent::create(
             $this->dummyRootSnippetCode,
@@ -39,18 +39,18 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
         );
     }
 
-    public function testPageMetaInfoSnippetContentInterfaceIsImplemented()
+    public function testPageMetaInfoSnippetContentInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(PageMetaInfoSnippetContent::class, $this->metaSnippetContent);
     }
 
-    public function testExceptionIsThrownIfTheRootSnippetCodeIsAnEmptyString()
+    public function testExceptionIsThrownIfTheRootSnippetCodeIsAnEmptyString(): void
     {
         $this->expectException(InvalidSnippetCodeException::class);
         ProductSearchResultMetaSnippetContent::create('', [], [], []);
     }
 
-    public function testMetaSnippetContentInfoContainsRequiredKeys()
+    public function testMetaSnippetContentInfoContainsRequiredKeys(): void
     {
         $expectedKeys = [
             ProductSearchResultMetaSnippetContent::KEY_ROOT_SNIPPET_CODE,
@@ -66,26 +66,26 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
         }
     }
 
-    public function testRootSnippetCodeIsReturned()
+    public function testRootSnippetCodeIsReturned(): void
     {
         $this->assertEquals($this->dummyRootSnippetCode, $this->metaSnippetContent->getRootSnippetCode());
     }
 
-    public function testPageSnippetCodeListIsReturned()
+    public function testPageSnippetCodeListIsReturned(): void
     {
-        $this->assertInternalType('array', $this->metaSnippetContent->getPageSnippetCodes());
+        $this->assertIsArray($this->metaSnippetContent->getPageSnippetCodes());
     }
 
-    public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfAbsent()
+    public function testRootSnippetCodeIsAddedToTheSnippetCodeListIfAbsent(): void
     {
         $metaSnippetContent = ProductSearchResultMetaSnippetContent::create($this->dummyRootSnippetCode, [], [], []);
         $metaMetaInfo = $metaSnippetContent->toArray();
         $pageSnippetCodes = $metaMetaInfo[ProductSearchResultMetaSnippetContent::KEY_PAGE_SNIPPET_CODES];
 
-        $this->assertContains($this->dummyRootSnippetCode, $pageSnippetCodes);
+        $this->assertTrue(in_array($this->dummyRootSnippetCode, $pageSnippetCodes));
     }
 
-    public function testCanBeCreatedFromJson()
+    public function testCanBeCreatedFromJson(): void
     {
         $metaSnippetContent = ProductSearchResultMetaSnippetContent::fromArray($this->metaSnippetContent->toArray());
 
@@ -94,8 +94,9 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
+     * @param string $missingKey
      */
-    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData(string $missingKey)
+    public function testExceptionIsThrownIfJsonDoesNotContainRequiredData(string $missingKey): void
     {
         $pageMeta = $this->metaSnippetContent->toArray();
         unset($pageMeta[$missingKey]);
@@ -119,12 +120,12 @@ class ProductSearchResultMetaSnippetContentTest extends TestCase
         ];
     }
 
-    public function testItReturnsThePageSnippetContainers()
+    public function testItReturnsThePageSnippetContainers(): void
     {
         $this->assertSame($this->containerSnippets, $this->metaSnippetContent->getContainerSnippets());
     }
 
-    public function testReturnsPageSpecificData()
+    public function testReturnsPageSpecificData(): void
     {
         $this->assertSame($this->pageSpecificData, $this->metaSnippetContent->getPageSpecificData());
     }

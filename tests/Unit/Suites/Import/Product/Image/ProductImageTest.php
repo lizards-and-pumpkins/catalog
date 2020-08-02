@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class ProductImageTest extends TestCase
 {
     /**
-     * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeList|MockObject
      */
     private $stubAttributeList;
 
@@ -26,7 +26,7 @@ class ProductImageTest extends TestCase
      */
     private $productImage;
 
-    private function addStubAttributeWithCodeAndValue(string $attributeCode, string $attributeValue)
+    private function addStubAttributeWithCodeAndValue(string $attributeCode, string $attributeValue): void
     {
         $stubAttribute = $this->createMock(ProductAttribute::class);
         $stubAttribute->method('getValue')->willReturn($attributeValue);
@@ -35,37 +35,37 @@ class ProductImageTest extends TestCase
             ->willReturn([$stubAttribute]);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubAttributeList = $this->createMock(ProductAttributeList::class);
         $this->productImage = new ProductImage($this->stubAttributeList);
     }
 
-    public function testItReturnsTheFileName()
+    public function testItReturnsTheFileName(): void
     {
         $testFileName = 'test.jpg';
         $this->addStubAttributeWithCodeAndValue(ProductImage::FILE, $testFileName);
         $this->assertSame($testFileName, $this->productImage->getFileName());
     }
 
-    public function testItReturnsAnEmptyStringIfThereIsNoLabel()
+    public function testItReturnsAnEmptyStringIfThereIsNoLabel(): void
     {
         $this->assertSame('', $this->productImage->getLabel());
     }
 
-    public function testItReturnsTheAttributeLabel()
+    public function testItReturnsTheAttributeLabel(): void
     {
         $testLabel = 'Image Label';
         $this->addStubAttributeWithCodeAndValue(ProductImage::LABEL, $testLabel);
         $this->assertSame($testLabel, $this->productImage->getLabel());
     }
 
-    public function testItIsJsonSerializable()
+    public function testItIsJsonSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->productImage);
     }
 
-    public function testItCanBeJsonSerializedAndRehydrated()
+    public function testItCanBeJsonSerializedAndRehydrated(): void
     {
         $imageFileAttribute = ProductAttribute::fromArray([
             ProductAttribute::CODE => ProductImage::FILE,

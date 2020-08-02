@@ -38,7 +38,7 @@ class ContentBlockServiceFactoryTest extends TestCase
      */
     private $factory;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
@@ -50,17 +50,17 @@ class ContentBlockServiceFactoryTest extends TestCase
         $masterFactory->register($this->factory);
     }
 
-    public function testImplementsFactoryWithCallback()
+    public function testImplementsFactoryWithCallback(): void
     {
         $this->assertInstanceOf(FactoryWithCallback::class, $this->factory);
     }
 
-    public function testRegistersApiHandler()
+    public function testRegistersApiHandler(): void
     {
         $apiVersion = 2;
         $mockApiRequestHandlerLocator = $this->createMock(ApiRequestHandlerLocator::class);
 
-        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
+        /** @var MasterFactory|MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator']))
             ->getMock();
@@ -72,7 +72,7 @@ class ContentBlockServiceFactoryTest extends TestCase
         $this->factory->factoryRegistrationCallback($stubMasterFactory);
     }
 
-    public function testCreatesContentBlockApiV2GetRequestHandler()
+    public function testCreatesContentBlockApiV2GetRequestHandler(): void
     {
         $this->assertInstanceOf(
             ContentBlockApiV2GetRequestHandler::class,

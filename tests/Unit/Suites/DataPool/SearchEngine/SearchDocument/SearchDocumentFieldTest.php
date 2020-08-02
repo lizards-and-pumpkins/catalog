@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SearchDocumentFieldTest extends TestCase
 {
-    public function testDocumentFieldKeyAndValueAreSetAndReturned()
+    public function testDocumentFieldKeyAndValueAreSetAndReturned(): void
     {
         $key = 'foo';
         $values = ['bar'];
@@ -28,7 +28,7 @@ class SearchDocumentFieldTest extends TestCase
      * @param mixed $invalidKey
      * @dataProvider invalidKeyProvider
      */
-    public function testExceptionIsThrownIfInvalidKeyIsSpecified($invalidKey)
+    public function testExceptionIsThrownIfInvalidKeyIsSpecified($invalidKey): void
     {
         $this->expectException(InvalidSearchDocumentFieldKeyException::class);
         SearchDocumentField::fromKeyAndValues($invalidKey, ['foo']);
@@ -49,13 +49,13 @@ class SearchDocumentFieldTest extends TestCase
         ];
     }
 
-    public function testExceptionIsThrownIfInvalidKeyTypeIsSpecified()
+    public function testExceptionIsThrownIfInvalidKeyTypeIsSpecified(): void
     {
         $this->expectException(\TypeError::class);
         SearchDocumentField::fromKeyAndValues(1, ['foo']);
     }
 
-    public function testItThrowsAnExceptionIfTheValuesContainNonScalars()
+    public function testItThrowsAnExceptionIfTheValuesContainNonScalars(): void
     {
         $this->expectException(InvalidSearchDocumentFieldValueException::class);
         $this->expectExceptionMessage(

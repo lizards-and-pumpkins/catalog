@@ -30,11 +30,11 @@ class CsvTranslator implements Translator
      * @param string[] $fileNames
      * @return CsvTranslator
      */
-    public static function forLocale(string $localeCode, ThemeLocator $themeLocator, array $fileNames) : CsvTranslator
+    public static function forLocale(string $localeCode, ThemeLocator $themeLocator, array $fileNames): CsvTranslator
     {
         $localeDirectoryPath = $themeLocator->getThemeDirectory() . '/locale/' . $localeCode . '/';
 
-        if (!is_dir($localeDirectoryPath)) {
+        if (! is_dir($localeDirectoryPath)) {
             return new self([]);
         }
 
@@ -57,27 +57,27 @@ class CsvTranslator implements Translator
         return new self($translations);
     }
 
-    public function translate(string $string) : string
+    public function translate(string $string): string
     {
-        if (!isset($this->translations[$string])) {
+        if (! isset($this->translations[$string])) {
             return $string;
         }
 
         return $this->translations[$string];
     }
 
-    private static function validateTranslationFileIsReadable(string $translationFilePath)
+    private static function validateTranslationFileIsReadable(string $translationFilePath): void
     {
-        if (!is_readable($translationFilePath)) {
+        if (! is_readable($translationFilePath)) {
             throw new TranslationFileNotReadableException(
                 sprintf('Translation file "%s" is not readable', $translationFilePath)
             );
         }
     }
 
-    private static function validateLocaleDirectory(string $localeDirectoryPath)
+    private static function validateLocaleDirectory(string $localeDirectoryPath): void
     {
-        if (!is_readable($localeDirectoryPath)) {
+        if (! is_readable($localeDirectoryPath)) {
             throw new LocaleDirectoryNotReadableException(
                 sprintf('Locale directory "%s" is not readable', $localeDirectoryPath)
             );
@@ -89,7 +89,7 @@ class CsvTranslator implements Translator
      * @param string $filePath
      * @param string $row
      */
-    private static function validateTranslation(array $translationData, string $filePath, string $row)
+    private static function validateTranslation(array $translationData, string $filePath, string $row): void
     {
         if (2 !== count($translationData)) {
             throw new MalformedTranslationFileException(
@@ -101,7 +101,7 @@ class CsvTranslator implements Translator
     /**
      * @return string[]
      */
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return $this->translations;
     }

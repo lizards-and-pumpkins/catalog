@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class TemplatesApiV1PutRequestHandlerTest extends TestCase
 {
     /**
-     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|MockObject
      */
     private $mockCommandQueue;
 
@@ -32,16 +32,16 @@ class TemplatesApiV1PutRequestHandlerTest extends TestCase
     private $requestHandler;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $mockRequest;
 
     /**
-     * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataVersion|MockObject
      */
     private $stubDataVersion;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubDataVersion = $this->createMock(DataVersion::class);
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
@@ -50,12 +50,12 @@ class TemplatesApiV1PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testInheritsTheV2RequestHandler()
+    public function testInheritsTheV2RequestHandler(): void
     {
         $this->assertInstanceOf(TemplatesApiV2PutRequestHandler::class, $this->requestHandler);
     }
 
-    public function testEmitsUpdateTemplateCommandWithInjectedDataVersion()
+    public function testEmitsUpdateTemplateCommandWithInjectedDataVersion(): void
     {
         $testContent = 'Raw Request Body';
         $this->stubDataVersion->method('__toString')->willReturn('foo');

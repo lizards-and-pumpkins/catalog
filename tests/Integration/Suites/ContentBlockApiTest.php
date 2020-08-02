@@ -27,7 +27,7 @@ class ContentBlockApiTest extends AbstractIntegrationTest
         return $website->processRequest();
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -40,7 +40,7 @@ class ContentBlockApiTest extends AbstractIntegrationTest
         $this->factory->register(new ContentBlockServiceFactory());
     }
 
-    public function testContentBlockCanBePutAndGetViaApi()
+    public function testContentBlockCanBePutAndGetViaApi(): void
     {
         $snippetCode = 'content_block_foo';
         $contentBlockContent = 'bar';

@@ -23,12 +23,12 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
     use TestFileFixtureTrait;
     
     /**
-     * @var CLImate|\PHPUnit_Framework_MockObject_MockObject
+     * @var CLImate
      */
     private $mockCliMate;
 
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory
      */
     private $stubMasterFactory;
 
@@ -47,7 +47,7 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
         return array_values($arguments);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->disableOriginalConstructor()
@@ -71,7 +71,7 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
         $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
     }
 
-    public function testOutputsTableDataFromLogfile()
+    public function testOutputsTableDataFromLogfile(): void
     {
         $this->stubMasterFactory->createDomainEventProcessingTimesLogFileReader()
             ->method('getEventHandlerProcessingTimes')->willReturn([
@@ -86,7 +86,7 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
         (new ReportEventProcessingTimeAverageConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
     }
 
-    public function testsShowsMessageIfNoRecordsInLogfile()
+    public function testsShowsMessageIfNoRecordsInLogfile(): void
     {
         $this->stubMasterFactory->createDomainEventProcessingTimesLogFileReader()
             ->method('getEventHandlerProcessingTimes')->willReturn([]);
@@ -99,7 +99,7 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
         (new ReportEventProcessingTimeAverageConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
     }
 
-    public function testValidatesLogFileIsReadable()
+    public function testValidatesLogFileIsReadable(): void
     {
         $filePath = $this->getUniqueTempDir() . 'test-log.log';
         $this->createFixtureFile($filePath, '', 0000);
@@ -112,7 +112,7 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
         (new ReportEventProcessingTimeAverageConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
     }
 
-    public function testValidatesLogFileExists()
+    public function testValidatesLogFileExists(): void
     {
         $argumentsMap = $this->getCommandArgumentMap(['logfile' => '/foo/does/not/exist.txt']);
         $this->mockCliMate->arguments->method('get')->willReturnMap($argumentsMap);
@@ -122,7 +122,7 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
         (new ReportEventProcessingTimeAverageConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
     }
 
-    public function testValidatesSortField()
+    public function testValidatesSortField(): void
     {
         $argumentsMap = $this->getCommandArgumentMap(['sortBy' => 'foo']);
         $this->mockCliMate->arguments->method('get')->willReturnMap($argumentsMap);
@@ -132,7 +132,7 @@ class ReportEventProcessingTimeAverageConsoleCommandTest extends TestCase
         (new ReportEventProcessingTimeAverageConsoleCommand($this->stubMasterFactory, $this->mockCliMate))->run();
     }
 
-    public function testValidatesSortDirection()
+    public function testValidatesSortDirection(): void
     {
         $argumentsMap = $this->getCommandArgumentMap(['direction' => 'bar']);
         $this->mockCliMate->arguments->method('get')->willReturnMap($argumentsMap);

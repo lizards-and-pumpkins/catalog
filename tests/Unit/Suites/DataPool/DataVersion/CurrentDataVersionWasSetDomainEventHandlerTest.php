@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrentDataVersionWasSetDomainEventHandlerTest extends TestCase
 {
-    public function testIsADomainEventHandler()
+    public function testIsADomainEventHandler(): void
     {
         $this->assertInstanceOf(DomainEventHandler::class, new CurrentDataVersionWasSetDomainEventHandler());
     }

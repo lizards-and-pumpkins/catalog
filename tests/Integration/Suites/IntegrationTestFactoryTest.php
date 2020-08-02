@@ -34,7 +34,7 @@ class IntegrationTestFactoryTest extends TestCase
      */
     private $factory;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $this->factory = new IntegrationTestFactory();
@@ -42,175 +42,175 @@ class IntegrationTestFactoryTest extends TestCase
         $masterFactory->register(new CommonFactory);
     }
 
-    public function testInMemoryKeyValueStoreIsReturned()
+    public function testInMemoryKeyValueStoreIsReturned(): void
     {
         $this->assertInstanceOf(InMemoryKeyValueStore::class, $this->factory->createKeyValueStore());
     }
 
-    public function testInMemoryEventQueueIsReturned()
+    public function testInMemoryEventQueueIsReturned(): void
     {
         $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createEventMessageQueue());
     }
 
-    public function testInMemoryCommandQueueIsReturned()
+    public function testInMemoryCommandQueueIsReturned(): void
     {
         $this->assertInstanceOf(InMemoryQueue::class, $this->factory->createCommandMessageQueue());
     }
 
-    public function testInMemoryLoggerIsReturned()
+    public function testInMemoryLoggerIsReturned(): void
     {
         $this->assertInstanceOf(InMemoryLogger::class, $this->factory->createLogger());
     }
 
-    public function testInMemorySearchEngineIsReturned()
+    public function testInMemorySearchEngineIsReturned(): void
     {
         $this->assertInstanceOf(InMemorySearchEngine::class, $this->factory->createSearchEngine());
     }
 
-    public function testItReturnsAnInMemoryUrlKeyStore()
+    public function testItReturnsAnInMemoryUrlKeyStore(): void
     {
         $this->assertInstanceOf(InMemoryUrlKeyStore::class, $this->factory->createUrlKeyStore());
     }
 
-    public function testLocalFilesystemStorageWriterIsReturned()
+    public function testLocalFilesystemStorageWriterIsReturned(): void
     {
         $this->assertInstanceOf(LocalFilesystemStorageWriter::class, $this->factory->createFileStorageWriter());
     }
 
-    public function testLocalFilesystemStorageReaderIsReturned()
+    public function testLocalFilesystemStorageReaderIsReturned(): void
     {
         $this->assertInstanceOf(LocalFilesystemStorageReader::class, $this->factory->createFileStorageReader());
     }
 
-    public function testArrayOfSearchableAttributeCodesIsReturned()
+    public function testArrayOfSearchableAttributeCodesIsReturned(): void
     {
         $result = $this->factory->getSearchableAttributeCodes();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertContainsOnly('string', $result);
     }
 
-    public function testImageProcessorCollectionIsReturned()
+    public function testImageProcessorCollectionIsReturned(): void
     {
         $this->assertInstanceOf(ImageProcessorCollection::class, $this->factory->createImageProcessorCollection());
     }
 
-    public function testImageProcessorIsReturned()
+    public function testImageProcessorIsReturned(): void
     {
         $this->assertInstanceOf(ImageProcessor::class, $this->factory->createImageProcessor());
     }
 
-    public function testItReturnsTheSameKeyValueStoreInstanceOnMultipleCalls()
+    public function testItReturnsTheSameKeyValueStoreInstanceOnMultipleCalls(): void
     {
         $this->assertInstanceOf(KeyValueStore::class, $this->factory->getKeyValueStore());
         $this->assertSame($this->factory->getKeyValueStore(), $this->factory->getKeyValueStore());
     }
 
-    public function testItReturnsTheSetKeyValueStore()
+    public function testItReturnsTheSetKeyValueStore(): void
     {
-        /** @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject $stubKeyValueStore */
         $stubKeyValueStore = $this->createMock(KeyValueStore::class);
         $this->factory->setKeyValueStore($stubKeyValueStore);
+
         $this->assertSame($stubKeyValueStore, $this->factory->getKeyValueStore());
     }
 
-    public function testItReturnsTheSameEventQueueInstanceOnMultipleCalls()
+    public function testItReturnsTheSameEventQueueInstanceOnMultipleCalls(): void
     {
         $this->assertInstanceOf(DomainEventQueue::class, $this->factory->getEventQueue());
         $this->assertSame($this->factory->getEventQueue(), $this->factory->getEventQueue());
     }
 
-    public function testItReturnsTheSameEventMessageQueueInstanceOnMultipleCalls()
+    public function testItReturnsTheSameEventMessageQueueInstanceOnMultipleCalls(): void
     {
         $this->assertInstanceOf(Queue::class, $this->factory->getEventMessageQueue());
         $this->assertSame($this->factory->getEventMessageQueue(), $this->factory->getEventMessageQueue());
     }
 
-    public function testItReturnsTheSetEventQueue()
+    public function testItReturnsTheSetEventQueue(): void
     {
-        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubQueue */
         $stubQueue = $this->createMock(Queue::class);
         $this->factory->setEventMessageQueue($stubQueue);
         $this->assertSame($stubQueue, $this->factory->getEventMessageQueue());
     }
 
-    public function testItReturnsTheSameCommandQueueInstanceOnMultipleCalls()
+    public function testItReturnsTheSameCommandQueueInstanceOnMultipleCalls(): void
     {
         $this->assertInstanceOf(CommandQueue::class, $this->factory->getCommandQueue());
         $this->assertSame($this->factory->getCommandQueue(), $this->factory->getCommandQueue());
     }
 
-    public function testItReturnsTheSetCommandQueue()
+    public function testItReturnsTheSetCommandQueue(): void
     {
-        /** @var Queue|\PHPUnit_Framework_MockObject_MockObject $stubQueue */
         $stubQueue = $this->createMock(Queue::class);
         $this->factory->setCommandMessageQueue($stubQueue);
+
         $this->assertSame($stubQueue, $this->factory->getCommandMessageQueue());
     }
 
-    public function testItReturnsTheSameSearchEngineOnMultipleCalls()
+    public function testItReturnsTheSameSearchEngineOnMultipleCalls(): void
     {
         $this->assertInstanceOf(SearchEngine::class, $this->factory->getSearchEngine());
         $this->assertSame($this->factory->getSearchEngine(), $this->factory->getSearchEngine());
     }
 
-    public function testItReturnsTheSetSearchEngine()
+    public function testItReturnsTheSetSearchEngine(): void
     {
-        /** @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject $stubSearchEngine */
         $stubSearchEngine = $this->createMock(SearchEngine::class);
         $this->factory->setSearchEngine($stubSearchEngine);
+
         $this->assertSame($stubSearchEngine, $this->factory->getSearchEngine());
     }
 
-    public function testItReturnsTheSameUrlKeyStoreOnMultipleCalls()
+    public function testItReturnsTheSameUrlKeyStoreOnMultipleCalls(): void
     {
         $this->assertInstanceOf(UrlKeyStore::class, $this->factory->getUrlKeyStore());
         $this->assertSame($this->factory->getUrlKeyStore(), $this->factory->getUrlKeyStore());
     }
 
-    public function testItReturnsTheSetUrlKeyStore()
+    public function testItReturnsTheSetUrlKeyStore(): void
     {
-        /** @var UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject $stubUrlKeyStore */
         $stubUrlKeyStore = $this->createMock(UrlKeyStore::class);
         $this->factory->setUrlKeyStore($stubUrlKeyStore);
+
         $this->assertSame($stubUrlKeyStore, $this->factory->getUrlKeyStore());
     }
 
-    public function testItReturnsAnExistingDirectoryAsTheFileStorageBasePathConfig()
+    public function testItReturnsAnExistingDirectoryAsTheFileStorageBasePathConfig(): void
     {
         $fileStorageBasePath = $this->factory->getFileStorageBasePathConfig();
-        $this->assertInternalType('string', $fileStorageBasePath);
+
+        $this->assertIsString($fileStorageBasePath);
         $this->assertFileExists($fileStorageBasePath);
         $this->assertTrue(is_dir($fileStorageBasePath));
     }
 
-    public function testItReturnsAnIntegrationTestTaxServiceLocator()
+    public function testItReturnsAnIntegrationTestTaxServiceLocator(): void
     {
         $this->assertInstanceOf(TaxServiceLocator::class, $this->factory->createTaxServiceLocator());
     }
 
-    public function testProductViewLocatorIsReturned()
+    public function testProductViewLocatorIsReturned(): void
     {
         $this->assertInstanceOf(ProductViewLocator::class, $this->factory->createProductViewLocator());
     }
 
-    public function testItReturnsAProductImageFileLocator()
+    public function testItReturnsAProductImageFileLocator(): void
     {
         $this->assertInstanceOf(ProductImageFileLocator::class, $this->factory->createProductImageFileLocator());
     }
 
-    public function testItReturnsAnImageStorage()
+    public function testItReturnsAnImageStorage(): void
     {
         $this->assertInstanceOf(ImageStorage::class, $this->factory->createImageStorage());
     }
 
-    public function testReturnsMaxAllowedProductsPerSearchResultsPage()
+    public function testReturnsMaxAllowedProductsPerSearchResultsPage(): void
     {
-        $this->assertInternalType('int', $this->factory->getMaxAllowedProductsPerSearchResultsPage());
+        $this->assertIsInt($this->factory->getMaxAllowedProductsPerSearchResultsPage());
     }
 
-    public function testReturnsDefaultNumberOfProductsPerSearchResultsPage()
+    public function testReturnsDefaultNumberOfProductsPerSearchResultsPage(): void
     {
-        $this->assertInternalType('int', $this->factory->getDefaultNumberOfProductsPerSearchResultsPage());
+        $this->assertIsInt($this->factory->getDefaultNumberOfProductsPerSearchResultsPage());
     }
 }

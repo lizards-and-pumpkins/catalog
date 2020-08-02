@@ -25,23 +25,23 @@ class ImageWasAddedDomainEventHandlerTest extends TestCase
     private $handler;
 
     /**
-     * @var ImageProcessorCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageProcessorCollection|MockObject
      */
     private $mockImageProcessorCollection;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockImageProcessorCollection = $this->createMock(ImageProcessorCollection::class);
 
         $this->handler = new ImageWasAddedDomainEventHandler($this->mockImageProcessorCollection);
     }
 
-    public function testImageDomainEventHandlerIsReturned()
+    public function testImageDomainEventHandlerIsReturned(): void
     {
         $this->assertInstanceOf(ImageWasAddedDomainEventHandler::class, $this->handler);
     }
 
-    public function testAllImagesArePassedThroughImageProcessor()
+    public function testAllImagesArePassedThroughImageProcessor(): void
     {
         $this->mockImageProcessorCollection->expects($this->once())->method('process');
         $testEvent = new ImageWasAddedDomainEvent(__FILE__, DataVersion::fromVersionString('foo'));

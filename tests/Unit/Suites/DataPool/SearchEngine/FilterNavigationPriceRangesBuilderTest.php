@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FilterNavigationPriceRangesBuilderTest extends TestCase
 {
-    public function testFacetFilterRangesAreReturned()
+    public function testFacetFilterRangesAreReturned(): void
     {
         $this->assertContainsOnly(FacetFilterRange::class, FilterNavigationPriceRangesBuilder::getPriceRanges());
     }

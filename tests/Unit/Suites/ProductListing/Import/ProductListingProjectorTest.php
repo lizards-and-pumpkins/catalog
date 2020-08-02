@@ -17,17 +17,17 @@ use PHPUnit\Framework\TestCase;
 class ProductListingProjectorTest extends TestCase
 {
     /**
-     * @var Projector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Projector|MockObject
      */
     private $mockSnippetProjector;
 
     /**
-     * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolWriter|MockObject
      */
     private $mockDataPoolWriter;
 
     /**
-     * @var UrlKeyForContextCollector|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlKeyForContextCollector|MockObject
      */
     private $mockUrlKeyCollector;
 
@@ -36,7 +36,7 @@ class ProductListingProjectorTest extends TestCase
      */
     private $projector;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockSnippetProjector = $this->createMock(Projector::class);
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
@@ -49,18 +49,18 @@ class ProductListingProjectorTest extends TestCase
         );
     }
 
-    public function testImplementsProjectorInterface()
+    public function testImplementsProjectorInterface(): void
     {
         $this->assertInstanceOf(Projector::class, $this->projector);
     }
 
-    public function testThrowsAnExceptionIfProjectionSourceDataIsNotProductListing()
+    public function testThrowsAnExceptionIfProjectionSourceDataIsNotProductListing(): void
     {
         $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->projector->project('foo');
     }
 
-    public function testWritesSnippetsToDataPool()
+    public function testWritesSnippetsToDataPool(): void
     {
         $dummyProductListing = $this->createMock(ProductListing::class);
 
@@ -69,7 +69,7 @@ class ProductListingProjectorTest extends TestCase
         $this->projector->project($dummyProductListing);
     }
 
-    public function testUrlKeyCollectionToDataPool()
+    public function testUrlKeyCollectionToDataPool(): void
     {
         $dummyProductListing = $this->createMock(ProductListing::class);
 

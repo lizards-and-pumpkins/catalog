@@ -11,6 +11,7 @@ use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Http\Routing\HttpRouter;
 use LizardsAndPumpkins\Http\Routing\HttpRouterChain;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -82,14 +83,11 @@ class CatalogWebFrontTest extends TestCase
     private $webFront;
 
     /**
-     * @var HttpResponse|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpResponse|MockObject
      */
     private $mockHttpResponse;
 
-    /**
-     * @return MasterFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createStubMasterFactory()
+    private function createStubMasterFactory(): MasterFactory
     {
         $routerFactoryMethods = [
             'createApiRouter',
@@ -98,14 +96,11 @@ class CatalogWebFrontTest extends TestCase
             'createUnknownHttpRequestMethodRouter',
         ];
 
-        $stubFactoryMethods = array_merge(
-            get_class_methods(MasterFactory::class),
-            ['getContext', 'createHttpRouterChain'],
-            $routerFactoryMethods
-        );
-
-        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
-        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods($stubFactoryMethods)->getMock();
+        /** @var MasterFactory|MockObject $stubMasterFactory */
+        $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
+            ->onlyMethods(get_class_methods(MasterFactory::class))
+            ->addMethods(array_merge(['getContext', 'createHttpRouterChain'], $routerFactoryMethods))
+            ->getMock();
 
         $mockRouterChain = $this->createMock(HttpRouterChain::class);
         $mockHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
@@ -124,17 +119,15 @@ class CatalogWebFrontTest extends TestCase
         return $stubMasterFactory;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->createMock(HttpRequest::class);
-
         $stubMasterFactory = $this->createStubMasterFactory();
 
         $this->webFront = new TestCatalogWebFront($stubHttpRequest, $stubMasterFactory, new UnitTestFactory($this));
     }
 
-    public function testSendMethodOfResponseIsCalled()
+    public function testSendMethodOfResponseIsCalled(): void
     {
         $this->mockHttpResponse->expects($this->once())->method('send');
         $this->webFront->run();

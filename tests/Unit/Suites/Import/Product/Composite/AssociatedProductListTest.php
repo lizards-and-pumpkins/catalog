@@ -36,7 +36,7 @@ class AssociatedProductListTest extends TestCase
 {
     /**
      * @param int $numberOfAssociatedProducts
-     * @return Product[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return Product[]|MockObject[]
      */
     private function createArrayOfStubProductsWithSize(int $numberOfAssociatedProducts) : array
     {
@@ -50,7 +50,7 @@ class AssociatedProductListTest extends TestCase
     /**
      * @param AttributeCode $attributeCode
      * @param string $value
-     * @return ProductAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductAttribute|MockObject
      */
     private function createStubAttribute(AttributeCode $attributeCode, string $value) : ProductAttribute
     {
@@ -63,7 +63,7 @@ class AssociatedProductListTest extends TestCase
     /**
      * @param string $productId
      * @param ProductAttribute[] $attributes
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|MockObject
      */
     private function createStubProduct(string $productId, ProductAttribute ...$attributes) : Product
     {
@@ -101,13 +101,13 @@ class AssociatedProductListTest extends TestCase
         };
     }
 
-    public function testItReturnsTheInjectedProducts()
+    public function testItReturnsTheInjectedProducts(): void
     {
         $associatedProducts = $this->createArrayOfStubProductsWithSize(2);
         $this->assertSame($associatedProducts, (new AssociatedProductList(...$associatedProducts))->getProducts());
     }
 
-    public function testItCanBeUsedToIterateOverTheAssociatedProducts()
+    public function testItCanBeUsedToIterateOverTheAssociatedProducts(): void
     {
         $associatedProducts = $this->createArrayOfStubProductsWithSize(2);
         $this->assertSame($associatedProducts, iterator_to_array(new AssociatedProductList(...$associatedProducts)));
@@ -116,7 +116,7 @@ class AssociatedProductListTest extends TestCase
     /**
      * @dataProvider numberOfAssociatedProductsProvider
      */
-    public function testItIsCountable(int $numberOfAssociatedProducts)
+    public function testItIsCountable(int $numberOfAssociatedProducts): void
     {
         $stubProducts = $this->createArrayOfStubProductsWithSize($numberOfAssociatedProducts);
         $this->assertCount($numberOfAssociatedProducts, new AssociatedProductList(...$stubProducts));
@@ -130,13 +130,13 @@ class AssociatedProductListTest extends TestCase
         return [[1], [2]];
     }
 
-    public function testItImplementsTheJsonSerializableInterface()
+    public function testItImplementsTheJsonSerializableInterface(): void
     {
         $stubProduct = $this->createMock(Product::class);
         $this->assertInstanceOf(\JsonSerializable::class, new AssociatedProductList($stubProduct));
     }
 
-    public function testItCanBeSerializedAndRehydrated()
+    public function testItCanBeSerializedAndRehydrated(): void
     {
         $associatedProduct = new SimpleProduct(
             new ProductId('test'),
@@ -152,7 +152,7 @@ class AssociatedProductListTest extends TestCase
         $this->assertInstanceOf(AssociatedProductList::class, $rehydratedAssociatedProductList);
     }
 
-    public function testItThrowsAnExceptionIfTwoProductsWithTheSameIdAreInjectedAsAssociatedProducts()
+    public function testItThrowsAnExceptionIfTwoProductsWithTheSameIdAreInjectedAsAssociatedProducts(): void
     {
         $this->expectException(DuplicateAssociatedProductException::class);
         $this->expectExceptionMessage('The product "test" is associated two times to the same composite product');
@@ -164,7 +164,7 @@ class AssociatedProductListTest extends TestCase
         new AssociatedProductList($stubProductOne, $stubProductTwo);
     }
 
-    public function testItThrowsAnExceptionIfTheValueCombinationsForTheGivenAttributesAreNotUnique()
+    public function testItThrowsAnExceptionIfTheValueCombinationsForTheGivenAttributesAreNotUnique(): void
     {
         $this->expectException(ProductAttributeValueCombinationNotUniqueException::class);
         $this->expectExceptionMessage(
@@ -191,7 +191,7 @@ class AssociatedProductListTest extends TestCase
         );
     }
 
-    public function testItThrowsAnExceptionIfTheValueCombinationsForTheGivenAttributesAreNotUniqueAndSkuIsNumeric()
+    public function testItThrowsAnExceptionIfTheValueCombinationsForTheGivenAttributesAreNotUniqueAndSkuIsNumeric(): void
     {
         $this->expectException(ProductAttributeValueCombinationNotUniqueException::class);
         $this->expectExceptionMessage(
@@ -218,7 +218,7 @@ class AssociatedProductListTest extends TestCase
         );
     }
 
-    public function testItThrowsNoExceptionIfTheValueCombinationsForTheGivenAttributesAreUnique()
+    public function testItThrowsNoExceptionIfTheValueCombinationsForTheGivenAttributesAreUnique(): void
     {
         $dummyAttributeCodeA = AttributeCode::fromString('code_a');
         $dummyAttributeCodeB = AttributeCode::fromString('code_b');
@@ -240,7 +240,7 @@ class AssociatedProductListTest extends TestCase
         $this->assertTrue(true, 'No exception was thrown');
     }
 
-    public function testItThrowsAnExceptionIfAssociatedProductsAreMissingGivenAttributes()
+    public function testItThrowsAnExceptionIfAssociatedProductsAreMissingGivenAttributes(): void
     {
         $this->expectException(AssociatedProductIsMissingRequiredAttributesException::class);
         $this->expectExceptionMessage('The associated product "test" is missing the required attribute "code_b"');

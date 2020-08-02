@@ -25,7 +25,7 @@ class IntegrationTestSearchEngineOperationFullTextTest extends TestCase
     /**
      * @param string $fieldKey
      * @param string[] $fieldValues
-     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocumentField|MockObject
      */
     private function createStubSearchDocumentField(string $fieldKey, array $fieldValues) : SearchDocumentField
     {
@@ -38,7 +38,7 @@ class IntegrationTestSearchEngineOperationFullTextTest extends TestCase
 
     /**
      * @param SearchDocumentField[] ...$stubSearchDocumentFields
-     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocument|MockObject
      */
     private function createStubSearchDocumentWithGivenFields(
         SearchDocumentField ...$stubSearchDocumentFields
@@ -53,18 +53,18 @@ class IntegrationTestSearchEngineOperationFullTextTest extends TestCase
         return $stubSearchDocument;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $dataSet = ['fieldValue' => $this->testFiledValue];
         $this->operation = new IntegrationTestSearchEngineOperationFullText($dataSet);
     }
 
-    public function testImplementsIntegrationTestSearchEngineOperationInterface()
+    public function testImplementsIntegrationTestSearchEngineOperationInterface(): void
     {
         $this->assertInstanceOf(IntegrationTestSearchEngineOperation::class, $this->operation);
     }
 
-    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldValue()
+    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldValue(): void
     {
         $this->expectException(InvalidSearchEngineOperationDataSetException::class);
         $this->expectExceptionMessage('Search engine operation data set array does not contain "fieldValue" element.');
@@ -72,7 +72,7 @@ class IntegrationTestSearchEngineOperationFullTextTest extends TestCase
         new IntegrationTestSearchEngineOperationFullText([]);
     }
 
-    public function testThrowsAnExceptionIfSearchEngineOperationFieldValueIsNonString()
+    public function testThrowsAnExceptionIfSearchEngineOperationFieldValueIsNonString(): void
     {
         $this->expectException(InvalidSearchEngineOperationDataSetException::class);
         $this->expectExceptionMessage('Search engine operation field value must be a string.');
@@ -80,13 +80,13 @@ class IntegrationTestSearchEngineOperationFullTextTest extends TestCase
         new IntegrationTestSearchEngineOperationFullText(['fieldValue' => 1]);
     }
 
-    public function testReturnsFalseIfDocumentHaveNoFields()
+    public function testReturnsFalseIfDocumentHaveNoFields(): void
     {
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields();
         $this->assertFalse($this->operation->matches($stubSearchDocument));
     }
 
-    public function testReturnsFalseIfDocumentFieldValueIsNotMatching()
+    public function testReturnsFalseIfDocumentFieldValueIsNotMatching(): void
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField('foo', ['qux']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
@@ -97,7 +97,7 @@ class IntegrationTestSearchEngineOperationFullTextTest extends TestCase
     /**
      * @dataProvider matchingValueProvider
      */
-    public function testReturnsTrueIfDocumentFieldValueIsMatching(string $matchingValue)
+    public function testReturnsTrueIfDocumentFieldValueIsMatching(string $matchingValue): void
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField('foo', [$matchingValue]);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
@@ -105,7 +105,7 @@ class IntegrationTestSearchEngineOperationFullTextTest extends TestCase
         $this->assertTrue($this->operation->matches($stubSearchDocument));
     }
 
-    public function testIgnoresDocumentFieldsWithNonStringValues()
+    public function testIgnoresDocumentFieldsWithNonStringValues(): void
     {
         $stubSearchDocumentIntegerField = $this->createStubSearchDocumentField('bar', [100]);
         $stubSearchDocumentStringField = $this->createStubSearchDocumentField('foo', [$this->testFiledValue]);

@@ -20,7 +20,7 @@ class ContextSourceTest extends TestCase
     private $contextSource;
 
     /**
-     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextBuilder|MockObject
      */
     private $stubContextBuilder;
 
@@ -34,20 +34,20 @@ class ContextSourceTest extends TestCase
         ['website' => 'website-two', 'locale' => 'de_DE', 'customer_group' => 'general'],
     ];
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
         $this->contextSource = new StubContextSource($this->stubContextBuilder, $this->testContextMatrix);
     }
 
-    public function testArrayIsReturned()
+    public function testArrayIsReturned(): void
     {
         $this->stubContextBuilder->method('createContextsFromDataSets')->willReturn([]);
 
-        $this->assertInternalType('array', $this->contextSource->getAllAvailableContexts());
+        $this->assertIsArray($this->contextSource->getAllAvailableContexts());
     }
 
-    public function testAllAvailableContextsAreLazyLoaded()
+    public function testAllAvailableContextsAreLazyLoaded(): void
     {
         $this->stubContextBuilder->expects($this->once())->method('createContextsFromDataSets')->willReturn([]);
 
@@ -60,7 +60,7 @@ class ContextSourceTest extends TestCase
      * @param string[] $partsToExtract
      * @param array[] $expectedContextMatrix
      */
-    public function testOnlyDesiredPartsArePassedToContextBuilder(array $partsToExtract, array $expectedContextMatrix)
+    public function testOnlyDesiredPartsArePassedToContextBuilder(array $partsToExtract, array $expectedContextMatrix): void
     {
         $this->stubContextBuilder->expects($this->once())->method('createContextsFromDataSets')
             ->with($expectedContextMatrix);
@@ -93,7 +93,7 @@ class ContextSourceTest extends TestCase
         ];
     }
 
-    public function testItReturnsAllContextsWithTheSpecifiedVersion()
+    public function testItReturnsAllContextsWithTheSpecifiedVersion(): void
     {
         $testVersion = DataVersion::fromVersionString('abc123');
         $this->stubContextBuilder->expects($this->once())->method('createContextsFromDataSets')

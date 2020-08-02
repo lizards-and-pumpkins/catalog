@@ -12,18 +12,18 @@ use PHPUnit\Framework\TestCase;
  */
 class FacetFieldTest extends TestCase
 {
-    public function testFacetFieldAttributeCodeIsReturned()
+    public function testFacetFieldAttributeCodeIsReturned(): void
     {
-        /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
+        /** @var AttributeCode|MockObject $stubAttributeCode */
         $stubAttributeCode = $this->createMock(AttributeCode::class);
         $facetField = new FacetField($stubAttributeCode);
 
         $this->assertSame($stubAttributeCode, $facetField->getAttributeCode());
     }
 
-    public function testFacetFieldValuesAreReturned()
+    public function testFacetFieldValuesAreReturned(): void
     {
-        /** @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode */
+        /** @var AttributeCode|MockObject $stubAttributeCode */
         $stubAttributeCode = $this->createMock(AttributeCode::class);
 
         $stubFacetValueA = $this->createMock(FacetFieldValue::class);

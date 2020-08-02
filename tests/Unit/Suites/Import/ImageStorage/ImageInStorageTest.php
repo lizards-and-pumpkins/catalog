@@ -18,17 +18,17 @@ use PHPUnit\Framework\TestCase;
 class ImageInStorageTest extends TestCase
 {
     /**
-     * @var StorageSpecificFileUri|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageSpecificFileUri|MockObject
      */
     private $stubStorageSpecificFileUri;
 
     /**
-     * @var ImageToImageStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageToImageStorage|MockObject
      */
     private $stubImageStorage;
 
     /**
-     * @var FileContent|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileContent|MockObject
      */
     private $stubFileContent;
 
@@ -40,21 +40,21 @@ class ImageInStorageTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubStorageSpecificFileUri = $this->createMock(StorageSpecificFileUri::class);
         $this->stubImageStorage = $this->createMock(ImageToImageStorage::class);
         $this->stubFileContent = $this->createMock(FileContent::class);
     }
 
-    public function testItImplementsTheImageInterface()
+    public function testItImplementsTheImageInterface(): void
     {
         $image = $this->createImageInStorage();
         $this->assertInstanceOf(Image::class, $image);
         $this->assertInstanceOf(ImageInStorage::class, $image);
     }
 
-    public function testItReturnsAnImageWithContent()
+    public function testItReturnsAnImageWithContent(): void
     {
         $image = ImageInStorage::createWithContent(
             $this->stubStorageSpecificFileUri,
@@ -65,7 +65,7 @@ class ImageInStorageTest extends TestCase
         $this->assertSame($this->stubFileContent, $image->getContent());
     }
 
-    public function testItReturnsTheImageUrl()
+    public function testItReturnsTheImageUrl(): void
     {
         $testUrl = 'http://example.com/media/image.svg';
         $this->stubImageStorage->method('url')->willReturn($testUrl);
@@ -77,13 +77,13 @@ class ImageInStorageTest extends TestCase
         $this->assertSame($testUrl, (string) $result);
     }
 
-    public function testItReturnsTrueIfTheStorageReportsItIsPresent()
+    public function testItReturnsTrueIfTheStorageReportsItIsPresent(): void
     {
         $this->stubImageStorage->method('isPresent')->willReturn(true);
         $this->assertTrue($this->createImageInStorage()->exists());
     }
 
-    public function testItDelegatesToTheStorageToReadTheImageContentIfItWasNotInjected()
+    public function testItDelegatesToTheStorageToReadTheImageContentIfItWasNotInjected(): void
     {
         $testFileContent = 'test content';
         $image = $this->createImageInStorage();
@@ -95,13 +95,13 @@ class ImageInStorageTest extends TestCase
         $this->assertSame($testFileContent, (string) $content);
     }
 
-    public function testItReturnsTheStorageSpecificFileUri()
+    public function testItReturnsTheStorageSpecificFileUri(): void
     {
         $image = $this->createImageInStorage();
         $this->assertSame($this->stubStorageSpecificFileUri, $image->getInStorageUri());
     }
 
-    public function testItReturnsTheImageFilePathAsAString()
+    public function testItReturnsTheImageFilePathAsAString(): void
     {
         $testPath = '/some/path/test.svg';
         $this->stubStorageSpecificFileUri->method('__toString')->willReturn($testPath);

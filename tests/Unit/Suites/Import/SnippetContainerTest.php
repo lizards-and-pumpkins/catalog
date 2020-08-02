@@ -12,13 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class SnippetContainerTest extends TestCase
 {
-    public function testThrowsAnExceptionIfTheContainerCodeIsNotAString()
+    public function testThrowsAnExceptionIfTheContainerCodeIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         new SnippetContainer(12, []);
     }
 
-    public function testThrowsAnExceptionIfTheContainerCodeIsTooShort()
+    public function testThrowsAnExceptionIfTheContainerCodeIsTooShort(): void
     {
         $this->expectException(InvalidSnippetContainerCodeException::class);
         $this->expectExceptionMessage('The snippet container code has to be at least 2 characters long');
@@ -26,7 +26,7 @@ class SnippetContainerTest extends TestCase
         new SnippetContainer('i', []);
     }
 
-    public function testReturnsSnippetContainerArrayRepresentation()
+    public function testReturnsSnippetContainerArrayRepresentation(): void
     {
         $container = new SnippetContainer('test', ['foo', 'bar']);
         $jsonData = $container->toArray();
@@ -34,7 +34,7 @@ class SnippetContainerTest extends TestCase
         $this->assertSame(['test' => ['foo', 'bar']], $jsonData);
     }
 
-    public function testCanBeRehydrated()
+    public function testCanBeRehydrated(): void
     {
         $rehydrated = SnippetContainer::rehydrate('test', ['foo', 'bar']);
 

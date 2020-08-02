@@ -26,14 +26,14 @@ class ProductVariationAttributeListTest extends TestCase
         }, $attributeCodeStrings);
     }
 
-    public function testItThrowsAnExceptionIfTheVariationListIsEmpty()
+    public function testItThrowsAnExceptionIfTheVariationListIsEmpty(): void
     {
         $this->expectException(ProductVariationAttributesEmptyException::class);
         $this->expectExceptionMessage('The product variation attribute list can not be empty');
         new ProductVariationAttributeList();
     }
 
-    public function testItThrowsAnExceptionIfTwoEqualAttributesAreAddedToTheList()
+    public function testItThrowsAnExceptionIfTwoEqualAttributesAreAddedToTheList(): void
     {
         $attributeCodeOne = AttributeCode::fromString('test');
         $attributeCodeTwo = AttributeCode::fromString('test');
@@ -45,7 +45,7 @@ class ProductVariationAttributeListTest extends TestCase
         new ProductVariationAttributeList($attributeCodeOne, $attributeCodeTwo);
     }
 
-    public function testItReturnsAProductAttributeVariationList()
+    public function testItReturnsAProductAttributeVariationList(): void
     {
         $this->assertInstanceOf(
             ProductVariationAttributeList::class,
@@ -53,13 +53,13 @@ class ProductVariationAttributeListTest extends TestCase
         );
     }
 
-    public function testItImplementsTheIteratorAggregateInterface()
+    public function testItImplementsTheIteratorAggregateInterface(): void
     {
         $testAttribute = AttributeCode::fromString('test');
         $this->assertInstanceOf(\IteratorAggregate::class, new ProductVariationAttributeList($testAttribute));
     }
 
-    public function testItIteratesOverTheInjectedAttributeCodes()
+    public function testItIteratesOverTheInjectedAttributeCodes(): void
     {
         $expectedAttributes = [
             AttributeCode::fromString('test_a'),
@@ -69,7 +69,7 @@ class ProductVariationAttributeListTest extends TestCase
         $this->assertSame($expectedAttributes, iterator_to_array($productVariationsList));
     }
 
-    public function testItReturnsTheVariationAttributesArray()
+    public function testItReturnsTheVariationAttributesArray(): void
     {
         $expectedAttributes = [
             AttributeCode::fromString('test_a'),
@@ -85,7 +85,7 @@ class ProductVariationAttributeListTest extends TestCase
      * @param int $expectedCount
      * @dataProvider attributeCodeStringCountProvider
      */
-    public function testItCountsTheNumberOfAttributesInTheList(array $attributeCodeStrings, int $expectedCount)
+    public function testItCountsTheNumberOfAttributesInTheList(array $attributeCodeStrings, int $expectedCount): void
     {
         $attributeCodes = $this->createAttributeCodeListFromStrings($attributeCodeStrings);
         $this->assertCount($expectedCount, new ProductVariationAttributeList(...$attributeCodes));
@@ -103,13 +103,13 @@ class ProductVariationAttributeListTest extends TestCase
         ];
     }
 
-    public function testItImplementsJsonSerializable()
+    public function testItImplementsJsonSerializable(): void
     {
         $testAttribute = AttributeCode::fromString('test');
         $this->assertInstanceOf(\JsonSerializable::class, new ProductVariationAttributeList($testAttribute));
     }
 
-    public function testItCanBeJsonSerializedAndRehydrated()
+    public function testItCanBeJsonSerializedAndRehydrated(): void
     {
         $attributeCodeStrings = ['test_one', 'test_two'];
         $attributeCodes = $this->createAttributeCodeListFromStrings($attributeCodeStrings);

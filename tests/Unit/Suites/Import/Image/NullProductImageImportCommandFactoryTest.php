@@ -17,17 +17,17 @@ class NullProductImageImportCommandFactoryTest extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->factory = new NullProductImageImportCommandFactory();
     }
 
-    public function testItImplementsTheProductImportCommandFactoryInterface()
+    public function testItImplementsTheProductImportCommandFactoryInterface(): void
     {
         $this->assertInstanceOf(ProductImageImportCommandFactory::class, $this->factory);
     }
 
-    public function testItReturnsNoCommands()
+    public function testItReturnsNoCommands(): void
     {
         $stubDataVersion = $this->createMock(DataVersion::class);
         $this->assertSame([], $this->factory->createProductImageImportCommands('image.jpg', $stubDataVersion));

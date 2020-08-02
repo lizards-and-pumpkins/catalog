@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ContentBlockIdTest extends TestCase
 {
-    public function testStringRepresentationOfContentBlockIdIsReturned()
+    public function testStringRepresentationOfContentBlockIdIsReturned(): void
     {
         $contentBlockIdString = 'foo';
         $contentBlockId = ContentBlockId::fromString($contentBlockIdString);

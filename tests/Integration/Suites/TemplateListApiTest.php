@@ -35,7 +35,7 @@ class TemplateListApiTest extends AbstractIntegrationTest
         return $website->processRequest();
     }
 
-    public function testReturnsTemplatesList()
+    public function testReturnsTemplatesList(): void
     {
         $expectedTemplateCodes = ['template_ids' => [
             'product_listing',

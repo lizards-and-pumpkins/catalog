@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SnippetTest extends TestCase
 {
-    public function testExceptionIsThrownOnNonStringKey()
+    public function testExceptionIsThrownOnNonStringKey(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -24,7 +24,7 @@ class SnippetTest extends TestCase
      * @dataProvider invalidKeyProvider
      * @param mixed $invalidKey
      */
-    public function testExceptionIsThrownOnInvalidKey($invalidKey)
+    public function testExceptionIsThrownOnInvalidKey($invalidKey): void
     {
         $this->expectException(InvalidKeyException::class);
 
@@ -48,7 +48,7 @@ class SnippetTest extends TestCase
     /**
      * @dataProvider validKeyProvider
      */
-    public function testSnippetIsCreatedIfValidKeyIsProvided(string $validKey)
+    public function testSnippetIsCreatedIfValidKeyIsProvided(string $validKey): void
     {
         $content = 'doesn\'t matter';
         $result = Snippet::create($validKey, $content);
@@ -70,7 +70,7 @@ class SnippetTest extends TestCase
         ];
     }
 
-    public function testSnippetKeyAndContentAreReturned()
+    public function testSnippetKeyAndContentAreReturned(): void
     {
         $content = 'doesn\'t matter';
         $key = 'key';

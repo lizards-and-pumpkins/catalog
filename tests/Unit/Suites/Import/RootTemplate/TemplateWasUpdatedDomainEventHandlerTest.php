@@ -10,6 +10,7 @@ use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateProjectionData;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
 use LizardsAndPumpkins\Messaging\Queue\Message;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 class TemplateWasUpdatedDomainEventHandlerTest extends TestCase
 {
     /**
-     * @var Projector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Projector
      */
     private $mockProjector;
 
@@ -43,26 +44,26 @@ class TemplateWasUpdatedDomainEventHandlerTest extends TestCase
 
     private function createDomainEventHandler() : TemplateWasUpdatedDomainEventHandler
     {
-        /** @var TemplateProjectorLocator|\PHPUnit_Framework_MockObject_MockObject $stubTemplateProjectorLocator */
+        /** @var TemplateProjectorLocator|MockObject $stubTemplateProjectorLocator */
         $stubTemplateProjectorLocator = $this->createMock(TemplateProjectorLocator::class);
         $stubTemplateProjectorLocator->method('getTemplateProjectorForCode')->willReturn($this->mockProjector);
 
         return new TemplateWasUpdatedDomainEventHandler($stubTemplateProjectorLocator);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProjector = $this->createMock(Projector::class);
 
         $this->domainEventHandler = $this->createDomainEventHandler();
     }
 
-    public function testDomainEventHandlerInterfaceIsImplemented()
+    public function testDomainEventHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
     }
 
-    public function testProjectionIsTriggered()
+    public function testProjectionIsTriggered(): void
     {
         $this->mockProjector->expects($this->once())->method('project')
             ->with($this->isInstanceOf(TemplateProjectionData::class));

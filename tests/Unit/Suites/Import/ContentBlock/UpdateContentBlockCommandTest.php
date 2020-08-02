@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class UpdateContentBlockCommandTest extends TestCase
 {
     /**
-     * @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentBlockSource|MockObject
      */
     private $stubContentBlockSource;
 
@@ -33,25 +33,25 @@ class UpdateContentBlockCommandTest extends TestCase
      */
     private $command;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContentBlockSource = $this->createMock(ContentBlockSource::class);
         $this->stubContentBlockSource->method('serialize')->willReturn(json_encode('foo'));
         $this->command = new UpdateContentBlockCommand($this->stubContentBlockSource);
     }
 
-    public function testCommandInterfaceIsImplemented()
+    public function testCommandInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testContentBlockSourceIsReturned()
+    public function testContentBlockSourceIsReturned(): void
     {
         $result = $this->command->getContentBlockSource();
         $this->assertSame($this->stubContentBlockSource, $result);
     }
 
-    public function testReturnsMessageWithName()
+    public function testReturnsMessageWithName(): void
     {
         $message = $this->command->toMessage();
 
@@ -59,7 +59,7 @@ class UpdateContentBlockCommandTest extends TestCase
         $this->assertSame(UpdateContentBlockCommand::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithContentBlockPayload()
+    public function testReturnsMessageWithContentBlockPayload(): void
     {
         $message = $this->command->toMessage();
 
@@ -67,7 +67,7 @@ class UpdateContentBlockCommandTest extends TestCase
         $this->assertSame([], $message->getMetadata());
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $testContent = 'some empty content';
         $testContext = SelfContainedContextBuilder::rehydrateContext([]);
@@ -82,7 +82,7 @@ class UpdateContentBlockCommandTest extends TestCase
         $this->assertSame($testContent, $rehydratedContentBlockSource->getContent());
     }
 
-    public function testThrowsExceptionIfTheMessageNameDoesNotMatchCommandCode()
+    public function testThrowsExceptionIfTheMessageNameDoesNotMatchCommandCode(): void
     {
         $this->expectException(NoUpdateContentBlockCommandMessageException::class);
         $message = 'Unable to rehydrate from "foo" queue message, expected "update_content_block"';

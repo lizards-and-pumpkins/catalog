@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "php": "^7.0.0",
+        "php": "^7.1",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-xmlreader": "*",
@@ -26,7 +26,8 @@
         "league/climate": "^3.2.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
+        "phpunit/phpunit": "~9.2",
+        "ext-simplexml": "*",
         "lizards-and-pumpkins/coding-standards": "dev-master"
     },
     "autoload": {

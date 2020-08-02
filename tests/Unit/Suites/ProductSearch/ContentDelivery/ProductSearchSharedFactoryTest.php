@@ -41,7 +41,7 @@ class ProductSearchSharedFactoryTest extends TestCase
      */
     private $factory;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
@@ -52,17 +52,17 @@ class ProductSearchSharedFactoryTest extends TestCase
         $masterFactory->register($this->factory);
     }
 
-    public function testImplementsFactoryInterface()
+    public function testImplementsFactoryInterface(): void
     {
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testReturnProductSearchService()
+    public function testReturnProductSearchService(): void
     {
         $this->assertInstanceOf(ProductSearchService::class, $this->factory->createProductSearchService());
     }
 
-    public function testReturnsFullTextCriteriaBuilder()
+    public function testReturnsFullTextCriteriaBuilder(): void
     {
         $this->assertInstanceOf(FullTextCriteriaBuilder::class, $this->factory->createFullTextCriteriaBuilder());
     }

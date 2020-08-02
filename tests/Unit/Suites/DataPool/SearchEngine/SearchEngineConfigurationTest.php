@@ -19,7 +19,7 @@ class SearchEngineConfigurationTest extends TestCase
     private $testMaxProductsPerPage = 2000;
 
     /**
-     * @var SortBy|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortBy|MockObject
      */
     private $dummySortBy;
 
@@ -33,7 +33,7 @@ class SearchEngineConfigurationTest extends TestCase
      */
     private $testSortableAttributeCodes = ['foo', 'bar'];
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->dummySortBy = $this->createMock(SortBy::class);
 
@@ -45,77 +45,77 @@ class SearchEngineConfigurationTest extends TestCase
         );
     }
 
-    public function testThrowsAnErrorIfNumberOfProductPerPageTypeIsInvalid()
+    public function testThrowsAnErrorIfNumberOfProductPerPageTypeIsInvalid(): void
     {
         $this->expectException(\TypeError::class);
         new SearchEngineConfiguration('foo', $this->testMaxProductsPerPage, $this->dummySortBy);
     }
     
-    public function testReturnsNumberOfProductsPerPage()
+    public function testReturnsNumberOfProductsPerPage(): void
     {
         $this->assertSame($this->testProductsPerPage, $this->configuration->getProductsPerPage());
     }
 
-    public function testThrowsAnErrorIfMaxProductsPerPageTypeIsInvalid()
+    public function testThrowsAnErrorIfMaxProductsPerPageTypeIsInvalid(): void
     {
         $this->expectException(\TypeError::class);
         new SearchEngineConfiguration($this->testProductsPerPage, new \stdClass(), $this->dummySortBy);
     }
 
-    public function testReturnsMaxProductsPerPage()
+    public function testReturnsMaxProductsPerPage(): void
     {
         $this->assertSame($this->testMaxProductsPerPage, $this->configuration->getMaxProductsPerPage());
     }
-    public function testThrowsAnExceptionIfNonIntegerIsTestedAgainstMaxProductsPerPage()
+    public function testThrowsAnExceptionIfNonIntegerIsTestedAgainstMaxProductsPerPage(): void
     {
         $this->expectException(\TypeError::class);
         $this->configuration->isExceedingMaxProductsPerPage('1');
     }
 
-    public function testReturnsTrueIfGivenNumberExceedsAllowedNumberOfProductsPerPage()
+    public function testReturnsTrueIfGivenNumberExceedsAllowedNumberOfProductsPerPage(): void
     {
         $this->assertTrue($this->configuration->isExceedingMaxProductsPerPage($this->testMaxProductsPerPage + 1));
     }
 
-    public function testReturnsFalseIfGivenNumberIsLessThenAllowedNumberOfProductsPerPage()
+    public function testReturnsFalseIfGivenNumberIsLessThenAllowedNumberOfProductsPerPage(): void
     {
         $this->assertFalse($this->configuration->isExceedingMaxProductsPerPage($this->testMaxProductsPerPage - 1));
     }
 
-    public function testReturnsFalseIfGivenNumberEqualsAllowedNumberOfProductsPerPage()
+    public function testReturnsFalseIfGivenNumberEqualsAllowedNumberOfProductsPerPage(): void
     {
         $this->assertFalse($this->configuration->isExceedingMaxProductsPerPage($this->testMaxProductsPerPage));
     }
 
-    public function testThrowsAnErrorIfSortByTypeIsInvalid()
+    public function testThrowsAnErrorIfSortByTypeIsInvalid(): void
     {
         $this->expectException(\TypeError::class);
         new SearchEngineConfiguration($this->testProductsPerPage, $this->testMaxProductsPerPage, 'foo');
     }
 
-    public function testReturnsSortBy()
+    public function testReturnsSortBy(): void
     {
         $this->assertSame($this->dummySortBy, $this->configuration->getSortBy());
     }
 
-    public function testThrowsAnErrorIfSortableAttributeCodesTypeIsInvalid()
+    public function testThrowsAnErrorIfSortableAttributeCodesTypeIsInvalid(): void
     {
         $this->expectException(\TypeError::class);
         new SearchEngineConfiguration($this->testProductsPerPage, $this->testMaxProductsPerPage, $this->dummySortBy, 1);
     }
 
-    public function testThrowsAnErrorIfNonAttributeCodeIsTestedToBeAmongAllowedToBeSortedBy()
+    public function testThrowsAnErrorIfNonAttributeCodeIsTestedToBeAmongAllowedToBeSortedBy(): void
     {
         $this->expectException(\TypeError::class);
         $this->configuration->isSortingByAttributeAllowed('foo');
     }
 
-    public function testReturnsFalseIfGivenAttributeCodeIsNotAmongSortableAttributes()
+    public function testReturnsFalseIfGivenAttributeCodeIsNotAmongSortableAttributes(): void
     {
         $this->assertFalse($this->configuration->isSortingByAttributeAllowed(AttributeCode::fromString('baz')));
     }
 
-    public function testReturnsTrueIfGivenAttributeCodeIsAmongSortableAttributes()
+    public function testReturnsTrueIfGivenAttributeCodeIsAmongSortableAttributes(): void
     {
         $this->assertTrue($this->configuration->isSortingByAttributeAllowed(AttributeCode::fromString('foo')));
     }

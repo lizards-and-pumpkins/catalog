@@ -18,7 +18,7 @@ class TranslatorRegistryTest extends TestCase
     private $registry;
 
     /**
-     * @return callable|\PHPUnit_Framework_MockObject_MockObject
+     * @return callable|MockObject
      */
     private function createStubTranslatorFactory() : callable
     {
@@ -30,12 +30,12 @@ class TranslatorRegistryTest extends TestCase
         return $stubTranslatorFactory;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->registry = new TranslatorRegistry();
     }
 
-    public function testExceptionIsThrowIfNoTranslatorFactoryIsDefinedForGivenPage()
+    public function testExceptionIsThrowIfNoTranslatorFactoryIsDefinedForGivenPage(): void
     {
         $pageCode = 'foo';
         $locale = 'foo_BAR';
@@ -44,7 +44,7 @@ class TranslatorRegistryTest extends TestCase
         $this->registry->getTranslator($pageCode, $locale);
     }
 
-    public function testTranslatorIsReturnedEvenIfLocaleIsNotAvailable()
+    public function testTranslatorIsReturnedEvenIfLocaleIsNotAvailable(): void
     {
         $pageCode = 'foo';
         $locale = 'foo_BAR';
@@ -53,7 +53,7 @@ class TranslatorRegistryTest extends TestCase
         $this->assertInstanceOf(Translator::class, $this->registry->getTranslator($pageCode, $locale));
     }
 
-    public function testSameInstanceOfTranslatorIsReturnedOnConsecutiveCallsForSameLocale()
+    public function testSameInstanceOfTranslatorIsReturnedOnConsecutiveCallsForSameLocale(): void
     {
         $pageCode = 'foo';
         $locale = 'foo_BAR';
@@ -66,7 +66,7 @@ class TranslatorRegistryTest extends TestCase
         $this->assertSame($instanceA, $instanceB);
     }
 
-    public function testDifferentInstancesOfTranslatorAreReturnedForDifferentLocales()
+    public function testDifferentInstancesOfTranslatorAreReturnedForDifferentLocales(): void
     {
         $pageCode = 'foo';
         $localeA = 'foo_BAR';
@@ -80,7 +80,7 @@ class TranslatorRegistryTest extends TestCase
         $this->assertNotSame($instanceA, $instanceB);
     }
 
-    public function testDifferentInstancesOfTranslatorAreReturnedForDifferentPageCodes()
+    public function testDifferentInstancesOfTranslatorAreReturnedForDifferentPageCodes(): void
     {
         $pageCodeA = 'foo';
         $pageCodeB = 'bar';

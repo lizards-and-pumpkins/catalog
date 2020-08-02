@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\Import\XmlParser;
 
 use LizardsAndPumpkins\Import\CatalogListingImportCallbackFailureMessage;
-use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileDoesNotExistException;
 use LizardsAndPumpkins\Import\XmlParser\Exception\CatalogImportSourceXmlFileIsNotReadableException;
+use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Util\Xml;
 
 /**
  * @covers \LizardsAndPumpkins\Import\XmlParser\CatalogXmlParser
@@ -23,7 +25,7 @@ class CatalogXmlParserTest extends TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
     private $mockLogger;
 
@@ -156,7 +158,7 @@ EOT;
         );
     }
 
-    private function createFixtureFileAndPathWithContent(string $filePath, string $content)
+    private function createFixtureFileAndPathWithContent(string $filePath, string $content): void
     {
         $this->createFixtureDirectory(dirname($filePath));
         $this->createFixtureFile($filePath, $content);
@@ -173,7 +175,7 @@ EOT;
      * @param string $expectedXml
      * @param int $expectedCallCount
      * @param string $callbackIdentifier
-     * @return callable|\PHPUnit_Framework_MockObject_MockObject
+     * @return callable|MockObject
      */
     private function createMockCallbackExpectingXml(
         string $expectedXml,
@@ -188,30 +190,56 @@ EOT;
                 $actual = new \DOMDocument();
                 $actual->loadXML($xml);
                 $message = sprintf('The argument XML for the callback "%s" did not match', $callbackIdentifier);
-                $this->assertEqualXMLStructure($expected->firstChild, $actual->firstChild, false, $message);
+                $this->assertEqualStructure($expected->firstChild, $actual->firstChild, $message);
             }
         );
         return $mockCallback;
     }
 
-    protected function setUp()
+    private function assertEqualStructure(\DOMElement $expectedElement, \DOMElement $actualElement, string $message): void
+    {
+        $expectedElement = Xml::import($expectedElement);
+        $actualElement = Xml::import($actualElement);
+
+        static::assertSame($expectedElement->tagName, $actualElement->tagName, $message);
+
+        Xml::removeCharacterDataNodes($expectedElement);
+        Xml::removeCharacterDataNodes($actualElement);
+
+        static::assertSame($expectedElement->childNodes->length, $actualElement->childNodes->length, sprintf(
+            '%s%sNumber of child nodes of "%s" differs',
+            $message,
+            !empty($message) ? "\n" : '',
+            $expectedElement->tagName
+        ));
+
+        for ($i = 0; $i < $expectedElement->childNodes->length; $i++) {
+            static::assertEqualStructure(
+                $expectedElement->childNodes->item($i),
+                $actualElement->childNodes->item($i),
+                $message
+            );
+        }
+    }
+
+    final protected function setUp(): void
     {
         $this->mockLogger = $this->createMock(Logger::class);
     }
 
-    public function testItThrowsAnExceptionIfTheFromFileConstructorInputIsNotAString()
+    public function testItThrowsAnExceptionIfTheFromFileConstructorInputIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         CatalogXmlParser::fromFilePath(123, $this->mockLogger);
     }
 
-    public function testItThrowsAnExceptionIfTheFromXmlConstructorInputIsNotAString()
+    public function testItThrowsAnExceptionIfTheFromXmlConstructorInputIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         CatalogXmlParser::fromXml([], $this->mockLogger);
     }
 
-    public function testItThrowsAnExceptionIfTheInputFileDoesNotExist()
+    public function testItThrowsAnExceptionIfTheInputFileDoesNotExist(): void
     {
         $sourceFilePath = 'non-existent-file.xml';
         $this->expectException(CatalogImportSourceXmlFileDoesNotExistException::class);
@@ -219,7 +247,7 @@ EOT;
         CatalogXmlParser::fromFilePath($sourceFilePath, $this->mockLogger);
     }
 
-    public function testItThrowsAnExceptionIfTheInputFileIsNotReadable()
+    public function testItThrowsAnExceptionIfTheInputFileIsNotReadable(): void
     {
         $dirPath = $this->getUniqueTempDir();
         $sourceFilePath = $dirPath . '/not-readable.xml';
@@ -231,20 +259,20 @@ EOT;
         CatalogXmlParser::fromFilePath($sourceFilePath, $this->mockLogger);
     }
 
-    public function testItReturnsACatalogXmlParserInstanceFromAFile()
+    public function testItReturnsACatalogXmlParserInstanceFromAFile(): void
     {
         $sourceFilePath = $this->createCatalogXmlFileWithOneSimpleProduct();
         $instance = CatalogXmlParser::fromFilePath($sourceFilePath, $this->mockLogger);
         $this->assertInstanceOf(CatalogXmlParser::class, $instance);
     }
 
-    public function testItReturnsACatalogXmlParserInstanceFromAXmlString()
+    public function testItReturnsACatalogXmlParserInstanceFromAXmlString(): void
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct(), $this->mockLogger);
         $this->assertInstanceOf(CatalogXmlParser::class, $instance);
     }
 
-    public function testItCallsAllRegisteredProductBuilderCallbacksForOneProduct()
+    public function testItCallsAllRegisteredProductBuilderCallbacksForOneProduct(): void
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithOneSimpleProduct(), $this->mockLogger);
         $expectedXml = $this->getSimpleProductXml();
@@ -256,7 +284,7 @@ EOT;
         $instance->parse();
     }
 
-    public function testItCallsRegisteredProductBuilderCallbackForTwoProducts()
+    public function testItCallsRegisteredProductBuilderCallbackForTwoProducts(): void
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoSimpleProducts(), $this->mockLogger);
         $expectedXml = $this->getSimpleProductXml();
@@ -266,7 +294,7 @@ EOT;
         $instance->parse();
     }
 
-    public function testItCallsAllRegisteredListingCallbacks()
+    public function testItCallsAllRegisteredListingCallbacks(): void
     {
         $instance = CatalogXmlParser::fromXml($this->getCatalogXmlWithTwoListings(), $this->mockLogger);
         $expectedXml = $this->getListingXml();
@@ -276,7 +304,7 @@ EOT;
         $instance->parse();
     }
     
-    public function testItLogsAnExceptionsWhileProcessingListingCallbacks()
+    public function testItLogsAnExceptionsWhileProcessingListingCallbacks(): void
     {
         $this->mockLogger->expects($this->once())->method('log')
             ->with($this->isInstanceOf(CatalogListingImportCallbackFailureMessage::class));
@@ -288,7 +316,7 @@ EOT;
         );
         $instance = CatalogXmlParser::fromXml($xml, $this->mockLogger);
 
-        /** @var callable|\PHPUnit_Framework_MockObject_MockObject $listingCallback */
+        /** @var callable|MockObject $listingCallback */
         $listingCallback = $this->getMockBuilder(\stdClass::class)->setMethods(['__invoke'])->getMock();
         $listingCallback->expects($this->once())->method('__invoke')->willThrowException(new \Exception('Test dummy'));
 

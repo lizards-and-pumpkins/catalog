@@ -17,12 +17,12 @@ class ResourceNotFoundRequestHandlerTest extends TestCase
      */
     private $requestHandler;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $this->requestHandler = new ResourceNotFoundRequestHandler();
     }
 
-    public function testInstanceOfHttpResourceNotFoundResponseIsReturned()
+    public function testInstanceOfHttpResourceNotFoundResponseIsReturned(): void
     {
         $stubRequest = $this->createMock(HttpRequest::class);
         $result = $this->requestHandler->process($stubRequest);
@@ -30,7 +30,7 @@ class ResourceNotFoundRequestHandlerTest extends TestCase
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $result);
     }
 
-    public function testTrueIsReturnedForEveryRequest()
+    public function testTrueIsReturnedForEveryRequest(): void
     {
         $mockRequest = $this->createMock(HttpRequest::class);
         $this->assertTrue($this->requestHandler->canProcess($mockRequest));

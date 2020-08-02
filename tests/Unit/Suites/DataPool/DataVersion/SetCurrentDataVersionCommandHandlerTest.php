@@ -24,17 +24,17 @@ use PHPUnit\Framework\TestCase;
 class SetCurrentDataVersionCommandHandlerTest extends TestCase
 {
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|MockObject
      */
     private $mockDomainEventQueue;
 
     /**
-     * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolWriter|MockObject
      */
     private $mockDataPoolWriter;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolReader|MockObject
      */
     private $mockDataPoolReader;
 
@@ -55,19 +55,19 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
         return Message::withCurrentTime(SetCurrentDataVersionCommand::CODE, $payload, $metadata);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
         $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
     }
 
-    public function testIsACommandHandler()
+    public function testIsACommandHandler(): void
     {
         $this->assertInstanceOf(CommandHandler::class, $this->createCommandHandler());
     }
 
-    public function testAddsCurrentDataVersionWasSetDomainEventToQueue()
+    public function testAddsCurrentDataVersionWasSetDomainEventToQueue(): void
     {
         $sourceMessage = $this->createMessage();
         $handler = $this->createCommandHandler();
@@ -80,7 +80,7 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
         $handler->process($sourceMessage);
     }
 
-    public function testSetsTheDataVersionFromTheCommandViaTheDataPoolWriter()
+    public function testSetsTheDataVersionFromTheCommandViaTheDataPoolWriter(): void
     {
         $sourceMessage = $this->createMessage();
         $dataVersionString = $sourceMessage->getMetadata()['data_version'];
@@ -88,7 +88,7 @@ class SetCurrentDataVersionCommandHandlerTest extends TestCase
         $this->createCommandHandler()->process($sourceMessage);
     }
 
-    public function testSetsThePreviousDataVersionFromTheDataPoolReaderViaTheDataPoolWriter()
+    public function testSetsThePreviousDataVersionFromTheDataPoolReaderViaTheDataPoolWriter(): void
     {
         $previousVersion = '-1';
         $this->mockDataPoolReader->method('getCurrentDataVersion')->willReturn($previousVersion);

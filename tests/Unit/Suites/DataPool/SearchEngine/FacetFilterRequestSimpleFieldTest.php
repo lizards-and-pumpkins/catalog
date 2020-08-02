@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class FacetFilterRequestSimpleFieldTest extends TestCase
 {
     /**
-     * @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCode|MockObject
      */
     private $stubAttributeCode;
 
@@ -22,23 +22,23 @@ class FacetFilterRequestSimpleFieldTest extends TestCase
      */
     private $field;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubAttributeCode = $this->createMock(AttributeCode::class);
         $this->field = new FacetFilterRequestSimpleField($this->stubAttributeCode);
     }
 
-    public function testFacetFilterRequestFiledInterfaceIsImplemented()
+    public function testFacetFilterRequestFiledInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FacetFilterRequestField::class, $this->field);
     }
 
-    public function testFieldIsNotRanged()
+    public function testFieldIsNotRanged(): void
     {
         $this->assertFalse($this->field->isRanged());
     }
 
-    public function testAttributeCodeIsReturned()
+    public function testAttributeCodeIsReturned(): void
     {
         $this->assertSame($this->stubAttributeCode, $this->field->getAttributeCode());
     }

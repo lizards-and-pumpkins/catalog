@@ -16,7 +16,7 @@ class DataVersionTest extends TestCase
      * @dataProvider emptyVersionProvider
      * @param mixed $emptyVersion
      */
-    public function testExceptionIsThrownIfVersionIsEmpty($emptyVersion)
+    public function testExceptionIsThrownIfVersionIsEmpty($emptyVersion): void
     {
         $this->expectException(EmptyVersionException::class);
         DataVersion::fromVersionString($emptyVersion);
@@ -33,13 +33,13 @@ class DataVersionTest extends TestCase
         ];
     }
 
-    public function testExceptionIsThrownIfVersionIsInvalid()
+    public function testExceptionIsThrownIfVersionIsInvalid(): void
     {
         $this->expectException(\TypeError::class);
         DataVersion::fromVersionString(true);
     }
 
-    public function testVersionIsReturned()
+    public function testVersionIsReturned(): void
     {
         $version = '1.0';
         $dataVersion = DataVersion::fromVersionString($version);

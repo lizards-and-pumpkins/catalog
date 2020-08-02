@@ -20,34 +20,34 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends TestCase
      */
     abstract protected function createUrlKeyStoreInstance();
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlKeyStore = $this->createUrlKeyStoreInstance();
     }
 
-    public function testItImplementsUrlKeyStore()
+    public function testItImplementsUrlKeyStore(): void
     {
         $this->assertInstanceOf(UrlKeyStore::class, $this->urlKeyStore);
     }
 
-    public function testItImplementsClearable()
+    public function testItImplementsClearable(): void
     {
         $this->assertInstanceOf(Clearable::class, $this->urlKeyStore);
     }
 
-    public function testItThrowsAnExceptionIfTheUrlKeyToAddIsNotAString()
+    public function testItThrowsAnExceptionIfTheUrlKeyToAddIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         $this->urlKeyStore->addUrlKeyForVersion('1.0', 123, 'dummy-context-string', 'type-string');
     }
 
-    public function testItThrowsAnExceptionIfAVersionToAddIsNotAString()
+    public function testItThrowsAnExceptionIfAVersionToAddIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         $this->urlKeyStore->addUrlKeyForVersion(123, 'test.html', 'dummy-context-string', 'type-string');
     }
 
-    public function testThatEmptyUrlKeysAreAllowed()
+    public function testThatEmptyUrlKeysAreAllowed(): void
     {
         $testUrlKey = '';
         $testVersion = '1.0';
@@ -60,39 +60,39 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends TestCase
         );
     }
 
-    public function testItThrowsAnExceptionIfADataVersionToGetUrlKeysForIsNotAString()
+    public function testItThrowsAnExceptionIfADataVersionToGetUrlKeysForIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         $this->urlKeyStore->getForDataVersion(555);
     }
 
-    public function testItThrowsAnExceptionIfADataVersionToWriteIsAnEmptyString()
+    public function testItThrowsAnExceptionIfADataVersionToWriteIsAnEmptyString(): void
     {
         $this->expectException(DataVersionToWriteIsEmptyStringException::class);
         $this->expectExceptionMessage('Invalid data version: version strings have to be one or more characters long');
         $this->urlKeyStore->addUrlKeyForVersion('', 'test.html', 'dummy-context-string', 'type-string');
     }
 
-    public function testItThrowsAnExceptionIfADataVersionToGetIsAnEmptyString()
+    public function testItThrowsAnExceptionIfADataVersionToGetIsAnEmptyString(): void
     {
         $this->expectException(DataVersionToWriteIsEmptyStringException::class);
         $this->expectExceptionMessage('Invalid data version: version strings have to be one or more characters long');
         $this->urlKeyStore->getForDataVersion('');
     }
 
-    public function testItThrowsAnExceptionIfTheContextIsNotAString()
+    public function testItThrowsAnExceptionIfTheContextIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', [], 'type-string');
     }
 
-    public function testItThrowsAnExceptionIfTheUrlKeyTypeIsNotAString()
+    public function testItThrowsAnExceptionIfTheUrlKeyTypeIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         $this->urlKeyStore->addUrlKeyForVersion('1.0', 'test.html', '', 42);
     }
 
-    public function testItReturnsUrlKeysForAGivenVersion()
+    public function testItReturnsUrlKeysForAGivenVersion(): void
     {
         $testUrlKey = 'example.html';
         $testVersion = '1.0';
@@ -105,12 +105,12 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends TestCase
         );
     }
 
-    public function testItReturnsAnEmptyArrayForUnknownVersions()
+    public function testItReturnsAnEmptyArrayForUnknownVersions(): void
     {
         $this->assertSame([], $this->urlKeyStore->getForDataVersion('1.0'));
     }
 
-    public function testItReturnsTheUrlKeysForTheGivenVersion()
+    public function testItReturnsTheUrlKeysForTheGivenVersion(): void
     {
         $this->urlKeyStore->addUrlKeyForVersion('1', 'aaa.html', 'dummy-context-string', 'type-string');
         $this->urlKeyStore->addUrlKeyForVersion('2', 'bbb.html', 'dummy-context-string', 'type-string');
@@ -125,7 +125,7 @@ abstract class AbstractIntegrationTestUrlKeyStoreTest extends TestCase
         );
     }
 
-    public function testItClearsTheStorage()
+    public function testItClearsTheStorage(): void
     {
         $this->urlKeyStore->addUrlKeyForVersion('1', 'aaa.html', 'dummy-context-string', 'type-string');
         $this->urlKeyStore->addUrlKeyForVersion('1', 'bbb.html', 'dummy-context-string', 'type-string');

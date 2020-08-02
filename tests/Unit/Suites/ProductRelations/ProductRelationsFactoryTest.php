@@ -56,9 +56,9 @@ class ProductRelationsFactoryTest extends TestCase
      */
     private $factory;
 
-    public function setUp()
+    final protected function setUp(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
+        /** @var HttpRequest|MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
 
         $masterFactory = new CatalogMasterFactory();
@@ -72,35 +72,35 @@ class ProductRelationsFactoryTest extends TestCase
         $masterFactory->register($this->factory);
     }
 
-    public function testFactoryInterfaceIsImplemented()
+    public function testFactoryInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testFactoryWithCallbackInterfaceIsImplemented()
+    public function testFactoryWithCallbackInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FactoryWithCallback::class, $this->factory);
     }
 
-    public function testItCreatesProductRelationsApiV1GetRequestHandler()
+    public function testItCreatesProductRelationsApiV1GetRequestHandler(): void
     {
         $result = $this->factory->createProductRelationsApiV1GetRequestHandler();
         $this->assertInstanceOf(ProductRelationsApiV1GetRequestHandler::class, $result);
     }
 
-    public function testItReturnsAProductRelationsService()
+    public function testItReturnsAProductRelationsService(): void
     {
         $result = $this->factory->createProductRelationsService();
         $this->assertInstanceOf(ProductRelationsService::class, $result);
     }
 
-    public function testItReturnsAProductRelationsLocator()
+    public function testItReturnsAProductRelationsLocator(): void
     {
         $result = $this->factory->createProductRelationsLocator();
         $this->assertInstanceOf(ProductRelationsLocator::class, $result);
     }
 
-    public function testProductRelationsApiEndpointIsRegistered()
+    public function testProductRelationsApiEndpointIsRegistered(): void
     {
         $endpointKey = 'get_products';
         $apiVersion = 1;
@@ -109,7 +109,7 @@ class ProductRelationsFactoryTest extends TestCase
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
             ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
-        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
+        /** @var MasterFactory|MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
             array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator'])
         )->getMock();

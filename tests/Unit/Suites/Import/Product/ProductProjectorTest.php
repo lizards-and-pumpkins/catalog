@@ -26,31 +26,31 @@ class ProductProjectorTest extends TestCase
     private $projector;
 
     /**
-     * @var Projector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Projector|MockObject
      */
     private $mockSnippetProjector;
 
     /**
-     * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolWriter|MockObject
      */
     private $mockDataPoolWriter;
 
     /**
-     * @var SearchDocumentBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchDocumentBuilder|MockObject
      */
     private $stubSearchDocumentBuilder;
 
     /**
-     * @var UrlKeyForContextCollector|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlKeyForContextCollector|MockObject
      */
     private $stubUrlKeyCollector;
 
     /**
-     * @var ProductViewLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductViewLocator|MockObject
      */
     private $productViewLocator;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $this->mockSnippetProjector = $this->createMock(Projector::class);
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
@@ -71,20 +71,20 @@ class ProductProjectorTest extends TestCase
         );
     }
 
-    public function testImplementsProjectorInterface()
+    public function testImplementsProjectorInterface(): void
     {
         $this->assertInstanceOf(Projector::class, $this->projector);
     }
 
-    public function testThrownAnExceptionIfProjectionSourceDataIsNotProduct()
+    public function testThrownAnExceptionIfProjectionSourceDataIsNotProduct(): void
     {
         $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->projector->project('foo');
     }
 
-    public function testWritesSearchDocumentToDataPool()
+    public function testWritesSearchDocumentToDataPool(): void
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $dummyProduct */
+        /** @var Product|MockObject $dummyProduct */
         $dummyProduct = $this->createMock(Product::class);
 
         $dummyProductView = $this->createMock(ProductView::class);
@@ -98,9 +98,9 @@ class ProductProjectorTest extends TestCase
         $this->projector->project($dummyProduct);
     }
 
-    public function testTriggersSnippetProjection()
+    public function testTriggersSnippetProjection(): void
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $dummyProduct */
+        /** @var Product|MockObject $dummyProduct */
         $dummyProduct = $this->createMock(Product::class);
 
         $dummyProductView = $this->createMock(ProductView::class);
@@ -111,9 +111,9 @@ class ProductProjectorTest extends TestCase
         $this->projector->project($dummyProduct);
     }
 
-    public function testItWritesTheUrlKeyCollectionForTheDataVersionToTheDataPool()
+    public function testItWritesTheUrlKeyCollectionForTheDataVersionToTheDataPool(): void
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var Product|MockObject $stubProduct */
         $stubProduct = $this->createMock(Product::class);
 
         $urlKeyCollection = $this->stubUrlKeyCollector->collectProductUrlKeys($stubProduct);
@@ -122,9 +122,9 @@ class ProductProjectorTest extends TestCase
         $this->projector->project($stubProduct);
     }
 
-    public function testItDelegatesToTheUrlKeyCollectorToCollectAllKeys()
+    public function testItDelegatesToTheUrlKeyCollectorToCollectAllKeys(): void
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var Product|MockObject $stubProduct */
         $stubProduct = $this->createMock(Product::class);
 
         $this->stubUrlKeyCollector->expects($this->once())->method('collectProductUrlKeys')

@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class IntegrationTestProductViewTest extends TestCase
 {
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $mockProduct;
 
@@ -22,14 +22,14 @@ class IntegrationTestProductViewTest extends TestCase
      */
     private $productView;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProduct = $this->createMock(Product::class);
         $stubProductImageFileLocator = $this->createMock(ProductImageFileLocator::class);
         $this->productView = new IntegrationTestProductView($this->mockProduct, $stubProductImageFileLocator);
     }
 
-    public function testOriginalProductIsReturned()
+    public function testOriginalProductIsReturned(): void
     {
         $this->assertSame($this->mockProduct, $this->productView->getOriginalProduct());
     }

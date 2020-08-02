@@ -24,7 +24,7 @@ class LocalFilesystemStorageReaderTest extends TestCase
      */
     private $testBaseDirPath;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testBaseDirPath = sys_get_temp_dir() . '/lizards-and-pumpkins-local-filesystem-storage';
         mkdir($this->testBaseDirPath);
@@ -32,25 +32,25 @@ class LocalFilesystemStorageReaderTest extends TestCase
         $this->reader = new LocalFilesystemStorageReader();
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         if (is_dir($this->testBaseDirPath) && is_writable($this->testBaseDirPath)) {
             (new LocalFilesystem())->removeDirectoryAndItsContent($this->testBaseDirPath);
         }
     }
 
-    public function testFileStorageReaderInterfaceIsImplemented()
+    public function testFileStorageReaderInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FileStorageReader::class, $this->reader);
     }
 
-    public function testExceptionIsThrownIfFileIsNotReadable()
+    public function testExceptionIsThrownIfFileIsNotReadable(): void
     {
         $this->expectException(FileNotReadableException::class);
         $this->reader->getFileContents('/some-non-existing-file');
     }
 
-    public function testFileContentsIsReturned()
+    public function testFileContentsIsReturned(): void
     {
         $filePath = $this->testBaseDirPath . '/foo';
         $content = 'bar';

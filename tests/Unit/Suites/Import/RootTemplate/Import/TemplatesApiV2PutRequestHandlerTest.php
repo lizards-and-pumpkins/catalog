@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 class TemplatesApiV2PutRequestHandlerTest extends TestCase
 {
     /**
-     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|MockObject
      */
     private $mockCommandQueue;
 
@@ -33,11 +33,11 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
     private $requestHandler;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $mockRequest;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
         $this->requestHandler = new TemplatesApiV2PutRequestHandler($this->mockCommandQueue);
@@ -45,18 +45,18 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testIsHttpRequestHandler()
+    public function testIsHttpRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    public function testRequestCanNotBeProcessedIfMethodIsNotPut()
+    public function testRequestCanNotBeProcessedIfMethodIsNotPut(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanNotBeProcessedIfUrlDoesNotContainTemplateId()
+    public function testRequestCanNotBeProcessedIfUrlDoesNotContainTemplateId(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates'));
@@ -64,7 +64,7 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testRequestCanBeProcessedIfValid()
+    public function testRequestCanBeProcessedIfValid(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
@@ -72,7 +72,7 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testThrowsExceptionIfRequestBodyIsNotValidJson()
+    public function testThrowsExceptionIfRequestBodyIsNotValidJson(): void
     {
         $this->expectException(InvalidTemplateApiRequestBodyException::class);
         $this->expectExceptionMessage('The request body is not valid JSON: Syntax error');
@@ -83,7 +83,7 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testThrowsExceptionIfRequestDoesNotContainADataVersion()
+    public function testThrowsExceptionIfRequestDoesNotContainADataVersion(): void
     {
         $this->expectException(InvalidTemplateApiRequestBodyException::class);
         $this->expectExceptionMessage('The API request is missing the target data_version.');
@@ -94,7 +94,7 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testDoesNotThrowExceptionIfRequestDoesNotContainContent()
+    public function testDoesNotThrowExceptionIfRequestDoesNotContainContent(): void
     {
         $this->mockRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/templates/foo'));
         $this->mockRequest->method('getRawBody')->willReturn(json_encode(['data_version' => 'foo']));
@@ -107,7 +107,7 @@ class TemplatesApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testEmitsUpdateTemplateCommand()
+    public function testEmitsUpdateTemplateCommand(): void
     {
         $testVersionString = 'foo';
         $testContent = 'some raw template related data';

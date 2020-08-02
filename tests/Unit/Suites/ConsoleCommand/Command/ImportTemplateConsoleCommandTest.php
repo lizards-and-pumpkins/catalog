@@ -13,9 +13,8 @@ use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
-use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @covers \LizardsAndPumpkins\ConsoleCommand\Command\ImportTemplateConsoleCommand
@@ -27,19 +26,22 @@ class ImportTemplateConsoleCommandTest extends TestCase
 {
     private $testTemplateId = 'foo_page_template';
 
-    private $testValidTemplateIds;
-
     private $testDataVersion = 'bar';
 
     /**
-     * @var MasterFactory|MockObject
+     * @var MasterFactory
      */
     private $stubMasterFactory;
 
     /**
-     * @var CLImate|MockObject
+     * @var CLImate
      */
     private $stubCliMate;
+
+    /**
+     * @var CliMateArgumentManager
+     */
+    private $mockCliArguments;
 
     private function getCommandArgumentMap($overRideDefaults = []): array
     {
@@ -57,13 +59,16 @@ class ImportTemplateConsoleCommandTest extends TestCase
         return array_values($arguments);
     }
 
-    private function runCommand(MockObject $stubMasterFactory)
+    /**
+     * @param MasterFactory|MockObject $stubMasterFactory
+     */
+    private function runCommand($stubMasterFactory): void
     {
         $command = new ImportTemplateConsoleCommand($stubMasterFactory, $this->stubCliMate);
         $command->run();
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge([
@@ -75,7 +80,7 @@ class ImportTemplateConsoleCommandTest extends TestCase
             ], get_class_methods(MasterFactory::class)))
             ->getMock();
 
-        $this->testValidTemplateIds = ['foo', $this->testTemplateId];
+        $testValidTemplateIds = ['foo', $this->testTemplateId];
 
         $this->stubMasterFactory->method('createDataPoolReader')->willReturn($this->createMock(DataPoolReader::class));
         $this->stubMasterFactory->createDataPoolReader()->method('getCurrentDataVersion')
@@ -87,17 +92,18 @@ class ImportTemplateConsoleCommandTest extends TestCase
         $stubTemplateProjectorLocator = $this->createMock(TemplateProjectorLocator::class);
         $this->stubMasterFactory->method('createTemplateProjectorLocator')->willReturn($stubTemplateProjectorLocator);
         $this->stubMasterFactory->createTemplateProjectorLocator()->method('getRegisteredProjectorCodes')
-            ->willReturn($this->testValidTemplateIds);
+            ->willReturn($testValidTemplateIds);
 
         $this->stubCliMate = $this->getMockBuilder(CLImate::class)
             ->setMethods(['output', 'error'])
             ->getMock();
-        $this->stubCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
+        $this->mockCliArguments = $this->createMock(CliMateArgumentManager::class);
+        $this->stubCliMate->arguments = $this->mockCliArguments;
     }
 
-    public function testImportsTheSpecifiedTemplate()
+    public function testImportsTheSpecifiedTemplate(): void
     {
-        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->mockCliArguments->method('get')->willReturnMap($this->getCommandArgumentMap());
 
         $this->stubMasterFactory->getEventQueue()
             ->expects($this->once())->method('add')
@@ -106,10 +112,10 @@ class ImportTemplateConsoleCommandTest extends TestCase
         $this->runCommand($this->stubMasterFactory);
     }
 
-    public function testProcessesQueuesIfRequested()
+    public function testProcessesQueuesIfRequested(): void
     {
         $commandArgumentMap = $this->getCommandArgumentMap(['processQueues' => true]);
-        $this->stubCliMate->arguments->method('get')->willReturnMap($commandArgumentMap);
+        $this->mockCliArguments->method('get')->willReturnMap($commandArgumentMap);
 
         $mockCommandConsumer = $this->createMock(CommandConsumer::class);
         $mockCommandConsumer->expects($this->once())->method('processAll');
@@ -122,10 +128,10 @@ class ImportTemplateConsoleCommandTest extends TestCase
         $this->runCommand($this->stubMasterFactory);
     }
 
-    public function testOutputsValidTemplateIdsIfRequested()
+    public function testOutputsValidTemplateIdsIfRequested(): void
     {
         $commandArgumentMap = $this->getCommandArgumentMap(['list' => true]);
-        $this->stubCliMate->arguments->method('get')->willReturnMap($commandArgumentMap);
+        $this->mockCliArguments->method('get')->willReturnMap($commandArgumentMap);
         $this->stubCliMate->expects($this->exactly(2))->method('output')->withConsecutive(
             ['Available template IDs:'],
             [$this->stringContains($this->testTemplateId)]
@@ -133,26 +139,25 @@ class ImportTemplateConsoleCommandTest extends TestCase
         $this->runCommand($this->stubMasterFactory);
     }
 
-    public function testThrowsExceptionIfAnInvalidTemplateIdIsProvided()
+    public function testThrowsExceptionIfAnInvalidTemplateIdIsProvided(): void
     {
         $commandArgumentMap = $this->getCommandArgumentMap(['templateId' => 'invalid foo']);
-        $this->stubCliMate->arguments->method('get')->willReturnMap($commandArgumentMap);
-        $errorOutputSpy = $this->atLeastOnce();
-        $this->stubCliMate->expects($errorOutputSpy)->method('error');
-        $this->runCommand($this->stubMasterFactory);
+        $this->mockCliArguments->method('get')->willReturnMap($commandArgumentMap);
 
-        $expectationFulfilled = array_reduce(
-            $errorOutputSpy->getInvocations(),
-            function ($found, ObjectInvocation $invocation) {
-                return $found || strpos($invocation->getParameters()[0], 'Invalid template ID "invalid foo"') === false;
+        $this->stubCliMate->expects($this->atLeastOnce())->method('error')->willReturnCallback(function () {
+            $args = func_get_args();
+
+            if (strpos($args[0], ':') === false) {
+                $this->assertStringContainsString('Invalid template ID "invalid foo"', $args[0]);
             }
-        );
-        $this->assertTrue($expectationFulfilled, "Expected message not output as error.");
+        });
+
+        $this->runCommand($this->stubMasterFactory);
     }
 
-    public function testUsesCurrentDataVersionIfNotSpecified()
+    public function testUsesCurrentDataVersionIfNotSpecified(): void
     {
-        $this->stubCliMate->arguments->method('get')->willReturnMap($this->getCommandArgumentMap());
+        $this->mockCliArguments->method('get')->willReturnMap($this->getCommandArgumentMap());
 
         $this->stubMasterFactory->getEventQueue()
             ->expects($this->once())->method('add')
@@ -162,10 +167,10 @@ class ImportTemplateConsoleCommandTest extends TestCase
         $this->runCommand($this->stubMasterFactory);
     }
 
-    public function testUsesSpecifiedDataVersionIfPresentInArguments()
+    public function testUsesSpecifiedDataVersionIfPresentInArguments(): void
     {
         $dataVersion = 'foobar123';
-        $this->stubCliMate->arguments->method('get')
+        $this->mockCliArguments->method('get')
             ->willReturnMap($this->getCommandArgumentMap(['dataVersion' => $dataVersion]));
 
         $this->stubMasterFactory->getEventQueue()

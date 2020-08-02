@@ -19,17 +19,17 @@ use PHPUnit\Framework\TestCase;
 class ContentBlockServiceTest extends TestCase
 {
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|MockObject
      */
     private $stubSnippetKeyGenerator;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolReader|MockObject
      */
     private $mockDataPoolReader;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $dummyContext;
 
@@ -38,13 +38,13 @@ class ContentBlockServiceTest extends TestCase
      */
     private $service;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $this->dummyContext = $this->createMock(Context::class);
         $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
 
-        /** @var SnippetKeyGeneratorLocator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGeneratorLocator */
+        /** @var SnippetKeyGeneratorLocator|MockObject $stubSnippetKeyGeneratorLocator */
         $stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $stubSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')
             ->willReturn($this->stubSnippetKeyGenerator);
@@ -52,7 +52,7 @@ class ContentBlockServiceTest extends TestCase
         $this->service = new ContentBlockService($this->mockDataPoolReader, $stubSnippetKeyGeneratorLocator);
     }
 
-    public function testThrowsExceptionIfBlockDoesNotExist()
+    public function testThrowsExceptionIfBlockDoesNotExist(): void
     {
         $this->expectException(ContentBlockNotFoundException::class);
 
@@ -62,7 +62,7 @@ class ContentBlockServiceTest extends TestCase
         $this->service->getContentBlock('foo', $this->dummyContext);
     }
 
-    public function testReturnsSnippet()
+    public function testReturnsSnippet(): void
     {
         $contentBlockName = 'foo';
         $snippetContentValue = 'bar';

@@ -20,14 +20,14 @@ class SelfContainedContextBuilderTest extends TestCase
     private $contextBuilder;
 
     /**
-     * @var ContextPartBuilder[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @var ContextPartBuilder[]|MockObject[]
      */
     private $stubContextPartBuilders;
 
     /**
      * @param string $code
      * @param string|null $value
-     * @return ContextPartBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ContextPartBuilder|MockObject
      */
     private function createMockContextPartBuilder(string $code, $value) : ContextPartBuilder
     {
@@ -37,7 +37,7 @@ class SelfContainedContextBuilderTest extends TestCase
         return $stubContextPartBuilder;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContextPartBuilders = [
             $this->createMockContextPartBuilder('aaa', 'value_a'),
@@ -47,33 +47,33 @@ class SelfContainedContextBuilderTest extends TestCase
         $this->contextBuilder = new SelfContainedContextBuilder(...$this->stubContextPartBuilders);
     }
 
-    public function testItIsAContextBuilder()
+    public function testItIsAContextBuilder(): void
     {
         $this->assertInstanceOf(ContextBuilder::class, $this->contextBuilder);
     }
 
-    public function testItReturnsAContextInstance()
+    public function testItReturnsAContextInstance(): void
     {
         $this->assertInstanceOf(Context::class, $this->contextBuilder->createContext([]));
     }
 
-    public function testItDelegatesToTheInjectedContextPartBuildersToBuildTheContextArray()
+    public function testItDelegatesToTheInjectedContextPartBuildersToBuildTheContextArray(): void
     {
         $context = $this->contextBuilder->createContext([]);
         $this->assertTrue($context->supportsCode('aaa'));
         $this->assertTrue($context->supportsCode('bbb'));
     }
 
-    public function testItIgnoresContextPartBuildersThatReturnNull()
+    public function testItIgnoresContextPartBuildersThatReturnNull(): void
     {
         $context = $this->contextBuilder->createContext([]);
         $this->assertFalse($context->supportsCode('ccc'));
         $this->assertNotContains('ccc', $context->getSupportedCodes());
     }
 
-    public function testItReturnsAContextFromTheRequest()
+    public function testItReturnsAContextFromTheRequest(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
+        /** @var HttpRequest|MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
         $this->stubContextPartBuilders[0]->expects($this->once())
             ->method('getValue')
@@ -81,16 +81,16 @@ class SelfContainedContextBuilderTest extends TestCase
         $this->assertInstanceOf(Context::class, $this->contextBuilder->createFromRequest($stubRequest));
     }
 
-    public function testItReturnsOneContextForEachDataSet()
+    public function testItReturnsOneContextForEachDataSet(): void
     {
         $dataSets = [ [], [], [] ];
         $result = $this->contextBuilder->createContextsFromDataSets($dataSets);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertContainsOnlyInstancesOf(Context::class, $result);
         $this->assertCount(3, $result);
     }
 
-    public function testItPassesTheGivenArrayStraightToTheContextForRehydration()
+    public function testItPassesTheGivenArrayStraightToTheContextForRehydration(): void
     {
         $context = SelfContainedContextBuilder::rehydrateContext(['foo' => 'bar', 'baz' => 'qux']);
         $this->assertInstanceOf(Context::class, $context);
@@ -99,7 +99,7 @@ class SelfContainedContextBuilderTest extends TestCase
         $this->assertSame('qux', $context->getValue('baz'));
     }
 
-    public function testItReturnsAnExpandedContext()
+    public function testItReturnsAnExpandedContext(): void
     {
         $fooContextPart = new FromInputCopyingTestContextPartBuilder('foo');
         $bazContextPart = new FromInputCopyingTestContextPartBuilder('baz');

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class ContentBlockProjectorTest extends TestCase
 {
     /**
-     * @var Projector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Projector|MockObject
      */
     private $mockSnippetProjector;
 
@@ -23,26 +23,26 @@ class ContentBlockProjectorTest extends TestCase
      */
     private $projector;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockSnippetProjector = $this->createMock(Projector::class);
         $this->projector = new ContentBlockProjector($this->mockSnippetProjector);
     }
 
-    public function testImplementsProjectorInterface()
+    public function testImplementsProjectorInterface(): void
     {
         $this->assertInstanceOf(Projector::class, $this->projector);
     }
 
-    public function testThrowsAnExceptionIfProjectionSourceDataIsNotContentBlockSource()
+    public function testThrowsAnExceptionIfProjectionSourceDataIsNotContentBlockSource(): void
     {
         $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->projector->project($projectionSourceData = 'foo');
     }
 
-    public function testSnippetIsWrittenIntoDataPool()
+    public function testSnippetIsWrittenIntoDataPool(): void
     {
-        /** @var ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject $dummyContentBlockSource */
+        /** @var ContentBlockSource|MockObject $dummyContentBlockSource */
         $dummyContentBlockSource = $this->createMock(ContentBlockSource::class);
         $this->mockSnippetProjector->expects($this->once())->method('project')->with($dummyContentBlockSource);
 

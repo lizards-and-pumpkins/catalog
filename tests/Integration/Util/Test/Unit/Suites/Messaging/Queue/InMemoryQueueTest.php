@@ -23,7 +23,7 @@ class InMemoryQueueTest extends TestCase
     private $queue;
 
     /**
-     * @var MessageReceiver|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageReceiver|MockObject
      */
     private $mockMessageReceiver;
 
@@ -32,26 +32,26 @@ class InMemoryQueueTest extends TestCase
      */
     private $testMessage;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $this->testMessage = Message::withCurrentTime('foo', [], []);
         $this->mockMessageReceiver = $this->createMock(MessageReceiver::class);
         $this->queue = new InMemoryQueue();
     }
 
-    public function testIsInitiallyEmpty()
+    public function testIsInitiallyEmpty(): void
     {
         $this->assertCount(0, $this->queue);
     }
 
-    public function testCallsMessageReceiverWithMessage()
+    public function testCallsMessageReceiverWithMessage(): void
     {
         $this->queue->add($this->testMessage);
         $this->mockMessageReceiver->expects($this->once())->method('receive')->with($this->testMessage);
         $this->queue->consume($this->mockMessageReceiver, $numberOfMessagesBeforeReturn = 1);
     }
 
-    public function testRemovesConsumedMessageFromQueue()
+    public function testRemovesConsumedMessageFromQueue(): void
     {
         $this->queue->add($this->testMessage);
         $this->queue->consume($this->mockMessageReceiver, $numberOfMessagesBeforeReturn = 1);
@@ -59,7 +59,7 @@ class InMemoryQueueTest extends TestCase
         $this->assertCount(0, $this->queue);
     }
 
-    public function testReturnsTheMessagesInTheRightOrder()
+    public function testReturnsTheMessagesInTheRightOrder(): void
     {
         $this->queue->add(Message::withCurrentTime('One', [], []));
         $this->queue->add(Message::withCurrentTime('Two', [], []));
@@ -79,12 +79,12 @@ class InMemoryQueueTest extends TestCase
         $this->queue->consume($this->mockMessageReceiver, $numberOfMessagesBeforeReturn = 2);
     }
 
-    public function testIsClearable()
+    public function testIsClearable(): void
     {
         $this->assertInstanceOf(Clearable::class, $this->queue);
     }
 
-    public function testClearsTheQueue()
+    public function testClearsTheQueue(): void
     {
         $this->queue->add(Message::withCurrentTime('One', [], []));
         $this->queue->add(Message::withCurrentTime('Two', [], []));

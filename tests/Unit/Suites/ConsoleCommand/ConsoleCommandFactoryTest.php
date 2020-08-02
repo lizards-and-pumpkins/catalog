@@ -15,24 +15,24 @@ use PHPUnit\Framework\TestCase;
  */
 class ConsoleCommandFactoryTest extends TestCase
 {
-    public function testImplementsTheFactoryInterface()
+    public function testImplementsTheFactoryInterface(): void
     {
         $this->assertInstanceOf(Factory::class, new ConsoleCommandFactory());
     }
 
-    public function testReturnsAConsoleCommandLocator()
+    public function testReturnsAConsoleCommandLocator(): void
     {
         $consoleCommandLocator = (new ConsoleCommandFactory())->createConsoleCommandLocator();
         $this->assertInstanceOf(ConsoleCommandLocator::class, $consoleCommandLocator);
     }
 
-    public function testReturnsAProcessingTimeTableDataBuilder()
+    public function testReturnsAProcessingTimeTableDataBuilder(): void
     {
         $processingTimeTableDataBuilder = (new ConsoleCommandFactory())->createProcessingTimeTableDataBuilder();
         $this->assertInstanceOf(ProcessingTimeTableDataBuilder::class, $processingTimeTableDataBuilder);
     }
 
-    public function testReturnsADomainEventProcesingTimesLogFileReader()
+    public function testReturnsADomainEventProcesingTimesLogFileReader(): void
     {
         $logFileReader = (new ConsoleCommandFactory())->createDomainEventProcessingTimesLogFileReader();
         $this->assertInstanceOf(LogfileReader::class, $logFileReader);

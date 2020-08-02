@@ -21,9 +21,9 @@ class AttributeValueCollectorLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubFactory */
+        /** @var MasterFactory|MockObject $stubFactory */
         $realMethods = get_class_methods(MasterFactory::class);
         $testMethods = [
             'createDefaultAttributeValueCollector',
@@ -39,14 +39,14 @@ class AttributeValueCollectorLocatorTest extends TestCase
         $this->locator = new AttributeValueCollectorLocator($stubFactory);
     }
 
-    public function testItReturnsADefaultCollector()
+    public function testItReturnsADefaultCollector(): void
     {
         $product = $this->createMock(Product::class);
         $result = $this->locator->forProduct($product);
         $this->assertInstanceOf(DefaultAttributeValueCollector::class, $result);
     }
 
-    public function testItReturnsAConfigurableProductAttributeValueCollectorForAConfigurableProduct()
+    public function testItReturnsAConfigurableProductAttributeValueCollectorForAConfigurableProduct(): void
     {
         $configurableProduct = $this->createMock(ConfigurableProduct::class);
         $result = $this->locator->forProduct($configurableProduct);

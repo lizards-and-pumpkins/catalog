@@ -31,7 +31,7 @@ class CatalogImportApiTest extends AbstractIntegrationTest
         return $receiver->message;
     }
 
-    public function testV1CatalogImportHandlerPlacesImportCommandsIntoQueue()
+    public function testV1CatalogImportHandlerPlacesImportCommandsIntoQueue(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([
@@ -58,7 +58,7 @@ class CatalogImportApiTest extends AbstractIntegrationTest
         $this->assertSame('', $response->getBody());
     }
 
-    public function testV2CatalogImportHandlerPlacesImportCommandsIntoQueue()
+    public function testV2CatalogImportHandlerPlacesImportCommandsIntoQueue(): void
     {
         $testDataVersionString = 'foo-123';
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');

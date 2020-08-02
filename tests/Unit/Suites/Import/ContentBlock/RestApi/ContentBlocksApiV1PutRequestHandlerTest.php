@@ -27,22 +27,22 @@ use PHPUnit\Framework\TestCase;
 class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
 {
     /**
-     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|MockObject
      */
     private $mockCommandQueue;
 
     /**
-     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextBuilder|MockObject
      */
     private $stubContextBuilder;
 
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolReader|MockObject
      */
     private $dummyDataPoolReader;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $mockRequest;
 
@@ -51,7 +51,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
      */
     private $requestHandler;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
@@ -72,7 +72,7 @@ class ContentBlocksApiV1PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testEmitsUpdateContentBlockCommandWithCurrentDataVersion()
+    public function testEmitsUpdateContentBlockCommandWithCurrentDataVersion(): void
     {
         $testVersion = 'foo-bar';
 

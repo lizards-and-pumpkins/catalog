@@ -15,13 +15,13 @@ class DirectoryTest extends TestCase
 {
     use TestFileFixtureTrait;
 
-    public function testExceptionIfNonStringIsSpecifiedAsDirectoryPath()
+    public function testExceptionIfNonStringIsSpecifiedAsDirectoryPath(): void
     {
         $this->expectException(\TypeError::class);
         Directory::fromPath(1);
     }
 
-    public function testExceptionIsThrownIfFileWithGivenPathAlreadyExists()
+    public function testExceptionIsThrownIfFileWithGivenPathAlreadyExists(): void
     {
         $filePath = $this->getUniqueTempDir() . '/' . uniqid();
         $this->createFixtureFile($filePath, '');
@@ -31,19 +31,19 @@ class DirectoryTest extends TestCase
         Directory::fromPath($filePath);
     }
 
-    public function testFalseIsReturnedIfDirectoryIsNotReadable()
+    public function testFalseIsReturnedIfDirectoryIsNotReadable(): void
     {
         $directory = Directory::fromPath('/some-not-existing-directory');
         $this->assertFalse($directory->isReadable());
     }
 
-    public function testTrueIsReturnedIfDirectoryIsReadable()
+    public function testTrueIsReturnedIfDirectoryIsReadable(): void
     {
         $directory = Directory::fromPath(sys_get_temp_dir());
         $this->assertTrue($directory->isReadable());
     }
 
-    public function testDirectoryPathIsReturned()
+    public function testDirectoryPathIsReturned(): void
     {
         $directoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($directoryPath);

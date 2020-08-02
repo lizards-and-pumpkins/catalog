@@ -11,19 +11,19 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductIdTest extends TestCase
 {
-    public function testExceptionIsThrownDuringAttemptToCreateProductIdFromNonString()
+    public function testExceptionIsThrownDuringAttemptToCreateProductIdFromNonString(): void
     {
         $this->expectException(\TypeError::class);
         new ProductId(1);
     }
 
-    public function testProductIdCanBeCreatedFromString()
+    public function testProductIdCanBeCreatedFromString(): void
     {
         $productId = new ProductId('foo');
         $this->assertInstanceOf(ProductId::class, $productId);
     }
 
-    public function testProductIdCanBeConvertedToString()
+    public function testProductIdCanBeConvertedToString(): void
     {
         $productIdString = 'foo';
         $productId = new ProductId($productIdString);

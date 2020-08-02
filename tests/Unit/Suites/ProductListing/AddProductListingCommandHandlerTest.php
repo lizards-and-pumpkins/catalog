@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 class AddProductListingCommandHandlerTest extends TestCase
 {
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|MockObject
      */
     private $mockDomainEventQueue;
 
@@ -36,7 +36,7 @@ class AddProductListingCommandHandlerTest extends TestCase
 
     private function createTestMessage(): Message
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        /** @var ProductListing|MockObject $stubProductListing */
         $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => '123']);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
@@ -44,19 +44,19 @@ class AddProductListingCommandHandlerTest extends TestCase
         return (new AddProductListingCommand($stubProductListing))->toMessage();
     }
     
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
 
         $this->commandHandler = new AddProductListingCommandHandler($this->mockDomainEventQueue);
     }
 
-    public function testCommandHandlerInterfaceIsImplemented()
+    public function testCommandHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
-    public function testProductListingWasAddedDomainEventIsEmitted()
+    public function testProductListingWasAddedDomainEventIsEmitted(): void
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 

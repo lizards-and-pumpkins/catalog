@@ -31,7 +31,7 @@ use PHPUnit\Framework\TestCase;
 class ProductWasUpdatedDomainEventHandlerTest extends TestCase
 {
     /**
-     * @var ProductProjector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductProjector|MockObject
      */
     private $mockProductProjector;
 
@@ -53,19 +53,19 @@ class ProductWasUpdatedDomainEventHandlerTest extends TestCase
         return (new ProductWasUpdatedDomainEvent($testProduct))->toMessage();
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProductProjector = $this->createMock(ProductProjector::class);
 
         $this->domainEventHandler = new ProductWasUpdatedDomainEventHandler($this->mockProductProjector);
     }
 
-    public function testDomainEventHandlerInterfaceIsImplemented()
+    public function testDomainEventHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
     }
 
-    public function testProductProjectionIsTriggered()
+    public function testProductProjectionIsTriggered(): void
     {
         $this->mockProductProjector->expects($this->once())->method('project');
         $this->domainEventHandler->process($this->createTestMessage());

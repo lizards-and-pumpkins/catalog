@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class ClearableStubUrlKeyStore implements UrlKeyStore, Clearable
 {
-    public function clear()
+    public function clear(): void
     {
         // Intentionally left empty
     }

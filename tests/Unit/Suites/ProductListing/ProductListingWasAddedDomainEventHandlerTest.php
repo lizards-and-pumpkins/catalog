@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class ProductListingWasAddedDomainEventHandlerTest extends TestCase
 {
     /**
-     * @var ProductListingProjector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingProjector|MockObject
      */
     private $mockProjector;
 
@@ -35,14 +35,14 @@ class ProductListingWasAddedDomainEventHandlerTest extends TestCase
 
     private function createTestMessage(): Message
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        /** @var ProductListing|MockObject $stubProductListing */
         $stubProductListing = $this->createMock(ProductListing::class);
         $stubProductListing->method('serialize')->willReturn(serialize($stubProductListing));
         $stubProductListing->method('getContextData')->willReturn([DataVersion::CONTEXT_CODE => 'foo']);
         return (new ProductListingWasAddedDomainEvent($stubProductListing))->toMessage();
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         
         $this->mockProjector = $this->createMock(ProductListingProjector::class);
@@ -50,12 +50,12 @@ class ProductListingWasAddedDomainEventHandlerTest extends TestCase
         $this->domainEventHandler = new ProductListingWasAddedDomainEventHandler($this->mockProjector);
     }
 
-    public function testDomainHandlerInterfaceIsImplemented()
+    public function testDomainHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
     }
 
-    public function testProductListingProjectionIsTriggered()
+    public function testProductListingProjectionIsTriggered(): void
     {
         $this->mockProjector->expects($this->once())->method('project');
         

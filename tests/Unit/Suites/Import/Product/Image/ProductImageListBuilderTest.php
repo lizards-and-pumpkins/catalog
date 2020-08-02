@@ -45,6 +45,7 @@ class ProductImageListBuilderTest extends TestCase
     {
         $property = new \ReflectionProperty($productImageListBuilder, $attributeCode);
         $property->setAccessible(true);
+
         return $property->getValue($productImageListBuilder);
     }
 
@@ -69,18 +70,18 @@ class ProductImageListBuilderTest extends TestCase
         ];
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testProductId = new ProductId('test-sku');
     }
 
-    public function testItReturnsAProductImageListBuilderInstance()
+    public function testItReturnsAProductImageListBuilderInstance(): void
     {
         $productImageList = ProductImageListBuilder::fromImageArrays($this->testProductId);
         $this->assertInstanceOf(ProductImageListBuilder::class, $productImageList);
     }
 
-    public function testItCreatesTheCorrectCountOfImages()
+    public function testItCreatesTheCorrectCountOfImages(): void
     {
         $productImageListArray = [
             $this->getImageAttributeArray('test1.jpg', 'The label A'),
@@ -95,7 +96,7 @@ class ProductImageListBuilderTest extends TestCase
         $this->assertCount(2, $imageBuilders);
     }
 
-    public function testItReturnsAProductImageListInstance()
+    public function testItReturnsAProductImageListInstance(): void
     {
         $productImageListBuilder = ProductImageListBuilder::fromImageArrays($this->testProductId);
         $stubContext = $this->createMock(Context::class);
@@ -103,7 +104,7 @@ class ProductImageListBuilderTest extends TestCase
         $this->assertInstanceOf(ProductImageList::class, $productImageList);
     }
 
-    public function testItExtractsTheRightAmountOfImages()
+    public function testItExtractsTheRightAmountOfImages(): void
     {
         $productImageListArray = [
             $this->getImageAttributeArray('test1.jpg', 'The label A'),

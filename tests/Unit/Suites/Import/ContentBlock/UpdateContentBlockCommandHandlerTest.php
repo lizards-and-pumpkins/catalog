@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 class UpdateContentBlockCommandHandlerTest extends TestCase
 {
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue
      */
     private $mockDomainEventQueue;
 
@@ -35,10 +35,7 @@ class UpdateContentBlockCommandHandlerTest extends TestCase
      */
     private $commandHandler;
 
-    /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createDummyContext()
+    private function createDummyContext(): Context
     {
         $dummyContext = $this->createMock(Context::class);
         $dummyContext->method('jsonSerialize')->willReturn([]);
@@ -53,18 +50,18 @@ class UpdateContentBlockCommandHandlerTest extends TestCase
         return (new UpdateContentBlockCommand($testContentBlockSource))->toMessage();
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
         $this->commandHandler = new UpdateContentBlockCommandHandler($this->mockDomainEventQueue);
     }
 
-    public function testCommandHandlerInterfaceIsImplemented()
+    public function testCommandHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
-    public function testContentBlockWasUpdatedDomainEventIsEmitted()
+    public function testContentBlockWasUpdatedDomainEventIsEmitted(): void
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 

@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Import\Projector;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Import\TemplateRendering\Exception\InvalidTemplateProjectorCodeException;
 use LizardsAndPumpkins\Import\RootTemplate\Exception\UnableToLocateTemplateProjectorException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,31 +22,31 @@ class TemplateProjectorLocatorTest extends TestCase
     private $locator;
 
     /**
-     * @return Projector|\PHPUnit_Framework_MockObject_MockObject
+     * @return Projector|MockObject
      */
-    private function getStubProjector()
+    private function getStubProjector(): Projector
     {
         return $this->createMock(Projector::class);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->locator = new TemplateProjectorLocator;
     }
 
-    public function testExceptionIsThrownIfNonStringCodeIsPassed()
+    public function testExceptionIsThrownIfNonStringCodeIsPassed(): void
     {
         $this->expectException(\TypeError::class);
         $this->locator->getTemplateProjectorForCode(1);
     }
 
-    public function testExceptionIsThrownIfProjectorCanNotBeLocated()
+    public function testExceptionIsThrownIfProjectorCanNotBeLocated(): void
     {
         $this->expectException(UnableToLocateTemplateProjectorException::class);
         $this->locator->getTemplateProjectorForCode('foo');
     }
 
-    public function testExceptionIsThrownDuringAttemptToRegisterProjectorWithNonStringCode()
+    public function testExceptionIsThrownDuringAttemptToRegisterProjectorWithNonStringCode(): void
     {
         $invalidTemplateCode = 1;
         $this->expectException(\TypeError::class);
@@ -53,7 +54,7 @@ class TemplateProjectorLocatorTest extends TestCase
         $this->locator->register($invalidTemplateCode, $this->getStubProjector());
     }
 
-    public function testProjectorForTemplateCodesIsReturned()
+    public function testProjectorForTemplateCodesIsReturned(): void
     {
         $dummyTemplateCode = 'foo';
 
@@ -64,7 +65,7 @@ class TemplateProjectorLocatorTest extends TestCase
         $this->assertSame($stubProjector, $result);
     }
 
-    public function testSameInstanceForSameTemplateCodeIsReturned()
+    public function testSameInstanceForSameTemplateCodeIsReturned(): void
     {
         $dummyTemplateCode = 'foo';
 
@@ -75,7 +76,7 @@ class TemplateProjectorLocatorTest extends TestCase
         $this->assertSame($resultA, $resultB);
     }
 
-    public function testDifferentInstancesAreReturnedForDifferentTemplateCodes()
+    public function testDifferentInstancesAreReturnedForDifferentTemplateCodes(): void
     {
         $dummyTemplateCodeA = 'foo';
         $stubProjectorA = $this->getStubProjector();
@@ -94,7 +95,7 @@ class TemplateProjectorLocatorTest extends TestCase
     /**
      * @dataProvider projectorCodesToRegisterProvider
      */
-    public function testReturnsTheRegisteredProjectorCodes(string ...$codesToRegister)
+    public function testReturnsTheRegisteredProjectorCodes(string ...$codesToRegister): void
     {
         array_map(function ($codeToRegister) {
             $this->locator->register($codeToRegister, $this->getStubProjector());

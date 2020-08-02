@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
 {
     /**
-     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|MockObject
      */
     private $mockCommandQueue;
 
@@ -43,16 +43,16 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
     private $requestHandler;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $mockRequest;
 
     /**
-     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextBuilder|MockObject
      */
     private $stubContextBuilder;
     
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
         $this->stubContextBuilder = $this->createMock(ContextBuilder::class);
@@ -70,18 +70,18 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->mockRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testIsHttpRequestHandler()
+    public function testIsHttpRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    public function testCanNotProcessRequestIfMethodIsNotPut()
+    public function testCanNotProcessRequestIfMethodIsNotPut(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testCanNotProcessRequestIfUrlDoesNotContainContentBlockId()
+    public function testCanNotProcessRequestIfUrlDoesNotContainContentBlockId(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
 
@@ -91,7 +91,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->assertFalse($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testCanProcessRequestIfValid()
+    public function testCanProcessRequestIfValid(): void
     {
         $this->mockRequest->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
 
@@ -101,7 +101,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->assertTrue($this->requestHandler->canProcess($this->mockRequest));
     }
 
-    public function testThrowsExceptionIfContentBlockContentIsMissingInRequestBody()
+    public function testThrowsExceptionIfContentBlockContentIsMissingInRequestBody(): void
     {
         $this->expectException(ContentBlockBodyIsMissingInRequestBodyException::class);
         $this->expectExceptionMessage('Content block content is missing in request body.');
@@ -111,7 +111,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testThrowsExceptionIfContentBlockContextIsMissingInRequestBody()
+    public function testThrowsExceptionIfContentBlockContextIsMissingInRequestBody(): void
     {
         $this->expectException(ContentBlockContextIsMissingInRequestBodyException::class);
         $this->expectExceptionMessage('Content block context is missing in request body.');
@@ -121,7 +121,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testThrowsExceptionIfContentBlockContextIsNotAnArray()
+    public function testThrowsExceptionIfContentBlockContextIsNotAnArray(): void
     {
         $this->expectException(InvalidContentBlockContextException::class);
         $this->expectExceptionMessage('Content block context supposed to be an array, got string.');
@@ -131,7 +131,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testThrowsExceptionIfContentBlockUrlKeyIsInvalid()
+    public function testThrowsExceptionIfContentBlockUrlKeyIsInvalid(): void
     {
         $this->expectException(InvalidContentBlockUrlKey::class);
         $this->expectExceptionMessage('Content block URL key must be a string, got integer.');
@@ -142,7 +142,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testThrowsExceptionIfDataVersionIsMissing()
+    public function testThrowsExceptionIfDataVersionIsMissing(): void
     {
         $this->expectException(MissingContentBlockDataVersionException::class);
         $this->expectExceptionMessage('The content block data version must be specified.');
@@ -155,7 +155,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
         $this->requestHandler->process($this->mockRequest);
     }
 
-    public function testValidatesTheDataVersion()
+    public function testValidatesTheDataVersion(): void
     {
         $this->expectException(EmptyVersionException::class);
         $this->expectExceptionMessage('The specified version is empty.');
@@ -169,7 +169,7 @@ class ContentBlocksApiV2PutRequestHandlerTest extends TestCase
 
     }
 
-    public function testEmitsUpdateContentBlockCommand()
+    public function testEmitsUpdateContentBlockCommand(): void
     {
         $testVersion = 'foo-bar';
         $requestBody = [

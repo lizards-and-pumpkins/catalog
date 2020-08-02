@@ -34,7 +34,7 @@ class ConfigurableProductXmlToProductBuilderTest extends TestCase
      */
     private $configurableProductXmlToProductBuilder;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $stubProductXmlToProductBuilderLocatorProxy = function () {
             return $this->createMock(ProductXmlToProductBuilderLocator::class);
@@ -44,14 +44,14 @@ class ConfigurableProductXmlToProductBuilderTest extends TestCase
         );
     }
 
-    public function testItReturnsTheConfigurableProductTypeCode()
+    public function testItReturnsTheConfigurableProductTypeCode(): void
     {
         $productTypeCode = $this->configurableProductXmlToProductBuilder->getSupportedProductTypeCode();
         $this->assertInstanceOf(ProductTypeCode::class, $productTypeCode);
         $this->assertEquals(ConfigurableProduct::TYPE_CODE, $productTypeCode);
     }
 
-    public function testItReturnsAConfigurableProductBuilderInstance()
+    public function testItReturnsAConfigurableProductBuilderInstance(): void
     {
         $xml = '
 <product type="configurable" sku="test" tax_class="test">

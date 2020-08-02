@@ -21,12 +21,12 @@ use PHPUnit\Framework\TestCase;
 class ShutdownConsumerConsoleCommandTest extends TestCase
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|MockObject
      */
     private $stubMasterFactory;
 
     /**
-     * @var CLImate|\PHPUnit_Framework_MockObject_MockObject
+     * @var CLImate|MockObject
      */
     private $mockCliMate;
 
@@ -45,7 +45,7 @@ class ShutdownConsumerConsoleCommandTest extends TestCase
         return array_values($arguments);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['getCommandQueue', 'getEventQueue']))
@@ -58,7 +58,7 @@ class ShutdownConsumerConsoleCommandTest extends TestCase
         $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
     }
 
-    public function testIsABaseCliCommand()
+    public function testIsABaseCliCommand(): void
     {
         $command = new ShutdownConsumerConsoleCommand($this->stubMasterFactory, $this->mockCliMate);
         $this->assertInstanceOf(BaseCliCommand::class, $command);
@@ -66,8 +66,11 @@ class ShutdownConsumerConsoleCommandTest extends TestCase
 
     /**
      * @dataProvider queueTypeDataProvider
+     * @param string $type
+     * @param string $queueClass
+     * @param string $queueFactoryMethod
      */
-    public function testAddsShutdownDirectiveToQueue(string $type, string $queueClass, string $queueFactoryMethod)
+    public function testAddsShutdownDirectiveToQueue(string $type, string $queueClass, string $queueFactoryMethod): void
     {
         $argumentMap = $this->getCommandArgumentMap([
             'type' => $type,
@@ -90,7 +93,7 @@ class ShutdownConsumerConsoleCommandTest extends TestCase
         ];
     }
 
-    public function testDisplaysAnErrorIfTheQueueTypeIsNotSpecified()
+    public function testDisplaysAnErrorIfTheQueueTypeIsNotSpecified(): void
     {
         $argumentMap = $this->getCommandArgumentMap(['pid' => 123]);
         $this->mockCliMate->arguments->method('get')->willReturnMap($argumentMap);

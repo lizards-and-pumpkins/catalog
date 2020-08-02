@@ -17,19 +17,19 @@ class IntegrationTestSearchEngineOperationAnythingTest extends TestCase
      */
     private $operation;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->operation = new IntegrationTestSearchEngineOperationAnything();
     }
 
-    public function testImplementsIntegrationTestSearchEngineOperationInterface()
+    public function testImplementsIntegrationTestSearchEngineOperationInterface(): void
     {
         $this->assertInstanceOf(IntegrationTestSearchEngineOperation::class, $this->operation);
     }
 
-    public function testMatchesAnyDocument()
+    public function testMatchesAnyDocument(): void
     {
-        /** @var SearchDocument|\PHPUnit_Framework_MockObject_MockObject $stubSearchDocument */
+        /** @var SearchDocument|MockObject $stubSearchDocument */
         $stubSearchDocument = $this->createMock(SearchDocument::class);
 
         $this->assertTrue($this->operation->matches($stubSearchDocument));

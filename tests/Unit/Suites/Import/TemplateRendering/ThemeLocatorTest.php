@@ -27,7 +27,7 @@ class ThemeLocatorTest extends TestCase
      */
     private $preTestWorkingDirectory;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->preTestWorkingDirectory = getcwd();
         $testBasePath = realpath(sys_get_temp_dir());
@@ -35,17 +35,17 @@ class ThemeLocatorTest extends TestCase
         $this->locator = new ThemeLocator($testBasePath);
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         chdir($this->preTestWorkingDirectory);
     }
     
-    public function testPathToThemeDirectoryIsReturned()
+    public function testPathToThemeDirectoryIsReturned(): void
     {
         $this->assertEquals(realpath(sys_get_temp_dir()) . '/theme', $this->locator->getThemeDirectory());
     }
 
-    public function testLayoutObjectIsReturnedForGivenHandle()
+    public function testLayoutObjectIsReturnedForGivenHandle(): void
     {
         $layoutHandle = 'test_layout_handle_' . uniqid();
         $layoutFile = $this->locator->getThemeDirectory() . '/layout/' . $layoutHandle . '.xml';

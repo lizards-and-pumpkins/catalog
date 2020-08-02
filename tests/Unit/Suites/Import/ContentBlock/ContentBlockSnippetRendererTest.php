@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class ContentBlockSnippetRendererTest extends TestCase
 {
     /**
-     * @var ContentBlockSnippetKeyGeneratorLocatorStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentBlockSnippetKeyGeneratorLocatorStrategy|MockObject
      */
     private $stubSnippetKeyGeneratorLocator;
 
@@ -30,7 +30,7 @@ class ContentBlockSnippetRendererTest extends TestCase
 
     /**
      * @param string $contentBlockContent
-     * @return ContentBlockSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return ContentBlockSource|MockObject
      */
     private function createStubContentBlockSource(string $contentBlockContent): ContentBlockSource
     {
@@ -42,18 +42,18 @@ class ContentBlockSnippetRendererTest extends TestCase
         return $stubContentBlockSource;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubSnippetKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
         $this->renderer = new ContentBlockSnippetRenderer($this->stubSnippetKeyGeneratorLocator);
     }
 
-    public function testSnippetRendererInterfaceIsImplemented()
+    public function testSnippetRendererInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testThrowsExceptionIfDataObjectIsNotContentBlockSource()
+    public function testThrowsExceptionIfDataObjectIsNotContentBlockSource(): void
     {
         $this->expectException(InvalidDataObjectTypeException::class);
         $this->expectExceptionMessage('Data object must be ContentBlockSource, got string.');
@@ -61,7 +61,7 @@ class ContentBlockSnippetRendererTest extends TestCase
         $this->renderer->render('foo');
     }
 
-    public function testSnippetIsAddedToList()
+    public function testSnippetIsAddedToList(): void
     {
         $stubSnippetKey = 'foo';
         $dummyContentBlockContent = 'bar';

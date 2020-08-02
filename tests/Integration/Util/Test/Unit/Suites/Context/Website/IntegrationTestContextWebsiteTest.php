@@ -17,17 +17,17 @@ class IntegrationTestContextWebsiteTest extends TestCase
      */
     private $contextWebsite;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->contextWebsite = new IntegrationTestContextWebsite();
     }
 
-    public function testItIsAContextPartBuilder()
+    public function testItIsAContextPartBuilder(): void
     {
         $this->assertInstanceOf(ContextPartBuilder::class, $this->contextWebsite);
     }
 
-    public function testItReturnsTheWebsiteCode()
+    public function testItReturnsTheWebsiteCode(): void
     {
         $this->assertSame(Website::CONTEXT_CODE, $this->contextWebsite->getCode());
     }
@@ -35,7 +35,7 @@ class IntegrationTestContextWebsiteTest extends TestCase
     /**
      * @dataProvider websiteCodeProvider
      */
-    public function testItReturnsTheWebsiteIfPresentInTheInput(string $websiteCode)
+    public function testItReturnsTheWebsiteIfPresentInTheInput(string $websiteCode): void
     {
         $inputDataSet = [Website::CONTEXT_CODE => $websiteCode];
         $this->assertSame($websiteCode, $this->contextWebsite->getValue($inputDataSet));
@@ -49,7 +49,7 @@ class IntegrationTestContextWebsiteTest extends TestCase
         return [['foo'], ['bar']];
     }
 
-    public function testItReturnsDefaultWebsiteCodeIfNotExplicitlySet()
+    public function testItReturnsDefaultWebsiteCodeIfNotExplicitlySet(): void
     {
         $inputDataSet = [];
         $this->assertSame('fr', $this->contextWebsite->getValue($inputDataSet));

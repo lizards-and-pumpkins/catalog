@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategyTest extends TestCase
 {
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|MockObject
      */
     private $stubSnippetKeyGenerator;
 
@@ -25,7 +25,7 @@ class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategyTest extends T
      */
     private $strategy;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $testKeyGeneratorFactoryClosure = function () {
@@ -36,31 +36,31 @@ class ProductListingContentBlockSnippetKeyGeneratorLocatorStrategyTest extends T
         );
     }
 
-    public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented()
+    public function testSnippetKeyGeneratorLocatorStrategyInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SnippetKeyGeneratorLocator::class, $this->strategy);
     }
 
-    public function testFalseIsReturnedIfSnippetCodeIsNotSupported()
+    public function testFalseIsReturnedIfSnippetCodeIsNotSupported(): void
     {
         $unsupportedSnippetCode = 'foo';
         $this->assertFalse($this->strategy->canHandle($unsupportedSnippetCode));
     }
 
-    public function testTrueIsReturnedIfSnippetCodeIsSupported()
+    public function testTrueIsReturnedIfSnippetCodeIsSupported(): void
     {
         $snippetCode = 'product_listing_content_block_foo';
         $this->assertTrue($this->strategy->canHandle($snippetCode));
     }
 
-    public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode()
+    public function testExceptionIsThrownDuringAttemptToSnippetKeyGeneratorForUnsupportedSnippetCode(): void
     {
         $unsupportedSnippetCode = 'foo';
         $this->expectException(SnippetCodeCanNotBeProcessedException::class);
         $this->strategy->getKeyGeneratorForSnippetCode($unsupportedSnippetCode);
     }
 
-    public function testSnippetKeyGeneratorIsReturned()
+    public function testSnippetKeyGeneratorIsReturned(): void
     {
         $snippetCode = 'product_listing_content_block_foo';
         $result = $this->strategy->getKeyGeneratorForSnippetCode($snippetCode);

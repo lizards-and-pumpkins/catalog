@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins;
 
 class ProductUrlKeyStoreTest extends AbstractIntegrationTest
 {
-    public function testUrlKeysAreWrittenToStore()
+    public function testUrlKeysAreWrittenToStore(): void
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         

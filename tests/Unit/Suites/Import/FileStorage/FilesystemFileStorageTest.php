@@ -36,23 +36,23 @@ class FilesystemFileStorageTest extends TestCase
     private $testFileContent = '*** test content ***';
 
     /**
-     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File
      */
     private $mockFile;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testBaseDirectory = $this->getUniqueTempDir();
         $this->mockFile = $this->createMock(File::class);
         $this->fileStorage = new FilesystemFileStorage($this->testBaseDirectory);
     }
 
-    public function testItImplementsTheFileStorageInterface()
+    public function testItImplementsTheFileStorageInterface(): void
     {
         $this->assertInstanceOf(FileStorage::class, $this->fileStorage);
     }
 
-    public function testItReturnsAFileInstance()
+    public function testItReturnsAFileInstance(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/readme.md');
 
@@ -60,19 +60,19 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertInstanceOf(File::class, $file);
     }
 
-    public function testContainsReturnsTrueIfTheFileExists()
+    public function testContainsReturnsTrueIfTheFileExists(): void
     {
         $fileURI = 'test/readme.md';
         $this->createFixtureFile($this->testBaseDirectory . '/' . $fileURI, $this->testFileContent);
         $this->assertTrue($this->fileStorage->contains(StorageAgnosticFileUri::fromString($fileURI)));
     }
 
-    public function testContainsReturnsFalseIfTheFileNotExists()
+    public function testContainsReturnsFalseIfTheFileNotExists(): void
     {
         $this->assertFalse($this->fileStorage->contains(StorageAgnosticFileUri::fromString('non-existing')));
     }
 
-    public function testPutContentCreatesAFileIfItDoesNotExist()
+    public function testPutContentCreatesAFileIfItDoesNotExist(): void
     {
         $fileURI = 'this/is/a/new-file';
         $file = $this->testBaseDirectory . '/' . $fileURI;
@@ -86,7 +86,7 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertSame($this->testFileContent, file_get_contents($file));
     }
 
-    public function testPutContentUpdatesFileContentsIfTheFileDoesNotYetExist()
+    public function testPutContentUpdatesFileContentsIfTheFileDoesNotYetExist(): void
     {
         $fileURI = 'this/is/an/existing-file';
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;
@@ -100,7 +100,7 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertSame($this->testFileContent, file_get_contents($filesystemPath));
     }
 
-    public function testGetContentThrowsAnExceptionIfTheFileDoesNotExist()
+    public function testGetContentThrowsAnExceptionIfTheFileDoesNotExist(): void
     {
         $fileURI = 'non-existing-file';
         $this->expectException(FileDoesNotExistException::class);
@@ -109,7 +109,7 @@ class FilesystemFileStorageTest extends TestCase
         $this->fileStorage->getContent($identifier);
     }
 
-    public function testGetContentReturnsTheContentsOfAnExistingFile()
+    public function testGetContentReturnsTheContentsOfAnExistingFile(): void
     {
         $fileURI = 'non-existing-file';
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;
@@ -122,15 +122,16 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertSame($this->testFileContent, (string) $fileContent);
     }
 
-    public function testItImplementsTheFileToFileStorageInterfaces()
+    public function testItImplementsTheFileToFileStorageInterfaces(): void
     {
         $this->assertInstanceOf(FileToFileStorage::class, $this->fileStorage);
     }
 
     /**
      * @dataProvider methodWithFileArgumentProvider
+     * @param string $methodWithFileArgument
      */
-    public function testItThrowsAnExceptionIfTheFileStorageTypeDoesNotMatch(string $methodWithFileArgument)
+    public function testItThrowsAnExceptionIfTheFileStorageTypeDoesNotMatch(string $methodWithFileArgument): void
     {
         $this->expectException(FileStorageTypeMismatchException::class);
         $this->expectExceptionMessage(
@@ -156,7 +157,7 @@ class FilesystemFileStorageTest extends TestCase
         ];
     }
 
-    public function testIsPresentReturnsFalseForANotExistingFile()
+    public function testIsPresentReturnsFalseForANotExistingFile(): void
     {
         $filesystemPath = $this->testBaseDirectory . '/non-existing';
         $this->mockFile->method('getInStorageUri')->willReturn(FilesystemFileUri::fromString('/non-existing'));
@@ -165,7 +166,7 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertFalse($this->fileStorage->isPresent($this->mockFile));
     }
 
-    public function testItReturnsTrueForAnExistingFile()
+    public function testItReturnsTrueForAnExistingFile(): void
     {
         $this->mockFile->method('getInStorageUri')->willReturn(FilesystemFileUri::fromString('/existing-file'));
         $filesystemPath = $this->testBaseDirectory . '/existing-file';
@@ -175,7 +176,7 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertTrue($this->fileStorage->isPresent($this->mockFile));
     }
 
-    public function testWriteCreatesAFileIfItDoesNotExist()
+    public function testWriteCreatesAFileIfItDoesNotExist(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/file-to-create');
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;
@@ -191,7 +192,7 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertSame($this->testFileContent, file_get_contents($filesystemPath));
     }
 
-    public function testWriteUpdateAnExistingFile()
+    public function testWriteUpdateAnExistingFile(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/file-to-update');
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;
@@ -206,7 +207,7 @@ class FilesystemFileStorageTest extends TestCase
         $this->assertSame($this->testFileContent, file_get_contents($filesystemPath));
     }
 
-    public function testReadReturnsAnExistingFilesContent()
+    public function testReadReturnsAnExistingFilesContent(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/file-to-read');
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;
@@ -216,11 +217,11 @@ class FilesystemFileStorageTest extends TestCase
 
         $content = $this->fileStorage->read($this->mockFile);
         
-        $this->assertInternalType('string', $content);
+        $this->assertIsString($content);
         $this->assertSame($this->testFileContent, $content);
     }
 
-    public function testReadThrowsAnExceptionForNonExistentFiles()
+    public function testReadThrowsAnExceptionForNonExistentFiles(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/file-to-read');
         $filesystemPath = $this->testBaseDirectory . '/' . $fileURI;

@@ -15,14 +15,14 @@ use PHPUnit\Framework\TestCase;
  */
 class TemplateProjectionDataTest extends TestCase
 {
-    public function testReturnsTheInjectedTemplateContent()
+    public function testReturnsTheInjectedTemplateContent(): void
     {
         $testContent = 'foo';
         $dataVersion = DataVersion::fromVersionString('bar');
         $this->assertSame($testContent, (new TemplateProjectionData($testContent, $dataVersion))->getContent());
     }
 
-    public function testReturnsTheInjectedDataVersion()
+    public function testReturnsTheInjectedDataVersion(): void
     {
         $testContent = 'foo';
         $dataVersion = DataVersion::fromVersionString('bar');
@@ -30,7 +30,7 @@ class TemplateProjectionDataTest extends TestCase
         $this->assertEquals((string) $dataVersion, $templateProjectionData->getDataVersion());
     }
 
-    public function testCanBeCreatedFromTemplateWasUpdatedDomanEvent()
+    public function testCanBeCreatedFromTemplateWasUpdatedDomanEvent(): void
     {
         $event = new TemplateWasUpdatedDomainEvent(
             $templateId = 'foo',

@@ -18,7 +18,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    private function renderProductListingTemplate()
+    private function renderProductListingTemplate(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
         $httpHeaders = HttpHeaders::fromArray([
@@ -50,17 +50,17 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         return $page->getBody();
     }
 
-    private function importContentBlockViaApiV1(string $snippetCode, string $httpRequestBodyString)
+    private function importContentBlockViaApiV1(string $snippetCode, string $httpRequestBodyString): void
     {
         $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString, 'v1');
     }
 
-    private function importContentBlockViaApiV2(string $snippetCode, string $httpRequestBodyString)
+    private function importContentBlockViaApiV2(string $snippetCode, string $httpRequestBodyString): void
     {
         $this->importContentBlockViaApi($snippetCode, $httpRequestBodyString, 'v2');
     }
 
-    private function importContentBlockViaApi(string $snippetCode, string $httpRequestBodyString, string $version)
+    private function importContentBlockViaApi(string $snippetCode, string $httpRequestBodyString, string $version): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/content_blocks/' . $snippetCode);
         $httpHeaders = HttpHeaders::fromArray([
@@ -135,7 +135,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         return $snippetKeyGenerator->getKeyForContext($context, $keyGeneratorParameters);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,
@@ -146,7 +146,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
     }
 
-    public function testContentBlockSnippetIsWrittenIntoDataPool()
+    public function testContentBlockSnippetIsWrittenIntoDataPool(): void
     {
         $snippetCode = 'content_block_foo';
         $contentBlockContent = 'bar';
@@ -164,7 +164,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->assertEquals($contentBlockContent, $snippetContent);
     }
 
-    public function testProductListingSpecificContentBlockIsWrittenIntoDataPool()
+    public function testProductListingSpecificContentBlockIsWrittenIntoDataPool(): void
     {
         $productListingUrlKey = 'foo';
         $contentBlockContent = 'bar';
@@ -184,7 +184,7 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->assertEquals($contentBlockContent, $snippetContent);
     }
 
-    public function testProductListingSpecificContentBlockIsPresentOnProductListingPage()
+    public function testProductListingSpecificContentBlockIsPresentOnProductListingPage(): void
     {
         $productListingUrlKey = 'sale';
         $contentBlockContent = '<p>foo</p>';
@@ -201,11 +201,11 @@ class ContentBlockImportTest extends AbstractIntegrationTest
         $this->renderProductListingTemplate();
         $this->importCatalogFixture($this->factory, 'product_listings.xml');
 
-        $this->assertContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));
-        $this->assertNotContains($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics'));
+        $this->assertStringContainsString($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('sale'));
+        $this->assertStringNotContainsString($contentBlockContent, $this->getProductListingPageHtmlByUrlKey('asics'));
     }
 
-    public function testContentBlockSnippetIsWrittenIntoDataPoolWithTheSpecifiedDataVersion()
+    public function testContentBlockSnippetIsWrittenIntoDataPoolWithTheSpecifiedDataVersion(): void
     {
         $currentDataVersion = DataVersion::fromVersionString('foo');
         $targetDataVersion = DataVersion::fromVersionString('baz');

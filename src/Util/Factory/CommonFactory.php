@@ -57,14 +57,12 @@ use LizardsAndPumpkins\Import\SnippetRenderer;
 use LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
-use LizardsAndPumpkins\Messaging\Command\CommandHandlerFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandHandlerLocator;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandler;
-use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventHandlerLocator;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope;
@@ -126,7 +124,7 @@ use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\ImageStorage\MediaBaseUrlBuilder;
 use LizardsAndPumpkins\Import\ImageStorage\MediaDirectoryBaseUrlBuilder;
 
-class CommonFactory implements Factory, DomainEventHandlerFactory, CommandHandlerFactory
+class CommonFactory implements Factory
 {
     use FactoryTrait;
     

@@ -18,7 +18,7 @@ class StorageAgnosticFileUriTest extends TestCase
      * @param string $expectedType
      * @dataProvider invalidFileIdentifierProvider
      */
-    public function testItThrowsAnExceptionIfTheFileIdentifierIsInvalid($invalidIdentifier, string $expectedType)
+    public function testItThrowsAnExceptionIfTheFileIdentifierIsInvalid($invalidIdentifier, string $expectedType): void
     {
         $this->expectException(InvalidFileIdentifierException::class);
         $this->expectExceptionMessage(sprintf('The file identifier has to be a string, got "%s"', $expectedType));
@@ -39,7 +39,7 @@ class StorageAgnosticFileUriTest extends TestCase
     /**
      * @dataProvider emptyFileIdentifierProvider
      */
-    public function testItThrowsAnExceptionIfTheFileIdentifierStringIsEmpty(string $emptyIdentifier)
+    public function testItThrowsAnExceptionIfTheFileIdentifierStringIsEmpty(string $emptyIdentifier): void
     {
         $this->expectException(InvalidFileIdentifierException::class);
         $this->expectExceptionMessage('The file identifier must not be empty');
@@ -57,7 +57,7 @@ class StorageAgnosticFileUriTest extends TestCase
         ];
     }
 
-    public function testItReturnsAFileIdentifierInstance()
+    public function testItReturnsAFileIdentifierInstance(): void
     {
         $fileIdentifierString = 'test';
         $this->assertInstanceOf(
@@ -69,7 +69,7 @@ class StorageAgnosticFileUriTest extends TestCase
     /**
      * @dataProvider fileIdentifierStringProvider
      */
-    public function testItReturnsTheFileIdentifierAsAString(string $identifierString)
+    public function testItReturnsTheFileIdentifierAsAString(string $identifierString): void
     {
         $this->assertEquals($identifierString, StorageAgnosticFileUri::fromString($identifierString));
     }
@@ -85,7 +85,7 @@ class StorageAgnosticFileUriTest extends TestCase
         ];
     }
 
-    public function testItAcceptsAFileIdentifierAsInput()
+    public function testItAcceptsAFileIdentifierAsInput(): void
     {
         $sourceIdentifier = StorageAgnosticFileUri::fromString('test');
         $otherIdentifier = StorageAgnosticFileUri::fromString($sourceIdentifier);

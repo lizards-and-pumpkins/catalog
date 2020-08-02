@@ -55,10 +55,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\RootTemplate\UpdateTemplateCommandHandler
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\BlockRenderer
  * @uses   \LizardsAndPumpkins\Import\TemplateRendering\TemplateSnippetRenderer
- * @uses   \LizardsAndPumpkins\Logging\LoggingCommandHandlerFactory
- * @uses   \LizardsAndPumpkins\Logging\LoggingDomainEventHandlerFactory
  * @uses   \LizardsAndPumpkins\Messaging\Queue\Logging\LoggingQueueDecorator
- * @uses   \LizardsAndPumpkins\Logging\LoggingQueueFactory
  * @uses   \LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirectiveHandler
  * @uses   \LizardsAndPumpkins\Messaging\Queue\EnqueuesMessageEnvelope
  * @uses   \LizardsAndPumpkins\ProductDetail\Import\ConfigurableProductJsonSnippetRenderer
@@ -84,18 +81,18 @@ use PHPUnit\Framework\TestCase;
  */
 class CliBootstrapTest extends TestCase
 {
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         unset($_SERVER[CliBootstrap::ENV_DEBUG_VAR], $_ENV[CliBootstrap::ENV_DEBUG_VAR]);
     }
 
-    public function testReturnsAnInstanceOfTheSpecifiedCommand()
+    public function testReturnsAnInstanceOfTheSpecifiedCommand(): void
     {
         $command = CliBootstrap::create(MockCliCommand::class);
         $this->assertInstanceOf(MockCliCommand::class, $command);
     }
 
-    public function testInjectsMasterFactoryAndCLIMateInstanceToCommand()
+    public function testInjectsMasterFactoryAndCLIMateInstanceToCommand(): void
     {
         /** @var MockCliCommand $command */
         $command = CliBootstrap::create(MockCliCommand::class);
@@ -103,7 +100,7 @@ class CliBootstrapTest extends TestCase
         $this->assertInstanceOf(CLImate::class, $command->cliMate);
     }
 
-    public function testRegistersSpecifiedFactoriesWithMasterFactory()
+    public function testRegistersSpecifiedFactoriesWithMasterFactory(): void
     {
         $spyFactory = new class implements FactoryWithCallback
         {
@@ -122,7 +119,7 @@ class CliBootstrapTest extends TestCase
         $this->assertTrue($spyFactory->wasRegistered);
     }
 
-    public function testDoesNotRegisterLoggingFactoriesIfDebugEnvironmentVariableIsNotSet()
+    public function testDoesNotRegisterLoggingFactoriesIfDebugEnvironmentVariableIsNotSet(): void
     {
         unset($_SERVER[CliBootstrap::ENV_DEBUG_VAR], $_ENV[CliBootstrap::ENV_DEBUG_VAR]);
 
@@ -132,27 +129,7 @@ class CliBootstrapTest extends TestCase
         $this->assertNotInstanceOf(LoggingQueueDecorator::class, $command->factory->createEventMessageQueue());
     }
 
-    public function testRegistersLoggingFactoriesIfDebugServerEnvironmentVariableIsSet()
-    {
-        $_SERVER[CliBootstrap::ENV_DEBUG_VAR] = 1;
-
-        /** @var MockCliCommand $command */
-        $command = CliBootstrap::create(MockCliCommand::class, new UnitTestFactory($this));
-
-        $this->assertInstanceOf(LoggingQueueDecorator::class, $command->factory->createEventMessageQueue());
-    }
-
-    public function testRegistersLoggingFactoriesIfDebugEnvEnvironmentVariableIsSet()
-    {
-        $_ENV[CliBootstrap::ENV_DEBUG_VAR] = 1;
-
-        /** @var MockCliCommand $command */
-        $command = CliBootstrap::create(MockCliCommand::class, new UnitTestFactory($this));
-
-        $this->assertInstanceOf(LoggingQueueDecorator::class, $command->factory->createEventMessageQueue());
-    }
-
-    public function testThrowsExceptionIfTheArgumentVectorContainsNoName()
+    public function testThrowsExceptionIfTheArgumentVectorContainsNoName(): void
     {
         $this->expectException(NoConsoleCommandSpecifiedException::class);
         $this->expectExceptionMessage('No command name specified.');
@@ -160,7 +137,7 @@ class CliBootstrapTest extends TestCase
         CliBootstrap::fromArgumentsVector(['foo']);
     }
 
-    public function testReturnsInstanceOfTheSpecifiedCommand()
+    public function testReturnsInstanceOfTheSpecifiedCommand(): void
     {
         $consoleCommand = CliBootstrap::fromArgumentsVector(['foo script', 'test:stub'], new UnitTestFactory($this));
         $this->assertInstanceOf(TestStubConsoleCommand::class, $consoleCommand);

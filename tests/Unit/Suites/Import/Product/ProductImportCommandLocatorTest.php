@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class ProductImportCommandLocatorTest extends TestCase
 {
     /**
-     * @var ProductImportCommandFactory|MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductImportCommandFactory|MasterFactory|MockObject
      */
     private $mockProductImportCommandFactory;
 
@@ -24,7 +24,7 @@ class ProductImportCommandLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProductImportCommandFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['createProductImportCommands']))
@@ -32,7 +32,7 @@ class ProductImportCommandLocatorTest extends TestCase
         $this->locator = new ProductImportCommandLocator($this->mockProductImportCommandFactory);
     }
 
-    public function testItDelegatesToTheFactoryToCreateTheProductImportCommands()
+    public function testItDelegatesToTheFactoryToCreateTheProductImportCommands(): void
     {
         $stubCommand = $this->createMock(Command::class);
         $this->mockProductImportCommandFactory->expects($this->once())

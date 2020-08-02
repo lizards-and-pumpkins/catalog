@@ -17,8 +17,10 @@ use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
 use LizardsAndPumpkins\RestApi\ApiRouter;
+use LizardsAndPumpkins\RestApi\CatalogRestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,21 +37,21 @@ class CatalogRestApiWebFrontTest extends TestCase
     private $webFront;
 
     /**
-     * @var HttpRouterChain|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRouterChain|MockObject
      */
     private $mockRouterChain;
 
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|MockObject
      */
     private $mockMasterFactory;
 
     /**
-     * @var HttpResponse|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpResponse|MockObject
      */
     private $stubHttpResponse;
 
-    private function initMasterFactoryMock(HttpRequestHandler $httpRequestHandler)
+    private function initMasterFactoryMock(HttpRequestHandler $httpRequestHandler): void
     {
         $stubFactoryMethods = array_merge(
             get_class_methods(MasterFactory::class),
@@ -66,15 +68,14 @@ class CatalogRestApiWebFrontTest extends TestCase
         $this->mockMasterFactory->method('createApiRouter')->willReturn($this->createMock(ApiRouter::class));
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->createMock(HttpRequest::class);
 
         $this->stubHttpResponse = $this->createMock(HttpResponse::class);
         $this->stubHttpResponse->method('getStatusCode')->willReturn(HttpResponse::STATUS_OK);
 
-        /** @var HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequestHandler */
+        /** @var HttpRequestHandler|MockObject $stubHttpRequestHandler */
         $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
         $stubHttpRequestHandler->method('process')->willReturn($this->stubHttpResponse);
 
@@ -87,17 +88,17 @@ class CatalogRestApiWebFrontTest extends TestCase
         );
     }
 
-    public function testIsWebFront()
+    public function testIsWebFront(): void
     {
         $this->assertInstanceOf(WebFront::class, $this->webFront);
     }
 
-    public function testReturnsHttpResponse()
+    public function testReturnsHttpResponse(): void
     {
         $this->assertInstanceOf(HttpResponse::class, $this->webFront->processRequest());
     }
 
-    public function testCorsHeadersAreAdded()
+    public function testCorsHeadersAreAdded(): void
     {
         $originalHeaders = ['Foo' => 'Bar'];
         $stubHttpHeaders = HttpHeaders::fromArray($originalHeaders);
@@ -114,14 +115,13 @@ class CatalogRestApiWebFrontTest extends TestCase
         $this->assertEquals($expectedHeaders, $response->getHeaders()->getAll());
     }
 
-    public function testReturnsJsonErrorResponseInCaseOfExceptions()
+    public function testReturnsJsonErrorResponseInCaseOfExceptions(): void
     {
         $exceptionMessage = 'foo';
 
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequest */
         $stubHttpRequest = $this->createMock(HttpRequest::class);
 
-        /** @var HttpRequestHandler|\PHPUnit_Framework_MockObject_MockObject $stubHttpRequestHandler */
+        /** @var HttpRequestHandler|MockObject $stubHttpRequestHandler */
         $stubHttpRequestHandler = $this->createMock(HttpRequestHandler::class);
         $stubHttpRequestHandler->method('process')->willThrowException(new \Exception($exceptionMessage));
 
@@ -134,23 +134,28 @@ class CatalogRestApiWebFrontTest extends TestCase
         $this->assertSame(json_encode(['error' => $exceptionMessage]), $response->getBody());
     }
 
-    public function testRegistersApiRouter()
+    public function testRegistersApiRouter(): void
     {
         $this->mockRouterChain->expects($this->once())->method('register')->with($this->isInstanceOf(ApiRouter::class));
         $this->webFront->processRequest();
     }
 
-    public function testRegistersFactoriesRequiredForRestApiRequestHandling()
+    public function testRegistersFactoriesRequiredForRestApiRequestHandling(): void
     {
-        $this->mockMasterFactory->expects($this->atLeast(7))->method('register')->withConsecutive(
-            $this->isInstanceOf(CommonFactory::class),
-            $this->isInstanceOf(CatalogRestApiFactory::class),
-            $this->isInstanceOf(ContentBlockServiceFactory::class),
-            $this->isInstanceOf(ProductSearchApiFactory::class),
-            $this->isInstanceOf(UpdatingProductImportCommandFactory::class),
-            $this->isInstanceOf(UpdatingProductImageImportCommandFactory::class),
-            $this->isInstanceOf(UpdatingProductListingImportCommandFactory::class)
-        );
+        $this->mockMasterFactory->expects($this->at(0))->method('register')
+            ->with($this->isInstanceOf(CommonFactory::class));
+        $this->mockMasterFactory->expects($this->at(1))->method('register')
+            ->with($this->isInstanceOf(CatalogRestApiFactory::class));
+        $this->mockMasterFactory->expects($this->at(2))->method('register')
+            ->with($this->isInstanceOf(ContentBlockServiceFactory::class));
+        $this->mockMasterFactory->expects($this->at(3))->method('register')
+            ->with($this->isInstanceOf(ProductSearchApiFactory::class));
+        $this->mockMasterFactory->expects($this->at(4))->method('register')
+            ->with($this->isInstanceOf(UpdatingProductImportCommandFactory::class));
+        $this->mockMasterFactory->expects($this->at(5))->method('register')
+            ->with($this->isInstanceOf(UpdatingProductImageImportCommandFactory::class));
+        $this->mockMasterFactory->expects($this->at(6))->method('register')
+            ->with($this->isInstanceOf(UpdatingProductListingImportCommandFactory::class));
 
         $this->webFront->processRequest();
     }

@@ -12,21 +12,21 @@ use PHPUnit\Framework\TestCase;
  */
 class SortDirectionTest extends TestCase
 {
-    public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified()
+    public function testExceptionIsThrownIfInvalidSelectedSortingDirectionsIsSpecified(): void
     {
         $invalidSortDirection = 'foo';
         $this->expectException(InvalidSortDirectionException::class);
         SortDirection::create($invalidSortDirection);
     }
 
-    public function testSortDirectionIsReturned()
+    public function testSortDirectionIsReturned(): void
     {
         $direction = 'asc';
         $result = SortDirection::create($direction);
         $this->assertSame($direction, (string) $result);
     }
 
-    public function testExceptionIsThrownIfParameterIsNonString()
+    public function testExceptionIsThrownIfParameterIsNonString(): void
     {
         $this->expectException(\TypeError::class);
         $this->assertFalse(SortDirection::isValid(new \stdClass()));
@@ -36,7 +36,7 @@ class SortDirectionTest extends TestCase
      * @dataProvider invalidSortDirectionProvider
      * @param mixed $invalidDirection
      */
-    public function testFalseIsReturnedIfParameterIsNotValidSortDirection($invalidDirection)
+    public function testFalseIsReturnedIfParameterIsNotValidSortDirection($invalidDirection): void
     {
         $this->assertFalse(SortDirection::isValid($invalidDirection));
     }
@@ -57,7 +57,7 @@ class SortDirectionTest extends TestCase
      * @dataProvider validSortDirectionProvider
      * @param mixed $validDirection
      */
-    public function testTrueIsReturnedIfParameterIsAValidSortDirection($validDirection)
+    public function testTrueIsReturnedIfParameterIsAValidSortDirection($validDirection): void
     {
         $this->assertTrue(SortDirection::isValid($validDirection));
     }

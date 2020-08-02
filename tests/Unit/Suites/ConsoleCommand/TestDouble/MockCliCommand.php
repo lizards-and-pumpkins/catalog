@@ -30,7 +30,7 @@ class MockCliCommand extends BaseCliCommand
      * @param CLImate $climate
      * @return void
      */
-    protected function execute(CLImate $climate)
+    protected function execute(CLImate $climate): void
     {
         // left empty on purpose since this is just a test double
     }

@@ -29,12 +29,12 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
     private $handler;
 
     /**
-     * @var ProductJsonToXml|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductJsonToXml|MockObject
      */
     private $mockProductJsonToXml;
 
     /**
-     * @var CatalogImport|\PHPUnit_Framework_MockObject_MockObject
+     * @var CatalogImport|MockObject
      */
     private $mockCatalogImport;
 
@@ -44,19 +44,19 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
     private $dummyDataVersion;
 
     /**
-     * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @return HttpRequest|MockObject
      */
     private function createValidRequestMock(): HttpRequest
     {
         $productJson = json_encode(['product_data' => $this->productJson, 'data_version' => $this->dummyDataVersion]);
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $request */
+        /** @var HttpRequest|MockObject $request */
         $request = $this->createMock(HttpRequest::class);
         $request->method('getRawBody')->willReturn($productJson);
 
         return $request;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProductJsonToXml = $this->createMock(ProductJsonToXml::class);
         $this->mockCatalogImport = $this->createMock(CatalogImport::class);
@@ -67,31 +67,31 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
         );
     }
 
-    public function testIsProductImportRequestHandler()
+    public function testIsProductImportRequestHandler(): void
     {
         $this->assertInstanceOf(ProductImportApiV1PutRequestHandler::class, $this->handler);
     }
 
-    public function testImplementsApiRequestHandler()
+    public function testImplementsApiRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->handler);
     }
 
-    public function testCanProcessPut()
+    public function testCanProcessPut(): void
     {
         $request = $this->createValidRequestMock();
         $request->method('getMethod')->willReturn(HttpRequest::METHOD_PUT);
         $this->assertTrue($this->handler->canProcess($request));
     }
 
-    public function testCanNotProcessGet()
+    public function testCanNotProcessGet(): void
     {
         $request = $this->createValidRequestMock();
         $request->method('getMethod')->willReturn(HttpRequest::METHOD_GET);
         $this->assertFalse($this->handler->canProcess($request));
     }
 
-    public function testReturnsAcceptResponseForValidRequest()
+    public function testReturnsAcceptResponseForValidRequest(): void
     {
         $expectedCode = HttpResponse::STATUS_ACCEPTED;
         $expectedBody = '';
@@ -103,32 +103,32 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
         $this->assertEquals($expectedCode, $response->getStatusCode());
     }
 
-    public function testReturnsBadRequestResponseIfProductDataNotSet()
+    public function testReturnsBadRequestResponseIfProductDataNotSet(): void
     {
         $this->expectException(CatalogImportProductDataNotFoundInRequestBodyException::class);
         $this->expectExceptionMessage('Product data not found in import product API request.');
 
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $request */
+        /** @var HttpRequest|MockObject $request */
         $request = $this->createMock(HttpRequest::class);
 
         $this->handler->process($request);
     }
 
-    public function testReturnsBadRequestResponseIfDataVersionNotSet()
+    public function testReturnsBadRequestResponseIfDataVersionNotSet(): void
     {
         $this->expectException(DataVersionNotFoundInRequestBodyException::class);
         $this->expectExceptionMessage('The catalog import data version is not found in request body.');
 
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $request */
+        /** @var HttpRequest|MockObject $request */
         $productWithoutDataVersionJson = json_encode(['product_data' => $this->productJson]);
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $request */
+        /** @var HttpRequest|MockObject $request */
         $request = $this->createMock(HttpRequest::class);
         $request->method('getRawBody')->willReturn($productWithoutDataVersionJson);
 
         $this->handler->process($request);
     }
 
-    public function testDelegatesToJsonToXmlInstance()
+    public function testDelegatesToJsonToXmlInstance(): void
     {
         $request = $this->createValidRequestMock();
         $this->mockProductJsonToXml->expects($this->once())->method('toXml')->with($this->productJson);
@@ -136,7 +136,7 @@ class ProductImportApiV1PutRequestHandlerTest extends TestCase
         $this->handler->process($request);
     }
 
-    public function testCallsCatalogImportInstanceWithProductXml()
+    public function testCallsCatalogImportInstanceWithProductXml(): void
     {
         $request = $this->createValidRequestMock();
         $productXml = 'PRODUCT_XML';

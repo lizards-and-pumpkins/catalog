@@ -13,17 +13,17 @@ use PHPUnit\Framework\TestCase;
  */
 class CompositeSearchCriterionTest extends TestCase
 {
-    public function testSearchCriteriaInterfaceIsImplemented()
+    public function testSearchCriteriaInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SearchCriteria::class, CompositeSearchCriterion::createAnd());
     }
 
-    public function testJsonSerializableInterfaceIsImplemented()
+    public function testJsonSerializableInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, CompositeSearchCriterion::createAnd());
     }
 
-    public function testCriteriaWithAndConditionIsCreated()
+    public function testCriteriaWithAndConditionIsCreated(): void
     {
         $criteria = CompositeSearchCriterion::createAnd();
         $result = $criteria->jsonSerialize();
@@ -32,7 +32,7 @@ class CompositeSearchCriterionTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testCriteriaWithOrConditionIsCreated()
+    public function testCriteriaWithOrConditionIsCreated(): void
     {
         $criteria = CompositeSearchCriterion::createOr();
         $result = $criteria->jsonSerialize();
@@ -41,7 +41,7 @@ class CompositeSearchCriterionTest extends TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function testExceptionIsThrownIfConditionIsNotSupported()
+    public function testExceptionIsThrownIfConditionIsNotSupported(): void
     {
         $invalidCondition = 'foo';
         $this->expectException(InvalidCriterionConditionException::class);
@@ -51,7 +51,7 @@ class CompositeSearchCriterionTest extends TestCase
     /**
      * @dataProvider criteriaConditionProvider
      */
-    public function testCriteriaWithArbitraryConditionIsCreated(string $condition)
+    public function testCriteriaWithArbitraryConditionIsCreated(string $condition): void
     {
         $result = CompositeSearchCriterion::create($condition);
         $this->assertInstanceOf(CompositeSearchCriterion::class, $result);
@@ -68,7 +68,7 @@ class CompositeSearchCriterionTest extends TestCase
         ];
     }
 
-    public function testReturnsArrayRepresentationOfCriteria()
+    public function testReturnsArrayRepresentationOfCriteria(): void
     {
         $dummyCriteriaArrayRepresentation = ['Dummy criteria array representation'];
 

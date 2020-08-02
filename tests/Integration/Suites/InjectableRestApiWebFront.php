@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Core\Factory\MasterFactory;
 class InjectableRestApiWebFront extends CatalogRestApiWebFront
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|MockObject
      */
     private $testMasterFactory;
     

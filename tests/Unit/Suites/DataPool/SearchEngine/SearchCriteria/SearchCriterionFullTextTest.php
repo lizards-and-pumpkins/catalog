@@ -18,28 +18,28 @@ class SearchCriterionFullTextTest extends TestCase
      */
     private $criteria;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->criteria = new SearchCriterionFullText($this->testFieldValue);
     }
 
-    public function testImplementsSearchCriteriaInterface()
+    public function testImplementsSearchCriteriaInterface(): void
     {
         $this->assertInstanceOf(SearchCriteria::class, $this->criteria);
     }
 
-    public function testItImplementsJsonSerializable()
+    public function testItImplementsJsonSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->criteria);
     }
 
-    public function testThrowsAnExceptionIfFieldValueIsNonString()
+    public function testThrowsAnExceptionIfFieldValueIsNonString(): void
     {
         $this->expectException(\TypeError::class);
         new SearchCriterionFullText(1);
     }
 
-    public function testItReturnsAnArrayRepresentationWhenJsonSerialized()
+    public function testItReturnsAnArrayRepresentationWhenJsonSerialized(): void
     {
         $expectation = [
             'fieldName'  => '',
@@ -50,7 +50,7 @@ class SearchCriterionFullTextTest extends TestCase
         $this->assertSame($expectation, $this->criteria->jsonSerialize());
     }
 
-    public function testReturnsArrayRepresentationOfCriteria()
+    public function testReturnsArrayRepresentationOfCriteria(): void
     {
         $expectation = [
             'fieldName'  => '',

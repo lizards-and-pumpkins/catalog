@@ -40,22 +40,22 @@ class PriceSnippetRendererTest extends TestCase
     private $renderer;
 
     /**
-     * @var TaxableCountries|\PHPUnit_Framework_MockObject_MockObject
+     * @var TaxableCountries|MockObject
      */
     private $stubTaxableCountries;
 
     /**
-     * @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetKeyGenerator|MockObject
      */
     private $stubSnippetKeyGenerator;
 
     /**
-     * @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextBuilder|MockObject
      */
     private $stubContextBuilder;
 
     /**
-     * @var TaxServiceLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var TaxServiceLocator|MockObject
      */
     private $stubTaxServiceLocator;
 
@@ -65,7 +65,7 @@ class PriceSnippetRendererTest extends TestCase
     private $testPriceAttributeCode;
 
     /**
-     * @return ProductView|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductView|MockObject
      */
     private function createStubProductView(): ProductView
     {
@@ -79,11 +79,11 @@ class PriceSnippetRendererTest extends TestCase
     }
 
     /**
-     * @param Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct
+     * @param Product|MockObject $stubProduct
      */
-    private function stubContextWebsiteAndCountry($stubProduct)
+    private function stubContextWebsiteAndCountry($stubProduct): void
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $stubProduct->getContext();
         $stubContext->method('getValue')->willReturnMap([
             [Website::CONTEXT_CODE, 'test website'],
@@ -91,7 +91,7 @@ class PriceSnippetRendererTest extends TestCase
         ]);
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $stubTaxService = $this->createMock(TaxService::class);
         $stubTaxService->method('applyTo')->willReturnArgument(0);
@@ -118,18 +118,18 @@ class PriceSnippetRendererTest extends TestCase
         );
     }
 
-    public function testIsSnippetRenderer()
+    public function testIsSnippetRenderer(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testReturnsSnippets()
+    public function testReturnsSnippets(): void
     {
         $result = $this->renderer->render($this->createStubProductView());
         $this->assertContainsOnly(Snippet::class, $result);
     }
 
-    public function testThrowsExceptionIfDataObjectIsNotProductView()
+    public function testThrowsExceptionIfDataObjectIsNotProductView(): void
     {
         $this->expectException(InvalidDataObjectTypeException::class);
         $this->expectExceptionMessage('Data object must be ProductView, got string.');
@@ -137,7 +137,7 @@ class PriceSnippetRendererTest extends TestCase
         $this->renderer->render('foo');
     }
 
-    public function testReturnsEmptyArrayIfProductDoesNotHaveARequiredAttribute()
+    public function testReturnsEmptyArrayIfProductDoesNotHaveARequiredAttribute(): void
     {
         $stubProduct = $this->createStubProductView();
         $stubProduct->method('hasAttribute')->with($this->testPriceAttributeCode)->willReturn(false);
@@ -146,7 +146,7 @@ class PriceSnippetRendererTest extends TestCase
         $this->assertCount(0, $result);
     }
 
-    public function testReturnsSnippetsWithGivenKeyAndPrice()
+    public function testReturnsSnippetsWithGivenKeyAndPrice(): void
     {
         $dummyPriceSnippetKey = 'bar';
         $dummyPriceAttributeValue = 1;
@@ -159,7 +159,7 @@ class PriceSnippetRendererTest extends TestCase
         $stubProduct->method('getTaxClass')->willReturn(ProductTaxClass::fromString('test class'));
         $this->stubContextWebsiteAndCountry($stubProduct);
 
-        /** @var ProductView|\PHPUnit_Framework_MockObject_MockObject $stubProductView */
+        /** @var ProductView|MockObject $stubProductView */
         $stubProductView = $this->createMock(ProductView::class);
         $stubProductView->method('getOriginalProduct')->willReturn($stubProduct);
 

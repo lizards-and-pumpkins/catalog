@@ -12,26 +12,26 @@ use PHPUnit\Framework\TestCase;
  */
 class SearchDocumentFieldCollectionTest extends TestCase
 {
-    public function testCountableInterfaceIsImplemented()
+    public function testCountableInterfaceIsImplemented(): void
     {
         $collection = SearchDocumentFieldCollection::fromArray([]);
         $this->assertInstanceOf(\Countable::class, $collection);
     }
 
-    public function testIteratorAggregateInterfaceIsImplemented()
+    public function testIteratorAggregateInterfaceIsImplemented(): void
     {
         $collection = SearchDocumentFieldCollection::fromArray([]);
         $this->assertInstanceOf(\IteratorAggregate::class, $collection);
     }
 
-    public function testItShouldConvertStringValuesIntoArrays()
+    public function testItShouldConvertStringValuesIntoArrays(): void
     {
         $fieldsArray = ['foo' => 'bar'];
         $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
         $this->assertSame(['bar'], $collection->getFields()['foo']->getValues());
     }
 
-    public function testCollectionIsAccessibleViaGetter()
+    public function testCollectionIsAccessibleViaGetter(): void
     {
         $fieldsArray = ['foo' => 'bar', 'baz' => 'qux'];
         $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);
@@ -45,7 +45,7 @@ class SearchDocumentFieldCollectionTest extends TestCase
         $this->assertEquals(['qux'], $result['baz']->getValues());
     }
 
-    public function testCollectionIsAccessibleViaIterator()
+    public function testCollectionIsAccessibleViaIterator(): void
     {
         $fieldsArray = ['foo' => 'bar'];
         $collection = SearchDocumentFieldCollection::fromArray($fieldsArray);

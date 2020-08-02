@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class EnrichProductJsonWithPricesTest extends TestCase
 {
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
@@ -30,7 +30,7 @@ class EnrichProductJsonWithPricesTest extends TestCase
      * @param mixed $expectedValue
      * @param string[] $attributeData
      */
-    private function assertProductJsonDataHas($attributeCode, $expectedValue, array $attributeData)
+    private function assertProductJsonDataHas($attributeCode, $expectedValue, array $attributeData): void
     {
         $this->assertArrayHasKey($attributeCode, $attributeData);
         $this->assertSame($expectedValue, $attributeData[$attributeCode]);
@@ -41,7 +41,7 @@ class EnrichProductJsonWithPricesTest extends TestCase
         return Price::fromDecimalValue($amount)->getAmount();
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContext = $this->createMock(Context::class);
         $this->stubContext->method('getValue')->willReturnMap([[Locale::CONTEXT_CODE, 'de_DE']]);
@@ -49,7 +49,7 @@ class EnrichProductJsonWithPricesTest extends TestCase
         $this->enrichProductJsonWithPrices = new EnrichProductJsonWithPrices();
     }
 
-    public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation()
+    public function testItEnrichesProductDataWithPriceAndSpecialPriceInformation(): void
     {
         $productData = [];
         $price = $this->getPriceAsFractionUnits('19.99');
@@ -71,7 +71,7 @@ class EnrichProductJsonWithPricesTest extends TestCase
         $this->assertProductJsonDataHas('price_base_unit', 100, $result['attributes']);
     }
 
-    public function testItDoesNotAddSpecialPriceDataIfTheSpecialPriceIsNull()
+    public function testItDoesNotAddSpecialPriceDataIfTheSpecialPriceIsNull(): void
     {
         $productData = [];
         $price = '1999';
@@ -88,7 +88,7 @@ class EnrichProductJsonWithPricesTest extends TestCase
         $this->assertArrayNotHasKey('raw_special_price', $result['attributes']);
     }
 
-    public function testItAddsCurrencyInformationToTheProductAttributes()
+    public function testItAddsCurrencyInformationToTheProductAttributes(): void
     {
         $productData = [];
         $price = '1999';

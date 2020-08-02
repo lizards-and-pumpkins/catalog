@@ -21,17 +21,17 @@ class ProductJsonSnippetTransformationTest extends TestCase
     private $transformation;
 
     /**
-     * @var EnrichProductJsonWithPrices|\PHPUnit_Framework_MockObject_MockObject
+     * @var EnrichProductJsonWithPrices|MockObject
      */
     private $mockEnrichesProductJsonWithPrices;
 
     /**
-     * @var PageSnippets|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageSnippets|MockObject
      */
     private $stubPageSnippets;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
@@ -39,14 +39,14 @@ class ProductJsonSnippetTransformationTest extends TestCase
      * @param mixed $expected
      * @param mixed $input
      */
-    private function assertTransformation($expected, $input)
+    private function assertTransformation($expected, $input): void
     {
         $callable = $this->transformation;
         $result = call_user_func($callable, $input, $this->stubContext, $this->stubPageSnippets);
         $this->assertSame($expected, $result);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $class = EnrichProductJsonWithPrices::class;
         $this->mockEnrichesProductJsonWithPrices = $this->createMock($class);
@@ -56,12 +56,12 @@ class ProductJsonSnippetTransformationTest extends TestCase
         $this->stubContext = $this->createMock(Context::class);
     }
     
-    public function testItIsASnippetTransformation()
+    public function testItIsASnippetTransformation(): void
     {
         $this->assertInstanceOf(SnippetTransformation::class, $this->transformation);
     }
 
-    public function testItUsesDelegateClassToEnrichProductJsonWithPrices()
+    public function testItUsesDelegateClassToEnrichProductJsonWithPrices(): void
     {
         $inputJson = json_encode([]);
         $enrichedProductData = ['dummy enriched product data'];
@@ -81,7 +81,7 @@ class ProductJsonSnippetTransformationTest extends TestCase
         $this->assertTransformation(json_encode($enrichedProductData), $inputJson);
     }
 
-    public function testItPassesNullIfNoSpecialPriceSnippetIsPresent()
+    public function testItPassesNullIfNoSpecialPriceSnippetIsPresent(): void
     {
         $inputJson = json_encode([]);
         $enrichedProductData = ['dummy enriched product data'];

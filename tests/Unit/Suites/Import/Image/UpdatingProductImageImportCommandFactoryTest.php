@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,28 +22,28 @@ class UpdatingProductImageImportCommandFactoryTest extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->factory = new UpdatingProductImageImportCommandFactory();
     }
 
-    public function testItImplementsTheProductImageImportCommandFactoryInterface()
+    public function testItImplementsTheProductImageImportCommandFactoryInterface(): void
     {
         $this->assertInstanceOf(ProductImageImportCommandFactory::class, $this->factory);
     }
 
-    public function testItReturnsAddImageCommandData()
+    public function testItReturnsAddImageCommandData(): void
     {
         $imageFilePath = $this->getUniqueTempDir() . '/image.jpg';
         $this->createFixtureFile($imageFilePath, '');
 
-        /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
+        /** @var DataVersion|MockObject $stubDataVersion */
         $stubDataVersion = $this->createMock(DataVersion::class);
         $stubDataVersion->method('__toString')->willReturn('123');
 
         $commands = $this->factory->createProductImageImportCommands($imageFilePath, $stubDataVersion);
 
-        $this->assertInternalType('array', $commands);
+        $this->assertIsArray($commands);
         $this->assertContainsOnlyInstancesOf(AddImageCommand::class, $commands);
     }
 }

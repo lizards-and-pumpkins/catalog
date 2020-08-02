@@ -13,6 +13,7 @@ use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 class DataversionSetConsoleCommandTest extends TestCase
 {
     /**
-     * @var CLImate|\PHPUnit_Framework_MockObject_MockObject
+     * @var CLImate|MockObject
      */
     private $mockCliMate;
 
@@ -42,7 +43,7 @@ class DataversionSetConsoleCommandTest extends TestCase
         return array_values($arguments);
     }
 
-    private function createCLIMateTestDouble(): \PHPUnit_Framework_MockObject_MockObject
+    private function createCLIMateTestDouble(): MockObject
     {
         $mockCliMate = $this->getMockBuilder(CLImate::class)
             ->disableOriginalConstructor()
@@ -54,7 +55,7 @@ class DataversionSetConsoleCommandTest extends TestCase
     }
 
     /**
-     * @return MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return MasterFactory|MockObject
      */
     private function createStubMasterFactory(): MasterFactory
     {
@@ -67,18 +68,18 @@ class DataversionSetConsoleCommandTest extends TestCase
             ->getMock();
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockCliMate = $this->createCLIMateTestDouble();
     }
 
-    public function testIsAConsoleCommand()
+    public function testIsAConsoleCommand(): void
     {
         $consoleCommand = new DataversionSetConsoleCommand($this->createStubMasterFactory(), $this->mockCliMate);
         $this->assertInstanceOf(ConsoleCommand::class, $consoleCommand);
     }
 
-    public function testAddsSetDataVersionCommandWithTheSpecifiedDataVersion()
+    public function testAddsSetDataVersionCommandWithTheSpecifiedDataVersion(): void
     {
         $arguments = $this->getCommandArgumentMap(['dataVersion' => 'foo']);
         $this->mockCliMate->arguments->method('get')->willReturnMap($arguments);
@@ -96,7 +97,7 @@ class DataversionSetConsoleCommandTest extends TestCase
         $command->run();
     }
 
-    public function testProcessesQueuesIfRequested()
+    public function testProcessesQueuesIfRequested(): void
     {
         $arguments = $this->getCommandArgumentMap(['processQueues' => true]);
         $this->mockCliMate->arguments->method('get')->willReturnMap($arguments);

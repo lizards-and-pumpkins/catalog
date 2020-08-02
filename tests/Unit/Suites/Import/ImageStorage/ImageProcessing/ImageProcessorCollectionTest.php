@@ -11,14 +11,14 @@ use PHPUnit\Framework\TestCase;
  */
 class ImageProcessorCollectionTest extends TestCase
 {
-    public function testAllProcessorsOfCollectionAreProcessed()
+    public function testAllProcessorsOfCollectionAreProcessed(): void
     {
-        /** @var ImageProcessor|\PHPUnit_Framework_MockObject_MockObject $processor1 */
+        /** @var ImageProcessor|MockObject $processor1 */
         $processor1 = $this->createMock(ImageProcessor::class);
         $processor1->expects($this->once())
             ->method('process');
 
-        /** @var ImageProcessor|\PHPUnit_Framework_MockObject_MockObject $processor2 */
+        /** @var ImageProcessor|MockObject $processor2 */
         $processor2 = $this->createMock(ImageProcessor::class);
         $processor2->expects($this->once())
             ->method('process');

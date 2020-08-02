@@ -40,7 +40,7 @@ class TemplateWasUpdatedDomainEventTest extends TestCase
      */
     private $dummyDataVersion;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->dummyDataVersion = DataVersion::fromVersionString('foo');
         $this->domainEvent = new TemplateWasUpdatedDomainEvent(
@@ -50,47 +50,47 @@ class TemplateWasUpdatedDomainEventTest extends TestCase
         );
     }
 
-    public function testDomainEventInterfaceIsImplemented()
+    public function testDomainEventInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testTemplateContentIsReturned()
+    public function testTemplateContentIsReturned(): void
     {
         $this->assertSame($this->dummyTemplateContent, $this->domainEvent->getTemplateContent());
     }
 
-    public function testTemplateIdIsReturned()
+    public function testTemplateIdIsReturned(): void
     {
         $this->assertSame($this->dummyTemplateId, $this->domainEvent->getTemplateId());
     }
 
-    public function testReturnsDataVersion()
+    public function testReturnsDataVersion(): void
     {
         $this->assertSame($this->dummyDataVersion, $this->domainEvent->getDataVersion());
     }
 
-    public function testReturnsTemplateWasUpdatedEventMessage()
+    public function testReturnsTemplateWasUpdatedEventMessage(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(TemplateWasUpdatedDomainEvent::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithTemplatePayload()
+    public function testReturnsMessageWithTemplatePayload(): void
     {
         $payload = $this->domainEvent->toMessage()->getPayload();
         $this->assertSame($this->dummyTemplateId, $payload['id']);
         $this->assertSame($this->dummyTemplateContent, $payload['template']);
     }
 
-    public function testReturnsMessageWithMetadata()
+    public function testReturnsMessageWithMetadata(): void
     {
         $metadata = $this->domainEvent->toMessage()->getMetadata();
         $this->assertSame((string) $this->dummyDataVersion, $metadata[DataVersion::VERSION_KEY]);
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $rehydratedEvent = TemplateWasUpdatedDomainEvent::fromMessage($this->domainEvent->toMessage());
         $this->assertInstanceOf(TemplateWasUpdatedDomainEvent::class, $rehydratedEvent);
@@ -99,7 +99,7 @@ class TemplateWasUpdatedDomainEventTest extends TestCase
         $this->assertEquals((string) $this->dummyDataVersion, $rehydratedEvent->getDataVersion());
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatch()
+    public function testThrowsExceptionIfMessageNameDoesNotMatch(): void
     {
         $this->expectException(NoTemplateWasUpdatedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "template_was_updated" domain event, got "foo"');

@@ -25,7 +25,7 @@ class ProductListingWasAddedDomainEventTest extends TestCase
     private $testDataVersion = '321';
 
     /**
-     * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListing|MockObject
      */
     private $stubProductListing;
     
@@ -34,7 +34,7 @@ class ProductListingWasAddedDomainEventTest extends TestCase
      */
     private $domainEvent;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubProductListing = $this->createMock(ProductListing::class);
         $this->stubProductListing->method('serialize')->willReturn(serialize($this->stubProductListing));
@@ -43,31 +43,31 @@ class ProductListingWasAddedDomainEventTest extends TestCase
         $this->domainEvent = new ProductListingWasAddedDomainEvent($this->stubProductListing);
     }
 
-    public function testDomainEventInterFaceIsImplemented()
+    public function testDomainEventInterFaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testProductListingIsReturned()
+    public function testProductListingIsReturned(): void
     {
         $result = $this->domainEvent->getListingCriteria();
         $this->assertEquals($this->stubProductListing, $result);
     }
 
-    public function testReturnsMessageWithDomainEventName()
+    public function testReturnsMessageWithDomainEventName(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(ProductListingWasAddedDomainEvent::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithPayload()
+    public function testReturnsMessageWithPayload(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertArrayHasKey('listing', $message->getPayload());
     }
 
-    public function testReturnsMessageWithDataVersionInMetaData()
+    public function testReturnsMessageWithDataVersionInMetaData(): void
     {
         $message = $this->domainEvent->toMessage();
         $metaData = $message->getMetadata();
@@ -75,14 +75,14 @@ class ProductListingWasAddedDomainEventTest extends TestCase
         $this->assertSame($this->testDataVersion, $metaData['data_version']);
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $message = $this->domainEvent->toMessage();
         $rehydratedEvent = ProductListingWasAddedDomainEvent::fromMessage($message);
         $this->assertInstanceOf(ProductListingWasAddedDomainEvent::class, $rehydratedEvent);
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode()
+    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode(): void
     {
         $this->expectException(NoProductListingWasAddedDomainEventMessage::class);
         $this->expectExceptionMessage('Expected "product_listing_was_added" domain event, got "foo"');
@@ -90,7 +90,7 @@ class ProductListingWasAddedDomainEventTest extends TestCase
         ProductListingWasAddedDomainEvent::fromMessage(Message::withCurrentTime('foo', [], []));
     }
 
-    public function testReturnsTheDataVersion()
+    public function testReturnsTheDataVersion(): void
     {
         $dataVersion = $this->domainEvent->getDataVersion();
         $this->assertInstanceOf(DataVersion::class, $dataVersion);

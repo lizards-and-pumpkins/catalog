@@ -32,7 +32,7 @@ class CatalogImportApiSingleProductTest extends AbstractIntegrationTest
         return $receiver->message;
     }
 
-    public function testV1ProductImportApiV1PutRequestHandler()
+    public function testV1ProductImportApiV1PutRequestHandler(): void
     {
         $testDataVersionString = 'foo-123';
         $httpUrl = HttpUrl::fromString('http://example.com/api/product_import');

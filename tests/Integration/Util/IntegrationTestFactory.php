@@ -166,7 +166,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return new InMemoryKeyValueStore();
     }
 
-    public function setCommandMessageQueue(Queue $commandQueue)
+    public function setCommandMessageQueue(Queue $commandQueue): void
     {
         $this->commandMessageQueue = $commandQueue;
     }
@@ -197,7 +197,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return new InMemoryQueue();
     }
 
-    public function setEventMessageQueue(Queue $eventQueue)
+    public function setEventMessageQueue(Queue $eventQueue): void
     {
         $this->eventMessageQueue = $eventQueue;
     }
@@ -303,7 +303,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->keyValueStore;
     }
 
-    public function setKeyValueStore(KeyValueStore $keyValueStore)
+    public function setKeyValueStore(KeyValueStore $keyValueStore): void
     {
         $this->keyValueStore = $keyValueStore;
     }
@@ -316,7 +316,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->searchEngine;
     }
 
-    public function setSearchEngine(SearchEngine $searchEngine)
+    public function setSearchEngine(SearchEngine $searchEngine): void
     {
         $this->searchEngine = $searchEngine;
     }
@@ -329,7 +329,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->urlKeyStore;
     }
 
-    public function setUrlKeyStore(UrlKeyStore $urlKeyStore)
+    public function setUrlKeyStore(UrlKeyStore $urlKeyStore): void
     {
         $this->urlKeyStore = $urlKeyStore;
     }
@@ -456,7 +456,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return 120;
     }
 
-    public function getDefaultNumberOfProductsPerSearchResultsPage()
+    public function getDefaultNumberOfProductsPerSearchResultsPage(): int
     {
         return 60;
     }

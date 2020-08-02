@@ -22,18 +22,18 @@ class LayoutReaderTest extends TestCase
      */
     private $layoutReader;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->layoutReader = new LayoutReader();
     }
 
-    public function testExceptionIsThrownIfFileDesNotExist()
+    public function testExceptionIsThrownIfFileDesNotExist(): void
     {
         $this->expectException(LayoutFileNotReadableException::class);
         $this->layoutReader->loadLayoutFromXmlFile('some-non-existing-file-name.xml');
     }
 
-    public function testExceptionIsThrownIfFileIsNotReadable()
+    public function testExceptionIsThrownIfFileIsNotReadable(): void
     {
         $filePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'some-file-name.xml';
         $this->createFixtureFile($filePath, '', 0000);
@@ -42,13 +42,13 @@ class LayoutReaderTest extends TestCase
         $this->layoutReader->loadLayoutFromXmlFile($filePath);
     }
 
-    public function testExceptionIsThrownIfPathIsADirectory()
+    public function testExceptionIsThrownIfPathIsADirectory(): void
     {
         $this->expectException(LayoutFileNotReadableException::class);
         $this->layoutReader->loadLayoutFromXmlFile(sys_get_temp_dir());
     }
 
-    public function testLayoutIsReturned()
+    public function testLayoutIsReturned(): void
     {
         $layoutFile = $this->getUniqueTempDir() . '/test_layout.xml';
         $layoutXML = '<?xml version="1.0"?><snippet><block name="foo" class="Bar\Baz" template="qux.phtml"/></snippet>';
