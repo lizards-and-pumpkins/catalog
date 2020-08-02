@@ -27,8 +27,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~9.2",
-        "ext-simplexml": "*",
-        "lizards-and-pumpkins/coding-standards": "dev-master"
+        "ext-simplexml": "*"
     },
     "autoload": {
         "psr-4": {"LizardsAndPumpkins\\": "src/"}
@@ -51,8 +50,7 @@
         "test": [
             "vendor/bin/phpunit -c tests/Unit/phpunit.xml.dist",
             "vendor/bin/phpunit -c tests/Integration/phpunit.xml.dist"
-        ],
-        "sniff": "vendor/bin/phpcs --runtime-set ignore_warnings_on_exit true --runtime-set ignore_errors_on_exit true -p --colors --encoding=utf-8 --standard=vendor/lizards-and-pumpkins/coding-standards/src/LizardsAndPumpkins/ src/ tests/"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true
