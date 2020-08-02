@@ -48,7 +48,7 @@ class ImportCatalogCommand implements Command
         return new self($dataVersion, $message->getPayload()['catalog_data_file']);
     }
 
-    private static function validateMessage(Message $message)
+    private static function validateMessage(Message $message): void
     {
         if ($message->getName() !== self::CODE) {
             throw new NotImportCatalogCommandMessageException(
@@ -57,14 +57,14 @@ class ImportCatalogCommand implements Command
         }
     }
 
-    private function validateImportFile(string $catalogDataFile)
+    private function validateImportFile(string $catalogDataFile): void
     {
         $this->validateFileExists($catalogDataFile);
         $this->validateFileToImportIsFile($catalogDataFile);
         $this->validateFileIsReadable($catalogDataFile);
     }
 
-    private function validateFileExists(string $catalogDataFile)
+    private function validateFileExists(string $catalogDataFile): void
     {
         if (!file_exists($catalogDataFile)) {
             $message = sprintf('Catalog import file "%s" does not exist', $catalogDataFile);
@@ -72,7 +72,7 @@ class ImportCatalogCommand implements Command
         }
     }
 
-    private function validateFileToImportIsFile(string $catalogDataFile)
+    private function validateFileToImportIsFile(string $catalogDataFile): void
     {
         if (! is_file($catalogDataFile)) {
             $message = sprintf('Catalog import file "%s" is not a file', $catalogDataFile);
@@ -80,7 +80,7 @@ class ImportCatalogCommand implements Command
         }
     }
 
-    private function validateFileIsReadable(string $catalogDataFile)
+    private function validateFileIsReadable(string $catalogDataFile): void
     {
         if (!is_readable($catalogDataFile)) {
             $message = sprintf('Catalog import file "%s" is not readable', $catalogDataFile);

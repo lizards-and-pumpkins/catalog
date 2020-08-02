@@ -35,7 +35,7 @@ class ProductTaxClass
         return $this->name;
     }
 
-    private function validateName(string $name)
+    private function validateName(string $name): void
     {
         if ('' === trim($name)) {
             throw new InvalidTaxClassNameException('The tax class name can not be empty');

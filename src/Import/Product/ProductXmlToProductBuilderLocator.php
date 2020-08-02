@@ -48,12 +48,7 @@ class ProductXmlToProductBuilderLocator
         return $nodeArray[0]['value'];
     }
 
-    /**
-     * @param ProductTypeCode $typeCode
-     * @param XPathParser $parser
-     * @return SimpleProductBuilder
-     */
-    private function createProductBuilderForProductType(ProductTypeCode $typeCode, XPathParser $parser)
+    private function createProductBuilderForProductType(ProductTypeCode $typeCode, XPathParser $parser): ProductBuilder
     {
         $builder = $this->getProductBuilderForProductType($typeCode);
         return $builder->createProductBuilder($parser);

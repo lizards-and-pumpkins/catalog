@@ -58,11 +58,7 @@ class TemplatesApiV2PutRequestHandler implements HttpRequestHandler
         return DataVersion::fromVersionString($this->extractDataVersionFromRequest($request));
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string|null
-     */
-    private function extractTemplateIdFromRequest(HttpRequest $request)
+    private function extractTemplateIdFromRequest(HttpRequest $request): ?string
     {
         if (! preg_match('#/templates/(?<template_id>[^/]+)#i', (string) $request->getUrl(), $urlTokens)) {
             return null;
@@ -96,6 +92,10 @@ class TemplatesApiV2PutRequestHandler implements HttpRequestHandler
         return is_array($dataFromRequest) && isset($dataFromRequest[$key]);
     }
 
+    /**
+     * @param HttpRequest $request
+     * @return mixed
+     */
     private function extractDataFromRequest(HttpRequest $request)
     {
         $decodedData = json_decode($request->getRawBody(), true);

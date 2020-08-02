@@ -465,7 +465,10 @@ class CommonFactory implements Factory
         );
     }
 
-    public function createProductDetailTemplateSnippetRendererList()
+    /**
+     * @return SnippetRenderer[]
+     */
+    public function createProductDetailTemplateSnippetRendererList(): array
     {
         return [
             $this->getMasterFactory()->createProductDetailTemplateSnippetRenderer(),

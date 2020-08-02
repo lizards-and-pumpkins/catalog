@@ -26,7 +26,7 @@ class ConsumeEventsConsoleCommand implements ConsoleCommand
         $this->masterFactory->register(new UpdatingProductListingImportCommandFactory());
     }
 
-    public function run()
+    public function run(): void
     {
         /** @var DomainEventConsumer $eventConsumer */
         $eventConsumer = $this->masterFactory->createDomainEventConsumer();

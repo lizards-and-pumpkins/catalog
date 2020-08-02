@@ -231,11 +231,7 @@ abstract class AbstractProductView implements ProductView
         return array_merge($existingValues, [$attribute[ProductAttribute::VALUE]]);
     }
 
-    /**
-     * @param string $variantCode
-     * @return ProductImage
-     */
-    protected function getPlaceholderImage(string $variantCode)
+    protected function getPlaceholderImage(string $variantCode): Image
     {
         return $this->getProductImageFileLocator()->getPlaceholder($variantCode, $this->getContext());
     }

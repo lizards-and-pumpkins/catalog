@@ -32,7 +32,7 @@ class RegistrySnippetKeyGeneratorLocatorStrategy implements SnippetKeyGeneratorL
         return call_user_func($this->keyGeneratorFactoryClosures[$snippetCode]);
     }
 
-    public function register(string $snippetCode, \Closure $keyGeneratorFactoryClosure)
+    public function register(string $snippetCode, \Closure $keyGeneratorFactoryClosure): void
     {
         SnippetCodeValidator::validate($snippetCode);
         $this->keyGeneratorFactoryClosures[$snippetCode] = $keyGeneratorFactoryClosure;

@@ -9,14 +9,14 @@ use LizardsAndPumpkins\Util\FileSystem\Exception\FileNotWritableException;
 
 class LocalFilesystemStorageWriter implements FileStorageWriter
 {
-    public function putFileContents(string $filePath, string $contents)
+    public function putFileContents(string $filePath, string $contents): void
     {
         $this->checkIfDestinationIsWritable($filePath);
 
         file_put_contents($filePath, $contents);
     }
 
-    private function checkIfDestinationIsWritable(string $filePath)
+    private function checkIfDestinationIsWritable(string $filePath): void
     {
         if (file_exists($filePath) && !is_writable($filePath) ||
             !file_exists($filePath) && !is_writable(dirname($filePath))

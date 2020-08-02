@@ -66,7 +66,7 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
      * @param int|string $offset
      * @param mixed $value
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new ProductImageListNotMutableException('ProductImageList instances are immutable');
     }
@@ -74,7 +74,7 @@ class ProductImageList implements \Countable, \IteratorAggregate, \ArrayAccess, 
     /**
      * @param int|string $offset
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new ProductImageListNotMutableException('ProductImageList instances are immutable');
     }

@@ -29,11 +29,7 @@ class ProductImageListBuilder
         return new self(...$productImageLists);
     }
 
-    /**
-     * @param Context $context
-     * @return ProductImageList
-     */
-    public function getImageListForContext(Context $context)
+    public function getImageListForContext(Context $context): ProductImageList
     {
         $images = array_map(function (ProductImageBuilder $imageBuilder) use ($context) {
             return $imageBuilder->getImageForContext($context);

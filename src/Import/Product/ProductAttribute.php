@@ -55,7 +55,7 @@ class ProductAttribute implements \JsonSerializable
      * @param mixed $value
      * @param AttributeCode $code
      */
-    private function validateValue($value, AttributeCode $code)
+    private function validateValue($value, AttributeCode $code): void
     {
         if (!is_scalar($value)) {
             $type = typeof($value);
@@ -113,7 +113,7 @@ class ProductAttribute implements \JsonSerializable
         return $this->contextData[$contextPartCode];
     }
 
-    private function validateContextPartIsPresent(string $contextCode)
+    private function validateContextPartIsPresent(string $contextCode): void
     {
         if (!isset($this->contextData[$contextCode])) {
             throw new ProductAttributeDoesNotContainContextPartException(

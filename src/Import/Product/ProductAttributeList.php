@@ -38,7 +38,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
         $this->initializeAttributeCodesArray(...$attributes);
     }
 
-    private function validateAllAttributesHaveCompatibleContextData(ProductAttribute ...$attributes)
+    private function validateAllAttributesHaveCompatibleContextData(ProductAttribute ...$attributes): void
     {
         array_reduce($attributes, function (array $attributeListContextParts, ProductAttribute $attribute) {
             every($attribute->getContextParts(), function ($contextPart) use ($attribute, $attributeListContextParts) {
@@ -65,7 +65,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
         }
     }
 
-    private function validateContextPartValuesMatch(string $contextPart, string $valueA, string $valueB)
+    private function validateContextPartValuesMatch(string $contextPart, string $valueA, string $valueB): void
     {
         if ($valueA !== $valueB) {
             throw $this->getConflictingContextDataFoundException($contextPart, $valueA, $valueB);
@@ -82,7 +82,7 @@ class ProductAttributeList implements \Countable, \JsonSerializable
         return new ConflictingContextDataForProductAttributeListException($message);
     }
 
-    private function initializeAttributeCodesArray(ProductAttribute ...$attributes)
+    private function initializeAttributeCodesArray(ProductAttribute ...$attributes): void
     {
         $this->attributeCodes = array_reduce($attributes, function (array $carry, ProductAttribute $attribute) {
             return array_merge($carry, [(string)$attribute->getCode() => $attribute->getCode()]);

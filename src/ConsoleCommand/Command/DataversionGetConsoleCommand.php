@@ -23,7 +23,7 @@ class DataversionGetConsoleCommand extends BaseCliCommand
         $this->setCLImate($CLImate);
     }
 
-    protected function execute(CLImate $climate)
+    protected function execute(CLImate $climate): void
     {
         $this->getCLImate()->output(sprintf('Current data version:  %s', $this->getCurrentDataVersion()));
         $this->getCLImate()->output(sprintf('Previous data version: %s', $this->getPreviousDataVersion()));

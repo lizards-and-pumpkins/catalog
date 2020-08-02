@@ -38,24 +38,24 @@ class DataPoolWriter implements Clearable
         $this->urlKeyStorage = $urlKeyStorage;
     }
 
-    public function writeSnippets(Snippet ...$snippets)
+    public function writeSnippets(Snippet ...$snippets): void
     {
         every($snippets, function ($snippet) {
             $this->writeSnippet($snippet);
         });
     }
 
-    private function writeSnippet(Snippet $snippet)
+    private function writeSnippet(Snippet $snippet): void
     {
         $this->keyValueStore->set($snippet->getKey(), $snippet->getContent());
     }
 
-    public function writeSearchDocument(SearchDocument $searchDocument)
+    public function writeSearchDocument(SearchDocument $searchDocument): void
     {
         $this->searchEngine->addDocument($searchDocument);
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->clearComponent($this->searchEngine);
         $this->clearComponent($this->keyValueStore);
@@ -65,14 +65,14 @@ class DataPoolWriter implements Clearable
     /**
      * @param object $instance
      */
-    private function clearComponent($instance)
+    private function clearComponent($instance): void
     {
         if ($instance instanceof Clearable) {
             $instance->clear();
         }
     }
 
-    public function writeUrlKeyCollection(UrlKeyForContextCollection $urlKeysForContextsCollection)
+    public function writeUrlKeyCollection(UrlKeyForContextCollection $urlKeysForContextsCollection): void
     {
         array_map(function (UrlKeyForContext $urlKeyForContext) {
             $version = (string) $urlKeyForContext->getContextValue(DataVersion::CONTEXT_CODE);
@@ -83,12 +83,12 @@ class DataPoolWriter implements Clearable
         }, $urlKeysForContextsCollection->getUrlKeys());
     }
 
-    public function setCurrentDataVersion(string $dataVersionString)
+    public function setCurrentDataVersion(string $dataVersionString): void
     {
         $this->keyValueStore->set(CurrentDataVersion::SNIPPET_KEY, $dataVersionString);
     }
 
-    public function setPreviousDataVersion(string $dataVersionString)
+    public function setPreviousDataVersion(string $dataVersionString): void
     {
         $this->keyValueStore->set(CurrentDataVersion::PREVIOUS_VERSION_SNIPPET_KEY, $dataVersionString);
     }

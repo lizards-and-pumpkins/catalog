@@ -75,14 +75,14 @@ class DefaultSelectedFiltersParser implements SelectedFiltersParser
         return $result;
     }
 
-    private function validateFilterString(string $filterString, string $filtersString)
+    private function validateFilterString(string $filterString, string $filtersString): void
     {
         if (! preg_match('/^[^:]+:\[?[^\[\]]+\]?$/', $filterString)) {
             $this->throwMalformedFiltersStringException($filtersString);
         }
     }
 
-    private function validateValues(string $filtersString, string ...$values)
+    private function validateValues(string $filtersString, string ...$values): void
     {
         every($values, function (string $value) use ($filtersString) {
             if ('' === trim($value)) {
@@ -91,7 +91,7 @@ class DefaultSelectedFiltersParser implements SelectedFiltersParser
         });
     }
 
-    private function throwMalformedFiltersStringException(string $filtersString)
+    private function throwMalformedFiltersStringException(string $filtersString): void
     {
         throw new MalformedSelectedFiltersQueryStringException(
             sprintf('Selected filters query string %s is malformed.', $filtersString)

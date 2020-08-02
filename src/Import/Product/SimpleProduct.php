@@ -60,7 +60,7 @@ class SimpleProduct implements Product
      * @param mixed[] $sourceArray
      * @return SimpleProduct
      */
-    public static function fromArray(array $sourceArray)
+    public static function fromArray(array $sourceArray): SimpleProduct
     {
         self::validateTypeCodeInSourceArray(self::TYPE_CODE, $sourceArray);
         return new self(

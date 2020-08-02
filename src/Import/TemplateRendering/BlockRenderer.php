@@ -47,11 +47,6 @@ abstract class BlockRenderer
     private $translatorRegistry;
 
     /**
-     * @var Block
-     */
-    private $outermostBlock;
-
-    /**
      * @var BaseUrlBuilder
      */
     private $baseUrlBuilder;
@@ -89,9 +84,9 @@ abstract class BlockRenderer
         $this->missingBlockNames = [];
 
         $outermostBlockLayout = $this->getOuterMostBlockLayout();
-        $this->outermostBlock = $this->createBlockWithChildrenRecursively($outermostBlockLayout);
+        $outermostBlock = $this->createBlockWithChildrenRecursively($outermostBlockLayout);
 
-        return $this->outermostBlock->render();
+        return $outermostBlock->render();
     }
 
     /**
@@ -133,7 +128,7 @@ abstract class BlockRenderer
         return $blockInstance;
     }
 
-    private function addDeclaredChildBlocks(Layout $layout, string $parentName)
+    private function addDeclaredChildBlocks(Layout $layout, string $parentName): void
     {
         if ($layout->hasChildren()) {
             /** @var Layout $childBlockLayout */
@@ -144,7 +139,7 @@ abstract class BlockRenderer
         }
     }
 
-    private function validateBlockClass(string $blockClass)
+    private function validateBlockClass(string $blockClass): void
     {
         if (is_null($blockClass)) {
             throw new CanNotInstantiateBlockException('Block class is not specified.');

@@ -122,7 +122,7 @@ class ProductDetailPageMetaInfoSnippetContent implements PageMetaInfoSnippetCont
     /**
      * @param mixed[] $pageInfo
      */
-    private static function validateRequiredKeysArePresent(array $pageInfo)
+    private static function validateRequiredKeysArePresent(array $pageInfo): void
     {
         $requiredKeys = [
             self::KEY_PRODUCT_ID,

@@ -11,7 +11,7 @@ class ImageProcessingStrategySequence implements ImageProcessingStrategy
      */
     private $strategies = [];
 
-    public function add(ImageProcessingStrategy $strategy)
+    public function add(ImageProcessingStrategy $strategy): void
     {
         $this->strategies[] = $strategy;
     }

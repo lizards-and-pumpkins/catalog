@@ -72,18 +72,14 @@ class ContentBlocksApiV2PutRequestHandler implements HttpRequestHandler
     /**
      * @param string[] $requestBody
      */
-    private function validateRequestBody(array $requestBody)
+    private function validateRequestBody(array $requestBody): void
     {
         $this->validateContent($requestBody);
         $this->validateContext($requestBody);
         $this->validateUrlKey($requestBody);
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return string|null
-     */
-    private function extractContentBlockIdFromUrl(HttpRequest $request)
+    private function extractContentBlockIdFromUrl(HttpRequest $request): ?string
     {
         if (! preg_match('#/content_blocks/(?<content_block_id>[^/]+)#i', (string) $request->getUrl(), $urlTokens)) {
             return null;
@@ -102,7 +98,7 @@ class ContentBlocksApiV2PutRequestHandler implements HttpRequestHandler
         return $requestBody['data_version'];
     }
 
-    private function validateDataVersion(array $requestBody)
+    private function validateDataVersion(array $requestBody): void
     {
         if (!isset($requestBody['data_version'])) {
             throw new MissingContentBlockDataVersionException('The content block data version must be specified.');
@@ -111,7 +107,7 @@ class ContentBlocksApiV2PutRequestHandler implements HttpRequestHandler
         DataVersion::fromVersionString($requestBody['data_version']);
     }
 
-    private function validateContext(array $requestBody)
+    private function validateContext(array $requestBody): void
     {
         if (!isset($requestBody['context'])) {
             throw new ContentBlockContextIsMissingInRequestBodyException(
@@ -126,7 +122,7 @@ class ContentBlocksApiV2PutRequestHandler implements HttpRequestHandler
         }
     }
 
-    private function validateContent(array $requestBody)
+    private function validateContent(array $requestBody): void
     {
         if (!isset($requestBody['content'])) {
             throw new ContentBlockBodyIsMissingInRequestBodyException(
@@ -135,7 +131,7 @@ class ContentBlocksApiV2PutRequestHandler implements HttpRequestHandler
         }
     }
 
-    private function validateUrlKey(array $requestBody)
+    private function validateUrlKey(array $requestBody): void
     {
         if (isset($requestBody['url_key']) && !is_string($requestBody['url_key'])) {
             throw new InvalidContentBlockUrlKey(

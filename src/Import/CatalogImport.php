@@ -76,7 +76,7 @@ class CatalogImport
         $this->logger = $logger;
     }
 
-    public function importFile(string $importFilePath, DataVersion $dataVersion)
+    public function importFile(string $importFilePath, DataVersion $dataVersion): void
     {
         $this->dataVersion = $dataVersion;
         $this->validateImportFilePath($importFilePath);
@@ -88,7 +88,7 @@ class CatalogImport
         $this->addCatalogImportedDomainEvent();
     }
 
-    private function validateImportFilePath(string $importFilePath)
+    private function validateImportFilePath(string $importFilePath): void
     {
         if (! file_exists($importFilePath)) {
             throw new CatalogImportFileDoesNotExistException(
@@ -109,7 +109,7 @@ class CatalogImport
         };
     }
 
-    private function processProductXml(string $productXml)
+    private function processProductXml(string $productXml): void
     {
         try {
             $this->addProductsAndProductImagesToQueue($productXml, $this->dataVersion);
@@ -122,7 +122,7 @@ class CatalogImport
         }
     }
 
-    public function addProductsAndProductImagesToQueue(string $productXml, DataVersion $dataVersion)
+    public function addProductsAndProductImagesToQueue(string $productXml, DataVersion $dataVersion): void
     {
         $this->dataVersion = $dataVersion;
         $productBuilder = $this->productXmlToProductBuilder->createProductBuilderFromXml($productXml);
@@ -136,7 +136,7 @@ class CatalogImport
         });
     }
 
-    private function processImagesInProductXml(string $productXml)
+    private function processImagesInProductXml(string $productXml): void
     {
         $imageNodes = (new XPathParser($productXml))->getXmlNodesRawXmlArrayByXPath('/product/images/image');
         every($imageNodes, function ($productImageXml) {
@@ -144,7 +144,7 @@ class CatalogImport
         });
     }
 
-    private function processProductImageXml(string $productImageXml)
+    private function processProductImageXml(string $productImageXml): void
     {
         try {
             $fileNode = (new XPathParser($productImageXml))->getXmlNodesArrayByXPath('/image/file')[0];
@@ -155,7 +155,7 @@ class CatalogImport
         }
     }
 
-    private function processListingXml(string $listingXml)
+    private function processListingXml(string $listingXml): void
     {
         try {
             $productListing = $this->productListingBuilder
@@ -166,7 +166,7 @@ class CatalogImport
         }
     }
 
-    private function addCatalogImportedDomainEvent()
+    private function addCatalogImportedDomainEvent(): void
     {
         $this->eventQueue->add(new CatalogWasImportedDomainEvent($this->dataVersion));
     }

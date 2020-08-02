@@ -22,7 +22,7 @@ class ContentBlockProjector implements Projector
     /**
      * @param ContentBlockSource $contentBlockSource
      */
-    public function project($contentBlockSource)
+    public function project($contentBlockSource): void
     {
         if (! $contentBlockSource instanceof ContentBlockSource) {
             throw new InvalidProjectionSourceDataTypeException(sprintf(

@@ -11,12 +11,12 @@ class ImageProcessorCollection
      */
     private $processors = [];
 
-    public function add(ImageProcessor $processor)
+    public function add(ImageProcessor $processor): void
     {
         $this->processors[] = $processor;
     }
 
-    public function process(string $imageFilePath)
+    public function process(string $imageFilePath): void
     {
         foreach ($this->processors as $processor) {
             $processor->process($imageFilePath);

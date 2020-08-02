@@ -42,7 +42,7 @@ class ImageProcessor
         $this->targetImageDirectoryPath = $targetImageDirectoryPath;
     }
 
-    public function process(string $imageFilePath)
+    public function process(string $imageFilePath): void
     {
         $imageBinaryData = $this->reader->getFileContents($imageFilePath);
         $processedImageStream = $this->strategySequence->processBinaryImageData($imageBinaryData);
@@ -53,14 +53,14 @@ class ImageProcessor
         $this->writer->putFileContents($targetFilePath, $processedImageStream);
     }
 
-    private function ensureTargetDirectoryExists()
+    private function ensureTargetDirectoryExists(): void
     {
         if (! file_exists($this->targetImageDirectoryPath)) {
             $this->createDirectory($this->targetImageDirectoryPath);
         }
     }
 
-    private function createDirectory(string $directoryPath)
+    private function createDirectory(string $directoryPath): void
     {
         if (!@mkdir($directoryPath, 0755, true) || ! is_dir(dirname($directoryPath))) {
             $message = sprintf('Unable to create the target directory for processed images "%s"', $directoryPath);

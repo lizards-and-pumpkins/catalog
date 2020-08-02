@@ -53,7 +53,7 @@ class ProductSearchApiFactory implements FactoryWithCallback
         );
     }
 
-    private function registerProductSearchApiEndpoint(MasterFactory $masterFactory)
+    private function registerProductSearchApiEndpoint(MasterFactory $masterFactory): void
     {
         $apiVersion = 1;
 

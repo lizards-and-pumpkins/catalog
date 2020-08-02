@@ -27,7 +27,7 @@ class CliFactoryBootstrap
      * @param MasterFactory $masterFactory
      * @param Factory[] $otherFactories
      */
-    private static function registerDefaultFactories(MasterFactory $masterFactory, array $otherFactories)
+    private static function registerDefaultFactories(MasterFactory $masterFactory, array $otherFactories): void
     {
         every(self::getDefaultFactoryClasses(), function (string $class) use ($masterFactory, $otherFactories) {
             if (class_exists($class) && ! self::arrayContainsInstanceOfClass($otherFactories, $class)) {
@@ -40,7 +40,7 @@ class CliFactoryBootstrap
      * @param MasterFactory $masterFactory
      * @param Factory[] $factoriesToRegister
      */
-    private static function registerSpecifiedFactories(MasterFactory $masterFactory, array $factoriesToRegister)
+    private static function registerSpecifiedFactories(MasterFactory $masterFactory, array $factoriesToRegister): void
     {
         every($factoriesToRegister, function (Factory $factory) use ($masterFactory) {
             $masterFactory->register($factory);

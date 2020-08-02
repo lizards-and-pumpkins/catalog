@@ -31,7 +31,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
         return $this->isPresent($file);
     }
 
-    public function putContent(StorageAgnosticFileUri $identifier, FileContent $content)
+    public function putContent(StorageAgnosticFileUri $identifier, FileContent $content): void
     {
         $filesystemPath = $this->buildFileSystemPath($identifier);
         $file = FileInStorage::createWithContent(FilesystemFileUri::fromString($filesystemPath), $this, $content);
@@ -67,7 +67,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
         return file_get_contents((string) $file);
     }
 
-    public function write(File $file)
+    public function write(File $file): void
     {
         $this->validateFileStorageType($file);
         $filePath = (string) $file;
@@ -79,7 +79,7 @@ class FilesystemFileStorage implements FileStorage, FileToFileStorage
         file_put_contents($filePath, $file->getContent());
     }
 
-    private function validateFileStorageType(File $file)
+    private function validateFileStorageType(File $file): void
     {
         $fileURI = $file->getInStorageUri();
         if (!($fileURI instanceof FilesystemFileUri)) {

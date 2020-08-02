@@ -39,7 +39,7 @@ class ProductListingProjector implements Projector
     /**
      * @param ProductListing $productListing
      */
-    public function project($productListing)
+    public function project($productListing): void
     {
         if (! $productListing instanceof ProductListing) {
             throw new InvalidProjectionSourceDataTypeException(

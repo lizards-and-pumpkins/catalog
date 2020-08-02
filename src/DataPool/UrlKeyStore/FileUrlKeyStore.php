@@ -22,7 +22,7 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
         $this->storageDirectoryPath = $storageDirectoryPath;
     }
 
-    public function clear()
+    public function clear(): void
     {
         (new LocalFilesystem())->removeDirectoryContents($this->storageDirectoryPath);
     }
@@ -41,7 +41,7 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
         );
     }
 
-    private function appendRecordToFile(string $filePath, string $record)
+    private function appendRecordToFile(string $filePath, string $record): void
     {
         $f = fopen($filePath, 'a');
         flock($f, LOCK_EX);
@@ -102,7 +102,7 @@ class FileUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements UrlK
             $urlKeyType . PHP_EOL;
     }
 
-    private function ensureDirectoryExists(string $directoryPath)
+    private function ensureDirectoryExists(string $directoryPath): void
     {
         if (! @mkdir($directoryPath, 0700, true) && ! is_dir($directoryPath)) {
             throw new DirectoryDoesNotExistException(sprintf(

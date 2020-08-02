@@ -46,7 +46,7 @@ class CatalogRestApiFactory implements Factory
         return new UrlToWebsiteMapBasedUrlParser($this->getMasterFactory()->createUrlToWebsiteMap());
     }
 
-    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator)
+    private function registerApiRequestHandlers(ApiRequestHandlerLocator $requestHandlerLocator): void
     {
         $requestHandlerLocator->register('put_catalog_import', $version = 1, function () {
             return $this->getMasterFactory()->createCatalogImportApiV1PutRequestHandler();
@@ -162,7 +162,7 @@ class CatalogRestApiFactory implements Factory
         );
     }
 
-    public function createProductImportApiV1PutRequestHandler()
+    public function createProductImportApiV1PutRequestHandler(): ProductImportApiV1PutRequestHandler
     {
         return new ProductImportApiV1PutRequestHandler(
             $this->getMasterFactory()->createProductJsonToXml(),

@@ -129,7 +129,7 @@ class ProductListingMetaSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param mixed[] $pageInfo
      */
-    private static function validateRequiredKeysArePresent(array $pageInfo)
+    private static function validateRequiredKeysArePresent(array $pageInfo): void
     {
         foreach (self::$requiredKeys as $key) {
             if (! array_key_exists($key, $pageInfo)) {
@@ -193,7 +193,7 @@ class ProductListingMetaSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param mixed[] $metaInfo
      */
-    private static function validateProductListingSearchCriteria(array $metaInfo)
+    private static function validateProductListingSearchCriteria(array $metaInfo): void
     {
         if (! isset($metaInfo['condition'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criteria condition.');
@@ -216,7 +216,7 @@ class ProductListingMetaSnippetContent implements PageMetaInfoSnippetContent
     /**
      * @param mixed[] $criterionArray
      */
-    private static function validateSearchCriterionMetaInfo(array $criterionArray)
+    private static function validateSearchCriterionMetaInfo(array $criterionArray): void
     {
         if (! isset($criterionArray['fieldName'])) {
             throw new MalformedSearchCriteriaMetaException('Missing criterion field name.');

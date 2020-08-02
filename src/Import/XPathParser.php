@@ -108,14 +108,9 @@ class XPathParser
         return $nodeList;
     }
 
-    /**
-     * @return string|null
-     */
-    private function getNamespaceUri()
+    private function getNamespaceUri(): ?string
     {
-        $namespaceUri = $this->document->documentElement->lookupNamespaceUri(null);
-
-        return $namespaceUri;
+        return $this->document->documentElement->lookupNamespaceUri(null);
     }
 
     private function addNamespacePrefixesToXPathString(string $xPathString) : string
@@ -146,14 +141,14 @@ class XPathParser
         return $attributeArray;
     }
 
-    private function removeCommentNodes()
+    private function removeCommentNodes(): void
     {
         foreach ($this->xPathEngine->query('//comment()') as $comment) {
             $comment->parentNode->removeChild($comment);
         }
     }
 
-    private function validateNoErrors()
+    private function validateNoErrors(): void
     {
         $errors = libxml_get_errors();
         if (count($errors) > 0) {

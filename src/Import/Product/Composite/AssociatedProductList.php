@@ -26,7 +26,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
         $this->products = $products;
     }
 
-    private function validateAssociatedProducts(Product ...$products)
+    private function validateAssociatedProducts(Product ...$products): void
     {
         array_reduce($products, function (array $idStrings, Product $product) {
             $productIdString = (string) $product->getId();
@@ -111,7 +111,7 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
         return new \ArrayIterator($this->products);
     }
 
-    public function validateUniqueValueCombinationForEachProductAttribute(AttributeCode ...$attributeCodes)
+    public function validateUniqueValueCombinationForEachProductAttribute(AttributeCode ...$attributeCodes): void
     {
         $this->validateAllProductsHaveTheAttributes(...$attributeCodes);
         array_reduce($this->products, function ($carry, Product $product) use ($attributeCodes) {
@@ -155,21 +155,21 @@ class AssociatedProductList implements \JsonSerializable, \IteratorAggregate, \C
         return new ProductAttributeValueCombinationNotUniqueException($message);
     }
 
-    private function validateAllProductsHaveTheAttributes(AttributeCode ...$attributeCodes)
+    private function validateAllProductsHaveTheAttributes(AttributeCode ...$attributeCodes): void
     {
         every($this->products, function (Product $product) use ($attributeCodes) {
             $this->validateProductHasAttributes($product, ...$attributeCodes);
         });
     }
 
-    private function validateProductHasAttributes(Product $product, AttributeCode ...$attributeCodes)
+    private function validateProductHasAttributes(Product $product, AttributeCode ...$attributeCodes): void
     {
         every($attributeCodes, function (AttributeCode $attributeCode) use ($product) {
             $this->validateProductHasAttribute($product, $attributeCode);
         });
     }
 
-    private function validateProductHasAttribute(Product $product, AttributeCode $attributeCode)
+    private function validateProductHasAttribute(Product $product, AttributeCode $attributeCode): void
     {
         if (! $product->hasAttribute($attributeCode)) {
             $message = sprintf(

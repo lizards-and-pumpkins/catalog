@@ -24,7 +24,7 @@ class ContentBlockServiceFactory implements FactoryWithCallback
         });
     }
 
-    public function createContentBlockApiV2GetRequestHandler()
+    public function createContentBlockApiV2GetRequestHandler(): ContentBlockApiV2GetRequestHandler
     {
         return new ContentBlockApiV2GetRequestHandler(
             $this->getMasterFactory()->getContentBlockService(),
@@ -32,7 +32,7 @@ class ContentBlockServiceFactory implements FactoryWithCallback
         );
     }
 
-    public function getContentBlockService()
+    public function getContentBlockService(): ContentBlockService
     {
         return new ContentBlockService(
             $this->getMasterFactory()->createDataPoolReader(),

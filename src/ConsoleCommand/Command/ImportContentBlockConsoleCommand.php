@@ -58,13 +58,13 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         ]);
     }
 
-    final protected function execute(CLImate $CLImate)
+    final protected function execute(CLImate $CLImate): void
     {
         $this->addUpdateContentBlockCommands();
         $this->processQueuesIfRequested();
     }
 
-    private function addUpdateContentBlockCommands()
+    private function addUpdateContentBlockCommands(): void
     {
         $contentFileNames = glob($this->getArg('importDirectory') . '/*.html');
 
@@ -82,7 +82,7 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
      * @param string $blockContent
      * @param string[] $keyGeneratorParams
      */
-    private function addCommandsForEachContext(ContentBlockId $blockId, string $blockContent, array $keyGeneratorParams)
+    private function addCommandsForEachContext(ContentBlockId $blockId, string $blockContent, array $keyGeneratorParams): void
     {
         every($this->getAllContexts(), function (Context $context) use ($blockId, $blockContent, $keyGeneratorParams) {
             $contentBlockSource = new ContentBlockSource($blockId, $blockContent, $context, $keyGeneratorParams);
@@ -129,14 +129,14 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         return [];
     }
 
-    private function processQueuesIfRequested()
+    private function processQueuesIfRequested(): void
     {
         if ($this->getArg('processQueues')) {
             $this->processQueues();
         }
     }
 
-    private function processQueues()
+    private function processQueues(): void
     {
         $this->processCommandQueue();
         $this->processDomainEventQueue();
@@ -147,13 +147,13 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         return preg_replace('/.*\/|\.html$/i', '', $fileName);
     }
 
-    private function processCommandQueue()
+    private function processCommandQueue(): void
     {
         $this->output('Processing command queue...');
         $this->createCommandConsumer()->processAll();
     }
 
-    private function processDomainEventQueue()
+    private function processDomainEventQueue(): void
     {
         $this->output('Processing domain event queue...');
         $this->createDomainEventConsumer()->processAll();
@@ -174,7 +174,7 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         return DataVersion::fromVersionString($version);
     }
 
-    private function validateContentBlockId(string $blockId)
+    private function validateContentBlockId(string $blockId): void
     {
         if (!preg_match('/^(:?product_listing_|)content_block_/', $blockId)) {
             $this->warn(sprintf('Warning: the content block "%s" is probably invalid.', $blockId));
@@ -182,7 +182,7 @@ class ImportContentBlockConsoleCommand extends BaseCliCommand
         }
     }
 
-    private function warn(string $message)
+    private function warn(string $message): void
     {
         $this->getCLImate()->yellow($message);
     }

@@ -29,7 +29,7 @@ class NameToClassConvertingConsoleCommandLocator implements ConsoleCommandLocato
         return '\\LizardsAndPumpkins\\ConsoleCommand\\Command\\' . $class;
     }
 
-    private function validateCommandName(string $commandName)
+    private function validateCommandName(string $commandName): void
     {
         if ('' === trim($commandName)) {
             throw new InvalidConsoleCommandNameException('The command name must not be an empty string');

@@ -20,7 +20,7 @@ class EnrichProductJsonWithPrices
      * @param int|string|null $specialPriceInt
      * @return array[]
      */
-    public function addPricesToProductData(Context $context, array $productData, $priceInt, $specialPriceInt = null)
+    public function addPricesToProductData(Context $context, array $productData, $priceInt, $specialPriceInt = null): array
     {
         $currency = new Currency($this->getCurrencyCode());
         $price = Price::fromFractions($priceInt)->round($currency->getDefaultFractionDigits());

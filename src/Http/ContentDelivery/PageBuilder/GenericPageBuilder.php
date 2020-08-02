@@ -103,7 +103,7 @@ class GenericPageBuilder implements PageBuilder
      * @param string[] $snippetCodeToKeyMap
      * @param string[] $snippetKeyToContentMap
      */
-    public function addSnippetsToPage(array $snippetCodeToKeyMap, array $snippetKeyToContentMap)
+    public function addSnippetsToPage(array $snippetCodeToKeyMap, array $snippetKeyToContentMap): void
     {
         $this->snippetCodeToKeyMap = array_merge($this->snippetCodeToKeyMap, $snippetCodeToKeyMap);
         $this->snippetKeyToContentMap = array_merge($this->snippetKeyToContentMap, $snippetKeyToContentMap);
@@ -141,7 +141,7 @@ class GenericPageBuilder implements PageBuilder
         }, []);
     }
 
-    public function registerSnippetTransformation(string $snippetCode, callable $transformation)
+    public function registerSnippetTransformation(string $snippetCode, callable $transformation): void
     {
         if (!array_key_exists($snippetCode, $this->snippetTransformations)) {
             $this->snippetTransformations[$snippetCode] = [];
@@ -149,12 +149,12 @@ class GenericPageBuilder implements PageBuilder
         $this->snippetTransformations[$snippetCode][] = $transformation;
     }
 
-    public function addSnippetToContainer(string $containerCode, string $snippetCode)
+    public function addSnippetToContainer(string $containerCode, string $snippetCode): void
     {
         $this->containerSnippets[$containerCode][] = $snippetCode;
     }
 
-    public function addSnippetToPage(string $snippetCode, string $snippetContent)
+    public function addSnippetToPage(string $snippetCode, string $snippetContent): void
     {
         $this->addSnippetsToPage([$snippetCode => $snippetCode], [$snippetCode => $snippetContent]);
     }
@@ -200,7 +200,7 @@ class GenericPageBuilder implements PageBuilder
         return array_filter($snippetKeys);
     }
 
-    private function applySnippetTransformations()
+    private function applySnippetTransformations(): void
     {
         every($this->getCodesOfSnippetsWithTransformations(), function ($snippetCode) {
             $this->applyTransformationToSnippetByCode($snippetCode);
@@ -218,7 +218,7 @@ class GenericPageBuilder implements PageBuilder
         );
     }
 
-    private function applyTransformationToSnippetByCode(string $snippetCode)
+    private function applyTransformationToSnippetByCode(string $snippetCode): void
     {
         $this->pageSnippets->updateSnippetByCode(
             $snippetCode,

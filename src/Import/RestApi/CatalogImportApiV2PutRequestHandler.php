@@ -44,7 +44,7 @@ class CatalogImportApiV2PutRequestHandler implements HttpRequestHandler
         $this->logger = $logger;
     }
 
-    private function validateImportDirectoryPath(string $importDirectoryPath)
+    private function validateImportDirectoryPath(string $importDirectoryPath): void
     {
         if (! is_readable($importDirectoryPath)) {
             throw new CatalogImportApiDirectoryNotReadableException(

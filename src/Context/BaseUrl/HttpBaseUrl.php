@@ -19,7 +19,7 @@ class HttpBaseUrl implements BaseUrl
         $this->baseUrlString = $baseUrlString;
     }
 
-    private function validateInputString(string $baseUrlString)
+    private function validateInputString(string $baseUrlString): void
     {
         if (trim($baseUrlString) === '') {
             throw self::createException('Invalid empty source data for the base URL specified');

@@ -19,12 +19,12 @@ class BlockStructure
      */
     private $blockChildren = [];
 
-    public function addBlock(Block $blockInstance)
+    public function addBlock(Block $blockInstance): void
     {
         $this->blocks[$blockInstance->getBlockName()] = $blockInstance;
     }
 
-    public function setParentBlock(string $parentName, Block $childBlockInstance)
+    public function setParentBlock(string $parentName, Block $childBlockInstance): void
     {
         if (!$this->hasBlock($parentName)) {
             throw new BlockDoesNotExistException(sprintf(

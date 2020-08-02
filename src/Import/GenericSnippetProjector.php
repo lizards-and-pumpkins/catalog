@@ -28,7 +28,7 @@ class GenericSnippetProjector implements Projector
     /**
      * @param mixed $projectionData
      */
-    public function project($projectionData)
+    public function project($projectionData): void
     {
         $snippets = $this->getSnippets($projectionData);
         $this->dataPoolWriter->writeSnippets(...$snippets);

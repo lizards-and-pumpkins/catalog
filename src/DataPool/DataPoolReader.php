@@ -84,7 +84,7 @@ class DataPoolReader
         return $this->keyValueStore->multiGet(...$keys);
     }
 
-    private function validateKey(string $key)
+    private function validateKey(string $key): void
     {
         if ('' === $key) {
             throw new InvalidKeyValueStoreKeyException('The Key/Value storage key "" is invalid');

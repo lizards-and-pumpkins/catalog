@@ -60,7 +60,7 @@ class ProductsPerPage implements \JsonSerializable
     /**
      * @param mixed[] $numbersOfProductsPerPage
      */
-    private static function validateNumbersOfProductsPerPage(array $numbersOfProductsPerPage)
+    private static function validateNumbersOfProductsPerPage(array $numbersOfProductsPerPage): void
     {
         if (count($numbersOfProductsPerPage) === 0) {
             throw new InvalidNumberOfProductsPerPageException('No numbers of products per page specified.');

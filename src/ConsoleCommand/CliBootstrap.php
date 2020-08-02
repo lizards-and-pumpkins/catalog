@@ -20,6 +20,11 @@ class CliBootstrap
         return self::instantiateCommand($cliCommandClass, $masterFactory);
     }
 
+    /**
+     * @param string $cliCommandClass
+     * @param MasterFactory $masterFactory
+     * @return mixed
+     */
     private static function instantiateCommand(string $cliCommandClass, MasterFactory $masterFactory)
     {
         return new $cliCommandClass($masterFactory, new CLImate());

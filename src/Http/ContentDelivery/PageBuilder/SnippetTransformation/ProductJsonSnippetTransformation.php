@@ -42,11 +42,7 @@ class ProductJsonSnippetTransformation implements SnippetTransformation
         return json_encode($enrichedProductData);
     }
 
-    /**
-     * @param PageSnippets $pageSnippets
-     * @return string|null
-     */
-    private function getSpecialPrice(PageSnippets $pageSnippets)
+    private function getSpecialPrice(PageSnippets $pageSnippets): ?string
     {
         return $pageSnippets->hasSnippetCode(PriceSnippetRenderer::SPECIAL_PRICE) ?
             $pageSnippets->getSnippetByCode(PriceSnippetRenderer::SPECIAL_PRICE) :

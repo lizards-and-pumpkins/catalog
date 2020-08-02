@@ -30,7 +30,7 @@ class SnippetContainer
         $this->containedSnippetCodes = $containedSnippetCodes;
     }
 
-    private function validateContainerCode(string $containerCode)
+    private function validateContainerCode(string $containerCode): void
     {
         if (strlen($containerCode) < 2) {
             $message = 'The snippet container code has to be at least 2 characters long';

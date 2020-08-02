@@ -25,7 +25,7 @@ class TemplateProjectorLocator
         return $this->projectors[$code];
     }
 
-    public function register(string $code, Projector $projector)
+    public function register(string $code, Projector $projector): void
     {
         $this->projectors[$code] = $projector;
     }

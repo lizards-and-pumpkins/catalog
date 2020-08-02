@@ -53,6 +53,10 @@ class CurrentVersionApiV1PutRequestHandler implements HttpRequestHandler
         return $versionString;
     }
 
+    /**
+     * @param HttpRequest $request
+     * @return mixed
+     */
     private function getRequestData(HttpRequest $request)
     {
         $data = json_decode($request->getRawBody(), true);

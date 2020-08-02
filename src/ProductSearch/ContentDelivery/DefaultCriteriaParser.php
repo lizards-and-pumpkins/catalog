@@ -91,7 +91,7 @@ class DefaultCriteriaParser implements CriteriaParser
         return $result;
     }
 
-    private function validateCriteriaString(string $criteriaString)
+    private function validateCriteriaString(string $criteriaString): void
     {
         if (! preg_match('/^.+:.+$/', $criteriaString)) {
             throw new MalformedCriteriaQueryStringException(
@@ -100,7 +100,7 @@ class DefaultCriteriaParser implements CriteriaParser
         }
     }
 
-    private function validateSingleValue(string $valuesString)
+    private function validateSingleValue(string $valuesString): void
     {
         if (preg_match('/^\s|\s$/', $valuesString) || ! preg_match('/^[^\[\]\{\}:,]+$/', $valuesString)) {
             throw new MalformedCriteriaQueryStringException(

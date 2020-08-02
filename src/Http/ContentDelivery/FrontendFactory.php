@@ -265,7 +265,7 @@ class FrontendFactory implements Factory
         return $pageBuilder;
     }
 
-    private function registerSnippetTransformations(PageBuilder $pageBuilder)
+    private function registerSnippetTransformations(PageBuilder $pageBuilder): void
     {
         $pageBuilder->registerSnippetTransformation(
             ProductJsonSnippetRenderer::CODE,

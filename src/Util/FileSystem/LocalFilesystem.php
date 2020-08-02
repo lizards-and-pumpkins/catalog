@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Util\FileSystem\Exception\DirectoryNotWritableException;
 
 class LocalFilesystem
 {
-    public function removeDirectoryAndItsContent(string $directoryPath)
+    public function removeDirectoryAndItsContent(string $directoryPath): void
     {
         if (!is_dir($directoryPath)) {
             throw new DirectoryDoesNotExistException(sprintf('The directory "%s" does not exist', $directoryPath));
@@ -28,7 +28,7 @@ class LocalFilesystem
         rmdir($directoryPath);
     }
 
-    public function removeDirectoryContents(string $directoryPath)
+    public function removeDirectoryContents(string $directoryPath): void
     {
         if (!file_exists($directoryPath)) {
             return;

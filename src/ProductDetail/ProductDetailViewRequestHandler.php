@@ -70,7 +70,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         return $this->pageBuilder->buildPage($this->pageMetaInfo, $this->context, $keyGeneratorParams);
     }
 
-    private function addTranslationsToPageBuilder()
+    private function addTranslationsToPageBuilder(): void
     {
         $translator = $this->translatorRegistry->getTranslator(
             ProductDetailTemplateSnippetRenderer::CODE,
@@ -79,7 +79,7 @@ class ProductDetailViewRequestHandler implements HttpRequestHandler
         $this->addDynamicSnippetToPageBuilder('translations', json_encode($translator));
     }
 
-    private function addDynamicSnippetToPageBuilder(string $snippetCode, string $snippetContents)
+    private function addDynamicSnippetToPageBuilder(string $snippetCode, string $snippetContents): void
     {
         $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];

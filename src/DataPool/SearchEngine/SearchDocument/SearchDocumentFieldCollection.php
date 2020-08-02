@@ -40,7 +40,7 @@ class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
     /**
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->fields);
     }
@@ -48,7 +48,7 @@ class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
     /**
      * @return \ArrayIterator|SearchDocumentField[]
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->fields);
     }
@@ -56,7 +56,7 @@ class SearchDocumentFieldCollection implements \Countable, \IteratorAggregate
     /**
      * @return SearchDocumentField[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }

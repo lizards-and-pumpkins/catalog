@@ -20,7 +20,7 @@ class ConsumeCommandsConsoleCommand implements ConsoleCommand
         $this->masterFactory = $masterFactory;
     }
     
-    public function run()
+    public function run(): void
     {
         /** @var CommandConsumer $commandConsumer */
         $commandConsumer = $this->masterFactory->createCommandConsumer();
