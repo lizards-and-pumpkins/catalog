@@ -9,8 +9,8 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\LogfileReader;
 use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\ProcessingTimeTableDataBuilder;
 use LizardsAndPumpkins\ConsoleCommand\ConsoleCommandFactory;
-use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**

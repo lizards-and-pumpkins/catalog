@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace LizardsAndPumpkins\Import\FileStorage;
 
-use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Import\FileStorage\Exception\FileDoesNotExistException;
 use LizardsAndPumpkins\Import\FileStorage\Exception\FileStorageTypeMismatchException;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**

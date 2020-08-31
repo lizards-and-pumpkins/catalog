@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockServiceFactory;
 use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Http\HttpHeaders;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
@@ -142,20 +143,20 @@ class CatalogRestApiWebFrontTest extends TestCase
 
     public function testRegistersFactoriesRequiredForRestApiRequestHandling(): void
     {
-        $this->mockMasterFactory->expects($this->at(0))->method('register')
-            ->with($this->isInstanceOf(CommonFactory::class));
-        $this->mockMasterFactory->expects($this->at(1))->method('register')
-            ->with($this->isInstanceOf(CatalogRestApiFactory::class));
-        $this->mockMasterFactory->expects($this->at(2))->method('register')
-            ->with($this->isInstanceOf(ContentBlockServiceFactory::class));
-        $this->mockMasterFactory->expects($this->at(3))->method('register')
-            ->with($this->isInstanceOf(ProductSearchApiFactory::class));
-        $this->mockMasterFactory->expects($this->at(4))->method('register')
-            ->with($this->isInstanceOf(UpdatingProductImportCommandFactory::class));
-        $this->mockMasterFactory->expects($this->at(5))->method('register')
-            ->with($this->isInstanceOf(UpdatingProductImageImportCommandFactory::class));
-        $this->mockMasterFactory->expects($this->at(6))->method('register')
-            ->with($this->isInstanceOf(UpdatingProductListingImportCommandFactory::class));
+        $expectedFactories = [
+            CommonFactory::class,
+            CatalogRestApiFactory::class,
+            ContentBlockServiceFactory::class,
+            ProductSearchApiFactory::class,
+            UpdatingProductImportCommandFactory::class,
+            UpdatingProductImageImportCommandFactory::class,
+            UpdatingProductListingImportCommandFactory::class,
+        ];
+
+        $this->mockMasterFactory->expects($this->atLeast(7))->method('register')
+            ->willReturnCallback(function (Factory $factory) use ($expectedFactories) {
+                $this->assertContains(get_class($factory), $expectedFactories);
+            });
 
         $this->webFront->processRequest();
     }

@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Import\Exception\CatalogImportFileNotReadableException;
 use LizardsAndPumpkins\Import\Exception\NotImportCatalogCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage;
 
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**

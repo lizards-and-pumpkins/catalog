@@ -8,7 +8,8 @@ use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Translation\Exception\LocaleDirectoryNotReadableException;
 use LizardsAndPumpkins\Translation\Exception\MalformedTranslationFileException;
 use LizardsAndPumpkins\Translation\Exception\TranslationFileNotReadableException;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

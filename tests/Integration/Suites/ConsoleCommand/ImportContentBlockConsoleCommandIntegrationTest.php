@@ -9,7 +9,7 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\AbstractIntegrationTest;
 use LizardsAndPumpkins\ConsoleCommand\Command\ImportContentBlockConsoleCommand;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 
 class ImportContentBlockConsoleCommandIntegrationTest extends AbstractIntegrationTest
 {
