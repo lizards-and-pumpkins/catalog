@@ -17,7 +17,7 @@
         "ext-ctype": "*",
         "ext-dom": "*",
         "ext-libxml": "*",
-        "lizards-and-pumpkins/core": "dev-master",
+        "lizards-and-pumpkins/core": "^1.0.0",
         "lizards-and-pumpkins/http": "dev-master",
         "lizards-and-pumpkins/rest-api": "dev-master",
         "lizards-and-pumpkins/messaging": "^1.0.0",
