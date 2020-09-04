@@ -21,7 +21,7 @@
         "lizards-and-pumpkins/http": "dev-master",
         "lizards-and-pumpkins/rest-api": "dev-master",
         "lizards-and-pumpkins/messaging": "^1.0.0",
-        "lizards-and-pumpkins/logging": "dev-master",
+        "lizards-and-pumpkins/logging": "^1.0.0",
         "lizards-and-pumpkins/util-filesystem": "^1.0.0",
         "sebastian/money": "^1.5",
         "league/climate": "^3.2.0"
