@@ -8,9 +8,12 @@ use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
+use LizardsAndPumpkins\Util\Factory\ProjectFactory;
 
 class CliFactoryBootstrap
 {
+    protected static $projectFactoryClass = ProjectFactory::class;
+
     protected static $commonFactoryClass = CommonFactory::class;
 
     public static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
@@ -54,6 +57,7 @@ class CliFactoryBootstrap
     {
         return [
             static::$commonFactoryClass,
+            static::$projectFactoryClass,
         ];
     }
 
