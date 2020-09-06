@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
-class InjectableRestApiWebFront extends RestApiWebFront
+class InjectableRestApiWebFront extends CatalogRestApiWebFront
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|MockObject
      */
     private $testMasterFactory;
     
@@ -26,7 +26,7 @@ class InjectableRestApiWebFront extends RestApiWebFront
         return $this->testMasterFactory;
     }
 
-    final protected function registerFactories(MasterFactory $masterFactory)
+    final protected function registerFactories(MasterFactory $masterFactory): void
     {
         // All factories must already have been registered with the injected testing master factory.
     }

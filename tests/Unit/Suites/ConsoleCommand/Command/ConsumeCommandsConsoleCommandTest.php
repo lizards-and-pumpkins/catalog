@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
 use LizardsAndPumpkins\ConsoleCommand\ConsoleCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandConsumer;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,25 +15,26 @@ use PHPUnit\Framework\TestCase;
 class ConsumeCommandsConsoleCommandTest extends TestCase
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory
      */
     private $stubMasterFactory;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
-            ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['createCommandConsumer']))
+            ->onlyMethods(get_class_methods(MasterFactory::class))
+            ->addMethods(['createCommandConsumer'])
             ->disableOriginalConstructor()
             ->getMock();
     }
     
-    public function testIsAConsoleCommand()
+    public function testIsAConsoleCommand(): void
     {
         $command = new ConsumeCommandsConsoleCommand($this->stubMasterFactory);
         $this->assertInstanceOf(ConsoleCommand::class, $command);
     }
 
-    public function testCallsProcessOnTheCommandConsumer()
+    public function testCallsProcessOnTheCommandConsumer(): void
     {
         $mockCommandConsumer = $this->createMock(CommandConsumer::class);
         $mockCommandConsumer->expects($this->once())->method('process');

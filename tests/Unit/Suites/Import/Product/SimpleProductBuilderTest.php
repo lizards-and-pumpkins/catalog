@@ -8,6 +8,7 @@ use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageListBuilder;
 use LizardsAndPumpkins\Import\Product\Image\ProductImageList;
 use LizardsAndPumpkins\Import\Tax\ProductTaxClass;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,70 +25,55 @@ use PHPUnit\Framework\TestCase;
 class SimpleProductBuilderTest extends TestCase
 {
     /**
-     * @var ProductAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeList|MockObject
      */
     private $mockAttributeList;
-
-    /**
-     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubProductId;
 
     /**
      * @var SimpleProductBuilder
      */
     private $productBuilder;
 
-    /**
-     * @var ProductAttributeListBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockProductAttributeListBuilder;
-
-    /**
-     * @var ProductImageListBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockProductImageListBuilder;
-
     private function createProductAttribute(string $code, string $value) : ProductAttribute
     {
         return new ProductAttribute(AttributeCode::fromString($code), $value, []);
     }
 
-    public function setUp()
+    final protected function setUp(): void
     {
-        $this->stubProductId = $this->createMock(ProductId::class);
-        $this->mockProductAttributeListBuilder = $this->createMock(ProductAttributeListBuilder::class);
-        $this->mockProductImageListBuilder = $this->createMock(ProductImageListBuilder::class);
+        $stubProductId = $this->createMock(ProductId::class);
+        $mockProductAttributeListBuilder = $this->createMock(ProductAttributeListBuilder::class);
+        $mockProductImageListBuilder = $this->createMock(ProductImageListBuilder::class);
 
         $this->mockAttributeList = $this->createMock(ProductAttributeList::class);
-        $this->mockProductAttributeListBuilder->method('getAttributeListForContext')
+        $mockProductAttributeListBuilder->method('getAttributeListForContext')
             ->willReturn($this->mockAttributeList);
 
-        $this->mockProductImageListBuilder->method('getImageListForContext')
+        $mockProductImageListBuilder->method('getImageListForContext')
             ->willReturn($this->createMock(ProductImageList::class));
 
-        /** @var ProductTaxClass|\PHPUnit_Framework_MockObject_MockObject $stubTaxClass */
+        /** @var ProductTaxClass|MockObject $stubTaxClass */
         $stubTaxClass = $this->createMock(ProductTaxClass::class);
         
         $this->productBuilder = new SimpleProductBuilder(
-            $this->stubProductId,
+            $stubProductId,
             $stubTaxClass,
-            $this->mockProductAttributeListBuilder,
-            $this->mockProductImageListBuilder
+            $mockProductAttributeListBuilder,
+            $mockProductImageListBuilder
         );
     }
 
-    public function testProductForContextIsReturned()
+    public function testProductForContextIsReturned(): void
     {
         $this->mockAttributeList->method('getAllAttributes')->willReturn([]);
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $result = $this->productBuilder->getProductForContext($stubContext);
 
         $this->assertInstanceOf(SimpleProduct::class, $result);
     }
 
-    public function testProductPriceAttributeIsInteger()
+    public function testProductPriceAttributeIsInteger(): void
     {
         $sourcePrice = '11.99';
         $priceAttributeCodes = ['price', 'special_price'];
@@ -100,40 +86,40 @@ class SimpleProductBuilderTest extends TestCase
             $sourceSpecialPriceAttribute
         ]);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $product = $this->productBuilder->getProductForContext($stubContext);
 
         array_map(function ($priceAttributeCode) use ($product) {
             $price = $product->getFirstValueOfAttribute($priceAttributeCode);
-            $this->assertInternalType('integer', $price);
+            $this->assertIsInt($price);
         }, $priceAttributeCodes);
     }
 
-    public function testProductIsAvailableForContextIfAttributesCanBeCollected()
+    public function testProductIsAvailableForContextIfAttributesCanBeCollected(): void
     {
         $this->mockAttributeList->method('count')->willReturn(2);
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         
         $this->assertTrue($this->productBuilder->isAvailableForContext($stubContext));
     }
 
-    public function testProductIsNotAvailableForContextIfNoAttributesCanBeCollected()
+    public function testProductIsNotAvailableForContextIfNoAttributesCanBeCollected(): void
     {
         $this->mockAttributeList->method('count')->willReturn(0);
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         
         $this->assertFalse($this->productBuilder->isAvailableForContext($stubContext));
     }
 
-    public function testProductHasNoSpecialPriceAttributeIfEmptyStringIsDefined()
+    public function testProductHasNoSpecialPriceAttributeIfEmptyStringIsDefined(): void
     {
         $sourceSpecialPriceAttribute = $this->createProductAttribute('special_price', '');
         $this->mockAttributeList->method('getAllAttributes')->willReturn([$sourceSpecialPriceAttribute]);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $product = $this->productBuilder->getProductForContext($stubContext);
 

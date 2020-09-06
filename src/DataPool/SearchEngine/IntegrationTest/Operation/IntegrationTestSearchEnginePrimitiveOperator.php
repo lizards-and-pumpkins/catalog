@@ -62,7 +62,7 @@ class IntegrationTestSearchEnginePrimitiveOperator
     /**
      * @param mixed[] $dataSet
      */
-    private function validateDataSet(array $dataSet)
+    private function validateDataSet(array $dataSet): void
     {
         if (! array_key_exists('fieldName', $dataSet)) {
             throw new InvalidSearchEngineOperationDataSetException(

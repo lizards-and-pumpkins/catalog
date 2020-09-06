@@ -12,9 +12,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ResourceNotFoundRouterTest extends TestCase
 {
-    public function testInstanceOfResourceNotFoundRequestHandlerIsReturned()
+    public function testInstanceOfResourceNotFoundRequestHandlerIsReturned(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
+        /** @var HttpRequest|MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
         $result = (new ResourceNotFoundRouter())->route($stubRequest);
 

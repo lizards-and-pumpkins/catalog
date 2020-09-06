@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Import\Image\Exception\NoAddImageCommandMessageException;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +30,7 @@ class AddImageCommandTest extends TestCase
     private $imageFilePath;
 
     /**
-     * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataVersion|MockObject
      */
     private $stubDataVersion;
 
@@ -39,7 +39,7 @@ class AddImageCommandTest extends TestCase
      */
     private $command;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $fixtureDirectoryPath = $this->getUniqueTempDir();
         $this->imageFilePath = $fixtureDirectoryPath . '/foo.png';
@@ -50,37 +50,37 @@ class AddImageCommandTest extends TestCase
         $this->command = new AddImageCommand($this->imageFilePath, $this->stubDataVersion);
     }
 
-    public function testCommandInterfaceIsImplemented()
+    public function testCommandInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testImageFileNameIsReturned()
+    public function testImageFileNameIsReturned(): void
     {
         $result = $this->command->getImageFilePath();
         $this->assertSame($this->imageFilePath, $result);
     }
 
-    public function testItThrowsAnExceptionIfTheImageDoesNotExist()
+    public function testItThrowsAnExceptionIfTheImageDoesNotExist(): void
     {
         $this->expectException(ImageFileDoesNotExistException::class);
         $this->expectExceptionMessage('The image file does not exist: "foo.png"');
         new AddImageCommand('foo.png', $this->stubDataVersion);
     }
 
-    public function testItReturnsTheInjectedDataVersion()
+    public function testItReturnsTheInjectedDataVersion(): void
     {
         $this->assertSame($this->stubDataVersion, $this->command->getDataVersion());
     }
 
-    public function testReturnsMessageWithCommandCodeName()
+    public function testReturnsMessageWithCommandCodeName(): void
     {
         $message = $this->command->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(AddImageCommand::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithExpectedPayload()
+    public function testReturnsMessageWithExpectedPayload(): void
     {
         $this->stubDataVersion->method('__toString')->willReturn('123');
         $expectedPayload = ['file_path' => $this->imageFilePath, 'data_version' => '123'];
@@ -88,7 +88,7 @@ class AddImageCommandTest extends TestCase
         $this->assertSame($expectedPayload, $message->getPayload());
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $this->stubDataVersion->method('__toString')->willReturn('123');
         $message = $this->command->toMessage();
@@ -99,7 +99,7 @@ class AddImageCommandTest extends TestCase
         $this->assertSame((string)$this->command->getDataVersion(), (string)$rehydratedCommand->getDataVersion());
     }
 
-    public function testThrowsExceptionIfTheSourceMessageNameIsNotAddImage()
+    public function testThrowsExceptionIfTheSourceMessageNameIsNotAddImage(): void
     {
         $this->expectException(NoAddImageCommandMessageException::class);
         $this->expectExceptionMessage('Unable to rehydrate from "foo" queue message, expected "add_image"');

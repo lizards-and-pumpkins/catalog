@@ -17,7 +17,7 @@ class LocalFilesystemStorageReader implements FileStorageReader
         return file_get_contents($filePath);
     }
 
-    private function checkIfFileIsReadable(string $filePath)
+    private function checkIfFileIsReadable(string $filePath): void
     {
         if (!is_file($filePath)) {
             throw new FileNotReadableException(sprintf('Can not read %s file', $filePath));

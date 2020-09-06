@@ -38,12 +38,13 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\ProductId;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\Util\Storage\Clearable;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractSearchEngineTest extends TestCase
 {
     /**
-     * @var FacetFieldTransformationRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFieldTransformationRegistry|MockObject
      */
     private $stubFacetFieldTransformationRegistry;
 
@@ -62,7 +63,7 @@ abstract class AbstractSearchEngineTest extends TestCase
     ) : SearchEngine;
 
     /**
-     * @param string[] $fields
+     * @param string[]|array[] $fields
      * @param ProductId $productId
      * @return SearchDocument
      */
@@ -120,7 +121,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         ));
     }
 
-    private function assertFacetFieldHasValue(FacetField $field, string $expectedValue)
+    private function assertFacetFieldHasValue(FacetField $field, string $expectedValue): void
     {
         foreach ($field->getValues() as $value) {
             if ($value->jsonSerialize()['value'] === $expectedValue) {
@@ -136,7 +137,7 @@ abstract class AbstractSearchEngineTest extends TestCase
      * @param ProductId[] $expectedOrder
      * @param ProductId[] $actualArray
      */
-    private function assertOrder(array $expectedOrder, array $actualArray)
+    private function assertOrder(array $expectedOrder, array $actualArray): void
     {
         $keys = array_map(function ($value) use ($actualArray) {
             return array_search($value, $actualArray);
@@ -148,7 +149,7 @@ abstract class AbstractSearchEngineTest extends TestCase
     }
 
     /**
-     * @return FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject
+     * @return FacetFiltersToIncludeInResult
      */
     private function createStubFacetFiltersToIncludeInResult() : FacetFiltersToIncludeInResult
     {
@@ -160,7 +161,7 @@ abstract class AbstractSearchEngineTest extends TestCase
     }
 
     /**
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @return QueryOptions
      */
     private function createStubQueryOptions() : QueryOptions
     {
@@ -169,7 +170,7 @@ abstract class AbstractSearchEngineTest extends TestCase
 
     /**
      * @param Context $context
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @return QueryOptions
      */
     private function createStubQueryOptionsWithGivenContext(Context $context) : QueryOptions
     {
@@ -190,7 +191,7 @@ abstract class AbstractSearchEngineTest extends TestCase
     /**
      * @param FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult
      * @param array[] $selectedFilters
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @return QueryOptions
      */
     private function createStubQueryOptionsWithGivenFacetFilters(
         FacetFiltersToIncludeInResult $facetFiltersToIncludeInResult,
@@ -212,7 +213,7 @@ abstract class AbstractSearchEngineTest extends TestCase
     /**
      * @param SortBy $sortBy
      * @param array[] $selectedFilters
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @return QueryOptions
      */
     private function createStubQueryOptionsWithGivenSortOrder(SortBy $sortBy, array $selectedFilters) : QueryOptions
     {
@@ -232,7 +233,7 @@ abstract class AbstractSearchEngineTest extends TestCase
     /**
      * @param int $rowsPerPage
      * @param int $pageNumber
-     * @return QueryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @return QueryOptions
      */
     private function createStubQueryOptionsWithGivenPagination(int $rowsPerPage, int $pageNumber) : QueryOptions
     {
@@ -250,19 +251,19 @@ abstract class AbstractSearchEngineTest extends TestCase
         return $stubQueryOptions;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubFacetFieldTransformationRegistry = $this->createMock(FacetFieldTransformationRegistry::class);
         $this->searchEngine = $this->createSearchEngineInstance($this->stubFacetFieldTransformationRegistry);
         $this->testContext = $this->createContextFromDataParts([Website::CONTEXT_CODE => 'ru']);
     }
 
-    public function testSearchEngineInterfaceIsImplemented()
+    public function testSearchEngineInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SearchEngine::class, $this->searchEngine);
     }
 
-    public function testSearchEngineResponseIsReturned()
+    public function testSearchEngineResponseIsReturned(): void
     {
         $criteria = new SearchCriterionEqual('foo', 'bar');
         $result = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
@@ -270,7 +271,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertInstanceOf(SearchEngineResponse::class, $result);
     }
 
-    public function testOnlyMatchesWithMatchingContextsAreReturned()
+    public function testOnlyMatchesWithMatchingContextsAreReturned(): void
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
@@ -294,11 +295,11 @@ abstract class AbstractSearchEngineTest extends TestCase
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getProductIds();
 
-        $this->assertNotContains($productAId, $result, '', false, false);
-        $this->assertContains($productBId, $result, '', false, false);
+        $this->assertNotContains($productAId, $result);
+        $this->assertContains($productBId, $result);
     }
 
-    public function testPartialContextsAreMatched()
+    public function testPartialContextsAreMatched(): void
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
@@ -322,11 +323,11 @@ abstract class AbstractSearchEngineTest extends TestCase
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
         $result = $searchEngineResponse->getProductIds();
 
-        $this->assertContains($productAId, $result, '', false, false);
-        $this->assertContains($productBId, $result, '', false, false);
+        $this->assertContains($productAId, $result);
+        $this->assertContains($productBId, $result);
     }
 
-    public function testEntriesContainingRequestedStringAreReturned()
+    public function testEntriesContainingRequestedStringAreReturned(): void
     {
         $fieldName = 'baz';
 
@@ -344,10 +345,10 @@ abstract class AbstractSearchEngineTest extends TestCase
         $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
-        $this->assertContains($productAId, $result, '', false, false);
+        $this->assertContains($productAId, $result);
     }
 
-    public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria()
+    public function testEmptyCollectionIsReturnedIfNoSearchDocumentsMatchesGivenCriteria(): void
     {
         $searchCriteria = new SearchCriterionEqual('foo', 'some-value-which-is-definitely-absent-in-index');
         $searchEngineResponse = $this->searchEngine->query($searchCriteria, $this->createStubQueryOptions());
@@ -357,8 +358,9 @@ abstract class AbstractSearchEngineTest extends TestCase
 
     /**
      * @dataProvider searchCriteriaProvider
+     * @param SearchCriteria $searchCriteria
      */
-    public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria(SearchCriteria $searchCriteria)
+    public function testCollectionContainsOnlySearchDocumentsMatchingGivenCriteria(SearchCriteria $searchCriteria): void
     {
         $productAId = new ProductId(uniqid());
         $productBId = new ProductId(uniqid());
@@ -372,8 +374,8 @@ abstract class AbstractSearchEngineTest extends TestCase
         $searchEngineResponse = $this->searchEngine->query($searchCriteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
-        $this->assertContains($productAId, $result, '', false, false);
-        $this->assertNotContains($productBId, $result, '', false, false);
+        $this->assertContains($productAId, $result);
+        $this->assertNotContains($productBId, $result);
     }
 
     /**
@@ -395,8 +397,9 @@ abstract class AbstractSearchEngineTest extends TestCase
 
     /**
      * @dataProvider searchRangeCriteriaProvider
+     * @param SearchCriteria $searchCriteria
      */
-    public function testCollectionContainsOnlySearchDocumentsMatchingRangeCriteria(SearchCriteria $searchCriteria)
+    public function testCollectionContainsOnlySearchDocumentsMatchingRangeCriteria(SearchCriteria $searchCriteria): void
     {
         $productAId = new ProductId(uniqid());
         $productBId = new ProductId(uniqid());
@@ -410,8 +413,8 @@ abstract class AbstractSearchEngineTest extends TestCase
         $searchEngineResponse = $this->searchEngine->query($searchCriteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
-        $this->assertContains($productAId, $result, '', false, false);
-        $this->assertNotContains($productBId, $result, '', false, false);
+        $this->assertContains($productAId, $result);
+        $this->assertNotContains($productBId, $result);
     }
 
     /**
@@ -437,7 +440,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         ];
     }
 
-    public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned()
+    public function testIfMultipleMatchingDocumentsHasSameProductIdOnlyOneInstanceIsReturned(): void
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
@@ -454,10 +457,10 @@ abstract class AbstractSearchEngineTest extends TestCase
         $searchEngineResponse = $this->searchEngine->query($criteria, $this->createStubQueryOptions());
         $result = $searchEngineResponse->getProductIds();
 
-        $this->assertContains($productId, $result, '', false, false);
+        $this->assertContains($productId, $result);
     }
 
-    public function testItClearsTheStorage()
+    public function testItClearsTheStorage(): void
     {
         $fieldName = 'foo';
         $fieldValue = 'bar';
@@ -474,7 +477,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertCount(0, $searchEngineResponse->getProductIds());
     }
 
-    public function testDocumentIsUniqueForProductIdAndContextCombination()
+    public function testDocumentIsUniqueForProductIdAndContextCombination(): void
     {
         $productAId = new ProductId(uniqid());
         $productBId = new ProductId(uniqid());
@@ -497,11 +500,11 @@ abstract class AbstractSearchEngineTest extends TestCase
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertCount(2, $result);
-        $this->assertContains($productAId, $result, '', false, false);
-        $this->assertContains($productBId, $result, '', false, false);
+        $this->assertContains($productAId, $result);
+        $this->assertContains($productBId, $result);
     }
 
-    public function testFacetFieldCollectionOnlyContainsSpecifiedAttributes()
+    public function testFacetFieldCollectionOnlyContainsSpecifiedAttributes(): void
     {
         $keyword = uniqid();
         $productAId = new ProductId(uniqid());
@@ -537,7 +540,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertFacetFieldCollectionContainsFieldWithCodeAndValue($result, $fieldBCode, $keyword);
     }
 
-    public function testExceptionIsThrownIfNoTransformationIsRegisteredForRangedFacetField()
+    public function testExceptionIsThrownIfNoTransformationIsRegisteredForRangedFacetField(): void
     {
         $productId = new ProductId('id');
 
@@ -565,7 +568,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->searchEngine->query($criteria, $queryOptions);
     }
 
-    public function testFacetFieldCollectionContainsConfiguredRanges()
+    public function testFacetFieldCollectionContainsConfiguredRanges(): void
     {
         $productAId = new ProductId('A');
         $productBId = new ProductId('B');
@@ -613,7 +616,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertFacetFieldCollectionContainsFieldWithCodeAndValue($facetFieldsCollection, $fieldName, '30-');
     }
 
-    public function testOnlyProductsFromARequestedPageAreReturned()
+    public function testOnlyProductsFromARequestedPageAreReturned(): void
     {
         $field = 'foo';
         $keyword = uniqid();
@@ -639,7 +642,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertSame(2, $searchEngineResponse->getTotalNumberOfResults());
     }
 
-    public function testSelectedFiltersAreAddedToCriteria()
+    public function testSelectedFiltersAreAddedToCriteria(): void
     {
         $keywordA = uniqid();
         $keywordB = uniqid();
@@ -669,11 +672,11 @@ abstract class AbstractSearchEngineTest extends TestCase
         $result = $searchEngineResponse->getProductIds();
 
         $this->assertCount(1, $result);
-        $this->assertContains($productAId, $result, '', false, false);
-        $this->assertNotContains($productBId, $result, '', false, false);
+        $this->assertContains($productAId, $result);
+        $this->assertNotContains($productBId, $result);
     }
 
-    public function testSelectedFiltersOptionValueSiblingsAreIncludedIntoFilterOptionValues()
+    public function testSelectedFiltersOptionValueSiblingsAreIncludedIntoFilterOptionValues(): void
     {
         $fieldACode = 'foo';
         $fieldBCode = 'bar';
@@ -707,7 +710,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertFacetFieldHasValue($result[0], $fieldValueB);
     }
 
-    public function testSearchResultsAreSortedAccordingToGivenOrder()
+    public function testSearchResultsAreSortedAccordingToGivenOrder(): void
     {
         $productAId = new ProductId('A');
         $productBId = new ProductId('B');
@@ -736,7 +739,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertOrder($expectedOrder, $searchEngineResponse->getProductIds());
     }
 
-    public function testItReturnsAnEmptyArrayForRequestsWithSelectedFacetsIfTheSearchEngineIndexIsEmpty()
+    public function testItReturnsAnEmptyArrayForRequestsWithSelectedFacetsIfTheSearchEngineIndexIsEmpty(): void
     {
         $criteria = new SearchCriterionAnything();
 
@@ -749,11 +752,12 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertSame([], $searchEngineResponse->getProductIds());
     }
 
-    public function testItDoesNotReturnAnyFacetsIfTheRequestedFacetFiltersAreEmpty()
+    public function testItDoesNotReturnAnyFacetsIfTheRequestedFacetFiltersAreEmpty(): void
     {
+        $testProductId = new ProductId('ID');
         $fieldValue = ['foo', 'bar', 'baz'];
 
-        $searchDocument = $this->createSearchDocument(['qux' => $fieldValue], new ProductId('ID'));
+        $searchDocument = $this->createSearchDocument(['qux' => $fieldValue], $testProductId);
         $this->searchEngine->addDocument($searchDocument);
         
         $criteria = new SearchCriterionAnything();
@@ -764,11 +768,11 @@ abstract class AbstractSearchEngineTest extends TestCase
 
         $searchEngineResponse = $this->searchEngine->query($criteria, $queryOptions);
 
-        $this->assertContains('ID', $searchEngineResponse->getProductIds());
+        $this->assertContains($testProductId, $searchEngineResponse->getProductIds());
         $this->assertCount(0, $searchEngineResponse->getFacetFieldCollection());
     }
 
-    public function testFacetFilterOptionValuesAreOrderedAlphabetically()
+    public function testFacetFilterOptionValuesAreOrderedAlphabetically(): void
     {
         $productAId = new ProductId(uniqid());
         $productBId = new ProductId(uniqid());
@@ -806,7 +810,7 @@ abstract class AbstractSearchEngineTest extends TestCase
         $this->assertEquals($expectedValues, $facetFields[0]->getValues());
     }
 
-    public function testAppliesFacetFieldTransformationsToSelectedFilters()
+    public function testAppliesFacetFieldTransformationsToSelectedFilters(): void
     {
         $fieldCode = 'price';
         $fieldValue = '10-20';

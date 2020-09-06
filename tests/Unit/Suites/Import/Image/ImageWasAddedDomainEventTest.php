@@ -35,57 +35,57 @@ class ImageWasAddedDomainEventTest extends TestCase
      */
     private $testDataVersion;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->dummyImageFilePath = 'test_image.jpg';
         $this->testDataVersion = DataVersion::fromVersionString('foo');
         $this->domainEvent = new ImageWasAddedDomainEvent($this->dummyImageFilePath, $this->testDataVersion);
     }
 
-    public function testDomainEventInterfaceIsImplemented()
+    public function testDomainEventInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testPassedImageFilenameIsReturned()
+    public function testPassedImageFilenameIsReturned(): void
     {
         $result = $this->domainEvent->getImageFilePath();
         $this->assertEquals($this->dummyImageFilePath, $result);
     }
 
-    public function testItReturnsTheInjectedDataVersionInstance()
+    public function testItReturnsTheInjectedDataVersionInstance(): void
     {
         $this->assertSame($this->testDataVersion, $this->domainEvent->getDataVersion());
     }
 
-    public function testReturnsMessageWithEventName()
+    public function testReturnsMessageWithEventName(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(ImageWasAddedDomainEvent::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithPayload()
+    public function testReturnsMessageWithPayload(): void
     {
         $message = $this->domainEvent->toMessage();
         $payload = $message->getPayload();
         $this->assertSame($this->dummyImageFilePath, $payload['file_path']);
     }
 
-    public function testReturnsMessageWithDataVersionInMetaData()
+    public function testReturnsMessageWithDataVersionInMetaData(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertArrayHasKey('data_version', $message->getMetadata());
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $message = $this->domainEvent->toMessage();
         $rehydratedEvent = ImageWasAddedDomainEvent::fromMessage($message);
         $this->assertInstanceOf(ImageWasAddedDomainEvent::class, $rehydratedEvent);
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode()
+    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode(): void
     {
         $this->expectException(NoImageWasAddedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "image_was_added" domain event, got "foo"');

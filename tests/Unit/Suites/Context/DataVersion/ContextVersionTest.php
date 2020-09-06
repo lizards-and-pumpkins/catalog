@@ -22,7 +22,7 @@ class ContextVersionTest extends TestCase
     private $contextVersion;
 
     /**
-     * @return HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @return HttpRequest|MockObject
      */
     private function createStubRequestWithRequestedVersion(string $version): HttpRequest
     {
@@ -33,44 +33,44 @@ class ContextVersionTest extends TestCase
         return $stubRequest;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubCurrentDataVersion */
+        /** @var DataVersion|MockObject $stubCurrentDataVersion */
         $stubCurrentDataVersion = $this->createMock(DataVersion::class);
         $stubCurrentDataVersion->method('__toString')->willReturn($this->testCurrentVersion);
         $this->contextVersion = new ContextVersion($stubCurrentDataVersion);
     }
 
-    public function testIsAContextPartBuilder()
+    public function testIsAContextPartBuilder(): void
     {
         $this->assertInstanceOf(ContextPartBuilder::class, $this->contextVersion);
     }
 
-    public function testReturnsTheCode()
+    public function testReturnsTheCode(): void
     {
         $this->assertSame(DataVersion::CONTEXT_CODE, $this->contextVersion->getCode());
     }
 
-    public function testReturnsTheVersionFromTheInputArrayIfPresent()
+    public function testReturnsTheVersionFromTheInputArrayIfPresent(): void
     {
         $inputDataSet = [DataVersion::CONTEXT_CODE => '1.0'];
         $this->assertSame('1.0', $this->contextVersion->getValue($inputDataSet));
     }
 
-    public function testReturnsTheVersionFromTheRequestParametersIfPresent()
+    public function testReturnsTheVersionFromTheRequestParametersIfPresent(): void
     {
         $version = 'foo';
         $inputDataSet = [ContextBuilder::REQUEST => $this->createStubRequestWithRequestedVersion($version)];
         $this->assertSame($version, $this->contextVersion->getValue($inputDataSet));
     }
 
-    public function testReturnsTheInjectedDataVersionValueIfTheInputContainsNoVersion()
+    public function testReturnsTheInjectedDataVersionValueIfTheInputContainsNoVersion(): void
     {
         $inputDataSet = [];
         $this->assertSame($this->testCurrentVersion, $this->contextVersion->getValue($inputDataSet));
     }
 
-    public function testTheVersionFromTheInputArrayHasTheHighestPriority()
+    public function testTheVersionFromTheInputArrayHasTheHighestPriority(): void
     {
         $inputDataSet = [
             DataVersion::CONTEXT_CODE => 'foo',

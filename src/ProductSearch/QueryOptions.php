@@ -96,9 +96,9 @@ class QueryOptions
     }
 
     /**
-     * @return array|\array[]
+     * @return array[]
      */
-    public function getFilterSelection()
+    public function getFilterSelection(): array
     {
         return $this->filterSelection;
     }
@@ -128,7 +128,7 @@ class QueryOptions
         return $this->sortBy;
     }
 
-    private static function validateRowsPerPage(int $rowsPerPage)
+    private static function validateRowsPerPage(int $rowsPerPage): void
     {
         if ($rowsPerPage <= 0) {
             throw new InvalidNumberOfProductsPerPageException(
@@ -137,7 +137,7 @@ class QueryOptions
         }
     }
 
-    private static function validatePageNumber(int $pageNumber)
+    private static function validatePageNumber(int $pageNumber): void
     {
         if ($pageNumber < 0) {
             throw new InvalidNumberOfProductsPerPageException(

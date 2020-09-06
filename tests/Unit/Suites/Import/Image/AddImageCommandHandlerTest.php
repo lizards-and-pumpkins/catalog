@@ -7,7 +7,8 @@ namespace LizardsAndPumpkins\Import\Image;
 use LizardsAndPumpkins\Messaging\Command\CommandHandler;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,7 +28,7 @@ class AddImageCommandHandlerTest extends TestCase
     use TestFileFixtureTrait;
 
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|MockObject
      */
     private $mockDomainEventQueue;
 
@@ -43,14 +44,14 @@ class AddImageCommandHandlerTest extends TestCase
 
     private function createStubMessage(): Message
     {
-        /** @var Message|\PHPUnit_Framework_MockObject_MockObject $stubMessage */
+        /** @var Message|MockObject $stubMessage */
         $stubMessage = $this->createMock(Message::class);
         $stubMessage->method('getName')->willReturn('add_image');
         $stubMessage->method('getPayload')->willReturn(['file_path' => $this->imageFilePath, 'data_version' => 'defg']);
         return $stubMessage;
     }
     
-    protected function setUp()
+    final protected function setUp(): void
     {
         $fixtureDirectoryPath = $this->getUniqueTempDir();
         $this->imageFilePath = $fixtureDirectoryPath . '/foo.png';
@@ -62,12 +63,12 @@ class AddImageCommandHandlerTest extends TestCase
         $this->commandHandler = new AddImageCommandHandler($this->mockDomainEventQueue);
     }
 
-    public function testCommandHandlerInterfaceIsImplemented()
+    public function testCommandHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
-    public function testImageWasAddedDomainEventIsEmitted()
+    public function testImageWasAddedDomainEventIsEmitted(): void
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 

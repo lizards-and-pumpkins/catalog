@@ -37,7 +37,7 @@ class SetCurrentDataVersionCommandHandler implements CommandHandler
         $this->dataPoolWriter = $dataPoolWriter;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $command = SetCurrentDataVersionCommand::fromMessage($message);
         $newDataVersion = $command->getDataVersion();

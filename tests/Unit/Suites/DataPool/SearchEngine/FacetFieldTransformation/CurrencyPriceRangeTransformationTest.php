@@ -27,7 +27,7 @@ class CurrencyPriceRangeTransformationTest extends TestCase
      */
     private $testCurrency;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testCurrency = new Currency('EUR');
         $localeFactory = function () {
@@ -36,7 +36,7 @@ class CurrencyPriceRangeTransformationTest extends TestCase
         $this->transformation = new CurrencyPriceRangeTransformation($this->testCurrency, $localeFactory);
     }
 
-    public function testFacetFieldTransformationInterfaceIsImplemented()
+    public function testFacetFieldTransformationInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FacetFieldTransformation::class, $this->transformation);
     }
@@ -44,7 +44,7 @@ class CurrencyPriceRangeTransformationTest extends TestCase
     /**
      * @dataProvider rangeDataProvider
      */
-    public function testEncodedPriceRangeIsReturned(int $rangeFrom, int $rangeTo, string $expectation)
+    public function testEncodedPriceRangeIsReturned(int $rangeFrom, int $rangeTo, string $expectation): void
     {
         $stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
         $stubFacetFilterRange->method('from')->willReturn($rangeFrom);
@@ -68,7 +68,7 @@ class CurrencyPriceRangeTransformationTest extends TestCase
         ];
     }
 
-    public function testPriceRangeCanBeEncodedFromStringValues()
+    public function testPriceRangeCanBeEncodedFromStringValues(): void
     {
         $stubFacetFilterRange = $this->createMock(FacetFilterRange::class);
         $stubFacetFilterRange->method('from')->willReturn('100000');
@@ -80,7 +80,7 @@ class CurrencyPriceRangeTransformationTest extends TestCase
     /**
      * @dataProvider nonMatchingEncodedInputDataProvider
      */
-    public function testExceptionIsThrownIfInputCanNotBeDecoded(string $nonMatchingEncodedInput)
+    public function testExceptionIsThrownIfInputCanNotBeDecoded(string $nonMatchingEncodedInput): void
     {
         $this->expectException(InvalidTransformationInputException::class);
         $this->transformation->decode($nonMatchingEncodedInput);
@@ -101,7 +101,7 @@ class CurrencyPriceRangeTransformationTest extends TestCase
     /**
      * @dataProvider matchingEncodedInputDataProvider
      */
-    public function testFilterPricePriceRangeIsReturned(string $input, int $rangeFrom, int $rangeTo)
+    public function testFilterPricePriceRangeIsReturned(string $input, int $rangeFrom, int $rangeTo): void
     {
         $result = $this->transformation->decode($input);
 

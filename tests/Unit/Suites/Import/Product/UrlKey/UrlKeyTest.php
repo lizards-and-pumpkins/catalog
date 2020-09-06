@@ -11,13 +11,13 @@ use PHPUnit\Framework\TestCase;
  */
 class UrlKeyTest extends TestCase
 {
-    public function testExceptionIsThrownDuringAttemptToCreateUrlKeyFromNonString()
+    public function testExceptionIsThrownDuringAttemptToCreateUrlKeyFromNonString(): void
     {
         $this->expectException(\TypeError::class);
         UrlKey::fromString(1);
     }
 
-    public function testUrlKeyCanBeCastedToString()
+    public function testUrlKeyCanBeCastedToString(): void
     {
         $dummyKey = 'foo';
         $urlKey = UrlKey::fromString($dummyKey);
@@ -28,7 +28,7 @@ class UrlKeyTest extends TestCase
     /**
      * @dataProvider urlKeySourceProvider
      */
-    public function testDisallowedCharactersAreReplacedWithUnderscores(string $urlKeySource, string $expectedUrlKey)
+    public function testDisallowedCharactersAreReplacedWithUnderscores(string $urlKeySource, string $expectedUrlKey): void
     {
         $urlKey = UrlKey::fromString($urlKeySource);
         $this->assertEquals($expectedUrlKey, (string) $urlKey);

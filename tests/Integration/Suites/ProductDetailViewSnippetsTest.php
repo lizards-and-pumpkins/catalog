@@ -45,7 +45,7 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         return $keyGenerator->getKeyForContext($context, ['product_id' => $productIdString]);
     }
 
-    public function testProductJsonSnippetsAreWrittenToDataPool()
+    public function testProductJsonSnippetsAreWrittenToDataPool(): void
     {
         $simpleProductFixture = 'simple_product_adilette.xml';
         $configurableProductFixture = 'configurable_product_adipure.xml';
@@ -67,11 +67,11 @@ class ProductDetailViewSnippetsTest extends AbstractIntegrationTest
         $variationAttributes = $this->getConfigurableProductVariationAttributesJsonSnippetForId($configProductIdString);
         $associatedProducts = $this->getConfigurableProductAssociatedProductsJsonSnippetForId($configProductIdString);
 
-        $this->assertInternalType('array', json_decode($variationAttributes, true));
-        $this->assertInternalType('array', json_decode($associatedProducts, true));
+        $this->assertIsArray(json_decode($variationAttributes, true));
+        $this->assertIsArray(json_decode($associatedProducts, true));
     }
 
-    public function testConfigurableProductJsonSnippetsAreAlsoWrittenForSimpleProducts()
+    public function testConfigurableProductJsonSnippetsAreAlsoWrittenForSimpleProducts(): void
     {
         $fixtureCatalogFile = 'simple_product_adilette.xml';
 

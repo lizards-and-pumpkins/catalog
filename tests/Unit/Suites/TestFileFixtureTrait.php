@@ -21,7 +21,7 @@ trait TestFileFixtureTrait
      */
     private $uniqueId;
 
-    public function createFixtureFile(string $filePath, string $content, int $mode = 0600)
+    public function createFixtureFile(string $filePath, string $content, int $mode = 0600): void
     {
         $realFile = $this->___getAbsolutePath($filePath);
         $this->___createMissingDirectories($realFile);
@@ -29,12 +29,12 @@ trait TestFileFixtureTrait
         $this->addFileToCleanupAfterTest($realFile);
     }
 
-    public function addFileToCleanupAfterTest(string $realFile)
+    public function addFileToCleanupAfterTest(string $realFile): void
     {
         $this->fixtureFiles[] = $realFile;
     }
 
-    public function createFixtureDirectory(string $directoryPath)
+    public function createFixtureDirectory(string $directoryPath): void
     {
         $absolutePath = $this->___getAbsolutePath($directoryPath);
         $directories = explode('/', ltrim($absolutePath, '/'));
@@ -49,7 +49,7 @@ trait TestFileFixtureTrait
     /**
      * @after
      */
-    protected function ___cleanupFilesystemFixtures()
+    protected function ___cleanupFilesystemFixtures(): void
     {
         $this->___cleanUpFixtureFiles();
         $this->___cleanUpFixtureDirsRecursively(...array_reverse($this->fixtureDirs));
@@ -64,7 +64,7 @@ trait TestFileFixtureTrait
         return getcwd() . '/' . $path;
     }
 
-    private function ___createMissingDirectories(string $realFile)
+    private function ___createMissingDirectories(string $realFile): void
     {
         $dirs = explode('/', ltrim(dirname($realFile), '/'));
         $this->___createMissingDirectoriesRecursively($dirs);
@@ -74,7 +74,7 @@ trait TestFileFixtureTrait
      * @param string[] $dirs
      * @param string $base
      */
-    private function ___createMissingDirectoriesRecursively(array $dirs, string $base = '')
+    private function ___createMissingDirectoriesRecursively(array $dirs, string $base = ''): void
     {
         if (0 == count($dirs)) {
             return;
@@ -87,7 +87,7 @@ trait TestFileFixtureTrait
         $this->___createMissingDirectoriesRecursively(array_slice($dirs, 1), $dir);
     }
 
-    private function ___createDirectoryIfNotExists(string $dir)
+    private function ___createDirectoryIfNotExists(string $dir): void
     {
         if (!file_exists($dir)) {
             mkdir($dir);
@@ -95,7 +95,7 @@ trait TestFileFixtureTrait
         }
     }
 
-    private function ___validateIsDir(string $dir)
+    private function ___validateIsDir(string $dir): void
     {
         if (!file_exists($dir)) {
             throw new \RuntimeException(sprintf('Unable to create directory "%s"', $dir));
@@ -105,14 +105,14 @@ trait TestFileFixtureTrait
         }
     }
 
-    private function ___validateFileWasCreated(string $file)
+    private function ___validateFileWasCreated(string $file): void
     {
         if (!file_exists($file)) {
             throw new \RuntimeException('Unable to create fixture file "%s"', $file);
         }
     }
 
-    private function ___createFile(string $content, string $file, int $mode = 0500)
+    private function ___createFile(string $content, string $file, int $mode = 0500): void
     {
         $this->___validateFileDoesNotExist($file);
         file_put_contents($file, $content);
@@ -120,14 +120,14 @@ trait TestFileFixtureTrait
         $this->___validateFileWasCreated($file);
     }
 
-    private function ___validateFileDoesNotExist(string $file)
+    private function ___validateFileDoesNotExist(string $file): void
     {
         if (file_exists($file)) {
             throw new \RuntimeException(sprintf('Fixture file already exists: "%s"', $file));
         }
     }
 
-    private function ___cleanUpFixtureFiles()
+    private function ___cleanUpFixtureFiles(): void
     {
         array_map(function ($file) {
             if (file_exists($file)) {
@@ -139,7 +139,7 @@ trait TestFileFixtureTrait
         }, $this->fixtureFiles);
     }
 
-    private function ___cleanUpFixtureDirsRecursively(string ...$dirs)
+    private function ___cleanUpFixtureDirsRecursively(string ...$dirs): void
     {
         if (0 == count($dirs)) {
             return;

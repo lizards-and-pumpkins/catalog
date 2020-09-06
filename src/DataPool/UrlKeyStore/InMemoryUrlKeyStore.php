@@ -13,7 +13,7 @@ class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements 
      */
     private $urlKeys = [];
 
-    public function clear()
+    public function clear(): void
     {
         $this->urlKeys = [];
     }
@@ -28,7 +28,7 @@ class InMemoryUrlKeyStore extends IntegrationTestUrlKeyStoreAbstract implements 
         $this->urlKeys[$dataVersionString][] = [$urlKeyString, $contextDataString, $urlKeyTypeString];
     }
 
-    private function validateParameters(string $dataVersionString)
+    private function validateParameters(string $dataVersionString): void
     {
         $this->validateDataVersionString($dataVersionString);
     }

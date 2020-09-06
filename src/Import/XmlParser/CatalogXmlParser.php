@@ -59,7 +59,7 @@ class CatalogXmlParser
         return new self($xmlReader, $logger);
     }
 
-    private static function validateSourceFileExists(string $sourceFilePath)
+    private static function validateSourceFileExists(string $sourceFilePath): void
     {
         if (!file_exists($sourceFilePath)) {
             throw new CatalogImportSourceXmlFileDoesNotExistException(
@@ -68,7 +68,7 @@ class CatalogXmlParser
         }
     }
 
-    private static function validateSourceFileIsReadable(string $sourceFilePath)
+    private static function validateSourceFileIsReadable(string $sourceFilePath): void
     {
         if (!is_readable($sourceFilePath)) {
             throw new CatalogImportSourceXmlFileIsNotReadableException(
@@ -77,17 +77,17 @@ class CatalogXmlParser
         }
     }
 
-    public function registerProductCallback(callable $callback)
+    public function registerProductCallback(callable $callback): void
     {
         $this->productCallbacks[] = $callback;
     }
 
-    public function registerListingCallback(callable $callback)
+    public function registerListingCallback(callable $callback): void
     {
         $this->listingCallbacks[] = $callback;
     }
 
-    public function parse()
+    public function parse(): void
     {
         while ($this->xmlReader->read()) {
             if ($this->isProductNode()) {
@@ -98,7 +98,7 @@ class CatalogXmlParser
         }
     }
 
-    private function parseProductXml()
+    private function parseProductXml(): void
     {
         $productXml = $this->xmlReader->readOuterXml();
         try {
@@ -108,7 +108,7 @@ class CatalogXmlParser
         }
     }
 
-    private function parseListingXml()
+    private function parseListingXml(): void
     {
         $listingXml = $this->xmlReader->readOuterXml();
         try {
@@ -140,7 +140,7 @@ class CatalogXmlParser
      * @param callable[] $callbacks
      * @param string $argument
      */
-    private function processCallbacksWithArg(array $callbacks, string $argument)
+    private function processCallbacksWithArg(array $callbacks, string $argument): void
     {
         array_map(function (callable $callback) use ($argument) {
             call_user_func($callback, $argument);

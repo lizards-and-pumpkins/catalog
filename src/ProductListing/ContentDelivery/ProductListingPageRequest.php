@@ -124,7 +124,7 @@ class ProductListingPageRequest
         return $defaultSortBy;
     }
 
-    public function processCookies(HttpRequest $request, SortBy ...$availableSortBy)
+    public function processCookies(HttpRequest $request, SortBy ...$availableSortBy): void
     {
         if ($request->hasQueryParameter(self::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)) {
             setcookie(

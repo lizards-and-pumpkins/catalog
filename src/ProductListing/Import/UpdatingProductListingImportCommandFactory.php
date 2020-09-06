@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ProductListing\Import;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\ProductListing\AddProductListingCommand;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 
 class UpdatingProductListingImportCommandFactory implements ProductListingImportCommandFactory
 {

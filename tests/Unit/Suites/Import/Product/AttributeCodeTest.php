@@ -12,18 +12,18 @@ use PHPUnit\Framework\TestCase;
  */
 class AttributeCodeTest extends TestCase
 {
-    public function testItReturnsAnAttributeCodeInstance()
+    public function testItReturnsAnAttributeCodeInstance(): void
     {
         $attributeCode = AttributeCode::fromString('test');
         $this->assertInstanceOf(AttributeCode::class, $attributeCode);
     }
 
-    public function testItReturnsTheInjectedCodeWhenCastToString()
+    public function testItReturnsTheInjectedCodeWhenCastToString(): void
     {
         $this->assertSame('test_code', (string) AttributeCode::fromString('test_code'));
     }
 
-    public function testItThrowsAnExceptionIfTheCodeIsNotAString()
+    public function testItThrowsAnExceptionIfTheCodeIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         AttributeCode::fromString(123);
@@ -32,7 +32,7 @@ class AttributeCodeTest extends TestCase
     /**
      * @dataProvider tooShortAttributeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong(string $shortAttributeCode)
+    public function testItThrowsAnExceptionIfTheAttributeCodeIsLessThenThreeCharactersLong(string $shortAttributeCode): void
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage(
@@ -56,7 +56,7 @@ class AttributeCodeTest extends TestCase
     /**
      * @dataProvider attributeCodeWithInvalidFirstCharacterProvider
      */
-    public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ(string $attributeCode)
+    public function testItThrowsAnExceptionIfTheFirstCharacterIsNotAThroughZ(string $attributeCode): void
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage('The first letter of the attribute code has to be a character from a-z, got ');
@@ -78,7 +78,7 @@ class AttributeCodeTest extends TestCase
         ];
     }
 
-    public function testItThrowsAnExceptionIfTheAttributeCodeContainsInvalidCharacters()
+    public function testItThrowsAnExceptionIfTheAttributeCodeContainsInvalidCharacters(): void
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage(
@@ -87,40 +87,40 @@ class AttributeCodeTest extends TestCase
         AttributeCode::fromString('abc.');
     }
 
-    public function testItThrowsAnExceptionIfTheAttributeCodeEndsWithAnUnderscore()
+    public function testItThrowsAnExceptionIfTheAttributeCodeEndsWithAnUnderscore(): void
     {
         $this->expectException(InvalidAttributeCodeException::class);
         $this->expectExceptionMessage('The attribute code may not end with an underscore, got "abc_"');
         AttributeCode::fromString('abc_');
     }
 
-    public function testItReturnsAnAttributeCodeIfInstantiatedWithAnAttributeCode()
+    public function testItReturnsAnAttributeCodeIfInstantiatedWithAnAttributeCode(): void
     {
         $attributeCode = AttributeCode::fromString(AttributeCode::fromString('test'));
         $this->assertInstanceOf(AttributeCode::class, $attributeCode);
         $this->assertEquals('test', $attributeCode);
     }
 
-    public function testItReturnsTrueIfTheGivenCodeIsEqual()
+    public function testItReturnsTrueIfTheGivenCodeIsEqual(): void
     {
         $attributeCode = AttributeCode::fromString('test');
         $this->assertTrue($attributeCode->isEqualTo('test'));
         $this->assertTrue(AttributeCode::fromString('test')->isEqualTo($attributeCode));
     }
 
-    public function testItReturnsFalseIfTheGivenCodeIsNotEqual()
+    public function testItReturnsFalseIfTheGivenCodeIsNotEqual(): void
     {
         $attributeCode = AttributeCode::fromString('foo');
         $this->assertFalse($attributeCode->isEqualTo('bar'));
         $this->assertFalse(AttributeCode::fromString('bar')->isEqualTo($attributeCode));
     }
 
-    public function testItIsSerializable()
+    public function testItIsSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, AttributeCode::fromString('test'));
     }
 
-    public function testItCanBeSerializedAndRehydrated()
+    public function testItCanBeSerializedAndRehydrated(): void
     {
         $sourceAttributeCode = AttributeCode::fromString('test');
         $json = json_encode($sourceAttributeCode);

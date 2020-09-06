@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Import\TemplateRendering;
 
 use LizardsAndPumpkins\Context\BaseUrl\HttpBaseUrl;
 use LizardsAndPumpkins\Import\RootTemplate\Import\Exception\TemplateFileNotReadableException;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,7 +33,7 @@ class BlockTest extends TestCase
     private $testProjectionSourceData = 'test-projection-source-data';
 
     /**
-     * @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockRenderer|MockObject
      */
     private $mockBlockRenderer;
 
@@ -42,7 +42,7 @@ class BlockTest extends TestCase
      */
     private $block;
 
-    public function setUp()
+    final protected function setUp(): void
     {
         $this->testTemplateFilePath = $this->getUniqueTempDir() . '/test-template.phtml';
         $this->mockBlockRenderer = $this->createMock(BlockRenderer::class);
@@ -55,12 +55,12 @@ class BlockTest extends TestCase
         );
     }
 
-    public function testBlocksNameIsReturned()
+    public function testBlocksNameIsReturned(): void
     {
         $this->assertEquals($this->testBlockName, $this->block->getBlockName());
     }
 
-    public function testDataObjectIsReturned()
+    public function testDataObjectIsReturned(): void
     {
         $method = new \ReflectionMethod($this->block, 'getDataObject');
         $method->setAccessible(true);
@@ -68,20 +68,20 @@ class BlockTest extends TestCase
         $this->assertSame($this->testProjectionSourceData, $method->invoke($this->block));
     }
 
-    public function testExceptionIsThrownIfTemplateFileDoesNotExist()
+    public function testExceptionIsThrownIfTemplateFileDoesNotExist(): void
     {
         $this->expectException(TemplateFileNotReadableException::class);
         $this->block->render();
     }
 
-    public function testExceptionIsThrownIfTemplateFileIsNotReadable()
+    public function testExceptionIsThrownIfTemplateFileIsNotReadable(): void
     {
         $this->expectException(TemplateFileNotReadableException::class);
         $this->createFixtureFile($this->testTemplateFilePath, '', 0000);
         $this->block->render();
     }
 
-    public function testTemplateIsReturned()
+    public function testTemplateIsReturned(): void
     {
         $templateContent = 'The template content';
         $this->createFixtureFile($this->testTemplateFilePath, $templateContent);
@@ -89,7 +89,7 @@ class BlockTest extends TestCase
         $this->assertEquals($templateContent, $this->block->render());
     }
 
-    public function testGettingChildBlockOutputIsDelegatedToBlockRenderer()
+    public function testGettingChildBlockOutputIsDelegatedToBlockRenderer(): void
     {
         $childName = 'child-name';
         $this->mockBlockRenderer->expects($this->once())->method('getChildBlockOutput')
@@ -98,7 +98,7 @@ class BlockTest extends TestCase
         $this->block->getChildOutput($childName);
     }
 
-    public function testGettingLayoutHandleIsDelegatedToBlockRenderer()
+    public function testGettingLayoutHandleIsDelegatedToBlockRenderer(): void
     {
         $expectedLayoutHandle = 'foo';
         $this->mockBlockRenderer->method('getLayoutHandle')->willReturn($expectedLayoutHandle);
@@ -106,7 +106,7 @@ class BlockTest extends TestCase
         $this->assertSame($expectedLayoutHandle, $this->block->getLayoutHandle());
     }
 
-    public function testTranslationIsDelegatedToBlockRenderer()
+    public function testTranslationIsDelegatedToBlockRenderer(): void
     {
         $testSourceString = 'foo';
         $testTranslatedString = 'bar';
@@ -115,7 +115,7 @@ class BlockTest extends TestCase
         $this->assertEquals($testTranslatedString, $this->block->__($testSourceString));
     }
 
-    public function testItDelegatesFetchingTheBaseUrlToTheBlockRenderer()
+    public function testItDelegatesFetchingTheBaseUrlToTheBlockRenderer(): void
     {
         $baseUrl = new HttpBaseUrl('http://example.com/');
         $this->mockBlockRenderer->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
@@ -123,14 +123,14 @@ class BlockTest extends TestCase
         $this->assertSame($baseUrl, $this->block->getBaseUrl());
     }
 
-    public function testDelegatesFetchingTheAssetsBaseUrlToTheBlockRenderer()
+    public function testDelegatesFetchingTheAssetsBaseUrlToTheBlockRenderer(): void
     {
         $assetsBaseUrl = new HttpBaseUrl('http://example.com/');
         $this->mockBlockRenderer->expects($this->once())->method('getAssetsBaseUrl')->willReturn($assetsBaseUrl);
         $this->assertSame($assetsBaseUrl, $this->block->getAssetsBaseUrl());
     }
 
-    public function testFetchingWebsiteCodeIsDelegatedToBlockRenderer()
+    public function testFetchingWebsiteCodeIsDelegatedToBlockRenderer(): void
     {
         $dummyWebsiteCode = 'foo';
         $this->mockBlockRenderer->expects($this->once())->method('getWebsiteCode')->willReturn($dummyWebsiteCode);

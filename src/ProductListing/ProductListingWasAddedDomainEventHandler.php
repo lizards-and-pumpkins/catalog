@@ -20,7 +20,7 @@ class ProductListingWasAddedDomainEventHandler implements DomainEventHandler
         $this->projector = $projector;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $domainEvent = ProductListingWasAddedDomainEvent::fromMessage($message);
         $this->projector->project($domainEvent->getListingCriteria());

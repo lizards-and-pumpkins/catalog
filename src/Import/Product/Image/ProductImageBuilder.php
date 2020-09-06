@@ -37,7 +37,7 @@ class ProductImageBuilder
      * @param ProductId $productId
      * @param array[] $imageAttributesArray
      */
-    private static function validateImageAttributesArray(ProductId $productId, array $imageAttributesArray)
+    private static function validateImageAttributesArray(ProductId $productId, array $imageAttributesArray): void
     {
         self::validateItHasGivenImageAttribute($productId, $imageAttributesArray, ProductImage::FILE);
     }

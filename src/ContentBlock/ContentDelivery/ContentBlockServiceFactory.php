@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ContentBlock\ContentDelivery;
 
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ContentBlockServiceFactory implements FactoryWithCallback
 {
     use FactoryWithCallbackTrait;
 
-    public function factoryRegistrationCallback(MasterFactory $masterFactory)
+    public function factoryRegistrationCallback(MasterFactory $masterFactory): void
     {
         $apiVersion = 2;
 
@@ -24,7 +24,7 @@ class ContentBlockServiceFactory implements FactoryWithCallback
         });
     }
 
-    public function createContentBlockApiV2GetRequestHandler()
+    public function createContentBlockApiV2GetRequestHandler(): ContentBlockApiV2GetRequestHandler
     {
         return new ContentBlockApiV2GetRequestHandler(
             $this->getMasterFactory()->getContentBlockService(),
@@ -32,7 +32,7 @@ class ContentBlockServiceFactory implements FactoryWithCallback
         );
     }
 
-    public function getContentBlockService()
+    public function getContentBlockService(): ContentBlockService
     {
         return new ContentBlockService(
             $this->getMasterFactory()->createDataPoolReader(),

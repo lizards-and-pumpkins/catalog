@@ -52,67 +52,67 @@ Flasher abnehmbar.',
         return json_encode($product);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->productJsonToXml = new ProductJsonToXml();
     }
 
-    public function testImplementsProductJsonToXml()
+    public function testImplementsProductJsonToXml(): void
     {
         $this->assertInstanceOf(ProductJsonToXml::class, $this->productJsonToXml);
     }
 
-    public function testStartsWithXmlHeader()
+    public function testStartsWithXmlHeader(): void
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
         $this->assertStringStartsWith('<?xml version="1.0" encoding="UTF-8"?>', $xml);
     }
 
-    public function testContainsClosingProductNode()
+    public function testContainsClosingProductNode(): void
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
         $this->assertStringEndsWith("</product>\n", $xml);
     }
 
-    public function testWritesProductNodeWithAttributes()
+    public function testWritesProductNodeWithAttributes(): void
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
         $productNode = "<product type=\"{$this->type}\" sku=\"{$this->sku}\" tax_class=\"{$this->taxClass}\"";
 
-        $this->assertContains($productNode, $xml);
+        $this->assertStringContainsString($productNode, $xml);
     }
 
-    public function testAttributeNodesAreInsideAttributesNode()
+    public function testAttributeNodesAreInsideAttributesNode(): void
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
 
-        $this->assertContains('<attributes><attribute', $xml);
+        $this->assertStringContainsString('<attributes><attribute', $xml);
     }
 
-    public function testIsValidXml()
+    public function testIsValidXml(): void
     {
         $simpleXml = simplexml_load_string($xml = $this->productJsonToXml->toXml($this->getProductJson()));
         $this->assertInstanceOf(\SimpleXMLElement::class, $simpleXml);
     }
 
-    public function testWriteAttributes()
+    public function testWriteAttributes(): void
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
 
-        $this->assertContains('<attribute name="backorders">true</attribute>', $xml);
-        $this->assertContains('<attribute name="url_key">led-arm-signallampe</attribute>', $xml);
+        $this->assertStringContainsString('<attribute name="backorders">true</attribute>', $xml);
+        $this->assertStringContainsString('<attribute name="url_key">led-arm-signallampe</attribute>', $xml);
     }
 
-    public function testWriteCData()
+    public function testWriteCData(): void
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJson());
-        $this->assertContains('<attribute name="description"><![CDATA[', $xml);
+        $this->assertStringContainsString('<attribute name="description"><![CDATA[', $xml);
     }
 
-    public function testWritesContextToAttributes()
+    public function testWritesContextToAttributes(): void
     {
         $xml = $this->productJsonToXml->toXml($this->getProductJsonWithContext());
-        $this->assertContains('<attribute name="description" website="german" locale="de_DE">', $xml);
-        $this->assertContains('<attribute name="backorders" website="german" locale="de_DE">', $xml);
+        $this->assertStringContainsString('<attribute name="description" website="german" locale="de_DE">', $xml);
+        $this->assertStringContainsString('<attribute name="backorders" website="german" locale="de_DE">', $xml);
     }
 }

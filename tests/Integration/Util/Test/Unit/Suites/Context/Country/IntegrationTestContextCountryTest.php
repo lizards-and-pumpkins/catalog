@@ -17,28 +17,28 @@ class IntegrationTestContextCountryTest extends TestCase
      */
     private $contextCountry;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->contextCountry = new IntegrationTestContextCountry();
     }
 
-    public function testItIsAContextPartBuilder()
+    public function testItIsAContextPartBuilder(): void
     {
         $this->assertInstanceOf(ContextPartBuilder::class, $this->contextCountry);
     }
 
-    public function testItReturnsTheCountryContextPartCode()
+    public function testItReturnsTheCountryContextPartCode(): void
     {
         $this->assertSame(Country::CONTEXT_CODE, $this->contextCountry->getCode());
     }
 
-    public function testItReturnsTheValueFromTheInputDataSetIfPresent()
+    public function testItReturnsTheValueFromTheInputDataSetIfPresent(): void
     {
         $inputDataSet = [Country::CONTEXT_CODE => 'fr'];
         $this->assertSame('fr', $this->contextCountry->getValue($inputDataSet));
     }
 
-    public function testItReturnsDefaultCountryCodeIfNotPartOfTheInputDataSet()
+    public function testItReturnsDefaultCountryCodeIfNotPartOfTheInputDataSet(): void
     {
         $inputDataSet = [];
         $this->assertSame('DE', $this->contextCountry->getValue($inputDataSet));

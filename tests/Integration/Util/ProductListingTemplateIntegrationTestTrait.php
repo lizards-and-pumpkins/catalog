@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 
 trait ProductListingTemplateIntegrationTestTrait
 {
-    private function importProductListingTemplateFixtureViaApi()
+    private function importProductListingTemplateFixtureViaApi(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
         $httpHeaders = HttpHeaders::fromArray([

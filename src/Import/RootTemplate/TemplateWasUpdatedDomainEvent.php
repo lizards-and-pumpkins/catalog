@@ -7,7 +7,6 @@ namespace LizardsAndPumpkins\Import\RootTemplate;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\RootTemplate\Exception\NoTemplateWasUpdatedDomainEventMessageException;
 use LizardsAndPumpkins\Messaging\Event\DomainEvent;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class TemplateWasUpdatedDomainEvent implements DomainEvent
@@ -54,7 +53,7 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
     public function toMessage(): Message
     {
         $payload = ['id' => $this->templateId, 'template' => $this->templateContent];
-        $metadata = [DomainEventQueue::VERSION_KEY => (string) $this->dataVersion];
+        $metadata = [DataVersion::VERSION_KEY => (string) $this->dataVersion];
 
         return Message::withCurrentTime(self::CODE, $payload, $metadata);
     }
@@ -66,7 +65,7 @@ class TemplateWasUpdatedDomainEvent implements DomainEvent
             throw new NoTemplateWasUpdatedDomainEventMessageException($message);
         }
         $payload = $message->getPayload();
-        $dataVersion = DataVersion::fromVersionString($message->getMetadata()[DomainEventQueue::VERSION_KEY]);
+        $dataVersion = DataVersion::fromVersionString($message->getMetadata()[DataVersion::VERSION_KEY]);
 
         return new self($payload['id'], $payload['template'], $dataVersion);
     }

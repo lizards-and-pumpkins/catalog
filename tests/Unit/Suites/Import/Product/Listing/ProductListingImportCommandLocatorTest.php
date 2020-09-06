@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Import\Product\Listing;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingImportCommandFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ProductListingImportCommandLocatorTest extends TestCase
 {
     /**
-     * @var ProductListingImportCommandFactory|MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingImportCommandFactory|MasterFactory|MockObject
      */
     private $mockProductListingImportCommandFactory;
 
@@ -25,7 +25,7 @@ class ProductListingImportCommandLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProductListingImportCommandFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['createProductListingImportCommands']))
@@ -33,7 +33,7 @@ class ProductListingImportCommandLocatorTest extends TestCase
         $this->locator = new ProductListingImportCommandLocator($this->mockProductListingImportCommandFactory);
     }
 
-    public function testItDelegatesToTheFactoryToCreateTheProductListingImportCommands()
+    public function testItDelegatesToTheFactoryToCreateTheProductListingImportCommands(): void
     {
         $stubCommand = $this->createMock(Command::class);
         $this->mockProductListingImportCommandFactory->expects($this->once())

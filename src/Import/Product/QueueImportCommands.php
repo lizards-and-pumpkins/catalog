@@ -45,25 +45,25 @@ class QueueImportCommands
         $this->listingImportCommandLocator = $productListingImportCommandLocator;
     }
 
-    public function forProduct(Product $product)
+    public function forProduct(Product $product): void
     {
         $commands = $this->productImportCommandLocator->getProductImportCommands($product);
         $this->addCommandsToQueue(...$commands);
     }
 
-    public function forImage(string $imageFilePath, DataVersion $dataVersion)
+    public function forImage(string $imageFilePath, DataVersion $dataVersion): void
     {
         $commands = $this->imageImportCommandLocator->getProductImageImportCommands($imageFilePath, $dataVersion);
         $this->addCommandsToQueue(...$commands);
     }
 
-    public function forListing(ProductListing $listingCriteria)
+    public function forListing(ProductListing $listingCriteria): void
     {
         $commands = $this->listingImportCommandLocator->getProductListingImportCommands($listingCriteria);
         $this->addCommandsToQueue(...$commands);
     }
 
-    private function addCommandsToQueue(Command ...$commands)
+    private function addCommandsToQueue(Command ...$commands): void
     {
         every($commands, [$this->commandQueue, 'add']);
     }

@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\Import\ImageStorage\ImageProcessing;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
 use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\Exception\UnableToCreateTargetDirectoryForProcessedImagesException;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,17 +28,17 @@ class ImageProcessorTest extends TestCase
     private $dummyImageFilePath = '/imageFilePath';
 
     /**
-     * @var ImageProcessingStrategySequence|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageProcessingStrategySequence|MockObject
      */
     private $mockStrategySequence;
 
     /**
-     * @var FileStorageReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileStorageReader|MockObject
      */
     private $mockFileStorageReader;
 
     /**
-     * @var FileStorageWriter|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileStorageWriter|MockObject
      */
     private $mockFileStorageWriter;
 
@@ -47,7 +47,7 @@ class ImageProcessorTest extends TestCase
      */
     private $imageProcessor;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->targetImageDirectoryPath = $this->getUniqueTempDir() . '/test/image-processor-foo';
         $this->createFixtureDirectory($this->targetImageDirectoryPath);
@@ -67,14 +67,14 @@ class ImageProcessorTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         @chmod(dirname($this->targetImageDirectoryPath), 0700);
         parent::tearDown();
     }
 
 
-    public function testImageIsProcessed()
+    public function testImageIsProcessed(): void
     {
         $this->mockFileStorageReader->expects($this->once())->method('getFileContents')
             ->with($this->dummyImageFilePath);
@@ -91,7 +91,7 @@ class ImageProcessorTest extends TestCase
         $this->assertFileExists($this->targetImageDirectoryPath);
     }
 
-    public function testItThrowsAnExceptionIfTheTargetDirectoryCanNotBeCreated()
+    public function testItThrowsAnExceptionIfTheTargetDirectoryCanNotBeCreated(): void
     {
         chmod(dirname($this->targetImageDirectoryPath), 0000);
         $this->expectException(UnableToCreateTargetDirectoryForProcessedImagesException::class);

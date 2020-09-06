@@ -33,13 +33,13 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    private function importCatalogFixtureWithApiV1(string $importFileName)
+    private function importCatalogFixtureWithApiV1(string $importFileName): void
     {
         $httpRequestBody = $this->buildV1ApiCatalogImportRequestBody($importFileName);
         $this->importCatalogFixtureWithApi($httpRequestBody, 'v1');
     }
 
-    private function importCatalogFixtureWithApiV2(string $importFileName, string $dataVersion)
+    private function importCatalogFixtureWithApiV2(string $importFileName, string $dataVersion): void
     {
         $httpRequestBody = $this->buildV2ApiCatalogImportRequestBody($importFileName, $dataVersion);
         $this->importCatalogFixtureWithApi($httpRequestBody, 'v2');
@@ -57,7 +57,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         return new HttpRequestBody($httpRequestBodyString);
     }
 
-    private function importCatalogFixtureWithApi(HttpRequestBody $httpRequestBody, $apiVersion)
+    private function importCatalogFixtureWithApi(HttpRequestBody $httpRequestBody, $apiVersion): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/catalog_import');
         $httpHeaders = HttpHeaders::fromArray([
@@ -107,12 +107,12 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->factory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($this->factory);
 
-        $website = new InjectableDefaultWebFront($request, $this->factory, $implementationSpecificFactory);
+        $website = new InjectableWebFront($request, $this->factory, $implementationSpecificFactory);
 
         return $website->processRequest();
     }
 
-    private function importProductDetailTemplate(string $dataVersion)
+    private function importProductDetailTemplate(string $dataVersion): void
     {
         $requestBodyContent = json_encode(['data_version' => $dataVersion]);
 
@@ -134,17 +134,17 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($factory->getLogger());
     }
 
-    public function assertProductCanBeAccessedOnFrontend(string $urlKey, string $name, string $dataVersion)
+    public function assertProductCanBeAccessedOnFrontend(string $urlKey, string $name, string $dataVersion): void
     {
         $this->factory->createDataPoolWriter()->setCurrentDataVersion($dataVersion);
         $response = $this->getHttpRequestResponse($urlKey);
         if (! $response->getStatusCode() === HttpResponse::STATUS_OK) {
             $this->fail(sprintf('Product "%s" not accessible on route "%s"', $name, $urlKey));
         }
-        $this->assertContains($name, $response->getBody());
+        $this->assertStringContainsString($name, $response->getBody());
     }
 
-    public function assertProductPriceOnFrontend(string $urlKey, string $dataVersion, string $expectedPrice)
+    public function assertProductPriceOnFrontend(string $urlKey, string $dataVersion, string $expectedPrice): void
     {
         $price = Price::fromDecimalValue($expectedPrice)->round((new Currency('EUR'))->getDefaultFractionDigits());
         $this->factory->createDataPoolWriter()->setCurrentDataVersion($dataVersion);
@@ -152,10 +152,10 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         if (! $response->getStatusCode() === HttpResponse::STATUS_OK) {
             $this->fail(sprintf('Product not accessible on route "%s"', $urlKey));
         }
-        $this->assertContains((string) $price->getAmount(), $response->getBody());
+        $this->assertStringContainsString((string) $price->getAmount(), $response->getBody());
     }
 
-    public function testCatalogImportApiPutsProductIntoKeyValueStoreAndSearchIndex()
+    public function testCatalogImportApiPutsProductIntoKeyValueStoreAndSearchIndex(): void
     {
         $productId = new ProductId('118235-251');
         $productName = 'LED Arm-Signallampe (1)';
@@ -182,12 +182,12 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
         $productJson = $dataPoolReader->getSnippet($productJsonSnippetKey);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             (string) $productId,
             $productJson,
             sprintf('The result page HTML does not contain the expected sku "%s"', $productId)
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             $productName,
             $productJson,
             sprintf('The result page HTML does not contain the expected product name "%s"', $productName)
@@ -222,10 +222,10 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
         $searchResults = $dataPoolReader->getSearchResults($criteria, $queryOptions);
 
-        $this->assertContains($productId, $searchResults->getProductIds(), '', false, false);
+        $this->assertTrue(in_array($productId, $searchResults->getProductIds()));
     }
 
-    public function testImportedProductIsAccessibleFromTheFrontend()
+    public function testImportedProductIsAccessibleFromTheFrontend(): void
     {
         $dataVersion = '-1';
 
@@ -241,7 +241,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         );
     }
 
-    public function testImportedProductIsAccessibleViaNonCanonicalUrlFromTheFrontend()
+    public function testImportedProductIsAccessibleViaNonCanonicalUrlFromTheFrontend(): void
     {
         $dataVersion = '-1';
 
@@ -259,7 +259,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->assertProductCanBeAccessedOnFrontend($urlKey, $name, $dataVersion);
     }
 
-    public function testHttpResourceNotFoundResponseIsReturned()
+    public function testHttpResourceNotFoundResponseIsReturned(): void
     {
         $url = HttpUrl::fromString('http://example.com/non/existent/path');
         $headers = HttpHeaders::fromArray([]);
@@ -269,13 +269,13 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $masterFactory = $this->prepareIntegrationTestMasterFactoryForRequest($request);
         $implementationSpecificFactory = $this->getIntegrationTestFactory($masterFactory);
 
-        $website = new InjectableDefaultWebFront($request, $masterFactory, $implementationSpecificFactory);
+        $website = new InjectableWebFront($request, $masterFactory, $implementationSpecificFactory);
 
         $response = $website->processRequest();
         $this->assertInstanceOf(HttpResourceNotFoundResponse::class, $response);
     }
 
-    public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged()
+    public function testProductsWithValidDataAreImportedAndInvalidDataAreNotImportedButLogged(): void
     {
         $this->importCatalogFixtureWithApiV1('catalog-with-invalid-product.xml');
 
@@ -319,7 +319,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
             $invalidProductId,
             $importExceptionMessage
         );
-        $this->assertContains($expectedLoggedErrorMessage, $messages, 'Product import failure was not logged.');
+        $this->assertTrue(in_array($expectedLoggedErrorMessage, $messages), 'Product import failure was not logged.');
 
         if (count($messages) > 0) {
             array_map(function (LogMessage $message) use ($expectedLoggedErrorMessage) {
@@ -330,7 +330,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         }
     }
 
-    public function testProductImportedWithDifferentDataVersionsAreBothAccessibleFromFrontend()
+    public function testProductImportedWithDifferentDataVersionsAreBothAccessibleFromFrontend(): void
     {
         $fixtureFileV1 = 'simple_product_armflasher-v1.xml';
         $fixtureFileV2 = 'simple_product_armflasher-v2.xml';
@@ -356,7 +356,7 @@ class EdgeToEdgeImportCatalogTest extends AbstractIntegrationTest
         $this->assertProductCanBeAccessedOnFrontend($urlKey2, $name2, $dataVersion2);
     }
 
-    public function testProductPriceIsProjectedWithoutDataVersion()
+    public function testProductPriceIsProjectedWithoutDataVersion(): void
     {
         $fixtureFileV1 = 'simple_product_armflasher-v1.xml';
         $fixtureFileV2 = 'simple_product_armflasher-v2.xml';

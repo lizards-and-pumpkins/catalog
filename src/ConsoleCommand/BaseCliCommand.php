@@ -18,7 +18,7 @@ abstract class BaseCliCommand implements ConsoleCommand
      */
     private $argv;
 
-    final protected function setCLImate(CLImate $climate)
+    final protected function setCLImate(CLImate $climate): void
     {
         $this->climate = $climate;
     }
@@ -35,7 +35,7 @@ abstract class BaseCliCommand implements ConsoleCommand
     /**
      * @param string[] $argv
      */
-    final protected function setArgumentVector(array $argv)
+    final protected function setArgumentVector(array $argv): void
     {
         $this->argv = $argv;
     }
@@ -52,7 +52,7 @@ abstract class BaseCliCommand implements ConsoleCommand
         return $this->argv;
     }
 
-    public function run()
+    public function run(): void
     {
         try {
             $this->handleHookMethodFlow();
@@ -61,7 +61,7 @@ abstract class BaseCliCommand implements ConsoleCommand
         }
     }
 
-    private function handleHookMethodFlow()
+    private function handleHookMethodFlow(): void
     {
         $climate = $this->getCLImate();
         $this->prepareCommandLineArguments($climate);
@@ -75,7 +75,7 @@ abstract class BaseCliCommand implements ConsoleCommand
         }
     }
 
-    private function handleException(\Exception $e)
+    private function handleException(\Exception $e): void
     {
         $climate = $this->getCLImate();
         $climate->error($e->getMessage());
@@ -83,7 +83,7 @@ abstract class BaseCliCommand implements ConsoleCommand
         $climate->usage($this->getArgumentVectorWithCommandName());
     }
 
-    private function prepareCommandLineArguments(CLImate $climate)
+    private function prepareCommandLineArguments(CLImate $climate): void
     {
         $arguments = $this->getCommandLineArgumentsArray($climate);
         $climate->arguments->add($arguments);
@@ -91,7 +91,10 @@ abstract class BaseCliCommand implements ConsoleCommand
         $climate->arguments->parse($this->getArgumentVectorWithCommandName());
     }
 
-    private function getArgumentVectorWithCommandName()
+    /**
+     * @return string[]
+     */
+    private function getArgumentVectorWithCommandName(): array
     {
         $argv = $this->getArgumentVector();
         
@@ -122,12 +125,12 @@ abstract class BaseCliCommand implements ConsoleCommand
         ];
     }
 
-    private function processBeforeExecute()
+    private function processBeforeExecute(): void
     {
         $this->beforeExecute($this->getCLImate());
     }
 
-    protected function beforeExecute(CLImate $climate)
+    protected function beforeExecute(CLImate $climate): void
     {
         // Intentionally empty hook method
     }
@@ -138,12 +141,12 @@ abstract class BaseCliCommand implements ConsoleCommand
      */
     abstract protected function execute(CLImate $climate);
 
-    private function processAfterExecute()
+    private function processAfterExecute(): void
     {
         $this->afterExecute($this->getCLImate());
     }
 
-    protected function afterExecute(CLImate $climate)
+    protected function afterExecute(CLImate $climate): void
     {
         // Intentionally empty hook method
     }

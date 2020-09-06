@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\Import\Product\Image;
 use LizardsAndPumpkins\Import\Image\ProductImageImportCommandFactory;
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ProductImageImportCommandLocatorTest extends TestCase
 {
     /**
-     * @var ProductImageImportCommandFactory|MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductImageImportCommandFactory|MasterFactory|MockObject
      */
     private $mockProductImageImportCommandFactory;
 
@@ -25,7 +25,7 @@ class ProductImageImportCommandLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProductImageImportCommandFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), ['createProductImageImportCommands']))
@@ -33,7 +33,7 @@ class ProductImageImportCommandLocatorTest extends TestCase
         $this->locator = new ProductImageImportCommandLocator($this->mockProductImageImportCommandFactory);
     }
     
-    public function testItDelegatesToTheFactoryToCreateTheProductImageImportCommands()
+    public function testItDelegatesToTheFactoryToCreateTheProductImageImportCommands(): void
     {
         $stubCommand = $this->createMock(Command::class);
         $stubDataVersion = $this->createMock(DataVersion::class);

@@ -26,7 +26,7 @@ class ProductListingTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    public function testProductListingMetaSnippetIsWrittenIntoDataPool()
+    public function testProductListingMetaSnippetIsWrittenIntoDataPool(): void
     {
         $this->factory = $this->prepareIntegrationTestMasterFactory();
         $this->importCatalogFixture($this->factory, 'product_listings.xml');
@@ -76,7 +76,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $this->assertEquals($expectedMetaSnippetContent, $metaInfoSnippet);
     }
 
-    public function testProductListingPageHtmlIsReturned()
+    public function testProductListingPageHtmlIsReturned(): void
     {
         $this->factory = $this->prepareIntegrationTestMasterFactory();
         $this->importProductListingTemplateFixtureViaApi();
@@ -102,13 +102,13 @@ class ProductListingTest extends AbstractIntegrationTest
         $expectedProductName = 'Adilette';
         $unExpectedProductName = 'LED Armflasher';
 
-        $this->assertContains($expectedPageTitle, $body);
-        $this->assertContains($expectedMetaDescription, $body);
-        $this->assertContains($expectedProductName, $body);
-        $this->assertNotContains($unExpectedProductName, $body);
+        $this->assertStringContainsString($expectedPageTitle, $body);
+        $this->assertStringContainsString($expectedMetaDescription, $body);
+        $this->assertStringContainsString($expectedProductName, $body);
+        $this->assertStringNotContainsString($unExpectedProductName, $body);
     }
 
-    public function testProductListingWithEmptyUrlKeyReturnsHomepage()
+    public function testProductListingWithEmptyUrlKeyReturnsHomepage(): void
     {
         $this->factory = $this->prepareIntegrationTestMasterFactory();
         $this->importProductListingTemplateFixtureViaApi();
@@ -131,7 +131,7 @@ class ProductListingTest extends AbstractIntegrationTest
         $expectedDescription = 'This is a cool homepage';
 
         $this->assertSame(200, $page->getStatusCode());
-        $this->assertContains($expectedListingName, $body);
-        $this->assertContains($expectedDescription, $body);
+        $this->assertStringContainsString($expectedListingName, $body);
+        $this->assertStringContainsString($expectedDescription, $body);
     }
 }

@@ -24,7 +24,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
      */
     private $temporaryStoragePath;
 
-    private static function isDirectoryExpected()
+    private static function isDirectoryExpected(): bool
     {
         return self::$createDirectory;
     }
@@ -48,13 +48,13 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         return $temporaryStoragePath;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         self::$createDirectory = true;
         parent::setUp();
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         try {
             (new LocalFilesystem())->removeDirectoryAndItsContent($this->temporaryStoragePath);
@@ -66,7 +66,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
 
     }
 
-    public function testAddOnOneInstanceReadFromOther()
+    public function testAddOnOneInstanceReadFromOther(): void
     {
         $urlKeyStoreOne = $this->createUrlKeyStoreInstance();
         $urlKeyStoreTwo = $this->createUrlKeyStoreInstance();
@@ -78,7 +78,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         );
     }
 
-    public function testItCanStoreContextDataWithASpace()
+    public function testItCanStoreContextDataWithASpace(): void
     {
         $urlKeyStore = $this->createUrlKeyStoreInstance();
         $urlKeyStore->addUrlKeyForVersion('1.0', 'example.html', 'context data with spaces', 'type-string');
@@ -88,7 +88,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         );
     }
 
-    public function testItCreatesTheStorageDirectoryIfItDoesNotExist()
+    public function testItCreatesTheStorageDirectoryIfItDoesNotExist(): void
     {
         $urlKeyStore = $this->createUrlKeyStoreInstance();
         rmdir($this->temporaryStoragePath);
@@ -97,7 +97,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
         $this->assertTrue(is_dir($this->temporaryStoragePath));
     }
 
-    public function testItThrowsAnExceptionIfDirectoryIsNotCreated()
+    public function testItThrowsAnExceptionIfDirectoryIsNotCreated(): void
     {
         $urlKeyStore = $this->createUrlKeyStoreInstance();
         rmdir($this->temporaryStoragePath);
@@ -115,7 +115,7 @@ class FileUrlKeyStoreTest extends AbstractIntegrationTestUrlKeyStoreTest
     }
 }
 
-function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
+function mkdir($pathname, $mode = 0777, $recursive = false, $context = null): bool
 {
     if (! FileUrlKeyStoreTest::$createDirectory) {
         return false;

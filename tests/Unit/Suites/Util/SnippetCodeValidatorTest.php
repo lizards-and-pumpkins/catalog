@@ -12,13 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class SnippetCodeValidatorTest extends TestCase
 {
-    public function testExceptionIsThrownIfSnippetCodeIsNonString()
+    public function testExceptionIsThrownIfSnippetCodeIsNonString(): void
     {
         $this->expectException(\TypeError::class);
         SnippetCodeValidator::validate(123);
     }
 
-    public function testExceptionIsThrownIfSnippetCodeIsAnEmptyString()
+    public function testExceptionIsThrownIfSnippetCodeIsAnEmptyString(): void
     {
         $this->expectException(InvalidSnippetCodeException::class);
         SnippetCodeValidator::validate('');

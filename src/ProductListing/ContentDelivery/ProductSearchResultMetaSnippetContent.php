@@ -147,7 +147,7 @@ class ProductSearchResultMetaSnippetContent implements PageMetaInfoSnippetConten
     /**
      * @param mixed[] $pageMetaInfo
      */
-    private static function validateRequiredKeysArePresent(array $pageMetaInfo)
+    private static function validateRequiredKeysArePresent(array $pageMetaInfo): void
     {
         $requiredKeys = [
             self::KEY_ROOT_SNIPPET_CODE,

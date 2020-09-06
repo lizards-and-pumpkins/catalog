@@ -20,7 +20,7 @@ class ImageWasAddedDomainEventHandler implements DomainEventHandler
         $this->imageProcessorCollection = $imageProcessorCollection;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         // todo: should we use $this->event->getDataVersion() and use it while processing...?
         $event = ImageWasAddedDomainEvent::fromMessage($message);

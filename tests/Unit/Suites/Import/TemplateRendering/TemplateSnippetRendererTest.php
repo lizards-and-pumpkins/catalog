@@ -22,29 +22,29 @@ class TemplateSnippetRendererTest extends TestCase
      */
     private $renderer;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var BlockRenderer|\PHPUnit_Framework_MockObject_MockObject $stubBlockRenderer */
+        /** @var BlockRenderer|MockObject $stubBlockRenderer */
         $stubBlockRenderer = $this->createMock(BlockRenderer::class);
         $stubBlockRenderer->method('render')->willReturn('');
 
-        /** @var SnippetKeyGenerator|\PHPUnit_Framework_MockObject_MockObject $stubSnippetKeyGenerator */
+        /** @var SnippetKeyGenerator|MockObject $stubSnippetKeyGenerator */
         $stubSnippetKeyGenerator = $this->createMock(SnippetKeyGenerator::class);
         $stubSnippetKeyGenerator->method('getKeyForContext')->willReturn('foo');
 
-        /** @var ContextSource|\PHPUnit_Framework_MockObject_MockObject $stubContextSource */
+        /** @var ContextSource|MockObject $stubContextSource */
         $stubContextSource = $this->createMock(ContextSource::class);
         $stubContextSource->method('getAllAvailableContexts')->willReturn([$this->createMock(Context::class)]);
 
         $this->renderer = new TemplateSnippetRenderer($stubSnippetKeyGenerator, $stubBlockRenderer, $stubContextSource);
     }
 
-    public function testIsSnippetRenderer()
+    public function testIsSnippetRenderer(): void
     {
         $this->assertInstanceOf(SnippetRenderer::class, $this->renderer);
     }
 
-    public function testThrowsExceptionIfDataObjectIsNotTemplateProjectionData()
+    public function testThrowsExceptionIfDataObjectIsNotTemplateProjectionData(): void
     {
         $this->expectException(InvalidDataObjectTypeException::class);
         $this->expectExceptionMessage('Data object must be TemplateProjectionData, got string.');
@@ -52,9 +52,9 @@ class TemplateSnippetRendererTest extends TestCase
         $this->renderer->render('foo');
     }
 
-    public function testArrayOfSnippetsIsReturned()
+    public function testArrayOfSnippetsIsReturned(): void
     {
-        /** @var TemplateProjectionData|\PHPUnit_Framework_MockObject_MockObject $dataObject */
+        /** @var TemplateProjectionData|MockObject $dataObject */
         $dataObject = $this->createMock(TemplateProjectionData::class);
         $result = $this->renderer->render($dataObject);
 

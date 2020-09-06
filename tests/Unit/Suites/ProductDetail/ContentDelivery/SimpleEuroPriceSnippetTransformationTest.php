@@ -20,12 +20,12 @@ class SimpleEuroPriceSnippetTransformationTest extends TestCase
     private $transformation;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
     /**
-     * @var PageSnippets|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageSnippets|MockObject
      */
     private $stubPageSnippets;
 
@@ -33,43 +33,43 @@ class SimpleEuroPriceSnippetTransformationTest extends TestCase
      * @param string $expected
      * @param int|string|null $input
      */
-    private function assertIsTransformedTo(string $expected, $input)
+    private function assertIsTransformedTo(string $expected, $input): void
     {
         $transformation = $this->transformation;
         $this->assertSame($expected, $transformation($input, $this->stubContext, $this->stubPageSnippets));
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->transformation = new SimpleEuroPriceSnippetTransformation();
         $this->stubContext = $this->createMock(Context::class);
         $this->stubPageSnippets = $this->createMock(PageSnippets::class);
     }
 
-    public function testItIsCallable()
+    public function testItIsCallable(): void
     {
         $this->assertInstanceOf(SnippetTransformation::class, $this->transformation);
         $this->assertTrue(is_callable($this->transformation), "Snippet transformations not callable");
     }
 
-    public function testItIgnoresInputContainingNotOnlyNumbers()
+    public function testItIgnoresInputContainingNotOnlyNumbers(): void
     {
         $this->assertIsTransformedTo('12,3', '12,3');
         $this->assertIsTransformedTo('12.3', '12.3');
         $this->assertIsTransformedTo('12.30 €', '12.30 €');
     }
 
-    public function testItReturnsNullInputAsAnEmptyString()
+    public function testItReturnsNullInputAsAnEmptyString(): void
     {
         $this->assertIsTransformedTo('', null);
     }
 
-    public function testItReturnsArrayInputAsAnEmptyString()
+    public function testItReturnsArrayInputAsAnEmptyString(): void
     {
         $this->assertIsTransformedTo('', []);
     }
 
-    public function testItReturnsAnEmptyStringAsAnEmptyString()
+    public function testItReturnsAnEmptyStringAsAnEmptyString(): void
     {
         $this->assertIsTransformedTo('', '');
     }
@@ -79,7 +79,7 @@ class SimpleEuroPriceSnippetTransformationTest extends TestCase
      * @param string $expected
      * @param int|string $input
      */
-    public function testItReturnsInputNumbersAsEuro(string $expected, $input)
+    public function testItReturnsInputNumbersAsEuro(string $expected, $input): void
     {
         $this->assertIsTransformedTo($expected, $input);
     }

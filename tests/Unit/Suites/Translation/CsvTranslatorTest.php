@@ -8,7 +8,8 @@ use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
 use LizardsAndPumpkins\Translation\Exception\LocaleDirectoryNotReadableException;
 use LizardsAndPumpkins\Translation\Exception\MalformedTranslationFileException;
 use LizardsAndPumpkins\Translation\Exception\TranslationFileNotReadableException;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,16 +25,16 @@ class CsvTranslatorTest extends TestCase
     private $testLocaleCode = 'foo_BAR';
 
     /**
-     * @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeLocator|MockObject
      */
     private $stubThemeLocator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubThemeLocator = $this->createMock(ThemeLocator::class);
     }
 
-    public function testTranslatorInterfaceIsImplemented()
+    public function testTranslatorInterfaceIsImplemented(): void
     {
         $testThemeDirectoryPath = sys_get_temp_dir();
         $this->stubThemeLocator->method('getThemeDirectory')->willReturn($testThemeDirectoryPath);
@@ -47,7 +48,7 @@ class CsvTranslatorTest extends TestCase
         $this->assertInstanceOf(Translator::class, $result);
     }
 
-    public function testExceptionIsThrownIfLocaleDirectoryIsNotReadable()
+    public function testExceptionIsThrownIfLocaleDirectoryIsNotReadable(): void
     {
         $this->expectException(LocaleDirectoryNotReadableException::class);
 
@@ -64,7 +65,7 @@ class CsvTranslatorTest extends TestCase
         CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
     }
 
-    public function testExceptionIsThrownIfTranslationFileIsNotReadable()
+    public function testExceptionIsThrownIfTranslationFileIsNotReadable(): void
     {
         $this->expectException(TranslationFileNotReadableException::class);
 
@@ -81,7 +82,7 @@ class CsvTranslatorTest extends TestCase
         CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
     }
 
-    public function testExceptionIsThrownIfTranslationFileHasWrongFormatting()
+    public function testExceptionIsThrownIfTranslationFileHasWrongFormatting(): void
     {
         $this->expectException(MalformedTranslationFileException::class);
 
@@ -98,7 +99,7 @@ class CsvTranslatorTest extends TestCase
         CsvTranslator::forLocale($this->testLocaleCode, $this->stubThemeLocator, $fileNames);
     }
 
-    public function testOriginalStringIsReturnedIfTranslationDirectoryDoesNotExist()
+    public function testOriginalStringIsReturnedIfTranslationDirectoryDoesNotExist(): void
     {
         $fileNames = [];
 
@@ -110,7 +111,7 @@ class CsvTranslatorTest extends TestCase
         $this->assertSame($testTranslationSource, $result);
     }
 
-    public function testOriginalStringIsReturnedIfTranslationIsMissing()
+    public function testOriginalStringIsReturnedIfTranslationIsMissing(): void
     {
         $testThemeDirectoryPath = sys_get_temp_dir();
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
@@ -129,7 +130,7 @@ class CsvTranslatorTest extends TestCase
         $this->assertSame($testTranslationSource, $result);
     }
 
-    public function testGivenStringIsTranslated()
+    public function testGivenStringIsTranslated(): void
     {
         $testThemeDirectoryPath = sys_get_temp_dir();
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
@@ -151,7 +152,7 @@ class CsvTranslatorTest extends TestCase
         $this->assertSame($testTranslationResult, $result);
     }
 
-    public function testGivenStringIsNotTranslatedIfTranslationFileIsNotSpecifiedEvenIfExists()
+    public function testGivenStringIsNotTranslatedIfTranslationFileIsNotSpecifiedEvenIfExists(): void
     {
         $testThemeDirectoryPath = sys_get_temp_dir();
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;
@@ -173,7 +174,7 @@ class CsvTranslatorTest extends TestCase
         $this->assertSame($testTranslationSource, $result);
     }
 
-    public function testAllTranslationsAreReturnedAsAnArray()
+    public function testAllTranslationsAreReturnedAsAnArray(): void
     {
         $testThemeDirectoryPath = sys_get_temp_dir();
         $testLocaleDirectoryPath = $testThemeDirectoryPath . '/locale/' . $this->testLocaleCode;

@@ -24,7 +24,7 @@ class ProductImageImportCallbackFailureMessageTest extends TestCase
     
     private $testInvalidImageXml = '<image/>';
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testException = new \Exception('Test Message');
         $this->logMessage = new ProductImageImportCallbackFailureMessage(
@@ -33,36 +33,37 @@ class ProductImageImportCallbackFailureMessageTest extends TestCase
         );
     }
 
-    public function testItIsALogMessage()
+    public function testItIsALogMessage(): void
     {
         $this->assertInstanceOf(LogMessage::class, $this->logMessage);
     }
 
-    public function testItIncludesTheExceptionMessageInTheStringReturnValue()
+    public function testItIncludesTheExceptionMessageInTheStringReturnValue(): void
     {
         $expected = 'Error during processing catalog product image XML import callback: Test Message';
         $this->assertSame($expected, (string) $this->logMessage);
     }
 
-    public function testItIncludesTheExceptionInTheContextArray()
+    public function testItIncludesTheExceptionInTheContextArray(): void
     {
         $contextArray = $this->logMessage->getContext();
-        $this->assertInternalType('array', $contextArray);
+
+        $this->assertIsArray($contextArray);
         $this->assertArrayHasKey('exception', $contextArray);
         $this->assertSame($this->testException, $contextArray['exception']);
     }
 
-    public function testItIncludesTheProductImageXmlInTheContextArray()
+    public function testItIncludesTheProductImageXmlInTheContextArray(): void
     {
         $this->assertArrayHasKey('product_image_xml', $this->logMessage->getContext());
         $this->assertSame($this->testInvalidImageXml, $this->logMessage->getContext()['product_image_xml']);
     }
 
-    public function testTheContextSynopsisIncludesTheFileAndLine()
+    public function testTheContextSynopsisIncludesTheFileAndLine(): void
     {
         $synopsis = $this->logMessage->getContextSynopsis();
-        $this->assertContains($this->testException->getFile(), $synopsis);
-        $this->assertContains((string) $this->testException->getLine(), $synopsis);
-        $this->assertContains($this->testInvalidImageXml, $synopsis);
+        $this->assertStringContainsString($this->testException->getFile(), $synopsis);
+        $this->assertStringContainsString((string) $this->testException->getLine(), $synopsis);
+        $this->assertStringContainsString($this->testInvalidImageXml, $synopsis);
     }
 }

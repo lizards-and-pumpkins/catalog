@@ -41,16 +41,12 @@ class MetaSnippetBasedRouter implements HttpRouter
         $this->context = $context;
     }
 
-    public function registerHandlerCallback(string $requestHandlerCode, callable $callbackFunction)
+    public function registerHandlerCallback(string $requestHandlerCode, callable $callbackFunction): void
     {
         $this->requestHandlerRegistry[$requestHandlerCode] = $callbackFunction;
     }
 
-    /**
-     * @param HttpRequest $request
-     * @return HttpRequestHandler|null
-     */
-    public function route(HttpRequest $request)
+    public function route(HttpRequest $request): ?HttpRequestHandler
     {
         $pageMeta = $this->getPageMeta($request);
 

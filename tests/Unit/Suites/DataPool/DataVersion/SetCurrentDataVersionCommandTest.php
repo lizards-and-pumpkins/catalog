@@ -20,19 +20,19 @@ use PHPUnit\Framework\TestCase;
  */
 class SetCurrentDataVersionCommandTest extends TestCase
 {
-    public function testImplementsCommandInterface()
+    public function testImplementsCommandInterface(): void
     {
         $testDataVersion = DataVersion::fromVersionString('foo');
         $this->assertInstanceOf(Command::class, new SetCurrentDataVersionCommand($testDataVersion));
     }
 
-    public function testReturnsDataVersionToSet()
+    public function testReturnsDataVersionToSet(): void
     {
         $testDataVersion = DataVersion::fromVersionString('bar');
         $this->assertSame($testDataVersion, (new SetCurrentDataVersionCommand($testDataVersion))->getDataVersion());
     }
 
-    public function testReturnsMessageWithDataVersion()
+    public function testReturnsMessageWithDataVersion(): void
     {
         $testDataVersion = DataVersion::fromVersionString('baz');
         $message = (new SetCurrentDataVersionCommand($testDataVersion))->toMessage();
@@ -40,7 +40,7 @@ class SetCurrentDataVersionCommandTest extends TestCase
         $this->assertSame('baz', $message->getMetadata()['data_version']);
     }
 
-    public function testThrowsExceptionIfTheMessageNameDoesNotMatchSetCurrentDataVersion()
+    public function testThrowsExceptionIfTheMessageNameDoesNotMatchSetCurrentDataVersion(): void
     {
         $code = 'foo';
         $this->expectException(NotSetCurrentDataVersionCommandMessageException::class);
@@ -49,7 +49,7 @@ class SetCurrentDataVersionCommandTest extends TestCase
         SetCurrentDataVersionCommand::fromMessage(Message::withCurrentTime($code, [], []));
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $testDataVersion = DataVersion::fromVersionString('baz');
         $message = (new SetCurrentDataVersionCommand($testDataVersion))->toMessage();

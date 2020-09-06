@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class FacetFiltersToIncludeInResultTest extends TestCase
 {
     /**
-     * @var FacetFilterRequestField|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFilterRequestField|MockObject
      */
     private $stubFacetFilterRequestField;
 
@@ -22,18 +22,18 @@ class FacetFiltersToIncludeInResultTest extends TestCase
      */
     private $facetFilterRequest;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubFacetFilterRequestField = $this->createMock(FacetFilterRequestField::class);
         $this->facetFilterRequest = new FacetFiltersToIncludeInResult($this->stubFacetFilterRequestField);
     }
 
-    public function testFacetFilterRequestFieldsAreReturned()
+    public function testFacetFilterRequestFieldsAreReturned(): void
     {
         $this->assertSame([$this->stubFacetFilterRequestField], $this->facetFilterRequest->getFields());
     }
 
-    public function testAttributeCodeStringsAreReturned()
+    public function testAttributeCodeStringsAreReturned(): void
     {
         $testAttributeCodeString = 'foo';
 
@@ -45,7 +45,7 @@ class FacetFiltersToIncludeInResultTest extends TestCase
         $this->assertSame([$testAttributeCodeString], $this->facetFilterRequest->getAttributeCodeStrings());
     }
 
-    public function testAttributeCodeStringsAreMemoized()
+    public function testAttributeCodeStringsAreMemoized(): void
     {
         $this->stubFacetFilterRequestField->expects($this->once())->method('getAttributeCode');
         $this->facetFilterRequest->getAttributeCodeStrings();

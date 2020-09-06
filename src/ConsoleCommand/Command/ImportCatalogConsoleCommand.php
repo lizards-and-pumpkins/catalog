@@ -12,7 +12,7 @@ use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
 use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class ImportCatalogConsoleCommand extends BaseCliCommand
@@ -71,7 +71,7 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
         );
     }
 
-    final protected function execute(CLImate $CLImate)
+    final protected function execute(CLImate $CLImate): void
     {
         $this->clearStorageIfRequested();
         $this->enableImageImportIfRequested();
@@ -79,14 +79,14 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
         $this->processQueuesIfRequested();
     }
 
-    private function clearStorageIfRequested()
+    private function clearStorageIfRequested(): void
     {
         if ($this->getArg('clearStorage')) {
             $this->clearStorage();
         }
     }
 
-    private function enableImageImportIfRequested()
+    private function enableImageImportIfRequested(): void
     {
         if ($this->getArg('importImages')) {
             $this->factory->register(new UpdatingProductImageImportCommandFactory());
@@ -95,7 +95,7 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
         }
     }
 
-    private function clearStorage()
+    private function clearStorage(): void
     {
         $this->output('Clearing queue and data pool before import...');
 
@@ -103,7 +103,7 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
         $dataPoolWriter->clear();
     }
 
-    private function importFile()
+    private function importFile(): void
     {
         $this->output('Importing...');
 
@@ -112,27 +112,27 @@ class ImportCatalogConsoleCommand extends BaseCliCommand
         $import->importFile($this->getArg('importFile'), DataVersion::fromVersionString($this->getDataVersion()));
     }
 
-    private function processQueuesIfRequested()
+    private function processQueuesIfRequested(): void
     {
         if ($this->getArg('processQueues')) {
             $this->processQueues();
         }
     }
 
-    private function processQueues()
+    private function processQueues(): void
     {
         $this->processCommandQueue();
         $this->processDomainEventQueue();
     }
 
-    private function processCommandQueue()
+    private function processCommandQueue(): void
     {
         $this->output('Processing command queue...');
         $commandConsumer = $this->factory->createCommandConsumer();
         $commandConsumer->processAll();
     }
 
-    private function processDomainEventQueue()
+    private function processDomainEventQueue(): void
     {
         $this->output('Processing domain event queue...');
         $domainEventConsumer = $this->factory->createDomainEventConsumer();

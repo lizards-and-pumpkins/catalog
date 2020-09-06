@@ -6,12 +6,12 @@ namespace LizardsAndPumpkins\Import\ImageStorage;
 
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\TestFileFixtureTrait;
 use LizardsAndPumpkins\Import\FileStorage\FileContent;
 use LizardsAndPumpkins\Import\FileStorage\FileInStorage;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileStorage;
 use LizardsAndPumpkins\Import\FileStorage\FilesystemFileUri;
 use LizardsAndPumpkins\Import\FileStorage\StorageAgnosticFileUri;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,19 +33,9 @@ class FilesystemImageStorageTest extends TestCase
     private $imageStorage;
 
     /**
-     * @var FilesystemFileStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilesystemFileStorage
      */
     private $mockFilesystemFileStorage;
-
-    /**
-     * @var FilesystemFileUri
-     */
-    private $testFileUri;
-
-    /**
-     * @var FileInStorage
-     */
-    private $testFile;
 
     /**
      * @var string
@@ -53,12 +43,7 @@ class FilesystemImageStorageTest extends TestCase
     private $testMediaBaseDirectory;
 
     /**
-     * @var MediaBaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubMediaBaseUrlBuilder;
-
-    /**
-     * @var Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var Image
      */
     private $mockImage;
 
@@ -67,33 +52,33 @@ class FilesystemImageStorageTest extends TestCase
      */
     private $testMediaBaseUrl;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testMediaBaseDirectory = $this->getUniqueTempDir() . '/media/';
-        $this->testFileUri = FilesystemFileUri::fromString($this->testMediaBaseDirectory . '/test/image.svg');
+        $testFileUri = FilesystemFileUri::fromString($this->testMediaBaseDirectory . '/test/image.svg');
         $this->mockFilesystemFileStorage = $this->createMock(FilesystemFileStorage::class);
-        $this->testFile = FileInStorage::create($this->testFileUri, $this->mockFilesystemFileStorage);
-        $this->mockFilesystemFileStorage->method('getFileReference')->willReturn($this->testFile);
+        $testFile = FileInStorage::create($testFileUri, $this->mockFilesystemFileStorage);
+        $this->mockFilesystemFileStorage->method('getFileReference')->willReturn($testFile);
         
-        $this->testMediaBaseUrl = HttpUrl::fromString('http://example.com/test/media');
-        $this->stubMediaBaseUrlBuilder = $this->createMock(MediaBaseUrlBuilder::class);
-        $this->stubMediaBaseUrlBuilder->method('create')->willReturn($this->testMediaBaseUrl);
+        $this->testMediaBaseUrl = 'http://example.com/test/media';
+        $stubMediaBaseUrlBuilder = $this->createMock(MediaBaseUrlBuilder::class);
+        $stubMediaBaseUrlBuilder->method('create')->willReturn($this->testMediaBaseUrl);
         
         $this->mockImage = $this->createMock(Image::class);
         
         $this->imageStorage = new FilesystemImageStorage(
             $this->mockFilesystemFileStorage,
-            $this->stubMediaBaseUrlBuilder,
+            $stubMediaBaseUrlBuilder,
             $this->testMediaBaseDirectory
         );
     }
     
-    public function testItImplementsTheImageStorageInterface()
+    public function testItImplementsTheImageStorageInterface(): void
     {
         $this->assertInstanceOf(ImageStorage::class, $this->imageStorage);
     }
 
-    public function testItReturnsAFileInstance()
+    public function testItReturnsAFileInstance(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
         
@@ -102,7 +87,7 @@ class FilesystemImageStorageTest extends TestCase
         $this->assertInstanceOf(Image::class, $image);
     }
 
-    public function testContainsReturnsTrueIfTheFileExists()
+    public function testContainsReturnsTrueIfTheFileExists(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
         $this->mockFilesystemFileStorage->method('contains')->with($fileURI)->willReturn(true);
@@ -110,7 +95,7 @@ class FilesystemImageStorageTest extends TestCase
         $this->assertTrue($this->imageStorage->contains($fileURI));
     }
 
-    public function testContainsReturnsFalseIfTheFileNotExists()
+    public function testContainsReturnsFalseIfTheFileNotExists(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
         $this->mockFilesystemFileStorage->method('contains')->with($fileURI)->willReturn(false);
@@ -118,7 +103,7 @@ class FilesystemImageStorageTest extends TestCase
         $this->assertFalse($this->imageStorage->contains($fileURI));
     }
 
-    public function testPutContentDelegatesToTheFileStorage()
+    public function testPutContentDelegatesToTheFileStorage(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
         $fileContent = FileContent::fromString('test content');
@@ -129,7 +114,7 @@ class FilesystemImageStorageTest extends TestCase
         $this->imageStorage->putContent($fileURI, $fileContent);
     }
 
-    public function testGetContentDelegatesToTheFileStorage()
+    public function testGetContentDelegatesToTheFileStorage(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
         $stubContent = $this->createMock(FileContent::class);
@@ -140,7 +125,7 @@ class FilesystemImageStorageTest extends TestCase
         $this->assertSame($stubContent, $this->imageStorage->getContent($fileURI));
     }
 
-    public function testItReturnsTheHttpUrlForTheImageUri()
+    public function testItReturnsTheHttpUrlForTheImageUri(): void
     {
         $fileURI = StorageAgnosticFileUri::fromString('test/image.svg');
         $stubContext = $this->createMock(Context::class);
@@ -151,12 +136,12 @@ class FilesystemImageStorageTest extends TestCase
         $this->assertSame($this->testMediaBaseUrl . '/test/image.svg', (string) $url);
     }
 
-    public function testItImplementsTheImageToImageStorageInterfaces()
+    public function testItImplementsTheImageToImageStorageInterfaces(): void
     {
         $this->assertInstanceOf(ImageToImageStorage::class, $this->imageStorage);
     }
     
-    public function testItDelegatesToTheFileStorageToCheckIfAnImageIsPresent()
+    public function testItDelegatesToTheFileStorageToCheckIfAnImageIsPresent(): void
     {
         $this->mockFilesystemFileStorage->expects($this->once())
             ->method('isPresent')->willReturn(true);
@@ -164,7 +149,7 @@ class FilesystemImageStorageTest extends TestCase
         $this->assertTrue($this->imageStorage->isPresent($this->mockImage));
     }
 
-    public function testItDelegatesToTheFileStorageToReadImageContent()
+    public function testItDelegatesToTheFileStorageToReadImageContent(): void
     {
         $this->mockFilesystemFileStorage->expects($this->once())
             ->method('read')->willReturn('test content');
@@ -172,7 +157,7 @@ class FilesystemImageStorageTest extends TestCase
         $this->assertSame('test content', $this->imageStorage->read($this->mockImage));
     }
 
-    public function testItDelegatesToTheFileStorageToWriteImageContent()
+    public function testItDelegatesToTheFileStorageToWriteImageContent(): void
     {
         $this->mockFilesystemFileStorage->expects($this->once())
             ->method('write')->with($this->mockImage);
@@ -180,14 +165,14 @@ class FilesystemImageStorageTest extends TestCase
         $this->imageStorage->write($this->mockImage);
     }
 
-    public function testItReturnsTheUrlForTheSpecifiedImage()
+    public function testItReturnsTheUrlForTheSpecifiedImage(): void
     {
         $this->mockImage->method('__toString')->willReturn($this->testMediaBaseDirectory . '/test/image.svg');
         $stubContext = $this->createMock(Context::class);
         
         $url = $this->imageStorage->url($this->mockImage, $stubContext);
         
-        $this->assertInternalType('string', $url);
+        $this->assertIsString('string', $url);
         $this->assertSame($this->testMediaBaseUrl . '/test/image.svg', $url);
     }
 }

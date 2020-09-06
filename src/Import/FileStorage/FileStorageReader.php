@@ -6,5 +6,5 @@ namespace LizardsAndPumpkins\Import\FileStorage;
 
 interface FileStorageReader
 {
-    public function getFileContents(string $filePath) : string;
+    public function getFileContents(string $filePath): string;
 }

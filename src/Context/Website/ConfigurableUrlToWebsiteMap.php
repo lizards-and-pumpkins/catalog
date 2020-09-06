@@ -26,11 +26,7 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
         $this->urlToWebsiteMap = $urlToWebsiteMap;
     }
 
-    /**
-     * @param ConfigReader $configReader
-     * @return ConfigurableUrlToWebsiteMap
-     */
-    public static function fromConfig(ConfigReader $configReader)
+    public static function fromConfig(ConfigReader $configReader): ConfigurableUrlToWebsiteMap
     {
         $urlToWebsiteMap = $configReader->get(self::CONFIG_KEY) ?
             self::buildArrayMapFromString($configReader->get(self::CONFIG_KEY)) :
@@ -52,9 +48,9 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 
     /**
      * @param string $configValue
-     * @return mixed
+     * @return string[]
      */
-    private static function buildArrayMapFromString(string $configValue)
+    private static function buildArrayMapFromString(string $configValue): array
     {
         $pairs = array_map([self::class, 'splitConfigRecord'], explode(self::RECORD_SEPARATOR, $configValue));
 
@@ -77,7 +73,7 @@ class ConfigurableUrlToWebsiteMap implements UrlToWebsiteMap
 
     /**
      * @param string $url
-     * @return string[]
+     * @return Website[]
      */
     private function getWebsiteUrlPrefixAndCodeByUrl(string $url): array
     {

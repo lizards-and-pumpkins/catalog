@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Import\Image;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
-use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\Factory;
 
 interface ProductImageImportCommandFactory extends Factory
 {

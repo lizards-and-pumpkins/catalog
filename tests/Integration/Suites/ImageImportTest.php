@@ -14,7 +14,7 @@ use LizardsAndPumpkins\Util\FileSystem\LocalFilesystem;
 
 class ImageImportTest extends AbstractIntegrationTest
 {
-    private function flushProcessedImagesDir()
+    private function flushProcessedImagesDir(): void
     {
         $localFilesystem = new LocalFilesystem();
         $processedImagesDir = sys_get_temp_dir() . '/' . IntegrationTestFactory::PROCESSED_IMAGES_DIR;
@@ -24,12 +24,12 @@ class ImageImportTest extends AbstractIntegrationTest
         mkdir($processedImagesDir, 0700, true);
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         $this->flushProcessedImagesDir();
     }
 
-    public function testImagesAreImportedAndProcessed()
+    public function testImagesAreImportedAndProcessed(): void
     {
         $request = HttpRequest::fromParameters(
             HttpRequest::METHOD_GET,

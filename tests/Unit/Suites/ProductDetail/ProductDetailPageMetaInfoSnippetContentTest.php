@@ -34,7 +34,7 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 
     private $pageSpecificData = [['foo' => 'bar'], ['baz' => 'qux']];
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create(
             $this->sourceId,
@@ -45,12 +45,12 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
         );
     }
 
-    public function testReturnsPageMetaSnippetAsArray()
+    public function testReturnsPageMetaSnippetAsArray(): void
     {
-        $this->assertInternalType('array', $this->pageMetaInfo->toArray());
+        $this->assertIsArray($this->pageMetaInfo->toArray());
     }
 
-    public function testExpectedArrayKeysArePresentInJsonContent()
+    public function testExpectedArrayKeysArePresentInJsonContent(): void
     {
         $keys = [
             ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID,
@@ -58,37 +58,37 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
             ProductDetailPageMetaInfoSnippetContent::KEY_PAGE_SNIPPET_CODES,
             ProductDetailPageMetaInfoSnippetContent::KEY_CONTAINER_SNIPPETS,
         ];
+
         foreach ($keys as $key) {
-            $this->assertTrue(
-                array_key_exists($key, $this->pageMetaInfo->toArray()),
+            $this->assertArrayHasKey(
+                $key,
+                $this->pageMetaInfo->toArray(),
                 sprintf('The expected key "%s" is not set on the page meta info array', $key)
             );
         }
     }
 
-    public function testExceptionIsThrownIfTheSourceIdIsNotScalar()
+    public function testExceptionIsThrownIfTheSourceIdIsNotScalar(): void
     {
         $this->expectException(\TypeError::class);
         ProductDetailPageMetaInfoSnippetContent::create([], 'test', [], [], []);
     }
 
-    public function testExceptionIsThrownIfRootSnippetCodeIsNoString()
+    public function testExceptionIsThrownIfRootSnippetCodeIsNoString(): void
     {
         $this->expectException(\TypeError::class);
         ProductDetailPageMetaInfoSnippetContent::create('foo', 1.0, [], [], []);
     }
 
-    public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent()
+    public function testRootSnippetCodeIsAddedToSnippetCodeListIfNotPresent(): void
     {
         $rootSnippetCode = 'root-snippet-code';
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::create('123', $rootSnippetCode, [], [], []);
-        $this->assertContains(
-            $rootSnippetCode,
-            $pageMetaInfo->getPageSnippetCodes()
-        );
+
+        $this->assertTrue(in_array($rootSnippetCode, $pageMetaInfo->getPageSnippetCodes()));
     }
 
-    public function testFromJsonConstructorIsPresent()
+    public function testFromJsonConstructorIsPresent(): void
     {
         $pageMeta = json_decode(json_encode($this->pageMetaInfo->toArray()), true);
         $pageMetaInfo = ProductDetailPageMetaInfoSnippetContent::fromArray($pageMeta);
@@ -97,8 +97,9 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
 
     /**
      * @dataProvider pageInfoArrayKeyProvider
+     * @param string $key
      */
-    public function testExceptionIsThrownIfRequiredKeyIsMissing(string $key)
+    public function testExceptionIsThrownIfRequiredKeyIsMissing(string $key): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Missing key in input array');
@@ -123,35 +124,36 @@ class ProductDetailPageMetaInfoSnippetContentTest extends TestCase
         ];
     }
 
-    public function testSourceIdIsReturned()
+    public function testSourceIdIsReturned(): void
     {
         $this->assertEquals($this->sourceId, $this->pageMetaInfo->getProductId());
     }
 
-    public function testRootSnippetCodeIsReturned()
+    public function testRootSnippetCodeIsReturned(): void
     {
         $this->assertEquals($this->rootSnippetCode, $this->pageMetaInfo->getRootSnippetCode());
     }
 
-    public function testPageSnippetCodeListIsReturned()
+    public function testPageSnippetCodeListIsReturned(): void
     {
-        $this->assertInternalType('array', $this->pageMetaInfo->getPageSnippetCodes());
+        $this->assertIsArray($this->pageMetaInfo->getPageSnippetCodes());
     }
 
-    public function testThePageSnippetListIncludesTheProductJsonAndPriceSnippetCodes()
+    public function testThePageSnippetListIncludesTheProductJsonAndPriceSnippetCodes(): void
     {
         $pageSnippetCodes = $this->pageMetaInfo->getPageSnippetCodes();
-        $this->assertContains(ProductJsonSnippetRenderer::CODE, $pageSnippetCodes);
-        $this->assertContains(PriceSnippetRenderer::PRICE, $pageSnippetCodes);
-        $this->assertContains(PriceSnippetRenderer::SPECIAL_PRICE, $pageSnippetCodes);
+
+        $this->assertTrue(in_array(ProductJsonSnippetRenderer::CODE, $pageSnippetCodes));
+        $this->assertTrue(in_array(PriceSnippetRenderer::PRICE, $pageSnippetCodes));
+        $this->assertTrue(in_array(PriceSnippetRenderer::SPECIAL_PRICE, $pageSnippetCodes));
     }
 
-    public function testItReturnsThePageSnippetContainers()
+    public function testItReturnsThePageSnippetContainers(): void
     {
         $this->assertSame($this->containers, $this->pageMetaInfo->getContainerSnippets());
     }
 
-    public function testReturnsPageSpecificData()
+    public function testReturnsPageSpecificData(): void
     {
         $this->assertSame($this->pageSpecificData, $this->pageMetaInfo->getPageSpecificData());
     }

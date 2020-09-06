@@ -27,7 +27,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
     /**
      * @param string $fieldKey
      * @param string[] $fieldValues
-     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocumentField|MockObject
      */
     private function createStubSearchDocumentField(string $fieldKey, array $fieldValues) : SearchDocumentField
     {
@@ -40,7 +40,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
 
     /**
      * @param SearchDocumentField[] ...$stubSearchDocumentFields
-     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocument|MockObject
      */
     private function createStubSearchDocumentWithGivenFields(
         SearchDocumentField ...$stubSearchDocumentFields
@@ -55,18 +55,18 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
         return $stubSearchDocument;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $dataSet = ['fieldName' => $this->testFieldName, 'fieldValue' => $this->testFiledValue];
         $this->operation = new IntegrationTestSearchEngineOperationNotEqual($dataSet);
     }
 
-    public function testImplementsIntegrationTestSearchEngineOperationInterface()
+    public function testImplementsIntegrationTestSearchEngineOperationInterface(): void
     {
         $this->assertInstanceOf(IntegrationTestSearchEngineOperation::class, $this->operation);
     }
 
-    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldName()
+    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldName(): void
     {
         $this->expectException(InvalidSearchEngineOperationDataSetException::class);
         $this->expectExceptionMessage('Search engine operation data set array does not contain "fieldName" element.');
@@ -74,7 +74,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
         new IntegrationTestSearchEngineOperationNotEqual(['fieldValue' => 'bar']);
     }
 
-    public function testThrowsAnExceptionIfSearchEngineOperationFieldNameIsNonString()
+    public function testThrowsAnExceptionIfSearchEngineOperationFieldNameIsNonString(): void
     {
         $this->expectException(InvalidSearchEngineOperationDataSetException::class);
         $this->expectExceptionMessage('Search engine operation field name must be a string.');
@@ -85,7 +85,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
     /**
      * @dataProvider emptyStringProvider
      */
-    public function testThrowsAnExceptionIfSearchEngineOperationFieldNameIsEmpty(string $emptyString)
+    public function testThrowsAnExceptionIfSearchEngineOperationFieldNameIsEmpty(string $emptyString): void
     {
         $this->expectException(InvalidSearchEngineOperationDataSetException::class);
         $this->expectExceptionMessage('Search engine operation field name must not be empty.');
@@ -93,7 +93,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
         new IntegrationTestSearchEngineOperationNotEqual(['fieldName' => $emptyString, 'fieldValue' => 'bar']);
     }
 
-    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldValue()
+    public function testThrowsAnExceptionIfSearchEngineOperationDataArrayDoesNotContainFieldValue(): void
     {
         $this->expectException(InvalidSearchEngineOperationDataSetException::class);
         $this->expectExceptionMessage('Search engine operation data set array does not contain "fieldValue" element.');
@@ -101,7 +101,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
         new IntegrationTestSearchEngineOperationNotEqual(['fieldName' => 'foo']);
     }
 
-    public function testReturnsTrueIfDocumentHasNoFieldInvolvedIntoAnOperation()
+    public function testReturnsTrueIfDocumentHasNoFieldInvolvedIntoAnOperation(): void
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField('baz', ['qux']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
@@ -109,7 +109,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
         $this->assertTrue($this->operation->matches($stubSearchDocument));
     }
 
-    public function testReturnsFalseIfDocumentFieldValueIsMatching()
+    public function testReturnsFalseIfDocumentFieldValueIsMatching(): void
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField($this->testFieldName, [$this->testFiledValue]);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
@@ -117,7 +117,7 @@ class IntegrationTestSearchEngineOperationNotEqualTest extends TestCase
         $this->assertFalse($this->operation->matches($stubSearchDocument));
     }
 
-    public function testReturnsTrueIfDocumentFieldValueIsNotMatching()
+    public function testReturnsTrueIfDocumentFieldValueIsNotMatching(): void
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField($this->testFieldName, ['qux']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);

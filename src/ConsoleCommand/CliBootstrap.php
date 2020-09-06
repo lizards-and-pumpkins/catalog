@@ -6,8 +6,8 @@ namespace LizardsAndPumpkins\ConsoleCommand;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\Exception\NoConsoleCommandSpecifiedException;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class CliBootstrap
 {
@@ -20,6 +20,11 @@ class CliBootstrap
         return self::instantiateCommand($cliCommandClass, $masterFactory);
     }
 
+    /**
+     * @param string $cliCommandClass
+     * @param MasterFactory $masterFactory
+     * @return mixed
+     */
     private static function instantiateCommand(string $cliCommandClass, MasterFactory $masterFactory)
     {
         return new $cliCommandClass($masterFactory, new CLImate());
@@ -43,14 +48,7 @@ class CliBootstrap
 
     private static function createMasterFactory(Factory ...$factoriesToRegister): MasterFactory
     {
-        return self::isLoggingActive() ?
-            CliFactoryBootstrap::createLoggingMasterFactory(...$factoriesToRegister) :
-            CliFactoryBootstrap::createMasterFactory(...$factoriesToRegister);
-    }
-
-    private static function isLoggingActive(): bool
-    {
-        return ($_SERVER[self::ENV_DEBUG_VAR] ?? false) || ($_ENV[self::ENV_DEBUG_VAR] ?? false);
+        return CliFactoryBootstrap::createMasterFactory(...$factoriesToRegister);
     }
 
     private static function getConsoleCommandLocator(MasterFactory $masterFactory): ConsoleCommandLocator

@@ -26,7 +26,7 @@ class ConfigurableProductAttributeValueCollectorTest extends TestCase
 
     /**
      * @param string[] $variationAttributes
-     * @return ProductVariationAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductVariationAttributeList|MockObject
      */
     private function createMockVariationAttributeList(array $variationAttributes) : ProductVariationAttributeList
     {
@@ -42,7 +42,7 @@ class ConfigurableProductAttributeValueCollectorTest extends TestCase
     /**
      * @param string $variationAttribute
      * @param string[] $values
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|MockObject
      */
     private function createMockProductWithAttributeValues($variationAttribute, array $values) : Product
     {
@@ -53,7 +53,7 @@ class ConfigurableProductAttributeValueCollectorTest extends TestCase
 
     /**
      * @param Product[] $associatedProducts
-     * @return AssociatedProductList|\PHPUnit_Framework_MockObject_MockObject
+     * @return AssociatedProductList|MockObject
      */
     private function createMockAssociatedProductList(Product ...$associatedProducts) : AssociatedProductList
     {
@@ -63,17 +63,17 @@ class ConfigurableProductAttributeValueCollectorTest extends TestCase
         return $stubAssociatedProductList;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->valueCollector = new ConfigurableProductAttributeValueCollector();
     }
 
-    public function testItIsASearchableAttributeValueCollector()
+    public function testItIsASearchableAttributeValueCollector(): void
     {
         $this->assertInstanceOf(AttributeValueCollector::class, $this->valueCollector);
     }
 
-    public function testItReturnsTheAttributeValuesForConfigurableProducts()
+    public function testItReturnsTheAttributeValuesForConfigurableProducts(): void
     {
         $stubConfigurableProduct = $this->createMock(ConfigurableProduct::class);
         $stubConfigurableProduct->expects($this->once())
@@ -87,7 +87,7 @@ class ConfigurableProductAttributeValueCollectorTest extends TestCase
         $this->assertSame(['a value'], $result);
     }
 
-    public function testItCollectsTheAttributeValuesOfAssociatedProductsForVariationAttributes()
+    public function testItCollectsTheAttributeValuesOfAssociatedProductsForVariationAttributes(): void
     {
         $variationAttribute = 'test';
 

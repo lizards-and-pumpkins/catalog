@@ -23,31 +23,31 @@ class QueueImportCommandsTest extends TestCase
     private $createImportCommands;
 
     /**
-     * @var Command|\PHPUnit_Framework_MockObject_MockObject
+     * @var Command|MockObject
      */
     private $stubCommand;
 
     /**
-     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|MockObject
      */
     private $mockCommandQueue;
 
     /**
-     * @var ProductImportCommandLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductImportCommandLocator|MockObject
      */
     private $mockProductCommandLocator;
 
     /**
-     * @var ProductImageImportCommandLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductImageImportCommandLocator|MockObject
      */
     private $mockImageCommandLocator;
 
     /**
-     * @var ProductListingImportCommandLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingImportCommandLocator|MockObject
      */
     private $mockListingCommandLocator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
         $this->stubCommand = $this->createMock(Command::class);
@@ -62,14 +62,14 @@ class QueueImportCommandsTest extends TestCase
         );
     }
 
-    public function testItAddsCreatedProductCommandsToTheQueue()
+    public function testItAddsCreatedProductCommandsToTheQueue(): void
     {
         $this->mockProductCommandLocator->method('getProductImportCommands')->willReturn([$this->stubCommand]);
         $this->mockCommandQueue->expects($this->once())->method('add');
         $this->createImportCommands->forProduct($this->createMock(Product::class));
     }
 
-    public function testItAddsCreatedProductImageCommandsToTheQueue()
+    public function testItAddsCreatedProductImageCommandsToTheQueue(): void
     {
         $this->mockImageCommandLocator
             ->method('getProductImageImportCommands')
@@ -78,7 +78,7 @@ class QueueImportCommandsTest extends TestCase
         $this->createImportCommands->forImage('foo.jpg', $this->createMock(DataVersion::class));
     }
 
-    public function testItAddsCreatedProductListingCommandsToTheQueue()
+    public function testItAddsCreatedProductListingCommandsToTheQueue(): void
     {
         $this->mockListingCommandLocator
             ->method('getProductListingImportCommands')

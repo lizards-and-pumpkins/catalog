@@ -36,7 +36,7 @@ class ProductListingAttributeList
         return new self($attributes);
     }
 
-    private static function validateAttributeCode(string $code)
+    private static function validateAttributeCode(string $code): void
     {
         if ('' === $code) {
             throw new InvalidProductListingAttributeCodeException(
@@ -48,7 +48,7 @@ class ProductListingAttributeList
     /**
      * @param int|float|string|bool $value
      */
-    private static function validateAttributeValue($value)
+    private static function validateAttributeValue($value): void
     {
         if (!is_scalar($value)) {
             throw new InvalidProductListingAttributeValueException(

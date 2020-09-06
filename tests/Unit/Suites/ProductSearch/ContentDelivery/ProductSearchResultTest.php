@@ -19,7 +19,7 @@ class ProductSearchResultTest extends TestCase
     private $testFacetFieldsArray = ['attribute-name' => ['value' => 'attribute-value', 'count' => 5]];
 
     /**
-     * @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFieldCollection|MockObject
      */
     private $stubFacetFieldCollection;
 
@@ -28,7 +28,7 @@ class ProductSearchResultTest extends TestCase
      */
     private $searchResult;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
         $this->stubFacetFieldCollection->method('jsonSerialize')->willReturn($this->testFacetFieldsArray);
@@ -40,12 +40,12 @@ class ProductSearchResultTest extends TestCase
         );
     }
 
-    public function testImplementsJsonSerializableInterface()
+    public function testImplementsJsonSerializableInterface(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->searchResult);
     }
 
-    public function testReturnsArrayRepresentation()
+    public function testReturnsArrayRepresentation(): void
     {
         $expectedArray = [
             'total' => $this->testTotalNumber,
@@ -56,17 +56,17 @@ class ProductSearchResultTest extends TestCase
         $this->assertSame($expectedArray, $this->searchResult->jsonSerialize());
     }
 
-    public function testReturnsTotalNumberOrResults()
+    public function testReturnsTotalNumberOrResults(): void
     {
         $this->assertSame($this->testTotalNumber, $this->searchResult->getTotalNumberOfResults());
     }
 
-    public function testReturnsProductsDataArray()
+    public function testReturnsProductsDataArray(): void
     {
         $this->assertSame($this->testProductsData, $this->searchResult->getData());
     }
 
-    public function testReturnsFacetFieldCollection()
+    public function testReturnsFacetFieldCollection(): void
     {
         $this->assertSame($this->stubFacetFieldCollection, $this->searchResult->getFacetFieldCollection());
     }

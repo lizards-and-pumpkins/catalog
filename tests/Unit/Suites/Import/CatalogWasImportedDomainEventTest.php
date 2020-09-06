@@ -26,42 +26,42 @@ class CatalogWasImportedDomainEventTest extends TestCase
     private $event;
 
     /**
-     * @var DataVersion|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataVersion|MockObject
      */
     private $testDataVersion;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testDataVersion = DataVersion::fromVersionString('1234');
         
         $this->event = new CatalogWasImportedDomainEvent($this->testDataVersion);
     }
 
-    public function testIsADomainEvent()
+    public function testIsADomainEvent(): void
     {
         $this->assertInstanceOf(DomainEvent::class, $this->event);
     }
 
-    public function testReturnsTheInjectedVersion()
+    public function testReturnsTheInjectedVersion(): void
     {
         $this->assertSame($this->testDataVersion, $this->event->getDataVersion());
     }
 
-    public function testReturnsMessageWithEventCodeAsName()
+    public function testReturnsMessageWithEventCodeAsName(): void
     {
         $message = $this->event->toMessage();
         $this->assertInstanceOf(Message::class, $message);
         $this->assertSame(CatalogWasImportedDomainEvent::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithDataVersionInMetaData()
+    public function testReturnsMessageWithDataVersionInMetaData(): void
     {
         $message = $this->event->toMessage();
         $this->assertArrayHasKey('data_version', $message->getMetadata());
         $this->assertSame((string) $this->testDataVersion, $message->getMetadata()['data_version']);
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $message = $this->event->toMessage();
         $rehydratedEvent = CatalogWasImportedDomainEvent::fromMessage($message);
@@ -69,7 +69,7 @@ class CatalogWasImportedDomainEventTest extends TestCase
         $this->assertSame((string) $rehydratedEvent->getDataVersion(), (string) $this->testDataVersion);
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode()
+    public function testThrowsExceptionIfMessageNameDoesNotMatchEventCode(): void
     {
         $this->expectException(NoCatalogWasImportedDomainEventMessageException::class);
         $this->expectExceptionMessage('Expected "catalog_was_imported" domain event, got "buz"');

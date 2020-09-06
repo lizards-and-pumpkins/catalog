@@ -53,7 +53,7 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
         return $this->fileStorage->contains($identifier);
     }
 
-    public function putContent(StorageAgnosticFileUri $identifier, FileContent $content)
+    public function putContent(StorageAgnosticFileUri $identifier, FileContent $content): void
     {
         $this->fileStorage->putContent($identifier, $content);
     }
@@ -79,7 +79,7 @@ class FilesystemImageStorage implements ImageStorage, ImageToImageStorage
         return $this->fileStorage->read($image);
     }
 
-    public function write(File $file)
+    public function write(File $file): void
     {
         $this->fileStorage->write($file);
     }

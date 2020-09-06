@@ -14,8 +14,7 @@ use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
-use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
-use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class ProductListingPageContentBuilderTest extends TestCase
 {
     /**
-     * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageBuilder|MockObject
      */
     private $mockPageBuilder;
 
@@ -35,12 +34,12 @@ class ProductListingPageContentBuilderTest extends TestCase
     private $pageContentBuilder;
 
     /**
-     * @var PageMetaInfoSnippetContent|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageMetaInfoSnippetContent
      */
     private $stubPageMetaInfoSnippetContent;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context
      */
     private $stubContext;
 
@@ -50,37 +49,32 @@ class ProductListingPageContentBuilderTest extends TestCase
     private $stubKeyGeneratorParams = [];
 
     /**
-     * @var ProductSearchResult|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSearchResult
      */
     private $stubProductSearchResult;
 
     /**
-     * @var ProductsPerPage|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductsPerPage
      */
     private $stubProductsPerPage;
 
     /**
-     * @var SortBy|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortBy
      */
     private $stubSelectedSortBy;
 
     /**
-     * @var AnyInvokedCount
-     */
-    private $addSnippetsToPageSpy;
-
-    /**
-     * @var Translator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translator
      */
     private $stubTranslator;
 
     /**
-     * @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFieldCollection|MockObject
      */
     private $stubFacetFieldCollection;
 
     /**
-     * @var SearchFieldToRequestParamMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchFieldToRequestParamMap
      */
     private $stubSearchFieldToRequestParamMap;
 
@@ -90,49 +84,7 @@ class ProductListingPageContentBuilderTest extends TestCase
     private $stubListOfAvailableSortBy;
 
     /**
-     * @return PageBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function createMockPageBuilder() : PageBuilder
-    {
-        $mockPageBuilder = $this->createMock(PageBuilder::class);
-
-        $this->addSnippetsToPageSpy = new AnyInvokedCount();
-        $mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
-
-        return $mockPageBuilder;
-    }
-
-    private function assertDynamicSnippetWithAnyValueWasAddedToPageBuilder(string $snippetCode)
-    {
-        $snippetsAddedToPageBuilder = array_map(function (ObjectInvocation $invocation) use ($snippetCode) {
-            return (int) ([$snippetCode => $snippetCode] === $invocation->getParameters()[0]);
-        }, $this->addSnippetsToPageSpy->getInvocations());
-
-        $this->assertEquals(
-            1,
-            array_sum($snippetsAddedToPageBuilder),
-            sprintf('Failed to assert "%s" snippet was added to page builder.', $snippetCode)
-        );
-    }
-
-    private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
-    {
-        $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
-            array_map(function (ObjectInvocation $invocation) use ($snippetCode, $snippetValue) {
-                return (int) ([$snippetCode => $snippetCode] === $invocation->getParameters()[0] &&
-                              [$snippetCode => $snippetValue] === $invocation->getParameters()[1]);
-            }, $this->addSnippetsToPageSpy->getInvocations())
-        );
-
-        $this->assertEquals(1, $numberOfTimesSnippetWasAddedToPageBuilder, sprintf(
-            'Failed to assert "%s" snippet with "%s" value was added to page builder.',
-            $snippetCode,
-            $snippetValue
-        ));
-    }
-
-    /**
-     * @return ProductSearchResult|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductSearchResult
      */
     private function createStubProductSearchResult() : ProductSearchResult
     {
@@ -144,16 +96,15 @@ class ProductListingPageContentBuilderTest extends TestCase
         return $stubProductSearchResult;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
-        $this->mockPageBuilder = $this->createMockPageBuilder();
+        $this->mockPageBuilder = $this->createMock(PageBuilder::class);
 
         $class = SearchFieldToRequestParamMap::class;
         $this->stubSearchFieldToRequestParamMap = $this->createMock($class);
         
         $this->stubTranslator = $this->createMock(Translator::class);
 
-        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
         $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
@@ -171,7 +122,7 @@ class ProductListingPageContentBuilderTest extends TestCase
         $this->stubProductSearchResult = $this->createStubProductSearchResult();
     }
 
-    public function testPageIsBuilt()
+    public function testPageIsBuilt(): void
     {
         $this->mockPageBuilder->expects($this->once())->method('buildPage');
 
@@ -186,25 +137,13 @@ class ProductListingPageContentBuilderTest extends TestCase
         );
     }
 
-    public function testProductsAreAddedToPageBuilder()
+    public function testProductsAreAddedToPageBuilder(): void
     {
-        $this->pageContentBuilder->buildPageContent(
-            $this->stubPageMetaInfoSnippetContent,
-            $this->stubContext,
-            $this->stubKeyGeneratorParams,
-            $this->stubProductSearchResult,
-            $this->stubProductsPerPage,
-            $this->stubSelectedSortBy,
-            ...$this->stubListOfAvailableSortBy
-        );
-
         $productGridSnippetCode = 'product_grid';
 
-        $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($productGridSnippetCode);
-    }
+        $this->mockPageBuilder->expects($this->at(1))->method('addSnippetsToPage')
+            ->with([$productGridSnippetCode => $productGridSnippetCode]);
 
-    public function testFilterNavigationSnippetIsAddedToPageBuilder()
-    {
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
@@ -214,21 +153,35 @@ class ProductListingPageContentBuilderTest extends TestCase
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
         );
-
-        $snippetCode = 'filter_navigation';
-
-        $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode);
     }
 
-    public function testItMapsFilterNavigationFieldsToRequestParameterNames()
+    public function testFilterNavigationSnippetIsAddedToPageBuilder(): void
     {
-        $dummyFacetData = [
-            'price_with_tax' => ['a', 'b', 'c']
-        ];
-        $expectedValue = [
-            'price' => ['a', 'b', 'c']
-        ];
-        
+        $snippetCode = 'filter_navigation';
+
+        $this->mockPageBuilder->expects($this->at(0))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode]);
+
+        $this->pageContentBuilder->buildPageContent(
+            $this->stubPageMetaInfoSnippetContent,
+            $this->stubContext,
+            $this->stubKeyGeneratorParams,
+            $this->stubProductSearchResult,
+            $this->stubProductsPerPage,
+            $this->stubSelectedSortBy,
+            ...$this->stubListOfAvailableSortBy
+        );
+    }
+
+    public function testItMapsFilterNavigationFieldsToRequestParameterNames(): void
+    {
+        $snippetCode = 'filter_navigation';
+        $dummyFacetData = ['price_with_tax' => ['a', 'b', 'c']];
+        $expectedValue = json_encode(['price' => ['a', 'b', 'c']]);
+
+        $this->mockPageBuilder->expects($this->at(0))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode], [$snippetCode => $expectedValue]);
+
         $this->stubFacetFieldCollection->method('jsonSerialize')->willReturn($dummyFacetData);
         $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')
             ->with('price_with_tax')->willReturn('price');
@@ -242,31 +195,15 @@ class ProductListingPageContentBuilderTest extends TestCase
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
         );
-
-        $snippetCode = 'filter_navigation';
-        
-        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($expectedValue));
     }
 
-    public function testTotalNumberOfResultsSnippetIsAddedToPageBuilder()
+    public function testTotalNumberOfResultsSnippetIsAddedToPageBuilder(): void
     {
-        $this->pageContentBuilder->buildPageContent(
-            $this->stubPageMetaInfoSnippetContent,
-            $this->stubContext,
-            $this->stubKeyGeneratorParams,
-            $this->stubProductSearchResult,
-            $this->stubProductsPerPage,
-            $this->stubSelectedSortBy,
-            ...$this->stubListOfAvailableSortBy
-        );
-
         $snippetCode = 'total_number_of_results';
 
-        $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode);
-    }
+        $this->mockPageBuilder->expects($this->at(2))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode]);
 
-    public function testProductPerPageSnippetIsAddedToPageBuilder()
-    {
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
@@ -276,14 +213,15 @@ class ProductListingPageContentBuilderTest extends TestCase
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
         );
+    }
 
+    public function testProductPerPageSnippetIsAddedToPageBuilder(): void
+    {
         $snippetCode = 'products_per_page';
 
-        $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode);
-    }
+        $this->mockPageBuilder->expects($this->at(3))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode]);
 
-    public function testAddsAvailableSortByListSnippetToPageBuilder()
-    {
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
@@ -293,17 +231,36 @@ class ProductListingPageContentBuilderTest extends TestCase
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
         );
-
-        $snippetCode = 'available_sort_orders';
-
-        $this->assertDynamicSnippetWithAnyValueWasAddedToPageBuilder($snippetCode);
     }
 
-    public function testAddsDefaultSortBySnippetToPageBuilder()
+    public function testAddsAvailableSortByListSnippetToPageBuilder(): void
     {
+        $snippetCode = 'available_sort_orders';
+
+        $this->mockPageBuilder->expects($this->at(4))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode]);
+
+        $this->pageContentBuilder->buildPageContent(
+            $this->stubPageMetaInfoSnippetContent,
+            $this->stubContext,
+            $this->stubKeyGeneratorParams,
+            $this->stubProductSearchResult,
+            $this->stubProductsPerPage,
+            $this->stubSelectedSortBy,
+            ...$this->stubListOfAvailableSortBy
+        );
+    }
+
+    public function testAddsDefaultSortBySnippetToPageBuilder(): void
+    {
+        $stubAttributeCode = $this->createMock(AttributeCode::class);
         $selectedSortByRepresentation = ['selected-sort-by'];
 
-        $stubAttributeCode = $this->createMock(AttributeCode::class);
+        $snippetCode = 'selected_sort_order';
+        $expectedValue = json_encode($selectedSortByRepresentation);
+
+        $this->mockPageBuilder->expects($this->at(5))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode], [$snippetCode => $expectedValue]);
 
         $this->stubSelectedSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
         $this->stubSelectedSortBy->method('jsonSerialize')->willReturn($selectedSortByRepresentation);
@@ -317,20 +274,21 @@ class ProductListingPageContentBuilderTest extends TestCase
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
         );
-
-        $snippetCode = 'selected_sort_order';
-        $expectedSnippetValue = json_encode($selectedSortByRepresentation);
-
-        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }
 
-    public function testAddsProductListingAttributesSnippetToPageBuilder()
+    public function testAddsProductListingAttributesSnippetToPageBuilder(): void
     {
         $productListingAttributes = ['foo' => 'bar'];
         $this->stubPageMetaInfoSnippetContent->method('getPageSpecificData')->willReturn([
             'product_listing_attributes' => $productListingAttributes
         ]);
 
+        $snippetCode = 'product_listing_attributes';
+        $expectedValue = json_encode($productListingAttributes);
+
+        $this->mockPageBuilder->expects($this->at(6))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode], [$snippetCode => $expectedValue]);
+
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
@@ -340,19 +298,20 @@ class ProductListingPageContentBuilderTest extends TestCase
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
         );
-
-        $snippetCode = 'product_listing_attributes';
-        $expectedSnippetValue = json_encode($productListingAttributes);
-
-        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, $expectedSnippetValue);
     }
 
-    public function testTranslationsAreAddedToPageBuilder()
+    public function testTranslationsAreAddedToPageBuilder(): void
     {
         $translations = ['foo' => 'bar'];
 
         $this->stubTranslator->method('jsonSerialize')->willReturn($translations);
 
+        $snippetCode = 'translations';
+        $expectedValue = json_encode($translations);
+
+        $this->mockPageBuilder->expects($this->at(7))->method('addSnippetsToPage')
+            ->with([$snippetCode => $snippetCode], [$snippetCode => $expectedValue]);
+
         $this->pageContentBuilder->buildPageContent(
             $this->stubPageMetaInfoSnippetContent,
             $this->stubContext,
@@ -362,8 +321,5 @@ class ProductListingPageContentBuilderTest extends TestCase
             $this->stubSelectedSortBy,
             ...$this->stubListOfAvailableSortBy
         );
-
-        $snippetCode = 'translations';
-        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($translations));
     }
 }

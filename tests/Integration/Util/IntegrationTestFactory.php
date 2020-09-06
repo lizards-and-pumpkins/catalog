@@ -20,8 +20,9 @@ use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\MessageQueueFactory;
 use LizardsAndPumpkins\Messaging\Queue\InMemoryQueue;
+use LizardsAndPumpkins\Messaging\Queue\MessageQueueFactory;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
@@ -45,13 +46,12 @@ use LizardsAndPumpkins\Import\Product\AttributeCode;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 use LizardsAndPumpkins\Import\Product\View\IntegrationTestProductViewLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
-use LizardsAndPumpkins\Messaging\Queue;
 use LizardsAndPumpkins\Tax\IntegrationTestTaxServiceLocator;
 use LizardsAndPumpkins\Import\ImageStorage\FilesystemImageStorage;
 use LizardsAndPumpkins\Import\ImageStorage\ImageStorage;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageReader;
 use LizardsAndPumpkins\Util\FileSystem\LocalFilesystemStorageWriter;
 
@@ -166,7 +166,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return new InMemoryKeyValueStore();
     }
 
-    public function setCommandMessageQueue(Queue $commandQueue)
+    public function setCommandMessageQueue(Queue $commandQueue): void
     {
         $this->commandMessageQueue = $commandQueue;
     }
@@ -197,7 +197,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return new InMemoryQueue();
     }
 
-    public function setEventMessageQueue(Queue $eventQueue)
+    public function setEventMessageQueue(Queue $eventQueue): void
     {
         $this->eventMessageQueue = $eventQueue;
     }
@@ -303,7 +303,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->keyValueStore;
     }
 
-    public function setKeyValueStore(KeyValueStore $keyValueStore)
+    public function setKeyValueStore(KeyValueStore $keyValueStore): void
     {
         $this->keyValueStore = $keyValueStore;
     }
@@ -316,7 +316,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->searchEngine;
     }
 
-    public function setSearchEngine(SearchEngine $searchEngine)
+    public function setSearchEngine(SearchEngine $searchEngine): void
     {
         $this->searchEngine = $searchEngine;
     }
@@ -329,7 +329,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return $this->urlKeyStore;
     }
 
-    public function setUrlKeyStore(UrlKeyStore $urlKeyStore)
+    public function setUrlKeyStore(UrlKeyStore $urlKeyStore): void
     {
         $this->urlKeyStore = $urlKeyStore;
     }
@@ -456,7 +456,7 @@ class IntegrationTestFactory implements Factory, MessageQueueFactory
         return 120;
     }
 
-    public function getDefaultNumberOfProductsPerSearchResultsPage()
+    public function getDefaultNumberOfProductsPerSearchResultsPage(): int
     {
         return 60;
     }

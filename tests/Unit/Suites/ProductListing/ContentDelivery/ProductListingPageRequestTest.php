@@ -10,8 +10,8 @@ use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMa
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @covers \LizardsAndPumpkins\ProductListing\ContentDelivery\ProductListingPageRequest
@@ -52,9 +52,9 @@ class ProductListingPageRequestTest extends TestCase
      * @param mixed $value
      * @param int $ttl
      */
-    private function assertCookieHasBeenSet(string $name, $value, int $ttl)
+    private function assertCookieHasBeenSet(string $name, $value, int $ttl): void
     {
-        $this->assertContains([$name, $value, time() + $ttl], self::$setCookieValues);
+        $this->assertTrue(in_array([$name, $value, time() + $ttl], self::$setCookieValues));
     }
 
     /**
@@ -62,7 +62,7 @@ class ProductListingPageRequestTest extends TestCase
      * @param mixed $value
      * @param int $ttl
      */
-    private function assertCookieHasNotBeenSet(string $name, $value, int $ttl)
+    private function assertCookieHasNotBeenSet(string $name, $value, int $ttl): void
     {
         $this->assertNotContains([$name, $value, time() + $ttl], self::$setCookieValues);
     }
@@ -72,12 +72,12 @@ class ProductListingPageRequestTest extends TestCase
      * @param mixed $value
      * @param int $expire
      */
-    public static function trackSetCookieCalls(string $name, $value, int $expire)
+    public static function trackSetCookieCalls(string $name, $value, int $expire): void
     {
         self::$setCookieValues[] = [$name, $value, $expire];
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubProductsPerPage = $this->createMock(ProductsPerPage::class);
         $class = SearchFieldToRequestParamMap::class;
@@ -89,44 +89,44 @@ class ProductListingPageRequestTest extends TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         self::$setCookieValues = [];
     }
 
-    public function testCurrentPageIsZeroByDefault()
+    public function testCurrentPageIsZeroByDefault(): void
     {
         $this->stubRequest->method('hasQueryParameter')
             ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn(false);
         $this->assertSame(0, $this->pageRequest->getCurrentPageNumber($this->stubRequest));
     }
 
-    public function testCurrentPageIsZeroIfNegativePageNumberIsRequested()
+    public function testCurrentPageIsZeroIfNegativePageNumberIsRequested(): void
     {
         $pageNumber = -2;
 
         $this->stubRequest->method('hasQueryParameter')
             ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn(true);
         $this->stubRequest->method('getQueryParameter')
-            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn($pageNumber + 1);
+            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn((string) ($pageNumber + 1));
 
         $this->assertSame(0, $this->pageRequest->getCurrentPageNumber($this->stubRequest));
 
     }
 
-    public function testReturnsCurrentPageNumber()
+    public function testReturnsCurrentPageNumber(): void
     {
         $pageNumber = 2;
 
         $this->stubRequest->method('hasQueryParameter')
             ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn(true);
         $this->stubRequest->method('getQueryParameter')
-            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn($pageNumber + 1);
+            ->with(ProductListingPageRequest::PAGINATION_QUERY_PARAMETER_NAME)->willReturn((string) ($pageNumber + 1));
 
         $this->assertSame($pageNumber, $this->pageRequest->getCurrentPageNumber($this->stubRequest));
     }
 
-    public function testSelectedFiltersArrayIsReturned()
+    public function testSelectedFiltersArrayIsReturned(): void
     {
         $this->stubSearchFieldToRequestParamMap->method('getQueryParameterName')->willReturnArgument(0);
         
@@ -146,7 +146,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertSame($expectedFilterValues, $result);
     }
 
-    public function testInitialProductsPerPageConfigurationIsReturned()
+    public function testInitialProductsPerPageConfigurationIsReturned(): void
     {
         $this->stubRequest->method('hasQueryParameter')
             ->with(ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)->willReturn(false);
@@ -154,7 +154,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertSame($this->stubProductsPerPage, $this->pageRequest->getProductsPerPage($this->stubRequest));
     }
 
-    public function testProductsPerPageSpecifiedInQueryStringIsReturned()
+    public function testProductsPerPageSpecifiedInQueryStringIsReturned(): void
     {
         $selectedNumberOfProductsPerPage = 2;
         $availableNumbersOfProductsPerPage = [1, 2];
@@ -163,7 +163,7 @@ class ProductListingPageRequestTest extends TestCase
             ->with(ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)->willReturn(true);
         $this->stubRequest->method('getQueryParameter')
             ->with(ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME)
-            ->willReturn($selectedNumberOfProductsPerPage);
+            ->willReturn((string) $selectedNumberOfProductsPerPage);
 
         $this->stubProductsPerPage->method('getNumbersOfProductsPerPage')
             ->willReturn($availableNumbersOfProductsPerPage);
@@ -174,7 +174,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertEquals($selectedNumberOfProductsPerPage, $result->getSelectedNumberOfProductsPerPage());
     }
 
-    public function testProductsPerPageSpecifiedInCookieIsReturned()
+    public function testProductsPerPageSpecifiedInCookieIsReturned(): void
     {
         $selectedNumberOfProductsPerPage = 2;
         $availableNumbersOfProductsPerPage = [1, 2];
@@ -194,7 +194,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertEquals($selectedNumberOfProductsPerPage, $result->getSelectedNumberOfProductsPerPage());
     }
 
-    public function testReturnsDefaultSortBy()
+    public function testReturnsDefaultSortBy(): void
     {
         $stubDefaultSortBy = $this->createMock(SortBy::class);
         $stubAvailableSortBy = [$stubDefaultSortBy, $this->createMock(SortBy::class)];
@@ -213,7 +213,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertSame($stubDefaultSortBy, $result);
     }
 
-    public function testReturnsSortByForAttributeAndDirectionSpecifiedInQueryString()
+    public function testReturnsSortByForAttributeAndDirectionSpecifiedInQueryString(): void
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -239,7 +239,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertEquals($expectedSortBy, $result);
     }
 
-    public function testReturnsSortByForAttributeAndDirectionSpecifiedInCookie()
+    public function testReturnsSortByForAttributeAndDirectionSpecifiedInCookie(): void
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -271,7 +271,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertEquals($expectedSortBy, $result);
     }
 
-    public function testProductsPerPageCookieIsSetIfCorrespondingQueryParameterIsPresent()
+    public function testProductsPerPageCookieIsSetIfCorrespondingQueryParameterIsPresent(): void
     {
         $selectedNumberOfProductsPerPage = 2;
 
@@ -279,7 +279,7 @@ class ProductListingPageRequestTest extends TestCase
             [ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, true],
         ]);
         $this->stubRequest->method('getQueryParameter')->willReturnMap([
-            [ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, $selectedNumberOfProductsPerPage],
+            [ProductListingPageRequest::PRODUCTS_PER_PAGE_QUERY_PARAMETER_NAME, (string) $selectedNumberOfProductsPerPage],
         ]);
 
         $this->pageRequest->processCookies($this->stubRequest);
@@ -291,7 +291,7 @@ class ProductListingPageRequestTest extends TestCase
         );
     }
 
-    public function testSortOrderAndDirectionCookiesAreNotSetIfSortOrderQueryParametersIsNotAmongConfiguredSortOrders()
+    public function testSortOrderAndDirectionCookiesAreNotSetIfSortOrderQueryParametersIsNotAmongConfiguredSortOrders(): void
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -323,7 +323,7 @@ class ProductListingPageRequestTest extends TestCase
         );
     }
 
-    public function testSetsSortOrderAndDirectionCookiesIfCorrespondingQueryParametersArePresent()
+    public function testSetsSortOrderAndDirectionCookiesIfCorrespondingQueryParametersArePresent(): void
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -358,7 +358,7 @@ class ProductListingPageRequestTest extends TestCase
         );
     }
 
-    public function testItMapsRequestParametersToFacetFieldNames()
+    public function testItMapsRequestParametersToFacetFieldNames(): void
     {
         /** @var FacetFiltersToIncludeInResult|MockObject $stubFacetFiltersToIncludeInResult */
         $stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
@@ -374,10 +374,10 @@ class ProductListingPageRequestTest extends TestCase
         $result = $this->pageRequest->getSelectedFilterValues($this->stubRequest, $stubFacetFiltersToIncludeInResult);
 
         $this->assertArrayHasKey('price_with_tax', $result);
-        $this->assertContains('10.00 to 19.99', $result['price_with_tax']);
+        $this->assertTrue(in_array('10.00 to 19.99', $result['price_with_tax']));
     }
 
-    public function testSortByWithMappedAttributeCodeIsReturned()
+    public function testSortByWithMappedAttributeCodeIsReturned(): void
     {
         $originalAttributeCodeString = 'foo';
         $mappedAttributeCodeString = 'bar';
@@ -387,7 +387,7 @@ class ProductListingPageRequestTest extends TestCase
 
         $stubSortDirection = $this->createMock(SortDirection::class);
 
-        /** @var SortBy|\PHPUnit_Framework_MockObject_MockObject $stubSortBy */
+        /** @var SortBy|MockObject $stubSortBy */
         $stubSortBy = $this->createMock(SortBy::class);
         $stubSortBy->method('getAttributeCode')->willReturn($stubAttributeCode);
         $stubSortBy->method('getSelectedDirection')->willReturn($stubSortDirection);
@@ -401,7 +401,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertEquals($mappedAttributeCodeString, $result->getAttributeCode());
     }
 
-    public function testReturnsDefaultSortByIfQueryStringValuesAreNotAmongAvailableSortBy()
+    public function testReturnsDefaultSortByIfQueryStringValuesAreNotAmongAvailableSortBy(): void
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -427,7 +427,7 @@ class ProductListingPageRequestTest extends TestCase
         $this->assertSame($stubDefaultSortBy, $result);
     }
 
-    public function testReturnsDefaultSortByIfCookieValuesAreNotAmongAvailableSortBy()
+    public function testReturnsDefaultSortByIfCookieValuesAreNotAmongAvailableSortBy(): void
     {
         $sortAttributeName = 'foo';
         $sortDirection = SortDirection::ASC;
@@ -464,7 +464,7 @@ class ProductListingPageRequestTest extends TestCase
  * @param mixed $value
  * @param int $expire
  */
-function setcookie(string $name, $value, int $expire)
+function setcookie(string $name, $value, int $expire): void
 {
     ProductListingPageRequestTest::trackSetCookieCalls($name, $value, $expire);
 }

@@ -14,7 +14,7 @@ use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\CompositeSearchCrite
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngineConfiguration;
-use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
@@ -209,7 +209,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         return SortDirection::ASC;
     }
 
-    private function validateSortBy(SortBy $sortBy)
+    private function validateSortBy(SortBy $sortBy): void
     {
         if (! $this->searchEngineConfiguration->isSortingByAttributeAllowed($sortBy->getAttributeCode())) {
             throw new UnsupportedSortOrderException(
@@ -218,7 +218,7 @@ class ProductSearchApiV1GetRequestHandler implements HttpRequestHandler
         }
     }
 
-    private function validateRowsPerPage(int $rowsPerPage)
+    private function validateRowsPerPage(int $rowsPerPage): void
     {
         if ($this->searchEngineConfiguration->isExceedingMaxProductsPerPage($rowsPerPage)) {
             throw new InvalidNumberOfProductsPerPageException(sprintf(

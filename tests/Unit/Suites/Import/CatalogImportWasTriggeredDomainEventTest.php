@@ -29,28 +29,28 @@ class CatalogImportWasTriggeredDomainEventTest extends TestCase
     
     private $testImportFilePath = __FILE__;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $dataVersion = DataVersion::fromVersionString($this->testDataVersionString);
         $this->domainEvent = new CatalogImportWasTriggeredDomainEvent($dataVersion, $this->testImportFilePath);
     }
     
-    public function testImplementsDomainEvent()
+    public function testImplementsDomainEvent(): void
     {
         $this->assertInstanceOf(DomainEvent::class, $this->domainEvent);
     }
 
-    public function testReturnsTheDataVersion()
+    public function testReturnsTheDataVersion(): void
     {
         $this->assertSame($this->testDataVersionString, (string) $this->domainEvent->getDataVersion());
     }
 
-    public function testReturnsTheCatalogImportFilePath()
+    public function testReturnsTheCatalogImportFilePath(): void
     {
         $this->assertSame($this->testImportFilePath, $this->domainEvent->getCatalogImportFilePath());
     }
 
-    public function testSerializesItselfAsAMessage()
+    public function testSerializesItselfAsAMessage(): void
     {
         $message = $this->domainEvent->toMessage();
         $this->assertInstanceOf(Message::class, $message);
@@ -59,14 +59,14 @@ class CatalogImportWasTriggeredDomainEventTest extends TestCase
         $this->assertSame($this->testImportFilePath, $message->getPayload()['import_file_path']);
     }
 
-    public function testThrowsExceptionIfMessageCodeDoesNotMatch()
+    public function testThrowsExceptionIfMessageCodeDoesNotMatch(): void
     {
         $this->expectException(NoCatalogWasImportedDomainEventMessageException::class);
         $this->expectExceptionMessage('Invalid domain event "foo", expected "' . CatalogImportWasTriggeredDomainEvent::CODE);
         CatalogImportWasTriggeredDomainEvent::fromMessage(Message::withCurrentTime('foo', [], []));
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $rehydratedDomainEvent = CatalogImportWasTriggeredDomainEvent::fromMessage($this->domainEvent->toMessage());
         $this->assertInstanceOf(CatalogImportWasTriggeredDomainEvent::class, $rehydratedDomainEvent);

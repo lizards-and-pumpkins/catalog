@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\TargetDataVersionMissingInRequestException;
 use LizardsAndPumpkins\DataPool\DataVersion\RestApi\Exception\UnableToDeserializeRequestBodyJsonException;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
-use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\GenericHttpResponse;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
@@ -53,6 +53,10 @@ class CurrentVersionApiV1PutRequestHandler implements HttpRequestHandler
         return $versionString;
     }
 
+    /**
+     * @param HttpRequest $request
+     * @return mixed
+     */
     private function getRequestData(HttpRequest $request)
     {
         $data = json_decode($request->getRawBody(), true);

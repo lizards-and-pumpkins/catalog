@@ -45,18 +45,18 @@ class CurrentVersionApiTest extends AbstractIntegrationTest
         return $this->processRequest($request)->getBody();
     }
 
-    public function testReturnsDefaultCurrentVersionAndEmptyPreviousVersion()
+    public function testReturnsDefaultCurrentVersionAndEmptyPreviousVersion(): void
     {
         $request = $this->createReadCurrentVersionRequest();
 
         $responseData = json_decode($this->getResponseBody($request), true);
         
-        $this->assertInternalType('array', $responseData);
+        $this->assertIsArray($responseData);
         $this->assertNotEmpty($responseData['data']['current_version']);
         $this->assertSame('', $responseData['data']['previous_version']);
     }
 
-    public function testSetAndReadCurrentDataVersion()
+    public function testSetAndReadCurrentDataVersion(): void
     {
         $readRequest = $this->createReadCurrentVersionRequest();
         $firstResponseData = json_decode($this->getResponseBody($readRequest), true);

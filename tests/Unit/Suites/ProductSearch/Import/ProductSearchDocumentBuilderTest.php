@@ -35,28 +35,23 @@ class ProductSearchDocumentBuilderTest extends TestCase
     private $dummyPriceInclTax = '12199';
 
     /**
-     * @var AttributeValueCollectorLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeValueCollectorLocator
      */
     private $stubValueCollectorLocator;
 
     /**
-     * @var TaxableCountries|\PHPUnit_Framework_MockObject_MockObject
+     * @var TaxableCountries
      */
     private $stubTaxableCountries;
 
     /**
-     * @var TaxServiceLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var TaxServiceLocator
      */
     private $stubTaxServiceLocator;
 
     /**
-     * @var TaxService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubTaxService;
-
-    /**
      * @param array[] $attributesMap
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product
      */
     private function createStubProduct(array $attributesMap) : Product
     {
@@ -91,7 +86,7 @@ class ProductSearchDocumentBuilderTest extends TestCase
         array $attributeValues
     ) {
         $searchDocumentField = SearchDocumentField::fromKeyAndValues($attributeCode, $attributeValues);
-        $this->assertContains($searchDocumentField, $document->getFieldsCollection()->getFields(), '', false, false);
+        $this->assertTrue(in_array($searchDocumentField, $document->getFieldsCollection()->getFields()));
     }
 
     private function createInstance(string ...$searchableAttributes) : ProductSearchDocumentBuilder
@@ -104,31 +99,31 @@ class ProductSearchDocumentBuilderTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubTaxableCountries = $this->createMock(TaxableCountries::class);
         $this->stubTaxableCountries->method('getCountries')->willReturn($this->dummyTaxableCountries);
-        $this->stubTaxService = $this->createMock(TaxService::class);
-        $this->stubTaxService->method('applyTo')->willReturn(Price::fromFractions($this->dummyPriceInclTax));
+        $stubTaxService = $this->createMock(TaxService::class);
+        $stubTaxService->method('applyTo')->willReturn(Price::fromFractions($this->dummyPriceInclTax));
         $this->stubTaxServiceLocator = $this->createMock(TaxServiceLocator::class);
-        $this->stubTaxServiceLocator->method('get')->willReturn($this->stubTaxService);
+        $this->stubTaxServiceLocator->method('get')->willReturn($stubTaxService);
         $this->stubValueCollectorLocator = $this->createMock(AttributeValueCollectorLocator::class);
         $this->stubValueCollectorLocator->method('forProduct')
             ->willReturn(new DefaultAttributeValueCollector());
     }
 
-    public function testSearchDocumentBuilderInterfaceIsImplemented()
+    public function testSearchDocumentBuilderInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(SearchDocumentBuilder::class, $this->createInstance());
     }
 
-    public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct()
+    public function testExceptionIsThrownIfProjectionSourceDataIsNotProduct(): void
     {
         $this->expectException(InvalidProjectionSourceDataTypeException::class);
         $this->createInstance()->aggregate('invalid-projection-source-data');
     }
 
-    public function testSearchDocumentContainingIndexedAttributeIsReturned()
+    public function testSearchDocumentContainingIndexedAttributeIsReturned(): void
     {
         $searchableAttribute = 'foo';
         $attributeValues = ['bar'];
@@ -143,7 +138,7 @@ class ProductSearchDocumentBuilderTest extends TestCase
         $this->assertDocumentContainsField($result, $searchableAttribute, $attributeValues);
     }
 
-    public function testProductPriceIsIndexedIfProductHasNoSpecialPrice()
+    public function testProductPriceIsIndexedIfProductHasNoSpecialPrice(): void
     {
         $priceAttributeCode = PriceSnippetRenderer::PRICE;
         $priceValues = ['1000'];
@@ -158,7 +153,7 @@ class ProductSearchDocumentBuilderTest extends TestCase
         $this->assertDocumentContainsField($result, $priceAttributeCode, $priceValues);
     }
 
-    public function testProductSpecialPriceIsIndexedAsPriceIfProductHasSpecialPrice()
+    public function testProductSpecialPriceIsIndexedAsPriceIfProductHasSpecialPrice(): void
     {
         $priceAttributeCode = PriceSnippetRenderer::PRICE;
         $priceValues = ['1000'];
@@ -176,7 +171,7 @@ class ProductSearchDocumentBuilderTest extends TestCase
         $this->assertDocumentContainsField($result, $priceAttributeCode, $specialPriceValues);
     }
 
-    public function testItIncludesTheProductIdInTheSearchDocumentFields()
+    public function testItIncludesTheProductIdInTheSearchDocumentFields(): void
     {
         $searchableAttribute = 'foo';
         $attributeValues = ['bar'];
@@ -191,7 +186,7 @@ class ProductSearchDocumentBuilderTest extends TestCase
         $this->assertDocumentContainsField($result, 'product_id', [(string) $stubProduct->getId()]);
     }
 
-    public function testItAddsThePriceIncludingTaxForEachTaxableCountry()
+    public function testItAddsThePriceIncludingTaxForEachTaxableCountry(): void
     {
         $priceField = 'price';
         $priceExcludingTax = ['100'];

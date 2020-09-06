@@ -71,7 +71,7 @@ class ProductListingPageContentBuilder
         return $this->pageBuilder->buildPage($metaInfo, $context, $keyGeneratorParams);
     }
 
-    private function addFilterNavigationSnippetToPageBuilder(ProductSearchResult $productSearchResult)
+    private function addFilterNavigationSnippetToPageBuilder(ProductSearchResult $productSearchResult): void
     {
         $facetFields = $productSearchResult->getFacetFieldCollection()->jsonSerialize();
         $externalFacetFields = count($facetFields) > 0 ?
@@ -94,7 +94,7 @@ class ProductListingPageContentBuilder
         }, []);
     }
 
-    private function addProductsToPageBuilder(ProductSearchResult $productSearchResult)
+    private function addProductsToPageBuilder(ProductSearchResult $productSearchResult): void
     {
         $this->addDynamicSnippetToPageBuilder('product_grid', json_encode($productSearchResult->getData()));
     }
@@ -110,13 +110,13 @@ class ProductListingPageContentBuilder
         $this->addDynamicSnippetToPageBuilder('products_per_page', json_encode($productsPerPage));
     }
 
-    private function addSortOrderSnippetsToPageBuilder(SortBy $selectedSortBy, SortBy ...$availableSortBy)
+    private function addSortOrderSnippetsToPageBuilder(SortBy $selectedSortBy, SortBy ...$availableSortBy): void
     {
         $this->addDynamicSnippetToPageBuilder('available_sort_orders', json_encode($availableSortBy));
         $this->addDynamicSnippetToPageBuilder('selected_sort_order', json_encode($selectedSortBy));
     }
 
-    private function addProductListingAttributesSnippetToPageBuilder(PageMetaInfoSnippetContent $metaSnippetContent)
+    private function addProductListingAttributesSnippetToPageBuilder(PageMetaInfoSnippetContent $metaSnippetContent): void
     {
         $pageSpecificData = $metaSnippetContent->getPageSpecificData();
         $productListingAttributes = json_encode($pageSpecificData['product_listing_attributes'] ?? []);
@@ -128,7 +128,7 @@ class ProductListingPageContentBuilder
      * @param string $snippetCode
      * @param string|int $snippetContents
      */
-    private function addDynamicSnippetToPageBuilder(string $snippetCode, $snippetContents)
+    private function addDynamicSnippetToPageBuilder(string $snippetCode, $snippetContents): void
     {
         $snippetCodeToKeyMap = [$snippetCode => $snippetCode];
         $snippetKeyToContentMap = [$snippetCode => $snippetContents];
@@ -136,7 +136,7 @@ class ProductListingPageContentBuilder
         $this->pageBuilder->addSnippetsToPage($snippetCodeToKeyMap, $snippetKeyToContentMap);
     }
 
-    private function addTranslationsToPageBuilder(Context $context)
+    private function addTranslationsToPageBuilder(Context $context): void
     {
         $translator = $this->translatorRegistry->getTranslator(
             ProductListingTemplateSnippetRenderer::CODE,

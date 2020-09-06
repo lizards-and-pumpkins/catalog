@@ -11,7 +11,7 @@ use LizardsAndPumpkins\Http\HttpUrl;
 
 class ProductSearchApiTest extends AbstractIntegrationTest
 {
-    public function testReturnsEmptyJsonIfNoProductsMatchTheRequest()
+    public function testReturnsEmptyJsonIfNoProductsMatchTheRequest(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=morrissey');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
@@ -28,7 +28,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $this->assertEquals(json_encode(['total' => 0, 'data' => [], 'facets' => []]), $response->getBody());
     }
 
-    public function testReturnsProductsMatchingRequestSortedDescendingByStockQuantity()
+    public function testReturnsProductsMatchingRequestSortedDescendingByStockQuantity(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=adi');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
@@ -53,7 +53,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $this->assertEquals($responseJson['data'][1]['product_id'], $expectedProductIds['Adilette']);
     }
 
-    public function testReturnsProductWithSelectedFiltersApplied()
+    public function testReturnsProductWithSelectedFiltersApplied(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?filters=brand:Adidas');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
@@ -78,7 +78,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $this->assertEquals($responseJson['data'][1]['product_id'], $expectedProductIds['Adilette']);
     }
 
-    public function testReturnsFacets()
+    public function testReturnsFacets(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?facets=brand,gender');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
@@ -108,7 +108,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $this->assertEquals($expectedFacets, $responseJson['facets']);
     }
 
-    public function testAllowsWhitespacesInSearchTerm()
+    public function testAllowsWhitespacesInSearchTerm(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?q=Armer%20Conduit');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);
@@ -131,7 +131,7 @@ class ProductSearchApiTest extends AbstractIntegrationTest
         $this->assertEquals('118235-251', $responseJson['data'][0]['product_id']);
     }
 
-    public function testAllowsWhitespacesInCriteria()
+    public function testAllowsWhitespacesInCriteria(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/product/?criteria=brand:Pro%20Touch');
         $httpHeaders = HttpHeaders::fromArray(['Accept' => 'application/vnd.lizards-and-pumpkins.product.v1+json']);

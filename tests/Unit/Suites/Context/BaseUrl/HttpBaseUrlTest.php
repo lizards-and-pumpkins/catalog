@@ -12,34 +12,34 @@ use PHPUnit\Framework\TestCase;
  */
 class HttpBaseUrlTest extends TestCase
 {
-    public function testThrowsAnExceptionIfTheSourceIsNotAString()
+    public function testThrowsAnExceptionIfTheSourceIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         new HttpBaseUrl(123);
     }
 
-    public function testThrowsAnExceptionIfTheSourceStringIsEmpty()
+    public function testThrowsAnExceptionIfTheSourceStringIsEmpty(): void
     {
         $this->expectException(InvalidBaseUrlSourceDataException::class);
         $this->expectExceptionMessage('Invalid empty source data for the base URL specified');
         new HttpBaseUrl(' ');
     }
 
-    public function testThrowsAnExceptionIfTheInputStringDoesNotContainTheProtocol()
+    public function testThrowsAnExceptionIfTheInputStringDoesNotContainTheProtocol(): void
     {
         $this->expectException(InvalidBaseUrlSourceDataException::class);
         $this->expectExceptionMessage('The base URL input string contains an invalid protocol');
         new HttpBaseUrl('example.com/');
     }
 
-    public function testThrowsAnExceptionIfTheInputStringDoesNotEndWithASlash()
+    public function testThrowsAnExceptionIfTheInputStringDoesNotEndWithASlash(): void
     {
         $this->expectException(InvalidBaseUrlSourceDataException::class);
         $this->expectExceptionMessage('The base URL input string does not end with the required trailing slash');
         new HttpBaseUrl('http://example.com');
     }
 
-    public function testThrowsAnExceptionIfTheInputStringDoesNotContainAValidDomain()
+    public function testThrowsAnExceptionIfTheInputStringDoesNotContainAValidDomain(): void
     {
         $baseUrlWithInvalidDomain = 'http://example_domain.com/';
         $this->expectException(InvalidBaseUrlSourceDataException::class);
@@ -47,18 +47,18 @@ class HttpBaseUrlTest extends TestCase
         new HttpBaseUrl($baseUrlWithInvalidDomain);
     }
 
-    public function testCanBeCastToAString()
+    public function testCanBeCastToAString(): void
     {
         $baseUrlString = 'http://example.com/';
         $this->assertSame($baseUrlString, (string) new HttpBaseUrl($baseUrlString));
     }
 
-    public function testCanContainPort()
+    public function testCanContainPort(): void
     {
         $this->assertInstanceOf(HttpBaseUrl::class, new HttpBaseUrl('http://example.com:80/'));
     }
 
-    public function testImplementsTheBaseUrlInterface()
+    public function testImplementsTheBaseUrlInterface(): void
     {
         $this->assertInstanceOf(BaseUrl::class, new HttpBaseUrl('http://example.com/foo/'));
     }

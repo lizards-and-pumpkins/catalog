@@ -11,14 +11,14 @@ use PHPUnit\Framework\TestCase;
  */
 class LocaleTest extends TestCase
 {
-    public function testExceptionIsThrownDuringAttemptToCreateLocaleFromNonString()
+    public function testExceptionIsThrownDuringAttemptToCreateLocaleFromNonString(): void
     {
         $this->expectException(\TypeError::class);
         $invalidLocaleCode = new \stdClass();
         new Locale($invalidLocaleCode);
     }
 
-    public function testLocaleCanBeConvertedToString()
+    public function testLocaleCanBeConvertedToString(): void
     {
         $localeCode = 'foo_BAR';
         $locale = new Locale($localeCode);

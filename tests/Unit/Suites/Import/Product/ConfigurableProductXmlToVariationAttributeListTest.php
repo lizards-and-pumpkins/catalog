@@ -24,7 +24,7 @@ class ConfigurableProductXmlToVariationAttributeListTest extends TestCase
     </variations>
 </product>';
 
-    public function testItReturnsAVariationAttributeListFromGivenXPathParser()
+    public function testItReturnsAVariationAttributeListFromGivenXPathParser(): void
     {
         $converter = new ConfigurableProductXmlToVariationAttributeList();
         $parser = new XPathParser($this->testXml);

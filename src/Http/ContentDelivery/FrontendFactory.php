@@ -34,8 +34,8 @@ use LizardsAndPumpkins\DataPool\KeyGenerator\CompositeSnippetKeyGeneratorLocator
 use LizardsAndPumpkins\DataPool\KeyGenerator\RegistrySnippetKeyGeneratorLocatorStrategy;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 
 class FrontendFactory implements Factory
 {
@@ -265,7 +265,7 @@ class FrontendFactory implements Factory
         return $pageBuilder;
     }
 
-    private function registerSnippetTransformations(PageBuilder $pageBuilder)
+    private function registerSnippetTransformations(PageBuilder $pageBuilder): void
     {
         $pageBuilder->registerSnippetTransformation(
             ProductJsonSnippetRenderer::CODE,

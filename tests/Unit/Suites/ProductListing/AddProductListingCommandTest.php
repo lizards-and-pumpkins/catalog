@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class AddProductListingCommandTest extends TestCase
 {
     /**
-     * @var ProductListing|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListing|MockObject
      */
     private $stubProductListing;
 
@@ -30,23 +30,23 @@ class AddProductListingCommandTest extends TestCase
      */
     private $command;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubProductListing = $this->createMock(ProductListing::class);
         $this->command = new AddProductListingCommand($this->stubProductListing);
     }
 
-    public function testCommandInterFaceIsImplemented()
+    public function testCommandInterFaceIsImplemented(): void
     {
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    public function testProductListingIsReturned()
+    public function testProductListingIsReturned(): void
     {
         $this->assertSame($this->stubProductListing, $this->command->getProductListing());
     }
 
-    public function testReturnsMessageWithAddProductListingName()
+    public function testReturnsMessageWithAddProductListingName(): void
     {
         $this->stubProductListing->method('serialize')->willReturn(serialize($this->stubProductListing));
         $message = $this->command->toMessage();
@@ -54,7 +54,7 @@ class AddProductListingCommandTest extends TestCase
         $this->assertSame(AddProductListingCommand::CODE, $message->getName());
     }
 
-    public function testReturnsMessageWithPayload()
+    public function testReturnsMessageWithPayload(): void
     {
         $serializedProductListing = serialize($this->stubProductListing);
         $this->stubProductListing->method('serialize')->willReturn($serializedProductListing);
@@ -62,7 +62,7 @@ class AddProductListingCommandTest extends TestCase
         $this->assertSame(['listing' => $serializedProductListing], $message->getPayload());
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $this->stubProductListing->method('serialize')->willReturn(serialize($this->stubProductListing));
         $message = $this->command->toMessage();
@@ -70,7 +70,7 @@ class AddProductListingCommandTest extends TestCase
         $this->assertInstanceOf(AddProductListingCommand::class, $rehydratedCommand);
     }
 
-    public function testThrowsExceptionIfMessageNameDoesNotMatch()
+    public function testThrowsExceptionIfMessageNameDoesNotMatch(): void
     {
         $this->expectException(NoAddProductListingCommandMessageException::class);
         $expectedMessage = 'Unable to rehydrate from "foo bar" queue message, expected "add_product_listing"';

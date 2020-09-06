@@ -208,7 +208,7 @@ class PageBuilderSnippets implements PageSnippets
         return preg_replace('/' . $pattern . '/', '', $content);
     }
 
-    public function updateSnippetByKey(string $snippetKey, string $content)
+    public function updateSnippetByKey(string $snippetKey, string $content): void
     {
         if (! isset($this->keyToContentMap[$snippetKey])) {
             throw $this->createNonExistingSnippetException('key', $snippetKey);
@@ -216,7 +216,7 @@ class PageBuilderSnippets implements PageSnippets
         $this->keyToContentMap[$snippetKey] = $content;
     }
 
-    public function updateSnippetByCode(string $snippetCode, string $content)
+    public function updateSnippetByCode(string $snippetCode, string $content): void
     {
         if (! isset($this->codeToKeyMap[$snippetCode])) {
             throw $this->createNonExistingSnippetException('code', $snippetCode);
@@ -237,7 +237,7 @@ class PageBuilderSnippets implements PageSnippets
         return new NonExistingSnippetException($message);
     }
 
-    private function guardAgainstMultipleInvocations()
+    private function guardAgainstMultipleInvocations(): void
     {
         if ($this->pageWasBuilt) {
             $message = 'The method buildPageContent() may only be called once an an instance';

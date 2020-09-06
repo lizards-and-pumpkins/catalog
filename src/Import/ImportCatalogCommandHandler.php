@@ -18,7 +18,7 @@ class ImportCatalogCommandHandler implements CommandHandler
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $importCatalogCommand = ImportCatalogCommand::fromMessage($message);
         $domainEvent = new CatalogImportWasTriggeredDomainEvent(

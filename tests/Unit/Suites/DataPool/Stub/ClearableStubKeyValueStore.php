@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class ClearableStubKeyValueStore implements KeyValueStore, Clearable
 {
-    public function clear()
+    public function clear(): void
     {
         // Intentionally left empty
     }
@@ -19,7 +19,7 @@ class ClearableStubKeyValueStore implements KeyValueStore, Clearable
      * @param mixed $value
      * @return void
      */
-    public function set(string $key, $value)
+    public function set(string $key, $value): void
     {
         // Intentionally left empty
     }
@@ -28,7 +28,7 @@ class ClearableStubKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @return void
      */
-    public function get(string $key)
+    public function get(string $key): void
     {
         // Intentionally left empty
     }
@@ -51,7 +51,7 @@ class ClearableStubKeyValueStore implements KeyValueStore, Clearable
      * @param mixed[] $items
      * @return void
      */
-    public function multiSet(array $items)
+    public function multiSet(array $items): void
     {
         // Intentionally left empty
     }

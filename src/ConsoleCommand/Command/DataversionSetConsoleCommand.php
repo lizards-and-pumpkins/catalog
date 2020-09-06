@@ -9,7 +9,7 @@ use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class DataversionSetConsoleCommand extends BaseCliCommand
 {
@@ -44,41 +44,41 @@ class DataversionSetConsoleCommand extends BaseCliCommand
         ]);
     }
 
-    final protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate): void
     {
         $this->addSetCurrentDataVersionCommand();
         $this->output(sprintf('Queued set-data-version command with version "%s"', $this->getArg('dataVersion')));
         $this->processQueuesIfRequested();
     }
 
-    private function addSetCurrentDataVersionCommand()
+    private function addSetCurrentDataVersionCommand(): void
     {
         $dataVersion = DataVersion::fromVersionString($this->getArg('dataVersion'));
         $commandQueue = $this->factory->getCommandQueue();
         $commandQueue->add(new SetCurrentDataVersionCommand($dataVersion));
     }
 
-    private function processQueuesIfRequested()
+    private function processQueuesIfRequested(): void
     {
         if ($this->getArg('processQueues')) {
             $this->processQueues();
         }
     }
 
-    private function processQueues()
+    private function processQueues(): void
     {
         $this->processCommandQueue();
         $this->processDomainEventQueue();
     }
 
-    private function processCommandQueue()
+    private function processCommandQueue(): void
     {
         $this->output('Processing command queue...');
         $commandConsumer = $this->factory->createCommandConsumer();
         $commandConsumer->processAll();
     }
 
-    private function processDomainEventQueue()
+    private function processDomainEventQueue(): void
     {
         $this->output('Processing domain event queue...');
         $domainEventConsumer = $this->factory->createDomainEventConsumer();

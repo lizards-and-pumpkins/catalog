@@ -6,5 +6,5 @@ namespace LizardsAndPumpkins\Import\FileStorage;
 
 interface FileStorageWriter
 {
-    public function putFileContents(string $filePath, string $contents);
+    public function putFileContents(string $filePath, string $contents): void;
 }

@@ -15,7 +15,7 @@ class ProductRelationsLocator
      */
     private $factoryMethods = [];
 
-    public function register(ProductRelationTypeCode $relationTypeCode, callable $factoryMethod)
+    public function register(ProductRelationTypeCode $relationTypeCode, callable $factoryMethod): void
     {
         $this->factoryMethods[(string) $relationTypeCode] = $factoryMethod;
     }
@@ -39,7 +39,7 @@ class ProductRelationsLocator
     /**
      * @param ProductRelations $productRelationType
      */
-    private function validateProductRelationType($productRelationType)
+    private function validateProductRelationType($productRelationType): void
     {
         if (!is_object($productRelationType) || !$productRelationType instanceof ProductRelations) {
             $message = sprintf(

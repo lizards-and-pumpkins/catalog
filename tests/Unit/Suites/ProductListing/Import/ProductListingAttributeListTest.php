@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductListingAttributeListTest extends TestCase
 {
-    public function testExceptionIsThrownIfAttributeCodeIsNotAString()
+    public function testExceptionIsThrownIfAttributeCodeIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -23,7 +23,7 @@ class ProductListingAttributeListTest extends TestCase
         ProductListingAttributeList::fromArray([$attributeCode => $attributeValue]);
     }
 
-    public function testExceptionIsThrownIfAttributeCodeIsAnEmptyString()
+    public function testExceptionIsThrownIfAttributeCodeIsAnEmptyString(): void
     {
         $this->expectException(InvalidProductListingAttributeCodeException::class);
         $this->expectExceptionMessage('Product listing attribute code can not be empty string.');
@@ -34,7 +34,7 @@ class ProductListingAttributeListTest extends TestCase
         ProductListingAttributeList::fromArray([$attributeCode => $attributeValue]);
     }
 
-    public function testExceptionIsThrownIfAttributeValueIsNotScalar()
+    public function testExceptionIsThrownIfAttributeValueIsNotScalar(): void
     {
         $this->expectException(InvalidProductListingAttributeValueException::class);
 
@@ -44,7 +44,7 @@ class ProductListingAttributeListTest extends TestCase
         ProductListingAttributeList::fromArray([$attributeCode => $nonScalarAttributeValue]);
     }
 
-    public function testReturnsAttributesArray()
+    public function testReturnsAttributesArray(): void
     {
         $attributesArray = [
             'foo' => 'bar',

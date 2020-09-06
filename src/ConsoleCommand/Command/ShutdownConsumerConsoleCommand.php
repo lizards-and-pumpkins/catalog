@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 use LizardsAndPumpkins\Messaging\Consumer\ShutdownWorkerDirective;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 
@@ -54,7 +54,7 @@ class ShutdownConsumerConsoleCommand extends BaseCliCommand
         );
     }
 
-    final protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate): void
     {
         $queue = $this->selectQueue();
         $queue->add($this->createShutdownDirective());
@@ -91,7 +91,7 @@ class ShutdownConsumerConsoleCommand extends BaseCliCommand
         return new ShutdownWorkerDirective((string) $this->pid());
     }
 
-    private function displayMessage()
+    private function displayMessage(): void
     {
         if (!$this->getArg('quiet')) {
             $format = 'Shutdown directive for %s consumer with pid "%s" added';

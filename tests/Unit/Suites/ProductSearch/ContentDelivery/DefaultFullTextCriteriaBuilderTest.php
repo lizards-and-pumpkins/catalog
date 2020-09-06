@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DefaultFullTextCriteriaBuilderTest extends TestCase
 {
-    public function testImplementsFullTextCriteriaBuilderInterface()
+    public function testImplementsFullTextCriteriaBuilderInterface(): void
     {
         $fullTextSearchTermCombinationOperator = CompositeSearchCriterion::OR_CONDITION;
         $builder = new DefaultFullTextCriteriaBuilder($fullTextSearchTermCombinationOperator);
@@ -24,7 +24,7 @@ class DefaultFullTextCriteriaBuilderTest extends TestCase
         $this->assertInstanceOf(FullTextCriteriaBuilder::class, $builder);
     }
 
-    public function testCreatesASimpleCriteriaIfQueryStringContainsOfASingleWOrd()
+    public function testCreatesASimpleCriteriaIfQueryStringContainsOfASingleWOrd(): void
     {
         $fullTextSearchTermCombinationOperator = CompositeSearchCriterion::OR_CONDITION;
         $builder = new DefaultFullTextCriteriaBuilder($fullTextSearchTermCombinationOperator);
@@ -34,7 +34,7 @@ class DefaultFullTextCriteriaBuilderTest extends TestCase
         $this->assertEquals($expectedCriteria, $builder->createFromString('foo'));
     }
 
-    public function testThrowsAnErrorDuringAttemptToCreateACriteriaFromNonString()
+    public function testThrowsAnErrorDuringAttemptToCreateACriteriaFromNonString(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -47,7 +47,7 @@ class DefaultFullTextCriteriaBuilderTest extends TestCase
     /**
      * @dataProvider emptyStringProvider
      */
-    public function testThrowsAnExceptionDuringAttemptToCreateACriteriaFromEmptyString(string $emptyString)
+    public function testThrowsAnExceptionDuringAttemptToCreateACriteriaFromEmptyString(string $emptyString): void
     {
         $this->expectException(EmptyQueryStringException::class);
 
@@ -60,7 +60,7 @@ class DefaultFullTextCriteriaBuilderTest extends TestCase
     /**
      * @dataProvider fullTextSearchTermCombinationOperatorProvider
      */
-    public function testCreatesACombinedCriteriaIfQueryStringContainsOfMultipleWords(string $fullTextSearchOperator)
+    public function testCreatesACombinedCriteriaIfQueryStringContainsOfMultipleWords(string $fullTextSearchOperator): void
     {
         $builder = new DefaultFullTextCriteriaBuilder($fullTextSearchOperator);
 

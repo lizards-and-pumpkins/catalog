@@ -8,7 +8,7 @@ use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class DataversionGetConsoleCommand extends BaseCliCommand
 {
@@ -23,7 +23,7 @@ class DataversionGetConsoleCommand extends BaseCliCommand
         $this->setCLImate($CLImate);
     }
 
-    protected function execute(CLImate $climate)
+    protected function execute(CLImate $climate): void
     {
         $this->getCLImate()->output(sprintf('Current data version:  %s', $this->getCurrentDataVersion()));
         $this->getCLImate()->output(sprintf('Previous data version: %s', $this->getPreviousDataVersion()));

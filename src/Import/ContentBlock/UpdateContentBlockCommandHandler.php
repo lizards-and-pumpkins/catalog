@@ -20,7 +20,7 @@ class UpdateContentBlockCommandHandler implements CommandHandler
         $this->domainEventQueue = $domainEventQueue;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $command = UpdateContentBlockCommand::fromMessage($message);
         $contentBlockSource = $command->getContentBlockSource();

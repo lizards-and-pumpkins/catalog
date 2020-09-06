@@ -55,7 +55,7 @@ class ProductProjector implements Projector
     /**
      * @param Product $product
      */
-    public function project($product)
+    public function project($product): void
     {
         if (! $product instanceof Product) {
             throw new InvalidProjectionSourceDataTypeException(
@@ -70,13 +70,13 @@ class ProductProjector implements Projector
         $this->storeProductUrlKeys($product);
     }
 
-    private function aggregateSearchDocument(Product $product)
+    private function aggregateSearchDocument(Product $product): void
     {
         $searchDocument = $this->searchDocumentBuilder->aggregate($product);
         $this->dataPoolWriter->writeSearchDocument($searchDocument);
     }
 
-    private function storeProductUrlKeys(Product $product)
+    private function storeProductUrlKeys(Product $product): void
     {
         $urlKeysForContextsCollection = $this->urlKeyCollector->collectProductUrlKeys($product);
         $this->dataPoolWriter->writeUrlKeyCollection($urlKeysForContextsCollection);

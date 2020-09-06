@@ -10,12 +10,12 @@ use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1Get
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\RestApi\RestApiFactory;
+use LizardsAndPumpkins\RestApi\CatalogRestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -35,11 +35,11 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator
  * @uses   \LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
- * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
+ * @uses   \LizardsAndPumpkins\RestApi\CatalogRestApiFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
@@ -56,14 +56,14 @@ class ProductRelationsFactoryTest extends TestCase
      */
     private $factory;
 
-    public function setUp()
+    final protected function setUp(): void
     {
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
+        /** @var HttpRequest|MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
 
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new RestApiFactory());
+        $masterFactory->register(new CatalogRestApiFactory());
         $masterFactory->register(new FrontendFactory($stubRequest));
         $masterFactory->register(new UnitTestFactory($this));
 
@@ -72,35 +72,35 @@ class ProductRelationsFactoryTest extends TestCase
         $masterFactory->register($this->factory);
     }
 
-    public function testFactoryInterfaceIsImplemented()
+    public function testFactoryInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testFactoryWithCallbackInterfaceIsImplemented()
+    public function testFactoryWithCallbackInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FactoryWithCallback::class, $this->factory);
     }
 
-    public function testItCreatesProductRelationsApiV1GetRequestHandler()
+    public function testItCreatesProductRelationsApiV1GetRequestHandler(): void
     {
         $result = $this->factory->createProductRelationsApiV1GetRequestHandler();
         $this->assertInstanceOf(ProductRelationsApiV1GetRequestHandler::class, $result);
     }
 
-    public function testItReturnsAProductRelationsService()
+    public function testItReturnsAProductRelationsService(): void
     {
         $result = $this->factory->createProductRelationsService();
         $this->assertInstanceOf(ProductRelationsService::class, $result);
     }
 
-    public function testItReturnsAProductRelationsLocator()
+    public function testItReturnsAProductRelationsLocator(): void
     {
         $result = $this->factory->createProductRelationsLocator();
         $this->assertInstanceOf(ProductRelationsLocator::class, $result);
     }
 
-    public function testProductRelationsApiEndpointIsRegistered()
+    public function testProductRelationsApiEndpointIsRegistered(): void
     {
         $endpointKey = 'get_products';
         $apiVersion = 1;
@@ -109,7 +109,7 @@ class ProductRelationsFactoryTest extends TestCase
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
             ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
-        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
+        /** @var MasterFactory|MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
             array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator'])
         )->getMock();

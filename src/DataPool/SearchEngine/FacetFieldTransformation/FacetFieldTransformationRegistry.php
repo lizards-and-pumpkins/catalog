@@ -14,7 +14,7 @@ class FacetFieldTransformationRegistry
      */
     private $transformations = [];
 
-    public function register(string $code, FacetFieldTransformation $transformation)
+    public function register(string $code, FacetFieldTransformation $transformation): void
     {
         $this->validateCode($code);
         $this->transformations[$code] = $transformation;
@@ -37,7 +37,7 @@ class FacetFieldTransformationRegistry
         return isset($this->transformations[$code]);
     }
 
-    private function validateCode(string $code)
+    private function validateCode(string $code): void
     {
         if (trim($code) === '') {
             throw new InvalidTransformationCodeException('Facet field transformation code must be a non-empty string.');

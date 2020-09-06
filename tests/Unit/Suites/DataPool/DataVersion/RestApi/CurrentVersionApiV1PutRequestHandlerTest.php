@@ -27,12 +27,12 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
  * @uses   \LizardsAndPumpkins\DataPool\DataVersion\SetCurrentDataVersionCommand
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  */
 class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
 {
     /**
-     * @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandQueue|MockObject
      */
     private $mockCommandQueue;
 
@@ -56,12 +56,12 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockCommandQueue = $this->createMock(CommandQueue::class);
     }
 
-    public function testIsHttpRequestHandler()
+    public function testIsHttpRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->createHandler());
     }
@@ -69,7 +69,7 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
     /**
      * @dataProvider nonPutHttpRequestMethodProvider
      */
-    public function testDoesNotHandleNonPutRequests(string $nonPutRequestMethod)
+    public function testDoesNotHandleNonPutRequests(string $nonPutRequestMethod): void
     {
         $request = $this->createHttpRequest($nonPutRequestMethod, '');
         $this->assertFalse($this->createHandler()->canProcess($request));
@@ -83,7 +83,7 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
         ];
     }
 
-    public function testHandlesPutRequests()
+    public function testHandlesPutRequests(): void
     {
         $request = $this->createPutRequestForVersion('foo');
         $this->assertTrue($this->createHandler()->canProcess($request));
@@ -92,7 +92,7 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
     /**
      * @dataProvider requestDataWithoutTargetVersionDataProvider
      */
-    public function testThrowsExceptionIfTargetDataVersionIsMissing($missingTargetVersionRequestData)
+    public function testThrowsExceptionIfTargetDataVersionIsMissing($missingTargetVersionRequestData): void
     {
         $this->expectException(TargetDataVersionMissingInRequestException::class);
         $this->expectExceptionMessage('The target data version is missing in the request body');
@@ -117,7 +117,7 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
         ];
     }
 
-    public function testThrowsExceptionIfRequestBodyIsNotJson()
+    public function testThrowsExceptionIfRequestBodyIsNotJson(): void
     {
         $this->expectException(UnableToDeserializeRequestBodyJsonException::class);
         $this->expectExceptionMessage('Unable to deserialize request body JSON: Syntax error');
@@ -132,7 +132,7 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
         $this->createHandler()->process($request);
     }
 
-    public function testAddsSetCurrentDataVersionCommandToCommandQueue()
+    public function testAddsSetCurrentDataVersionCommandToCommandQueue(): void
     {
         $dataVersionString = 'bat';
 
@@ -145,7 +145,7 @@ class CurrentVersionApiV1PutRequestHandlerTest extends TestCase
         $this->createHandler()->process($request);
     }
 
-    public function testReturnsResponseWithAcceptedHttpStatusCode()
+    public function testReturnsResponseWithAcceptedHttpStatusCode(): void
     {
         $request = $this->createPutRequestForVersion('foo');
         $response = $this->createHandler()->process($request);

@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\ProductDetail\Import;
 
 use LizardsAndPumpkins\Import\Product\Product;
 use LizardsAndPumpkins\Import\Product\UpdateProductCommand;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,25 +20,25 @@ class UpdatingProductImportCommandFactoryTest extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->factory = new UpdatingProductImportCommandFactory();
     }
 
-    public function testItImplementsTheProductImportCommandFactoryInterface()
+    public function testItImplementsTheProductImportCommandFactoryInterface(): void
     {
         $this->assertInstanceOf(ProductImportCommandFactory::class, $this->factory);
     }
 
-    public function testItReturnsAnUpdateProductCommand()
+    public function testItReturnsAnUpdateProductCommand(): void
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var Product|MockObject $stubProduct */
         $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('jsonSerialize')->willReturn([]);
         $stubProduct->method('getId')->willReturn('dummy');
         $commands = $this->factory->createProductImportCommands($stubProduct);
         
-        $this->assertInternalType('array', $commands);
+        $this->assertIsArray($commands);
         $this->assertContainsOnlyInstancesOf(UpdateProductCommand::class, $commands);
     }
 }

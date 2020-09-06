@@ -9,7 +9,7 @@ use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\LogfileReader;
 use LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage\ProcessingTimeTableDataBuilder;
 use LizardsAndPumpkins\ConsoleCommand\ConsoleCommandFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ReportEventProcessingTimeAverageConsoleCommand extends BaseCliCommand
 {
@@ -63,7 +63,7 @@ class ReportEventProcessingTimeAverageConsoleCommand extends BaseCliCommand
         );
     }
 
-    final protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate): void
     {
         $eventHandlerProcessingTimes = $this->readEventHandlerProcessingTimes($this->getArg('logfile'));
         $tableData = $this->buildTableData($eventHandlerProcessingTimes);
@@ -93,14 +93,14 @@ class ReportEventProcessingTimeAverageConsoleCommand extends BaseCliCommand
             ->buildSortedTableData($eventHandlerProcessingTimes, $this->getArg('sortBy'), $this->getArg('direction'));
     }
 
-    final protected function beforeExecute(CLImate $climate)
+    final protected function beforeExecute(CLImate $climate): void
     {
         $this->validateLogFilePath($climate->arguments->get('logfile'));
         $this->validateSortField($climate->arguments->get('sortBy'));
         $this->validateSortDirection($climate->arguments->get('direction'));
     }
 
-    private function validateLogFilePath(string $filePath)
+    private function validateLogFilePath(string $filePath): void
     {
         if (!file_exists($filePath)) {
             throw new \RuntimeException(sprintf('Log file not found: "%s"', $filePath));
@@ -110,14 +110,14 @@ class ReportEventProcessingTimeAverageConsoleCommand extends BaseCliCommand
         }
     }
 
-    private function validateSortField(string $field)
+    private function validateSortField(string $field): void
     {
         if (!in_array($field, $this->processingTimeTableDataBuilder->getTableColumns())) {
             throw new \RuntimeException(sprintf('Invalid sort field: "%s"', $field));
         }
     }
 
-    private function validateSortDirection(string $direction)
+    private function validateSortDirection(string $direction): void
     {
         if (!in_array($direction, $this->processingTimeTableDataBuilder->getSortDirections())) {
             throw new \RuntimeException(sprintf('Invalid sort direction: "%s"', $direction));

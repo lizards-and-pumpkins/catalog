@@ -18,12 +18,12 @@ class InMemoryKeyValueStoreTest extends TestCase
      */
     private $store;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->store = new InMemoryKeyValueStore;
     }
 
-    public function testValueIsSetAndRetrieved()
+    public function testValueIsSetAndRetrieved(): void
     {
         $key = 'key';
         $value = 'value';
@@ -32,7 +32,7 @@ class InMemoryKeyValueStoreTest extends TestCase
         $this->assertEquals($value, $this->store->get($key));
     }
 
-    public function testTrueIsReturnedOnlyAfterValueIsSet()
+    public function testTrueIsReturnedOnlyAfterValueIsSet(): void
     {
         $key = 'key';
         $value = 'value';
@@ -43,13 +43,13 @@ class InMemoryKeyValueStoreTest extends TestCase
         $this->assertTrue($this->store->has($key));
     }
 
-    public function testExceptionIsThrownIfValueIsNotSet()
+    public function testExceptionIsThrownIfValueIsNotSet(): void
     {
         $this->expectException(KeyNotFoundException::class);
         $this->store->get('not set key');
     }
 
-    public function testMultipleKeysAreSetAndRetrieved()
+    public function testMultipleKeysAreSetAndRetrieved(): void
     {
         $keys = ['key1', 'key2'];
         $values = ['foo', 'bar'];
@@ -61,12 +61,12 @@ class InMemoryKeyValueStoreTest extends TestCase
         $this->assertSame($items, $result);
     }
 
-    public function testClearableInterfaceIsImplemented()
+    public function testClearableInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(Clearable::class, $this->store);
     }
 
-    public function testStorageContentIsFlushed()
+    public function testStorageContentIsFlushed(): void
     {
         $key = 'key';
         $value = 'value';

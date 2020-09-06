@@ -17,7 +17,7 @@ class DefaultSelectedFiltersParserTest extends TestCase
      */
     private $parser;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->parser = new DefaultSelectedFiltersParser();
     }
@@ -25,32 +25,32 @@ class DefaultSelectedFiltersParserTest extends TestCase
     /**
      * @dataProvider emptyStringProvider
      */
-    public function testReturnsAnEmptyArrayForAnEmptyString(string $emptyString)
+    public function testReturnsAnEmptyArrayForAnEmptyString(string $emptyString): void
     {
         $this->assertSame([], $this->parser->parse($emptyString));
     }
 
-    public function testCanParseSingleValue()
+    public function testCanParseSingleValue(): void
     {
         $this->assertSame(['foo' => ['bar']], $this->parser->parse('foo:bar'));
     }
 
-    public function testCanParseMultipleValuesFilter()
+    public function testCanParseMultipleValuesFilter(): void
     {
         $this->assertSame(['foo' => ['bar', 'baz']], $this->parser->parse('foo:[bar,baz]'));
     }
 
-    public function testCanParseMultipleFiltersWithSingleValues()
+    public function testCanParseMultipleFiltersWithSingleValues(): void
     {
         $this->assertSame(['foo' => ['bar'], 'baz' => ['qux']], $this->parser->parse('foo:bar,baz:qux'));
     }
 
-    public function testCanParseMultipleFiltersWithMultipleValues()
+    public function testCanParseMultipleFiltersWithMultipleValues(): void
     {
         $this->assertSame(['foo' => ['1', '2'], 'bar' => ['3', '4']], $this->parser->parse('foo:[1,2],bar:[3,4]'));
     }
 
-    public function testCanParseMultipleFiltersWithMixedValues()
+    public function testCanParseMultipleFiltersWithMixedValues(): void
     {
         $this->assertSame(['foo' => ['1', '2'], 'bar' => ['baz']], $this->parser->parse('foo:[1,2],bar:baz'));
     }
@@ -58,7 +58,7 @@ class DefaultSelectedFiltersParserTest extends TestCase
     /**
      * @dataProvider malformedFiltersStringProvider
      */
-    public function testExceptionIsThrownIfFiltersQueryStringIsMalformed(string $malformedFiltersString)
+    public function testExceptionIsThrownIfFiltersQueryStringIsMalformed(string $malformedFiltersString): void
     {
         $this->expectException(MalformedSelectedFiltersQueryStringException::class);
         $this->parser->parse($malformedFiltersString);

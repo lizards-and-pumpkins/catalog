@@ -10,7 +10,7 @@ use LizardsAndPumpkins\Context\DataVersion\DataVersion;
 use LizardsAndPumpkins\Import\RootTemplate\Import\TemplateProjectorLocator;
 use LizardsAndPumpkins\Import\RootTemplate\TemplateWasUpdatedDomainEvent;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ImportTemplateConsoleCommand extends BaseCliCommand
 {
@@ -60,46 +60,46 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
         );
     }
 
-    final protected function execute(CLImate $CLImate)
+    final protected function execute(CLImate $CLImate): void
     {
         $this->isTemplateIdListRequested() ?
             $this->outputTemplateIdList() :
             $this->importSpecifiedTemplate();
     }
 
-    private function importSpecifiedTemplate()
+    private function importSpecifiedTemplate(): void
     {
         $this->addDomainEvent();
         $this->processQueuesIfRequested();
     }
 
-    private function addDomainEvent()
+    private function addDomainEvent(): void
     {
         $event = $this->createTemplateWasUpdatedEvent($this->getTemplateIdToProject());
         $this->factory->getEventQueue()->add($event);
     }
 
-    private function processQueuesIfRequested()
+    private function processQueuesIfRequested(): void
     {
         if ($this->getArg('processQueues')) {
             $this->processQueues();
         }
     }
 
-    private function processQueues()
+    private function processQueues(): void
     {
         $this->processCommandQueue();
         $this->processDomainEventQueue();
     }
 
-    private function processCommandQueue()
+    private function processCommandQueue(): void
     {
         $this->output('Processing command queue...');
         $commandConsumer = $this->factory->createCommandConsumer();
         $commandConsumer->processAll();
     }
 
-    private function processDomainEventQueue()
+    private function processDomainEventQueue(): void
     {
         $this->output('Processing domain event queue...');
         $domainEventConsumer = $this->factory->createDomainEventConsumer();
@@ -142,7 +142,7 @@ class ImportTemplateConsoleCommand extends BaseCliCommand
         return (bool) $this->getArg('list');
     }
 
-    private function outputTemplateIdList()
+    private function outputTemplateIdList(): void
     {
         $this->output('Available template IDs:');
         $this->output(implode(PHP_EOL, $this->getValidTemplateIds()));

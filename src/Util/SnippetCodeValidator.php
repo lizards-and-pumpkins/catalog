@@ -8,7 +8,7 @@ use LizardsAndPumpkins\Util\Exception\InvalidSnippetCodeException;
 
 class SnippetCodeValidator
 {
-    public static function validate(string $snippetCode)
+    public static function validate(string $snippetCode): void
     {
         if (trim($snippetCode) === '') {
             throw new InvalidSnippetCodeException('Snippet code must not be empty.');

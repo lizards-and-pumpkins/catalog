@@ -24,7 +24,7 @@ class CatalogListingImportCallbackFailureMessageTest extends TestCase
     
     private $testListingXml = '<listing/>';
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testException = new \Exception('Test Message');
         $this->logMessage = new CatalogListingImportCallbackFailureMessage(
@@ -33,12 +33,12 @@ class CatalogListingImportCallbackFailureMessageTest extends TestCase
         );
     }
 
-    public function testItIsALogMessage()
+    public function testItIsALogMessage(): void
     {
         $this->assertInstanceOf(LogMessage::class, $this->logMessage);
     }
 
-    public function testItIncludesTheExceptionMessageInTheStringReturnValue()
+    public function testItIncludesTheExceptionMessageInTheStringReturnValue(): void
     {
         $this->assertSame(
             'An error occurred while processing catalog XML import listing callbacks: Test Message',
@@ -46,25 +46,25 @@ class CatalogListingImportCallbackFailureMessageTest extends TestCase
         );
     }
 
-    public function testItIncludesTheExceptionInTheContextArray()
+    public function testItIncludesTheExceptionInTheContextArray(): void
     {
         $contextArray = $this->logMessage->getContext();
-        $this->assertInternalType('array', $contextArray);
+        $this->assertIsArray($contextArray);
         $this->assertArrayHasKey('exception', $contextArray);
         $this->assertSame($this->testException, $contextArray['exception']);
     }
 
-    public function testItIncludesTheListingXmlInTheContextArray()
+    public function testItIncludesTheListingXmlInTheContextArray(): void
     {
         $contextArray = $this->logMessage->getContext();
         $this->assertArrayHasKey('listing_xml', $contextArray);
         $this->assertSame($this->testListingXml, $contextArray['listing_xml']);
     }
 
-    public function testTheContextSynopsisIncludesTheFileAndLine()
+    public function testTheContextSynopsisIncludesTheFileAndLine(): void
     {
         $synopsis = $this->logMessage->getContextSynopsis();
-        $this->assertContains($this->testException->getFile(), $synopsis);
-        $this->assertContains((string) $this->testException->getLine(), $synopsis);
+        $this->assertStringContainsString($this->testException->getFile(), $synopsis);
+        $this->assertStringContainsString((string) $this->testException->getLine(), $synopsis);
     }
 }

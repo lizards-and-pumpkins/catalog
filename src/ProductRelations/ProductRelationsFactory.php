@@ -8,9 +8,9 @@ use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsApiV1Get
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsLocator;
 use LizardsAndPumpkins\ProductRelations\ContentDelivery\ProductRelationsService;
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ProductRelationsFactory implements FactoryWithCallback
 {
@@ -38,7 +38,7 @@ class ProductRelationsFactory implements FactoryWithCallback
         );
     }
 
-    public function factoryRegistrationCallback(MasterFactory $masterFactory)
+    public function factoryRegistrationCallback(MasterFactory $masterFactory): void
     {
         $apiVersion = 1;
 

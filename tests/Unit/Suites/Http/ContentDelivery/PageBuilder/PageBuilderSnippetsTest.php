@@ -25,7 +25,7 @@ class PageBuilderSnippetsTest extends TestCase
      */
     private $pageSnippets;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $codeToKeyMap = [$this->testCode => $this->testKey];
         $keyToContentMap = [$this->testKey => $this->testContent];
@@ -33,7 +33,7 @@ class PageBuilderSnippetsTest extends TestCase
         $this->pageSnippets = PageBuilderSnippets::fromCodesAndContent($codeToKeyMap, $keyToContentMap, $containers);
     }
 
-    public function testItReturnsAPageSnippetInstance()
+    public function testItReturnsAPageSnippetInstance(): void
     {
         $codeToKeyMap = [];
         $keyToContentMap = [];
@@ -42,12 +42,12 @@ class PageBuilderSnippetsTest extends TestCase
         $this->assertInstanceOf(PageBuilderSnippets::class, $pageSnippets);
     }
 
-    public function testItImplementsThePageSnippetsInterface()
+    public function testItImplementsThePageSnippetsInterface(): void
     {
         $this->assertInstanceOf(PageSnippets::class, $this->pageSnippets);
     }
 
-    public function testItReturnsTheNotLoadedSnippetCodes()
+    public function testItReturnsTheNotLoadedSnippetCodes(): void
     {
         $codeToKeyMap = ['found' => 'found_key', 'missing' => 'missing_key'];
         $keyToContentMap = ['found_key' => 'found_content'];
@@ -56,7 +56,7 @@ class PageBuilderSnippetsTest extends TestCase
         $this->assertSame(['missing'], $pageSnippets->getNotLoadedSnippetCodes());
     }
 
-    public function testItReturnsTheLoadedSnippetCodes()
+    public function testItReturnsTheLoadedSnippetCodes(): void
     {
         $codeToKeyMap = ['found' => 'found_key', 'missing' => 'missing_key'];
         $keyToContentMap = ['found_key' => 'found_content'];
@@ -65,55 +65,55 @@ class PageBuilderSnippetsTest extends TestCase
         $this->assertSame(['found'], $pageSnippets->getSnippetCodes());
     }
 
-    public function testItReturnsTheSnippetContentForAGivenKey()
+    public function testItReturnsTheSnippetContentForAGivenKey(): void
     {
         $this->assertSame('some content', $this->pageSnippets->getSnippetByKey($this->testKey));
     }
 
-    public function testItReturnsTheSnippetContentForAGivenCode()
+    public function testItReturnsTheSnippetContentForAGivenCode(): void
     {
         $this->assertSame('some content', $this->pageSnippets->getSnippetByCode($this->testCode));
     }
 
-    public function testItUpdatesASnippetWithTheGivenKey()
+    public function testItUpdatesASnippetWithTheGivenKey(): void
     {
         $this->pageSnippets->updateSnippetByKey($this->testKey, 'new content');
         $this->assertSame('new content', $this->pageSnippets->getSnippetByKey($this->testKey));
     }
 
-    public function testItThrowsAnExceptionIfTheGivenKeyIsNotKnown()
+    public function testItThrowsAnExceptionIfTheGivenKeyIsNotKnown(): void
     {
         $this->expectException(NonExistingSnippetException::class);
         $this->expectExceptionMessage('The snippet key "not-existing-key" does not exist on the current page');
         $this->pageSnippets->updateSnippetByKey('not-existing-key', 'new content');
     }
 
-    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithKeySpec()
+    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithKeySpec(): void
     {
         $this->expectException(\TypeError::class);
         $this->pageSnippets->updateSnippetByKey('a-key', null);
     }
 
-    public function testItUpdatesASnippetWithTheGivenCode()
+    public function testItUpdatesASnippetWithTheGivenCode(): void
     {
         $this->pageSnippets->updateSnippetByCode($this->testCode, 'new content');
         $this->assertSame('new content', $this->pageSnippets->getSnippetByKey($this->testKey));
     }
 
-    public function testItThrowsAnExceptionWhenUpdatingANonExistingSnippet()
+    public function testItThrowsAnExceptionWhenUpdatingANonExistingSnippet(): void
     {
         $this->expectException(NonExistingSnippetException::class);
         $this->expectExceptionMessage('The snippet code "not-existing-code" does not exist on the current page');
         $this->pageSnippets->updateSnippetByCode('not-existing-code', 'new content');
     }
 
-    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithCodeSpec()
+    public function testItThrowsAnExceptionIfTheSnippetContentIsNotAStringWithCodeSpec(): void
     {
         $this->expectException(\TypeError::class);
         $this->pageSnippets->updateSnippetByCode($this->testCode, 123);
     }
 
-    public function testItThrowsAnExceptionIfThePageIsBuiltTwice()
+    public function testItThrowsAnExceptionIfThePageIsBuiltTwice(): void
     {
         $this->expectException(PageContentBuildAlreadyTriggeredException::class);
         $this->expectExceptionMessage('The method buildPageContent() may only be called once an an instance');
@@ -121,17 +121,17 @@ class PageBuilderSnippetsTest extends TestCase
         $this->pageSnippets->buildPageContent($this->testCode);
     }
 
-    public function testItReturnsTrueIfASnippetIsPresent()
+    public function testItReturnsTrueIfASnippetIsPresent(): void
     {
         $this->assertTrue($this->pageSnippets->hasSnippetCode($this->testCode));
     }
 
-    public function testItReturnsFalseIfASnippetIsNotPresent()
+    public function testItReturnsFalseIfASnippetIsNotPresent(): void
     {
         $this->assertFalse($this->pageSnippets->hasSnippetCode('not-present-code'));
     }
 
-    public function testItDoesNotDependOnMapSortOrder()
+    public function testItDoesNotDependOnMapSortOrder(): void
     {
         $codeToKeyMap = ['code-a' => 'key-a', 'code-b' => 'key-b', 'root' => 'root'];
         $keyToContentMap = ['key-b' => 'BBB', 'key-a' => 'AAA', 'root' => '{{snippet code-a}}{{snippet code-b}}'];
@@ -141,7 +141,7 @@ class PageBuilderSnippetsTest extends TestCase
         $this->assertSame('AAABBB', $result);
     }
 
-    public function testThrowsExceptionIfALoopIsFound()
+    public function testThrowsExceptionIfALoopIsFound(): void
     {
         $this->expectException(MaxSnippetNestingLevelExceededException::class);
         $this->expectExceptionMessage('Snippets are nested deeper than 50 levels or a loop is inside snippets.');
@@ -156,7 +156,7 @@ class PageBuilderSnippetsTest extends TestCase
         $pageSnippets->buildPageContent('root');
     }
 
-    public function testThrowsExceptionIfNestingIsTooDepp()
+    public function testThrowsExceptionIfNestingIsTooDepp(): void
     {
         $this->expectException(MaxSnippetNestingLevelExceededException::class);
         $this->expectExceptionMessage('Snippets are nested deeper than 50 levels or a loop is inside snippets.');

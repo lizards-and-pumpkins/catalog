@@ -12,13 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class PriceTest extends TestCase
 {
-    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger()
+    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsIsNotInteger(): void
     {
         $this->expectException(\TypeError::class);
         Price::fromFractionsWithDecimalPlaces(1, '2');
     }
 
-    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsAreNegative()
+    public function testItThrowsAnExceptionIfTheNumberOfDecimalPointsAreNegative(): void
     {
         $this->expectException(InvalidNumberOfDecimalPointsForPriceException::class);
         $this->expectExceptionMessage(
@@ -27,7 +27,7 @@ class PriceTest extends TestCase
         Price::fromFractionsWithDecimalPlaces(1, -2);
     }
 
-    public function testPriceIsCreatedFromStringMultiplyingItByTheNumberOfDecimalPoints()
+    public function testPriceIsCreatedFromStringMultiplyingItByTheNumberOfDecimalPoints(): void
     {
         $price = Price::fromDecimalValue('1');
         $result = $price->getAmount();
@@ -36,7 +36,7 @@ class PriceTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function testItReturnsTheAmountAsAString()
+    public function testItReturnsTheAmountAsAString(): void
     {
         $price = Price::fromFractions(123);
         $this->assertSame('123', (string) $price);
@@ -45,7 +45,7 @@ class PriceTest extends TestCase
     /**
      * @dataProvider fractionConversionDataProvider
      */
-    public function testItRoundsTheAmountToGivenFractions(int $amount, int $numDecimalPoints, int $expected)
+    public function testItRoundsTheAmountToGivenFractions(int $amount, int $numDecimalPoints, int $expected): void
     {
         $price = Price::fromFractionsWithDecimalPlaces($amount, 6);
         $roundedPrice = $price->round($numDecimalPoints);
@@ -78,7 +78,7 @@ class PriceTest extends TestCase
      * @param float|int $factor
      * @param int $expected
      */
-    public function testItMultipliesByTheGivenFactor(int $amount, $factor, int $expected)
+    public function testItMultipliesByTheGivenFactor(int $amount, $factor, int $expected): void
     {
         $price = Price::fromFractions($amount);
         $result = $price->multiplyBy($factor);
@@ -102,7 +102,7 @@ class PriceTest extends TestCase
         ];
     }
 
-    public function testItHasEnoughPrecision()
+    public function testItHasEnoughPrecision(): void
     {
         $price = Price::fromDecimalValue('21.76470588');
         $this->assertSame('2612', (string) $price->multiplyBy(1.2)->round(2));

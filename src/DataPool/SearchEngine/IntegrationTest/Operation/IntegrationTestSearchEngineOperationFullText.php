@@ -50,7 +50,7 @@ class IntegrationTestSearchEngineOperationFullText implements IntegrationTestSea
     /**
      * @param mixed[] $dataSet
      */
-    private function validateDataSet(array $dataSet)
+    private function validateDataSet(array $dataSet): void
     {
         if (! array_key_exists('fieldValue', $dataSet)) {
             throw new InvalidSearchEngineOperationDataSetException(

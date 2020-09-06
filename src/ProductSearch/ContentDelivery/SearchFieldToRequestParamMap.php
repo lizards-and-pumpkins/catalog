@@ -36,7 +36,7 @@ class SearchFieldToRequestParamMap
     /**
      * @param string[] $searchFieldToQueryParameterMap
      */
-    private function validateSearchFieldToQueryParameterMap(array $searchFieldToQueryParameterMap)
+    private function validateSearchFieldToQueryParameterMap(array $searchFieldToQueryParameterMap): void
     {
         $this->validateArrayMap($searchFieldToQueryParameterMap, 'Search Field to Query Parameter');
     }
@@ -44,7 +44,7 @@ class SearchFieldToRequestParamMap
     /**
      * @param string[] $queryParameterToFacetFieldMap
      */
-    private function validateQueryParameterToSearchFieldMap(array $queryParameterToFacetFieldMap)
+    private function validateQueryParameterToSearchFieldMap(array $queryParameterToFacetFieldMap): void
     {
         $this->validateArrayMap($queryParameterToFacetFieldMap, 'Query Parameter to Search Field');
     }
@@ -53,7 +53,7 @@ class SearchFieldToRequestParamMap
      * @param string[] $map
      * @param string $nameInExceptions
      */
-    private function validateArrayMap(array $map, string $nameInExceptions)
+    private function validateArrayMap(array $map, string $nameInExceptions): void
     {
         every($map, function (string $value, string $key) use ($nameInExceptions) {
             $this->validateArrayKey($key, $nameInExceptions);
@@ -61,7 +61,7 @@ class SearchFieldToRequestParamMap
         });
     }
 
-    private function validateArrayKey(string $arrayKey, string $nameInException)
+    private function validateArrayKey(string $arrayKey, string $nameInException): void
     {
         if ('' === $arrayKey) {
             $message = sprintf('The %s Map must have not have empty string keys', $nameInException);
@@ -69,7 +69,7 @@ class SearchFieldToRequestParamMap
         }
     }
 
-    private function validateArrayValue(string $arrayValue, string $nameInException)
+    private function validateArrayValue(string $arrayValue, string $nameInException): void
     {
         if ('' === $arrayValue) {
             $message = sprintf('The %s Map must have not have empty string values', $nameInException);

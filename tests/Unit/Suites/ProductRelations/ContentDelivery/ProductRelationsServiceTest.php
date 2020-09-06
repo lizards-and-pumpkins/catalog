@@ -16,27 +16,27 @@ use PHPUnit\Framework\TestCase;
 class ProductRelationsServiceTest extends TestCase
 {
     /**
-     * @var ProductRelations|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelations|MockObject
      */
     private $mockProductRelations;
 
     /**
-     * @var ProductRelationsLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelationsLocator|MockObject
      */
     private $stubProductRelationsLocator;
 
     /**
-     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductId|MockObject
      */
     private $stubProductId;
 
     /**
-     * @var ProductRelationTypeCode|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelationTypeCode|MockObject
      */
     private $stubProductRelationTypeCode;
 
     /**
-     * @var ProductJsonService|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductJsonService|MockObject
      */
     private $stubProductJsonService;
 
@@ -50,7 +50,7 @@ class ProductRelationsServiceTest extends TestCase
      */
     private $stubContext;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockProductRelations = $this->createMock(ProductRelations::class);
         $this->stubProductRelationsLocator = $this->createMock(ProductRelationsLocator::class);
@@ -67,7 +67,7 @@ class ProductRelationsServiceTest extends TestCase
         );
     }
     
-    public function testItDelegatesToTheProductRelationsInstanceToFetchTheRelatedProducts()
+    public function testItDelegatesToTheProductRelationsInstanceToFetchTheRelatedProducts(): void
     {
         $this->mockProductRelations->expects($this->once())->method('getById')->willReturn([]);
         
@@ -79,7 +79,7 @@ class ProductRelationsServiceTest extends TestCase
         $this->assertSame([], $result);
     }
 
-    public function testItFetchesTheRelatedProductJsonSnippetsFromTheProductJsonService()
+    public function testItFetchesTheRelatedProductJsonSnippetsFromTheProductJsonService(): void
     {
         $stubRelatedProductIds = [$this->createMock(ProductId::class)];
         $stubRelatedProductData = [

@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\Factory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -23,8 +23,8 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiV1GetRequestHandler
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
@@ -41,7 +41,7 @@ class ProductSearchSharedFactoryTest extends TestCase
      */
     private $factory;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
@@ -52,17 +52,17 @@ class ProductSearchSharedFactoryTest extends TestCase
         $masterFactory->register($this->factory);
     }
 
-    public function testImplementsFactoryInterface()
+    public function testImplementsFactoryInterface(): void
     {
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testReturnProductSearchService()
+    public function testReturnProductSearchService(): void
     {
         $this->assertInstanceOf(ProductSearchService::class, $this->factory->createProductSearchService());
     }
 
-    public function testReturnsFullTextCriteriaBuilder()
+    public function testReturnsFullTextCriteriaBuilder(): void
     {
         $this->assertInstanceOf(FullTextCriteriaBuilder::class, $this->factory->createFullTextCriteriaBuilder());
     }

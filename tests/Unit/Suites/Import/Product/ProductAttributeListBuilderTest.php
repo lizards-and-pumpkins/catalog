@@ -18,7 +18,7 @@ class ProductAttributeListBuilderTest extends TestCase
 {
     /**
      * @param mixed[] $contextDataSet
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     * @return Context|MockObject
      */
     private function createStubContextWithDataSet(array $contextDataSet) : Context
     {
@@ -28,7 +28,7 @@ class ProductAttributeListBuilderTest extends TestCase
         return $context;
     }
 
-    public function testAttributeListBuilderIsCreatedFromAttributesArray()
+    public function testAttributeListBuilderIsCreatedFromAttributesArray(): void
     {
         $contextDataSet = [];
 
@@ -47,7 +47,7 @@ class ProductAttributeListBuilderTest extends TestCase
         $this->assertEquals($expectedProductAttributeList, $result);
     }
 
-    public function testItMayContainMultipleProductAttributesWithTheSameCode()
+    public function testItMayContainMultipleProductAttributesWithTheSameCode(): void
     {
         $contextDataSet = [];
 
@@ -74,7 +74,7 @@ class ProductAttributeListBuilderTest extends TestCase
         $this->assertEquals($expectedProductAttributeList, $result);
     }
 
-    public function testExceptionIsThrownWhenCombiningAttributesWithSameCodeButDifferentContextPartsIntoList()
+    public function testExceptionIsThrownWhenCombiningAttributesWithSameCodeButDifferentContextPartsIntoList(): void
     {
         $attributeA = ProductAttribute::fromArray([
             ProductAttribute::CODE => 'attribute_code1',

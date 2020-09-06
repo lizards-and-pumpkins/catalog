@@ -15,11 +15,13 @@ use LizardsAndPumpkins\Import\Product\ProductBuilder;
 use LizardsAndPumpkins\Import\Product\ProductImportCallbackFailureMessage;
 use LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator;
 use LizardsAndPumpkins\Import\Product\QueueImportCommands;
+use LizardsAndPumpkins\Import\Product\UrlKey\UrlKey;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
 use LizardsAndPumpkins\ProductListing\Import\ProductListing;
 use LizardsAndPumpkins\ProductListing\Import\ProductListingBuilder;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -41,17 +43,17 @@ class CatalogImportTest extends TestCase
     private $sharedFixtureFilePath = __DIR__ . '/../../../shared-fixture/catalog.xml';
 
     /**
-     * @var ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductXmlToProductBuilderLocator|MockObject
      */
     private $stubProductXmlToProductBuilder;
 
     /**
-     * @var ProductListingBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductListingBuilder|MockObject
      */
     private $stubProductListingBuilder;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
     private $mockLogger;
 
@@ -61,12 +63,12 @@ class CatalogImportTest extends TestCase
     private $catalogImport;
 
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|MockObject
      */
     private $mockEventQueue;
 
     /**
-     * @var QueueImportCommands|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueueImportCommands|MockObject
      */
     private $mockQueueImportCommands;
 
@@ -76,7 +78,7 @@ class CatalogImportTest extends TestCase
     private $testDirectoryPath;
 
     /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextSource
      */
     private $contextSource;
 
@@ -86,7 +88,7 @@ class CatalogImportTest extends TestCase
     private $testDataVersion;
 
     /**
-     * @return ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductXmlToProductBuilderLocator
      */
     private function createMockProductXmlToProductBuilder() : ProductXmlToProductBuilderLocator
     {
@@ -99,12 +101,12 @@ class CatalogImportTest extends TestCase
     }
 
     /**
-     * @return ProductListingBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductListingBuilder
      */
     private function createMockProductsPerPageForContextBuilder() : ProductListingBuilder
     {
         $productListing = $this->createMock(ProductListing::class);
-        $productListing->method('getUrlKey')->willReturn('dummy-url-key');
+        $productListing->method('getUrlKey')->willReturn($this->createMock(UrlKey::class));
 
         $productsPerPageForContextBuilder = $this->createMock(ProductListingBuilder::class);
         $productsPerPageForContextBuilder->method('createProductListingFromXml')->willReturn($productListing);
@@ -112,19 +114,19 @@ class CatalogImportTest extends TestCase
         return $productsPerPageForContextBuilder;
     }
 
-    private function setProductIsAvailableForContextFixture(bool $isAvailableInContext)
+    private function setProductIsAvailableForContextFixture(bool $isAvailableInContext): void
     {
-        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
+        /** @var ProductBuilder|MockObject $stubProductBuilder */
         $stubProductBuilder = $this->stubProductXmlToProductBuilder->createProductBuilderFromXml('');
         $stubProductBuilder->method('isAvailableForContext')->willReturn($isAvailableInContext);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
 
         $stubProductBuilder->getProductForContext($stubContext);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testDirectoryPath = $this->getUniqueTempDir();
         $this->createFixtureDirectory($this->testDirectoryPath);
@@ -151,14 +153,14 @@ class CatalogImportTest extends TestCase
         );
     }
 
-    public function testExceptionIsThrownIfImportFileDoesNotExist()
+    public function testExceptionIsThrownIfImportFileDoesNotExist(): void
     {
         $this->expectException(CatalogImportFileDoesNotExistException::class);
         $this->expectExceptionMessage('Catalog import file not found');
         $this->catalogImport->importFile('/some-not-existing-file.xml', $this->testDataVersion);
     }
 
-    public function testExceptionIsThrownIfImportFileIsNotReadable()
+    public function testExceptionIsThrownIfImportFileIsNotReadable(): void
     {
         $this->expectException(CatalogImportFileNotReadableException::class);
         $this->expectExceptionMessage('Catalog import file is not readable');
@@ -169,14 +171,14 @@ class CatalogImportTest extends TestCase
         $this->catalogImport->importFile($importFilePath, $this->testDataVersion);
     }
 
-    public function testItAddsCommandsForTheProductToQueue()
+    public function testItAddsCommandsForTheProductToQueue(): void
     {
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
-    public function testItAddsCommandsForOneProductToQueue()
+    public function testItAddsCommandsForOneProductToQueue(): void
     {
         $xml = <<<XML
 <product type="simple" sku="288193NEU" tax_class="19%">
@@ -207,35 +209,35 @@ XML;
         $this->catalogImport->addProductsAndProductImagesToQueue($xml, $this->testDataVersion);
     }
 
-    public function testItAddsNoProductCommandsToTheQueueIfTheProductDoesNotMatchAGivenContext()
+    public function testItAddsNoProductCommandsToTheQueueIfTheProductDoesNotMatchAGivenContext(): void
     {
         $this->mockQueueImportCommands->expects($this->never())->method('forProduct');
         $this->setProductIsAvailableForContextFixture(false);
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
-    public function testAddsCommandsForTheProductListingToTheQueue()
+    public function testAddsCommandsForTheProductListingToTheQueue(): void
     {
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forListing');
         $this->setProductIsAvailableForContextFixture(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
-    public function testItAddsCommandsForTheProductImageToTheQueue()
+    public function testItAddsCommandsForTheProductImageToTheQueue(): void
     {
         $this->mockQueueImportCommands->expects($this->atLeastOnce())->method('forImage');
         $this->setProductIsAvailableForContextFixture(true);
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
-    public function testItAddsNoCommandsForImagesIfTheProductDoesNotMatchAGivenContext()
+    public function testItAddsNoCommandsForImagesIfTheProductDoesNotMatchAGivenContext(): void
     {
         $this->mockQueueImportCommands->expects($this->never())->method('forImage');
         $this->setProductIsAvailableForContextFixture(false);
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
-    public function testItAddsACatalogWasImportedDomainEventToTheEventQueue()
+    public function testItAddsACatalogWasImportedDomainEventToTheEventQueue(): void
     {
         $this->mockEventQueue->expects($this->once())->method('add')
             ->with($this->isInstanceOf(CatalogWasImportedDomainEvent::class));
@@ -243,7 +245,7 @@ XML;
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
-    public function testItLogsExceptionsThrownWhileProcessingListingXml()
+    public function testItLogsExceptionsThrownWhileProcessingListingXml(): void
     {
         $this->mockLogger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(CatalogListingImportCallbackFailureMessage::class));
@@ -257,19 +259,19 @@ XML;
         $this->catalogImport->importFile($fixtureFile, $this->testDataVersion);
     }
 
-    public function testItLogsExceptionsThrownDuringProductImport()
+    public function testItLogsExceptionsThrownDuringProductImport(): void
     {
         $this->mockLogger->expects($this->atLeastOnce())->method('log')
             ->with($this->isInstanceOf(ProductImportCallbackFailureMessage::class));
 
-        /** @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject $stubProductBuilder */
+        /** @var ProductBuilder|MockObject $stubProductBuilder */
         $stubProductBuilder = $this->createMock(ProductBuilder::class);
         $stubProductBuilder->method('isAvailableForContext')->willReturn(true);
         $stubProductBuilder->method('getProductForContext')->willThrowException(
             new \Exception('dummy exception')
         );
 
-        /** @var ProductXmlToProductBuilderLocator|\PHPUnit_Framework_MockObject_MockObject $stubProductXmlToProductBuilder */
+        /** @var ProductXmlToProductBuilderLocator|MockObject $stubProductXmlToProductBuilder */
         $stubProductXmlToProductBuilder = $this->createMock(ProductXmlToProductBuilderLocator::class);
         $stubProductXmlToProductBuilder->method('createProductBuilderFromXml')->willReturn($stubProductBuilder);
 
@@ -285,7 +287,7 @@ XML;
         $this->catalogImport->importFile($this->sharedFixtureFilePath, $this->testDataVersion);
     }
 
-    public function testItLogsExceptionsThrownDuringProductImageImport()
+    public function testItLogsExceptionsThrownDuringProductImageImport(): void
     {
         $this->setProductIsAvailableForContextFixture(true);
         $this->mockLogger->expects($this->atLeastOnce())->method('log')

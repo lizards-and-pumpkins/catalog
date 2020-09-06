@@ -36,7 +36,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         );
     }
 
-    public function testExceptionIsThrownIfNoRootBlockIsDefined()
+    public function testExceptionIsThrownIfNoRootBlockIsDefined(): void
     {
         $this->getStubLayout()->method('getNodeChildren')->willReturn([]);
         $this->expectException(BlockRendererMustHaveOneRootBlockException::class);
@@ -44,7 +44,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
-    public function testExceptionIsThrownIfMoreThenOneRootBlockIsDefined()
+    public function testExceptionIsThrownIfMoreThenOneRootBlockIsDefined(): void
     {
         $this->getStubLayout()->method('getNodeChildren')->willReturn([['test-dummy-1'], ['test-dummy-2']]);
         $this->expectException(BlockRendererMustHaveOneRootBlockException::class);
@@ -52,7 +52,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
-    public function testExceptionIsThrownIfNoBlockClassIsSpecified()
+    public function testExceptionIsThrownIfNoBlockClassIsSpecified(): void
     {
         $this->addStubRootBlock(null, 'dummy-template');
         $this->expectException(\TypeError::class);
@@ -60,7 +60,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
-    public function testExceptionIsThrownIfTheClassDoesNotExist()
+    public function testExceptionIsThrownIfTheClassDoesNotExist(): void
     {
         $this->addStubRootBlock('None\\Existing\\BlockClass', 'dummy-template');
         $this->expectException(CanNotInstantiateBlockException::class);
@@ -69,7 +69,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
-    public function testExceptionIsThrownIfTheSpecifiedClassIsNotABlock()
+    public function testExceptionIsThrownIfTheSpecifiedClassIsNotABlock(): void
     {
         $nonBlockClass = __CLASS__;
         $this->expectException(CanNotInstantiateBlockException::class);
@@ -78,7 +78,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->render('test-projection-source-data', $this->getStubContext());
     }
 
-    public function testBlockSpecifiedInLayoutIsRendered()
+    public function testBlockSpecifiedInLayoutIsRendered(): void
     {
         $template = sys_get_temp_dir() . '/' . uniqid() . '/test-template.php';
         $templateContent = 'test template content';
@@ -89,7 +89,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertEquals($templateContent, $result);
     }
 
-    public function testChildrenBlocksAreRenderedRecursively()
+    public function testChildrenBlocksAreRenderedRecursively(): void
     {
         $childBlockName = 'child-block';
         $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
@@ -110,7 +110,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertEquals($combinedTemplateContent, $result);
     }
 
-    public function testPlaceholderIsInsertedIfChildBlockIsMissing()
+    public function testPlaceholderIsInsertedIfChildBlockIsMissing(): void
     {
         $childBlockName = 'child-block';
         $outputChildBlockStatement = '<?= $this->getChildOutput("' . $childBlockName . '") ?>';
@@ -126,7 +126,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertEquals($templateContentWithChildPlaceholder, $result);
     }
 
-    public function testExceptionIsThrownIfTheListOfNestedSnippetsIsFetchedBeforeRendering()
+    public function testExceptionIsThrownIfTheListOfNestedSnippetsIsFetchedBeforeRendering(): void
     {
         $this->expectException(MethodNotYetAvailableException::class);
         $this->expectExceptionMessage(
@@ -135,7 +135,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->getNestedSnippetCodes();
     }
 
-    public function testArrayOfMissingChildBlockNamesIsReturned()
+    public function testArrayOfMissingChildBlockNamesIsReturned(): void
     {
         $childBlockName1 = 'child-block1';
         $childBlockName2 = 'child-block2';
@@ -152,7 +152,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
 
-    public function testFreshListOfMissingChildrenBlockNamesIsReturnedIfRenderIsCalledTwice()
+    public function testFreshListOfMissingChildrenBlockNamesIsReturnedIfRenderIsCalledTwice(): void
     {
         $childBlockName1 = 'child-block1';
         $childBlockName2 = 'child-block2';
@@ -172,12 +172,12 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertEquals([$childBlockName1, $childBlockName2], $this->getBlockRenderer()->getNestedSnippetCodes());
     }
 
-    public function testLayoutHandleIsReturnedAsRootSnippetCode()
+    public function testLayoutHandleIsReturnedAsRootSnippetCode(): void
     {
         $this->assertEquals(StubBlockRenderer::LAYOUT_HANDLE, $this->getBlockRenderer()->getRootSnippetCode());
     }
 
-    public function testDataObjectPassedToRenderIsReturned()
+    public function testDataObjectPassedToRenderIsReturned(): void
     {
         $testProjectionSourceData = 'test-projection-source-data';
         $template = $this->getUniqueTempDir() . '/template.phtml';
@@ -187,7 +187,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertSame($testProjectionSourceData, $this->getBlockRenderer()->getDataObject());
     }
 
-    public function testStringTranslationIsDelegatedToTranslator()
+    public function testStringTranslationIsDelegatedToTranslator(): void
     {
         $originalString = 'foo';
         $translatedString = 'bar';
@@ -203,7 +203,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertSame($translatedString, $this->getBlockRenderer()->translate($originalString));
     }
 
-    public function testItDelegatesGettingTheBaseUrlToTheBaseUrlBuilder()
+    public function testItDelegatesGettingTheBaseUrlToTheBaseUrlBuilder(): void
     {
         $this->getMockBaseUrlBuilder()->expects($this->once())->method('create')->with($this->getStubContext());
 
@@ -216,7 +216,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->getBlockRenderer()->getBaseUrl();
     }
 
-    public function testWebsiteCodeIsReturned()
+    public function testWebsiteCodeIsReturned(): void
     {
         $testWebsiteCode = 'foo';
         $stubContext = $this->getStubContext();
@@ -233,7 +233,7 @@ class BlockRendererTest extends AbstractBlockRendererTest
         $this->assertSame($testWebsiteCode, $this->getBlockRenderer()->getWebsiteCode());
     }
 
-    public function testDelegatesGettingTheAssetBaseUrlToTheAssetsBaseUrlBuilder()
+    public function testDelegatesGettingTheAssetBaseUrlToTheAssetsBaseUrlBuilder(): void
     {
         $this->getMockAssetsBaseUrlBuilder()->expects($this->once())->method('create')->with($this->getStubContext());
 

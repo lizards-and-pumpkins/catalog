@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilderLocator
- * @covers \LizardsAndPumpkins\Import\Product\ProductXmlToProductBuilder
  * @covers \LizardsAndPumpkins\Import\Product\SimpleProductXmlToProductBuilder
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToProductBuilder
  * @covers \LizardsAndPumpkins\Import\Product\ConfigurableProductXmlToAssociatedProductListBuilder
@@ -91,6 +90,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
     {
         $property = new \ReflectionProperty($object, $propertyName);
         $property->setAccessible(true);
+
         return $property->getValue($object);
     }
 
@@ -130,7 +130,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->xmlToProductBuilder = $this->createProductXmlToProductBuilderLocatorInstance();
 
@@ -139,7 +139,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         $this->domDocument->loadXML($xml);
     }
 
-    public function testSimpleProductBuilderIsCreatedFromXml()
+    public function testSimpleProductBuilderIsCreatedFromXml(): void
     {
         $simpleProductXml = $this->getSimpleProductXml();
         $expectedSpecialPrice = $this->getSpecialPriceFromProductXml($simpleProductXml);
@@ -150,7 +150,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         $this->assertFirstProductAttributeInAListValueEquals($expectedSpecialPrice, $productBuilder, 'special_price');
     }
 
-    public function testConfigurableProductBuilderIsCreatedFromXml()
+    public function testConfigurableProductBuilderIsCreatedFromXml(): void
     {
         $configurableProductXml = $this->getConfigurableProductXml();
 
@@ -159,7 +159,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         $this->assertInstanceOf(ConfigurableProductBuilder::class, $productBuilder);
     }
 
-    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes()
+    public function testProductBuilderIsCreatedFromXmlIgnoringAssociatedProductAttributes(): void
     {
         $configurableProductXml = $this->getConfigurableProductXml();
 
@@ -171,7 +171,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         $this->assertEmpty($colorAttributes, 'The configurable product builder has "color" attributes');
     }
 
-    public function testExceptionIsThrownIfSkuIsMissing()
+    public function testExceptionIsThrownIfSkuIsMissing(): void
     {
         $this->expectException(InvalidNumberOfSkusForImportedProductException::class);
         $xml = '<product type="simple" tax_class="test"></product>';
@@ -179,7 +179,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 
-    public function testExceptionIsThrownIfProductTypeCodeIsMissing()
+    public function testExceptionIsThrownIfProductTypeCodeIsMissing(): void
     {
         $this->expectException(InvalidProductTypeCodeForImportedProductException::class);
         $xml = '<product sku="foo" tax_class="test"></product>';
@@ -187,7 +187,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 
-    public function testExceptionIsThrownIfTaxClassIsMissing()
+    public function testExceptionIsThrownIfTaxClassIsMissing(): void
     {
         $this->expectException(TaxClassAttributeMissingForImportedProductException::class);
         $xml = '<product sku="foo" type="simple"></product>';
@@ -195,7 +195,7 @@ class ProductXmlToProductBuilderLocatorTest extends TestCase
         $this->createProductXmlToProductBuilderLocatorInstance()->createProductBuilderFromXml($xml);
     }
 
-    public function testExceptionIsThrownIfNoFactoryForGivenTypeCodeIsFound()
+    public function testExceptionIsThrownIfNoFactoryForGivenTypeCodeIsFound(): void
     {
         $this->expectException(NoMatchingProductTypeBuilderFactoryFoundException::class);
         $this->expectExceptionMessage('No product type builder factory for the product type code "invalid" was found');

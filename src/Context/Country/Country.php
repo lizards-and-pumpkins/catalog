@@ -36,7 +36,7 @@ class Country
         return new static(strtoupper($trimmedIsoString));
     }
 
-    private static function validateCountrySpecFormat(string $isoString)
+    private static function validateCountrySpecFormat(string $isoString): void
     {
         if ('' === $isoString) {
             throw new InvalidCountrySpecificationException('The country specification must not be empty');

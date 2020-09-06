@@ -57,7 +57,7 @@ class GenericSnippetKeyGenerator implements SnippetKeyGenerator
     /**
      * @param mixed[] $data
      */
-    private function validateDataContainsRequiredParts(array $data)
+    private function validateDataContainsRequiredParts(array $data): void
     {
         $missingDataParts = array_diff($this->usedDataParts, array_keys($data));
 

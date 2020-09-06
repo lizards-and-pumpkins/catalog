@@ -20,7 +20,7 @@ class AddProductListingCommandHandler implements CommandHandler
         $this->eventQueue = $domainEventQueue;
     }
     
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $command = AddProductListingCommand::fromMessage($message);
         $this->eventQueue->add(new ProductListingWasAddedDomainEvent($command->getProductListing()));

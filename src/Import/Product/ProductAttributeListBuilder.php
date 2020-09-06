@@ -32,7 +32,7 @@ class ProductAttributeListBuilder
         $this->attributes = $attributes;
     }
 
-    private static function validateAttributesMayBeCombinedIntoList(ProductAttribute ...$attributes)
+    private static function validateAttributesMayBeCombinedIntoList(ProductAttribute ...$attributes): void
     {
         every(self::getAttributesGroupedByCode($attributes), function (array $attributesByCode) {
             self::validateAttributesHaveSameContextParts(...$attributesByCode);
@@ -51,7 +51,7 @@ class ProductAttributeListBuilder
         }, []);
     }
 
-    private static function validateAttributesHaveSameContextParts(ProductAttribute $first, ProductAttribute ...$others)
+    private static function validateAttributesHaveSameContextParts(ProductAttribute $first, ProductAttribute ...$others): void
     {
         every($others, function (ProductAttribute $attributeToCompare) use ($first) {
             if (!$first->hasSameContextPartsAs($attributeToCompare)) {

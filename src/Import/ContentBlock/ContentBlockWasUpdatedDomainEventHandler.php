@@ -19,7 +19,7 @@ class ContentBlockWasUpdatedDomainEventHandler implements DomainEventHandler
         $this->projector = $projector;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $domainEvent = ContentBlockWasUpdatedDomainEvent::fromMessage($message);
         $this->projector->project($domainEvent->getContentBlockSource());

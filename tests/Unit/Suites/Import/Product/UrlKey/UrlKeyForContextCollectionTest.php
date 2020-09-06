@@ -12,33 +12,33 @@ use PHPUnit\Framework\TestCase;
 class UrlKeyForContextCollectionTest extends TestCase
 {
     /**
-     * @var UrlKeyForContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlKeyForContext|MockObject
      */
     private $stubUrlKeyForContext;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubUrlKeyForContext = $this->createMock(UrlKeyForContext::class);
     }
     
-    public function testItIsCountable()
+    public function testItIsCountable(): void
     {
         $this->assertInstanceOf(\Countable::class, new UrlKeyForContextCollection());
     }
 
-    public function testItIsAnIteratorAggregate()
+    public function testItIsAnIteratorAggregate(): void
     {
         $this->assertInstanceOf(\IteratorAggregate::class, new UrlKeyForContextCollection());
     }
 
-    public function testItCountsTheNumberOfUrlKeys()
+    public function testItCountsTheNumberOfUrlKeys(): void
     {
         $this->assertCount(0, new UrlKeyForContextCollection());
         $this->assertCount(1, new UrlKeyForContextCollection($this->stubUrlKeyForContext));
         $this->assertCount(2, new UrlKeyForContextCollection($this->stubUrlKeyForContext, $this->stubUrlKeyForContext));
     }
 
-    public function testItIteratesOverTheGivenUrlKeys()
+    public function testItIteratesOverTheGivenUrlKeys(): void
     {
         $collection = new UrlKeyForContextCollection($this->stubUrlKeyForContext);
         foreach ($collection as $urlKey) {
@@ -47,7 +47,7 @@ class UrlKeyForContextCollectionTest extends TestCase
         $this->assertTrue(isset($urlKey), 'No iteration was performed');
     }
 
-    public function testItReturnsAnArrayOfUrlKeys()
+    public function testItReturnsAnArrayOfUrlKeys(): void
     {
         $collection = new UrlKeyForContextCollection($this->stubUrlKeyForContext, $this->stubUrlKeyForContext);
         $this->assertSame([$this->stubUrlKeyForContext, $this->stubUrlKeyForContext], $collection->getUrlKeys());

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class LayoutTest extends TestCase
 {
-    public function testLayoutIsCreatedFromArray()
+    public function testLayoutIsCreatedFromArray(): void
     {
         $layoutArray = [
             [
@@ -32,7 +32,7 @@ class LayoutTest extends TestCase
         $this->assertContainsOnly(Layout::class, $snippetLayout->getNodeChildren());
     }
 
-    public function testAttributeValueIsReturned()
+    public function testAttributeValueIsReturned(): void
     {
         $layoutArray = [
             [
@@ -46,7 +46,7 @@ class LayoutTest extends TestCase
         $this->assertEquals('foo', $snippet->getAttribute('name'));
     }
 
-    public function testNullIsReturnedIfLayoutAttributeIsNotSet()
+    public function testNullIsReturnedIfLayoutAttributeIsNotSet(): void
     {
         $layoutArray = [
             [
@@ -60,13 +60,13 @@ class LayoutTest extends TestCase
         $this->assertNull($snippet->getAttribute('name'));
     }
 
-    public function testExceptionIsThrownIfRootElementIsNotAnArray()
+    public function testExceptionIsThrownIfRootElementIsNotAnArray(): void
     {
         $this->expectException(RootElementOfLayoutMustBeAnArrayException::class);
         Layout::fromArray(['foo']);
     }
 
-    public function testFalseIsReturnedIfThereAreNoChildren()
+    public function testFalseIsReturnedIfThereAreNoChildren(): void
     {
         $layoutArray = [
             [
@@ -79,7 +79,7 @@ class LayoutTest extends TestCase
         $this->assertFalse($layout->hasChildren());
     }
 
-    public function testTrueIsReturnedIfThereAreChildren()
+    public function testTrueIsReturnedIfThereAreChildren(): void
     {
         $layoutArray = [
             [

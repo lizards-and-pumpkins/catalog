@@ -14,21 +14,21 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractDataPoolTest extends TestCase
 {
     /**
-     * @var KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
+     * @var KeyValueStore|MockObject
      */
     private $mockKeyValueStore;
 
     /**
-     * @var SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchEngine|MockObject
      */
     private $mockSearchEngine;
 
     /**
-     * @var UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlKeyStore|MockObject
      */
     private $mockUrlKeyStore;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockKeyValueStore = $this->createMock(KeyValueStore::class);
         $this->mockSearchEngine = $this->createMock(SearchEngine::class);
@@ -36,7 +36,7 @@ abstract class AbstractDataPoolTest extends TestCase
     }
 
     /**
-     * @return UrlKeyStore|\PHPUnit_Framework_MockObject_MockObject
+     * @return UrlKeyStore|MockObject
      */
     final protected function getMockUrlKeyStore() : UrlKeyStore
     {
@@ -44,7 +44,7 @@ abstract class AbstractDataPoolTest extends TestCase
     }
 
     /**
-     * @return SearchEngine|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchEngine|MockObject
      */
     final protected function getMockSearchEngine() : SearchEngine
     {
@@ -52,7 +52,7 @@ abstract class AbstractDataPoolTest extends TestCase
     }
 
     /**
-     * @return KeyValueStore|\PHPUnit_Framework_MockObject_MockObject
+     * @return KeyValueStore|MockObject
      */
     final protected function getMockKeyValueStore() : KeyValueStore
     {
@@ -60,14 +60,14 @@ abstract class AbstractDataPoolTest extends TestCase
     }
 
     /**
-     * @return ProductId|\PHPUnit_Framework_MockObject_MockObject
+     * @return ProductId|MockObject
      */
     final protected function getStubProductId() : ProductId
     {
         return $this->createMock(ProductId::class);
     }
 
-    final protected function addSetMethodToStubKeyValueStore()
+    final protected function addSetMethodToStubKeyValueStore(): void
     {
         $this->mockKeyValueStore->expects($this->once())->method('set');
     }
@@ -75,7 +75,7 @@ abstract class AbstractDataPoolTest extends TestCase
     /**
      * @param mixed $returnValue
      */
-    final protected function addGetMethodToStubKeyValueStore($returnValue)
+    final protected function addGetMethodToStubKeyValueStore($returnValue): void
     {
         $this->mockKeyValueStore->expects($this->once())->method('get')->willReturn($returnValue);
     }
@@ -83,12 +83,12 @@ abstract class AbstractDataPoolTest extends TestCase
     /**
      * @param string[] $returnValue
      */
-    final protected function addMultiGetMethodToStubKeyValueStore(array $returnValue)
+    final protected function addMultiGetMethodToStubKeyValueStore(array $returnValue): void
     {
         $this->mockKeyValueStore->expects($this->once())->method('multiGet')->willReturn($returnValue);
     }
 
-    final protected function addHasMethodToStubKeyValueStore(bool $returnResult)
+    final protected function addHasMethodToStubKeyValueStore(bool $returnResult): void
     {
         $this->mockKeyValueStore->expects($this->once())
             ->method('has')

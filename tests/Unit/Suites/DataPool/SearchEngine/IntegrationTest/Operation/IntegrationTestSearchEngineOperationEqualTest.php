@@ -27,7 +27,7 @@ class IntegrationTestSearchEngineOperationEqualTest extends TestCase
     /**
      * @param string $fieldKey
      * @param string[] $fieldValues
-     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocumentField|MockObject
      */
     private function createStubSearchDocumentField(string $fieldKey, array $fieldValues) : SearchDocumentField
     {
@@ -40,7 +40,7 @@ class IntegrationTestSearchEngineOperationEqualTest extends TestCase
 
     /**
      * @param SearchDocumentField[] ...$stubSearchDocumentFields
-     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocument|MockObject
      */
     private function createStubSearchDocumentWithGivenFields(
         SearchDocumentField ...$stubSearchDocumentFields
@@ -55,18 +55,18 @@ class IntegrationTestSearchEngineOperationEqualTest extends TestCase
         return $stubSearchDocument;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $dataSet = ['fieldName' => $this->testFieldName, 'fieldValue' => $this->testFiledValue];
         $this->operation = new IntegrationTestSearchEngineOperationEqual($dataSet);
     }
 
-    public function testImplementsIntegrationTestSearchEngineOperationInterface()
+    public function testImplementsIntegrationTestSearchEngineOperationInterface(): void
     {
         $this->assertInstanceOf(IntegrationTestSearchEngineOperation::class, $this->operation);
     }
 
-    public function testReturnsFalseIfDocumentFieldValueIsNotMatching()
+    public function testReturnsFalseIfDocumentFieldValueIsNotMatching(): void
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField($this->testFieldName, ['qux']);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);
@@ -74,7 +74,7 @@ class IntegrationTestSearchEngineOperationEqualTest extends TestCase
         $this->assertFalse($this->operation->matches($stubSearchDocument));
     }
 
-    public function testReturnsTrueIfDocumentFieldValueIsMatching()
+    public function testReturnsTrueIfDocumentFieldValueIsMatching(): void
     {
         $stubSearchDocumentField = $this->createStubSearchDocumentField($this->testFieldName, [$this->testFiledValue]);
         $stubSearchDocument = $this->createStubSearchDocumentWithGivenFields($stubSearchDocumentField);

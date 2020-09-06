@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductDetail;
 
 use LizardsAndPumpkins\Context\Context;
-use LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse;
+use LizardsAndPumpkins\Http\GenericHttpResponse;
 use LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilder;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpUrl;
@@ -13,8 +13,7 @@ use LizardsAndPumpkins\Http\Routing\HttpRequestHandler;
 use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
-use PHPUnit\Framework\MockObject\Invocation\ObjectInvocation;
-use PHPUnit\Framework\MockObject\Matcher\AnyInvokedCount;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,47 +30,21 @@ class ProductDetailViewRequestHandlerTest extends TestCase
     private $requestHandler;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubContext;
-
-    /**
-     * @var PageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageBuilder
      */
     private $mockPageBuilder;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest
      */
     private $stubRequest;
 
     /**
-     * @var Translator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translator
      */
     private $stubTranslator;
 
-    /**
-     * @var AnyInvokedCount
-     */
-    private $addSnippetsToPageSpy;
-
-    private function assertDynamicSnippetWasAddedToPageBuilder(string $snippetCode, string $snippetValue)
-    {
-        $numberOfTimesSnippetWasAddedToPageBuilder = array_sum(
-            array_map(function (ObjectInvocation $invocation) use ($snippetCode, $snippetValue) {
-                return (int) ([$snippetCode => $snippetCode] === $invocation->getParameters()[0] &&
-                              [$snippetCode => $snippetValue] === $invocation->getParameters()[1]);
-            }, $this->addSnippetsToPageSpy->getInvocations())
-        );
-
-        $this->assertEquals(1, $numberOfTimesSnippetWasAddedToPageBuilder, sprintf(
-            'Failed to assert "%s" snippet with "%s" value was added to page builder.',
-            $snippetCode,
-            $snippetValue
-        ));
-    }
-
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $pageMeta = [
             ProductDetailPageMetaInfoSnippetContent::KEY_PRODUCT_ID => 'foo',
@@ -81,20 +54,17 @@ class ProductDetailViewRequestHandlerTest extends TestCase
             PageMetaInfoSnippetContent::KEY_PAGE_SPECIFIC_DATA => [],
         ];
 
-        $this->stubContext = $this->createMock(Context::class);
+        $stubContext = $this->createMock(Context::class);
         $this->mockPageBuilder = $this->createMock(PageBuilder::class);
-
-        $this->addSnippetsToPageSpy = new AnyInvokedCount();
-        $this->mockPageBuilder->expects($this->addSnippetsToPageSpy)->method('addSnippetsToPage');
 
         $this->stubTranslator = $this->createMock(Translator::class);
 
-        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        /** @var TranslatorRegistry|MockObject $stubTranslatorRegistry */
         $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
         $this->requestHandler = new ProductDetailViewRequestHandler(
-            $this->stubContext,
+            $stubContext,
             $this->mockPageBuilder,
             $stubTranslatorRegistry,
             $pageMeta
@@ -106,17 +76,17 @@ class ProductDetailViewRequestHandlerTest extends TestCase
         $this->stubRequest->method('getUrl')->willReturn($stubUrl);
     }
 
-    public function testRequestHandlerInterfaceIsImplemented()
+    public function testRequestHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->requestHandler);
     }
 
-    public function testCanProcessAnyRequest()
+    public function testCanProcessAnyRequest(): void
     {
         $this->assertTrue($this->requestHandler->canProcess($this->stubRequest));
     }
 
-    public function testPageIsReturned()
+    public function testPageIsReturned(): void
     {
         $this->mockPageBuilder->method('buildPage')->with(
             $this->anything(),
@@ -127,8 +97,9 @@ class ProductDetailViewRequestHandlerTest extends TestCase
         $this->assertInstanceOf(GenericHttpResponse::class, $this->requestHandler->process($this->stubRequest));
     }
 
-    public function testTranslationsAreAddedToPageBuilder()
+    public function testTranslationsAreAddedToPageBuilder(): void
     {
+        $snippetCode = 'translations';
         $translations = ['foo' => 'bar'];
 
         $this->stubTranslator->method('jsonSerialize')->willReturn($translations);
@@ -136,9 +107,11 @@ class ProductDetailViewRequestHandlerTest extends TestCase
         $this->mockPageBuilder->method('buildPage')
             ->willReturn($this->createMock(GenericHttpResponse::class));
 
-        $this->requestHandler->process($this->stubRequest);
+        $this->mockPageBuilder->expects($this->at(0))->method('addSnippetsToPage')->with(
+            [$snippetCode => $snippetCode],
+            [$snippetCode => json_encode($translations)]
+        );
 
-        $snippetCode = 'translations';
-        $this->assertDynamicSnippetWasAddedToPageBuilder($snippetCode, json_encode($translations));
+        $this->requestHandler->process($this->stubRequest);
     }
 }

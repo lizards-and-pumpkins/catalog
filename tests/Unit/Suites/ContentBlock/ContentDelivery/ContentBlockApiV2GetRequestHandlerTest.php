@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers  \LizardsAndPumpkins\ContentBlock\ContentDelivery\ContentBlockApiV2GetRequestHandler
- * @uses    \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses    \LizardsAndPumpkins\Http\GenericHttpResponse
  * @uses    \LizardsAndPumpkins\Http\HttpHeaders
  * @uses    \LizardsAndPumpkins\Http\HttpUrl
  */
@@ -27,16 +27,16 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
     private $handler;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $stubRequest;
 
     /**
-     * @var ContentBlockService|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentBlockService|MockObject
      */
     private $stubContentBlockService;
 
-    private function prepareValidContentBlock(string $blockName, string $blockContents)
+    private function prepareValidContentBlock(string $blockName, string $blockContents): void
     {
         $this->stubRequest->method('getUrl')
             ->willReturn(HttpUrl::fromString(sprintf('http://example.com/api/content_blocks/%s/', $blockName)));
@@ -44,11 +44,11 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
         $this->stubContentBlockService->method('getContentBlock')->with($blockName)->willReturn($blockContents);
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContentBlockService = $this->createMock(ContentBlockService::class);
 
-        /** @var ContextBuilder|\PHPUnit_Framework_MockObject_MockObject $dummyContextBuilder */
+        /** @var ContextBuilder|MockObject $dummyContextBuilder */
         $dummyContextBuilder = $this->createMock(ContextBuilder::class);
 
         $this->handler = new ContentBlockApiV2GetRequestHandler($this->stubContentBlockService, $dummyContextBuilder);
@@ -56,12 +56,12 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testIsHttpRequestHandler()
+    public function testIsHttpRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->handler);
     }
 
-    public function testCanNotProcessIfContentBlockIdIsMissing()
+    public function testCanNotProcessIfContentBlockIdIsMissing(): void
     {
         $this->stubRequest->method('getUrl')->willReturn(HttpUrl::fromString('http://example.com/api/content_blocks/'));
 
@@ -72,7 +72,7 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
      * @dataProvider emptyBlockIdProvider
      * @param string $emptyBlockId
      */
-    public function testCanNotProcessIfContentBlockIdIsEmpty(string $emptyBlockId)
+    public function testCanNotProcessIfContentBlockIdIsEmpty(string $emptyBlockId): void
     {
         $this->stubRequest->method('getUrl')
             ->willReturn(HttpUrl::fromString(sprintf('http://example.com/api/content_blocks/%s/', $emptyBlockId)));
@@ -85,14 +85,14 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
         return [[''], ['%20']];
     }
 
-    public function testCanProcess()
+    public function testCanProcess(): void
     {
         $this->prepareValidContentBlock('block_id', 'block_content');
 
         $this->assertTrue($this->handler->canProcess($this->stubRequest));
     }
 
-    public function testThrowsExceptionDuringAttemptToProcessInvalidRequest()
+    public function testThrowsExceptionDuringAttemptToProcessInvalidRequest(): void
     {
         $this->expectException(UnableToProcessContentBlockApiGetRequestException::class);
 
@@ -101,14 +101,14 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
         $this->handler->process($this->stubRequest);
     }
 
-    public function testReturnsHttpResponse()
+    public function testReturnsHttpResponse(): void
     {
         $this->prepareValidContentBlock('block_id', 'block_content');
 
         $this->assertInstanceOf(HttpResponse::class, $this->handler->process($this->stubRequest));
     }
 
-    public function testReturnsHttpResponseWithNotFoundCodeAndMessageIfContentBlockDoesNotExist()
+    public function testReturnsHttpResponseWithNotFoundCodeAndMessageIfContentBlockDoesNotExist(): void
     {
         $contentBlockId = 'foo';
 
@@ -124,7 +124,7 @@ class ContentBlockApiV2GetRequestHandlerTest extends TestCase
         $this->assertSame(sprintf('Content block "%s" does not exist.', $contentBlockId), $response->getBody());
     }
 
-    public function testReturnsHttpResponseWithBlockContent()
+    public function testReturnsHttpResponseWithBlockContent(): void
     {
         $this->prepareValidContentBlock('block_id', 'block_content');
 

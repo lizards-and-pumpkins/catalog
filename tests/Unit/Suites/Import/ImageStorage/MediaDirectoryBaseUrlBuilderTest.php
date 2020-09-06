@@ -19,7 +19,7 @@ class MediaDirectoryBaseUrlBuilderTest extends TestCase
     private $testMediaBaseUrlPath = 'test-media/';
 
     /**
-     * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseUrlBuilder|MockObject
      */
     private $mockBaseUrlBuilder;
 
@@ -28,7 +28,7 @@ class MediaDirectoryBaseUrlBuilderTest extends TestCase
      */
     private $mediaBaseUrlBuilder;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
         $this->mediaBaseUrlBuilder = new MediaDirectoryBaseUrlBuilder(
@@ -37,19 +37,19 @@ class MediaDirectoryBaseUrlBuilderTest extends TestCase
         );
     }
     
-    public function testItImplementsTheMediaBaseUrlBuilder()
+    public function testItImplementsTheMediaBaseUrlBuilder(): void
     {
         $this->assertInstanceOf(MediaBaseUrlBuilder::class, $this->mediaBaseUrlBuilder);
     }
 
-    public function testItThrowsAnExceptionIfTheMediaBaseUrlPathIsNoString()
+    public function testItThrowsAnExceptionIfTheMediaBaseUrlPathIsNoString(): void
     {
         $this->expectException(\TypeError::class);
         $invalidPath = 123;
         new MediaDirectoryBaseUrlBuilder($this->mockBaseUrlBuilder, $invalidPath);
     }
 
-    public function testItThrowsAnExceptionIfTheMediaBaseUrlPathDoesNotEndWithASlash()
+    public function testItThrowsAnExceptionIfTheMediaBaseUrlPathDoesNotEndWithASlash(): void
     {
         $this->expectException(InvalidMediaBaseUrlPathException::class);
         $this->expectExceptionMessage('The media base URL path has to end with a training slash');
@@ -57,7 +57,7 @@ class MediaDirectoryBaseUrlBuilderTest extends TestCase
         new MediaDirectoryBaseUrlBuilder($this->mockBaseUrlBuilder, $invalidPath);
     }
 
-    public function testItReturnsTheValueFromTheBaseUrlBuilderIncludingThePathSuffix()
+    public function testItReturnsTheValueFromTheBaseUrlBuilderIncludingThePathSuffix(): void
     {
         $stubContext = $this->createMock(Context::class);
         $this->mockBaseUrlBuilder->method('create')->with($stubContext)->willReturn(

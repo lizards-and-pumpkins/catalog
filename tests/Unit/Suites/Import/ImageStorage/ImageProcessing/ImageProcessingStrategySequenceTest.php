@@ -16,17 +16,17 @@ class ImageProcessingStrategySequenceTest extends TestCase
      */
     private $strategySequence;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->strategySequence = new ImageProcessingStrategySequence();
     }
 
-    public function testImageProcessorStrategyInterfaceIsImplemented()
+    public function testImageProcessorStrategyInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(ImageProcessingStrategy::class, $this->strategySequence);
     }
 
-    public function testAllStrategiesOfSequenceAreExecuted()
+    public function testAllStrategiesOfSequenceAreExecuted(): void
     {
         $mockStrategy1 = $this->createMock(ImageProcessingStrategy::class);
         $mockStrategy1->expects($this->once())

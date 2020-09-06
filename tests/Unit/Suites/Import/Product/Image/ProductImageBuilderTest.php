@@ -34,27 +34,27 @@ class ProductImageBuilderTest extends TestCase
         ]
     ];
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testProductId = new ProductId('test-sku');
     }
     
-    public function testItReturnsAProductImageBuilderInstanceFromNamedConstructor()
+    public function testItReturnsAProductImageBuilderInstanceFromNamedConstructor(): void
     {
         $productImageBuilder = ProductImageBuilder::fromArray($this->testProductId, $this->testAttributeArray);
         $this->assertInstanceOf(ProductImageBuilder::class, $productImageBuilder);
     }
 
-    public function testItThrowsAnExceptionIfThereIsNoFileAttribute()
+    public function testItThrowsAnExceptionIfThereIsNoFileAttribute(): void
     {
         $this->expectException(InvalidProductImageAttributeListException::class);
         $this->expectExceptionMessage('The image attribute "file" is missing for product "test-sku"');
         ProductImageBuilder::fromArray($this->testProductId, []);
     }
 
-    public function testItReturnsAProductImageForAGivenContext()
+    public function testItReturnsAProductImageForAGivenContext(): void
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $productImageBuilder = ProductImageBuilder::fromArray($this->testProductId, $this->testAttributeArray);
         $this->assertInstanceOf(ProductImage::class, $productImageBuilder->getImageForContext($stubContext));

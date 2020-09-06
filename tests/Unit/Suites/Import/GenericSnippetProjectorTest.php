@@ -6,6 +6,7 @@ namespace LizardsAndPumpkins\Import;
 
 use LizardsAndPumpkins\DataPool\DataPoolWriter;
 use LizardsAndPumpkins\DataPool\KeyValueStore\Snippet;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,34 +15,34 @@ use PHPUnit\Framework\TestCase;
 class GenericSnippetProjectorTest extends TestCase
 {
     /**
-     * @var DataPoolWriter|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolWriter|MockObject
      */
     private $mockDataPoolWriter;
 
     /**
      * @param mixed $projectionSourceData
-     * @param Snippet|\PHPUnit_Framework_MockObject_MockObject $snippet
-     * @return SnippetRenderer|\PHPUnit_Framework_MockObject_MockObject
+     * @param Snippet $snippet
+     * @return SnippetRenderer|MockObject
      */
-    private function createStubSnippetRenderer($projectionSourceData, Snippet $snippet)
+    private function createStubSnippetRenderer($projectionSourceData, Snippet $snippet): SnippetRenderer
     {
-        $stubSnippetRenderer = $this->getMockBuilder(SnippetRenderer::class)->setMethods(['render'])->getMock();
+        $stubSnippetRenderer = $this->createMock(SnippetRenderer::class);
         $stubSnippetRenderer->method('render')->with($projectionSourceData)->willReturn([$snippet]);
 
         return $stubSnippetRenderer;
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockDataPoolWriter = $this->createMock(DataPoolWriter::class);
     }
 
-    public function testImplementsProjectorInterface()
+    public function testImplementsProjectorInterface(): void
     {
         $this->assertInstanceOf(Projector::class, new GenericSnippetProjector($this->mockDataPoolWriter));
     }
 
-    public function testSnippetIsWrittenIntoDataPool()
+    public function testSnippetIsWrittenIntoDataPool(): void
     {
         $testProjectionSourceData = 'foo';
 

@@ -13,12 +13,12 @@ use PHPUnit\Framework\TestCase;
 class SearchEngineResponseTest extends TestCase
 {
     /**
-     * @var ProductId|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductId|MockObject
      */
     private $stubProductId;
 
     /**
-     * @var FacetFieldCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFieldCollection|MockObject
      */
     private $stubFacetFieldCollection;
 
@@ -29,7 +29,7 @@ class SearchEngineResponseTest extends TestCase
 
     private $testTotalNumberOfResults = 5;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubProductId = $this->createMock(ProductId::class);
         $this->stubFacetFieldCollection = $this->createMock(FacetFieldCollection::class);
@@ -41,17 +41,17 @@ class SearchEngineResponseTest extends TestCase
         );
     }
 
-    public function testProductIdsAreReturned()
+    public function testProductIdsAreReturned(): void
     {
         $this->assertSame([$this->stubProductId], $this->searchEngineResponse->getProductIds());
     }
 
-    public function testSearchEngineFacetFieldCollectionIsReturned()
+    public function testSearchEngineFacetFieldCollectionIsReturned(): void
     {
         $this->assertSame($this->stubFacetFieldCollection, $this->searchEngineResponse->getFacetFieldCollection());
     }
 
-    public function testTotalNumberOfResultsIsReturned()
+    public function testTotalNumberOfResultsIsReturned(): void
     {
         $this->assertSame($this->testTotalNumberOfResults, $this->searchEngineResponse->getTotalNumberOfResults());
     }

@@ -33,7 +33,7 @@ class FacetFilterRange
      * @param int|float|string|null $rangeTo
      * @return FacetFilterRange
      */
-    public static function create($rangeFrom, $rangeTo)
+    public static function create($rangeFrom, $rangeTo): FacetFilterRange
     {
         self::validateBoundaryType($rangeFrom);
         self::validateBoundaryType($rangeTo);
@@ -51,7 +51,7 @@ class FacetFilterRange
     /**
      * @param int|float|string|null $boundary
      */
-    private static function validateBoundaryType($boundary)
+    private static function validateBoundaryType($boundary): void
     {
         if (!is_int($boundary) && !is_string($boundary) && !is_float($boundary) && null !== $boundary) {
             throw new InvalidFacetFilterRangeBoundariesException(sprintf(

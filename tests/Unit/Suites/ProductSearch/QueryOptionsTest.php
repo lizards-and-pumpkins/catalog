@@ -18,12 +18,12 @@ class QueryOptionsTest extends TestCase
     private $testFilterSelection = ['foo' => ['bar', 'baz']];
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $stubContext;
 
     /**
-     * @var FacetFiltersToIncludeInResult|\PHPUnit_Framework_MockObject_MockObject
+     * @var FacetFiltersToIncludeInResult|MockObject
      */
     private $stubFacetFiltersToIncludeInResult;
 
@@ -32,7 +32,7 @@ class QueryOptionsTest extends TestCase
     private $testPageNumber = 1;
 
     /**
-     * @var SortBy|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortBy|MockObject
      */
     private $stubSearchOrderConfig;
 
@@ -41,7 +41,7 @@ class QueryOptionsTest extends TestCase
      */
     private $queryOptions;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContext = $this->createMock(Context::class);
         $this->stubFacetFiltersToIncludeInResult = $this->createMock(FacetFiltersToIncludeInResult::class);
@@ -57,7 +57,7 @@ class QueryOptionsTest extends TestCase
         );
     }
 
-    public function testExceptionIsThrownIfRowsPerPageIsNotAnInteger()
+    public function testExceptionIsThrownIfRowsPerPageIsNotAnInteger(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -72,7 +72,7 @@ class QueryOptionsTest extends TestCase
         );
     }
 
-    public function testExceptionIsThrownIfRowsPerPageIsNotPositive()
+    public function testExceptionIsThrownIfRowsPerPageIsNotPositive(): void
     {
         $invalidRowsPerPage = 0;
 
@@ -91,7 +91,7 @@ class QueryOptionsTest extends TestCase
         );
     }
 
-    public function testExceptionIsThrownIfCurrentPageNumberIsNotAnInteger()
+    public function testExceptionIsThrownIfCurrentPageNumberIsNotAnInteger(): void
     {
         $this->expectException(\TypeError::class);
 
@@ -107,7 +107,7 @@ class QueryOptionsTest extends TestCase
     }
 
 
-    public function testExceptionIsThrownIfPageNumberIsNegative()
+    public function testExceptionIsThrownIfPageNumberIsNegative(): void
     {
         $invalidPageNumber = -1;
 
@@ -126,17 +126,17 @@ class QueryOptionsTest extends TestCase
         );
     }
 
-    public function testFilterSelectionIsReturned()
+    public function testFilterSelectionIsReturned(): void
     {
         $this->assertSame($this->testFilterSelection, $this->queryOptions->getFilterSelection());
     }
 
-    public function testContextIsReturned()
+    public function testContextIsReturned(): void
     {
         $this->assertSame($this->stubContext, $this->queryOptions->getContext());
     }
 
-    public function testFacetFiltersToIncludeInResultAreReturned()
+    public function testFacetFiltersToIncludeInResultAreReturned(): void
     {
         $this->assertSame(
             $this->stubFacetFiltersToIncludeInResult,
@@ -144,17 +144,17 @@ class QueryOptionsTest extends TestCase
         );
     }
 
-    public function testNumberOfRowsPerPageIsReturned()
+    public function testNumberOfRowsPerPageIsReturned(): void
     {
         $this->assertSame($this->testRowsPerPage, $this->queryOptions->getRowsPerPage());
     }
 
-    public function testCurrentPageNumberIsReturned()
+    public function testCurrentPageNumberIsReturned(): void
     {
         $this->assertSame($this->testPageNumber, $this->queryOptions->getPageNumber());
     }
 
-    public function testSortByIsReturned()
+    public function testSortByIsReturned(): void
     {
         $this->assertSame($this->stubSearchOrderConfig, $this->queryOptions->getSortBy());
     }

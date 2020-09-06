@@ -22,12 +22,12 @@ class DefaultCriteriaParserTest extends TestCase
      */
     private $parser;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->parser = new DefaultCriteriaParser();
     }
 
-    public function testImplementsCriteriaParserInterface()
+    public function testImplementsCriteriaParserInterface(): void
     {
         $this->assertInstanceOf(CriteriaParser::class, $this->parser);
     }
@@ -35,24 +35,24 @@ class DefaultCriteriaParserTest extends TestCase
     /**
      * @dataProvider emptyStringProvider
      */
-    public function testReturnsAnythingCriteriaForEmptyString(string $emptyString)
+    public function testReturnsAnythingCriteriaForEmptyString(string $emptyString): void
     {
         $this->assertInstanceOf(SearchCriterionAnything::class, $this->parser->createCriteriaFromString($emptyString));
     }
 
-    public function testCanParseSingleValue()
+    public function testCanParseSingleValue(): void
     {
         $expectedCriteria = new SearchCriterionEqual('foo', 'bar');
         $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:bar'));
     }
 
-    public function testCanParseValueContainingWhitespace()
+    public function testCanParseValueContainingWhitespace(): void
     {
         $expectedCriteria = new SearchCriterionEqual('foo', 'bar baz');
         $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:bar baz'));
     }
 
-    public function testCanParseMultipleValuesFilterWithAndCriteria()
+    public function testCanParseMultipleValuesFilterWithAndCriteria(): void
     {
         $expectedCriteria = CompositeSearchCriterion::createAnd(
             new SearchCriterionEqual('foo', 'bar'),
@@ -61,7 +61,7 @@ class DefaultCriteriaParserTest extends TestCase
         $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:{and:[bar,baz]}'));
     }
 
-    public function testCanParseMultipleValuesFilterWithOrCriteria()
+    public function testCanParseMultipleValuesFilterWithOrCriteria(): void
     {
         $expectedCriteria = CompositeSearchCriterion::createOr(
             new SearchCriterionEqual('foo', 'bar'),
@@ -70,7 +70,7 @@ class DefaultCriteriaParserTest extends TestCase
         $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('foo:{or:[bar,baz]}'));
     }
 
-    public function testCanParseMultipleCriteriaWithSingleValues()
+    public function testCanParseMultipleCriteriaWithSingleValues(): void
     {
         $expectedCriteria = CompositeSearchCriterion::createOr(
             new SearchCriterionEqual('foo', 'bar'),
@@ -79,7 +79,7 @@ class DefaultCriteriaParserTest extends TestCase
         $this->assertEquals($expectedCriteria, $this->parser->createCriteriaFromString('or:[foo:bar,baz:qux]'));
     }
 
-    public function testCanParseMultipleCriteriaWithCompositeValues()
+    public function testCanParseMultipleCriteriaWithCompositeValues(): void
     {
         $criteriaString = 'or:[color:{and:[red,green]},color:{and:[yellow,blue]}]';
         $expectedCriteria = CompositeSearchCriterion::createOr(
@@ -98,7 +98,7 @@ class DefaultCriteriaParserTest extends TestCase
     /**
      * @dataProvider malformedFiltersStringProvider
      */
-    public function testExceptionIsThrownIfFiltersQueryStringIsMalformed(string $malformedFiltersString)
+    public function testExceptionIsThrownIfFiltersQueryStringIsMalformed(string $malformedFiltersString): void
     {
         $this->expectException(MalformedCriteriaQueryStringException::class);
         $this->parser->createCriteriaFromString($malformedFiltersString);

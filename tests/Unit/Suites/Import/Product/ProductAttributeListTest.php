@@ -15,17 +15,17 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductAttributeListTest extends TestCase
 {
-    public function testCountableInterfaceIsImplemented()
+    public function testCountableInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(\Countable::class, new ProductAttributeList());
     }
 
-    public function testJsonSerializableInterfaceIsImplemented()
+    public function testJsonSerializableInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, new ProductAttributeList());
     }
 
-    public function testItReturnsTheNumberOfAttributes()
+    public function testItReturnsTheNumberOfAttributes(): void
     {
         $attributeArray = [
             ProductAttribute::CODE => 'foo',
@@ -36,7 +36,7 @@ class ProductAttributeListTest extends TestCase
         $this->assertCount(2, ProductAttributeList::fromArray([$attributeArray, $attributeArray]));
     }
 
-    public function testAnAttributeCanBeRetrievedUsingAString()
+    public function testAnAttributeCanBeRetrievedUsingAString(): void
     {
         $attribute1 = [
             ProductAttribute::CODE => 'foo',
@@ -59,7 +59,7 @@ class ProductAttributeListTest extends TestCase
         $this->assertEquals('bar2', $attributesWithCode[1]->getValue());
     }
 
-    public function testAnAttributeCanBeRetrievedUsingAnAttributeCodeInstance()
+    public function testAnAttributeCanBeRetrievedUsingAnAttributeCodeInstance(): void
     {
         $attributeArray = [
             ProductAttribute::CODE => 'foo',
@@ -73,13 +73,13 @@ class ProductAttributeListTest extends TestCase
         $this->assertEquals('bar', $attributesWithCode[0]->getValue());
     }
 
-    public function testExceptionIsThrownIfNoAttributeWithGivenCodeIsSet()
+    public function testExceptionIsThrownIfNoAttributeWithGivenCodeIsSet(): void
     {
         $this->expectException(ProductAttributeNotFoundException::class);
         (new ProductAttributeList())->getAttributesWithCode('foo');
     }
 
-    public function testAttributeListIsCreatedFromAttributesArray()
+    public function testAttributeListIsCreatedFromAttributesArray(): void
     {
         $attributeArray = [
             [
@@ -96,7 +96,7 @@ class ProductAttributeListTest extends TestCase
         $this->assertEquals('bar', $attributeWithCode->getValue());
     }
 
-    public function testItMayContainMultipleProductAttributesWithTheSameCode()
+    public function testItMayContainMultipleProductAttributesWithTheSameCode(): void
     {
         $attributeArray = [
             [ProductAttribute::CODE => 'foo', ProductAttribute::CONTEXT => [], ProductAttribute::VALUE => 'bar'],
@@ -115,7 +115,7 @@ class ProductAttributeListTest extends TestCase
      * @param string[] $expected
      * @dataProvider numberOfAttributesToAddProvider
      */
-    public function testItReturnsTheCodesOfAttributesInTheList(int $numAttributesToAdd, array $expected)
+    public function testItReturnsTheCodesOfAttributesInTheList(int $numAttributesToAdd, array $expected): void
     {
         $attributes = [];
         for ($i = 0; $i < $numAttributesToAdd; $i++) {
@@ -146,12 +146,12 @@ class ProductAttributeListTest extends TestCase
         ];
     }
 
-    public function testHasAttributeReturnsFalseForAttributesNotInTheList()
+    public function testHasAttributeReturnsFalseForAttributesNotInTheList(): void
     {
         $this->assertFalse((new ProductAttributeList())->hasAttribute('foo'));
     }
 
-    public function testHasAttributeReturnsTrueForAttributesInTheList()
+    public function testHasAttributeReturnsTrueForAttributesInTheList(): void
     {
         $attributeArray = [[
             ProductAttribute::CODE => 'foo',
@@ -162,7 +162,7 @@ class ProductAttributeListTest extends TestCase
         $this->assertTrue($attributeList->hasAttribute('foo'));
     }
 
-    public function testItCanBeSerializedAndRehydrated()
+    public function testItCanBeSerializedAndRehydrated(): void
     {
         $attributesArray = [
             [
@@ -184,7 +184,7 @@ class ProductAttributeListTest extends TestCase
         $this->assertEquals($sourceAttributeList->getAttributeCodes(), $rehydratedAttributeList->getAttributeCodes());
     }
 
-    public function testItThrowsAnExceptionIfContextWithIncompatibleContextDataAreInjected()
+    public function testItThrowsAnExceptionIfContextWithIncompatibleContextDataAreInjected(): void
     {
         $this->expectException(ConflictingContextDataForProductAttributeListException::class);
         $expectedMessage = 'Conflicting context "locale" data set values found ' .
@@ -210,7 +210,7 @@ class ProductAttributeListTest extends TestCase
         ProductAttributeList::fromArray($attributesArray);
     }
 
-    public function testItReturnsAllAttributes()
+    public function testItReturnsAllAttributes(): void
     {
         $productAttributes = [
             new ProductAttribute('number_one', 1, []),

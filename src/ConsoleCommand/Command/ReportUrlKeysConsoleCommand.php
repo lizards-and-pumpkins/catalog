@@ -7,7 +7,7 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
 use LizardsAndPumpkins\DataPool\DataPoolReader;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 use function array_filter as filter;
 use function array_map as map;
@@ -62,7 +62,7 @@ class ReportUrlKeysConsoleCommand extends BaseCliCommand
         );
     }
 
-    final protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate): void
     {
         $version = $this->getDataVersionToDisplay();
         $urlKeys = $this->getUrlKeys($version, $this->getArg('type'));
@@ -87,7 +87,7 @@ class ReportUrlKeysConsoleCommand extends BaseCliCommand
     }
 
     /**
-     * @param array[] $urlKeyRecords
+     * @param string[] $urlKeyRecords
      * @param string $type
      * @return array[]
      */
@@ -109,7 +109,7 @@ class ReportUrlKeysConsoleCommand extends BaseCliCommand
         }, $rawUrlKeyRecords));
     }
 
-    private function outputMessage(string $message)
+    private function outputMessage(string $message): void
     {
         $this->getCLImate()->bold($message);
     }
@@ -131,7 +131,7 @@ class ReportUrlKeysConsoleCommand extends BaseCliCommand
     /**
      * @param string[] $formattedUrlKeys
      */
-    private function outputArray(array $formattedUrlKeys)
+    private function outputArray(array $formattedUrlKeys): void
     {
         every($formattedUrlKeys, function ($urlKey) {
             $this->output($urlKey);

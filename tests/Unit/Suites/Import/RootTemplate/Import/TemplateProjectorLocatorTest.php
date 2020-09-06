@@ -18,24 +18,24 @@ class TemplateProjectorLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->locator = new TemplateProjectorLocator;
     }
 
-    public function testExceptionIsThrownIfNonStringCodeIsPassed()
+    public function testExceptionIsThrownIfNonStringCodeIsPassed(): void
     {
         $this->expectException(\TypeError::class);
         $this->locator->getTemplateProjectorForCode(1);
     }
 
-    public function testExceptionIsThrownIfProjectorCanNotBeLocated()
+    public function testExceptionIsThrownIfProjectorCanNotBeLocated(): void
     {
         $this->expectException(UnableToLocateTemplateProjectorException::class);
         $this->locator->getTemplateProjectorForCode('foo');
     }
 
-    public function testProjectorForTemplateCodesIsReturned()
+    public function testProjectorForTemplateCodesIsReturned(): void
     {
         $dummyTemplateCode = 'foo';
 
@@ -46,7 +46,7 @@ class TemplateProjectorLocatorTest extends TestCase
         $this->assertSame($stubProjector, $result);
     }
 
-    public function testSameInstanceForSameTemplateCodeIsReturned()
+    public function testSameInstanceForSameTemplateCodeIsReturned(): void
     {
         $dummyTemplateCode = 'foo';
 
@@ -57,7 +57,7 @@ class TemplateProjectorLocatorTest extends TestCase
         $this->assertSame($resultA, $resultB);
     }
 
-    public function testDifferentInstancesAreReturnedForDifferentTemplateCodes()
+    public function testDifferentInstancesAreReturnedForDifferentTemplateCodes(): void
     {
         $dummyTemplateCodeA = 'foo';
         $stubProjectorA = $this->getStubProjector();
@@ -74,7 +74,7 @@ class TemplateProjectorLocatorTest extends TestCase
     }
 
     /**
-     * @return Projector|\PHPUnit_Framework_MockObject_MockObject
+     * @return Projector|MockObject
      */
     private function getStubProjector() : Projector
     {

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace LizardsAndPumpkins\ConsoleCommand\Command\EventProcessingTimeAverage;
 
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,7 +14,7 @@ class LogfileReaderTest extends TestCase
 {
     use TestFileFixtureTrait;
 
-    public function testParsesDomainEventHandlerProcessingTimesFromLogfile()
+    public function testParsesDomainEventHandlerProcessingTimesFromLogfile(): void
     {
         $testLogData = <<<EOT
 2004-02-12T15:19:21+00:00\tDomainEventHandler::process FooEventHandler 2.0

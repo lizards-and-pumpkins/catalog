@@ -6,9 +6,9 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
 use League\CLImate\Argument\Manager as CliMateArgumentManager;
 use League\CLImate\CLImate;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,16 +18,16 @@ use PHPUnit\Framework\TestCase;
 class ReportQueueCountConsoleCommandTest extends TestCase
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory
      */
     private $stubMasterFactory;
 
     /**
-     * @var CLImate|\PHPUnit_Framework_MockObject_MockObject
+     * @var CLImate
      */
     private $mockCliMate;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubMasterFactory = $this->getMockBuilder(MasterFactory::class)
             ->setMethods(array_merge(get_class_methods(MasterFactory::class), get_class_methods(CommonFactory::class)))
@@ -43,7 +43,7 @@ class ReportQueueCountConsoleCommandTest extends TestCase
         $this->mockCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
     }
 
-    public function testReportsTheQueueCount()
+    public function testReportsTheQueueCount(): void
     {
         $this->stubMasterFactory->getCommandMessageQueue()->method('count')->willReturn(111);
         $this->stubMasterFactory->getEventMessageQueue()->method('count')->willReturn(222);

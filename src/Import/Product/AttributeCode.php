@@ -25,7 +25,7 @@ class AttributeCode implements \JsonSerializable
      * @param string|AttributeCode $attributeCode
      * @return AttributeCode
      */
-    public static function fromString($attributeCode)
+    public static function fromString($attributeCode): AttributeCode
     {
         if ($attributeCode instanceof AttributeCode) {
             return $attributeCode;
@@ -34,7 +34,7 @@ class AttributeCode implements \JsonSerializable
         return new self($attributeCode);
     }
 
-    private static function validateAttributeCode(string $attributeCode)
+    private static function validateAttributeCode(string $attributeCode): void
     {
         if (strlen($attributeCode) < 3) {
             $message = sprintf('The attribute code has to be at least 3 characters long, got "%s"', $attributeCode);

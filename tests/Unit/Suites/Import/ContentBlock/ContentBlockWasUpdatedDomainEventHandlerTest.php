@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 class ContentBlockWasUpdatedDomainEventHandlerTest extends TestCase
 {
     /**
-     * @var ContentBlockProjector|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContentBlockProjector|MockObject
      */
     private $mockProjector;
 
@@ -38,9 +38,9 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends TestCase
      */
     private $testMessage;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $dummyContext */
+        /** @var Context|MockObject $dummyContext */
         $dummyContext = $this->createMock(Context::class);
         $dummyContext->method('jsonSerialize')->willReturn([]);
         $testContentBlockSource = new ContentBlockSource(ContentBlockId::fromString('foo'), '', $dummyContext, []);
@@ -50,12 +50,12 @@ class ContentBlockWasUpdatedDomainEventHandlerTest extends TestCase
         $this->domainEventHandler = new ContentBlockWasUpdatedDomainEventHandler($this->mockProjector);
     }
 
-    public function testDomainEventHandlerInterfaceIsImplemented()
+    public function testDomainEventHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->domainEventHandler);
     }
 
-    public function testContentBlockProjectorIsTriggered()
+    public function testContentBlockProjectorIsTriggered(): void
     {
         $this->mockProjector->expects($this->once())->method('project');
         $this->domainEventHandler->process($this->testMessage);

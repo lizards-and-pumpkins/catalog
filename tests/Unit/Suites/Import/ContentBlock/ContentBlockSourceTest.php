@@ -41,7 +41,7 @@ class ContentBlockSourceTest extends TestCase
      */
     private $contentBlockSource;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testContentBlockId = ContentBlockId::fromString('foo');
         $this->testContext = SelfContainedContextBuilder::rehydrateContext(['baz' => 'qux']);
@@ -53,27 +53,27 @@ class ContentBlockSourceTest extends TestCase
         );
     }
 
-    public function testContentBlockIdIsReturned()
+    public function testContentBlockIdIsReturned(): void
     {
         $this->assertEquals($this->testContentBlockId, $this->contentBlockSource->getContentBlockId());
     }
 
-    public function testContentBlockContentIsReturned()
+    public function testContentBlockContentIsReturned(): void
     {
         $this->assertSame($this->testContentBlockContent, $this->contentBlockSource->getContent());
     }
 
-    public function testContextIsReturned()
+    public function testContextIsReturned(): void
     {
         $this->assertSame($this->testContext, $this->contentBlockSource->getContext());
     }
 
-    public function testKeyGeneratorParamsAreReturned()
+    public function testKeyGeneratorParamsAreReturned(): void
     {
         $this->assertSame($this->testKeyGeneratorParams, $this->contentBlockSource->getKeyGeneratorParams());
     }
 
-    public function testCanBeSerializedAndRehydrated()
+    public function testCanBeSerializedAndRehydrated(): void
     {
         $rehydrated = ContentBlockSource::rehydrate($this->contentBlockSource->serialize());
         $this->assertEquals($this->contentBlockSource, $rehydrated);

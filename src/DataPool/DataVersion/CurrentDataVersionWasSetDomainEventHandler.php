@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Messaging\Queue\Message;
 
 class CurrentDataVersionWasSetDomainEventHandler implements DomainEventHandler
 {
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         CurrentDataVersionWasSetDomainEvent::fromMessage($message);
     }

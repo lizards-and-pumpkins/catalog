@@ -31,12 +31,12 @@ class UpdateTemplateCommandTest extends TestCase
         return new UpdateTemplateCommand($templateId, $templateContent, $this->testDataVersion);
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testDataVersion = DataVersion::fromVersionString('xyz');
     }
 
-    public function testIsCommand()
+    public function testIsCommand(): void
     {
         $this->assertInstanceOf(Command::class, $this->createCommand('test_id', '...'));
     }
@@ -44,7 +44,7 @@ class UpdateTemplateCommandTest extends TestCase
     /**
      * @dataProvider invalidTemplateIdProvider
      */
-    public function testThrowsExceptionIfTheTemplateIdIsInvalid(string $invalidTemplateId)
+    public function testThrowsExceptionIfTheTemplateIdIsInvalid(string $invalidTemplateId): void
     {
         $this->expectException(InvalidTemplateIdException::class);
         $this->expectExceptionMessage('Invalid template ID: ');
@@ -66,22 +66,22 @@ class UpdateTemplateCommandTest extends TestCase
         ];
     }
 
-    public function testReturnsTheGivenTemplateId()
+    public function testReturnsTheGivenTemplateId(): void
     {
         $this->assertSame('bar', $this->createCommand('bar', 'example content')->getTemplateId());
     }
 
-    public function testReturnsTheTemplateContent()
+    public function testReturnsTheTemplateContent(): void
     {
         $this->assertSame('example content', $this->createCommand('foo', 'example content')->getTemplateContent());
     }
 
-    public function testReturnsTheDataVersion()
+    public function testReturnsTheDataVersion(): void
     {
         $this->assertSame($this->testDataVersion, $this->createCommand('example_id', 'example')->getDataVersion());
     }
 
-    public function testCanBeConvertedIntoAMessageInstance()
+    public function testCanBeConvertedIntoAMessageInstance(): void
     {
         $updateTemplateCommand = $this->createCommand('foo', 'bar');
         $message = $updateTemplateCommand->toMessage();
@@ -93,7 +93,7 @@ class UpdateTemplateCommandTest extends TestCase
         $this->assertEquals((string) $this->testDataVersion, $message->getMetadata()['data_version']);
     }
 
-    public function testThrowsExceptionIfTheMessageNameDoesNotMatchTheCommandCode()
+    public function testThrowsExceptionIfTheMessageNameDoesNotMatchTheCommandCode(): void
     {
         $this->expectException(NotUpdateTemplateCommandMessageException::class);
         $this->expectExceptionMessage('Invalid message code "foo", expected ' . UpdateTemplateCommand::CODE);
@@ -101,7 +101,7 @@ class UpdateTemplateCommandTest extends TestCase
         UpdateTemplateCommand::fromMessage(Message::withCurrentTime('foo', [], []));
     }
 
-    public function testCanBeRehydratedFromMessage()
+    public function testCanBeRehydratedFromMessage(): void
     {
         $sourceCommand = $this->createCommand('foo', 'bar');
         $rehydratedCommand = UpdateTemplateCommand::fromMessage($sourceCommand->toMessage());

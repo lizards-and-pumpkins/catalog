@@ -12,23 +12,16 @@ use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestSimpleField;
 use LizardsAndPumpkins\ProductSearch\QueryOptions;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriterionAnything;
-use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\Import\Product\AttributeCode;
-use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 
 class SearchEngineTest extends AbstractIntegrationTest
 {
-    /**
-     * @var CatalogMasterFactory
-     */
-    private $factory;
-
-    public function testItMatchesVariationAttributes()
+    public function testItMatchesVariationAttributes(): void
     {
-        $this->factory = $this->prepareIntegrationTestMasterFactory();
-        $this->importCatalogFixture($this->factory, 'configurable_product_adipure.xml');
+        $factory = $this->prepareIntegrationTestMasterFactory();
+        $this->importCatalogFixture($factory, 'configurable_product_adipure.xml');
 
-        $context = $this->factory->createContextBuilder()->createContext([
+        $context = $factory->createContextBuilder()->createContext([
             Locale::CONTEXT_CODE => 'en_US',
             Website::CONTEXT_CODE => 'ru',
         ]);
@@ -39,8 +32,7 @@ class SearchEngineTest extends AbstractIntegrationTest
         $pageNumber = 0;
         $sortBy = new SortBy(AttributeCode::fromString('sku'), SortDirection::create(SortDirection::ASC));
 
-        /** @var SearchEngine $searchEngine */
-        $searchEngine = $this->factory->getSearchEngine();
+        $searchEngine = $factory->getSearchEngine();
 
         $selectedFilters = ['color' => ['Red']];
 
@@ -55,6 +47,6 @@ class SearchEngineTest extends AbstractIntegrationTest
 
         $searchEngineResponse = $searchEngine->query(new SearchCriterionAnything(), $queryOptions);
 
-        $this->assertContains('M29540', $searchEngineResponse->getProductIds());
+        $this->assertTrue(in_array('M29540', $searchEngineResponse->getProductIds()));
     }
 }

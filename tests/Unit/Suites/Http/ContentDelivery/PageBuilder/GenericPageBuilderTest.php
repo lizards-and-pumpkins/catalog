@@ -13,13 +13,13 @@ use LizardsAndPumpkins\Import\PageMetaInfoSnippetContent;
 use LizardsAndPumpkins\ProductDetail\ProductDetailPageMetaInfoSnippetContent;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGenerator;
 use LizardsAndPumpkins\DataPool\KeyGenerator\SnippetKeyGeneratorLocator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\GenericPageBuilder
  * @covers \LizardsAndPumpkins\Http\ContentDelivery\PageBuilder\PageBuilderSnippets
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class GenericPageBuilderTest extends TestCase
@@ -110,14 +110,14 @@ class GenericPageBuilderTest extends TestCase
      * @param string[] $allSnippetCodes
      * @param string[] $allSnippetContent
      */
-    private function setPageContentSnippetFixture(array $allSnippetCodes, array $allSnippetContent)
+    private function setPageContentSnippetFixture(array $allSnippetCodes, array $allSnippetContent): void
     {
         $allSnippetKeys = $allSnippetCodes;
         $pageSnippetKeyMap = array_combine($allSnippetKeys, $allSnippetContent);
         $this->mockDataPoolReader->method('getSnippets')->willReturn($pageSnippetKeyMap);
     }
 
-    private function fakeSnippetKeyGeneratorLocator(MockObject $fakeKeyGeneratorLocator)
+    private function fakeSnippetKeyGeneratorLocator(MockObject $fakeKeyGeneratorLocator): void
     {
         $fixedKeyGeneratorMockFactory = function ($snippetCode) {
             $keyGenerator = $this->createMock(SnippetKeyGenerator::class);
@@ -128,7 +128,7 @@ class GenericPageBuilderTest extends TestCase
             ->willReturnCallback($fixedKeyGeneratorMockFactory);
     }
 
-    private function fakeSnippetKeyGeneratorLocatorForRootOnly(MockObject $fakeSnippetKeyGeneratorLocator)
+    private function fakeSnippetKeyGeneratorLocatorForRootOnly(MockObject $fakeSnippetKeyGeneratorLocator): void
     {
         $fakeSnippetKeyGeneratorLocator->method('getKeyGeneratorForSnippetCode')->willReturnCallback(
             function ($snippetCode) {
@@ -142,7 +142,7 @@ class GenericPageBuilderTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContext = $this->createMock(Context::class);
         $this->stubContext->method('getIdForParts')->willReturn($this->contextIdFixture);
@@ -157,7 +157,7 @@ class GenericPageBuilderTest extends TestCase
         $this->pageBuilder = new GenericPageBuilder($this->mockDataPoolReader, $this->stubSnippetKeyGeneratorLocator);
     }
 
-    public function testHttpResponseIsReturned()
+    public function testHttpResponseIsReturned(): void
     {
         $rootSnippetContent = 'Stub Content';
         $childSnippetMap = [];
@@ -167,7 +167,7 @@ class GenericPageBuilderTest extends TestCase
         $this->assertInstanceOf(HttpResponse::class, $result);
     }
 
-    public function testPlaceholderIsReplacedWithoutNestedPlaceholders()
+    public function testPlaceholderIsReplacedWithoutNestedPlaceholders(): void
     {
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $headContent = '<title>My Website!</title>';
@@ -182,7 +182,7 @@ class GenericPageBuilderTest extends TestCase
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
-    public function testPlaceholderIsReplacedWithNestedPlaceholdersDeeperThanTwo()
+    public function testPlaceholderIsReplacedWithNestedPlaceholdersDeeperThanTwo(): void
     {
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
@@ -203,7 +203,7 @@ EOH;
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
-    public function testPlaceholderIsReplacedWithNestedPlaceholdersIgnoringMissingSnippets()
+    public function testPlaceholderIsReplacedWithNestedPlaceholdersIgnoringMissingSnippets(): void
     {
         $rootSnippetContent = '<html><head>{{snippet head}}</head><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
@@ -224,7 +224,7 @@ EOH;
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
-    public function testPlaceholderIsReplacedRegardlessOfSnippetOrder()
+    public function testPlaceholderIsReplacedRegardlessOfSnippetOrder(): void
     {
         $rootSnippetContent = '<html><body>{{snippet body}}</body></html>';
         $childSnippetMap = [
@@ -242,7 +242,7 @@ EOH;
         $this->assertEquals($expectedContent, $page->getBody());
     }
 
-    public function testExceptionIsThrownIfTheRootSnippetContentIsNotFound()
+    public function testExceptionIsThrownIfTheRootSnippetContentIsNotFound(): void
     {
         $childSnippetCodes = ['child1'];
         $allSnippetCodes = [];
@@ -254,7 +254,7 @@ EOH;
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }
 
-    public function testPageSpecificAdditionalSnippetsAreMergedIntoList()
+    public function testPageSpecificAdditionalSnippetsAreMergedIntoList(): void
     {
         $rootSnippetContent = 'Stub Content - {{snippet child1}}';
         $childSnippetContent = 'Child Content 1 - {{snippet added-later}}';
@@ -273,7 +273,7 @@ EOH;
         $this->assertEquals('Stub Content - Child Content 1 - Added Content', $page->getBody());
     }
 
-    public function testPageSpecificAdditionalSnippetIsMergedIntoList()
+    public function testPageSpecificAdditionalSnippetIsMergedIntoList(): void
     {
         $rootSnippetContent = 'Stub Content - {{snippet child1}}';
         $childSnippetContent = 'Child Content 1 - {{snippet added-later}}';
@@ -289,7 +289,7 @@ EOH;
         $this->assertEquals('Stub Content - Child Content 1 - Added Content', $page->getBody());
     }
 
-    public function testChildSnippetsWithNoRegisteredKeyGeneratorAreIgnored()
+    public function testChildSnippetsWithNoRegisteredKeyGeneratorAreIgnored(): void
     {
         /** @var SnippetKeyGeneratorLocator|MockObject $stubKeyGeneratorLocator */
         $stubKeyGeneratorLocator = $this->createMock(SnippetKeyGeneratorLocator::class);
@@ -309,7 +309,7 @@ EOH;
         $this->assertEquals($rootSnippetContent, $page->getBody());
     }
 
-    public function testTestSnippetTransformationIsNotCalledIfThereIsNoMatchingSnippet()
+    public function testTestSnippetTransformationIsNotCalledIfThereIsNoMatchingSnippet(): void
     {
         /** @var callable|MockObject $mockTransformation */
         $mockTransformation = $this->createMock(SnippetTransformation::class);
@@ -326,7 +326,7 @@ EOH;
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }
 
-    public function testTestSnippetTransformationIsCalledIfThereIsAMatchingSnippet()
+    public function testTestSnippetTransformationIsCalledIfThereIsAMatchingSnippet(): void
     {
         /** @var callable|MockObject $mockTransformation */
         $mockTransformation = $this->createMock(SnippetTransformation::class);
@@ -344,7 +344,7 @@ EOH;
         $this->pageBuilder->buildPage($this->stubPageMetaInfo, $this->stubContext, []);
     }
 
-    public function testMultipleTestSnippetTransformationsForOneSnippetCanBeRegistered()
+    public function testMultipleTestSnippetTransformationsForOneSnippetCanBeRegistered(): void
     {
         /** @var callable|MockObject $mockTransformationOne */
         $mockTransformationOne = $this->createMock(SnippetTransformation::class);
@@ -369,7 +369,7 @@ EOH;
         $this->assertEquals('<body>result two</body>', $page->getBody());
     }
 
-    public function testItCombinesSnippetsInContainers()
+    public function testItCombinesSnippetsInContainers(): void
     {
         $rootSnippetContent = 'Stub Content - {{snippet container1}}';
         $childSnippetCodeToContentMap = [
@@ -390,7 +390,7 @@ EOH;
         $this->assertEquals('Stub Content - Child 1Child 2', $page->getBody());
     }
 
-    public function testItCombinesNestedContainers()
+    public function testItCombinesNestedContainers(): void
     {
         $rootSnippetContent = 'Stub Content - {{snippet container1}}';
         $childSnippetCodeToContentMap = [
@@ -416,7 +416,7 @@ EOH;
         $this->assertEquals('Stub Content - Child 1Child 2Child 3', $page->getBody());
     }
 
-    public function testItCombinesSnippetsAddedToThePageBuilder()
+    public function testItCombinesSnippetsAddedToThePageBuilder(): void
     {
         $rootSnippetContent = 'Stub Content - {{snippet container1}} : {{snippet container2}}';
         $childSnippetCodeToContentMap = [
@@ -443,7 +443,7 @@ EOH;
         $this->assertEquals('Stub Content - Child 1Child 2 : Child 3Child 4', $page->getBody());
     }
 
-    public function testLoadsSnippetsAddedToContainerFromTheDataPool()
+    public function testLoadsSnippetsAddedToContainerFromTheDataPool(): void
     {
         $rootSnippetContent = 'Stub Content - {{snippet container1}}';
 

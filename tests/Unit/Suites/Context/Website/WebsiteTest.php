@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class WebsiteTest extends TestCase
 {
-    public function testItThrowsAnExceptionIfTheInputIsNotAString()
+    public function testItThrowsAnExceptionIfTheInputIsNotAString(): void
     {
         $this->expectException(InvalidWebsiteCodeException::class);
         $this->expectExceptionMessage('The website code must be a string, got "integer"');
@@ -22,7 +22,7 @@ class WebsiteTest extends TestCase
     /**
      * @dataProvider emptyWebsiteCodeDataProvider
      */
-    public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty(string $emptyWebsiteCode)
+    public function testItThrowsAnExceptionIfTheWebsiteCodeIsEmpty(string $emptyWebsiteCode): void
     {
         $this->expectException(InvalidWebsiteCodeException::class);
         $this->expectExceptionMessage('The website code may not be empty');
@@ -40,7 +40,7 @@ class WebsiteTest extends TestCase
         ];
     }
 
-    public function testItReturnsAWebsite()
+    public function testItReturnsAWebsite(): void
     {
         $this->assertInstanceOf(Website::class, Website::fromString('test'));
     }
@@ -48,7 +48,7 @@ class WebsiteTest extends TestCase
     /**
      * @dataProvider websiteCodeDataProvider
      */
-    public function testItReturnsTheWebsiteCodeAsAString(string $websiteCode)
+    public function testItReturnsTheWebsiteCodeAsAString(string $websiteCode): void
     {
         $this->assertSame($websiteCode, (string) Website::fromString($websiteCode));
     }
@@ -64,26 +64,26 @@ class WebsiteTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheTrimmedWebsiteCode()
+    public function testItReturnsTheTrimmedWebsiteCode(): void
     {
         $this->assertSame('abc', (string) Website::fromString(' abc '));
     }
 
-    public function testTwoWebsitesWithDifferentCodesAreNotEqual()
+    public function testTwoWebsitesWithDifferentCodesAreNotEqual(): void
     {
         $websiteOne = Website::fromString('one');
         $websiteTwo = Website::fromString('two');
         $this->assertFalse($websiteOne->isEqual($websiteTwo));
     }
 
-    public function testTwoWebsitesWithSameCodesAreEqual()
+    public function testTwoWebsitesWithSameCodesAreEqual(): void
     {
         $websiteOne = Website::fromString('test');
         $websiteTwo = Website::fromString('test');
         $this->assertTrue($websiteOne->isEqual($websiteTwo));
     }
 
-    public function testAWebsiteInstanceCanBeUsedAsTheInput()
+    public function testAWebsiteInstanceCanBeUsedAsTheInput(): void
     {
         $input = Website::fromString('test');
         $output = Website::fromString($input);

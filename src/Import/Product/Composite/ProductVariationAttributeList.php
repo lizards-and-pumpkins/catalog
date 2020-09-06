@@ -30,20 +30,20 @@ class ProductVariationAttributeList implements \JsonSerializable, \IteratorAggre
         return new self(...$attributeCodes);
     }
 
-    private function validateVariationAttributes(AttributeCode ...$attributeCodes)
+    private function validateVariationAttributes(AttributeCode ...$attributeCodes): void
     {
         $this->validateAttributeCodeArrayIsNotEmpty(...$attributeCodes);
         $this->validateAttributeCodeArrayDoesNotContainDuplicates(...$attributeCodes);
     }
 
-    private function validateAttributeCodeArrayIsNotEmpty(AttributeCode ...$attributeCodes)
+    private function validateAttributeCodeArrayIsNotEmpty(AttributeCode ...$attributeCodes): void
     {
         if (count($attributeCodes) === 0) {
             throw new ProductVariationAttributesEmptyException('The product variation attribute list can not be empty');
         }
     }
 
-    private function validateAttributeCodeArrayDoesNotContainDuplicates(AttributeCode ...$attributeCodes)
+    private function validateAttributeCodeArrayDoesNotContainDuplicates(AttributeCode ...$attributeCodes): void
     {
         array_reduce($attributeCodes, function (array $stringCodes, AttributeCode $attributeCode) {
             $attributeCodeString = (string) $attributeCode;

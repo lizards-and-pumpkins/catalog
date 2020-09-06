@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Http\HttpRequest;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
-class TestREstApiWebFront extends RestApiWebFront
+class TestRestApiWebFront extends CatalogRestApiWebFront
 {
     /**
-     * @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MasterFactory|MockObject
      */
     private $testMasterFactory;
 

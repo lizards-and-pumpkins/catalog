@@ -9,19 +9,21 @@ use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
 use LizardsAndPumpkins\Http\ContentDelivery\FrontendFactory;
+use LizardsAndPumpkins\Http\HttpFactory;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Import\CatalogImport;
 use LizardsAndPumpkins\Import\Image\NullProductImageImportCommandFactory;
 use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Logging\LogMessage;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
 use LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchApiFactory;
+use LizardsAndPumpkins\RestApi\CatalogRestApiFactory;
 use LizardsAndPumpkins\RestApi\RestApiFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -61,6 +63,7 @@ abstract class AbstractIntegrationTest extends TestCase
     {
         $factory = $this->prepareIntegrationTestMasterFactory();
         $factory->register(new FrontendFactory($request));
+        $factory->register(new HttpFactory());
 
         return $factory;
     }
@@ -81,6 +84,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $factoriesToRegister = [
             new CommonFactory(),
             new RestApiFactory(),
+            new CatalogRestApiFactory(),
             new UpdatingProductImportCommandFactory(),
             new NullProductImageImportCommandFactory(),
             new UpdatingProductListingImportCommandFactory(),
@@ -114,7 +118,7 @@ abstract class AbstractIntegrationTest extends TestCase
         }
     }
 
-    private function prepareIntegrationTestFactory(MasterFactory $masterFactory)
+    private function prepareIntegrationTestFactory(MasterFactory $masterFactory): void
     {
         $this->integrationTestFactory = new IntegrationTestFactory();
         $masterFactory->register($this->integrationTestFactory);
@@ -134,7 +138,7 @@ abstract class AbstractIntegrationTest extends TestCase
         return $this->integrationTestFactory;
     }
 
-    final protected function failIfMessagesWhereLogged(Logger $logger)
+    final protected function failIfMessagesWhereLogged(Logger $logger): void
     {
         $messages = $logger->getMessages();
 
@@ -161,7 +165,7 @@ abstract class AbstractIntegrationTest extends TestCase
         return null === $this->keyValueStore;
     }
 
-    private function storeInMemoryObjects(IntegrationTestFactory $factory)
+    private function storeInMemoryObjects(IntegrationTestFactory $factory): void
     {
         $this->keyValueStore = $factory->getKeyValueStore();
         $this->eventMessageQueue = $factory->getEventMessageQueue();
@@ -170,7 +174,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $this->urlKeyStore = $factory->getUrlKeyStore();
     }
 
-    private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory)
+    private function persistInMemoryObjectsOnFactory(IntegrationTestFactory $factory): void
     {
         $factory->setKeyValueStore($this->keyValueStore);
         $factory->setEventMessageQueue($this->eventMessageQueue);
@@ -179,7 +183,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $factory->setUrlKeyStore($this->urlKeyStore);
     }
 
-    final protected function importCatalogFixture(MasterFactory $factory, string ...$fixtureCatalogFiles)
+    final protected function importCatalogFixture(MasterFactory $factory, string ...$fixtureCatalogFiles): void
     {
         /** @var CatalogImport $import */
         $import = $factory->createCatalogImport();
@@ -194,7 +198,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $this->processAllMessages($factory);
     }
 
-    final protected function processAllMessages(MasterFactory $factory)
+    final protected function processAllMessages(MasterFactory $factory): void
     {
         while ($factory->getCommandMessageQueue()->count() > 0 ||
                $factory->getEventMessageQueue()->count() > 0) {

@@ -57,7 +57,7 @@ class EnvironmentConfigReader implements ConfigReader
         return $this->environmentConfig[$normalizedKey];
     }
 
-    private function validateConfigKey(string $configKey)
+    private function validateConfigKey(string $configKey): void
     {
         if ('' === trim($configKey)) {
             $message = 'The given environment configuration key is empty.';

@@ -28,7 +28,7 @@ class ProductsPerPageTest extends TestCase
      */
     private $productsPerPage;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->productsPerPage = ProductsPerPage::create(
             $this->numbersOfProductsPerPage,
@@ -59,38 +59,38 @@ class ProductsPerPageTest extends TestCase
         ];
     }
 
-    public function testExceptionIsThrownIfSelectedNumberOfProductsIsNotInteger()
+    public function testExceptionIsThrownIfSelectedNumberOfProductsIsNotInteger(): void
     {
         $this->expectException(\TypeError::class);
         $invalidSelectedNumberOfProductsPerPage = '1';
         ProductsPerPage::create($this->numbersOfProductsPerPage, $invalidSelectedNumberOfProductsPerPage);
     }
 
-    public function testExceptionIsThrownIfSelectedNumberOfProductsPerPageIsAbsentInTheList()
+    public function testExceptionIsThrownIfSelectedNumberOfProductsPerPageIsAbsentInTheList(): void
     {
         $selectedNumberOfProductsPerPage = 4;
         $this->expectException(InvalidSelectedNumberOfProductsPerPageException::class);
         ProductsPerPage::create($this->numbersOfProductsPerPage, $selectedNumberOfProductsPerPage);
     }
 
-    public function testNumbersOfProductsPerPageIsReturn()
+    public function testNumbersOfProductsPerPageIsReturn(): void
     {
         $result = $this->productsPerPage->getNumbersOfProductsPerPage();
         $this->assertSame($this->numbersOfProductsPerPage, $result);
     }
 
-    public function testSelectedNumberOfProductsPerPageIsReturned()
+    public function testSelectedNumberOfProductsPerPageIsReturned(): void
     {
         $result = $this->productsPerPage->getSelectedNumberOfProductsPerPage();
         $this->assertSame($this->selectedNumberOfProductsPerPage, $result);
     }
 
-    public function testJsonSerializeInterfaceIsImplement()
+    public function testJsonSerializeInterfaceIsImplement(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->productsPerPage);
     }
 
-    public function testArrayRepresentationOfProductsPerPageIsReturned()
+    public function testArrayRepresentationOfProductsPerPageIsReturned(): void
     {
         $expectedArray = array_map(function ($numberOfProductsPerPage) {
             return [

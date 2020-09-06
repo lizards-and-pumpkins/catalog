@@ -8,7 +8,7 @@ use LizardsAndPumpkins\DataPool\UrlKeyStore\Exception\DataVersionToWriteIsEmptyS
 
 class IntegrationTestUrlKeyStoreAbstract
 {
-    final protected function validateDataVersionString(string $dataVersionString)
+    final protected function validateDataVersionString(string $dataVersionString): void
     {
         if ('' === $dataVersionString) {
             $message = 'Invalid data version: version strings have to be one or more characters long';

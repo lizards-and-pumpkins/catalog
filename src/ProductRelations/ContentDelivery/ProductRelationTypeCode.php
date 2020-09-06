@@ -25,7 +25,7 @@ class ProductRelationTypeCode
         return new self($trimmedRelationTypeCode);
     }
 
-    private static function validateStringFormat(string $relationTypeCode)
+    private static function validateStringFormat(string $relationTypeCode): void
     {
         if ('' === $relationTypeCode) {
             throw new InvalidProductRelationTypeCodeException('The product relation type code can not be empty');

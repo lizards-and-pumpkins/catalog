@@ -21,12 +21,12 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\HttpRequest
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  */
 class CurrentVersionApiV1GetRequestHandlerTest extends TestCase
 {
     /**
-     * @var DataPoolReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataPoolReader|MockObject
      */
     private $mockDataPoolReader;
 
@@ -45,12 +45,12 @@ class CurrentVersionApiV1GetRequestHandlerTest extends TestCase
         );
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockDataPoolReader = $this->createMock(DataPoolReader::class);
     }
 
-    public function testIsHttpRequestHandler()
+    public function testIsHttpRequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, $this->createHandler());
     }
@@ -58,7 +58,7 @@ class CurrentVersionApiV1GetRequestHandlerTest extends TestCase
     /**
      * @dataProvider nonGetHttpRequestMethodProvider
      */
-    public function testDoesNotHandleNonGetRequests(string $nonGetRequestMethod)
+    public function testDoesNotHandleNonGetRequests(string $nonGetRequestMethod): void
     {
         $request = $this->createHttpRequest($nonGetRequestMethod);
         $this->assertFalse($this->createHandler()->canProcess($request));
@@ -72,13 +72,13 @@ class CurrentVersionApiV1GetRequestHandlerTest extends TestCase
         ];
     }
 
-    public function testHandlesGetRequests()
+    public function testHandlesGetRequests(): void
     {
         $request = $this->createHttpRequest(HttpRequest::METHOD_GET);
         $this->assertTrue($this->createHandler()->canProcess($request));
     }
 
-    public function testRespondsWithCurrentAndPreviousDataVersion()
+    public function testRespondsWithCurrentAndPreviousDataVersion(): void
     {
         $this->mockDataPoolReader->method('getCurrentDataVersion')->willReturn('foo');
         $this->mockDataPoolReader->method('getPreviousDataVersion')->willReturn('bar');

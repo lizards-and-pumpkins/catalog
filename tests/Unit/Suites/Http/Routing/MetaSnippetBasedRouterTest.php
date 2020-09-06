@@ -20,17 +20,17 @@ use PHPUnit\Framework\TestCase;
 class MetaSnippetBasedRouterTest extends TestCase
 {
     /**
-     * @var UrlToWebsiteMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlToWebsiteMap|MockObject
      */
     private $stubUrlToWebsiteMap;
 
     /**
-     * @var SnippetReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SnippetReader|MockObject
      */
     private $stubSnippetReader;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $dummyContext;
 
@@ -40,11 +40,11 @@ class MetaSnippetBasedRouterTest extends TestCase
     private $router;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|MockObject
      */
     private $stubRequest;
 
-    private function mockMetaJsonSnippet(string $metaJson)
+    private function mockMetaJsonSnippet(string $metaJson): void
     {
         $testUrl = 'http://example.com/bar/';
         $testUrlKey = 'bar';
@@ -61,7 +61,7 @@ class MetaSnippetBasedRouterTest extends TestCase
             ->willReturn($metaJson);
     }
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubUrlToWebsiteMap = $this->createMock(UrlToWebsiteMap::class);
         $this->stubSnippetReader = $this->createMock(SnippetReader::class);
@@ -76,13 +76,13 @@ class MetaSnippetBasedRouterTest extends TestCase
         $this->stubRequest = $this->createMock(HttpRequest::class);
     }
 
-    public function testReturnsNullIfPageMetaSnippetDoesNotExist()
+    public function testReturnsNullIfPageMetaSnippetDoesNotExist(): void
     {
         $this->stubSnippetReader->method('getPageMetaSnippet')->willThrowException(new KeyNotFoundException);
         $this->assertNull($this->router->route($this->stubRequest));
     }
 
-    public function testThrowsAnExceptionIfPageMetaSnippetDoesNotContainRequestHandlerCode()
+    public function testThrowsAnExceptionIfPageMetaSnippetDoesNotContainRequestHandlerCode(): void
     {
         $this->expectException(MalformedMetaSnippetException::class);
 
@@ -92,7 +92,7 @@ class MetaSnippetBasedRouterTest extends TestCase
         $this->router->route($this->stubRequest);
     }
 
-    public function testReturnsNullIfRouterWithGivenCodeIsNotRegistered()
+    public function testReturnsNullIfRouterWithGivenCodeIsNotRegistered(): void
     {
         $metaJson = json_encode([PageMetaInfoSnippetContent::KEY_HANDLER_CODE => 'foo']);
         $this->mockMetaJsonSnippet($metaJson);
@@ -100,7 +100,7 @@ class MetaSnippetBasedRouterTest extends TestCase
         $this->assertNull($this->router->route($this->stubRequest));
     }
 
-    public function testReturnsNullIfRequestHandlerCanNotProcessRequest()
+    public function testReturnsNullIfRequestHandlerCanNotProcessRequest(): void
     {
         $requestHandlerCode = 'foo';
 
@@ -117,7 +117,7 @@ class MetaSnippetBasedRouterTest extends TestCase
         $this->assertNull($this->router->route($this->stubRequest));
     }
 
-    public function testReturnsRegisteredRequestHandler()
+    public function testReturnsRegisteredRequestHandler(): void
     {
         $requestHandlerCode = 'foo';
 

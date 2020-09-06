@@ -111,7 +111,7 @@ class SimpleProductXmlToProductBuilder implements ProductXmlToProductBuilder
     }
 
     /**
-     * @param string[] $node
+     * @param array[] $node
      * @return string[]
      */
     private function getContextParts(array $node) : array

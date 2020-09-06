@@ -18,7 +18,7 @@ class IntegrationTestSearchEngineOperationLessThanTest extends TestCase
     /**
      * @param string $fieldKey
      * @param string[] $fieldValues
-     * @return SearchDocumentField|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocumentField|MockObject
      */
     private function createStubSearchDocumentField(string $fieldKey, array $fieldValues) : SearchDocumentField
     {
@@ -31,7 +31,7 @@ class IntegrationTestSearchEngineOperationLessThanTest extends TestCase
 
     /**
      * @param SearchDocumentField[] ...$stubSearchDocumentFields
-     * @return SearchDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @return SearchDocument|MockObject
      */
     private function createStubSearchDocumentWithGivenFields(
         SearchDocumentField ...$stubSearchDocumentFields
@@ -46,7 +46,7 @@ class IntegrationTestSearchEngineOperationLessThanTest extends TestCase
         return $stubSearchDocument;
     }
 
-    public function testImplementsIntegrationTestSearchEngineOperationInterface()
+    public function testImplementsIntegrationTestSearchEngineOperationInterface(): void
     {
         $dataSet = ['fieldName' => 'foo', 'fieldValue' => 'bar'];
         $operation = new IntegrationTestSearchEngineOperationLessThan($dataSet);
@@ -59,7 +59,7 @@ class IntegrationTestSearchEngineOperationLessThanTest extends TestCase
      * @param mixed $operationFiledValue
      * @param mixed $documentFieldValue
      */
-    public function testReturnsFalseIfDocumentFieldValueIsNotMatching($operationFiledValue, $documentFieldValue)
+    public function testReturnsFalseIfDocumentFieldValueIsNotMatching($operationFiledValue, $documentFieldValue): void
     {
         $testFieldName = 'foo';
 
@@ -77,7 +77,7 @@ class IntegrationTestSearchEngineOperationLessThanTest extends TestCase
      * @param mixed $operationFiledValue
      * @param mixed $documentFieldValue
      */
-    public function testReturnsTrueIfDocumentFieldValueIsMatching($operationFiledValue, $documentFieldValue)
+    public function testReturnsTrueIfDocumentFieldValueIsMatching($operationFiledValue, $documentFieldValue): void
     {
         $testFieldName = 'foo';
 

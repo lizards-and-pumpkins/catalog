@@ -17,7 +17,7 @@ class SearchFieldToRequestParamMapTest extends TestCase
      */
     private $map;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $searchFieldToQueryParameterMap = [
             'search_field_a' => 'query_parameter_b',
@@ -33,24 +33,24 @@ class SearchFieldToRequestParamMapTest extends TestCase
         );
     }
 
-    public function testItIsASearchFieldToRequestParamMap()
+    public function testItIsASearchFieldToRequestParamMap(): void
     {
         $this->assertInstanceOf(SearchFieldToRequestParamMap::class, $this->map);
     }
 
-    public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNumericKeys()
+    public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNumericKeys(): void
     {
         $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap([0 => 'test'], []);
     }
 
-    public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNonStringValues()
+    public function testItThrowsAnExceptionIfTheSearchFieldMapArrayHasNonStringValues(): void
     {
         $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap(['test' => 0], []);
     }
 
-    public function testItThrowsAnExceptionIfTheSearchFieldArrayHasAnEmptyStringKey()
+    public function testItThrowsAnExceptionIfTheSearchFieldArrayHasAnEmptyStringKey(): void
     {
         $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
         $this->expectExceptionMessage(
@@ -59,7 +59,7 @@ class SearchFieldToRequestParamMapTest extends TestCase
         new SearchFieldToRequestParamMap(['' => 'Empty Key'], []);
     }
 
-    public function testItThrowsAnExceptionIfTheSearchFieldArrayHasAnEmptyStringValue()
+    public function testItThrowsAnExceptionIfTheSearchFieldArrayHasAnEmptyStringValue(): void
     {
         $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
         $this->expectExceptionMessage(
@@ -68,19 +68,19 @@ class SearchFieldToRequestParamMapTest extends TestCase
         new SearchFieldToRequestParamMap(['empty_value' => ''], []);
     }
 
-    public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNumericKeys()
+    public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNumericKeys(): void
     {
         $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap([], [0 => 'test']);
     }
 
-    public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNonStringValues()
+    public function testItThrowsAnExceptionIfTheQueryParameterMapArrayHasNonStringValues(): void
     {
         $this->expectException(\TypeError::class);
         new SearchFieldToRequestParamMap([], ['test' => 0]);
     }
 
-    public function testItThrowsAnExceptionIfTheQueryParameterArrayHasAnEmptyStringKey()
+    public function testItThrowsAnExceptionIfTheQueryParameterArrayHasAnEmptyStringKey(): void
     {
         $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
         $this->expectExceptionMessage(
@@ -89,7 +89,7 @@ class SearchFieldToRequestParamMapTest extends TestCase
         new SearchFieldToRequestParamMap([], ['' => 'Empty Key']);
     }
 
-    public function testItThrowsAnExceptionIfTheQueryParameterHasAnEmptyStringValue()
+    public function testItThrowsAnExceptionIfTheQueryParameterHasAnEmptyStringValue(): void
     {
         $this->expectException(InvalidSearchFieldToQueryParameterMapException::class);
         $this->expectExceptionMessage(
@@ -98,19 +98,19 @@ class SearchFieldToRequestParamMapTest extends TestCase
         new SearchFieldToRequestParamMap([], ['empty_value' => '']);
     }
 
-    public function testItReturnsTheMatchingQueryParameter()
+    public function testItReturnsTheMatchingQueryParameter(): void
     {
         $this->assertSame('query_parameter_b', $this->map->getQueryParameterName('search_field_a'));
         $this->assertSame('query_parameter_d', $this->map->getQueryParameterName('search_field_c'));
     }
 
-    public function testItReturnsTheInputValueIfThereIsNoValueInTheMap()
+    public function testItReturnsTheInputValueIfThereIsNoValueInTheMap(): void
     {
         $this->assertSame('not_defined', $this->map->getQueryParameterName('not_defined'));
         $this->assertSame('not_defined', $this->map->getSearchFieldName('not_defined'));
     }
 
-    public function testItReturnsTheMatchingFacetField()
+    public function testItReturnsTheMatchingFacetField(): void
     {
         $this->assertSame('search_field_b', $this->map->getSearchFieldName('query_parameter_a'));
         $this->assertSame('search_field_d', $this->map->getSearchFieldName('query_parameter_c'));

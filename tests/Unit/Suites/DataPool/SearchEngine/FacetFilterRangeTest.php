@@ -43,7 +43,7 @@ class FacetFilterRangeTest extends TestCase
         ];
     }
 
-    public function testExceptionIsThrownIfRangeBoundariesAreNotOfTheSameType()
+    public function testExceptionIsThrownIfRangeBoundariesAreNotOfTheSameType(): void
     {
         $rangeFrom = 'a';
         $rangeTo = 1;
@@ -57,7 +57,7 @@ class FacetFilterRangeTest extends TestCase
      * @param int|float|string|null $rangeFrom
      * @param int|float|string|null $rangeTo
      */
-    public function testRangeBoundariesAreReturned($rangeFrom, $rangeTo)
+    public function testRangeBoundariesAreReturned($rangeFrom, $rangeTo): void
     {
         $range = FacetFilterRange::create($rangeFrom, $rangeTo);
         $this->assertSame($rangeFrom, $range->from());

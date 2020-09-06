@@ -18,7 +18,7 @@ class FileContentTest extends TestCase
      * @param mixed $invalidStringContent
      * @param string $expectedType
      */
-    public function testItThrowsAnExceptionIfTheInputIsNotCastableToString($invalidStringContent, string $expectedType)
+    public function testItThrowsAnExceptionIfTheInputIsNotCastableToString($invalidStringContent, string $expectedType): void
     {
         $this->expectException(InvalidFileContentTypeException::class);
         $this->expectExceptionMessage(sprintf('Unable to cast file content to string, got "%s"', $expectedType));
@@ -40,7 +40,7 @@ class FileContentTest extends TestCase
      * @dataProvider validStringContentProvider
      * @param mixed $validStringContent
      */
-    public function testItReturnsAFileContentInstanceForStringableTypes($validStringContent)
+    public function testItReturnsAFileContentInstanceForStringableTypes($validStringContent): void
     {
         $this->assertInstanceOf(FileContent::class, FileContent::fromString($validStringContent));
     }
@@ -59,12 +59,12 @@ class FileContentTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheGivenContentAsAString()
+    public function testItReturnsTheGivenContentAsAString(): void
     {
         $this->assertSame('test content', (string) FileContent::fromString('test content'));
     }
 
-    public function testItReturnsAFileContentInstanceForFiles()
+    public function testItReturnsAFileContentInstanceForFiles(): void
     {
         $testContent = 'file content';
         $mockFile = $this->createMock(File::class);

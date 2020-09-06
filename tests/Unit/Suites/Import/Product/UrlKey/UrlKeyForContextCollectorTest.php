@@ -24,7 +24,7 @@ class UrlKeyForContextCollectorTest extends TestCase
     private $urlKeyCollector;
 
     /**
-     * @var ContextSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextSource|MockObject
      */
     private $stubContextSource;
     
@@ -32,7 +32,7 @@ class UrlKeyForContextCollectorTest extends TestCase
 
     /**
      * @param string $urlKey
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return Product|MockObject
      */
     private function createStubProductWithUrlKey(string $urlKey) : Product
     {
@@ -42,7 +42,7 @@ class UrlKeyForContextCollectorTest extends TestCase
         return $stubProduct;
     }
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubContextSource = $this->createMock(ContextSource::class);
         $this->stubContextSource->method('getContextsForParts')
@@ -52,18 +52,18 @@ class UrlKeyForContextCollectorTest extends TestCase
         $this->urlKeyCollector = new UrlKeyForContextCollector($this->stubContextSource);
     }
 
-    public function testItReturnsAUrlKeyCollectionForProducts()
+    public function testItReturnsAUrlKeyCollectionForProducts(): void
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var Product|MockObject $stubProduct */
         $stubProduct = $this->createStubProductWithUrlKey('product.html');
         $collection = $this->urlKeyCollector->collectProductUrlKeys($stubProduct);
         $this->assertInstanceOf(UrlKeyForContextCollection::class, $collection);
         $this->assertCount(1, $collection);
     }
 
-    public function testItReturnsAUrlKeyCollectionForListings()
+    public function testItReturnsAUrlKeyCollectionForListings(): void
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubListingCriteria */
+        /** @var ProductListing|MockObject $stubListingCriteria */
         $stubListingCriteria = $this->createMock(ProductListing::class);
         $stubListingCriteria->method('getContextData')->willReturn($this->testContextData);
         $stubListingCriteria->expects($this->once())->method('getUrlKey')

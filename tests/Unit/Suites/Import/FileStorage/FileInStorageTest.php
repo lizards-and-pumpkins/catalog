@@ -13,12 +13,12 @@ use PHPUnit\Framework\TestCase;
 class FileInStorageTest extends TestCase
 {
     /**
-     * @var FileToFileStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileToFileStorage|MockObject
      */
     private $mockFileStorage;
 
     /**
-     * @var StorageSpecificFileUri|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageSpecificFileUri|MockObject
      */
     private $inStorageFileUri;
 
@@ -27,7 +27,7 @@ class FileInStorageTest extends TestCase
      */
     private $fileInStorage;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockFileStorage = $this->createMock(FileToFileStorage::class);
         $this->inStorageFileUri = $this->createMock(StorageSpecificFileUri::class);
@@ -35,7 +35,7 @@ class FileInStorageTest extends TestCase
         $this->fileInStorage = FileInStorage::create($this->inStorageFileUri, $this->mockFileStorage);
     }
     
-    public function testItImplementsTheFileInterface()
+    public function testItImplementsTheFileInterface(): void
     {
         $this->assertInstanceOf(File::class, $this->fileInStorage);
     }
@@ -43,7 +43,7 @@ class FileInStorageTest extends TestCase
     /**
      * @dataProvider fileExistsInStorageProvider
      */
-    public function testItDelegatesToTheStorageToCheckIfTheFileExists(bool $fileExistsInStorage)
+    public function testItDelegatesToTheStorageToCheckIfTheFileExists(bool $fileExistsInStorage): void
     {
         $this->mockFileStorage->expects($this->once())->method('isPresent')
             ->with($this->equalTo($this->fileInStorage))
@@ -62,17 +62,17 @@ class FileInStorageTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheFileUriAsAString()
+    public function testItReturnsTheFileUriAsAString(): void
     {
         $this->assertSame((string) $this->inStorageFileUri, (string) $this->fileInStorage);
     }
 
-    public function testItReturnsTheStorageSpecificFileUri()
+    public function testItReturnsTheStorageSpecificFileUri(): void
     {
         $this->assertSame($this->inStorageFileUri, $this->fileInStorage->getInStorageUri());
     }
 
-    public function testItReturnsAFileInstanceWithInjectedContent()
+    public function testItReturnsAFileInstanceWithInjectedContent(): void
     {
         $fileContent = FileContent::fromString('test content');
         $file = FileInStorage::createWithContent($this->inStorageFileUri, $this->mockFileStorage, $fileContent);
@@ -81,7 +81,7 @@ class FileInStorageTest extends TestCase
         $this->assertSame($fileContent, $file->getContent());
     }
 
-    public function testItReturnTheInjectedContentEvenIfTheStorageHasTheFile()
+    public function testItReturnTheInjectedContentEvenIfTheStorageHasTheFile(): void
     {
         $fileContent = FileContent::fromString('test content');
         $this->mockFileStorage->method('read')->willReturn('other content');
@@ -90,7 +90,7 @@ class FileInStorageTest extends TestCase
         $this->assertSame($fileContent, $file->getContent());
     }
 
-    public function testItReturnsTheFileContentFromTheStorageIfNoneWasInjected()
+    public function testItReturnsTheFileContentFromTheStorageIfNoneWasInjected(): void
     {
         $testContent = 'storage file content';
         $this->mockFileStorage->method('read')->willReturn($testContent);

@@ -98,7 +98,7 @@ class Price
         return static::fromDecimalValueWithPrecision($roundedFractions, $numDecimalPoints);
     }
 
-    private function validateNumberOfDecimalPlaces(int $numDecimalPoints)
+    private function validateNumberOfDecimalPlaces(int $numDecimalPoints): void
     {
         if ($numDecimalPoints < 0) {
             $isNegativeMessage = sprintf(

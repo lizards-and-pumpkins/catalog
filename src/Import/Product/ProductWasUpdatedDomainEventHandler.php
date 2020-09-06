@@ -19,7 +19,7 @@ class ProductWasUpdatedDomainEventHandler implements DomainEventHandler
         $this->projector = $projector;
     }
 
-    public function process(Message $message)
+    public function process(Message $message): void
     {
         $event = ProductWasUpdatedDomainEvent::fromMessage($message);
         $this->projector->project($event->getProduct());

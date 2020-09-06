@@ -33,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 class UpdateProductCommandHandlerTest extends TestCase
 {
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|MockObject
      */
     private $mockDomainEventQueue;
 
@@ -47,7 +47,7 @@ class UpdateProductCommandHandlerTest extends TestCase
      */
     private $commandHandler;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testProduct = new SimpleProduct(
             new ProductId('foo'),
@@ -62,12 +62,12 @@ class UpdateProductCommandHandlerTest extends TestCase
         $this->commandHandler = new UpdateProductCommandHandler($this->mockDomainEventQueue);
     }
 
-    public function testCommandHandlerInterfaceIsImplemented()
+    public function testCommandHandlerInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
-    public function testProductWasUpdatedDomainEventIsEmitted()
+    public function testProductWasUpdatedDomainEventIsEmitted(): void
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add');
 

@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class SortByTest extends TestCase
 {
     /**
-     * @var AttributeCode|\PHPUnit_Framework_MockObject_MockObject $stubAttributeCode
+     * @var AttributeCode|MockObject $stubAttributeCode
      */
     private $stubAttributeCode;
 
@@ -23,7 +23,7 @@ class SortByTest extends TestCase
     private $testDirection = SortDirection::ASC;
 
     /**
-     * @var SortDirection|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortDirection|MockObject
      */
     private $stubSortDirection;
 
@@ -32,7 +32,7 @@ class SortByTest extends TestCase
      */
     private $sortBy;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubAttributeCode = $this->createMock(AttributeCode::class);
 
@@ -42,18 +42,18 @@ class SortByTest extends TestCase
         $this->sortBy = new SortBy($this->stubAttributeCode, $this->stubSortDirection);
     }
 
-    public function testCanBeCreated()
+    public function testCanBeCreated(): void
     {
         $this->assertSame($this->stubAttributeCode, $this->sortBy->getAttributeCode());
         $this->assertSame($this->stubSortDirection, $this->sortBy->getSelectedDirection());
     }
 
-    public function testJsonSerializableInterfaceIsImplemented()
+    public function testJsonSerializableInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, $this->sortBy);
     }
 
-    public function testArrayRepresentationOfSortByIsReturned()
+    public function testArrayRepresentationOfSortByIsReturned(): void
     {
         $attributeCode = 'foo';
 

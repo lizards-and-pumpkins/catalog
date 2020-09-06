@@ -14,8 +14,8 @@ class FacetFieldCollectionTest extends TestCase
 {
     /**
      * @param string $attributeCode
-     * @param \PHPUnit_Framework_MockObject_MockObject[] $stubFacetFieldValueCount
-     * @return FacetField|\PHPUnit_Framework_MockObject_MockObject
+     * @param MockObject[] $stubFacetFieldValueCount
+     * @return FacetField|MockObject
      */
     private function createStubFacetField(string $attributeCode, array $stubFacetFieldValueCount) : FacetField
     {
@@ -29,13 +29,13 @@ class FacetFieldCollectionTest extends TestCase
         return $stubFacetField;
     }
 
-    public function testCountableInterfaceIsImplemented()
+    public function testCountableInterfaceIsImplemented(): void
     {
         $facetFieldCollection = new FacetFieldCollection;
         $this->assertInstanceOf(\Countable::class, $facetFieldCollection);
     }
 
-    public function testCollectionCountIsReturned()
+    public function testCollectionCountIsReturned(): void
     {
         $stubFacetField = $this->createMock(FacetField::class);
         $facetFieldCollection = new FacetFieldCollection($stubFacetField);
@@ -43,7 +43,7 @@ class FacetFieldCollectionTest extends TestCase
         $this->assertCount(1, $facetFieldCollection);
     }
 
-    public function testCollectionCanBeRetrievedViaGetter()
+    public function testCollectionCanBeRetrievedViaGetter(): void
     {
         $stubFacetField = $this->createMock(FacetField::class);
         $facetFieldCollection = new FacetFieldCollection($stubFacetField);
@@ -54,13 +54,13 @@ class FacetFieldCollectionTest extends TestCase
         $this->assertSame($expectedFacetFieldsArray, $result);
     }
 
-    public function testIteratorAggregateInterfaceIsImplemented()
+    public function testIteratorAggregateInterfaceIsImplemented(): void
     {
         $facetFieldCollection = new FacetFieldCollection;
         $this->assertInstanceOf(\IteratorAggregate::class, $facetFieldCollection);
     }
 
-    public function testCollectionCanBeRetrievedViaIterator()
+    public function testCollectionCanBeRetrievedViaIterator(): void
     {
         $stubFacetField = $this->createMock(FacetField::class);
         $facetFieldCollection = new FacetFieldCollection($stubFacetField);
@@ -71,13 +71,13 @@ class FacetFieldCollectionTest extends TestCase
         $this->assertSame($stubFacetField, $result->current());
     }
 
-    public function testJsonSerializableInterfaceIsImplemented()
+    public function testJsonSerializableInterfaceIsImplemented(): void
     {
         $facetFieldCollection = new FacetFieldCollection;
         $this->assertInstanceOf(\JsonSerializable::class, $facetFieldCollection);
     }
 
-    public function testArrayRepresentationOfFacetFilterCollectionIsReturned()
+    public function testArrayRepresentationOfFacetFilterCollectionIsReturned(): void
     {
         $attributeCodeA = 'foo';
         $stubFacetFieldAValueCount = $this->createMock(FacetFieldValue::class);

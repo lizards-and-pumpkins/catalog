@@ -37,7 +37,7 @@ class ProductJsonToXml
         return $this->writer->outputMemory();
     }
 
-    private function startDocument()
+    private function startDocument(): void
     {
         $this->writer = new \XMLWriter();
         $this->writer->openMemory();
@@ -48,7 +48,7 @@ class ProductJsonToXml
     /**
      * @param array[] $productData
      */
-    private function writeProductNode(array $productData)
+    private function writeProductNode(array $productData): void
     {
         $this->writer->startElement('product');
         every($this->productRootNodeAttributes, function (string $attribute) use ($productData) {
@@ -63,7 +63,7 @@ class ProductJsonToXml
      * @param string $key
      * @param mixed $value
      */
-    private function writeAttributeNode(string $key, $value)
+    private function writeAttributeNode(string $key, $value): void
     {
         if (is_bool($value)) {
             $value = $value ? 'true' : 'false';
@@ -77,7 +77,7 @@ class ProductJsonToXml
         $this->writer->endElement();
     }
 
-    private function writeContextNode()
+    private function writeContextNode(): void
     {
         foreach ($this->context as $contextKey => $contextValue) {
             $this->writer->writeAttribute($contextKey, $contextValue);
@@ -87,7 +87,7 @@ class ProductJsonToXml
     /**
      * @param mixed $value
      */
-    private function writeTextNode($value)
+    private function writeTextNode($value): void
     {
         if ($this->containsTriangularBracket($value) || $this->containsAmpersand($value)) {
             $this->writer->writeCData($value);
@@ -99,7 +99,7 @@ class ProductJsonToXml
     /**
      * @param array[] $product
      */
-    private function writeProductAttributeNodes(array $product)
+    private function writeProductAttributeNodes(array $product): void
     {
         $this->writer->startElement('attributes');
 

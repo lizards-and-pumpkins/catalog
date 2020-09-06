@@ -33,7 +33,7 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
         $this->searchableFields = $searchableFields;
     }
 
-    public function addDocument(SearchDocument $searchDocument)
+    public function addDocument(SearchDocument $searchDocument): void
     {
         $this->index[$this->getSearchDocumentIdentifier($searchDocument)] = $searchDocument;
     }
@@ -46,7 +46,7 @@ class InMemorySearchEngine extends IntegrationTestSearchEngineAbstract
         return $this->index;
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->index = [];
     }

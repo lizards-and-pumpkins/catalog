@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class ProductRehydrationTest extends TestCase
 {
-    private function assertBasicProductPropertyEqual(Product $sourceProduct, Product $rehydratedProduct)
+    private function assertBasicProductPropertyEqual(Product $sourceProduct, Product $rehydratedProduct): void
     {
         $this->assertEquals($sourceProduct->getId(), $rehydratedProduct->getId());
         $this->assertSame(
@@ -49,7 +49,7 @@ class ProductRehydrationTest extends TestCase
         );
     }
 
-    private function assertProductEquals(Product $sourceProduct, Product $rehydratedProduct)
+    private function assertProductEquals(Product $sourceProduct, Product $rehydratedProduct): void
     {
         if ($sourceProduct instanceof SimpleProduct) {
             $this->assertSimpleProductEquals($sourceProduct, $rehydratedProduct);
@@ -71,7 +71,10 @@ class ProductRehydrationTest extends TestCase
         ProductVariationAttributeList $sourceVariationAttributeList,
         ProductVariationAttributeList $rehydratedVariationAttributeList
     ) {
-        $this->assertSame(count($sourceVariationAttributeList), count($rehydratedVariationAttributeList));
+        $this->assertSame(
+            $sourceVariationAttributeList->getIterator()->count(),
+            $rehydratedVariationAttributeList->getIterator()->count()
+        );
         
         /**
          * @var AttributeCode $attribute
@@ -112,7 +115,7 @@ class ProductRehydrationTest extends TestCase
         $image = new ProductImage(new ProductAttributeList($imageFileAttribute, $imageLabelAttribute));
         $imageList = new ProductImageList($image);
 
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $stubContext */
+        /** @var Context|MockObject $stubContext */
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('jsonSerialize')->willReturn([DataVersion::CONTEXT_CODE => '123']);
 
@@ -136,7 +139,7 @@ class ProductRehydrationTest extends TestCase
         return new ConfigurableProduct($simpleProduct, $variationAttributes, $associatedProducts);
     }
 
-    public function testASimpleProductCanBeJsonSerializedAndRehydrated()
+    public function testASimpleProductCanBeJsonSerializedAndRehydrated(): void
     {
         $sourceSimpleProduct = $this->createSimpleProductWithId('test');
         $json = json_encode($sourceSimpleProduct);
@@ -145,7 +148,7 @@ class ProductRehydrationTest extends TestCase
         $this->assertSimpleProductEquals($sourceSimpleProduct, $rehydratedSimpleProduct);
     }
 
-    public function testAConfigurableProductCanBeJsonSerializedAndRehydrated()
+    public function testAConfigurableProductCanBeJsonSerializedAndRehydrated(): void
     {
         $sourceConfigurableProduct = $this->createConfigurableProductWithIdAndAssociatedProducts(
             'root',

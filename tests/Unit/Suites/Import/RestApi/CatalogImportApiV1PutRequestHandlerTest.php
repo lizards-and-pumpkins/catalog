@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Import\ImportCatalogCommand;
 use LizardsAndPumpkins\Messaging\Command\CommandQueue;
 use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Logging\Logger;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,30 +17,30 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\ImportCatalogCommand
  * @uses   \LizardsAndPumpkins\Context\DataVersion\DataVersion
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  * @uses   \LizardsAndPumpkins\Http\HttpHeaders
  */
 class CatalogImportApiV1PutRequestHandlerTest extends TestCase
 {
     use TestFileFixtureTrait;
 
-    public function testCreatesCommandsWithCurrentDataVersion()
+    public function testCreatesCommandsWithCurrentDataVersion(): void
     {
         $testDataVersion = 'foo';
         
         $testImportDirectoryPath = $this->getUniqueTempDir() . '/test/catalog-import-directory';
         $this->createFixtureDirectory($testImportDirectoryPath);
 
-        /** @var CommandQueue|\PHPUnit_Framework_MockObject_MockObject $mockCommandQueue */
+        /** @var CommandQueue|MockObject $mockCommandQueue */
         $mockCommandQueue = $this->createMock(CommandQueue::class);
 
-        /** @var Logger|\PHPUnit_Framework_MockObject_MockObject $dummyLogger */
+        /** @var Logger|MockObject $dummyLogger */
         $dummyLogger = $this->createMock(Logger::class);
 
-        /** @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject $stubRequest */
+        /** @var HttpRequest|MockObject $stubRequest */
         $stubRequest = $this->createMock(HttpRequest::class);
 
-        /** @var DataVersion|\PHPUnit_Framework_MockObject_MockObject $stubDataVersion */
+        /** @var DataVersion|MockObject $stubDataVersion */
         $stubDataVersion = $this->createMock(DataVersion::class);
         $stubDataVersion->method('__toString')->willReturn($testDataVersion);
 

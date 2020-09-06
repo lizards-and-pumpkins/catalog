@@ -46,7 +46,7 @@ class UpdateTemplateCommand implements Command
         return Message::withCurrentTime($name, $payload, $metadata);
     }
 
-    public static function fromMessage(Message $message)
+    public static function fromMessage(Message $message): UpdateTemplateCommand
     {
         if ($message->getName() !== self::CODE) {
             throw new NotUpdateTemplateCommandMessageException(
@@ -76,7 +76,7 @@ class UpdateTemplateCommand implements Command
         return $this->dataVersion;
     }
 
-    private function validateTemplateId(string $templateId)
+    private function validateTemplateId(string $templateId): void
     {
         if ('' === $templateId) {
             throw new InvalidTemplateIdException('Invalid template ID: empty string');

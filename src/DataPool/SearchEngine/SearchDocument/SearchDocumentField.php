@@ -45,7 +45,7 @@ class SearchDocumentField
     /**
      * @param string|int|float|bool $value
      */
-    public static function validateValue($value)
+    public static function validateValue($value): void
     {
         if (! is_scalar($value)) {
             $type = is_object($value) ? get_class($value) : gettype($value);
@@ -57,7 +57,7 @@ class SearchDocumentField
     /**
      * @param mixed $key
      */
-    private static function validateKey(string $key)
+    private static function validateKey(string $key): void
     {
         if (!strlen($key) || !ctype_alpha($key{0})) {
             throw new InvalidSearchDocumentFieldKeyException('Search document field key must be led by a letter.');

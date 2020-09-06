@@ -12,13 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductRelationTypeCodeTest extends TestCase
 {
-    public function testItReturnsAProductRelationTypeCodeInstance()
+    public function testItReturnsAProductRelationTypeCodeInstance(): void
     {
         $result = ProductRelationTypeCode::fromString('test');
         $this->assertInstanceOf(ProductRelationTypeCode::class, $result);
     }
 
-    public function testItThrowsAnExceptionIfTheTypeCodeIsNotAString()
+    public function testItThrowsAnExceptionIfTheTypeCodeIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         ProductRelationTypeCode::fromString(123);
@@ -27,7 +27,7 @@ class ProductRelationTypeCodeTest extends TestCase
     /**
      * @dataProvider emptyRelationTypeCodeProvider
      */
-    public function testItThrowsAnExceptionIfTheProductRelationTypeCodeIsEmpty(string $emptyRelationTypeCode)
+    public function testItThrowsAnExceptionIfTheProductRelationTypeCodeIsEmpty(string $emptyRelationTypeCode): void
     {
         $this->expectException(InvalidProductRelationTypeCodeException::class);
         $this->expectExceptionMessage('The product relation type code can not be empty');
@@ -45,12 +45,12 @@ class ProductRelationTypeCodeTest extends TestCase
         ];
     }
 
-    public function testItReturnsTheRelationTypeCodeAsAString()
+    public function testItReturnsTheRelationTypeCodeAsAString(): void
     {
         $this->assertSame('test', (string) ProductRelationTypeCode::fromString('test'));
     }
 
-    public function testItReturnsTheTrimmedTypeCodeAsAString()
+    public function testItReturnsTheTrimmedTypeCodeAsAString(): void
     {
         $this->assertSame('a-code', (string) ProductRelationTypeCode::fromString(' a-code '));
     }

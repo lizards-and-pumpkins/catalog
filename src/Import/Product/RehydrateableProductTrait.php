@@ -13,7 +13,7 @@ trait RehydrateableProductTrait
      * @param string $expectedType
      * @param mixed[] $sourceArray
      */
-    protected static function validateTypeCodeInSourceArray(string $expectedType, array $sourceArray)
+    protected static function validateTypeCodeInSourceArray(string $expectedType, array $sourceArray): void
     {
         if (! isset($sourceArray[Product::TYPE_KEY])) {
             $message = sprintf('The array key "%s" is missing from source array', Product::TYPE_KEY);

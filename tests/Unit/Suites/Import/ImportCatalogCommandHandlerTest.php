@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class ImportCatalogCommandHandlerTest extends TestCase
 {
     /**
-     * @var DomainEventQueue|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomainEventQueue|MockObject
      */
     private $mockDomainEventQueue;
 
@@ -31,18 +31,18 @@ class ImportCatalogCommandHandlerTest extends TestCase
      */
     private $commandHandler;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->mockDomainEventQueue = $this->createMock(DomainEventQueue::class);
         $this->commandHandler = new ImportCatalogCommandHandler($this->mockDomainEventQueue);
     }
     
-    public function testImplementsCommandHandlerInterface()
+    public function testImplementsCommandHandlerInterface(): void
     {
         $this->assertInstanceOf(CommandHandler::class, $this->commandHandler);
     }
 
-    public function testEmitsCatalogImportWasTriggeredEvent()
+    public function testEmitsCatalogImportWasTriggeredEvent(): void
     {
         $this->mockDomainEventQueue->expects($this->once())->method('add')
             ->with($this->isInstanceOf(CatalogImportWasTriggeredDomainEvent::class));

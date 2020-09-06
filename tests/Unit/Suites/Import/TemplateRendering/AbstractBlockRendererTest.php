@@ -8,7 +8,8 @@ use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
 use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Translation\Translator;
 use LizardsAndPumpkins\Translation\TranslatorRegistry;
-use LizardsAndPumpkins\TestFileFixtureTrait;
+use LizardsAndPumpkins\Util\FileSystem\TestFileFixtureTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractBlockRendererTest extends TestCase
@@ -21,39 +22,29 @@ abstract class AbstractBlockRendererTest extends TestCase
     private $blockRenderer;
 
     /**
-     * @var ThemeLocator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubThemeLocator;
-
-    /**
-     * @var Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|MockObject
      */
     private $stubLayout;
 
     /**
-     * @var BlockStructure|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $stubBlockStructure;
-
-    /**
-     * @var Translator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Translator|MockObject
      */
     private $stubTranslator;
 
     /**
-     * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseUrlBuilder|MockObject
      */
     private $mockBaseUrlBuilder;
 
     /**
-     * @var BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseUrlBuilder|MockObject
      */
     private $mockAssetsBaseUrlBuilder;
 
     /**
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return Layout|MockObject
      */
-    final protected function getStubLayout()
+    final protected function getStubLayout(): Layout
     {
         return $this->stubLayout;
     }
@@ -64,33 +55,33 @@ abstract class AbstractBlockRendererTest extends TestCase
     }
 
     /**
-     * @return Context|\PHPUnit_Framework_MockObject_MockObject
+     * @return Context|MockObject
      */
-    final protected function getStubContext()
+    final protected function getStubContext(): Context
     {
         return $this->createMock(Context::class);
     }
 
     /**
-     * @return Translator|\PHPUnit_Framework_MockObject_MockObject
+     * @return Translator|MockObject
      */
-    final protected function getStubTranslator()
+    final protected function getStubTranslator(): Translator
     {
         return $this->stubTranslator;
     }
 
     /**
-     * @return BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return BaseUrlBuilder|MockObject
      */
-    final protected function getMockBaseUrlBuilder()
+    final protected function getMockBaseUrlBuilder(): BaseUrlBuilder
     {
         return $this->mockBaseUrlBuilder;
     }
 
     /**
-     * @return BaseUrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @return BaseUrlBuilder|MockObject
      */
-    final protected function getMockAssetsBaseUrlBuilder()
+    final protected function getMockAssetsBaseUrlBuilder(): BaseUrlBuilder
     {
         return $this->mockAssetsBaseUrlBuilder;
     }
@@ -98,7 +89,7 @@ abstract class AbstractBlockRendererTest extends TestCase
     /**
      * @param string $className
      * @param string $template
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return Layout|MockObject
      */
     final protected function addStubRootBlock($className, string $template) : Layout
     {
@@ -106,14 +97,14 @@ abstract class AbstractBlockRendererTest extends TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $stubBlock
+     * @param MockObject $stubBlock
      * @param string $className
      * @param string $template
      * @param string $childBlockName
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return Layout|MockObject
      */
     final protected function addChildLayoutToStubBlock(
-        \PHPUnit_Framework_MockObject_MockObject $stubBlock,
+        MockObject $stubBlock,
         $className,
         string $template,
         string $childBlockName = ''
@@ -129,7 +120,7 @@ abstract class AbstractBlockRendererTest extends TestCase
      * @param string $className
      * @param string $template
      * @param string $nameInLayout
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return Layout
      */
     final protected function createStubBlockLayout($className, string $template, string $nameInLayout = '') : Layout
     {
@@ -150,46 +141,46 @@ abstract class AbstractBlockRendererTest extends TestCase
         BaseUrlBuilder $assetsBaseUrlBuilder
     ) : BlockRenderer;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->stubLayout = $this->createMock(Layout::class);
-        $this->stubThemeLocator = $this->createMock(ThemeLocator::class);
-        $this->stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
+        $stubThemeLocator = $this->createMock(ThemeLocator::class);
+        $stubThemeLocator->method('getLayoutForHandle')->willReturn($this->stubLayout);
 
-        $this->stubBlockStructure = new BlockStructure();
+        $stubBlockStructure = new BlockStructure();
 
         $this->stubTranslator = $this->createMock(Translator::class);
         
         $this->mockBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
         $this->mockAssetsBaseUrlBuilder = $this->createMock(BaseUrlBuilder::class);
 
-        /** @var TranslatorRegistry|\PHPUnit_Framework_MockObject_MockObject $stubTranslatorRegistry */
+        /** @var TranslatorRegistry|MockObject $stubTranslatorRegistry */
         $stubTranslatorRegistry = $this->createMock(TranslatorRegistry::class);
         $stubTranslatorRegistry->method('getTranslator')->willReturn($this->stubTranslator);
 
         $this->blockRenderer = $this->createRendererInstance(
-            $this->stubThemeLocator,
-            $this->stubBlockStructure,
+            $stubThemeLocator,
+            $stubBlockStructure,
             $stubTranslatorRegistry,
             $this->mockBaseUrlBuilder,
             $this->mockAssetsBaseUrlBuilder
         );
     }
 
-    public function testBlockRendererAbstractClassIsExtended()
+    public function testBlockRendererAbstractClassIsExtended(): void
     {
         $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
     }
 
-    public function testBlockLayoutHandleIsNonEmptyString()
+    public function testBlockLayoutHandleIsNonEmptyString(): void
     {
         $result = $this->blockRenderer->getLayoutHandle();
 
-        $this->assertInternalType('string', $result);
+        $this->assertIsString($result);
         $this->assertNotEmpty(trim($result));
     }
 
-    public function testBlockRendererClassIsExtended()
+    public function testBlockRendererClassIsExtended(): void
     {
         $this->assertInstanceOf(BlockRenderer::class, $this->blockRenderer);
     }

@@ -6,5 +6,5 @@ namespace LizardsAndPumpkins\Translation;
 
 interface Translator extends \JsonSerializable
 {
-    public function translate(string $string) : string;
+    public function translate(string $string): string;
 }

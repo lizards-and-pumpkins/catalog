@@ -18,12 +18,12 @@ class NameToClassConvertingConsoleCommandLocatorTest extends TestCase
         return new NameToClassConvertingConsoleCommandLocator();
     }
 
-    public function testImplementsConsoleCommandLocatorInterface()
+    public function testImplementsConsoleCommandLocatorInterface(): void
     {
         $this->assertInstanceOf(ConsoleCommandLocator::class, $this->createLocator());
     }
 
-    public function testThrowsExceptionIfTheCommandNameIsEmpty()
+    public function testThrowsExceptionIfTheCommandNameIsEmpty(): void
     {
         $this->expectException(InvalidConsoleCommandNameException::class);
         $this->expectExceptionMessage('The command name must not be an empty string');
@@ -34,7 +34,7 @@ class NameToClassConvertingConsoleCommandLocatorTest extends TestCase
     /**
      * @dataProvider commandNameWithInvalidCharactersProvider
      */
-    public function testThrowsExceptionIfTheConsoleCommandNameContainsInvalidCharacters(string $invalidName)
+    public function testThrowsExceptionIfTheConsoleCommandNameContainsInvalidCharacters(string $invalidName): void
     {
         $this->expectException(InvalidConsoleCommandNameException::class);
         $this->expectExceptionMessage(sprintf('The command name "%s" is invalid', $invalidName));
@@ -51,17 +51,17 @@ class NameToClassConvertingConsoleCommandLocatorTest extends TestCase
         ];
     }
     
-    public function testReturnsFalseIfTheNameCanNotBeMappedToAnExistingClass()
+    public function testReturnsFalseIfTheNameCanNotBeMappedToAnExistingClass(): void
     {
         $this->assertFalse($this->createLocator()->hasClassForName('foo'));
     }
     
-    public function testReturnsTrueIfTheNameCanBeMappedToAnExistingClass()
+    public function testReturnsTrueIfTheNameCanBeMappedToAnExistingClass(): void
     {
         $this->assertTrue($this->createLocator()->hasClassForName('test:stub'));
     }
 
-    public function testThrowsAnExceptionOnGetClassWhenTheClassNameIsInvalid()
+    public function testThrowsAnExceptionOnGetClassWhenTheClassNameIsInvalid(): void
     {
         $this->expectException(InvalidConsoleCommandNameException::class);
         $this->expectExceptionMessage('The command name "foo bar" is invalid');
@@ -69,14 +69,14 @@ class NameToClassConvertingConsoleCommandLocatorTest extends TestCase
         $this->createLocator()->getClassFromName('foo bar');
     }
 
-    public function testThrowsExceptionIfTheClassDoesNotExist()
+    public function testThrowsExceptionIfTheClassDoesNotExist(): void
     {
         $this->expectException(InvalidConsoleCommandNameException::class);
         $this->expectExceptionMessage('The command "foo" is unknown');
         $this->createLocator()->getClassFromName('foo');
     }
 
-    public function testReturnsClassNameOfExistingCommand()
+    public function testReturnsClassNameOfExistingCommand(): void
     {
         $this->assertSame('\\' . TestStubConsoleCommand::class, $this->createLocator()->getClassFromName('test:stub'));
     }

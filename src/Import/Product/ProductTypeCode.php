@@ -24,7 +24,7 @@ class ProductTypeCode
         return new self($productTypeString);
     }
 
-    private static function validateProductTypeString(string $productTypeString)
+    private static function validateProductTypeString(string $productTypeString): void
     {
         if (trim($productTypeString) === '') {
             throw new InvalidProductTypeCodeException('The product type code can not be empty');

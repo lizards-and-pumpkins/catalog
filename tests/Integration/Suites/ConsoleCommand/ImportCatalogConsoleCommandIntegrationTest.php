@@ -38,7 +38,7 @@ class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
 
     private function createTestCliMate(array $argumentMap): CLImate
     {
-        /** @var CLImate|\PHPUnit_Framework_MockObject_MockObject $stubCliMate */
+        /** @var CLImate|MockObject $stubCliMate */
         $stubCliMate = $this->getMockBuilder(CLImate::class)->setMethods(['get', 'output', 'error'])->getMock();
         $stubCliMate->arguments = $this->createMock(CliMateArgumentManager::class);
         $stubCliMate->arguments->method('get')->willReturnMap($argumentMap);
@@ -60,7 +60,7 @@ class ImportCatalogConsoleCommandIntegrationTest extends AbstractIntegrationTest
         return $this->prepareIntegrationTestMasterFactoryExcludingFactories($factoriesToExclude);
     }
 
-    public function testRunImportsCatalogCommand()
+    public function testRunImportsCatalogCommand(): void
     {
         $factory = $this->createMasterFactory();
         

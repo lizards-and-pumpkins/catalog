@@ -22,7 +22,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
      */
     private $factory;
 
-    private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture()
+    private function addTemplateWasUpdatedDomainEventToSetupProductListingFixture(): void
     {
         $httpUrl = HttpUrl::fromString('http://example.com/api/templates/product_listing');
         $httpHeaders = HttpHeaders::fromArray([
@@ -42,7 +42,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $this->failIfMessagesWhereLogged($this->factory->getLogger());
     }
 
-    private function registerProductSearchResultMetaSnippetKeyGenerator()
+    private function registerProductSearchResultMetaSnippetKeyGenerator(): void
     {
         $this->factory->createRegistrySnippetKeyGeneratorLocatorStrategy()->register(
             ProductSearchResultMetaSnippetRenderer::CODE,
@@ -52,7 +52,7 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         );
     }
 
-    public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool()
+    public function testProductSearchResultMetaSnippetIsWrittenIntoDataPool(): void
     {
         $this->addTemplateWasUpdatedDomainEventToSetupProductListingFixture();
 
@@ -97,9 +97,9 @@ class ProductSearchEdgeToEdgeTest extends AbstractIntegrationTest
         $unExpectedProductName = 'LED Armflasher';
         $outOfStockProductName = 'Adilette Out Of Stock';
 
-        $this->assertContains($expectedProductName, $body);
-        $this->assertNotContains($unExpectedProductName, $body);
-        $this->assertNotContains($outOfStockProductName, $body);
+        $this->assertStringContainsString($expectedProductName, $body);
+        $this->assertStringNotContainsString($unExpectedProductName, $body);
+        $this->assertStringNotContainsString($outOfStockProductName, $body);
 
         return $page;
     }

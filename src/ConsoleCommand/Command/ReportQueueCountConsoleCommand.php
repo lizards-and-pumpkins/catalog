@@ -6,8 +6,8 @@ namespace LizardsAndPumpkins\ConsoleCommand\Command;
 
 use League\CLImate\CLImate;
 use LizardsAndPumpkins\ConsoleCommand\BaseCliCommand;
-use LizardsAndPumpkins\Messaging\Queue;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
 
 class ReportQueueCountConsoleCommand extends BaseCliCommand
 {
@@ -22,7 +22,7 @@ class ReportQueueCountConsoleCommand extends BaseCliCommand
         $this->setCLImate($climate);
     }
 
-    final protected function execute(CLImate $climate)
+    final protected function execute(CLImate $climate): void
     {
         $tableData = $this->formatTableData(
             $this->masterFactory->getCommandMessageQueue(),

@@ -24,7 +24,7 @@ class LocalFilesystemStorageWriterTest extends TestCase
      */
     private $testBaseDirPath;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testBaseDirPath = sys_get_temp_dir() . '/lizards-and-pumpkins-result-image';
         mkdir($this->testBaseDirPath);
@@ -32,7 +32,7 @@ class LocalFilesystemStorageWriterTest extends TestCase
         $this->writer = new LocalFilesystemStorageWriter();
     }
 
-    protected function tearDown()
+    final protected function tearDown(): void
     {
         chmod($this->testBaseDirPath, 0777);
 
@@ -41,19 +41,19 @@ class LocalFilesystemStorageWriterTest extends TestCase
         }
     }
 
-    public function testStaticFileInterfaceIsImplemented()
+    public function testStaticFileInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FileStorageWriter::class, $this->writer);
     }
 
-    public function testExceptionIsThrownIfDestinationIsNotWritable()
+    public function testExceptionIsThrownIfDestinationIsNotWritable(): void
     {
         $this->expectException(FileNotWritableException::class);
         chmod($this->testBaseDirPath, 0000);
         $this->writer->putFileContents($this->testBaseDirPath . '/foo', 'bar');
     }
 
-    public function testFileContentsIsWritten()
+    public function testFileContentsIsWritten(): void
     {
         $filePath = $this->testBaseDirPath . '/foo';
         $content = 'bar';

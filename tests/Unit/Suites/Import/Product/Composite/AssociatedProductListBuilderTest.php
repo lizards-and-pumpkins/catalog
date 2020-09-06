@@ -21,11 +21,11 @@ class AssociatedProductListBuilderTest extends TestCase
     private $builder;
 
     /**
-     * @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductBuilder|MockObject
      */
     private $stubProductBuilder;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $stubProduct = $this->createMock(Product::class);
         $stubProduct->method('getId')->willReturnCallback(function () {
@@ -41,7 +41,7 @@ class AssociatedProductListBuilderTest extends TestCase
         );
     }
     
-    public function testItReturnsAnAssociatedProductList()
+    public function testItReturnsAnAssociatedProductList(): void
     {
         $stubContext = $this->createMock(Context::class);
         $stubContext->method('__toString')->willReturn('test');

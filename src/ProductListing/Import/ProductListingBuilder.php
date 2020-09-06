@@ -109,7 +109,7 @@ class ProductListingBuilder
     /**
      * @param array[] $criteriaNode
      */
-    private function validateCriteriaNode(array $criteriaNode)
+    private function validateCriteriaNode(array $criteriaNode): void
     {
         if (!isset($criteriaNode['attributes']['type'])) {
             throw new MissingTypeXmlAttributeException('Missing "type" attribute in product listing XML.');
@@ -119,7 +119,7 @@ class ProductListingBuilder
     /**
      * @param array[] $criterionNode
      */
-    private function validateCriterionNode(array $criterionNode)
+    private function validateCriterionNode(array $criterionNode): void
     {
         if (!isset($criterionNode['attributes']['name'])) {
             throw new MissingCriterionAttributeNameXmlAttributeException(

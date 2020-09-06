@@ -6,7 +6,7 @@ namespace LizardsAndPumpkins\Import\Product;
 
 use LizardsAndPumpkins\Messaging\Command\Command;
 use LizardsAndPumpkins\ProductDetail\Import\ProductImportCommandFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ProductImportCommandLocator
 {

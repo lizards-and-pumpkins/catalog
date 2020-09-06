@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins\ProductSearch\ContentDelivery;
 
 use LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator;
-use LizardsAndPumpkins\RestApi\RestApiFactory;
+use LizardsAndPumpkins\RestApi\CatalogRestApiFactory;
 use LizardsAndPumpkins\UnitTestFactory;
 use LizardsAndPumpkins\Util\Factory\CommonFactory;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\FactoryWithCallback;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryWithCallback;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 use LizardsAndPumpkins\Util\Factory\CatalogMasterFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -28,11 +28,11 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchService
  * @uses   \LizardsAndPumpkins\ProductSearch\ContentDelivery\ProductSearchSharedFactory
  * @uses   \LizardsAndPumpkins\RestApi\ApiRequestHandlerLocator
- * @uses   \LizardsAndPumpkins\RestApi\RestApiFactory
+ * @uses   \LizardsAndPumpkins\RestApi\CatalogRestApiFactory
  * @uses   \LizardsAndPumpkins\Util\Factory\CommonFactory
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\FactoryWithCallbackTrait
- * @uses   \LizardsAndPumpkins\Util\Factory\MasterFactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\FactoryWithCallbackTrait
+ * @uses   \LizardsAndPumpkins\Core\Factory\MasterFactoryTrait
  * @uses   \LizardsAndPumpkins\Util\SnippetCodeValidator
  * @uses   \LizardsAndPumpkins\Import\ContentBlock\RestApi\ContentBlocksApiV2PutRequestHandler
  * @uses   \LizardsAndPumpkins\Import\RestApi\CatalogImportApiV2PutRequestHandler
@@ -49,11 +49,11 @@ class ProductSearchApiFactoryTest extends TestCase
      */
     private $factory;
 
-    final protected function setUp()
+    final protected function setUp(): void
     {
         $masterFactory = new CatalogMasterFactory();
         $masterFactory->register(new CommonFactory());
-        $masterFactory->register(new RestApiFactory());
+        $masterFactory->register(new CatalogRestApiFactory());
         $masterFactory->register(new UnitTestFactory($this));
 
         $this->factory = new ProductSearchApiFactory();
@@ -61,17 +61,17 @@ class ProductSearchApiFactoryTest extends TestCase
         $masterFactory->register($this->factory);
     }
 
-    public function testFactoryInterfaceIsImplemented()
+    public function testFactoryInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(Factory::class, $this->factory);
     }
 
-    public function testRegistersDelegateFactoryInterfaceIsImplemented()
+    public function testRegistersDelegateFactoryInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(FactoryWithCallback::class, $this->factory);
     }
 
-    public function testProductSearchApiEndpointIsRegistered()
+    public function testProductSearchApiEndpointIsRegistered(): void
     {
         $endpointKey = 'get_product';
         $apiVersion = 1;
@@ -80,7 +80,7 @@ class ProductSearchApiFactoryTest extends TestCase
         $mockApiRequestHandlerLocator->expects($this->once())->method('register')
             ->with($endpointKey, $apiVersion, $this->isInstanceOf(\Closure::class));
 
-        /** @var MasterFactory|\PHPUnit_Framework_MockObject_MockObject $stubMasterFactory */
+        /** @var MasterFactory|MockObject $stubMasterFactory */
         $stubMasterFactory = $this->getMockBuilder(MasterFactory::class)->setMethods(
             array_merge(get_class_methods(MasterFactory::class), ['getApiRequestHandlerLocator'])
         )->getMock();
@@ -89,7 +89,7 @@ class ProductSearchApiFactoryTest extends TestCase
         $this->factory->factoryRegistrationCallback($stubMasterFactory);
     }
 
-    public function testReturnsProductSearchApiV1GetRequestHandler()
+    public function testReturnsProductSearchApiV1GetRequestHandler(): void
     {
         $result = $this->factory->createProductSearchApiV1GetRequestHandler();
         $this->assertInstanceOf(ProductSearchApiV1GetRequestHandler::class, $result);

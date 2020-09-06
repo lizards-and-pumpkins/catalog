@@ -20,21 +20,21 @@ class IntegrationTestProductViewLocatorTest extends TestCase
      */
     private $locator;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
-        /** @var ProductImageFileLocator|\PHPUnit_Framework_MockObject_MockObject $stubProductImageFileLocator */
+        /** @var ProductImageFileLocator|MockObject $stubProductImageFileLocator */
         $stubProductImageFileLocator = $this->createMock(ProductImageFileLocator::class);
         $this->locator = new IntegrationTestProductViewLocator($stubProductImageFileLocator);
     }
 
-    public function testProductViewInterfaceIsImplemented()
+    public function testProductViewInterfaceIsImplemented(): void
     {
         $this->assertInstanceOf(ProductViewLocator::class, $this->locator);
     }
 
-    public function testProductViewIsReturned()
+    public function testProductViewIsReturned(): void
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var Product|MockObject $stubProduct */
         $stubProduct = $this->createMock(Product::class);
 
         $result = $this->locator->createForProduct($stubProduct);
@@ -42,9 +42,9 @@ class IntegrationTestProductViewLocatorTest extends TestCase
         $this->assertInstanceOf(ProductView::class, $result);
     }
 
-    public function testItReturnsAConfigurableProductViewForConfigurableProducts()
+    public function testItReturnsAConfigurableProductViewForConfigurableProducts(): void
     {
-        /** @var ConfigurableProduct|\PHPUnit_Framework_MockObject_MockObject $stubProduct */
+        /** @var ConfigurableProduct|MockObject $stubProduct */
         $stubProduct = $this->createMock(ConfigurableProduct::class);
 
         $result = $this->locator->createForProduct($stubProduct);

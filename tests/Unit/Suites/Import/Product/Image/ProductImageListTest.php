@@ -17,7 +17,7 @@ class ProductImageListTest extends TestCase
 {
     /**
      * @param int $numberOfImages
-     * @return ProductImage[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return ProductImage[]
      */
     private function createArrayOfStubImagesWithSize(int $numberOfImages) : array
     {
@@ -29,15 +29,16 @@ class ProductImageListTest extends TestCase
         }, range(1, $numberOfImages));
     }
 
-    public function testItImplementsTheCountableInterface()
+    public function testItImplementsTheCountableInterface(): void
     {
         $this->assertInstanceOf(\Countable::class, new ProductImageList());
     }
 
     /**
      * @dataProvider numberOfImagesProvider
+     * @param int $numberOfImages
      */
-    public function testItReturnsTheCorrectNumberOfImages(int $numberOfImages)
+    public function testItReturnsTheCorrectNumberOfImages(int $numberOfImages): void
     {
         $stubImages = $this->createArrayOfStubImagesWithSize($numberOfImages);
         $imageList = new ProductImageList(...$stubImages);
@@ -52,21 +53,21 @@ class ProductImageListTest extends TestCase
         return [[0], [1], [2], [3]];
     }
 
-    public function testItReturnsTheImagesArray()
+    public function testItReturnsTheImagesArray(): void
     {
         $stubImages = $this->createArrayOfStubImagesWithSize(2);
         $imageList = new ProductImageList(...$stubImages);
-        $this->assertInternalType('array', $imageList->getImages());
+        $this->assertIsArray($imageList->getImages());
         $this->assertCount(2, $imageList->getImages());
         $this->assertContainsOnlyInstancesOf(ProductImage::class, $imageList->getImages());
     }
 
-    public function testItImplementsIteratorAggregate()
+    public function testItImplementsIteratorAggregate(): void
     {
         $this->assertInstanceOf(\IteratorAggregate::class, new ProductImageList());
     }
 
-    public function testItIteratesOverTheImages()
+    public function testItIteratesOverTheImages(): void
     {
         $stubImages = $this->createArrayOfStubImagesWithSize(2);
         $imageList = new ProductImageList(...$stubImages);
@@ -78,12 +79,12 @@ class ProductImageListTest extends TestCase
         $this->assertSame(2, $counter);
     }
 
-    public function testItImplementsArrayAccess()
+    public function testItImplementsArrayAccess(): void
     {
         $this->assertInstanceOf(\ArrayAccess::class, new ProductImageList());
     }
 
-    public function testItReturnsIfAnOffsetExists()
+    public function testItReturnsIfAnOffsetExists(): void
     {
         $stubImages = $this->createArrayOfStubImagesWithSize(2);
         $imageList = new ProductImageList(...$stubImages);
@@ -92,14 +93,14 @@ class ProductImageListTest extends TestCase
         $this->assertFalse(isset($imageList[2]));
     }
 
-    public function testItReturnsTheImageByOffset()
+    public function testItReturnsTheImageByOffset(): void
     {
         $stubImage = $this->createMock(ProductImage::class);
         $imageList = new ProductImageList($stubImage);
         $this->assertSame($stubImage, $imageList[0]);
     }
 
-    public function testItThrowsAnExceptionIfAnOffsetIsSet()
+    public function testItThrowsAnExceptionIfAnOffsetIsSet(): void
     {
         $this->expectException(ProductImageListNotMutableException::class);
         $this->expectExceptionMessage('ProductImageList instances are immutable');
@@ -107,7 +108,7 @@ class ProductImageListTest extends TestCase
         $imageList[0] = 123;
     }
 
-    public function testItThrowsAnExceptionIfAnOffsetIsUnset()
+    public function testItThrowsAnExceptionIfAnOffsetIsUnset(): void
     {
         $this->expectException(ProductImageListNotMutableException::class);
         $this->expectExceptionMessage('ProductImageList instances are immutable');
@@ -115,12 +116,12 @@ class ProductImageListTest extends TestCase
         unset($imageList[0]);
     }
 
-    public function testItImplementsJsonSerializable()
+    public function testItImplementsJsonSerializable(): void
     {
         $this->assertInstanceOf(\JsonSerializable::class, new ProductImageList());
     }
 
-    public function testItCanBeJsonEncodedAndRehydrated()
+    public function testItCanBeJsonEncodedAndRehydrated(): void
     {
         $productImage = new ProductImage(ProductAttributeList::fromArray([]));
         $sourceProductImageList = new ProductImageList($productImage);

@@ -13,12 +13,12 @@ use LizardsAndPumpkins\Util\Storage\Clearable;
 
 class ClearableStubSearchEngine implements SearchEngine, Clearable
 {
-    public function clear()
+    public function clear(): void
     {
         // Intentionally left empty
     }
 
-    public function addDocument(SearchDocument $searchDocument)
+    public function addDocument(SearchDocument $searchDocument): void
     {
         // Intentionally left empty
     }

@@ -39,7 +39,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
      */
     private $snippetKeyGeneratorLocator;
 
-    private function addSnippetsFixtureToKeyValueStorage(string $productDetailPageMetaSnippetKey, Context $context)
+    private function addSnippetsFixtureToKeyValueStorage(string $productDetailPageMetaSnippetKey, Context $context): void
     {
         $dataPoolWriter = $this->factory->createDataPoolWriter();
 
@@ -63,7 +63,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         $dataPoolWriter->writeSnippets($rootSnippet, $metaInfoSnippet, ...$pageSnippets);
     }
 
-    private function registerSnippetKeyGenerators(string $rootSnippetCode)
+    private function registerSnippetKeyGenerators(string $rootSnippetCode): void
     {
         $rootSnippetKeyGenerator = new GenericSnippetKeyGenerator(
             ProductDetailMetaSnippetRenderer::CODE,
@@ -139,7 +139,7 @@ class FrontendRenderingTest extends AbstractIntegrationTest
         );
     }
 
-    public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets()
+    public function testPageIsRenderedFromAnUrlWithoutVariablesInSnippets(): void
     {
         $urlKey = 'product1';
         $request = $this->createDummyRequest(HttpUrl::fromString('http://example.com/' . $urlKey));

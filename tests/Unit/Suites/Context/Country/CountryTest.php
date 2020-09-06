@@ -12,12 +12,12 @@ use PHPUnit\Framework\TestCase;
  */
 class CountryTest extends TestCase
 {
-    public function testReturnsACountryInstance()
+    public function testReturnsACountryInstance(): void
     {
         $this->assertInstanceOf(Country::class, Country::from2CharIso3166('de'));
     }
 
-    public function testItThrowsAnExceptionIfTheInputIsNotAString()
+    public function testItThrowsAnExceptionIfTheInputIsNotAString(): void
     {
         $this->expectException(\TypeError::class);
         Country::from2CharIso3166(new \stdClass());
@@ -26,7 +26,7 @@ class CountryTest extends TestCase
     /**
      * @dataProvider invalidCountrySpecStringProvider
      */
-    public function testItThrowsAnExceptionIfTheInputStringIsNotTwoCharactersLong(string $invalidCountrySpec)
+    public function testItThrowsAnExceptionIfTheInputStringIsNotTwoCharactersLong(string $invalidCountrySpec): void
     {
         $this->expectException(InvalidCountrySpecificationException::class);
         $this->expectExceptionMessage('Two character string country specification expected (ISO 3166), got "');
@@ -48,7 +48,7 @@ class CountryTest extends TestCase
     /**
      * @dataProvider emptyStringDataProvider
      */
-    public function testItThrowsAnExceptionIfTheInputStringIsEmpty(string $emptyStringProvider)
+    public function testItThrowsAnExceptionIfTheInputStringIsEmpty(string $emptyStringProvider): void
     {
         $this->expectException(InvalidCountrySpecificationException::class);
         $this->expectExceptionMessage('The country specification must not be empty');
@@ -69,7 +69,7 @@ class CountryTest extends TestCase
     /**
      * @dataProvider countrySpecWithInvalidCharactersProvider
      */
-    public function testItThrowsAnExceptionIfItContainsCharactersBeyondAToZ(string $outOfBoundsCountrySpec)
+    public function testItThrowsAnExceptionIfItContainsCharactersBeyondAToZ(string $outOfBoundsCountrySpec): void
     {
         $this->expectException(InvalidCountrySpecificationException::class);
         $this->expectExceptionMessage(
@@ -89,30 +89,30 @@ class CountryTest extends TestCase
         ];
     }
 
-    public function testItAcceptsACountryInstanceAsValidInput()
+    public function testItAcceptsACountryInstanceAsValidInput(): void
     {
         $country = Country::from2CharIso3166('it');
         $this->assertSame($country, Country::from2CharIso3166($country));
     }
 
-    public function testItReturnsTheCountryCodeString()
+    public function testItReturnsTheCountryCodeString(): void
     {
         $this->assertSame('DE', (string) Country::from2CharIso3166('DE'));
     }
 
-    public function testItReturnsTheInputStringInUpperCase()
+    public function testItReturnsTheInputStringInUpperCase(): void
     {
         $this->assertSame('EN', (string) Country::from2CharIso3166('en'));
     }
 
-    public function testCountriesWithDifferentCodeAreNotEqual()
+    public function testCountriesWithDifferentCodeAreNotEqual(): void
     {
         $countryDE = Country::from2CharIso3166('de');
         $countryEN = Country::from2CharIso3166('en');
         $this->assertFalse($countryDE->isEqualTo($countryEN));
     }
 
-    public function testCountriesWithTheSameCodeAreEqual()
+    public function testCountriesWithTheSameCodeAreEqual(): void
     {
         $country1 = Country::from2CharIso3166('de');
         $country2 = Country::from2CharIso3166('DE');

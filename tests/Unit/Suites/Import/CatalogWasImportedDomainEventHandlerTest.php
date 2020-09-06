@@ -25,12 +25,12 @@ class CatalogWasImportedDomainEventHandlerTest extends TestCase
      */
     private $eventHandler;
     
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->eventHandler = new CatalogWasImportedDomainEventHandler();
     }
 
-    public function testItIsAnDomainEventHandler()
+    public function testItIsAnDomainEventHandler(): void
     {
         $this->assertInstanceOf(DomainEventHandler::class, $this->eventHandler);
     }

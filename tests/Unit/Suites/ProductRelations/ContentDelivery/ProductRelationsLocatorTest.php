@@ -26,19 +26,16 @@ class ProductRelationsLocatorTest extends TestCase
     private $testRelationTypeCode;
 
     /**
-     * @var ProductRelations|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRelations
      */
     private $stubProductRelationType;
 
-    /**
-     * @return ProductRelations|\PHPUnit_Framework_MockObject_MockObject
-     */
-    public function createTestProductRelation()
+    public function createTestProductRelation(): ProductRelations
     {
         return $this->stubProductRelationType;
     }
     
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testRelationTypeCode = ProductRelationTypeCode::fromString('test');
         $this->productRelationLocator = new ProductRelationsLocator();
@@ -47,20 +44,20 @@ class ProductRelationsLocatorTest extends TestCase
         $this->productRelationLocator->register($this->testRelationTypeCode, [$this, 'createTestProductRelation']);
     }
     
-    public function testItThrowsAnExceptionIfThereIsNoRelationForTheGivenTypeCode()
+    public function testItThrowsAnExceptionIfThereIsNoRelationForTheGivenTypeCode(): void
     {
         $this->expectException(UnknownProductRelationTypeException::class);
         $this->expectExceptionMessage('The product relation "unknown" is unknown');
         $this->productRelationLocator->locate(ProductRelationTypeCode::fromString('unknown'));
     }
 
-    public function testItReturnsARegisteredProductRelation()
+    public function testItReturnsARegisteredProductRelation(): void
     {
         $result = $this->productRelationLocator->locate($this->testRelationTypeCode);
         $this->assertSame($this->stubProductRelationType, $result);
     }
 
-    public function testItThrowsAnExceptionIfTheFactoryMethodReturnTypeIsInvalid()
+    public function testItThrowsAnExceptionIfTheFactoryMethodReturnTypeIsInvalid(): void
     {
         $typeCode = ProductRelationTypeCode::fromString('invalid');
         $invalidFactoryMethod = function () {

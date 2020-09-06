@@ -25,37 +25,37 @@ class ProductImportCallbackFailureMessageTest extends TestCase
 
     private $testInvalidXml = 'invalid';
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->testException = new \Exception('Test Message');
         $this->logMessage = new ProductImportCallbackFailureMessage($this->testException, $this->testInvalidXml);
     }
     
-    public function testItImplementsLogMessage()
+    public function testItImplementsLogMessage(): void
     {
         $this->assertInstanceOf(LogMessage::class, $this->logMessage);
     }
 
-    public function testItReturnsTheExceptionMessage()
+    public function testItReturnsTheExceptionMessage(): void
     {
         $expected = 'Error during processing catalog product XML import for product "- unknown -": Test Message';
         $this->assertSame($expected, (string) $this->logMessage);
     }
 
-    public function testItIncludesTheProductXmlInTheContextArray()
+    public function testItIncludesTheProductXmlInTheContextArray(): void
     {
-        $this->assertInternalType('array', $this->logMessage->getContext());
+        $this->assertIsArray($this->logMessage->getContext());
         $this->assertArrayHasKey('product_xml', $this->logMessage->getContext());
         $this->assertSame($this->testInvalidXml, $this->logMessage->getContext()['product_xml']);
     }
 
-    public function testItIncludesTheExceptionInTheContextArray()
+    public function testItIncludesTheExceptionInTheContextArray(): void
     {
         $this->assertArrayHasKey('exception', $this->logMessage->getContext());
         $this->assertSame($this->testException, $this->logMessage->getContext()['exception']);
     }
 
-    public function testItExtractsTheProductSkuFromTheXmlFragment()
+    public function testItExtractsTheProductSkuFromTheXmlFragment(): void
     {
         $productXml = '<product sku="test-id"></product>';
         $logMessage = new ProductImportCallbackFailureMessage($this->testException, $productXml);
@@ -63,10 +63,10 @@ class ProductImportCallbackFailureMessageTest extends TestCase
         $this->assertSame($expected, (string) $logMessage);
     }
 
-    public function testItIncludesTheExceptionFileAndLineInTheSynopsis()
+    public function testItIncludesTheExceptionFileAndLineInTheSynopsis(): void
     {
         $synopsis = $this->logMessage->getContextSynopsis();
-        $this->assertContains($this->testException->getFile(), $synopsis);
-        $this->assertContains((string) $this->testException->getLine(), $synopsis);
+        $this->assertStringContainsString($this->testException->getFile(), $synopsis);
+        $this->assertStringContainsString((string) $this->testException->getLine(), $synopsis);
     }
 }

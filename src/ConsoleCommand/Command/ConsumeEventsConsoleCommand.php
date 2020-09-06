@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Import\Image\UpdatingProductImageImportCommandFactory;
 use LizardsAndPumpkins\Messaging\Event\DomainEventConsumer;
 use LizardsAndPumpkins\ProductDetail\Import\UpdatingProductImportCommandFactory;
 use LizardsAndPumpkins\ProductListing\Import\UpdatingProductListingImportCommandFactory;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class ConsumeEventsConsoleCommand implements ConsoleCommand
 {
@@ -26,7 +26,7 @@ class ConsumeEventsConsoleCommand implements ConsoleCommand
         $this->masterFactory->register(new UpdatingProductListingImportCommandFactory());
     }
 
-    public function run()
+    public function run(): void
     {
         /** @var DomainEventConsumer $eventConsumer */
         $eventConsumer = $this->masterFactory->createDomainEventConsumer();

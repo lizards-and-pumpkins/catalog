@@ -9,7 +9,7 @@ use LizardsAndPumpkins\Http\HttpRequest;
 use LizardsAndPumpkins\Http\HttpRequestBody;
 use LizardsAndPumpkins\Http\HttpResponse;
 use LizardsAndPumpkins\Http\HttpUrl;
-use LizardsAndPumpkins\Util\Factory\MasterFactory;
+use LizardsAndPumpkins\Core\Factory\MasterFactory;
 
 class TemplateListApiTest extends AbstractIntegrationTest
 {
@@ -35,7 +35,7 @@ class TemplateListApiTest extends AbstractIntegrationTest
         return $website->processRequest();
     }
 
-    public function testReturnsTemplatesList()
+    public function testReturnsTemplatesList(): void
     {
         $expectedTemplateCodes = ['template_ids' => [
             'product_listing',

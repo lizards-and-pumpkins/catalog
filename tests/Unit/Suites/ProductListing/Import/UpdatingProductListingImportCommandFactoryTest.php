@@ -18,22 +18,23 @@ class UpdatingProductListingImportCommandFactoryTest extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    final protected function setUp(): void
     {
         $this->factory = new UpdatingProductListingImportCommandFactory();
     }
 
-    public function testItImplementsTheProductListingImportCommandFactoryInterface()
+    public function testItImplementsTheProductListingImportCommandFactoryInterface(): void
     {
         $this->assertInstanceOf(ProductListingImportCommandFactory::class, $this->factory);
     }
 
-    public function testItReturnsAnAddProductListingCommand()
+    public function testItReturnsAnAddProductListingCommand(): void
     {
-        /** @var ProductListing|\PHPUnit_Framework_MockObject_MockObject $stubProductListing */
+        /** @var ProductListing $stubProductListing */
         $stubProductListing = $this->createMock(ProductListing::class);
         $commands = $this->factory->createProductListingImportCommands($stubProductListing);
-        $this->assertInternalType('array', $commands);
+
+        $this->assertIsArray($commands);
         $this->assertNotEmpty($commands);
         $this->assertContainsOnlyInstancesOf(AddProductListingCommand::class, $commands);
     }

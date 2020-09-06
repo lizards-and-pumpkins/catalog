@@ -48,11 +48,7 @@ class Layout
         return $this->nodeAttributes;
     }
 
-    /**
-     * @param string $attributeCode
-     * @return null|string
-     */
-    public function getAttribute(string $attributeCode)
+    public function getAttribute(string $attributeCode): ?string
     {
         if (!array_key_exists($attributeCode, $this->nodeAttributes)) {
             return null;

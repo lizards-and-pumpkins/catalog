@@ -5,45 +5,46 @@ declare(strict_types=1);
 namespace LizardsAndPumpkins;
 
 use LizardsAndPumpkins\Context\BaseUrl\BaseUrlBuilder;
+use LizardsAndPumpkins\Context\Context;
 use LizardsAndPumpkins\Context\ContextPartBuilder;
 use LizardsAndPumpkins\Context\ContextSource;
 use LizardsAndPumpkins\Context\Website\UrlToWebsiteMap;
-use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
-use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
-use LizardsAndPumpkins\Import\Tax\TaxableCountries;
-use LizardsAndPumpkins\Messaging\Command\CommandQueue;
-use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
-use LizardsAndPumpkins\Messaging\MessageQueueFactory;
-use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
-use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
-use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
-use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
-use LizardsAndPumpkins\Context\Context;
+use LizardsAndPumpkins\Core\Factory\Factory;
+use LizardsAndPumpkins\Core\Factory\FactoryTrait;
 use LizardsAndPumpkins\DataPool\KeyValueStore\KeyValueStore;
+use LizardsAndPumpkins\DataPool\SearchEngine\FacetFieldTransformation\FacetFieldTransformationRegistry;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFilterRequestField;
 use LizardsAndPumpkins\DataPool\SearchEngine\FacetFiltersToIncludeInResult;
+use LizardsAndPumpkins\DataPool\SearchEngine\Query\SortBy;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchCriteria\SearchCriteria;
 use LizardsAndPumpkins\DataPool\SearchEngine\SearchEngine;
 use LizardsAndPumpkins\DataPool\UrlKeyStore\UrlKeyStore;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageReader;
+use LizardsAndPumpkins\Import\FileStorage\FileStorageWriter;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessingStrategy;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessor;
 use LizardsAndPumpkins\Import\ImageStorage\ImageProcessing\ImageProcessorCollection;
-use LizardsAndPumpkins\Logging\Logger;
 use LizardsAndPumpkins\Import\Product\View\ProductImageFileLocator;
 use LizardsAndPumpkins\Import\Product\View\ProductViewLocator;
+use LizardsAndPumpkins\Import\Tax\TaxableCountries;
 use LizardsAndPumpkins\Import\Tax\TaxServiceLocator;
 use LizardsAndPumpkins\Import\TemplateRendering\ThemeLocator;
-use LizardsAndPumpkins\Messaging\Queue;
+use LizardsAndPumpkins\Logging\Logger;
+use LizardsAndPumpkins\Messaging\Command\CommandQueue;
+use LizardsAndPumpkins\Messaging\Event\DomainEventQueue;
+use LizardsAndPumpkins\Messaging\Queue\MessageQueueFactory;
+use LizardsAndPumpkins\Messaging\Queue\Queue;
+use LizardsAndPumpkins\ProductListing\ContentDelivery\ProductsPerPage;
+use LizardsAndPumpkins\ProductSearch\ContentDelivery\SearchFieldToRequestParamMap;
 use LizardsAndPumpkins\RestApi\ApiRouter;
-use LizardsAndPumpkins\Util\Factory\Factory;
-use LizardsAndPumpkins\Util\Factory\FactoryTrait;
 use PHPUnit\Framework\MockObject\MockBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UnitTestFactory implements Factory, MessageQueueFactory
 {
     use FactoryTrait;
-    
+
     /**
      * @var KeyValueStore
      */
@@ -79,7 +80,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         $this->testCase = $testCase;
     }
 
-    private function createMock(string $className) : \PHPUnit_Framework_MockObject_MockObject
+    private function createMock(string $className): MockObject
     {
         return (new MockBuilder($this->testCase, $className))
             ->disableOriginalConstructor()
@@ -90,92 +91,92 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getSearchableAttributeCodes() : array
+    public function getSearchableAttributeCodes(): array
     {
         return [];
     }
 
-    public function createProductListingFacetFiltersToIncludeInResult() : FacetFiltersToIncludeInResult
+    public function createProductListingFacetFiltersToIncludeInResult(): FacetFiltersToIncludeInResult
     {
         return new FacetFiltersToIncludeInResult();
     }
 
-    public function createKeyValueStore() : KeyValueStore
+    public function createKeyValueStore(): KeyValueStore
     {
         return $this->createMock(KeyValueStore::class);
     }
 
-    public function createEventQueue() : DomainEventQueue
+    public function createEventQueue(): DomainEventQueue
     {
         return $this->createMock(DomainEventQueue::class);
     }
 
-    public function createEventMessageQueue() : Queue
+    public function createEventMessageQueue(): Queue
     {
         return $this->createMock(Queue::class);
     }
 
-    public function createCommandQueue() : CommandQueue
+    public function createCommandQueue(): CommandQueue
     {
         return $this->createMock(CommandQueue::class);
     }
 
-    public function createCommandMessageQueue() : Queue
+    public function createCommandMessageQueue(): Queue
     {
         return $this->createMock(Queue::class);
     }
 
-    public function createLogger() : Logger
+    public function createLogger(): Logger
     {
         return $this->createMock(Logger::class);
     }
 
-    public function createSearchEngine() : SearchEngine
+    public function createSearchEngine(): SearchEngine
     {
         return $this->createMock(SearchEngine::class);
     }
 
-    public function createUrlKeyStore() : UrlKeyStore
+    public function createUrlKeyStore(): UrlKeyStore
     {
         return $this->createMock(UrlKeyStore::class);
     }
 
-    public function createImageProcessorCollection() : ImageProcessorCollection
+    public function createImageProcessorCollection(): ImageProcessorCollection
     {
         return $this->createMock(ImageProcessorCollection::class);
     }
 
-    public function createImageProcessor() : ImageProcessor
+    public function createImageProcessor(): ImageProcessor
     {
         return $this->createMock(ImageProcessor::class);
     }
 
-    public function createFileStorageReader() : FileStorageReader
+    public function createFileStorageReader(): FileStorageReader
     {
         return $this->createMock(FileStorageReader::class);
     }
 
-    public function createFileStorageWriter() : FileStorageWriter
+    public function createFileStorageWriter(): FileStorageWriter
     {
         return $this->createMock(FileStorageWriter::class);
     }
 
-    public function createBaseUrlBuilder() : BaseUrlBuilder
+    public function createBaseUrlBuilder(): BaseUrlBuilder
     {
         return $this->createMock(BaseUrlBuilder::class);
     }
 
-    public function createAssetsBaseUrlBuilder() : BaseUrlBuilder
+    public function createAssetsBaseUrlBuilder(): BaseUrlBuilder
     {
         return $this->createMock(BaseUrlBuilder::class);
     }
 
-    public function createImageProcessingStrategySequence() : ImageProcessingStrategy
+    public function createImageProcessingStrategySequence(): ImageProcessingStrategy
     {
         return $this->createMock(ImageProcessingStrategy::class);
     }
 
-    public function getKeyValueStore() : KeyValueStore
+    public function getKeyValueStore(): KeyValueStore
     {
         if (null === $this->keyValueStore) {
             $this->keyValueStore = $this->createKeyValueStore();
@@ -184,7 +185,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return $this->keyValueStore;
     }
 
-    public function getEventQueue() : DomainEventQueue
+    public function getEventQueue(): DomainEventQueue
     {
         if (null === $this->eventQueue) {
             $this->eventQueue = $this->createEventQueue();
@@ -193,7 +194,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return $this->eventQueue;
     }
 
-    public function getCommandQueue() : CommandQueue
+    public function getCommandQueue(): CommandQueue
     {
         if (null === $this->commandQueue) {
             $this->commandQueue = $this->createCommandQueue();
@@ -202,7 +203,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return $this->commandQueue;
     }
 
-    public function getSearchEngine() : SearchEngine
+    public function getSearchEngine(): SearchEngine
     {
         if (null === $this->searchEngine) {
             $this->searchEngine = $this->createSearchEngine();
@@ -211,7 +212,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return $this->searchEngine;
     }
 
-    public function getUrlKeyStore() : UrlKeyStore
+    public function getUrlKeyStore(): UrlKeyStore
     {
         if (null === $this->urlKeyStore) {
             $this->urlKeyStore = $this->createUrlKeyStore();
@@ -223,12 +224,12 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return SortBy[]
      */
-    public function getProductListingAvailableSortBy() : array
+    public function getProductListingAvailableSortBy(): array
     {
         return [$this->createMock(SortBy::class)];
     }
 
-    public function getProductListingDefaultSortBy() : SortBy
+    public function getProductListingDefaultSortBy(): SortBy
     {
         return $this->createMock(SortBy::class);
     }
@@ -236,52 +237,52 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return SortBy[]
      */
-    public function getProductSearchAvailableSortBy() : array
+    public function getProductSearchAvailableSortBy(): array
     {
         return [$this->createMock(SortBy::class)];
     }
 
-    public function getProductSearchDefaultSortBy() : SortBy
+    public function getProductSearchDefaultSortBy(): SortBy
     {
         return $this->createMock(SortBy::class);
     }
 
-    public function getFileStorageBasePathConfig() : string
+    public function getFileStorageBasePathConfig(): string
     {
         return '';
     }
 
-    public function createFacetFieldTransformationRegistry() : FacetFieldTransformationRegistry
+    public function createFacetFieldTransformationRegistry(): FacetFieldTransformationRegistry
     {
         return $this->createMock(FacetFieldTransformationRegistry::class);
     }
 
-    public function createTaxableCountries() : TaxableCountries
+    public function createTaxableCountries(): TaxableCountries
     {
         return $this->createMock(TaxableCountries::class);
     }
 
-    public function createProductViewLocator() : ProductViewLocator
+    public function createProductViewLocator(): ProductViewLocator
     {
         return $this->createMock(ProductViewLocator::class);
     }
 
-    public function createTaxServiceLocator() : TaxServiceLocator
+    public function createTaxServiceLocator(): TaxServiceLocator
     {
         return $this->createMock(TaxServiceLocator::class);
     }
 
-    public function createGlobalProductListingCriteria() : SearchCriteria
+    public function createGlobalProductListingCriteria(): SearchCriteria
     {
         return $this->createMock(SearchCriteria::class);
     }
 
-    public function createProductImageFileLocator() : ProductImageFileLocator
+    public function createProductImageFileLocator(): ProductImageFileLocator
     {
         return $this->createMock(ProductImageFileLocator::class);
     }
 
-    public function getProductsPerPageConfig() : ProductsPerPage
+    public function getProductsPerPageConfig(): ProductsPerPage
     {
         return $this->createMock(ProductsPerPage::class);
     }
@@ -289,7 +290,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getSortableAttributeCodes() : array
+    public function getSortableAttributeCodes(): array
     {
         return [];
     }
@@ -298,7 +299,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
      * @param Context $context
      * @return FacetFilterRequestField[]
      */
-    public function getProductListingFacetFilterRequestFields(Context $context) : array
+    public function getProductListingFacetFilterRequestFields(Context $context): array
     {
         return $this->getCommonFacetFilterRequestFields();
     }
@@ -307,7 +308,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
      * @param Context $context
      * @return FacetFilterRequestField[]
      */
-    public function getProductSearchFacetFilterRequestFields(Context $context) : array
+    public function getProductSearchFacetFilterRequestFields(Context $context): array
     {
         return $this->getCommonFacetFilterRequestFields();
     }
@@ -315,7 +316,7 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return string[]
      */
-    public function getFacetFilterRequestFieldCodesForSearchDocuments() : array
+    public function getFacetFilterRequestFieldCodesForSearchDocuments(): array
     {
         return [];
     }
@@ -323,42 +324,42 @@ class UnitTestFactory implements Factory, MessageQueueFactory
     /**
      * @return FacetFilterRequestField[]
      */
-    private function getCommonFacetFilterRequestFields() : array
+    private function getCommonFacetFilterRequestFields(): array
     {
         return [];
     }
 
-    public function createSearchFieldToRequestParamMap() : SearchFieldToRequestParamMap
+    public function createSearchFieldToRequestParamMap(): SearchFieldToRequestParamMap
     {
         return $this->createMock(SearchFieldToRequestParamMap::class);
     }
 
-    public function createThemeLocator() : ThemeLocator
+    public function createThemeLocator(): ThemeLocator
     {
         return $this->createMock(ThemeLocator::class);
     }
 
-    public function createContextSource() : ContextSource
+    public function createContextSource(): ContextSource
     {
         return $this->createMock(ContextSource::class);
     }
 
-    public function createLocaleContextPartBuilder() : ContextPartBuilder
+    public function createLocaleContextPartBuilder(): ContextPartBuilder
     {
         return $this->createMock(ContextPartBuilder::class);
     }
 
-    public function createCountryContextPartBuilder() : ContextPartBuilder
+    public function createCountryContextPartBuilder(): ContextPartBuilder
     {
         return $this->createMock(ContextPartBuilder::class);
     }
 
-    public function createWebsiteContextPartBuilder() : ContextPartBuilder
+    public function createWebsiteContextPartBuilder(): ContextPartBuilder
     {
         return $this->createMock(ContextPartBuilder::class);
     }
 
-    public function createApiRouter() : ApiRouter
+    public function createApiRouter(): ApiRouter
     {
         return $this->createMock(ApiRouter::class);
     }
@@ -368,12 +369,12 @@ class UnitTestFactory implements Factory, MessageQueueFactory
         return $this->createMock(UrlToWebsiteMap::class);
     }
 
-    public function getMaxAllowedProductsPerSearchResultsPage() : int
+    public function getMaxAllowedProductsPerSearchResultsPage(): int
     {
         return 120;
     }
 
-    public function getDefaultNumberOfProductsPerSearchResultsPage() : int
+    public function getDefaultNumberOfProductsPerSearchResultsPage(): int
     {
         return 20;
     }

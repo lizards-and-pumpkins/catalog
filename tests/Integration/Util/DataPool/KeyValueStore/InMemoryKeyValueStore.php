@@ -30,7 +30,7 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
      * @param string $key
      * @param mixed $value
      */
-    public function set(string $key, $value)
+    public function set(string $key, $value): void
     {
         $this->store[$key] = $value;
     }
@@ -57,12 +57,12 @@ class InMemoryKeyValueStore implements KeyValueStore, Clearable
     /**
      * @param mixed[] $items
      */
-    public function multiSet(array $items)
+    public function multiSet(array $items): void
     {
         $this->store = array_merge($this->store, $items);
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->store = [];
     }

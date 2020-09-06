@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
  * @uses   \LizardsAndPumpkins\Http\HttpRequest
  * @uses   \LizardsAndPumpkins\Http\HttpRequestBody
  * @uses   \LizardsAndPumpkins\Http\HttpUrl
- * @uses   \LizardsAndPumpkins\Http\ContentDelivery\GenericHttpResponse
+ * @uses   \LizardsAndPumpkins\Http\GenericHttpResponse
  */
 class UnknownHttpRequestMethodHandlerTest extends TestCase
 {
@@ -31,12 +31,12 @@ class UnknownHttpRequestMethodHandlerTest extends TestCase
         );
     }
     
-    public function testIsARequestHandler()
+    public function testIsARequestHandler(): void
     {
         $this->assertInstanceOf(HttpRequestHandler::class, new UnknownHttpRequestMethodHandler());
     }
 
-    public function testCanHandleUnknownHttpMethodRequests()
+    public function testCanHandleUnknownHttpMethodRequests(): void
     {
         $unknownMethodHttpRequest = $this->createHttpRequestWithMethod('FOO');
         $this->assertTrue((new UnknownHttpRequestMethodHandler())->canProcess($unknownMethodHttpRequest));
@@ -46,7 +46,7 @@ class UnknownHttpRequestMethodHandlerTest extends TestCase
      * @param HttpRequest $httpRequestWithKnownMethod
      * @dataProvider knownHttpRequestMethodCodesProvider 
      */
-    public function testCanNotHandleKnownHttpMethodRequests(HttpRequest $httpRequestWithKnownMethod)
+    public function testCanNotHandleKnownHttpMethodRequests(HttpRequest $httpRequestWithKnownMethod): void
     {
         $this->assertFalse((new UnknownHttpRequestMethodHandler())->canProcess($httpRequestWithKnownMethod));
     }
@@ -62,7 +62,7 @@ class UnknownHttpRequestMethodHandlerTest extends TestCase
         ]);
     }
 
-    public function testReturnsMethodNotAllowedHttpResponse()
+    public function testReturnsMethodNotAllowedHttpResponse(): void
     {
         $unknownMethodRequest = $this->createHttpRequestWithMethod('FOO');
         $response = (new UnknownHttpRequestMethodHandler())->process($unknownMethodRequest);

@@ -8,7 +8,7 @@ use LizardsAndPumpkins\ConsoleCommand\ConsoleCommand;
 
 class TestStubConsoleCommand implements ConsoleCommand
 {
-    public function run()
+    public function run(): void
     {
         // Intentionally left empty as this is a test stub
     }
