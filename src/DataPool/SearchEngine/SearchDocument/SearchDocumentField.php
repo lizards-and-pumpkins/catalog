@@ -59,7 +59,7 @@ class SearchDocumentField
      */
     private static function validateKey(string $key): void
     {
-        if (!strlen($key) || !ctype_alpha($key{0})) {
+        if (!strlen($key) || !ctype_alpha(substr($key, 0, 1))) {
             throw new InvalidSearchDocumentFieldKeyException('Search document field key must be led by a letter.');
         }
     }
